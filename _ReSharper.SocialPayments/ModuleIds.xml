@@ -1,0 +1,16 @@
+<Modules>
+  <Module PersistentId="0074DB88-E270-462F-A473-303482E24B60" ModuleId="SocialPayments.Workflows.Payments" />
+  <Module PersistentId="B8F91D46-468B-4E47-9BA3-7026ED7F9C3E" ModuleId="SocialPayments.DomainServices" />
+  <Module PersistentId="4BE0F197-E35E-4364-99D3-56CFD4CA9212" ModuleId="SocialPayments.Services" />
+  <Module PersistentId="4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA" ModuleId="SocialPayments.Domain" />
+  <Module PersistentId="A06817CB-EF0F-49B3-B6ED-879EA399590A" ModuleId="SocialPayments.DataLayer" />
+  <Module PersistentId="9FE091DA-7C42-4645-837C-40C2B03282CE" ModuleId="SocialPayments.WorkflowServices.Payments" />
+  <Module PersistentId="A68BDEEB-0AA5-4A44-8662-11371C4D36E3" ModuleId="SocialPayments.Jobs.CreateNachaFileJob" />
+  <Module PersistentId="577EEA6E-A343-4DF1-95F3-CA862A7F4CF9" ModuleId="SocialPayments.Test" />
+  <Module PersistentId="4F193BBA-F1D4-426B-9C29-6B1D6529E8AE" ModuleId="SocialPayments.WindowsServices.NachaBatchScheduler" />
+  <Module PersistentId="F24B221A-3621-4048-9C16-F080739636E0" ModuleId="SocialPayments.Web" />
+  <Module PersistentId="4D6CFB79-81B1-40D7-AE0F-443EB9BCD4A1" ModuleId="SocialPayments.WorkflowServices.BatchFiles" />
+  <Module PersistentId="4F6364B8-534D-4598-95A5-43ADD8DB9BCD" ModuleId="SocialPayments.Web.Admin" />
+  <Module PersistentId="DF435856-BFEE-4A5A-8D76-F2E611969944" ModuleId="SocialPayments.UI.Controls" />
+  <Module PersistentId="86E68734-1E7C-4A3C-94FF-61951A5DF68A" ModuleId="SocialPayments.Providers" />
+</Modules>

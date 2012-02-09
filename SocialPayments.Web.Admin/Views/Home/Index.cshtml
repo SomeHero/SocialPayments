@@ -1,0 +1,98 @@
+﻿@model SocialPayments.Web.Admin.Models.OverviewModel
+@{
+    ViewBag.Title = "PdThx Dashboard";
+}
+<div class="colmask threecol">
+    <div class="colmid">
+        <div class="colleft">
+            <div class="col1">
+                <div>
+                    <h2>
+                        Current Batch Statistics <span style="font-size: 14px;">(Batch Opened: @Model.CurrentBatchStats.BatchCreated)</span></h2>
+                </div>
+                <div>
+                    <div class="row">
+                        <div style="float: left; text-align: center; margin: 10px;">
+                            <h5>
+                                Total Transactions</h5>
+                            <h3>@Model.CurrentBatchStats.TotalNumberOfPayments</h3>
+                        </div>
+                        <div style="float: left; text-align: center; margin: 10px;">
+                            <h5>
+                                Total Deposits</h5>
+                            <h3>@Model.CurrentBatchStats.TotalNumberOfDeposits</h3>
+                        </div>
+                        <div style="float: left; text-align: center; margin: 10px;">
+                            <h5>
+                                Total Withdrawals</h5>
+                            <h3>@Model.CurrentBatchStats.TotalNumberOfWithdrawals</h3>
+                        </div>
+                    </div>
+                    <div class="row" style="clear: both">
+                        <div style="float: left; text-align: center; margin: 10px;">
+                            <h5>
+                                Total Deposit Amount</h5>
+                            <h3>@String.Format("{0:C}", Model.CurrentBatchStats.TotalDepositAmount)</h3>
+                        </div>
+                        <div style="float: left; text-align: center; margin: 10px;">
+                            <h5>
+                                Total Withdrawal Amount</h5>
+                            <h3>@String.Format("{0:C}", Model.CurrentBatchStats.TotalWithdrawalAmount)</h3>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div style="clear: both">
+                        <h2>
+                            Recently Closed Batches</h2>
+                        <table cellpadding="2" cellspacing="2">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Batch Opened
+                                    </th>
+                                    <th>
+                                        Batch Closed
+                                    </th>
+                                    <th>
+                                        # of Deposits
+                                    </th>
+                                    <th>
+                                        Deposit Amount
+                                    </th>
+                                    <th>
+                                        # of Withdrawals
+                                    </th>
+                                    <th>
+                                        Withdrawal Amount
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.ClosedBatches)
+                            {
+                                <tr>
+                                    <td>@item.BatchCreated
+                                    </td>
+                                    <td>@item.BatchClosed
+                                    </td>
+                                    <td>@item.TotalNumberOfDeposits
+                                    </td>
+                                    <td>@item.TotalDepositAmount
+                                    </td>
+                                    <td>@item.TotalNumberOfWithdrawals
+                                    </td>
+                                    <td>@item.TotalWithdrawalAmount
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col2">
+            </div>
+            <div class="col3">
+            </div>
+        </div>
+    </div>
+</div>

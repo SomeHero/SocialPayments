@@ -1,0 +1,9 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\EntityFramework.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Debug\EntityFramework.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Debug\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Debug\SocialPayments.DataLayer.pdb

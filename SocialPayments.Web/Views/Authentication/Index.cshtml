@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Authenticate Your Account";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Authentication/sms-authentication.js")" type="text/javascript"></script>
+<h2>
+    Authenticate Your Account</h2>
+<p>
+    During account setup, we verified your email address. By verifying your email address,
+    in the future when you send and receive money the payments will appear from and
+    to a verified account. However, to truly get the best use out PdThx we recommend
+    that all of users complete verification of your cell phone and your bank account.
+    Completing these verification steps will increase your sending limits and increase
+    your account standing. And it's easy.</p>
+<p>
+    1. Verify your email address.</p>
+<p>
+    Completed {date}</p>
+<p>
+    2. Verify your mobile device.</p>
+<p>
+    To verify your mobile device, we will send 2 codes to your device. You will then
+    be asked to re-enter the codes on a form. When you have successfully verified your
+    mobile device your sending limit is instantly increase to $money.</p>
+<p>
+    <input type="button" id="btnAuthenticateMobileDevice" name="btnAuthenticateMobileDevice"
+        value="Send Authentication Codes" /></p>
+<p>
+    If you ever change the mobile number in your account profile, you will need to complete
+    this authentication step again</p>
+<p>
+    3. Verify your bank account</p>
+<p>
+    We have two ways to authenticate your bank account, both are simple but one takes
+    a little longer than the other. When you have successfully authenticated your bank
+    account your sending is increased to $money.</p>
+<p>
+    Instant Authentication</p>
+<p>
+    The quick way. You will provide us with your user name and password to your bank's
+    website. We will use your user name and password to verify you as the holder of
+    the account.</p>
+<p>
+    <input type="button" id="btnAuthenticateBankAccountInstant" name="btnAuthenticateBankAccountInstant"
+        value="Instantly Authenticate Bank Account" /></p>
+<p>
+    Authenticate by Deposit and Withdrawal</p>
+<p>
+    The long way. We will make 1 deposit and 1 withdrawal from your bank account (both
+    transactions will range from a few pennies to a few nickels. Upon completion of
+    the transactions, you will provide us with the exact amount of each transaction.
+    Ussually, it will take 2 days for the transactions to be posted to your account.</p>
+<p>
+    <input type="button" id="btnAuthenticateByDepositAndWithdrawl" name="btnAuthenticateByDepositAndWithdrawl"
+        value=" Authenticate by Deposit and Withdrawl" /></p>
+<p>
+    Note: You will be required to authenticate all new accounts that you set up in your
+    profile in the future before you can send money from the new account.</p>
+
+<div id="authenticate-mobile-dialog" style="display: none;">
+   <p style="text-align: left;">We just sent you two codes to your mobile device.  Use the text boxes below to enter the codes in the order that they were sent to you.</p>
+   <p>
+        <label for="txtCode1">First Code: </label><input style="width: 60px;" type="text" id="txtCode1" name="txtCode1"  width="40" />
+        </p>
+        <p>
+         <label for="txtCode2">Second Code: </label><input style="width: 60px;" type="text" id="txtCode2" name="txtCode2" width="50" />
+   </p>
+   <p><input type="button" id="btnSubmitCodes" name="btnSubmitCode" value="Submit Codes" /></p>
+</div>

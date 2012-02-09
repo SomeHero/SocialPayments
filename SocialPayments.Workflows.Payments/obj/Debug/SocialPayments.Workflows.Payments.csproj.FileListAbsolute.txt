@@ -1,0 +1,17 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Workflows.Payments.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Workflows.Payments.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\NLog.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.DomainServices.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Services.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\EntityFramework.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.DomainServices.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\SocialPayments.Services.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\NLog.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\obj\Debug\SocialPayments.Workflows.Payments.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\obj\Debug\SocialPayments.Workflows.Payments.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Payments\bin\Debug\EntityFramework.xml

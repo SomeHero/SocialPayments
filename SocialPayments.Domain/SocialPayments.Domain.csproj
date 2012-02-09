@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SocialPayments.Domain</RootNamespace>
+    <AssemblyName>SocialPayments.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK, Version=1.3.16.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\bin\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application.cs" />
+    <Compile Include="BatchFile.cs" />
+    <Compile Include="BatchFileStatus.cs" />
+    <Compile Include="Calendar.cs" />
+    <Compile Include="CalendarDate.cs" />
+    <Compile Include="CalendarType.cs" />
+    <Compile Include="EmailLog.cs" />
+    <Compile Include="EmailStatus.cs" />
+    <Compile Include="MobileDeviceAlias.cs" />
+    <Compile Include="Payment.cs" />
+    <Compile Include="PaymentAccount.cs" />
+    <Compile Include="PaymentAudit.cs" />
+    <Compile Include="PaymentBatch.cs" />
+    <Compile Include="PaymentAccountType.cs" />
+    <Compile Include="PaymentChannelType.cs" />
+    <Compile Include="PaymentRequest.cs" />
+    <Compile Include="PaymentRequestStatus.cs" />
+    <Compile Include="PaymentStatus.cs" />
+    <Compile Include="ProfileBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="SMSLog.cs" />
+    <Compile Include="SMSStatus.cs" />
+    <Compile Include="SocialPaymentsUserProfile.cs" />
+    <Compile Include="StandardEntryClass.cs" />
+    <Compile Include="SystemAlerts.cs" />
+    <Compile Include="Transaction.cs" />
+    <Compile Include="TransactionBatch.cs" />
+    <Compile Include="TransactionCategory.cs" />
+    <Compile Include="TransactionStatus.cs" />
+    <Compile Include="TransactionType.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserAudit.cs" />
+    <Compile Include="UserLoginAudit.cs" />
+    <Compile Include="UserRegistrationMethod.cs" />
+    <Compile Include="UserSMSAuthentication.cs" />
+    <Compile Include="UserStatus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

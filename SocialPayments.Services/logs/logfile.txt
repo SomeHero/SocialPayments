@@ -1,0 +1,13 @@
+2011-11-12 20:57:29.1347 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-13 17:40:12.3759 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:24:42.3398 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:27:40.2021 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:29:12.6318 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:33:53.8378 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:36:02.7958 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-15 21:46:36.1777 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-16 19:32:36.2402 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-16 19:36:51.4824 SocialPayments.Services.PaymentService Getting Payments
+2011-11-16 19:37:16.6826 SocialPayments.Services.PaymentService Getting Payments
+2011-11-16 19:57:49.3359 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2011-11-19 17:21:06.0634 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
