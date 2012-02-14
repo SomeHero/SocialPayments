@@ -8,6 +8,7 @@ using System.ServiceModel.Activation;
 using NLog;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using SocialPayments.Services.DataContracts.PaymentRequest;
 
 namespace SocialPayments.Services
 {
@@ -15,12 +16,77 @@ namespace SocialPayments.Services
     public class PaymentRequestService : IPaymentRequestService
     {
         private DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+        DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService();
+        DomainServices.UserService userService = new DomainServices.UserService();
         private Context _ctx = new Context();
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public DataContracts.PaymentRequest.PaymentRequestResponse AddPaymentRequest(DataContracts.PaymentRequest.PaymentRequestRequest request)
         {
             Domain.PaymentRequest newPaymentRequest;
+
+            var application = applicationService.GetApplication(Guid.Parse("bda11d91-7ade-4da1-855d-24adfe39d174"));
+
+            logger.Log(LogLevel.Info, String.Format("Getting Application."));
+
+            if (application == null)
+            {
+                logger.Log(LogLevel.Info, String.Format("No application"));
+
+                return new PaymentRequestResponse()
+                {
+                    Success = false,
+                    Message = "Invalid Api Key."
+                };
+            }
+
+            logger.Log(LogLevel.Info, String.Format("Getting Requestor."));
+
+            var payer = userService.GetUser(u => u.UserId.Equals(new Guid(request.UserId)));
+
+            if (payer == null)
+            {
+                logger.Log(LogLevel.Info, String.Format("No payer found."));
+
+                return new PaymentRequestResponse()
+                {
+                    Success = false,
+                    Message = "Payment Request from an unknown User."
+                };
+            }
+            string securityPin;
+
+            logger.Log(LogLevel.Info, String.Format("Validating security pin."));
+
+            try
+            {
+                securityPin = securityService.Decrypt(payer.SecurityPin);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, String.Format("Exception decrypting security pin {0}. Exception {1}.", request.SecurityPin, ex.Message));
+
+                return new PaymentRequestResponse()
+                {
+                    Success = false,
+                    Message = "Incorrect security pin.  Try again."
+                };
+            }
+
+            if (securityPin != request.SecurityPin)
+            {
+                logger.Log(LogLevel.Warn, String.Format("Security Pin was incorrect"));
+
+                //if 3 incorrect swipes within the last 15 minutes
+                //send back Lockout message
+                //else
+                //send SecurityPinIncorrect message back to phone
+                return new PaymentRequestResponse()
+                {
+                    Success = false,
+                    Message = "Incorrect Security Pin.  Try again."
+                };
+            }
 
             try
             {

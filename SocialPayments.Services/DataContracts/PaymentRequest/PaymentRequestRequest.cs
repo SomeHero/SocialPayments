@@ -26,5 +26,8 @@ namespace SocialPayments.Services.DataContracts.PaymentRequest
 
         [DataMember(Name = "comments")]
         public String Comments { get; set; }
+
+        [DataMember(Name = "securityPin")]
+        public string SecurityPin { get; set; }
     }
 }
