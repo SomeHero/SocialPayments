@@ -1,0 +1,15 @@
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.Providers.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.Providers.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\bin\Beta\NLog.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\obj\Beta\SocialPayments.Providers.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Providers\obj\Beta\SocialPayments.Providers.pdb

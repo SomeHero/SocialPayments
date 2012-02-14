@@ -11,6 +11,7 @@ using Amazon.SimpleNotificationService.Model;
 using NLog;
 using SocialPayments.Services.DataContracts.Payment;
 using SocialPayments.DataLayer;
+using System.Configuration;
 
 namespace SocialPayments.Services
 {
@@ -190,7 +191,7 @@ namespace SocialPayments.Services
             client.Publish(new PublishRequest()
             {
                 Message = payment.Id.ToString(),
-                TopicArn = "arn:aws:sns:us-east-1:102476399870:SocialPaymentNotifications",
+                TopicArn = ConfigurationManager.AppSettings["PaymentPostedTopicARN"],
                 Subject = "New Payment Receivied"
             });
             logger.Log(LogLevel.Info, String.Format("Message sent to Amazon SNS"));

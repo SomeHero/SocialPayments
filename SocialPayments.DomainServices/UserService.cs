@@ -8,6 +8,7 @@ using SocialPayments.Domain;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using NLog;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices
 {
@@ -101,7 +102,7 @@ namespace SocialPayments.DomainServices
                 client.Publish(new PublishRequest()
                 {
                     Message = user.UserId.ToString(),
-                    TopicArn = "arn:aws:sns:us-east-1:102476399870:UserNotifications",
+                    TopicArn = ConfigurationManager.AppSettings["UserPostedTopicARN"],
                     Subject = "New User Registration"
                 });
             }

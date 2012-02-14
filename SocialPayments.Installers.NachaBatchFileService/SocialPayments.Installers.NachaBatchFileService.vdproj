@@ -57,6 +57,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
+        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
+        "OwnerKey" = "8:_E1FD26DF116B56566B5A221EBDA66D8F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
+        "OwnerKey" = "8:_3DA53057982B8A88EA468DCEA688B881"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3DA53057982B8A88EA468DCEA688B881"
         "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
         "MsmSig" = "8:_UNDEFINED"
@@ -83,6 +101,12 @@
         {
         "MsmKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
         "OwnerKey" = "8:_E1FD26DF116B56566B5A221EBDA66D8F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
+        "OwnerKey" = "8:_E67C0E9E5F4B699848DF550C2E612983"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -187,9 +211,52 @@
         "OwnerKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_324D4CC044479F45F95018309006431F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
+        "Beta"
+        {
+        "DisplayName" = "8:Beta"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Beta\\SocialPayments.Installers.NachaBatchFileService.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
         "Debug"
         {
         "DisplayName" = "8:Debug"
@@ -249,6 +316,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -411,6 +491,37 @@
                     }
                 }
             "SourcePath" = "8:SocialPayments.DataLayer.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_324D4CC044479F45F95018309006431F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_324D4CC044479F45F95018309006431F"
+                    {
+                    "Name" = "8:NLog.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NLog.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
@@ -1161,7 +1272,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_87A088AEAF144770AEEAC75D7C7C6817"
             {
-            "SourcePath" = "8:..\\SocialPayments.WindowsServices.NachaBatchScheduler\\obj\\x86\\Debug\\SocialPayments.WindowsServices.NachaBatchScheduler.exe"
+            "SourcePath" = "8:..\\SocialPayments.WindowsServices.NachaBatchScheduler\\obj\\x86\\Beta\\SocialPayments.WindowsServices.NachaBatchScheduler.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"

@@ -1,0 +1,567 @@
+﻿/*----------------------------------------------------------
+The base color for this template is #5c87b2. If you'd like
+to use a different color start by replacing all instances of
+#5c87b2 with your new color.
+----------------------------------------------------------*/
+body {
+	color: #464646;
+	font: 14px 'Lucida Grande', Lucida, Tahoma, sans-serif;
+	width: 100%;
+	margin: 0px; 
+	padding:0px;
+	text-align:center;
+}
+
+a:link
+{
+    color: #034af3;
+    text-decoration: underline;
+}
+a:visited
+{
+    color: #505abc;
+}
+a:hover
+{
+    color: #1d60ff;
+    text-decoration: none;
+}
+a:active
+{
+    color: #12eb87;
+}
+
+p, ul
+{
+    margin-bottom: 20px;
+    line-height: 1.6em;
+}
+
+/* HEADINGS   
+----------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6
+{
+    font-size: 1.5em;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1
+{
+    font-size: 2em;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+h2
+{
+    padding: 0 0 10px 0;
+}
+h3
+{
+    font-size: 1.2em;
+}
+h4
+{
+    font-size: 1.1em;
+}
+h5, h6
+{
+    font-size: 1em;
+}
+
+/* this rule styles <h2> tags that are the 
+first child of the left and right table columns */
+.rightColumn > h1, .rightColumn > h2, .leftColumn > h1, .leftColumn > h2
+{
+    margin-top: 0;
+}
+
+
+/* PRIMARY LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+/* you can specify a greater or lesser percentage for the 
+page width. Or, you can specify an exact pixel width. */
+.page
+{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header
+{
+    position: relative;
+    margin-bottom: 0px;
+    color: #fff;
+    padding:  5px 14px 0px 14px;
+    background-color: #AAA;
+}
+
+#header h1
+{
+    font-weight: bold;
+    padding: 5px 0;
+    margin: 0;
+    color: #689482;
+    border: none;
+    line-height: 2em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 36px !important;
+}
+
+#main
+{
+    text-align: left;
+    padding: 30px 30px 15px 30px;
+    margin-bottom: 30px;
+    _height: 1px; /* only IE6 applies CSS properties starting with an underscore */
+}
+
+#footer
+{
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    line-height: normal;
+    margin: 0;
+    font-size: .9em;
+}
+
+/* TAB MENU   
+----------------------------------------------------------*/
+ul#menu
+{
+    padding: 0 0 2px;
+    position: relative;
+    margin: 0;
+    text-align: right;
+}
+
+ul#menu li
+{
+    display: inline;
+    list-style: none;
+}
+
+ul#menu li#greeting
+{
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 2.8em;
+}
+
+ul#menu li a
+{
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 2.8em;
+    background-color: #e8eef4;
+    color: #034af3;
+}
+
+ul#menu li a:hover
+{
+    background-color: #fff;
+    text-decoration: none;
+}
+
+ul#menu li a:active
+{
+    background-color: #a6e2a6;
+    text-decoration: none;
+}
+
+ul#menu li.selected a
+{
+    background-color: #fff;
+    color: #000;
+}
+
+/* FORM LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+fieldset 
+{
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #CCC;
+}
+
+fieldset p 
+{
+    margin: 2px 12px 10px 10px;
+}
+
+legend 
+{
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 2px 4px 8px 4px;
+}
+
+input[type="text"] 
+{
+    width: 200px;
+    border: 1px solid #CCC;
+}
+
+input[type="password"] 
+{
+    width: 200px;
+    border: 1px solid #CCC;
+}
+
+/* TABLE
+----------------------------------------------------------*/
+
+table 
+{
+  border: solid 1px #e8eef4;
+  border-collapse: collapse;
+}
+
+table td 
+{
+  padding: 5px;   
+  border: solid 1px #e8eef4;
+}
+
+table th
+{
+  padding: 6px 5px;
+  text-align: left;
+  background-color: #e8eef4; 
+  border: solid 1px #e8eef4;   
+}
+
+/* MISC  
+----------------------------------------------------------*/
+.clear
+{
+    clear: both;
+}
+
+.error
+{
+    color:Red;
+}
+
+#menucontainer
+{
+    margin-top:40px;
+}
+
+div#title
+{
+    display:block;
+    float:left;
+    text-align:left;
+}
+
+#logindisplay
+{
+    font-size:1.1em;
+    display:block;
+    text-align:right;
+    margin:10px;
+    color:#fff;
+}
+
+#logindisplay a:link
+{
+    color: white;
+    text-decoration: underline;
+}
+
+#logindisplay a:visited
+{
+    color: white;
+    text-decoration: underline;
+}
+
+#logindisplay a:hover
+{
+    color: white;
+    text-decoration: none;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: #ff0000;
+    margin-right: 5px;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error, input.field-validation-error
+{
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+/* Styles for editor and display helpers
+----------------------------------------------------------*/
+.display-label,
+.editor-label,
+.display-field,
+.editor-field
+{
+    margin: 0 0;
+}
+.editor-label 
+{
+    font-weight: bold;
+}
+.editor-row
+{
+    display: block;
+    height: 35px;
+    margin-bottom: 16px;
+    clear: right;
+}
+.editor-cell 
+{
+    float: left;
+    height: 35px;
+    margin-bottom: 16px;
+    overflow: visible;
+    margin-right: 35px;
+}
+.text-box
+{
+    width: 30em;
+}
+
+.text-box.multi-line
+{
+    height: 6.5em;
+}
+
+.tri-state
+{
+    width: 6em;
+}
+#mainContentWrapper
+{
+	position: relative;
+	height: 500px;
+}
+#mainContentNav
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 260px;
+}
+#mainContentNav ul
+{
+	margin: 0px;
+	padding: 0px;
+}
+#mainContentNav li
+{
+	margin: 0px;
+	padding: 10px 10px 10px 5px;
+	width: 260px;
+	height: 40px;
+	list-style-type: none;
+	vertical-align: middle;
+	border-left: solid 1px #ddd;
+	border-bottom: solid 1px #ddd;
+	border-right: solid 1px #ddd;
+}
+#mainContentNav li .first
+{
+	border-top: solid 1px #ddd;
+}
+#mainContentNav li a
+{
+	display: block;
+}
+	
+#mainContent 
+{
+	position: absolute;
+	top: 0px;
+	left: 300px;
+}
+
+/***************** styles for login ****************/
+#login label
+{
+    color: #fff;
+}
+#login fieldset {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    border-style: none;
+    outline-style: none;
+    outline-width: 0px;
+}
+#login legend {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    border-style: none;
+    font-family: Georgia, serif;
+    font-size: 19px;
+-webkit-padding-start: 2px;
+-webkit-padding-end: 2px;
+border: none;
+}
+#login #labelPass, #login #labelUser
+{
+    display: none;
+}
+#emailInput, #passInput {
+    font-size: 12px;
+    width: 220px;
+    padding: 6px;
+    background-color: #EFEFEF;
+    border: 1px solid #CCC;
+}
+#subNavWrapper {
+background-color: #363636;
+height: 110px;
+padding: 23px 0 10px 12px;
+}
+#subNav {
+overflow: visible;
+width: 980px;
+}
+#subNav ol, #subNav ul {
+list-style: none;
+margin: 0px;
+padding: 0px;
+}
+#aboutUs {
+display: block;
+width: 220px;
+float: left;
+}
+#subTools {
+display: block;
+width: 220px;
+float: left;
+}
+#forums {
+display: block;
+width: 180px;
+float: left;
+}
+#goodies {
+display: block;
+width: 230px;
+float: left;
+}
+#help {
+display: block;
+width: 120px;
+float: left;
+}
+#subNav h3 {
+color: white;
+font-size: 10px;
+text-transform: uppercase;
+}
+.link_list li {
+float: none;
+padding: 0px;
+margin: 0px;
+line-height: 15px;
+white-space: nowrap;
+}
+#subNav a {
+font: 10px/15px verdana,arial,sans-serif;
+text-decoration: none;
+color: #7195AF;
+}
+/* 'widths' sub menu */
+#layoutdims {
+	clear:both;
+	background:#eee;
+	border-top:4px solid #000;
+	margin:0;
+	padding:6px 15px !important;
+	text-align:right;
+}
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;			/* width of page */
+	position:relative;
+}
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;	/* no left and right padding on columns, we just make them narrower instead 
+					only padding top and bottom is included here, make it whatever value you need */
+	overflow:hidden;
+}
+/* 3 Column settings */
+.threecol {
+}
+.threecol .colmid {
+	right:25%;			/* width of the right column */
+}
+.threecol .colleft {
+	right:50%;			/* width of the middle column */
+}
+.threecol .col1 {
+	width:46%;			/* width of center column content (column width minus padding on either side) */
+	left:102%;			/* 100% plus left padding of center column */
+}
+.threecol .col2 {
+	width:21%;			/* Width of left column content (column width minus padding on either side) */
+	left:31%;			/* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+	width:21%;			/* Width of right column content (column width minus padding on either side) */
+	left:85%;			/* Please make note of the brackets here:
+					(100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
+}
+#footer p {
+	padding:10px;
+	margin:0;
+}

@@ -1,0 +1,17 @@
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Workflows.Users.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Workflows.Users.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Services.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\SocialPayments.Services.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Beta\NLog.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Beta\SocialPayments.Workflows.Users.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Beta\SocialPayments.Workflows.Users.pdb

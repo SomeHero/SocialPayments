@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowsServices.Payments\obj\Beta\Package\PackageTmp" managedRuntimeVersion="v4.0" />
+  <setAcl path="C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowsServices.Payments\obj\Beta\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowsServices.Payments\obj\Beta\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

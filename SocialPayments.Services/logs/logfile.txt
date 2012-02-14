@@ -11,3 +11,9 @@
 2011-11-16 19:37:16.6826 SocialPayments.Services.PaymentService Getting Payments
 2011-11-16 19:57:49.3359 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
 2011-11-19 17:21:06.0634 SocialPayments.DomainServices.UserService Validating username jrhodes621 and password james123
+2012-02-12 19:02:00.6357 SocialPayments.DomainServices.UserService Validating User
+2012-02-12 19:02:03.1679 SocialPayments.DomainServices.UserService Unable to find user by user name.
+2012-02-12 19:02:03.2646 SocialPayments.DomainServices.UserService Unable to find user by user name.
+2012-02-12 19:03:08.6757 SocialPayments.DomainServices.UserService Validating User
+2012-02-12 19:03:08.7099 SocialPayments.DomainServices.UserService Unable to find user by user name.
+2012-02-12 19:03:09.5009 SocialPayments.DomainServices.UserService Unable to find user by user name.
