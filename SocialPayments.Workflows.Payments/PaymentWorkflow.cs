@@ -8,6 +8,7 @@ using SocialPayments.Services;
 using SocialPayments.Domain;
 using NLog;
 using System.Text.RegularExpressions;
+using System.Configuration;
 
 namespace SocialPayments.Workflows.Payments
 {
@@ -18,7 +19,10 @@ namespace SocialPayments.Workflows.Payments
         SMSService smsService = new SMSService();
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-           
+        /// <summary>
+        /// Process user Initiated Payment to another user
+        /// </summary>
+        /// <param name="paymentId">the unique id of the payment</param>
         public void ProcessPayment(string paymentId)
         {
             var payment = _ctx.Payments.FirstOrDefault(p => p.Id == new Guid(paymentId));
@@ -31,14 +35,12 @@ namespace SocialPayments.Workflows.Payments
             switch (payment.PaymentStatus)
             {
                 case PaymentStatus.Submitted:
-                    string fromAddress = "jrhodes2705@gmail.com";
+                    string fromAddress = ConfigurationManager.AppSettings["FromAddress"];
 
                     string phoneNumberUnformatted = Regex.Replace(payment.ToMobileNumber, @"\D", string.Empty);
 
-                    logger.Log(LogLevel.Info, string.Format("Phone Number UnFormatted {0}", phoneNumberUnformatted));
-
                     if (phoneNumberUnformatted.Length != 10)
-                        throw new Exception("To Mobile Number is not valid");
+                        throw new Exception(String.Format("To Mobile Number is not valid {0}", phoneNumberUnformatted));
                     
                     string areaCode = phoneNumberUnformatted.Substring(0, 3);
                     string major = phoneNumberUnformatted.Substring(3, 3);
@@ -49,6 +51,7 @@ namespace SocialPayments.Workflows.Payments
                     payment.ToMobileNumber = phoneNumberFormatted;
 
                     //Validate Payment
+
                     //Attempt to assign payment to Payee
                     var payee = _ctx.Users.FirstOrDefault(u => u.MobileNumber == payment.ToMobileNumber);
 
@@ -62,29 +65,29 @@ namespace SocialPayments.Workflows.Payments
                             IsClosed = false
 
                         });
-                                              
-                    if (payee != null)
+
+                    //Create withdraw transaction
+                    payment.Transactions.Add(new Domain.Transaction()
+                    {
+                        Id = Guid.NewGuid(),
+                        PaymentId = payment.Id,
+                        FromAccountId = payment.FromAccountId,
+                        Amount = payment.PaymentAmount,
+                        Status = TransactionStatus.Pending,
+                        Category = TransactionCategory.Payment,
+                        Type = TransactionType.Withdrawal,
+                        TransactionBatchId = transactionBatch.Id,
+                        CreateDate = System.DateTime.Now,
+                        StandardEntryClass = payment.StandardEntryClass,
+                        PaymentChannelType = payment.PaymentChannelType
+                    });
+
+                    transactionBatch.TotalNumberOfWithdrawals += 1;
+                    transactionBatch.TotalWithdrawalAmount += payment.PaymentAmount;
+
+                    if (payee != null  && payee.PaymentAccounts.Count > 0)
                     {
                         payment.ToAccountId = payee.PaymentAccounts[0].Id;
-
-                        //Create withdraw transaction
-                        payment.Transactions.Add(new Domain.Transaction()
-                                                     {
-                                                      Id = Guid.NewGuid(),
-                                                      PaymentId = payment.Id,
-                                                      FromAccountId = payment.FromAccountId,
-                                                      Amount = payment.PaymentAmount,
-                                                      Status = TransactionStatus.Pending,
-                                                      Category = TransactionCategory.Payment,
-                                                      Type = TransactionType.Withdrawal,
-                                                      TransactionBatchId = transactionBatch.Id,
-                                                      CreateDate = System.DateTime.Now, 
-                                                      StandardEntryClass =  payment.StandardEntryClass,
-                                                      PaymentChannelType = payment.PaymentChannelType
-                                                     });
-
-                        transactionBatch.TotalNumberOfWithdrawals += 1;
-                        transactionBatch.TotalWithdrawalAmount += payment.PaymentAmount;
 
                         //Create deposit transaction
                         payment.Transactions.Add(new Domain.Transaction()
@@ -148,11 +151,12 @@ namespace SocialPayments.Workflows.Payments
                     {
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payee not found"));
 
+                        var link = String.Format("http://beta.paidthx.me/mobile/{0}", payment.Id);
                         //Send out SMS Message to payee
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("You received a payment request for {0:C} from {1}.  Go to PdThx.me to complete the transaction.", payment.PaymentAmount, payment.FromMobileNumber),
+                            Message = String.Format("{1} just sent you {0:C} using PaidThx.  Goto {2} to complete this transaction.", payment.PaymentAmount, payment.FromMobileNumber, link),
                             MobileNumber = payment.ToMobileNumber
                         });
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payer no payee"));

@@ -22,7 +22,7 @@ namespace SocialPayments.Services.ServiceContracts
         bool ValidateUser(string userName, string password);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/Register", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/Register", BodyStyle= WebMessageBodyStyle.Bare, RequestFormat=WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         UserRegistrationResponse RegisterUser(UserRegistrationRequest request);
 
         [OperationContract]

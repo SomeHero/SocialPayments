@@ -21,7 +21,7 @@ namespace SocialPayments.Domain
         [ForeignKey("ApiKey")]
         public virtual Application Application { get; set; }
         [Required()]
-        [MaxLength(20)]
+        [MaxLength(100)]
         public virtual string UserName { get; set; }
         [MaxLength(250)]
         [DataType(DataType.EmailAddress)]
@@ -48,7 +48,12 @@ namespace SocialPayments.Domain
         public virtual bool IsLockedOut { get; set; }
         public virtual string TimeZone { get; set; }
         public virtual string Culture { get; set; }
-        public virtual UserStatus UserStatus { get; set; }
+        public int UserStatusValue { get; set; }
+        public virtual UserStatus UserStatus 
+        { 
+            get { return (UserStatus)UserStatusValue; }
+            set { UserStatusValue = (int)value; } 
+        }
         public int RegistrationMethodValue { get; set; }
         public UserRegistrationMethod RegistrationMethod
         {

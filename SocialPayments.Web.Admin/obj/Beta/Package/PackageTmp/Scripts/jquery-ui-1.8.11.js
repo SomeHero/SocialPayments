@@ -5894,7 +5894,7 @@ $.widget( "ui.buttonset", {
 * for informational purposes only and are not the license terms under
 * which Microsoft distributed this file.
 *
-* jQuery UI Dialog 1.8.11
+* jQuery UI 1.8.11
 *
 * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
 *

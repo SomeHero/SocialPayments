@@ -106,6 +106,8 @@
     <Compile Include="APIKeyRepository.cs" />
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
+    <Compile Include="CancelPaymentRequest.cs" />
+    <Compile Include="CancelPaymentResponse.cs" />
     <Compile Include="DataContracts\Application\ApplicationRequest.cs" />
     <Compile Include="DataContracts\Application\ApplicationResponse.cs" />
     <Compile Include="DataContracts\Calendar\CalendarDateRequest.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="DataContracts\Email\EmailResponse.cs" />
     <Compile Include="DataContracts\PaymentRequest\PaymentRequestRequest.cs" />
     <Compile Include="DataContracts\PaymentRequest\PaymentRequestResponse.cs" />
+    <Compile Include="DataContracts\Transaction\TransactionResponse.cs" />
     <Compile Include="DataContracts\Users\UserSetupSecurityPinRequest.cs" />
     <Compile Include="DataContracts\Users\UserSetupSecurityPinResonse.cs" />
     <Compile Include="PaymentAccountService.cs" />

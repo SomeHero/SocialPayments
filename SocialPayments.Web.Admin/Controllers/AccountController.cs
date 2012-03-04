@@ -6,12 +6,16 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using SocialPayments.Web.Admin.Models;
+using SocialPayments.DataLayer;
 
 namespace SocialPayments.Web.Admin.Controllers
 {
     public class AccountController : Controller
     {
 
+        private readonly Context _ctx = new Context();
+        private DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+        
         //
         // GET: /Account/LogOn
 
@@ -28,8 +32,7 @@ namespace SocialPayments.Web.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                if (Membership.ValidateUser(model.UserName, model.Password))
+                if (Membership.ValidateUser(model.UserName, securityService.Encrypt(model.Password)) && Roles.IsUserInRole(model.UserName, "Administrator"))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

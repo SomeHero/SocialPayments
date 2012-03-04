@@ -14,11 +14,13 @@ namespace SocialPayments.Web.Admin.Controllers
         //
         // GET: /User/
         private readonly Context _ctx = new Context();
-        
+
         public ActionResult Index(int pageIndex, int pageSize)
         {
             var model = _ctx.Users
+                .Include("Roles")
                 .OrderByDescending(u => u.CreateDate)
+                .Where(u => u.Roles.Any(r => r.RoleName == "Member"))
                 .Select(u => new UserModel()
                                  {
                                      MobileNumber = u.MobileNumber,

@@ -1,0 +1,8 @@
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\bin\Beta\SocialPayments.Facebook.Tests.dll.config
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\bin\Beta\SocialPayments.Facebook.Tests.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\bin\Beta\SocialPayments.Facebook.Tests.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\bin\Beta\SocialPayments.Facebook.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\bin\Beta\SocialPayments.Facebook.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\obj\Beta\SocialPayments.Facebook.Tests.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Facebook.Tests\obj\Beta\SocialPayments.Facebook.Tests.pdb

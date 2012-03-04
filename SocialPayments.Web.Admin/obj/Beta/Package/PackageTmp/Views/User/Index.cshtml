@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Users";
 }
+<script src="@Url.Content("~/Scripts/user.js")" type="text/javascript"></script>
 
 <h2>Users</h2>
 
@@ -29,7 +30,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+    <tr class="edit" userid="@item.Id">
         <td>
             @Html.DisplayFor(modelItem => item.Id)
         </td>
@@ -86,4 +87,72 @@
         @Html.Raw(" ") 
         @:>> 
     } 
+</div>
+<div id="dialog-edit" class="dialog-form" title="Edit User" style="display: none;">
+	<p class="validateTips">All form fields are required.</p>
+
+	<fieldset>
+    <legend>Edit Account Information</legend>
+    <form action="@Url.Content("~/Administration/Edit")" method="post">
+        <input type="hidden" id="userId" name="Id" />
+        <div id="user-wrapper">
+            <div id="user-col-wrapper" class="clearfix">
+                <div id="user-left-col" style="float: left; margin-right: 10px; width: 50%;">
+                    <div class="editor-label">
+		                <label for="name">User Name</label>
+                    </div>
+                    <div class="editor-field">
+		                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" disabled="true" />
+		            </div>
+                    <div class="editor-label">
+		                <label for="email">Email</label>
+		            </div>
+                    <div class="editor-field">
+                        <input type="text" name="Email" id="email" value="" class="text ui-widget-content ui-corner-all" />
+                    </div>
+                    <div class="editor-label">
+		                <label for="email">Is Confirmed</label>
+		            </div>
+                    <div class="editor-field">
+                        <div id="isConfirmed"></div>
+                    </div>
+                    <div class="editor-label">
+		                <label for="email">Is Locked Out</label>
+		            </div>
+                    <div class="editor-field">
+                        <div id="isLockedOut"></div>
+                    </div>
+                </div>
+                <div id="user-right-col" style="float: left; margin-right: 10px; width: 50%;">
+                    <div class="editor-lablel">
+                        <label>Sign Up Date</label>
+                    </div>
+                    <div class="editor-field">
+                        <div id="signUpDate"></div>
+                    </div>
+                    <div class="editor-lablel">
+                        <label>Registration Method</label>
+                    </div>
+                    <div class="editor-field">
+                        <div id="signUpDate"></div>
+                    </div>
+                    <div class="editor-lablel">
+                        <label>Last Logged In</label>
+                    </div>
+                    <div class="editor-field">
+                        <div id="lastLoggedInDate"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <p>
+            <input type="submit" value="Save Changes" />
+        </p>
+        </form>
+	</fieldset>
+        <p>
+            <input type="submit" value="Lock User" />
+            <input type="submit" value="Un-Lock User" />
+        </p>
 </div>

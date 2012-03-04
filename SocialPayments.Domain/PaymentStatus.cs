@@ -10,6 +10,7 @@ namespace SocialPayments.Domain
         Submitted = 0,
         Pending = 1,
         Paid = 2,
-        ReturnedNSF = 3
+        ReturnedNSF = 3,
+        Cancelled = 4
     }
 }

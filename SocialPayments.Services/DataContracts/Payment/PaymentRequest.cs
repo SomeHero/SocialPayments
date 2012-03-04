@@ -9,8 +9,8 @@ namespace SocialPayments.Services.DataContracts.Payment
     [DataContract]
     public class PaymentRequest
     {
-        //[DataMember(Name = "ApiKey")]
-        //public Guid ApiKey { get; set; }
+        [DataMember(Name = "ApiKey")]
+        public Guid ApiKey { get; set; }
 
         [DataMember(Name = "PaymentId")]
         public string PaymentId { get; set; }
@@ -30,8 +30,8 @@ namespace SocialPayments.Services.DataContracts.Payment
         [DataMember(Name="comment")]
         public string Comment { get; set; }
 
-        [DataMember(Name="fromAcount")]
-        public int FromAccount { get; set; }
+        [DataMember(Name="paymentAccountid")]
+        public int PaymentAccountId { get; set; }
 
         [DataMember(Name = "securityPin")]
         public string SecurityPin { get; set; }

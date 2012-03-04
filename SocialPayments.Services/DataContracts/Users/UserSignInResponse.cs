@@ -15,7 +15,11 @@ namespace SocialPayments.Services.DataContracts.Users
         public string UserId { get; set; }
         [DataMember(Name = "mobileNumber")]
         public string MobileNumber { get; set; }
+        [DataMember(Name = "setupSecurityPin")]
+        public bool SetupSecurityPin { get; set; }
+        [DataMember(Name = "setupPassword")]
+        public Boolean SetupPassword { get; set; }
         [DataMember(Name = "paymentAccountId")]
-        public string PaymentAccountId { get; set; }
+        public String PaymentAccountId { get; set; }
     }
 }

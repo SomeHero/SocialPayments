@@ -1,29 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
   <publishProfile publishUrl="pdthx.me" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="Default Web Site/Services" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="True" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="True" profileName="Staging" publishMethod="MSDeploy" replaceMatchingFiles="True" userName="WDeployAdmin" savePWD="True" userPWD="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAADAb2e3hIF063FapvBV6QhgAAAAACAAAAAAAQZgAAAAEAACAAAADLvVq6iRNKSbi4/DhKCN6SRh8VWhiRYoQbgWoskc4vpgAAAAAOgAAAAAIAACAAAABTjahU3Zce2n6F84EYzgC6uyMmq9JY9nwd0uaHGh4sAiAAAAACKCT8fTZ3WbNxky2vRnK9XR5Sc5rIIHncPvaUfpuZe0AAAADt+rwgugB0u9uya9MQXCFBL6quc06MQQ3egc/QLbDChbWfwNzTAt3KAFUPb+IvGJVitfAxO0iFgUAzSKjrmqFP" SelectedForPublish="False" />
-  <publishProfile publishUrl="C:\inetpub\wwwroot\SocialPayments\Services" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Local" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="False">
-    <file relUrl="Web.config" publishTime="12/16/2011 16:40:19" />
-    <file relUrl="bin/EntityFramework.dll" publishTime="11/01/2011 18:21:06" />
-    <file relUrl="bin/NLog.xml" publishTime="07/17/2011 23:26:56" />
-    <file relUrl="bin/SocialPayments.Services.dll" publishTime="12/16/2011 16:40:18" />
-    <file relUrl="bin/SocialPayments.Domain.pdb" publishTime="12/16/2011 16:40:15" />
-    <file relUrl="bin/SocialPayments.DomainServices.pdb" publishTime="12/16/2011 16:40:16" />
-    <file relUrl="bin/SocialPayments.DataLayer.dll" publishTime="12/16/2011 16:40:16" />
-    <file relUrl="bin/AWSSDK.dll" publishTime="11/03/2011 02:41:08" />
-    <file relUrl="bin/EntityFramework.xml" publishTime="11/01/2011 18:21:06" />
-    <file relUrl="bin/SocialPayments.DomainServices.dll" publishTime="12/16/2011 16:40:16" />
-    <file relUrl="bin/SocialPayments.Services.pdb" publishTime="12/16/2011 16:40:18" />
-    <file relUrl="bin/System.Web.Helpers.dll" publishTime="01/05/2011 14:45:38" />
-    <file relUrl="DataContracts/App_Data/APIKeys.xml" publishTime="11/01/2011 18:26:10" />
-    <file relUrl="NLog.config" publishTime="11/12/2011 20:52:07" />
-    <file relUrl="bin/NLog.dll" publishTime="07/17/2011 23:26:56" />
-    <file relUrl="Default.htm" publishTime="11/11/2011 17:31:16" />
-    <file relUrl="Global.asax" publishTime="11/01/2011 18:26:10" />
-    <file relUrl="bin/AWSSDK.xml" publishTime="11/03/2011 02:41:08" />
-    <file relUrl="bin/SocialPayments.DataLayer.pdb" publishTime="12/16/2011 16:40:16" />
-    <file relUrl="ReadMe.htm" publishTime="11/01/2011 18:26:10" />
-    <file relUrl="bin/System.Web.Helpers.xml" publishTime="12/19/2010 22:59:38" />
-    <file relUrl="bin/SocialPayments.Domain.dll" publishTime="12/16/2011 16:40:15" />
-  </publishProfile>
-  <publishProfile publishUrl="pdthx.me" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="Beta/Services" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="True" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="True" profileName="Beta" publishMethod="MSDeploy" replaceMatchingFiles="True" userName="WDeployAdmin" savePWD="True" userPWD="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAADAb2e3hIF063FapvBV6QhgAAAAACAAAAAAAQZgAAAAEAACAAAADVl2T0+/FEVG9FEn74/00ViyNueSu1oT4s6G4fyRMO6AAAAAAOgAAAAAIAACAAAACztBRG8nX25ywfZWnGUWp2GUIJJYCMXXBW78L0Rj77wCAAAAB68FGmTsgq3uklxZSm/Ve6OzABC4t3+xSLvDlvL9JKxUAAAADc9WvU2U/13R8du8lvkdqQVb2fj2JNwOB3hW19nSWfc3xrD9CBQdZCR+amwu3uXxXoJ5Jch0Ed2NGw8W9QKtFY" SelectedForPublish="True" />
+  <publishProfile publishUrl="C:\inetpub\wwwroot\SocialPayments\Services" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Local" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="False" />
+  <publishProfile publishUrl="pdthx.me" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="Beta/Services" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="True" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="True" profileName="Beta" publishMethod="MSDeploy" replaceMatchingFiles="True" userName="WDeployAdmin" savePWD="True" userPWD="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAADAb2e3hIF063FapvBV6QhgAAAAACAAAAAAAQZgAAAAEAACAAAAB6n/f8plUIa2qZTg9kUCuCcYZdUf7CveAInu1kTdwicwAAAAAOgAAAAAIAACAAAACeVWBhwM26OB7RlvGbHyhXDpiD8FrZ29CiO/9TWyjx0yAAAAB99e9PFuExlyj9C68sxAuyfNRK0CnHJLVtdwWf3TPfW0AAAAAXw6f4zcTg4VhEWgKk4A+bNGIxoIpl3ZWBcnkcXtefIeCQ05Wbq+zZJHcsZxaVvxL+6MXGf7QU/7kWKOBr+WPs" SelectedForPublish="True" />
 </publishData>

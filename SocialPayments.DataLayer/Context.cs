@@ -59,10 +59,24 @@ namespace SocialPayments.DataLayer
 
     }
 
-    public class MyInitializer : DropCreateDatabaseIfModelChanges<Context>
+    public class MyInitializer : DropCreateDatabaseAlways<Context>
     {
+        private SecurityService securityService = new SecurityService();
+       
         protected override void Seed(Context context)
         {
+            var adminRole = context.Roles.Add(new Role()
+            {
+                RoleId = Guid.NewGuid(),
+                Description = "Administrator",
+                RoleName = "Administrator",
+            });
+            var memberRole = context.Roles.Add(new Role()
+            {
+                RoleId = Guid.NewGuid(),
+                Description = "Member",
+                RoleName = "Member"
+            });
             context.Applications.Add(new Application()
             {
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
@@ -70,6 +84,7 @@ namespace SocialPayments.DataLayer
                 IsActive = true,
                 Url = "myurl.com"
             });
+            context.SaveChanges();
 
             context.Users.Add(new User()
             {
@@ -77,21 +92,45 @@ namespace SocialPayments.DataLayer
                 UserId = Guid.NewGuid(),
                 EmailAddress = "test@gmail.com",
                 MobileNumber = "804-355-5555",
-                UserName = "testuser",
-                Password = "testuser",
-                SecurityPin = "1111",
+                UserName = "8043555555",
+                Password = securityService.Encrypt("testuser"),
+                SecurityPin = securityService.Encrypt("1111"),
                 PaymentAccounts = new List<PaymentAccount>() {
-                    new PaymentAccount() { AccountNumber = "411111111111", AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= "Test User", RoutingNumber="053000219" }
+                    new PaymentAccount() { Id=Guid.NewGuid(), AccountNumber = securityService.Encrypt("411111111111"), AccountType = PaymentAccountType.Checking, 
+                        NameOnAccount= securityService.Encrypt("Test User"), RoutingNumber= securityService.Encrypt("053000219") }
                 },
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
                 UserStatus = UserStatus.Verified,
                 IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test
+                RegistrationMethod = UserRegistrationMethod.Test,
+                Roles = new List<Role>()
+                {
+                    memberRole
+                }
             });
 
+            context.Users.Add(new User()
+            {
+                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                UserId = Guid.NewGuid(),
+                EmailAddress = "admin@pdthx.me",
+                MobileNumber = "",
+                UserName = "sysadmin",
+                Password = securityService.Encrypt("pdthx123"),
+                SecurityPin = "",
+                IsLockedOut = false,
+                CreateDate = System.DateTime.Now,
+                LastLoggedIn = System.DateTime.Now,
+                UserStatus = UserStatus.Verified,
+                IsConfirmed = true,
+                RegistrationMethod = UserRegistrationMethod.Test,
+                Roles = new List<Role>()
+                {
+                    adminRole
+                }
+            });
             context.SaveChanges();
 
             var user = context.Users.FirstOrDefault(u => u.EmailAddress == "test@gmail.com");

@@ -84,6 +84,8 @@ namespace SocialPayments.DomainServices
                 .Include("FromAccount")
                 .Include("FromAccount.User")
                 .Include("ToAccount")
+                .Include("Transactions")
+                .Include("Transactions.FromAccount")
                 .FirstOrDefault(p => p.Id == id);
 
             return payment;

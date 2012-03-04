@@ -39,7 +39,7 @@ namespace SocialPayments.Services
                 Comment = p.Comments,
                 FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                 {
-                    
+
                 },
                 FromMobileNumber = p.FromMobileNumber,
                 ToMobileNumber = p.ToMobileNumber,
@@ -53,20 +53,133 @@ namespace SocialPayments.Services
 
             DomainServices.PaymentService paymentService = new DomainServices.PaymentService();
 
-            var payment = paymentService.GetPayment(new Guid(id));
+            Guid paymentId;
+
+            Guid.TryParse(id, out paymentId);
+
+            var payment = _ctx.Payments
+                .Include("Application")
+                .Include("FromAccount")
+                .Include("FromAccount.User")
+                .Include("ToAccount")
+                .Include("Transactions")
+                .Include("Transactions.FromAccount")
+                .FirstOrDefault(p => p.Id == paymentId);
+
+            DataContracts.Transaction.TransactionResponse senderTransaction = null;
+            DataContracts.Transaction.TransactionResponse recipientTransaction = null;
+
+            foreach (var transaction in payment.Transactions)
+            {
+                logger.Log(LogLevel.Info, transaction.FromAccount.AccountNumber);
+                
+                var accountInfo = securityService.Decrypt(transaction.FromAccount.AccountNumber);
+                var accountType = transaction.FromAccount.AccountType.ToString();
+
+                logger.Log(LogLevel.Info, accountInfo);
+                if(accountInfo.Length >= 4)
+                    accountInfo = accountInfo.Substring(accountInfo.Length - 4, 4);
+
+                if (transaction.Type == Domain.TransactionType.Withdrawal)
+                {
+                    senderTransaction = new DataContracts.Transaction.TransactionResponse()
+                    {
+                        ACHTransactionId = transaction.ACHTransactionId,
+                        Amount = transaction.Amount,
+                        CreateDate = transaction.CreateDate,
+                        FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
+                        {
+                            Id = transaction.FromAccount.Id.ToString(),
+                            AccountInformation = accountType + " " + "****" + accountInfo
+                        },
+                        LastUpdatedDate = transaction.LastUpdatedDate,
+                        PaymentChannel = transaction.PaymentChannelType.ToString(),
+                        PaymentId = transaction.PaymentId,
+                        StandardEntryClass = transaction.StandardEntryClass.ToString(),
+                        TransactionBatchId = transaction.TransactionBatchId.ToString(),
+                        TransactionCategory = "Withdrawal",
+                        TransactionId = transaction.Id,
+                        TransactionStatus = transaction.Status.ToString(),
+                        TransationSentDate = transaction.SentDate
+                    };
+
+                }
+                else
+                {
+                    recipientTransaction = new DataContracts.Transaction.TransactionResponse()
+                    {
+                        ACHTransactionId = transaction.ACHTransactionId,
+                        Amount = transaction.Amount,
+                        CreateDate = transaction.CreateDate,
+                        FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
+                        {
+                            Id = transaction.FromAccount.Id.ToString(),
+                            AccountInformation = accountType + " " + "****" + accountInfo
+                        },
+                        LastUpdatedDate = transaction.LastUpdatedDate,
+                        PaymentChannel = transaction.PaymentChannelType.ToString(),
+                        PaymentId = transaction.PaymentId,
+                        StandardEntryClass = transaction.StandardEntryClass.ToString(),
+                        TransactionBatchId = transaction.TransactionBatchId.ToString(),
+                        TransactionCategory = "Deposit",
+                        TransactionId = transaction.Id,
+                        TransactionStatus = transaction.Status.ToString(),
+                        TransationSentDate = transaction.SentDate
+                    };
+                }
+            }
 
             return new DataContracts.Payment.PaymentResponse()
             {
                 PaymentId = payment.Id.ToString(),
                 FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                 {
-
+                     
                 },
                 FromMobileNumber = payment.FromMobileNumber,
                 Amount = payment.PaymentAmount,
                 ToMobileNumber = payment.ToMobileNumber,
                 Comment = payment.Comments,
-                UserId = payment.FromAccount.User.UserId.ToString()
+                UserId = payment.FromAccount.User.UserId.ToString(),
+                SenderTransaction = senderTransaction,
+                RecipientTransaction = recipientTransaction,
+                CreateDate = payment.CreateDate,
+                PaymentSubmittedDate = payment.PaymentDate,
+                PaymentStatus = payment.PaymentStatus.ToString()
+            };
+        }
+        public DataContracts.Payment.CancelPaymentResponse CancelPayment(DataContracts.Payment.CancelPaymentRequest request) {
+            var payment = _ctx.Payments.FirstOrDefault(p => p.Id == new Guid(request.PaymentId));
+
+            if (payment == null)
+            {
+                return new CancelPaymentResponse()
+                {
+                    Success = false,
+                    Message = String.Format("Unable to cancel payment {0}. Payment not found.", request.PaymentId)
+                };
+            }
+
+            if (payment.PaymentStatus != Domain.PaymentStatus.Submitted || payment.PaymentStatus != Domain.PaymentStatus.ReturnedNSF)
+            {
+                return new CancelPaymentResponse()
+                {
+                    Success = false,
+                    Message = String.Format("Unable to cancel payment {0}. Payment not a valid status.", request.PaymentId)
+                };
+            }
+            payment.PaymentStatus = Domain.PaymentStatus.Cancelled;
+
+            foreach (var transaction in payment.Transactions)
+            {
+                transaction.Status = Domain.TransactionStatus.Cancelled;
+            }
+
+            _ctx.SaveChanges();
+
+            return new CancelPaymentResponse()
+            {
+                Success = true
             };
         }
         public DataContracts.Payment.PaymentResponse AddPayment(DataContracts.Payment.PaymentRequest paymentRequest)
@@ -74,13 +187,13 @@ namespace SocialPayments.Services
             logger.Log(LogLevel.Info, String.Format("Payment Service received request to add payment."));
 
             var application = applicationService.GetApplication(Guid.Parse("bda11d91-7ade-4da1-855d-24adfe39d174"));
-            
+
             logger.Log(LogLevel.Info, String.Format("Getting Application."));
 
             if (application == null)
             {
                 logger.Log(LogLevel.Info, String.Format("No application"));
-                
+
                 return new PaymentResponse()
                 {
                     ResponseStatus = "Failed",
@@ -91,12 +204,12 @@ namespace SocialPayments.Services
 
             logger.Log(LogLevel.Info, String.Format("Getting Payer."));
 
-            var payer =userService.GetUser(u => u.UserId.Equals(new Guid(paymentRequest.UserId)));
+            var payer = userService.GetUser(u => u.UserId.Equals(new Guid(paymentRequest.UserId)));
 
             if (payer == null)
             {
                 logger.Log(LogLevel.Info, String.Format("No payer found."));
-                
+
                 return new PaymentResponse()
                 {
                     ResponseStatus = "Failed",
@@ -113,10 +226,10 @@ namespace SocialPayments.Services
             {
                 securityPin = securityService.Decrypt(payer.SecurityPin);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, String.Format("Exception decrypting security pin {0}. Exception {1}.", paymentRequest.SecurityPin, ex.Message));
-                
+
                 return new PaymentResponse()
                 {
                     ResponseStatus = "Failed",
@@ -144,7 +257,7 @@ namespace SocialPayments.Services
             logger.Log(LogLevel.Info, String.Format("Getting From Account."));
 
             var fromAccount = payer.PaymentAccounts[0];
-            if(fromAccount == null)
+            if (fromAccount == null)
                 logger.Log(LogLevel.Info, String.Format("From Account not found."));
 
 
@@ -169,12 +282,12 @@ namespace SocialPayments.Services
                     StandardEntryClass = Domain.StandardEntryClass.Web,
                     ToMobileNumber = paymentRequest.ToMobileNumber
                 });
-  
+
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Info, String.Format("Failed adding payment. Exception {0}", ex.ToString()));
-                
+
                 return new PaymentResponse()
                 {
                     ResponseStatus = "Failed",
@@ -185,7 +298,7 @@ namespace SocialPayments.Services
 
             _ctx.SaveChanges();
             logger.Log(LogLevel.Info, String.Format("Payment successfully submitted."));
-            
+
             AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
 
             client.Publish(new PublishRequest()
@@ -195,7 +308,7 @@ namespace SocialPayments.Services
                 Subject = "New Payment Receivied"
             });
             logger.Log(LogLevel.Info, String.Format("Message sent to Amazon SNS"));
-            
+
             DataContracts.Payment.PaymentResponse results;
 
             try
@@ -231,7 +344,7 @@ namespace SocialPayments.Services
                 };
             }
 
-            
+
         }
 
         public void UpdatePayment(DataContracts.Payment.PaymentRequest paymentRequest)

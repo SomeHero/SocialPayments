@@ -127,7 +127,7 @@ namespace SocialPayments.Services
                 client.Publish(new PublishRequest()
                 {
                     Message = newPaymentRequest.PaymentRequestId.ToString(),
-                    TopicArn = "arn:aws:sns:us-east-1:102476399870:PaymentRequests",
+                    TopicArn = System.Configuration.ConfigurationManager.AppSettings["PaymentRequestPostedTopicARN"],
                     Subject = "New Payment Request Receivied"
                 });
                 logger.Log(LogLevel.Info, String.Format("Message sent to Amazon SNS"));

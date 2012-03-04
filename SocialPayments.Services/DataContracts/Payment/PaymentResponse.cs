@@ -39,5 +39,20 @@ namespace SocialPayments.Services.DataContracts.Payment
 
         [DataMember(Name = "fromAcount")]
         public DataContracts.PaymentAccount.PaymentAccountReponse FromAccount { get; set; }
+
+        [DataMember(Name = "senderTransaction")]
+        public DataContracts.Transaction.TransactionResponse SenderTransaction { get; set; }
+
+        [DataMember(Name = "recipientTransaction")]
+        public DataContracts.Transaction.TransactionResponse RecipientTransaction { get; set; }
+
+        [DataMember(Name = "createDate")]
+        public DateTime CreateDate { get; set; }
+
+        [DataMember(Name = "paymentSubmittedDate")]
+        public DateTime? PaymentSubmittedDate { get; set; }
+
+        [DataMember(Name = "paymentStatus")]
+        public string PaymentStatus { get; set; }
     }
 }

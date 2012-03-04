@@ -11,6 +11,7 @@ using SocialPayments.DomainServices;
 using NLog;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using SocialPayments.Domain;
 
 namespace SocialPayments.Services
 {
@@ -68,10 +69,14 @@ namespace SocialPayments.Services
         }
         public UserRegistrationResponse RegisterUser(UserRegistrationRequest request)
         {
+            logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.UserName));
+
             string password = "pdthxnew";
 
-             int defaultNumPasswordFailures = 0;
-                       
+            int defaultNumPasswordFailures = 0;
+
+            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+
 
             Domain.User user;
 
@@ -98,7 +103,11 @@ namespace SocialPayments.Services
                     Limit = 0,
                     RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
                     SetupPassword = false,
-                    SetupSecurityPin = false
+                    SetupSecurityPin = false,
+                    Roles = new List<Role>()
+                    {
+                        memberRole
+                    }
                 });
 
                 _ctx.SaveChanges();
@@ -137,7 +146,7 @@ namespace SocialPayments.Services
                 client.Publish(new PublishRequest()
                 {
                     Message = user.UserId.ToString(),
-                    TopicArn = "arn:aws:sns:us-east-1:102476399870:UserNotifications",
+                    TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
                     Subject = "New User Registration"
                 });
             }
@@ -375,28 +384,39 @@ namespace SocialPayments.Services
         {
             Domain.User user = null;
 
-            var mobileNumber = "";
-            var userId = "";
             var paymentAccountId = "";
 
-            logger.Log(LogLevel.Info, string.Format("Hashed Password {0}", securityService.Encrypt(request.Password)));
             var isValid = userDomainService.ValidateUser(request.UserName, securityService.Encrypt(request.Password), out user);
 
-            if (isValid)
+            if (user != null && user.PaymentAccounts.Count > 0)
             {
-                mobileNumber = user.MobileNumber;
-                userId = user.UserId.ToString();
-                if(user.PaymentAccounts.Count >0)
-                    paymentAccountId = user.PaymentAccounts[0].Id.ToString();
+                paymentAccountId = user.PaymentAccounts[0].Id.ToString();
             }
 
-            return new UserSignInResponse()
+            if (isValid && user != null)
             {
-                IsValid = isValid,
-                UserId = userId,
-                MobileNumber = mobileNumber,
-                PaymentAccountId = paymentAccountId
-            };
+                return new UserSignInResponse()
+                {
+                    IsValid = true,
+                    UserId = user.UserId.ToString(),
+                    MobileNumber = user.MobileNumber,
+                    PaymentAccountId = paymentAccountId,
+                    SetupPassword = user.SetupPassword,
+                    SetupSecurityPin = user.SetupSecurityPin
+                };
+            }
+            else
+            {
+                return new UserSignInResponse()
+                {
+                    IsValid = false,
+                    UserId = "",
+                    MobileNumber = "",
+                    PaymentAccountId = "",
+                    SetupPassword = false,
+                    SetupSecurityPin = false
+                };
+            }
         }
 
         public DataContracts.Users.UserResponse AddUser(DataContracts.Users.UserRequest newUser)

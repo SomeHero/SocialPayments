@@ -15,6 +15,18 @@ namespace SocialPayments.Web.Admin.Models
         public string FromMobileNumber { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:c}")]
         public double Amount { get; set; }
-        public string Status { get; set; }
+        public int PaymentStatusValue { get; set; }
+        public string PaymentStatus
+        {
+            get
+            {
+                return ((PaymentStatus)PaymentStatusValue).ToString();
+            }
+        }
+    }
+    public class UpdateModel
+    {
+        public String PaymentId { get; set; }
+        public Double PaymentAmount { get; set; }
     }
 }

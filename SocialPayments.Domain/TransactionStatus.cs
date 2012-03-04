@@ -11,6 +11,7 @@ namespace SocialPayments.Domain
         Pending = 1,
         Complete = 2,
         Failed = 3,
-        Returned = 4
+        Returned = 4,
+        Cancelled = 5
     }
 }

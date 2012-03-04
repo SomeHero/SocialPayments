@@ -4,7 +4,8 @@ to use a different color start by replacing all instances of
 #5c87b2 with your new color.
 ----------------------------------------------------------*/
 body {
-	color: #464646;
+	color: #666;
+	background-color: #F5F5F5;
 	font: 14px 'Lucida Grande', Lucida, Tahoma, sans-serif;
 	width: 100%;
 	margin: 0px; 
@@ -92,10 +93,9 @@ page width. Or, you can specify an exact pixel width. */
 #header
 {
     position: relative;
-    margin-bottom: 0px;
-    color: #fff;
+    margin-bottom: 10px;
+    color: #666;
     padding:  5px 14px 0px 14px;
-    background-color: #AAA;
 }
 
 #header h1
@@ -243,7 +243,17 @@ table th
 {
     clear: both;
 }
-
+.clearfix:after {
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+.clearfix {display:inline-block;}
+/* Hide from IE Mac \*/
+	.clearfix {display:block;}
+/* End hide from IE Mac */
 .error
 {
     color:Red;
@@ -253,7 +263,35 @@ table th
 {
     margin-top:40px;
 }
-
+#menucontainer ul#submenu
+{
+    padding: 0 0 2px;
+    position: relative;
+    margin: 0;
+    text-align: left;
+}
+#menucontainer ul#submenu li
+{
+}
+#menucontainer ul#submenu li a
+{
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 2.8em;
+}
+#menucontainer ul#submenu li a:hover
+{
+     text-decoration: none;
+}
+#menucontainer ul#submenu li a:active
+{
+    text-decoration: none;
+}
+#menucontainer ul#submenu li.selected a
+{
+    color: #000;
+}
 div#title
 {
     display:block;
@@ -267,24 +305,20 @@ div#title
     display:block;
     text-align:right;
     margin:10px;
-    color:#fff;
 }
 
 #logindisplay a:link
 {
-    color: white;
     text-decoration: underline;
 }
 
 #logindisplay a:visited
 {
-    color: white;
     text-decoration: underline;
 }
 
 #logindisplay a:hover
 {
-    color: white;
     text-decoration: none;
 }
 
@@ -564,4 +598,30 @@ color: #7195AF;
 #footer p {
 	padding:10px;
 	margin:0;
+}
+#main-wrapper 
+{
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+}
+#left-col 
+{
+    width: 240px;
+}
+#main-col
+{
+    position: absolute;
+    top: 0px;
+    left: 241px;
+    text-align: left;
+    background-color: #fff;
+}
+.edit 
+{
+    cursor: pointer;
+}
+.dialog-form 
+{
+    text-align: left;
 }

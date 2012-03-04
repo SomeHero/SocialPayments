@@ -25,11 +25,16 @@ namespace SocialPayments.Services.ServiceContracts
         DataContracts.Payment.PaymentResponse GetPayment(string id);
 
         [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/Payments/CancelPayment", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json)]
+        DataContracts.Payment.CancelPaymentResponse CancelPayment(DataContracts.Payment.CancelPaymentRequest request);
+
+        [OperationContract]
         [WebInvoke(Method = "Put", UriTemplate = "/Payments", BodyStyle = WebMessageBodyStyle.Wrapped)]
         void UpdatePayment(DataContracts.Payment.PaymentRequest payment);
 
         [OperationContract]
         [WebInvoke(Method = "Delete", UriTemplate = "/Payments", BodyStyle = WebMessageBodyStyle.Wrapped)]
         void DeletePayment(DataContracts.Payment.PaymentRequest payment);
+
     }
 }

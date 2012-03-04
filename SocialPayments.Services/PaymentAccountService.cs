@@ -49,10 +49,11 @@ namespace SocialPayments.Services
             return new PaymentAccountReponse()
             {
                 Id = paymentAccount.Id.ToString(),
-                AccountNumber = paymentAccount.AccountNumber,
-                AccountType = "Checking",
-                NameOnAccount = paymentAccount.NameOnAccount,
-                RoutingNumber = paymentAccount.RoutingNumber,
+                AccountInformation = ""
+                //AccountNumber = paymentAccount.AccountNumber,
+                //AccountType = "Checking",
+                //NameOnAccount = paymentAccount.NameOnAccount,
+                //RoutingNumber = paymentAccount.RoutingNumber,
             };
 
         }
@@ -66,11 +67,12 @@ namespace SocialPayments.Services
         {
             return new PaymentAccountReponse()
             {
-                AccountNumber = "123412342",
-                AccountType = "Checking",
+                //AccountNumber = "123412342",
+                //AccountType = "Checking",
                 Id = "1",
-                NameOnAccount = "Test USer",
-                RoutingNumber = "123123123"
+                AccountInformation = ""
+                //NameOnAccount = "Test USer",
+                //RoutingNumber = "123123123"
             };
         }
 
