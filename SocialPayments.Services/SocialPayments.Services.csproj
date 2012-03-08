@@ -105,6 +105,8 @@
     <Compile Include="APIKeyAuthorization.cs" />
     <Compile Include="APIKeyRepository.cs" />
     <Compile Include="ApplicationService.cs" />
+    <Compile Include="Behaviors\MessageLoggingBehavior.cs" />
+    <Compile Include="Behaviors\MessageLoggingBehaviorExtension.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="CancelPaymentRequest.cs" />
     <Compile Include="CancelPaymentResponse.cs" />
@@ -121,6 +123,8 @@
     <Compile Include="DataContracts\Transaction\TransactionResponse.cs" />
     <Compile Include="DataContracts\Users\UserSetupSecurityPinRequest.cs" />
     <Compile Include="DataContracts\Users\UserSetupSecurityPinResonse.cs" />
+    <Compile Include="Factories\CustomServiceHostFactory.cs" />
+    <Compile Include="Inspectors\IncomingMessageLogger.cs" />
     <Compile Include="PaymentAccountService.cs" />
     <Compile Include="DataContracts\PaymentAccount\PaymentAccountReponse.cs" />
     <Compile Include="DataContracts\Payment\Base\PaymentResponseBase.cs" />
@@ -190,6 +194,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

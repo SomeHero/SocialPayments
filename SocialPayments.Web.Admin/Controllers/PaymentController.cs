@@ -40,7 +40,7 @@ namespace SocialPayments.Web.Admin.Controllers
             if (payment == null)
                 throw new Exception(String.Format("Unable to cancel payment {0}. Payment not found.", paymentId));
 
-            if (payment.PaymentStatus != Domain.PaymentStatus.Submitted && payment.PaymentStatus != Domain.PaymentStatus.ReturnedNSF)
+            if (payment.PaymentStatus != Domain.PaymentStatus.Submitted && payment.PaymentStatus != Domain.PaymentStatus.Pending)
                 throw new Exception(String.Format("Unable to cancel payment {0}. Payment not in a valid status.", paymentId));
             
             payment.PaymentStatus = Domain.PaymentStatus.Cancelled;
