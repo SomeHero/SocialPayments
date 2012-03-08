@@ -11,7 +11,7 @@ namespace SocialPayments.Services
     {
         void Application_Start(object sender, EventArgs e)
         {
-            Database.SetInitializer(new MyInitializer());
+           // Database.SetInitializer(new MyInitializer());
 
             RegisterRoutes();
         }

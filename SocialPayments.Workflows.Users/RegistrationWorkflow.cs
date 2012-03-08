@@ -139,7 +139,7 @@ namespace SocialPayments.Workflows.Users
                             smsService.SendSMS(new Services.DataContracts.SMS.SMSRequest()
                             {
                                 ApiKey = payment.ApiKey,
-                                Message = string.Format("A payment in the amounnt of {0} from {1} was successfully completed.  {0} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
+                                Message = string.Format("A payment in the amounnt of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
                                 MobileNumber = user.MobileNumber,
                                 SMSMessageId = Guid.NewGuid()
                             });
@@ -150,13 +150,13 @@ namespace SocialPayments.Workflows.Users
                             {
                                 ApiKey = payment.ApiKey,
                                 FromAddress = "admin@pdthx.me",
-                                Body = string.Format("A payment in the amounnt of {0} from {1} was successfully completed.  {0} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
+                                Body = string.Format("A payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
                                 EmailLogId = Guid.NewGuid(),
                                 Subject = string.Format("You received {0} from {1}", payment.PaymentAmount, payment.FromMobileNumber),
                                 ToAddress = user.EmailAddress
                             });
 
-                            logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payer at {1} f0r Payment {2}", userId, user.MobileNumber, payment.Id));
+                            logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payer at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
                             smsService.SendSMS(new Services.DataContracts.SMS.SMSRequest()
                             {
@@ -172,7 +172,7 @@ namespace SocialPayments.Workflows.Users
                             {
                                 ApiKey = payment.ApiKey,
                                 FromAddress = "admin@pdthx.me",
-                                Body = string.Format("Your payment in the amounnt of {0} from {1} was successfully completed.  {0} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber),
+                                Body = string.Format("Your payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber),
                                 EmailLogId = Guid.NewGuid(),
                                 Subject = string.Format("Your payment of {0} to {1} is complete.", payment.PaymentAmount, payment.FromMobileNumber),
                                 ToAddress = payment.FromAccount.User.EmailAddress,

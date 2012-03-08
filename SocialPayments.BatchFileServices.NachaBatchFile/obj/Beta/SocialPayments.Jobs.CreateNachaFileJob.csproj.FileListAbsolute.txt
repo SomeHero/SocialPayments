@@ -17,3 +17,4 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.BatchFileServices.NachaBatchFile\obj\Beta\ResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.BatchFileServices.NachaBatchFile\obj\Beta\SocialPayments.BatchFileServices.NachaBatchFile.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.BatchFileServices.NachaBatchFile\obj\Beta\SocialPayments.BatchFileServices.NachaBatchFile.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.BatchFileServices.NachaBatchFile\bin\Beta\NLog.config

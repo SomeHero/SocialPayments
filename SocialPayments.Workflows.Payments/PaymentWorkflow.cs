@@ -114,7 +114,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("You received a payment for {0:C} from {1}.  The payment is complete. PdThx.me", payment.PaymentAmount, payment.FromMobileNumber),
+                            Message = String.Format("You received a payment for {0:C} from {1}.  The payment is complete. PaidThx.com", payment.PaymentAmount, payment.FromMobileNumber),
                             MobileNumber = payment.ToMobileNumber
                         });
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payer"));
@@ -123,7 +123,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("Your payment for {0:C} to {1} is complete. PdThx.me", payment.PaymentAmount, payment.ToMobileNumber),
+                            Message = String.Format("Your payment for {0:C} to {1} is complete. PaidThx.com", payment.PaymentAmount, payment.ToMobileNumber),
                             MobileNumber = payment.FromMobileNumber
                         });
                         //Send out confirmation email to payer
@@ -151,7 +151,7 @@ namespace SocialPayments.Workflows.Payments
                     {
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payee not found"));
 
-                        var link = String.Format("http://beta.paidthx.me/mobile/{0}", payment.Id);
+                        var link = String.Format("http://beta.paidthx.com/mobile/{0}", payment.Id);
                         //Send out SMS Message to payee
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
@@ -165,7 +165,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("Your payment request for {0:C} was submitted to an unregistered user at {1}. PdThx.me", payment.PaymentAmount, payment.ToMobileNumber),
+                            Message = String.Format("Your payment request for {0:C} was submitted to an unregistered user at {1}. PaiddThx.com", payment.PaymentAmount, payment.ToMobileNumber),
                             MobileNumber = payment.FromMobileNumber
                         });
                         emailService.SendEmail(new SocialPayments.Services.DataContracts.Email.EmailRequest()

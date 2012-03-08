@@ -18,6 +18,7 @@ namespace SocialPayments.DataLayer
         public DbSet<Calendar> Calendars { get; set; }
         public DbSet<EmailLog> EmailLog { get; set; }
         public DbSet<SMSLog> SMSLog { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionBatch> TransactionBatches { get; set; }
         public DbSet<MobileDeviceAlias> MobileDeviceAliases { get; set; }
         public DbSet<PaymentRequest> PaymentRequests { get; set; }
@@ -59,7 +60,7 @@ namespace SocialPayments.DataLayer
 
     }
 
-    public class MyInitializer : DropCreateDatabaseAlways<Context>
+    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
        

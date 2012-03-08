@@ -212,16 +212,16 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             if (transaction.Type == TransactionType.Deposit)
             {
                 if (transaction.FromAccount.AccountType == PaymentAccountType.Checking)
-                    sb.Append("27".PadLeft(2, ' ')); //Transaction Code "Checking" account
+                    sb.Append("22".PadLeft(2, ' ')); //Transaction Code Deposit "Checking" account
                 else
-                    sb.Append("37".PadLeft(2, ' ')); //Transaction Code "Savings" account
+                    sb.Append("32".PadLeft(2, ' ')); //Transaction Code Deposit "Savings" account
             }
             else
             {
                 if (transaction.FromAccount.AccountType == PaymentAccountType.Checking)
-                    sb.Append("22".PadLeft(2, ' ')); //Transaction Code "Checking" account
+                    sb.Append("27".PadLeft(2, ' ')); //Transaction Code Debit "Checking" account
                 else
-                    sb.Append("32".PadLeft(2, ' ')); //Transaction Code "Savings" account
+                    sb.Append("37".PadLeft(2, ' ')); //Transaction Code Debit "Savings" account
             }
         
             string routingNumber = securityService.Decrypt(transaction.FromAccount.RoutingNumber);

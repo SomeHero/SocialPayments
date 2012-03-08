@@ -10,6 +10,8 @@ namespace SocialPayments.Domain
     {
         public Guid Id { get; set; }
         public Guid PaymentId { get; set; }
+        [ForeignKey("PaymentId")]
+        public virtual Payment Payment { get; set; }
         public Guid FromAccountId { get; set; }
         [ForeignKey("FromAccountId")]
         public virtual PaymentAccount FromAccount

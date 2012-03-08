@@ -23,3 +23,4 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\obj\x86\Beta\ResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\obj\x86\Beta\SocialPayments.Test.exe
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\obj\x86\Beta\SocialPayments.Test.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\NLog.config
