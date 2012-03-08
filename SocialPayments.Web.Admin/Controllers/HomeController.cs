@@ -34,7 +34,9 @@ namespace SocialPayments.Web.Admin.Controllers
                 TotalWithdrawalAmount = batch.TotalWithdrawalAmount,
                 TotalNumberOfDeposits = batch.TotalNumberOfDeposits,
                 TotalNumberOfWithdrawals = batch.TotalNumberOfWithdrawals
-            }).ToList();
+            })
+            .OrderByDescending(b => b.BatchCreated)
+            .ToList();
 
             return View(model);
         }
