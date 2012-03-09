@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body
+        {
+            font-family: Verdana;
+        }
+    </style>
+    <title>WCF REST Service with API Key Verification</title>
+</head>
+<body>
+    <h3>
+        WCF REST Service with API Key Verification</h3>
+    <p>
+        This template demonstrates how you can implement APIKey Verification for your REST
+        services to learn more</p>
+    <ol>
+        <li>Debug the application and click the links in default.htm</li>
+        <li>Watch <a href="http://channel9.msdn.com/shows/Endpoint/endpointtv-How-to-do-API-Key-Verification-with-a-WCF-WebHttp-REST-service/">
+            endpoint.tv - How to Do API Key Verification with a WCF WebHttp (REST) Service</a></li>
+        <li>Read <a href="http://blogs.msdn.com/b/rjacobs/archive/2010/06/14/how-to-do-api-key-verification-for-rest-services-in-net-4.aspx">
+            How to do API Key Verification for REST Services in .NET 4</a></li>
+    </ol>
+    <h3>
+        Why Use API Keys?</h3>
+    <p>
+        Most public web services use API Keys as a means to control access. This provides
+        you with a way to revoke the key of a malicious or malfunctioning application that
+        is causing problems with your service.</p>
+    <h3>
+        Implementing API Keys</h3>
+    <p>
+        Callers that want to invoke your service will need an API key. You will have to
+        create a mechanism for issuing and revoking, storing and retrieving API keys.</p>
+    <h3>
+        Modifying this template</h3>
+    <ol>
+        <li>Modify the APIKeyRepository class to obtain the keys from your store. This example
+            retrieves keys from App_Data/APIKeys.xml</li>
+        <li>For enhanced scalability consider caching the key list using the local cache or
+            Windows Server AppFabric caching for distributed caching across a web farm</li>
+        <li>Modify the HTML response returned when an API Key fails validation - the HTML returned
+            is defined as the constant <b>APIKeyAuthorization.APIErrorHTML</b></li>
+    </ol>
+    <h3>
+        Watch Out
+    </h3>
+    <p>
+        This APIKeyAuthoirzation behavior will apply to all services in the web site using
+        the web.config provided because it uses a behavior without a name making it the
+        default behavior for all services (including SOAP services). Typically that is what
+        you want, but if you need different behavior you can name this behavior configuration
+        and selectivly apply it.
+    </p>
+</body>
+</html>

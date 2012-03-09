@@ -69,5 +69,13 @@ namespace SocialPayments.Domain
         public virtual bool SetupPassword { get; set; }
         public virtual List<PaymentAccount> PaymentAccounts { get; set; }
 
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string SenderName { get; set; }
+
     }
 }
