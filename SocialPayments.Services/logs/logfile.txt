@@ -17,3 +17,11 @@
 2012-02-12 19:03:08.6757 SocialPayments.DomainServices.UserService Validating User
 2012-02-12 19:03:08.7099 SocialPayments.DomainServices.UserService Unable to find user by user name.
 2012-02-12 19:03:09.5009 SocialPayments.DomainServices.UserService Unable to find user by user name.
+2012-03-12 22:32:40.7636 SocialPayments.DomainServices.UserService Validating User
+2012-03-12 22:33:53.1142 SocialPayments.DomainServices.UserService Unable to find user by user name. Check email address.
+2012-03-12 22:33:53.3408 SocialPayments.DomainServices.UserService Unable to find user by email address. Check mobile number.
+2012-03-12 22:33:54.6708 SocialPayments.DomainServices.UserService Unable to find user by user name.
+2012-03-13 00:53:27.2216 SocialPayments.DomainServices.UserService Validating User
+2012-03-13 00:54:16.7119 SocialPayments.DomainServices.UserService Unable to find user by user name. Check email address.
+2012-03-13 00:54:16.8261 SocialPayments.DomainServices.UserService Unable to find user by email address. Check mobile number.
+2012-03-13 00:54:17.1015 SocialPayments.DomainServices.UserService Unable to find user by user name.

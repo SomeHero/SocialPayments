@@ -1,0 +1,4 @@
+Response to request to http://localhost:16839/UserService/?userName=jrhodes621&password=james123&apikey=bda11d91-7ade-4da1-855d-24adfe39d174:
+200 OK
+
+false

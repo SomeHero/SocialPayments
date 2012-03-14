@@ -15,6 +15,7 @@ namespace SocialPayments.DomainServices
     public class UserService
     {
         private readonly Context _ctx = new Context();
+        private SecurityService securityService = new SecurityService();
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -151,7 +152,7 @@ namespace SocialPayments.DomainServices
             {
                 throw CreateArgumentNullOrEmptyException("password");
             }
-            
+
             using (Context context = new Context())
             {
                 User user = null;
@@ -160,10 +161,17 @@ namespace SocialPayments.DomainServices
                     .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
                 if (user == null)
                 {
-                    logger.Log(LogLevel.Warn, "Unable to find user by user name.");
+                    logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
                     user = context.Users
                         .Include("PaymentAccounts")
                         .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
+                }
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
+                    user = context.Users
+                        .Include("PaymentAccounts")
+                        .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
                 }
                 if (user == null)
                 {
@@ -171,22 +179,21 @@ namespace SocialPayments.DomainServices
                     foundUser = null;
                     return false;
                 }
-                if (!user.IsConfirmed)
-                {
-                    foundUser = null;
-                    return false;
-                }
-                dynamic hashedPassword = user.Password;
+                //if (!user.IsConfirmed)
+                //{
+                //    foundUser = null;
+                //    return false;
+                //}
+                var hashedPassword = securityService.Encrypt(password);
                 logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
 
                 bool verificationSucceeded = false;
                 
                 try
                 {
-                    logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", hashedPassword, password));
-                    verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(password));
+                    logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
+                    verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
                         
-                        //cryptoService.VerifyHashedPassword(hashedPassword, password));
                 }
                 catch(Exception ex)
                 {

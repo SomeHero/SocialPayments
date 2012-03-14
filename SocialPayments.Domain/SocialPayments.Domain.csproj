@@ -88,6 +88,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="BatchFile.cs" />
     <Compile Include="BatchFileStatus.cs" />
+    <Compile Include="BetaSignup.cs" />
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />

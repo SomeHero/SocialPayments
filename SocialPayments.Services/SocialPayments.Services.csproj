@@ -124,11 +124,14 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="Behaviors\MessageLoggingBehavior.cs" />
     <Compile Include="Behaviors\MessageLoggingBehaviorExtension.cs" />
+    <Compile Include="BetaSignupService.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="CancelPaymentRequest.cs" />
     <Compile Include="CancelPaymentResponse.cs" />
     <Compile Include="DataContracts\Application\ApplicationRequest.cs" />
     <Compile Include="DataContracts\Application\ApplicationResponse.cs" />
+    <Compile Include="DataContracts\BetaSignUp\BetaSignUpRequest.cs" />
+    <Compile Include="DataContracts\BetaSignUp\BetaSignupResponse.cs" />
     <Compile Include="DataContracts\Calendar\CalendarDateRequest.cs" />
     <Compile Include="DataContracts\Calendar\CalendarDateResponse.cs" />
     <Compile Include="DataContracts\Calendar\CalendarRequest.cs" />
@@ -168,6 +171,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContracts\IApplication.cs" />
+    <Compile Include="ServiceContracts\IBetaSignupService.cs" />
     <Compile Include="ServiceContracts\ICalendarService.cs" />
     <Compile Include="ServiceContracts\IEmailService.cs" />
     <Compile Include="ServiceContracts\IPaymentAccountService.cs" />

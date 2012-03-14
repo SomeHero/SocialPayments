@@ -27,8 +27,11 @@ namespace SocialPayments.Workflows.Payments
         {
             var payment = _ctx.Payments.FirstOrDefault(p => p.Id == new Guid(paymentId));
 
-            if(payment == null)
+            if (payment == null)
+            {
+                logger.Log(LogLevel.Error, "Payment Id is Invalid");
                 throw new Exception("Payment id is invalid");
+            }
 
             logger.Log(LogLevel.Info, String.Format("Process Payment {0}", payment.Id.ToString()));
 
@@ -40,7 +43,10 @@ namespace SocialPayments.Workflows.Payments
                     string phoneNumberUnformatted = Regex.Replace(payment.ToMobileNumber, @"\D", string.Empty);
 
                     if (phoneNumberUnformatted.Length != 10)
+                    {
+                        logger.Log(LogLevel.Error, String.Format("To Mobile Number is not valid {0}", phoneNumberUnformatted));
                         throw new Exception(String.Format("To Mobile Number is not valid {0}", phoneNumberUnformatted));
+                    }
                     
                     string areaCode = phoneNumberUnformatted.Substring(0, 3);
                     string major = phoneNumberUnformatted.Substring(3, 3);
@@ -66,6 +72,8 @@ namespace SocialPayments.Workflows.Payments
 
                         });
 
+                    logger.Log(LogLevel.Debug, "Creating Withdrawl Record");
+
                     //Create withdraw transaction
                     payment.Transactions.Add(new Domain.Transaction()
                     {
@@ -89,6 +97,8 @@ namespace SocialPayments.Workflows.Payments
                     {
                         payment.ToAccountId = payee.PaymentAccounts[0].Id;
 
+                        logger.Log(LogLevel.Debug, "Creating Debug Record");
+
                         //Create deposit transaction
                         payment.Transactions.Add(new Domain.Transaction()
                         {
@@ -110,11 +120,17 @@ namespace SocialPayments.Workflows.Payments
 
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payee"));
 
+                        var sender = _ctx.Users.FirstOrDefault(u => u.MobileNumber == payment.FromMobileNumber);
+                        var senderName = String.IsNullOrEmpty(sender.SenderName) ? payment.FromMobileNumber : sender.SenderName;
+                        var recipientName = String.IsNullOrEmpty(payee.SenderName) ? payment.ToMobileNumber : payee.SenderName;
+                        var mobileLink = @"http://beta.paidthx.com/mobile/";
+
+                        logger.Log(LogLevel.Info, String.Format("{0} to {1} {2}", senderName, recipientName, mobileLink));
                         //Send out SMS Message to payee
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("You received a payment for {0:C} from {1}.  The payment is complete. PaidThx.com", payment.PaymentAmount, payment.FromMobileNumber),
+                            Message = String.Format("{1} just sent you {0:C} using PaidThx.  The payment has been submitted for processing. Goto {2}. ", payment.PaymentAmount, senderName, mobileLink),
                             MobileNumber = payment.ToMobileNumber
                         });
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payer"));
@@ -123,7 +139,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("Your payment for {0:C} to {1} is complete. PaidThx.com", payment.PaymentAmount, payment.ToMobileNumber),
+                            Message = String.Format("Your payment in the amount {0:C} was delivered to {1}.  The payment has been submitted for processing. Goto {2}", payment.PaymentAmount, recipientName, mobileLink),
                             MobileNumber = payment.FromMobileNumber
                         });
                         //Send out confirmation email to payer
@@ -131,15 +147,15 @@ namespace SocialPayments.Workflows.Payments
                         {
                             ApiKey = payment.Application.ApiKey,
                             Subject = "Confirmation of your payment to " + payment.ToMobileNumber + ".",
-                            Body = String.Format("Your payment in the amount of {0:C} was delivered to {1}.", payment.PaymentAmount, payment.ToMobileNumber),
+                            Body = String.Format("Your payment in the amount of {0:C} was delivered to {1}.  The payment has been submitted for processing. Go to {2}", payment.PaymentAmount, payment.ToMobileNumber, mobileLink),
                             FromAddress = fromAddress,
                             ToAddress = payment.FromAccount.User.EmailAddress
                         });
                         emailService.SendEmail(new SocialPayments.Services.DataContracts.Email.EmailRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Subject = "You received a payment from " + payment.FromMobileNumber + ".",
-                            Body = String.Format("Your received a payment of {0:C} from {1}. {2}", payment.PaymentAmount, payment.FromMobileNumber, payment.Comments),
+                            Subject = String.Format("{0} just sent you {1:C} using PaidThx.", senderName, payment.PaymentAmount),
+                            Body = String.Format("You received a payment of {0:C} from {1}. {2}", payment.PaymentAmount, payment.FromMobileNumber, payment.Comments),
                             FromAddress = fromAddress,
                             ToAddress = payee.EmailAddress
                         });
@@ -165,7 +181,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("Your payment request for {0:C} was submitted to an unregistered user at {1}. PaiddThx.com", payment.PaymentAmount, payment.ToMobileNumber),
+                            Message = String.Format("Your payment request for {0:C} was submitted to an unregistered user at {1}. PaidThx.com", payment.PaymentAmount, payment.ToMobileNumber),
                             MobileNumber = payment.FromMobileNumber
                         });
                         emailService.SendEmail(new SocialPayments.Services.DataContracts.Email.EmailRequest()
@@ -180,7 +196,7 @@ namespace SocialPayments.Workflows.Payments
                         {
                             ApiKey = payment.Application.ApiKey,
                             Subject = "Your recent payment to " + payment.ToMobileNumber + ".",
-                            Body = String.Format("The recipient of your payment ({0}) does not have an account with PdThx.  We have sent their mobile number information about your payment and instructions to register.  Please help us ensure that your transaction is completed by reminding the recipient of your payment to register with us.  Thanks.", payment.ToMobileNumber),
+                            Body = String.Format("The recipient of your payment ({0}) does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.  Please help us ensure that your transaction is completed by reminding the recipient of your payment to register with us.", payment.ToMobileNumber),
                             FromAddress = fromAddress,
                             ToAddress = payment.FromAccount.User.EmailAddress
                         });

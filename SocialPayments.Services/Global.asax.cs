@@ -11,7 +11,7 @@ namespace SocialPayments.Services
     {
         void Application_Start(object sender, EventArgs e)
         {
-           // Database.SetInitializer(new MyInitializer());
+            Database.SetInitializer(new MyInitializer());
 
             RegisterRoutes();
         }
@@ -28,6 +28,7 @@ namespace SocialPayments.Services
             RouteTable.Routes.Add(new ServiceRoute("ApplicationService", new CustomServiceHostFactory(), typeof(ApplicationService)));
             RouteTable.Routes.Add(new ServiceRoute("EmailService", new CustomServiceHostFactory(), typeof(EmailService)));
             RouteTable.Routes.Add(new ServiceRoute("SMSService", new CustomServiceHostFactory(), typeof(SMSService)));
+            RouteTable.Routes.Add(new ServiceRoute("BetaSignupService", new CustomServiceHostFactory(), typeof(BetaSignupService)));
 
         }
     }

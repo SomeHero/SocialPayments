@@ -22,6 +22,7 @@ namespace SocialPayments.DataLayer
         public DbSet<TransactionBatch> TransactionBatches { get; set; }
         public DbSet<MobileDeviceAlias> MobileDeviceAliases { get; set; }
         public DbSet<PaymentRequest> PaymentRequests { get; set; }
+        public DbSet<BetaSignup> BetaSignUps { get; set; }
 
         public Context() : base("name=DataContext") { }
 
