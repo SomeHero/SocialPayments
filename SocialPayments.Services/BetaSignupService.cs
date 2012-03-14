@@ -22,7 +22,7 @@ namespace SocialPayments.Services
             {
                 return new DataContracts.BetaSignUp.BetaSignupResponse() {
                     Success = false,
-                    Message = String.Format("Thanks for your intereset, but {0} is already signed up.", request.EmailAddress)
+                    Message = String.Format("Thanks for your interest, but {0} is already signed up.", request.EmailAddress)
                 };
             }
 

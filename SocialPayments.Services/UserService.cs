@@ -386,7 +386,7 @@ namespace SocialPayments.Services
 
             var paymentAccountId = "";
 
-            var isValid = userDomainService.ValidateUser(request.UserName, securityService.Encrypt(request.Password), out user);
+            var isValid = userDomainService.ValidateUser(request.UserName, request.Password, out user);
 
             if (user != null && user.PaymentAccounts.Count > 0)
             {
