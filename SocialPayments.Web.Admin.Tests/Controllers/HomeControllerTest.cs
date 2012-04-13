@@ -6,18 +6,22 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SocialPayments.Web.Admin;
 using SocialPayments.Web.Admin.Controllers;
+using SocialPayments.DomainServices;
 
 namespace SocialPayments.Web.Admin.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest
     {
+        private SecurityService securityService = new SecurityService();
+        
         [TestMethod]
         public void Index()
         {
             // Arrange
             HomeController controller = new HomeController();
-
+            var ba = securityService.Encrypt("0000157967460");
+            
             // Act
             ViewResult result = controller.Index() as ViewResult;
 

@@ -86,7 +86,7 @@ namespace SocialPayments.Services
                     {
                         ACHTransactionId = transaction.ACHTransactionId,
                         Amount = transaction.Amount,
-                        CreateDate = transaction.CreateDate,
+                        CreateDate = transaction.CreateDate.ToString("MM/dd/yyyy hh:mm tt"),
                         FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                         {
                             Id = transaction.FromAccount.Id.ToString(),
@@ -110,7 +110,7 @@ namespace SocialPayments.Services
                     {
                         ACHTransactionId = transaction.ACHTransactionId,
                         Amount = transaction.Amount,
-                        CreateDate = transaction.CreateDate,
+                        CreateDate = transaction.CreateDate.ToString("MM/dd/yyyy hh:mm tt"),
                         FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                         {
                             Id = transaction.FromAccount.Id.ToString(),

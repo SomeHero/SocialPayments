@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="d995fe15-8c5e-4684-ba16-3b3424acb054" name="James@JAMES-PC 2012-04-11 01:11:03" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="0df6aa2f-f0fa-4cd0-a682-0294680319e5">
+    <Deployment runDeploymentRoot="James_JAMES-PC 2012-04-11 01_11_03">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Web.Admin\bin\SocialPayments.Web.Admin.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services\bin\SocialPayments.DomainServices.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-04-11T01:11:03.7587890-04:00" queuing="2012-04-11T01:11:04.6660156-04:00" start="2012-04-11T01:11:04.8251953-04:00" finish="2012-04-11T01:11:06.6640625-04:00" />
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" error="0" failed="1" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="Index" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.web.admin.tests\bin\dev\socialpayments.web.admin.tests.dll" id="5b99f7cb-1db3-e09e-3653-a6b2ba79a288">
+      <Execution id="dc2ac4f0-efeb-4a86-a7bb-3e1d3dd49979" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Web.Admin.Tests/bin/Dev/SocialPayments.Web.Admin.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Web.Admin.Tests.Controllers.HomeControllerTest, SocialPayments.Web.Admin.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Index" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="5b99f7cb-1db3-e09e-3653-a6b2ba79a288" executionId="dc2ac4f0-efeb-4a86-a7bb-3e1d3dd49979" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="dc2ac4f0-efeb-4a86-a7bb-3e1d3dd49979" testId="5b99f7cb-1db3-e09e-3653-a6b2ba79a288" testName="Index" computerName="JAMES-PC" duration="00:00:00.5778200" startTime="2012-04-11T01:11:04.8242187-04:00" endTime="2012-04-11T01:11:05.9160156-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc2ac4f0-efeb-4a86-a7bb-3e1d3dd49979">
+      <Output>
+        <ErrorInfo>
+          <Message>Test method SocialPayments.Web.Admin.Tests.Controllers.HomeControllerTest.Index threw exception: 
+System.InvalidOperationException: No connection string named 'DataContext' could be found in the application config file.</Message>
+          <StackTrace>    at System.Data.Entity.Internal.LazyInternalConnection.Initialize()
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)
+   at SocialPayments.Web.Admin.Controllers.HomeController.Index() in C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Web.Admin\Controllers\HomeController.cs:line 19
+   at SocialPayments.Web.Admin.Tests.Controllers.HomeControllerTest.Index() in C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Web.Admin.Tests\Controllers\HomeControllerTest.cs:line 26
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>

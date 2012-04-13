@@ -7,7 +7,7 @@ using SocialPayments.Services.DataContracts.PaymentAccount;
 
 namespace SocialPayments.Services.DataContracts.Transaction
 {
-     [DataContract]
+     [DataContract(Name="Transaction")]
    public class TransactionResponse
     {
          [DataMember(Name = "transactionId")]
@@ -40,11 +40,14 @@ namespace SocialPayments.Services.DataContracts.Transaction
          [DataMember(Name="transationBatchId")]
          public string TransactionBatchId { get; set; }
 
+         [DataMember(Name="transactionType")]
+         public string TransactionType { get; set; }
+
          [DataMember(Name="transactionSentDate")]
          public DateTime? TransationSentDate { get; set; }
 
          [DataMember(Name="createDate")]
-         public DateTime CreateDate { get; set; }
+         public String CreateDate { get; set; }
 
          [DataMember(Name="lastUpdatedDate")]
          public DateTime? LastUpdatedDate { get; set; }

@@ -32,7 +32,7 @@ namespace SocialPayments.Web.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, securityService.Encrypt(model.Password)) && Roles.IsUserInRole(model.UserName, "Administrator"))
+                if (Membership.ValidateUser(model.UserName, model.Password) && Roles.IsUserInRole(model.UserName, "Administrator"))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

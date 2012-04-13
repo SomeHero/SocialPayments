@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="f451c39a-0422-43d9-85b6-370d2fade781" name="James@JAMES-PC 2012-04-11 01:11:33" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="444204e8-e9ab-4fc7-bf5a-c732463979b7">
+    <Deployment runDeploymentRoot="James_JAMES-PC 2012-04-11 01_11_33">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Web.Admin\bin\SocialPayments.Web.Admin.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services\bin\SocialPayments.DomainServices.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-04-11T01:11:33.0625000-04:00" queuing="2012-04-11T01:11:44.6962890-04:00" start="2012-04-11T01:11:45.6474609-04:00" finish="2012-04-11T01:18:34.5869140-04:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="4" executed="2" passed="1" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="2" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="JAMES-PC" outcome="Error" timestamp="2012-04-11T01:18:34.5859375-04:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="Index" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.facebook.tests\bin\dev\socialpayments.facebook.tests.dll" id="f5ae4d3d-1411-d1d3-0b66-791e83111db6">
+      <Execution id="c99d7eb9-96d5-427d-b2de-13a6801f6056" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Facebook.Tests/bin/Dev/SocialPayments.Facebook.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Facebook.Tests.Controllers.HomeControllerTest, SocialPayments.Facebook.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Index" />
+    </UnitTest>
+    <UnitTest name="Index" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.web.admin.tests\bin\dev\socialpayments.web.admin.tests.dll" id="5b99f7cb-1db3-e09e-3653-a6b2ba79a288">
+      <Execution id="75216d0b-3d66-47f2-8629-85dd6c025dde" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Web.Admin.Tests/bin/Dev/SocialPayments.Web.Admin.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Web.Admin.Tests.Controllers.HomeControllerTest, SocialPayments.Web.Admin.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Index" />
+    </UnitTest>
+    <UnitTest name="About" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.facebook.tests\bin\dev\socialpayments.facebook.tests.dll" id="c1d7bd53-920e-b184-31fb-b52ca09868f5">
+      <Execution id="83002375-a071-44a7-8729-148b08d0137c" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Facebook.Tests/bin/Dev/SocialPayments.Facebook.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Facebook.Tests.Controllers.HomeControllerTest, SocialPayments.Facebook.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="About" />
+    </UnitTest>
+    <UnitTest name="About" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.web.admin.tests\bin\dev\socialpayments.web.admin.tests.dll" id="54de1e2a-c365-20ba-ebe0-ac01c66e22f0">
+      <Execution id="f719d9f6-91cc-4c79-86ca-8733fb9300c8" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Web.Admin.Tests/bin/Dev/SocialPayments.Web.Admin.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Web.Admin.Tests.Controllers.HomeControllerTest, SocialPayments.Web.Admin.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="About" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="54de1e2a-c365-20ba-ebe0-ac01c66e22f0" executionId="f719d9f6-91cc-4c79-86ca-8733fb9300c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b99f7cb-1db3-e09e-3653-a6b2ba79a288" executionId="75216d0b-3d66-47f2-8629-85dd6c025dde" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1d7bd53-920e-b184-31fb-b52ca09868f5" executionId="83002375-a071-44a7-8729-148b08d0137c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5ae4d3d-1411-d1d3-0b66-791e83111db6" executionId="c99d7eb9-96d5-427d-b2de-13a6801f6056" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="f719d9f6-91cc-4c79-86ca-8733fb9300c8" testId="54de1e2a-c365-20ba-ebe0-ac01c66e22f0" testName="About" computerName="JAMES-PC" duration="00:00:07.6633278" startTime="2012-04-11T01:11:47.1132812-04:00" endTime="2012-04-11T01:12:05.4794921-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f719d9f6-91cc-4c79-86ca-8733fb9300c8">
+    </UnitTestResult>
+    <UnitTestResult executionId="75216d0b-3d66-47f2-8629-85dd6c025dde" testId="5b99f7cb-1db3-e09e-3653-a6b2ba79a288" testName="Index" computerName="JAMES-PC" duration="00:06:29.0449219" startTime="2012-04-11T01:12:05.5419921-04:00" endTime="2012-04-11T01:18:34.5869140-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75216d0b-3d66-47f2-8629-85dd6c025dde">
+    </UnitTestResult>
+    <UnitTestResult executionId="83002375-a071-44a7-8729-148b08d0137c" testId="c1d7bd53-920e-b184-31fb-b52ca09868f5" testName="About" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="83002375-a071-44a7-8729-148b08d0137c">
+    </UnitTestResult>
+    <UnitTestResult executionId="c99d7eb9-96d5-427d-b2de-13a6801f6056" testId="f5ae4d3d-1411-d1d3-0b66-791e83111db6" testName="Index" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c99d7eb9-96d5-427d-b2de-13a6801f6056">
+    </UnitTestResult>
+  </Results>
+</TestRun>

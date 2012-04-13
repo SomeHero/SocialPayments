@@ -90,12 +90,12 @@ namespace SocialPayments.Services
                     PasswordChangedDate = DateTime.UtcNow,
                     PasswordFailuresSinceLastSuccess = defaultNumPasswordFailures,
                     LastPasswordFailureDate = DateTime.UtcNow,
-                    EmailAddress = "james@pdthx.me",
+                    EmailAddress = request.EmailAddress,
                     //IsLockedOut = isLockedOut,
                     //LastLoggedIn = System.DateTime.Now,
                     MobileNumber = request.MobileNumber,
-                    Password = securityService.Encrypt(password), //hash
-                    SecurityPin = securityService.Encrypt("1111"),
+                    Password = securityService.Encrypt(request.Password), //hash
+                    SecurityPin = securityService.Encrypt(request.SecurityPin),
                     UserName = request.UserName,
                     UserStatus = Domain.UserStatus.Submitted,
                     IsConfirmed = false,

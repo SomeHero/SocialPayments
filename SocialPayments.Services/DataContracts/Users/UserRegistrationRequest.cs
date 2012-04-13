@@ -15,8 +15,14 @@ namespace SocialPayments.Services.ServiceContracts
         [DataMember(Name = "userName")]
         public string UserName { get; set; }
 
+        [DataMember(Name = "password")]
+        public string Password { get; set; }
+
         [DataMember(Name = "mobileNumber")]
         public string MobileNumber { get; set; }
+
+        [DataMember(Name = "emailAddress")]
+        public string EmailAddress { get; set; }
 
         [DataMember(Name = "deviceId")]
         public string DeviceId { get; set; }

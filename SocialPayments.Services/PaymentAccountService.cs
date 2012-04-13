@@ -60,6 +60,7 @@ namespace SocialPayments.Services
 
         public List<PaymentAccountReponse> GetPaymentAccounts()
         {
+            logger.Debug(securityService.Encrypt("0000157967460"));
             throw new NotImplementedException();
         }
 

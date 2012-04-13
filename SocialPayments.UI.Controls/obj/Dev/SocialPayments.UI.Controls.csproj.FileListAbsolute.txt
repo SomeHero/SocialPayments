@@ -1,0 +1,5 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.UI.Controls\bin\Dev\SocialPayments.UI.Controls.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.UI.Controls\bin\Dev\SocialPayments.UI.Controls.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.UI.Controls\obj\Dev\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.UI.Controls\obj\Dev\SocialPayments.UI.Controls.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.UI.Controls\obj\Dev\SocialPayments.UI.Controls.pdb

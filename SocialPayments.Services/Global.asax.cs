@@ -19,6 +19,7 @@ namespace SocialPayments.Services
         private void RegisterRoutes()
         {
             // Edit the base address of Service1 by replacing the "Service1" string below
+            RouteTable.Routes.Add(new ServiceRoute("TransactionService", new CustomServiceHostFactory(), typeof(TransactionService)));
             RouteTable.Routes.Add(new ServiceRoute("PaymentService", new CustomServiceHostFactory(), typeof(PaymentService)));
             RouteTable.Routes.Add(new ServiceRoute("PaymentRequestService", new CustomServiceHostFactory(), typeof(PaymentRequestService))); 
             RouteTable.Routes.Add(new ServiceRoute("PaymentAccountService", new CustomServiceHostFactory(), typeof(PaymentAccountService)));

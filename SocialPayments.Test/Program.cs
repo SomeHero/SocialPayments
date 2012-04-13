@@ -6,11 +6,14 @@ using System.IO;
 using System.Net;
 using SocialPayments.DomainServices;
 using SocialPayments.ThirdPartyServices.FedACHService;
+using NLog;
 
 namespace SocialPayments.Test
 {
     class Program
     {
+        
+
         static void Main(string[] args)
         {
             FedACHService fedACHService = new FedACHService();
