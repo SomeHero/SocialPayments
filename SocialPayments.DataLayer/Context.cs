@@ -57,6 +57,12 @@ namespace SocialPayments.DataLayer
                 .HasRequired(t => t.FromAccount)
                 .WithMany()
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasOptional(u => u.FacebookUser)
+                .WithOptionalDependent(f => f.User)
+                .Map(m => m.MapKey("FBUserId"));
+
         }
 
     }

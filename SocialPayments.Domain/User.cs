@@ -76,8 +76,7 @@ namespace SocialPayments.Domain
         public string State { get; set; }
         public string Zip { get; set; }
         public string SenderName { get; set; }
-        public Guid FBUserId { get; set; }
-        [ForeignKey("FBUserId")]
+        [Column(name:"FBUserId")]
         public FBUser FacebookUser { get; set; }
     }
 }
