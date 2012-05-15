@@ -14,7 +14,7 @@ namespace SocialPayments.Domain
     {
 
         //Membership required
-        [Key()]
+        [Key(), Required()]
         public virtual Guid UserId { get; set; }
         [Required()]
         public Guid ApiKey { get; set; }
@@ -23,6 +23,7 @@ namespace SocialPayments.Domain
         [Required()]
         [MaxLength(100)]
         public virtual string UserName { get; set; }
+        [Required()]
         [MaxLength(250)]
         [DataType(DataType.EmailAddress)]
         public virtual string EmailAddress { get; set; }
@@ -42,12 +43,13 @@ namespace SocialPayments.Domain
         public virtual Nullable<DateTime> PasswordVerificationTokenExpirationDate { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }
-
+        [Required()]
         public virtual string MobileNumber { get; set; }
         public virtual string SecurityPin { get; set; }
         public virtual bool IsLockedOut { get; set; }
         public virtual string TimeZone { get; set; }
         public virtual string Culture { get; set; }
+        public virtual List<UserAttributeValue> UserAttributes { get; set; }
         public int UserStatusValue { get; set; }
         public virtual UserStatus UserStatus 
         { 
@@ -78,5 +80,7 @@ namespace SocialPayments.Domain
         public string SenderName { get; set; }
         [Column(name:"FBUserId")]
         public FBUser FacebookUser { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

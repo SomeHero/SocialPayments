@@ -86,7 +86,7 @@ namespace SocialPayments.Services
                     {
                         ACHTransactionId = transaction.ACHTransactionId,
                         Amount = transaction.Amount,
-                        CreateDate = transaction.CreateDate.ToString("MM/dd/yyyy hh:mm tt"),
+                        CreateDate = transaction.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                         FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                         {
                             Id = transaction.FromAccount.Id.ToString(),
@@ -94,7 +94,7 @@ namespace SocialPayments.Services
                         },
                         LastUpdatedDate = transaction.LastUpdatedDate,
                         PaymentChannel = transaction.PaymentChannelType.ToString(),
-                        PaymentId = transaction.PaymentId,
+                       // PaymentId = transaction.PaymentId,
                         StandardEntryClass = transaction.StandardEntryClass.ToString(),
                         TransactionBatchId = transaction.TransactionBatchId.ToString(),
                         TransactionCategory = "Withdrawal",
@@ -110,7 +110,7 @@ namespace SocialPayments.Services
                     {
                         ACHTransactionId = transaction.ACHTransactionId,
                         Amount = transaction.Amount,
-                        CreateDate = transaction.CreateDate.ToString("MM/dd/yyyy hh:mm tt"),
+                        CreateDate = transaction.CreateDate.ToString("ddd MMM yyyy dd HH:mm:ss"),
                         FromAccount = new DataContracts.PaymentAccount.PaymentAccountReponse()
                         {
                             Id = transaction.FromAccount.Id.ToString(),

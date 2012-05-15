@@ -14,12 +14,16 @@ namespace SocialPayments.Workflows.Users
     public class RegistrationWorkflow
     {
         private readonly Context _ctx = new Context();
-        EmailService emailService = new EmailService();
+        Services.EmailService emailService = new Services.EmailService();
         SMSService smsService = new SMSService();
-        TransactionBatchService transactionBatchService = new TransactionBatchService();
+        DomainServices.TransactionBatchService transactionBatchService;
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public RegistrationWorkflow()
+        {
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+        }
         /// <summary>
         /// Process New PaidThx Member Registration
         /// </summary>
@@ -118,7 +122,7 @@ namespace SocialPayments.Workflows.Users
                                     CreateDate = System.DateTime.Now,
                                     FromAccount = paymentAccount,
                                     PaymentChannelType = PaymentChannelType.Single,
-                                    PaymentId = payment.Id,
+                                    //PaymentId = payment.Id,
                                     Id = Guid.NewGuid(),
                                     StandardEntryClass = StandardEntryClass.Web,
                                     Status = TransactionStatus.Pending,

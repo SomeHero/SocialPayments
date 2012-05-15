@@ -13,6 +13,12 @@ namespace SocialPayments.Services.DataContracts.Transaction
          [DataMember(Name = "transactionId")]
          public Guid TransactionId { get; set; }
 
+         [DataMember(Name = "senderUri")]
+         public string SenderUri { get; set; }
+
+         [DataMember(Name = "recipientUri")]
+         public string RecipientUri { get; set; }
+
          [DataMember(Name="paymentId")]
          public Guid PaymentId { get; set; }
 

@@ -13,6 +13,7 @@
     <RootNamespace>SocialPayments.Services</RootNamespace>
     <AssemblyName>SocialPayments.Services</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -222,7 +223,6 @@
     <Compile Include="DataContracts\Users\UserSetupPasswordRequest.cs" />
     <Compile Include="DataContracts\Users\UserSetupPasswordResponse.cs" />
     <Compile Include="SMSService.cs" />
-    <Compile Include="TransactionService.cs" />
     <Compile Include="UserService.cs" />
   </ItemGroup>
   <ItemGroup>

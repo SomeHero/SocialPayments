@@ -5,13 +5,21 @@ using System.Linq.Expressions;
 using System.Text;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using System.Text.RegularExpressions;
+using NLog;
 
 namespace SocialPayments.DomainServices
 {
     public class TransactionBatchService
     {
-        private readonly Context _ctx = new Context();
+        private readonly Context _ctx;
+        private Logger _logger;
 
+        public TransactionBatchService(Context context, Logger logger)
+        {
+            _ctx = context;
+            _logger = logger;
+        }
         private TransactionBatch AddTransactionBatch(TransactionBatch transactionBatch)
         {
             transactionBatch = _ctx.TransactionBatches.Add(transactionBatch);
@@ -19,6 +27,59 @@ namespace SocialPayments.DomainServices
             _ctx.SaveChanges();
 
             return transactionBatch;
+        }
+        public void BatchTransactions(Domain.Message message)
+        {
+            var transactionBatch = GetOpenBatch();
+
+            message.Transactions.Add(
+                new Domain.Transaction()
+                {
+                    Amount = message.Amount,
+                    Category = Domain.TransactionCategory.Payment,
+                    CreateDate = System.DateTime.Now,
+                    FromAccountId = message.SenderAccountId.Value,
+                    Id = Guid.NewGuid(),
+                    MessageId = message.Id,
+                    PaymentChannelType = Domain.PaymentChannelType.Single,
+                    StandardEntryClass = Domain.StandardEntryClass.Web,
+                    Status = Domain.TransactionStatus.Pending,
+                    TransactionBatchId = transactionBatch.Id,
+                    Type = Domain.TransactionType.Withdrawal,
+                    UserId = message.SenderId,
+                    Message = message
+                });
+
+            var recipient = GetRecipient(message.RecipientUri);
+
+            Domain.Transaction deposit;
+
+            if (recipient != null && recipient.PaymentAccounts.Count > 0)
+            {
+                _logger.Log(LogLevel.Info, String.Format("Found Recipient {0} for Message {1}", recipient.UserId, message.Id));
+                message.Transactions.Add(
+                new Domain.Transaction()
+                {
+                    Amount = message.Amount,
+                    Category = Domain.TransactionCategory.Payment,
+                    CreateDate = System.DateTime.Now,
+                    FromAccountId = recipient.PaymentAccounts[0].Id,
+                    Id = Guid.NewGuid(),
+                    MessageId = message.Id,
+                    PaymentChannelType = Domain.PaymentChannelType.Single,
+                    StandardEntryClass = Domain.StandardEntryClass.Web,
+                    Status = Domain.TransactionStatus.Pending,
+                    TransactionBatchId = transactionBatch.Id,
+                    Type = Domain.TransactionType.Deposit,
+                    UserId = recipient.UserId,
+                });
+
+                message.Recipient = recipient;
+            }
+
+            message.MessageStatus = Domain.MessageStatus.Pending;
+            message.LastUpdatedDate = System.DateTime.Now;
+                       
         }
         public List<TransactionBatch> GetBatches(Expression<Func<TransactionBatch, bool>> expression)
         {
@@ -74,6 +135,48 @@ namespace SocialPayments.DomainServices
                                                             
                                     });
             return transactionBatch.Transactions;
+        }
+        private Domain.User GetRecipient(string uri)
+        {
+            string phoneNumberUnformatted = Regex.Replace(uri, @"\D", string.Empty);
+
+            if (phoneNumberUnformatted.Length != 10)
+            {
+                //logger.Log(LogLevel.Error, String.Format("To Mobile Number is not valid {0}", phoneNumberUnformatted));
+                //throw new Exception(String.Format("To Mobile Number is not valid {0}", phoneNumberUnformatted));
+            }
+
+            string areaCode = phoneNumberUnformatted.Substring(0, 3);
+            string major = phoneNumberUnformatted.Substring(3, 3);
+            string minor = phoneNumberUnformatted.Substring(6);
+
+            string phoneNumberFormatted = string.Format("{0}{1}{2}", areaCode, major, minor);
+
+            var recipient = _ctx.Users
+                .Include("PaymentAccounts")
+                .FirstOrDefault(u => u.MobileNumber.Equals(phoneNumberFormatted));
+
+            return recipient;
+        }
+
+
+        public void RemoveFromBatch(Message message)
+        {
+            foreach (var temp in message.Transactions)
+            {
+                var transactionBatch = GetOpenBatch();
+                
+                if (temp.Status == TransactionStatus.Submitted || temp.Status == TransactionStatus.Pending)
+                {
+                    var transaction = transactionBatch.Transactions
+                        .FirstOrDefault(t => t.Id.Equals(temp.Id));
+
+                    transaction.LastUpdatedDate = System.DateTime.Now;
+                    transaction.Status = TransactionStatus.Cancelled;
+
+                    transactionBatch.Transactions.Remove(temp);
+                }
+            }
         }
     }
 }

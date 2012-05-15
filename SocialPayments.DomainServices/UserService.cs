@@ -16,6 +16,7 @@ namespace SocialPayments.DomainServices
     {
         private readonly Context _ctx = new Context();
         private SecurityService securityService = new SecurityService();
+        private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -23,6 +24,9 @@ namespace SocialPayments.DomainServices
             UserStatus userStatus, string accountNumber,
             PaymentAccountType accountType, string nameOnAccount, string routingNumber)
         {
+
+            mobileNumber = formattingServices.FormatMobileNumber(mobileNumber);
+
             var user = _ctx.Users.Add(new User()
             {
                 CreateDate = System.DateTime.Now,
@@ -263,6 +267,15 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.MobileNumber == mobileNumber);
         }
+
+
+        public User FindUserByEmailAddress(string emailAddress)
+        {
+            return _ctx.Users
+                .Include("PaymentAccounts")
+                .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
+        }
+
 
 
     }

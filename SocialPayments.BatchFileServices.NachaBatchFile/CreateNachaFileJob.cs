@@ -9,13 +9,19 @@ using System.IO;
 using Amazon.S3.Model;
 using System.Configuration;
 using NLog;
+using SocialPayments.DataLayer;
 
 namespace SocialPayments.BatchFileServices.NachaBatchFile
 {
     public class CreateNachaFileJob: IJob
     {
+        private readonly Context _ctx = new Context();
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
+        private TransactionBatchService transactionBatchService;
+        public CreateNachaFileJob()
+        {
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+        }
         public void Execute(JobExecutionContext context)
         {
             //Get Current Batch
@@ -23,10 +29,8 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             //And Open New One
             //Create a new BatchFile Record
             logger.Log(LogLevel.Info, String.Format("Creating Nacha ACH File at {0}", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")));
-            
-            var transactionBatchService = new TransactionBatchService();
+
             logger.Log(LogLevel.Info, String.Format("Batching Transactions"));
-            
             var transactions = transactionBatchService.BatchTransactions();
 
             FileGenerator fileGeneratorService = new FileGenerator();

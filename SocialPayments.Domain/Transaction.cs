@@ -9,9 +9,9 @@ namespace SocialPayments.Domain
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid PaymentId { get; set; }
-        [ForeignKey("PaymentId")]
-        public virtual Payment Payment { get; set; }
+        public Guid MessageId { get; set; }
+        [ForeignKey("MessageId")]
+        public virtual Message Message { get; set; }
         public Guid FromAccountId { get; set; }
         [ForeignKey("FromAccountId")]
         public virtual PaymentAccount FromAccount
@@ -59,6 +59,10 @@ namespace SocialPayments.Domain
 
         [ForeignKey("TransactionBatchId")]
         public virtual TransactionBatch TransactionBatch { get; set; }
+
+        public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
 
     }
 }

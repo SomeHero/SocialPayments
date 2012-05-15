@@ -77,6 +77,10 @@ namespace SocialPayments.Services
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
+            String mobileNumber = request.MobileNumber.Replace("-", "");
+            mobileNumber = mobileNumber.Replace("(", "");
+            mobileNumber = mobileNumber.Replace(")", "");
+            mobileNumber = String.Format("{0}-{1}-{2}", mobileNumber.Substring(0, 3), mobileNumber.Substring(3, 3), mobileNumber.Substring(6, 4));
 
             Domain.User user;
 
@@ -93,7 +97,7 @@ namespace SocialPayments.Services
                     EmailAddress = request.EmailAddress,
                     //IsLockedOut = isLockedOut,
                     //LastLoggedIn = System.DateTime.Now,
-                    MobileNumber = request.MobileNumber,
+                    MobileNumber = mobileNumber,
                     Password = securityService.Encrypt(request.Password), //hash
                     SecurityPin = securityService.Encrypt(request.SecurityPin),
                     UserName = request.UserName,
@@ -447,6 +451,24 @@ namespace SocialPayments.Services
         public DataContracts.Users.UserResponse GetUser(string userId)
         {
             var user = userDomainService.GetUser(u => u.UserId.Equals(new Guid(userId)));
+           
+            double sentTotal = 0;
+            double receivedTotal = 0;
+
+            var sentPayments = _ctx.Transactions
+                    .Include("FromAccount")
+                    .Where(t => t.FromAccount.UserId.Equals(user.UserId)  && t.TransactionTypeId == (int)TransactionType.Withdrawal);
+            
+            if(sentPayments.Count() > 0)
+                sentTotal = sentPayments.Sum(t => t.Amount);
+
+            var receivedPayments = _ctx.Transactions
+                    .Include("FromAccount")
+                    .Where(t => t.FromAccount.UserId.Equals(user.UserId) && t.TransactionTypeId == (int)TransactionType.Deposit);
+            
+            if(receivedPayments.Count() > 0)
+               receivedTotal = receivedPayments.Sum(t => t.Amount);
+
 
             return new DataContracts.Users.UserResponse()
             {
@@ -456,6 +478,8 @@ namespace SocialPayments.Services
                 EmailAddress = user.EmailAddress,
                // UserStatus = user.UserStatus.ToString(),
                // IsLockedOut = user.IsLockedOut
+               TotalMoneyReceived = receivedTotal,
+               TotalMoneySent = sentTotal
             };
         }
 

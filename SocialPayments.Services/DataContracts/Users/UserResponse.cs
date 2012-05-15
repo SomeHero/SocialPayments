@@ -38,5 +38,11 @@ namespace SocialPayments.Services.DataContracts.Users
 
         [DataMember(Name = "lastName")]
         public string LastName { get; set; }
+
+        [DataMember(Name = "totalMoneyReceived")]
+        public double TotalMoneyReceived { get; set; }
+
+        [DataMember(Name = "totalMoneySent")]
+        public double TotalMoneySent { get; set; }
     }
 }

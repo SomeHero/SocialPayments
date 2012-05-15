@@ -18,7 +18,13 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
     public class ProcessOpenPaymentJob: IJob
     {
         private readonly Context _ctx = new Context();
-        private TransactionBatchService transactionBatchService = new TransactionBatchService();
+        private DomainServices.TransactionBatchService transactionBatchService;
+
+        public ProcessOpenPaymentJob()
+        {
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+        }
+        
         public void Execute(JobExecutionContext context)
         {
             var payments = _ctx.Payments.Where(p => p.PaymentStatus == Domain.PaymentStatus.Pending);
@@ -37,7 +43,7 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
                         CreateDate = System.DateTime.Now,
                         FromAccountId = payment.FromAccountId,
                         PaymentChannelType = payment.PaymentChannelType,
-                        PaymentId = payment.Id,
+                        //PaymentId = payment.Id,
                         StandardEntryClass = payment.StandardEntryClass,
                         Status = Domain.TransactionStatus.Pending,
                         TransactionBatchId = transactionBatch.Id,

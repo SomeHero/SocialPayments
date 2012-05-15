@@ -21,5 +21,8 @@ namespace SocialPayments.Domain
             get { return (PaymentAccountType)PaymentAccountTypeId; }
             set { PaymentAccountTypeId = (int)value; }
         }
+        public bool IsActive { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
     }
 }

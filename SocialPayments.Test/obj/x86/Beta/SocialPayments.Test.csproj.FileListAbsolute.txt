@@ -10,7 +10,6 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\SocialPayments.ThirdPartyServices.FedACHService.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\NLog.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\EntityFramework.dll
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\Common.Logging.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\SocialPayments.BatchFileServices.NachaBatchFile.pdb
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\SocialPayments.DataLayer.pdb
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Test\bin\x86\Beta\SocialPayments.DomainServices.pdb

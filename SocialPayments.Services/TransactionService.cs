@@ -26,6 +26,7 @@ namespace SocialPayments.Services
             logger.Log(LogLevel.Info, String.Format("Getting Transactions"));
 
             var transactions = _ctx.Transactions
+                .Include("Payment")
                 .Where(t => t.FromAccount.UserId == new Guid(id))
                 .OrderByDescending(t => t.CreateDate)
                 .ToList<Domain.Transaction>();
@@ -37,8 +38,10 @@ namespace SocialPayments.Services
                 return transactions.Select(t => new TransactionResponse()
                 {
                     ACHTransactionId = t.ACHTransactionId,
+                    SenderUri = t.Payment.FromMobileNumber,
+                    RecipientUri = t.Payment.ToMobileNumber,
                     Amount = t.Amount,
-                    CreateDate = t.CreateDate.ToString("MM/dd/yyyy hh:mm tt"),
+                    CreateDate = t.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                     //FromAccount = t.FromAccount,
                     PaymentChannel = t.PaymentChannelType.ToString(),
                     PaymentId = t.PaymentId,

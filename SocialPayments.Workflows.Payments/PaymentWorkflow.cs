@@ -15,7 +15,7 @@ namespace SocialPayments.Workflows.Payments
     public class PaymentWorkflow
     {
         private readonly Context _ctx = new Context();
-        EmailService emailService = new EmailService();
+        Services.EmailService emailService;
         SMSService smsService = new SMSService();
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -103,7 +103,7 @@ namespace SocialPayments.Workflows.Payments
                         payment.Transactions.Add(new Domain.Transaction()
                         {
                             Id = Guid.NewGuid(),
-                            PaymentId = payment.Id,
+                            //PaymentId = payment.Id,
                             FromAccountId = payee.PaymentAccounts[0].Id,
                             Amount = payment.PaymentAmount,
                             Status = TransactionStatus.Pending,
@@ -172,7 +172,7 @@ namespace SocialPayments.Workflows.Payments
                         smsService.SendSMS(new SocialPayments.Services.DataContracts.SMS.SMSRequest()
                         {
                             ApiKey = payment.Application.ApiKey,
-                            Message = String.Format("{1} just sent you {0:C} using PaidThx.  Goto {2} to complete this transaction.", payment.PaymentAmount, payment.FromMobileNumber, link),
+                            Message = String.Format("{1} just sent you {0:C} using PaidThx.  Go to {2} to complete this transaction.", payment.PaymentAmount, payment.FromMobileNumber, link),
                             MobileNumber = payment.ToMobileNumber
                         });
                         logger.Log(LogLevel.Info, String.Format("Send SMS to Payer no payee"));
