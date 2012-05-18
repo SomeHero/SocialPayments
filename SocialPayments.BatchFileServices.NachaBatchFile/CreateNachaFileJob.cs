@@ -20,7 +20,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
         private TransactionBatchService transactionBatchService;
         public CreateNachaFileJob()
         {
-            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx, logger);
         }
         public void Execute(JobExecutionContext context)
         {

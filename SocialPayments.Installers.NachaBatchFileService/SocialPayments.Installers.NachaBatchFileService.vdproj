@@ -124,7 +124,7 @@
         "Entry"
         {
         "MsmKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
-        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
+        "OwnerKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -135,14 +135,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
+        "MsmKey" = "8:_EE349BDFE02129407C1C25E178BDE580"
+        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE349BDFE02129407C1C25E178BDE580"
         "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A4E96E351D60B8874ECB8B5EFDDDEBB4"
-        "OwnerKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
+        "MsmKey" = "8:_EE349BDFE02129407C1C25E178BDE580"
+        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -221,6 +227,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_324D4CC044479F45F95018309006431F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EE349BDFE02129407C1C25E178BDE580"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -487,7 +499,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -712,6 +724,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EE349BDFE02129407C1C25E178BDE580"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EE349BDFE02129407C1C25E178BDE580"
+                    {
+                    "Name" = "8:EntityFramework.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:EntityFramework.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EF117918DE096AF4B8C01CDE9512E118"
             {
             "AssemblyRegister" = "3:1"
@@ -831,7 +874,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{A0125E8E-F628-42C5-8AE3-21ECAE069F35}"
+        "PackageCode" = "8:{0BAFE907-61D4-4969-8D5A-84E0FF0F53EA}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

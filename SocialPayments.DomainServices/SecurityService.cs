@@ -52,6 +52,15 @@ namespace SocialPayments.DomainServices
 
             return Decrypt(encryptedText, passPhrase, saltValue, hashAlgorithm, passwordIterations, initVector, keySize);
         }
+        public string DecryptLastFour(string encryptedText)
+        {
+            var cc = Decrypt(encryptedText);
+
+            if (cc.Length >= 4)
+                return cc.Substring(cc.Length - 4, 4);
+
+            return cc;
+        }
         /// <summary>
         /// Encrypts specified plaintext using Rijndael symmetric key algorithm
         /// and returns a base64-encoded result.

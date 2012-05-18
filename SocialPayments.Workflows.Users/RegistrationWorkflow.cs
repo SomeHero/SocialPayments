@@ -14,15 +14,21 @@ namespace SocialPayments.Workflows.Users
     public class RegistrationWorkflow
     {
         private readonly Context _ctx = new Context();
-        Services.EmailService emailService = new Services.EmailService();
-        SMSService smsService = new SMSService();
-        DomainServices.TransactionBatchService transactionBatchService;
-
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        Services.EmailService emailService = null;
+        DomainServices.ApplicationService applicationServices = null;
+        DomainServices.SMSLogService smsLogServices = null;
+        DomainServices.SMSService smsService = null;
+        DomainServices.TransactionBatchService transactionBatchService = null;
 
         public RegistrationWorkflow()
         {
-            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+            emailService = new Services.EmailService();
+            applicationServices = new DomainServices.ApplicationService();
+            smsLogServices = new SMSLogService();
+            smsService = new DomainServices.SMSService(applicationServices, smsLogServices, _ctx, logger);
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx, logger);
         }
         /// <summary>
         /// Process New PaidThx Member Registration
@@ -30,6 +36,8 @@ namespace SocialPayments.Workflows.Users
         /// <param name="id">unique identified of the user</param>
         public void ProcessNewUserRegistration(string id)
         {
+            String message = "";
+
             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Starting.", id));
 
             Guid userId;
@@ -62,14 +70,10 @@ namespace SocialPayments.Workflows.Users
                         user.MobileVerificationCode1 = "1234";
                         user.MobileVerificationCode2 = "4321";
 
+                        message = string.Format("Welcome to PdThx.   Your verfication codes are {0} and {1}.", user.MobileVerificationCode1, user.MobileVerificationCode2);
+ 
                         //sms mobile verification codes
-                        smsService.SendSMS(new Services.DataContracts.SMS.SMSRequest()
-                        {
-                            ApiKey = user.ApiKey,
-                            Message = string.Format("Welcome to PdThx.   Your verfication codes are {0} and {1}.", user.MobileVerificationCode1, user.MobileVerificationCode2),
-                            MobileNumber = user.MobileNumber,
-                            SMSMessageId = Guid.NewGuid()
-                        });
+                        smsService.SendSMS(user.ApiKey, user.MobileNumber, message);
                     }
 
                     user.UserStatus = UserStatus.Pending;
@@ -140,13 +144,10 @@ namespace SocialPayments.Workflows.Users
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payee at {1} f0r Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            smsService.SendSMS(new Services.DataContracts.SMS.SMSRequest()
-                            {
-                                ApiKey = payment.ApiKey,
-                                Message = string.Format("A payment in the amounnt of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
-                                MobileNumber = user.MobileNumber,
-                                SMSMessageId = Guid.NewGuid()
-                            });
+                            message = string.Format("A payment in the amounnt of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber);
+
+                            smsService.SendSMS(payment.ApiKey, user.MobileNumber, message);
+
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending Confirmation Email to Payee at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
@@ -162,13 +163,9 @@ namespace SocialPayments.Workflows.Users
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payer at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            smsService.SendSMS(new Services.DataContracts.SMS.SMSRequest()
-                            {
-                                ApiKey = payment.ApiKey,
-                                Message = string.Format("Your payment in the amounnt of {0} to {1} was successfully completed.  {0} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber),
-                                MobileNumber = payment.FromMobileNumber,
-                                SMSMessageId = Guid.NewGuid()
-                            });
+                            message = string.Format("Your payment in the amounnt of {0} to {1} was successfully completed.  {0} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber);
+
+                            smsService.SendSMS(payment.ApiKey, payment.FromMobileNumber, message);
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending Confirmation Email to Payer at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 

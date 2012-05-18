@@ -19,10 +19,11 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
     {
         private readonly Context _ctx = new Context();
         private DomainServices.TransactionBatchService transactionBatchService;
+        private Logger _logger = LogManager.GetCurrentClassLogger();
 
         public ProcessOpenPaymentJob()
         {
-            transactionBatchService = new DomainServices.TransactionBatchService(_ctx);
+            transactionBatchService = new DomainServices.TransactionBatchService(_ctx, _logger);
         }
         
         public void Execute(JobExecutionContext context)

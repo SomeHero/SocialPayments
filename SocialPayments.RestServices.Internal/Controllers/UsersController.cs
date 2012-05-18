@@ -102,6 +102,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             String mobileNumber = formattingService.FormatMobileNumber(request.mobileNumber);
 
+            _logger.Log(LogLevel.Error, string.Format("I got here 1"));
+
             Domain.User user;
 
             //validate that email address is not already user
@@ -125,6 +127,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return errorMessage;
             }
+
+            _logger.Log(LogLevel.Error, string.Format("I got here 2"));
 
             try
             {
@@ -153,7 +157,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Roles = new List<Role>()
                     {
                         memberRole
-                    }
+                    },
+                    DeviceToken = request.deviceToken
                 });
 
                 _ctx.SaveChanges();

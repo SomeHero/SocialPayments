@@ -43,6 +43,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string emailAddress { get; set; }
             public string securityPin { get; set; }
             public string registrationMethod { get; set; }
+            public string deviceToken { get; set; }
         }
         public class SubmitUserResponse
         {

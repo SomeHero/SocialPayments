@@ -43,7 +43,6 @@ namespace SocialPayments.Domain
         public virtual Nullable<DateTime> PasswordVerificationTokenExpirationDate { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }
-        [Required()]
         public virtual string MobileNumber { get; set; }
         public virtual string SecurityPin { get; set; }
         public virtual bool IsLockedOut { get; set; }
@@ -82,5 +81,7 @@ namespace SocialPayments.Domain
         public FBUser FacebookUser { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+        public string DeviceToken { get; set; }
     }
+
 }

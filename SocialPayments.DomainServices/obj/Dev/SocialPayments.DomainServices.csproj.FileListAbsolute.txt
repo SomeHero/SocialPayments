@@ -1,13 +1,11 @@
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.DomainServices.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.DomainServices.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\EntityFramework.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\NLog.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\PagedList.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.DataLayer.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.Domain.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.DataLayer.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\SocialPayments.Domain.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\EntityFramework.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\NLog.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Dev\PagedList.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Dev\ResolveAssemblyReference.cache
