@@ -17,3 +17,44 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Services\obj\Beta\ResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Services\obj\Beta\SocialPayments.Services.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Services\obj\Beta\SocialPayments.Services.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.Services.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.Services.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\AWSSDK.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Common.Logging.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Rest.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Core.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Twitter.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Helpers.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\NLog.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Rest.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Rest.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Core.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Core.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Twitter.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Spring.Social.Twitter.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Helpers.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\obj\Beta\SocialPayments.Services.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\obj\Beta\SocialPayments.Services.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Http.Common.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Mvc.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Razor.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.Deployment.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.Razor.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Http.Common.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Mvc.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.Razor.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.Deployment.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.Services\bin\System.Web.WebPages.Razor.xml

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/SocialPayments.WorkflowServices.Users_deploy" />
+  <setParameter name="DataContext-Web.config Connection String" value="Data Source=.\EC2SQLExpress;Initial Catalog=PdThx_Beta;Persist Security Info=True;User ID=sa;Password=james123" />
+</parameters>

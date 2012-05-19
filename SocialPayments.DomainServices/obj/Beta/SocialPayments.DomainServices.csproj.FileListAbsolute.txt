@@ -13,3 +13,18 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Beta\ResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Beta\SocialPayments.DomainServices.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Beta\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\PagedList.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\NLog.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\bin\Beta\PagedList.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\obj\Beta\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.DomainServices\obj\Beta\SocialPayments.DomainServices.pdb

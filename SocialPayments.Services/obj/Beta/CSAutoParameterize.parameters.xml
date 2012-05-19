@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="DataContext-Web.config Connection String" description="DataContext Connection String used in web.config by the application to access the database." defaultvalue="Data Source=ec2-107-22-189-84.compute-1.amazonaws.com,1435\EC2SQLExpress;Initial Catalog=PdThx_Beta;Persist Security Info=True;User ID=sa;Password=james123" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="obj\\Beta\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DataContext']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\James\\Documents\\Visual\ Studio\ 2010\\Projects\\SocialPayments\ 2\\SocialPayments\\SocialPayments\.Services\\obj\\Beta\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DataContext']/@connectionString" />
   </parameter>
 </parameters>

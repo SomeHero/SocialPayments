@@ -18,3 +18,37 @@ C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\ResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\SocialPayments.WorkflowServices.PaymentRequests.dll
 C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\SocialPayments.WorkflowServices.PaymentRequests.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.WorkflowServices.PaymentRequests.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.WorkflowServices.PaymentRequests.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.DomainServices.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Workflows.PaymentRequests.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Helpers.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Http.Common.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Mvc.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Razor.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.Deployment.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.Razor.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Services.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.DomainServices.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Workflows.PaymentRequests.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\NLog.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Helpers.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Http.Common.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Mvc.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.Razor.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.Deployment.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\System.Web.WebPages.Razor.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\bin\SocialPayments.Services.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\SocialPayments.WorkflowServices.PaymentRequests.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments 2\SocialPayments\SocialPayments.WorkflowServices.PaymentRequests\obj\Beta\SocialPayments.WorkflowServices.PaymentRequests.pdb
