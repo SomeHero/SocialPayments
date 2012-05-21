@@ -7,6 +7,7 @@ using SocialPayments.RestServices.External.Models;
 using System.Net;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using System.Data.Entity;
 
 namespace SocialPayments.RestServices.External.Controllers
 {

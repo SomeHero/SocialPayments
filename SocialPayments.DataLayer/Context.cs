@@ -4,126 +4,135 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using SocialPayments.Domain;
+using NLog;
+using SocialPayments.DataLayer.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.DataLayer
 {
-    public class Context : DbContext
+    public class Context : DbContext, IDbContext
     {
-        public DbSet<Application> Applications { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserAttribute> UserAttributes { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<PaymentAccount> PaymentAccounts { get; set; }
-        public DbSet<BatchFile> BatchFiles { get; set; }
-        public DbSet<Calendar> Calendars { get; set; }
-        public DbSet<EmailLog> EmailLog { get; set; }
-        public DbSet<SMSLog> SMSLog { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionBatch> TransactionBatches { get; set; }
-        public DbSet<MobileDeviceAlias> MobileDeviceAliases { get; set; }
-        public DbSet<PaymentRequest> PaymentRequests { get; set; }
-        public DbSet<BetaSignup> BetaSignUps { get; set; }
-
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+      
+        public IDbSet<Application> Applications { get; set; }
+        public IDbSet<User> Users { get; set; }
+        public IDbSet<UserAttribute> UserAttributes { get; set; }
+        public IDbSet<Role> Roles { get; set; }
+        public IDbSet<Message> Messages { get; set; }
+        public IDbSet<PaymentAccount> PaymentAccounts { get; set; }
+        public IDbSet<BatchFile> BatchFiles { get; set; }
+        public IDbSet<Calendar> Calendars { get; set; }
+        public IDbSet<EmailLog> EmailLog { get; set; }
+        public IDbSet<SMSLog> SMSLog { get; set; }
+        public IDbSet<Transaction> Transactions { get; set; }
+        public IDbSet<TransactionBatch> TransactionBatches { get; set; }
+        public IDbSet<MobileDeviceAlias> MobileDeviceAliases { get; set; }
+        public IDbSet<BetaSignup> BetaSignUps { get; set; }
+        public IDbSet<MobileNumberSignUpKey> MobileNumberSignUpKeys { get; set; }
+        public IDbSet<MECode> MECodes { get; set; }
 
         public Context() : base("name=DataContext") { }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        public void SaveChanges()
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Message>()
-                .HasRequired(m => m.Application)
-                .WithMany()
-                .HasForeignKey(m => m.ApiKey)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Message>()
-                .HasRequired(m => m.Sender)
-                .WithMany()
-                .HasForeignKey(m => m.SenderId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Message>()
-                .HasOptional(m => m.Recipient)
-                .WithMany()
-                .HasForeignKey(m => m.RecipientId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Payment>()
-                .HasRequired(p => p.FromAccount)
-                .WithMany()
-                .HasForeignKey(p => p.FromAccountId)
-                .WillCascadeOnDelete(false);
-            modelBuilder.Entity<Payment>()
-                .HasOptional(p => p.ToAccount)
-                .WithMany()
-                .HasForeignKey(p => p.ToAccountId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<PaymentRequest>()
-                .HasRequired(r => r.Requestor)
-                .WithMany()
-                .HasForeignKey(r => r.RequestorId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<PaymentRequest>()
-                .HasOptional(r => r.Recipient)
-                .WithMany()
-                .HasForeignKey(r => r.RecipientId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Transaction>()
-                .HasRequired(t => t.FromAccount)
-                .WithMany()
-                .HasForeignKey(t => t.FromAccountId)
-                .WillCascadeOnDelete(false);
-
-           modelBuilder.Entity<Transaction>()
-                .HasRequired(t => t.User)
-                .WithMany()
-                .HasForeignKey(t => t.UserId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<User>()
-                .HasOptional(u => u.FacebookUser)
-                .WithOptionalDependent(f => f.User)
-                .Map(m => m.MapKey("FBUserId"));
-
-            modelBuilder.Entity<UserAttributeValue>()
-                .HasRequired(u => u.UserAttribute)
-                .WithMany()
-                .HasForeignKey(u => u.UserAttributeId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<UserAttributePermission>()
-                .HasRequired(u => u.UserAttribute)
-                .WithMany()
-                .HasForeignKey(u => u.UserAttributeId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<UserAttributePermission>()
-                .HasRequired(u => u.User)
-                .WithMany()
-                .HasForeignKey(u => u.UserId)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<UserAttributePermission>()
-                .HasRequired(u => u.Application)
-                .WithMany()
-                .HasForeignKey(u => u.ApiKey)
-                .WillCascadeOnDelete(false);
+            base.SaveChanges();
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Creating Model"));
+
+            try
+            {
+                base.OnModelCreating(modelBuilder);
+
+                modelBuilder.Entity<Message>()
+                    .HasRequired(m => m.Application)
+                    .WithMany()
+                    .HasForeignKey(m => m.ApiKey)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<Message>()
+                    .HasRequired(m => m.Sender)
+                    .WithMany()
+                    .HasForeignKey(m => m.SenderId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<Message>()
+                    .HasOptional(m => m.Recipient)
+                    .WithMany()
+                    .HasForeignKey(m => m.RecipientId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<Transaction>()
+                    .HasRequired(t => t.FromAccount)
+                    .WithMany()
+                    .HasForeignKey(t => t.FromAccountId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<Transaction>()
+                     .HasRequired(t => t.User)
+                     .WithMany()
+                     .HasForeignKey(t => t.UserId)
+                     .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<User>()
+                    .HasOptional(u => u.FacebookUser)
+                    .WithOptionalDependent(f => f.User)
+                    .Map(m => m.MapKey("FBUserId"));
+
+                modelBuilder.Entity<MECode>()
+                    .HasRequired(m => m.User)
+                    .WithMany()
+                    .HasForeignKey(m => m.UserId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<UserAttributeValue>()
+                    .HasRequired(u => u.UserAttribute)
+                    .WithMany()
+                    .HasForeignKey(u => u.UserAttributeId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<UserAttributePermission>()
+                    .HasRequired(u => u.UserAttribute)
+                    .WithMany()
+                    .HasForeignKey(u => u.UserAttributeId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<UserAttributePermission>()
+                    .HasRequired(u => u.User)
+                    .WithMany()
+                    .HasForeignKey(u => u.UserId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<UserAttributePermission>()
+                    .HasRequired(u => u.Application)
+                    .WithMany()
+                    .HasForeignKey(u => u.ApiKey)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<MobileNumberSignUpKey>()
+                    .HasKey(k => k.SignUpKey);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception creating model. {0}", ex.Message));
+
+                throw ex;
+            }
+        }
     }
 
     public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
-       
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+      
         protected override void Seed(Context context)
         {
+            _logger.Log(LogLevel.Info, String.Format("Seeding Database"));
+
             var adminRole = context.Roles.Add(new Role()
             {
                 RoleId = Guid.NewGuid(),
@@ -203,7 +212,7 @@ namespace SocialPayments.DataLayer
                 UserName = "8043555555",
                 Password = securityService.Encrypt("testuser"),
                 SecurityPin = securityService.Encrypt("1111"),
-                PaymentAccounts = new List<PaymentAccount>() {
+                PaymentAccounts = new Collection<PaymentAccount>() {
                     new PaymentAccount() { 
                         Id=Guid.NewGuid(), 
                         AccountNumber = securityService.Encrypt("411111111111"), 
@@ -220,7 +229,7 @@ namespace SocialPayments.DataLayer
                 UserStatus = UserStatus.Verified,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
-                Roles = new List<Role>()
+                Roles = new Collection<Role>()
                 {
                     memberRole
                 }
@@ -241,7 +250,7 @@ namespace SocialPayments.DataLayer
                 UserStatus = UserStatus.Verified,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
-                Roles = new List<Role>()
+                Roles = new Collection<Role>()
                 {
                     adminRole
                 }
@@ -261,12 +270,12 @@ namespace SocialPayments.DataLayer
                 UserStatus = UserStatus.Verified,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
-                Roles = new List<Role>()
+                Roles = new Collection<Role>()
                 {
                     adminRole,
                     memberRole
                 },
-                UserAttributes = new List<UserAttributeValue>()
+                UserAttributes = new Collection<UserAttributeValue>()
                 {
                     new UserAttributeValue() {
                         id = Guid.NewGuid(),
@@ -312,7 +321,7 @@ namespace SocialPayments.DataLayer
                 Application = application,
             });
             
-            message.Transactions = new List<Transaction>()
+            message.Transactions = new Collection<Transaction>()
                                        {
                                            new Transaction()
                                                {

@@ -10,6 +10,9 @@ using SocialPayments.Domain;
 using NLog;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using System.Configuration;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -84,6 +87,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     AttributeName = a.UserAttribute.AttributeName,
                     AttributeValue = a.AttributeValue
                 }).ToList(),
+                upperLimit = user.Limit,
                 totalMoneyReceived = receivedTotal,
                 totalMoneySent = sentTotal
             };
@@ -104,7 +108,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             _logger.Log(LogLevel.Error, string.Format("I got here 1"));
 
-            Domain.User user;
+            User user;
 
             //validate that email address is not already user
             user = _userService.FindUserByEmailAddress(request.userName);
@@ -150,11 +154,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     UserStatus = Domain.UserStatus.Submitted,
                     IsConfirmed = false,
                     LastLoggedIn = System.DateTime.Now,
-                    Limit = 0,
+                    Limit = Convert.ToDouble(ConfigurationManager.AppSettings["InitialPaymentLimit"]),
                     RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
                     SetupPassword = false,
                     SetupSecurityPin = false,
-                    Roles = new List<Role>()
+                    Roles = new Collection<Role>()
                     {
                         memberRole
                     },
@@ -210,7 +214,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             var userService = new DomainServices.UserService();
 
-            Domain.User user;
+            User user;
             var isValid = userService.ValidateUser(request.userName, request.password, out user);
 
             if (isValid){

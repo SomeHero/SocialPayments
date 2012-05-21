@@ -6,6 +6,7 @@ using System.Net;
 using System.IO;
 using SocialPayments.DataLayer;
 using NLog;
+using SocialPayments.DataLayer.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
@@ -13,10 +14,24 @@ namespace SocialPayments.DomainServices
     {
         private ApplicationService _applicationService;
         private SMSLogService _smsLogService;
-        private Context _ctx;
+        private IDbContext _ctx;
         private Logger _logger;
 
-        public SMSService(ApplicationService applicationService, SMSLogService smsLogService, Context context
+        public SMSService(IDbContext context)
+        {
+            _ctx = context;
+            _logger = LogManager.GetCurrentClassLogger();
+            _applicationService = new ApplicationService(_ctx);
+            _smsLogService = new SMSLogService(_ctx);
+        }
+        public SMSService(IDbContext context, Logger logger)
+        {
+            _ctx = context;
+            _logger = logger;
+            _applicationService = new ApplicationService(_ctx);
+            _smsLogService = new SMSLogService(_ctx);
+        }
+        public SMSService(ApplicationService applicationService, SMSLogService smsLogService, IDbContext context
             , Logger logger)
         {
             _applicationService = applicationService;
@@ -45,14 +60,14 @@ namespace SocialPayments.DomainServices
             //format to number
             string toMobileNumber = String.Format("{0}{1}", "1", mobileNumber.Replace(@"-", @""));
 
-            var aliases = _ctx.MobileDeviceAliases
-                .FirstOrDefault(m => m.MobileNumber == mobileNumber);
+            //var aliases = _ctx.MobileDeviceAliases
+            //    .FirstOrDefault(m => m.MobileNumber == mobileNumber);
 
-            if (aliases != null)
-            {
-                _logger.Log(LogLevel.Info, String.Format("Alias found for {0}", mobileNumber));
-                toMobileNumber = String.Format("{0}{1}", "1", aliases.MobileNumberAlias.Replace(@"-", @""));
-            }
+            //if (aliases != null)
+            //{
+            //    _logger.Log(LogLevel.Info, String.Format("Alias found for {0}", mobileNumber));
+            //    toMobileNumber = String.Format("{0}{1}", "1", aliases.MobileNumberAlias.Replace(@"-", @""));
+            //}
 
             _logger.Log(LogLevel.Info, String.Format("Sending SMS Message to {0}", toMobileNumber));
 

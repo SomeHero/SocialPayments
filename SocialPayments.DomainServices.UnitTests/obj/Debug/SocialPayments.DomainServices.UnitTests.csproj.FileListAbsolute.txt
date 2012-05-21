@@ -1,0 +1,14 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DomainServices.UnitTests.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DomainServices.UnitTests.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DomainServices.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\NLog.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DomainServices.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\NLog.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\obj\Debug\SocialPayments.DomainServices.UnitTests.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\obj\Debug\SocialPayments.DomainServices.UnitTests.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Debug\SocialPayments.DomainServices.UnitTests.dll.config

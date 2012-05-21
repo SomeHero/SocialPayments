@@ -33,14 +33,16 @@
   <ItemGroup>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SocialPayments.DomainServices\bin\Debug\EntityFramework.dll</HintPath>
+      <HintPath>..\..\MvcApplication1\packages\EntityFramework.4.1.10331.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\NLog\.NET Framework 4.0\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,10 +66,17 @@
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocialPayments.Services\SocialPayments.Services.csproj">
-      <Project>{4BE0F197-E35E-4364-99D3-56CFD4CA9212}</Project>
-      <Name>SocialPayments.Services</Name>
+    <ProjectReference Include="..\SocialPayments.Services.IMessageProcessor\SocialPayments.Services.IMessageProcessor.csproj">
+      <Project>{9AF99E2B-5BD4-4C38-B490-153FCFE73797}</Project>
+      <Name>SocialPayments.Services.IMessageProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SocialPayments.Services.SubmittedMessageProcessor\SocialPayments.Services.MessageProcessors.csproj">
+      <Project>{D89D77FD-B69B-4010-B072-A0A26F0C0194}</Project>
+      <Name>SocialPayments.Services.MessageProcessors</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

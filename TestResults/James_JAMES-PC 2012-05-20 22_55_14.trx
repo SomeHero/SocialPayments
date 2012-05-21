@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="45d0987b-3ed8-4716-bd6b-1433f1bfaea6" name="James@JAMES-PC 2012-05-20 22:55:14" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="63f1875e-6356-47de-9b24-1f557b223cad">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="James_JAMES-PC 2012-05-20 22_55_14">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.IMessageProcessor\bin\Release\SocialPayments.Services.IMessageProcessor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Local\SocialPayments.DataLayer.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-20T22:55:15.0048828-04:00" queuing="2012-05-20T22:55:23.6201172-04:00" start="2012-05-20T22:55:24.4013672-04:00" finish="2012-05-20T22:55:53.4140625-04:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="8" executed="2" passed="1" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="6" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="JAMES-PC" outcome="Error" timestamp="2012-05-20T22:55:53.2734375-04:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="WhenPendingPaymentMessageWithMECodeRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\release\socialpayments.services.messageprocessors.unittest.dll" id="3fbab4ce-0069-1341-3102-df8af4d658f8">
+      <Execution id="e32f2cc3-9b99-46d5-b52e-581b273c25dd" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Release/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithMECodeRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" />
+    </UnitTest>
+    <UnitTest name="WhenUpdatingNameApplicationNameIsChanged" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.domainservices.unittests\bin\release\socialpayments.domainservices.unittests.dll" id="954ba304-f237-1d11-1a31-48fb54e92c87">
+      <Execution id="f01eaccc-8d1c-411c-bd97-714a9c777ab9" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.DomainServices.UnitTests/bin/Release/SocialPayments.DomainServices.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.DomainServices.UnitTests.ApplicationServicesTest, SocialPayments.DomainServices.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenUpdatingNameApplicationNameIsChanged" />
+    </UnitTest>
+    <UnitTest name="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\release\socialpayments.services.messageprocessors.unittest.dll" id="0bbf6510-5b38-cc42-6794-c7dbbf478eb4">
+      <Execution id="d5a84be7-1391-45ce-9921-4a36ea5452f3" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Release/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" />
+    </UnitTest>
+    <UnitTest name="About" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.facebook.tests\bin\local\socialpayments.facebook.tests.dll" id="c1d7bd53-920e-b184-31fb-b52ca09868f5">
+      <Execution id="f107accc-62e7-415d-b9c4-7c4d1e7ffe2a" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Facebook.Tests/bin/Local/SocialPayments.Facebook.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Facebook.Tests.Controllers.HomeControllerTest, SocialPayments.Facebook.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="About" />
+    </UnitTest>
+    <UnitTest name="WhenAddingApplicationCollectionHasNewItem" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.domainservices.unittests\bin\release\socialpayments.domainservices.unittests.dll" id="478cca51-171e-22a8-e83b-baf059f41d9f">
+      <Execution id="702ce6dd-e045-4960-ac50-46803fa8db6b" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.DomainServices.UnitTests/bin/Release/SocialPayments.DomainServices.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.DomainServices.UnitTests.ApplicationServicesTest, SocialPayments.DomainServices.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenAddingApplicationCollectionHasNewItem" />
+    </UnitTest>
+    <UnitTest name="Index" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.facebook.tests\bin\local\socialpayments.facebook.tests.dll" id="f5ae4d3d-1411-d1d3-0b66-791e83111db6">
+      <Execution id="bdbb4505-5027-48ba-8167-8f89bfa17431" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Facebook.Tests/bin/Local/SocialPayments.Facebook.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Facebook.Tests.Controllers.HomeControllerTest, SocialPayments.Facebook.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Index" />
+    </UnitTest>
+    <UnitTest name="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\release\socialpayments.services.messageprocessors.unittest.dll" id="a98f7e50-8b97-baa5-6dbb-3dc100efdbe0">
+      <Execution id="7dee36c8-b9b4-4fa7-93f9-533a3b705917" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Release/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" />
+    </UnitTest>
+    <UnitTest name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\release\socialpayments.services.messageprocessors.unittest.dll" id="9348b3c8-0ebe-7192-620d-3e0b8e10480c">
+      <Execution id="a47c4934-0fa2-45cf-80f4-5cacea04837d" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Release/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="0bbf6510-5b38-cc42-6794-c7dbbf478eb4" executionId="d5a84be7-1391-45ce-9921-4a36ea5452f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3fbab4ce-0069-1341-3102-df8af4d658f8" executionId="e32f2cc3-9b99-46d5-b52e-581b273c25dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="478cca51-171e-22a8-e83b-baf059f41d9f" executionId="702ce6dd-e045-4960-ac50-46803fa8db6b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9348b3c8-0ebe-7192-620d-3e0b8e10480c" executionId="a47c4934-0fa2-45cf-80f4-5cacea04837d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="954ba304-f237-1d11-1a31-48fb54e92c87" executionId="f01eaccc-8d1c-411c-bd97-714a9c777ab9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a98f7e50-8b97-baa5-6dbb-3dc100efdbe0" executionId="7dee36c8-b9b4-4fa7-93f9-533a3b705917" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1d7bd53-920e-b184-31fb-b52ca09868f5" executionId="f107accc-62e7-415d-b9c4-7c4d1e7ffe2a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5ae4d3d-1411-d1d3-0b66-791e83111db6" executionId="bdbb4505-5027-48ba-8167-8f89bfa17431" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="d5a84be7-1391-45ce-9921-4a36ea5452f3" testId="0bbf6510-5b38-cc42-6794-c7dbbf478eb4" testName="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" computerName="JAMES-PC" duration="00:00:09.7285962" startTime="2012-05-20T22:55:25.2607422-04:00" endTime="2012-05-20T22:55:37.0576172-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5a84be7-1391-45ce-9921-4a36ea5452f3">
+    </UnitTestResult>
+    <UnitTestResult executionId="e32f2cc3-9b99-46d5-b52e-581b273c25dd" testId="3fbab4ce-0069-1341-3102-df8af4d658f8" testName="WhenPendingPaymentMessageWithMECodeRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" computerName="JAMES-PC" duration="00:00:16.2783203" startTime="2012-05-20T22:55:37.1357422-04:00" endTime="2012-05-20T22:55:53.4140625-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e32f2cc3-9b99-46d5-b52e-581b273c25dd">
+    </UnitTestResult>
+    <UnitTestResult executionId="702ce6dd-e045-4960-ac50-46803fa8db6b" testId="478cca51-171e-22a8-e83b-baf059f41d9f" testName="WhenAddingApplicationCollectionHasNewItem" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="702ce6dd-e045-4960-ac50-46803fa8db6b">
+    </UnitTestResult>
+    <UnitTestResult executionId="a47c4934-0fa2-45cf-80f4-5cacea04837d" testId="9348b3c8-0ebe-7192-620d-3e0b8e10480c" testName="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a47c4934-0fa2-45cf-80f4-5cacea04837d">
+    </UnitTestResult>
+    <UnitTestResult executionId="f01eaccc-8d1c-411c-bd97-714a9c777ab9" testId="954ba304-f237-1d11-1a31-48fb54e92c87" testName="WhenUpdatingNameApplicationNameIsChanged" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f01eaccc-8d1c-411c-bd97-714a9c777ab9">
+    </UnitTestResult>
+    <UnitTestResult executionId="7dee36c8-b9b4-4fa7-93f9-533a3b705917" testId="a98f7e50-8b97-baa5-6dbb-3dc100efdbe0" testName="WhenPendingPaymentMessageWithMobileNumberRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dee36c8-b9b4-4fa7-93f9-533a3b705917">
+    </UnitTestResult>
+    <UnitTestResult executionId="f107accc-62e7-415d-b9c4-7c4d1e7ffe2a" testId="c1d7bd53-920e-b184-31fb-b52ca09868f5" testName="About" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f107accc-62e7-415d-b9c4-7c4d1e7ffe2a">
+    </UnitTestResult>
+    <UnitTestResult executionId="bdbb4505-5027-48ba-8167-8f89bfa17431" testId="f5ae4d3d-1411-d1d3-0b66-791e83111db6" testName="Index" computerName="JAMES-PC" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdbb4505-5027-48ba-8167-8f89bfa17431">
+    </UnitTestResult>
+  </Results>
+</TestRun>

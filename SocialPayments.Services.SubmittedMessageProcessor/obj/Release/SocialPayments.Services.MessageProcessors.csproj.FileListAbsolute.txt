@@ -1,0 +1,15 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\NLog.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.DomainServices.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.IMessageProcessor.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.DomainServices.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.IMessageProcessor.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\NLog.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\obj\Release\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\obj\Release\SocialPayments.Services.SubmittedMessageProcessor.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\obj\Release\SocialPayments.Services.SubmittedMessageProcessor.pdb

@@ -1,4 +1,4 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\NLog.config
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\SocialPayments.RestServices.Internal.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\SocialPayments.RestServices.Internal.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\EntityFramework.dll
@@ -28,19 +28,11 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\NLog.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\SocialPayments.Domain.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\SocialPayments.DomainServices.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Json.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Net.Http.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Net.Http.Formatting.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Net.Http.WebRequest.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Helpers.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Http.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Http.Common.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Http.WebHost.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Mvc.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.Razor.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.WebPages.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.WebPages.Deployment.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\System.Web.WebPages.Razor.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\obj\Debug\SocialPayments.RestServices.Internal.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\obj\Debug\SocialPayments.RestServices.Internal.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\NLog.config

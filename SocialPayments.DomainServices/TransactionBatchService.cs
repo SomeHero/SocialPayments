@@ -7,15 +7,18 @@ using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using System.Text.RegularExpressions;
 using NLog;
+using SocialPayments.DataLayer.Interfaces;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
     public class TransactionBatchService
     {
-        private readonly Context _ctx;
+        private IDbContext _ctx;
         private Logger _logger;
 
-        public TransactionBatchService(Context context, Logger logger)
+        public TransactionBatchService(IDbContext context, Logger logger)
         {
             _ctx = context;
             _logger = logger;
@@ -28,11 +31,11 @@ namespace SocialPayments.DomainServices
 
             return transactionBatch;
         }
-        public void BatchTransactions(Domain.Message message)
+        public void BatchTransactions(Message message)
         {
             var transactionBatch = GetOpenBatch();
 
-            message.Transactions.Add(
+            var withDrawalTransaction =
                 new Domain.Transaction()
                 {
                     Amount = message.Amount,
@@ -48,33 +51,36 @@ namespace SocialPayments.DomainServices
                     Type = Domain.TransactionType.Withdrawal,
                     UserId = message.SenderId,
                     Message = message
-                });
+                };
 
-            var recipient = GetRecipient(message.RecipientUri);
+            _ctx.Transactions.Add(withDrawalTransaction);
+           
 
-            Domain.Transaction deposit;
+            Transaction deposit;
 
-            if (recipient != null && recipient.PaymentAccounts.Count > 0)
+            if (message.Recipient != null && message.Recipient.PaymentAccounts.Count > 0)
             {
-                _logger.Log(LogLevel.Info, String.Format("Found Recipient {0} for Message {1}", recipient.UserId, message.Id));
-                message.Transactions.Add(
-                new Domain.Transaction()
-                {
-                    Amount = message.Amount,
-                    Category = Domain.TransactionCategory.Payment,
-                    CreateDate = System.DateTime.Now,
-                    FromAccountId = recipient.PaymentAccounts[0].Id,
-                    Id = Guid.NewGuid(),
-                    MessageId = message.Id,
-                    PaymentChannelType = Domain.PaymentChannelType.Single,
-                    StandardEntryClass = Domain.StandardEntryClass.Web,
-                    Status = Domain.TransactionStatus.Pending,
-                    TransactionBatchId = transactionBatch.Id,
-                    Type = Domain.TransactionType.Deposit,
-                    UserId = recipient.UserId,
-                });
+                _logger.Log(LogLevel.Info, String.Format("Found Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
+                
+                var depositTransaction = 
+                    new Domain.Transaction()
+                    {
+                        Amount = message.Amount,
+                        Category = Domain.TransactionCategory.Payment,
+                        CreateDate = System.DateTime.Now,
+                        FromAccountId = message.Recipient.PaymentAccounts[0].Id,
+                        Id = Guid.NewGuid(),
+                        MessageId = message.Id,
+                        PaymentChannelType = Domain.PaymentChannelType.Single,
+                        StandardEntryClass = Domain.StandardEntryClass.Web,
+                        Status = Domain.TransactionStatus.Pending,
+                        TransactionBatchId = transactionBatch.Id,
+                        Type = Domain.TransactionType.Deposit,
+                        UserId = message.Recipient.UserId,
+                    };
 
-                message.Recipient = recipient;
+                _ctx.Transactions.Add(depositTransaction);
+                message.Recipient = message.Recipient;
             }
 
             message.MessageStatus = Domain.MessageStatus.Pending;
@@ -124,7 +130,7 @@ namespace SocialPayments.DomainServices
             transactionBatch.IsClosed = true;
             transactionBatch.ClosedDate = System.DateTime.Now;
             transactionBatch.Transactions.ForEach(t => t.Status = TransactionStatus.Submitted);
-            //transactionBatch.Transactions.ForEach(t => t.Payment.Status = TransactionStatus.Complete);
+            transactionBatch.Transactions.ForEach(t => t.Message.MessageStatus = MessageStatus.Completed);
             _ctx.SaveChanges();
 
             AddTransactionBatch(new TransactionBatch()
@@ -136,7 +142,7 @@ namespace SocialPayments.DomainServices
                                     });
             return transactionBatch.Transactions;
         }
-        private Domain.User GetRecipient(string uri)
+        private User GetRecipient(string uri)
         {
             string phoneNumberUnformatted = Regex.Replace(uri, @"\D", string.Empty);
 

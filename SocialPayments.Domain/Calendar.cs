@@ -16,7 +16,7 @@ namespace SocialPayments.Domain
         public int Id { get; set; }
         [Column("ApplicationId")]
         public Application Application { get; set; }
-        public virtual List<CalendarDate> CalendarDates { get; set; }
+        public virtual ICollection<CalendarDate> CalendarDates { get; set; }
         public int CalendarTypeValue { get; set; }
         public CalendarType CalendarType
         {

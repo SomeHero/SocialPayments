@@ -4,12 +4,22 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
+using System.Data.Entity;
+using SocialPayments.DataLayer.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
     public class CalendarService
     {
-        private readonly Context _ctx = new Context();
+        private IDbContext _ctx;
+
+        public CalendarService()
+        {}
+
+        public CalendarService(IDbContext context)
+        {
+            _ctx = context;
+        }
             
         public Calendar AddCalender(string calendarCode, List<CalendarDate> calendarDates, CalendarType calendarType)
         {

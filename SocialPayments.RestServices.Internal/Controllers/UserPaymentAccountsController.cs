@@ -103,7 +103,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public void Delete(string userId, string id)
         {
         }
-        private Domain.User GetUser(string id)
+        private User GetUser(string id)
         {
             Guid userId;
 

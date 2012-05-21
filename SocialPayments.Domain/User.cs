@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.Domain
 {
@@ -42,13 +43,13 @@ namespace SocialPayments.Domain
         public virtual string PasswordVerificationToken { get; set; }
         public virtual Nullable<DateTime> PasswordVerificationTokenExpirationDate { get; set; }
 
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual Collection<Role> Roles { get; set; }
         public virtual string MobileNumber { get; set; }
         public virtual string SecurityPin { get; set; }
         public virtual bool IsLockedOut { get; set; }
         public virtual string TimeZone { get; set; }
         public virtual string Culture { get; set; }
-        public virtual List<UserAttributeValue> UserAttributes { get; set; }
+        public virtual Collection<UserAttributeValue> UserAttributes { get; set; }
         public int UserStatusValue { get; set; }
         public virtual UserStatus UserStatus 
         { 
@@ -68,7 +69,7 @@ namespace SocialPayments.Domain
         public virtual bool SetupSecurityPin { get; set; }
         [DefaultValue(false)]
         public virtual bool SetupPassword { get; set; }
-        public virtual List<PaymentAccount> PaymentAccounts { get; set; }
+        public virtual Collection<PaymentAccount> PaymentAccounts { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -80,8 +81,13 @@ namespace SocialPayments.Domain
         [Column(name:"FBUserId")]
         public FBUser FacebookUser { get; set; }
 
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual Collection<Message> Messages { get; set; }
         public string DeviceToken { get; set; }
+
+        public virtual Collection<MECode> MECodes { get; set; }
+
+
+        
     }
 
 }

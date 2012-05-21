@@ -1,6 +1,5 @@
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.Jobs.ProcessOpenPaymentsJob.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.Jobs.ProcessOpenPaymentsJob.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\EntityFramework.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\NLog.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\Quartz.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.DataLayer.dll
@@ -10,7 +9,6 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.DataLayer.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.DomainServices.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\SocialPayments.Domain.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\EntityFramework.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\NLog.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\bin\Local\Quartz.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Jobs.ProcessOpenPaymentsJob\obj\Local\ResolveAssemblyReference.cache

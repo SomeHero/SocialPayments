@@ -2,3 +2,52 @@
 2012-05-17 15:28:03.7568 SocialPayments.RestServices.Internal.Controllers.UserPayStreamMessagesController Unhandled Exception getting user 1. A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
 2012-05-17 15:31:21.7607 SocialPayments.RestServices.Internal.Controllers.UserPayStreamMessagesController Unhandled Exception getting user 1. The provider did not return a ProviderManifestToken string.
 2012-05-17 15:31:21.7646 SocialPayments.RestServices.Internal.Controllers.UserPayStreamMessagesController Unhandled Exception getting user 1. A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+2012-05-19 09:02:47.7109 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:03:25.2578 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:07:03.7089 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:07:21.7558 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:12:26.7382 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:13:27.5664 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:14:31.1337 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:14:46.3837 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:16:23.6181 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:16:29.3994 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:18:31.3046 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 09:18:39.7890 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 09:18:45.6484 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-19 10:55:27.5253 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 10:55:35.8222 SocialPayments.DataLayer.Context Creating Model
+2012-05-19 11:02:08.8798 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-19 11:02:27.3925 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 00:51:14.4062 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:01:19.5244 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:13:30.1337 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:13:46.9619 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 01:18:37.3095 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:18:48.7470 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 01:24:30.3886 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:30:08.6181 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:30:52.5947 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 01:52:31.1406 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 01:52:53.3037 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 01:53:00.8730 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-20 08:33:27.8505 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 08:35:08.2392 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 21:44:44.9355 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 21:51:37.2441 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 21:53:03.6757 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 21:55:14.4726 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 21:55:30.7675 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-20 21:59:29.6591 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:00:53.8115 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:02:16.5449 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 22:16:42.0761 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:17:18.4775 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 22:30:59.5869 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:31:11.7744 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 22:32:34.9404 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:32:51.6435 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 22:36:28.4638 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:37:09.9794 SocialPayments.DataLayer.Context Creating Model
+2012-05-20 22:39:56.9755 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-20 22:40:24.0068 SocialPayments.DataLayer.Context Creating Model

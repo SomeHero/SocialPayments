@@ -17,7 +17,6 @@ namespace SocialPayments.Domain
         public virtual PaymentAccount FromAccount { get; set; }
 
         public string FromMobileNumber { get; set; }
-
         public Guid? ToAccountId { get; set; }
         [ForeignKey("ToAccountId")]
         public virtual PaymentAccount ToAccount { get; set; }

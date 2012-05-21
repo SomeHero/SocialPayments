@@ -29,6 +29,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string state { get; set; }
             public string zip { get; set; }
             public string senderName { get; set; }
+            public double upperLimit { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
 
             public double totalMoneySent { get; set; }
@@ -70,6 +71,25 @@ namespace SocialPayments.RestServices.Internal.Models
             public string userId { get; set; }
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
+        }
+        public class MECodeResponse
+        {
+            public string Id { get; set; }
+            public string MeCode { get; set; }
+            public DateTime CreateDate { get; set; }
+            public DateTime? ApprovedDate { get; set; }
+            public bool IsApproved { get; set; }
+            public bool IsActive { get; set; }
+        }
+        public class SubmitMECodeRequest
+        {
+            public string MeCode { get; set; }
+        }
+        public class UpdateMECodeRequest
+        {
+            public DateTime? ApprovedDate { get; set; }
+            public bool IsApproved { get; set; }
+            public bool IsActive { get; set; }
         }
     }
 }

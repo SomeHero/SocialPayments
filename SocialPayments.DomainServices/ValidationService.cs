@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using System.Text.RegularExpressions;
 
 namespace SocialPayments.DomainServices
 {
@@ -27,6 +28,27 @@ namespace SocialPayments.DomainServices
             }
 
             return false;
+        }
+        public bool IsEmailAddress(string uri)
+        {
+
+            string patternStrict = @"^(([^<>()[\]\\.,;:\s@\""]+"
+                  + @"(\.[^<>()[\]\\.,;:\s@\""]+)*)|(\"".+\""))@"
+                  + @"((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+                  + @"\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+"
+                  + @"[a-zA-Z]{2,}))$";
+
+            Regex reStrict = new Regex(patternStrict);
+
+
+            bool isStrictMatch = reStrict.IsMatch(uri);
+
+            return isStrictMatch;
+
+        }
+        public bool IsMECode(string uri)
+        {
+            return uri[0].Equals('$');
         }
     }
 }

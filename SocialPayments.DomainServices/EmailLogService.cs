@@ -4,12 +4,23 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
+using SocialPayments.DataLayer.Interfaces;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
     public class EmailLogService
     {
-        private readonly Context _ctx = new Context();
+        private IDbContext _ctx;
+
+        public EmailLogService()
+        {
+            _ctx = new Context();
+        }
+        public EmailLogService(IDbContext context)
+        {
+            _ctx = context;
+        }
             
         public EmailLog AddEmailLog(Guid apiKey, string fromAddress, string toAddress, string subject, string body, DateTime? sentDate)
         {

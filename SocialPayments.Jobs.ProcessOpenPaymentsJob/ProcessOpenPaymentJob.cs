@@ -28,24 +28,24 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
         
         public void Execute(JobExecutionContext context)
         {
-            var payments = _ctx.Payments.Where(p => p.PaymentStatus == Domain.PaymentStatus.Pending);
+            var payments = _ctx.Messages.Where(p => p.MessageStatus == Domain.MessageStatus.Pending);
             int numberOfDaysOpenThreshold = 10;
             foreach (var payment in payments)
             {
                 var transactionBatch = transactionBatchService.GetOpenBatch();
 
-                if (payment.PaymentDate.AddDays(numberOfDaysOpenThreshold).Date > System.DateTime.Now.Date)
+                if (payment.CreateDate.AddDays(numberOfDaysOpenThreshold).Date > System.DateTime.Now.Date)
                 {
                     //Create a transaction to deposit payment amount in payer's account
                     payment.Transactions.Add(new Domain.Transaction()
                     {
-                        Amount = payment.PaymentAmount,
+                        Amount = payment.Amount,
                         Category = Domain.TransactionCategory.Payment,
                         CreateDate = System.DateTime.Now,
-                        FromAccountId = payment.FromAccountId,
-                        PaymentChannelType = payment.PaymentChannelType,
+                        FromAccountId = payment.SenderAccountId.Value,
+                        PaymentChannelType = Domain.PaymentChannelType.Single,
                         //PaymentId = payment.Id,
-                        StandardEntryClass = payment.StandardEntryClass,
+                        StandardEntryClass = Domain.StandardEntryClass.Web,
                         Status = Domain.TransactionStatus.Pending,
                         TransactionBatchId = transactionBatch.Id,
                         Type = Domain.TransactionType.Deposit

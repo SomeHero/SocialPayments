@@ -1,7 +1,6 @@
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe.config
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\EntityFramework.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\NLog.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\Quartz.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DataLayer.dll
@@ -13,7 +12,6 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DomainServices.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Domain.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Jobs.ProcessOpenPaymentsJob.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\EntityFramework.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\NLog.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\Quartz.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\ResolveAssemblyReference.cache

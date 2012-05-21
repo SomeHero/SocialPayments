@@ -6,6 +6,7 @@ using System.Web.Security;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using SocialPayments.DomainServices;
+using System.Collections.ObjectModel;
 
 namespace CodeFirstMembershipDemoSharp.Code
 {
@@ -90,7 +91,7 @@ namespace CodeFirstMembershipDemoSharp.Code
                             PasswordChangedDate = DateTime.UtcNow,
                             PasswordFailuresSinceLastSuccess = defaultNumPasswordFailures,
                             LastPasswordFailureDate = DateTime.UtcNow,
-                            PaymentAccounts = new List<PaymentAccount>()
+                            PaymentAccounts = new Collection<PaymentAccount>()
                                                   {
                                                       new PaymentAccount() { 
                                                           AccountNumber = securityService.Encrypt(accountNumber), 

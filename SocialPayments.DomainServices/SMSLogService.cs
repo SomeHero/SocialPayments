@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
+using SocialPayments.DataLayer.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
     public class SMSLogService
     {
-        private readonly Context _ctx = new Context();
+        private IDbContext _ctx;
+
+        public SMSLogService(IDbContext context)
+        {
+            _ctx = context;
+        }
 
         public SMSLog AddSMSLog(Guid applicationId, string mobileNumber, string message, Domain.SMSStatus smsStatus, DateTime? sentDate)
         {

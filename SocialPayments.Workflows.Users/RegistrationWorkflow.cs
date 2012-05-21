@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
 using SocialPayments.DomainServices;
-using SocialPayments.Services;
 using SocialPayments.Domain;
 using NLog;
 using System.Text.RegularExpressions;
+using System.Data.Entity;
 
 namespace SocialPayments.Workflows.Users
 {
@@ -16,7 +16,7 @@ namespace SocialPayments.Workflows.Users
         private readonly Context _ctx = new Context();
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        Services.EmailService emailService = null;
+        DomainServices.EmailService emailService = null;
         DomainServices.ApplicationService applicationServices = null;
         DomainServices.SMSLogService smsLogServices = null;
         DomainServices.SMSService smsService = null;
@@ -24,9 +24,9 @@ namespace SocialPayments.Workflows.Users
 
         public RegistrationWorkflow()
         {
-            emailService = new Services.EmailService();
+            emailService = new DomainServices.EmailService(_ctx);
             applicationServices = new DomainServices.ApplicationService();
-            smsLogServices = new SMSLogService();
+            smsLogServices = new SMSLogService(_ctx);
             smsService = new DomainServices.SMSService(applicationServices, smsLogServices, _ctx, logger);
             transactionBatchService = new DomainServices.TransactionBatchService(_ctx, logger);
         }
@@ -105,23 +105,23 @@ namespace SocialPayments.Workflows.Users
                             logger.Log(LogLevel.Error, string.Format("Exceptioon retreiving current batch file. {0}", ex.Message));
                         }
                         
-                        var payments = _ctx.Payments
+                        var payments = _ctx.Messages
                             .Include("Transactions")
                             .Include("FromAccount")
                             .Include("FromAccount.User")
-                            .Where(p => p.ToMobileNumber == user.MobileNumber && p.Transactions.Count < 2); //  && p.PaymentStatus == PaymentStatus.Pending);
+                            .Where(p => p.RecipientUri == user.MobileNumber && p.Transactions.Count < 2); //  && p.PaymentStatus == PaymentStatus.Pending);
 
                         foreach (var payment in payments)
                         {
                             logger.Log(LogLevel.Info, string.Format("Processing User Registration for {0}, Creating Deposit for Payment {1}", userId, payment.Id));
 
-                            payment.ToAccountId = paymentAccount.Id;
+                            payment.SenderAccountId = paymentAccount.Id;
 
                             try
                             {
                                 payment.Transactions.Add(new Transaction()
                                 {
-                                    Amount = payment.PaymentAmount,
+                                    Amount = payment.Amount,
                                     Category = TransactionCategory.Payment,
                                     CreateDate = System.DateTime.Now,
                                     FromAccount = paymentAccount,
@@ -144,40 +144,40 @@ namespace SocialPayments.Workflows.Users
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payee at {1} f0r Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            message = string.Format("A payment in the amounnt of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber);
+                            message = string.Format("A payment in the amounnt of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.Amount, payment.SenderUri);
 
                             smsService.SendSMS(payment.ApiKey, user.MobileNumber, message);
 
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending Confirmation Email to Payee at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            emailService.SendEmail(new Services.DataContracts.Email.EmailRequest()
-                            {
-                                ApiKey = payment.ApiKey,
-                                FromAddress = "admin@pdthx.me",
-                                Body = string.Format("A payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
-                                EmailLogId = Guid.NewGuid(),
-                                Subject = string.Format("You received {0} from {1}", payment.PaymentAmount, payment.FromMobileNumber),
-                                ToAddress = user.EmailAddress
-                            });
+                            //emailService.SendEmail(new Services.DataContracts.Email.EmailRequest()
+                            //{
+                            //    ApiKey = payment.ApiKey,
+                            //    FromAddress = "admin@pdthx.me",
+                            //    Body = string.Format("A payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into your bank account.", payment.PaymentAmount, payment.FromMobileNumber),
+                            //    EmailLogId = Guid.NewGuid(),
+                            //    Subject = string.Format("You received {0} from {1}", payment.PaymentAmount, payment.FromMobileNumber),
+                            //    ToAddress = user.EmailAddress
+                            //});
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending SMS to Payer at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            message = string.Format("Your payment in the amounnt of {0} to {1} was successfully completed.  {0} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber);
+                            message = string.Format("Your payment in the amounnt of {0} to {1} was successfully completed.  {0} will be deposited into the recipient's bank account.", payment.Amount, payment.SenderUri);
 
-                            smsService.SendSMS(payment.ApiKey, payment.FromMobileNumber, message);
+                            smsService.SendSMS(payment.ApiKey, payment.SenderUri, message);
 
                             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Sending Confirmation Email to Payer at {1} for Payment {2}", userId, user.MobileNumber, payment.Id));
 
-                            emailService.SendEmail(new Services.DataContracts.Email.EmailRequest()
-                            {
-                                ApiKey = payment.ApiKey,
-                                FromAddress = "admin@pdthx.me",
-                                Body = string.Format("Your payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber),
-                                EmailLogId = Guid.NewGuid(),
-                                Subject = string.Format("Your payment of {0} to {1} is complete.", payment.PaymentAmount, payment.FromMobileNumber),
-                                ToAddress = payment.FromAccount.User.EmailAddress,
-                            });
+                            //emailService.SendEmail(new Services.DataContracts.Email.EmailRequest()
+                            //{
+                            //    ApiKey = payment.ApiKey,
+                            //    FromAddress = "admin@pdthx.me",
+                            //    Body = string.Format("Your payment in the amount of {0:C} from {1} was successfully completed.  {0:C} will be deposited into the recipient's bank account.", payment.PaymentAmount, payment.FromMobileNumber),
+                            //    EmailLogId = Guid.NewGuid(),
+                            //    Subject = string.Format("Your payment of {0} to {1} is complete.", payment.PaymentAmount, payment.FromMobileNumber),
+                            //    ToAddress = payment.FromAccount.User.EmailAddress,
+                            //});
                         }
                     }
 

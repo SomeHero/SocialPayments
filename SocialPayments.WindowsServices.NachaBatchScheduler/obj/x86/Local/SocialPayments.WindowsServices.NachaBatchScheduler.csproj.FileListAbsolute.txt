@@ -3,7 +3,6 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.WindowsServices.NachaBatchScheduler.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.WindowsServices.NachaBatchScheduler.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\Common.Logging.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\EntityFramework.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\NLog.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\Quartz.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.BatchFileServices.NachaBatchFile.dll
@@ -14,7 +13,6 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.DataLayer.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.DomainServices.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\SocialPayments.Domain.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\EntityFramework.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\NLog.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\bin\x86\Local\Quartz.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.NachaBatchScheduler\obj\x86\Local\ResolveAssemblyReference.cache

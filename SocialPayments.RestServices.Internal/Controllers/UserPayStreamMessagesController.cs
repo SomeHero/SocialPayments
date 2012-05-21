@@ -7,6 +7,7 @@ using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DataLayer;
 using NLog;
 using System.Net;
+using SocialPayments.Domain;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -31,7 +32,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var messages = _ctx.Messages
                 .Where(m => m.SenderId == user.UserId || m.RecipientId.Value == user.UserId)
                 .OrderByDescending(m => m.CreateDate)
-                .ToList<Domain.Message>();
+                .ToList<Message>();
 
             List<MessageModels.MessageResponse> messageResponse = null;
 
@@ -67,7 +68,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage<List<MessageModels.MessageResponse>>(messageResponse, HttpStatusCode.OK);
         }
 
-        private Domain.User GetUser(string id)
+        private User GetUser(string id)
         {
             Guid userId;
 
@@ -76,7 +77,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             if (userId == null)
                 return null;
 
-            Domain.User user = null;
+            User user = null;
 
             try
             {

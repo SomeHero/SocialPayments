@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.Domain
 {
@@ -40,6 +41,6 @@ namespace SocialPayments.Domain
             set { MessageStatusValue = (int)value; }
         }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual Collection<Transaction> Transactions { get; set; }
     }
 }

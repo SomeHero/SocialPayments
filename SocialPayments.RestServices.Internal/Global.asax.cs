@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Data.Entity;
 using SocialPayments.DataLayer;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal
 {
@@ -16,6 +17,8 @@ namespace SocialPayments.RestServices.Internal
 
     public class WebApiApplication : System.Web.HttpApplication
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -32,14 +35,21 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+                name: "UserMECodes",
+                routeTemplate: "api/users/{userId}/mecodes/{id}",
+                defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
+            );
+
+
+            routes.MapHttpRoute(
                 name: "UserPaymentAccounts",
-                routeTemplate: "api/{userId}/PaymentAccounts/{id}",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/{id}",
                 defaults: new { controller = "UserPaymentAccounts", id = RouteParameter.Optional }
             );
 
             routes.MapHttpRoute(
                 name: "UserPayStreamMessages",
-                routeTemplate: "api/{userId}/PayStreamMessages/{id}",
+                routeTemplate: "api/users/{userId}/PayStreamMessages/{id}",
                 defaults: new { controller = "UserPayStreamMessages", id = RouteParameter.Optional }
             );
 
@@ -58,7 +68,18 @@ namespace SocialPayments.RestServices.Internal
 
         protected void Application_Start()
         {
-            Database.SetInitializer(new MyInitializer());
+            _logger.Log(LogLevel.Info, String.Format("Starting application {0}", "API Internal"));
+
+            try
+            {
+                Database.SetInitializer(new MyInitializer());
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Failed to initialize database. {0}", ex.Message));
+
+                throw ex;
+            }
             
             AreaRegistration.RegisterAllAreas();
 

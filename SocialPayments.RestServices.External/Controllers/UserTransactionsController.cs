@@ -8,6 +8,7 @@ using System.Net;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using SocialPayments.DomainServices;
+using System.Data.Entity;
 
 namespace SocialPayments.RestServices.External.Controllers
 {
@@ -24,11 +25,11 @@ namespace SocialPayments.RestServices.External.Controllers
             if (user == null)
                 return new HttpResponseMessage<List<TransactionModels.TransactionResponse>>(HttpStatusCode.NotFound);
 
-            List<Domain.Transaction> transactions = _ctx.Transactions
+            List<Transaction> transactions = _ctx.Transactions
                 .Include("FromAccount")
                 .Where(t => t.UserId.Equals(user.UserId))
                 .OrderByDescending(t => t.CreateDate)
-                .ToList<Domain.Transaction>(); ;
+                .ToList<Transaction>(); ;
 
             var messages = transactions.Select(t => new TransactionModels.TransactionResponse()
             {

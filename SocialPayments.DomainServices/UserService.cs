@@ -9,17 +9,27 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using NLog;
 using System.Configuration;
+using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using SocialPayments.DataLayer.Interfaces;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
     public class UserService
     {
-        private readonly Context _ctx = new Context();
+        private IDbContext _ctx;
         private SecurityService securityService = new SecurityService();
         private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public UserService() { }
+
+        public UserService(IDbContext context)
+        {
+            _ctx = context;
+        }
         public User AddUser(string userName, string password, string emailAddress, bool isLockedOut, string mobileNumber, string securityPin, 
             UserStatus userStatus, string accountNumber,
             PaymentAccountType accountType, string nameOnAccount, string routingNumber)
@@ -35,7 +45,7 @@ namespace SocialPayments.DomainServices
                 //LastLoggedIn = System.DateTime.Now,
                 MobileNumber = mobileNumber,
                 Password = password,
-                PaymentAccounts = new List<PaymentAccount> {
+                PaymentAccounts = new Collection<PaymentAccount> {
                     new PaymentAccount() { 
                         AccountNumber = accountNumber,
                         AccountType = accountType,
@@ -63,6 +73,31 @@ namespace SocialPayments.DomainServices
             return _ctx.Users
                 .Include("PaymentAccounts")
                 .FirstOrDefault(expression);
+        }
+        public User GetUser(string userUri)
+        {
+            var phoneNumber = Regex.Replace(userUri, @"[^\d]", "");
+
+            User user;
+
+            if (userUri[0].Equals('$'))
+            {
+                var meCode = _ctx.MECodes
+                    .Include("User")
+                    .FirstOrDefault(m => m.MeCode.Equals(userUri));
+
+                if (meCode == null)
+                    return null;
+
+                user = meCode.User;
+
+                return user;
+            }
+
+            user = _ctx.Users
+                .FirstOrDefault(u => u.MobileNumber == phoneNumber || u.EmailAddress == userUri);
+
+            return user;
         }
         public bool ConfirmUser(string accountConfirmationToken)
         {
@@ -160,6 +195,7 @@ namespace SocialPayments.DomainServices
             using (Context context = new Context())
             {
                 User user = null;
+
                 user = context.Users
                     .Include("PaymentAccounts")
                     .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
@@ -238,25 +274,25 @@ namespace SocialPayments.DomainServices
         }
         public void ProcessUser(Guid userId)
         {
-            AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
+            //AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
 
-            var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
+            //var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
 
-            var payments = _ctx.Payments.Select(p => p.ToMobileNumber.Equals(user.MobileNumber)) as IQueryable<Payment>;
+            //var payments = _ctx.Payments.Select(p => p.ToMobileNumber.Equals(user.MobileNumber)) as IQueryable<Payment>;
 
-            foreach (var payment in payments)
-            {
-                payment.FromAccount = user.PaymentAccounts[0];
+            //foreach (var payment in payments)
+            //{
+            //    payment.FromAccount = user.PaymentAccounts[0];
 
-                _ctx.SaveChanges();
+            //    _ctx.SaveChanges();
 
-                client.Publish(new PublishRequest()
-                {
-                    Message = payment.Id.ToString(),
-                    TopicArn = "arn:aws:sns:us-east-1:102476399870:SocialPaymentNotifications",
-                    Subject = "New Payment Receivied"
-                });
-            }
+            //    client.Publish(new PublishRequest()
+            //    {
+            //        Message = payment.Id.ToString(),
+            //        TopicArn = "arn:aws:sns:us-east-1:102476399870:SocialPaymentNotifications",
+            //        Subject = "New Payment Receivied"
+            //    });
+            //}
 
 
         }

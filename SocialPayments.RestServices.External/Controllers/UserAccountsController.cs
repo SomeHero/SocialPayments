@@ -8,6 +8,7 @@ using System.Net;
 using SocialPayments.RestServices.External.Models;
 using SocialPayments.DomainServices;
 using SocialPayments.Domain;
+using System.Data.Entity;
 
 namespace SocialPayments.RestServices.External.Controllers
 {
@@ -202,7 +203,7 @@ namespace SocialPayments.RestServices.External.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
 
         }
-        private Domain.User GetUser(string id)
+        private User GetUser(string id)
         {
             Guid userId;
 
@@ -221,7 +222,7 @@ namespace SocialPayments.RestServices.External.Controllers
 
             return user;
         }
-        private Domain.PaymentAccount GetAccount(string id)
+        private PaymentAccount GetAccount(string id)
         {
             Guid paymentAccountId;
 

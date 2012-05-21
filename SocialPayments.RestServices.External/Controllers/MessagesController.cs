@@ -63,7 +63,7 @@ namespace SocialPayments.RestServices.External.Controllers
             var messages = _ctx.Messages
                 .Where(m => m.CreateDate.Date.Equals(messageDate.Date))
                 .OrderByDescending(m => m.CreateDate)
-                .ToList<Domain.Message>();
+                .ToList<Message>();
 
             var messageResponses = messages.Select(m => new MessageModels.MessageResponse()
             {

@@ -4,13 +4,22 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
+using SocialPayments.DataLayer.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.DomainServices
 {
     public class ApplicationService
     {
-        private readonly Context _ctx = new Context();
-           
+        private IDbContext _ctx;
+
+        public ApplicationService() { }
+
+        public ApplicationService(IDbContext context)
+        {
+            _ctx = context;
+        }
+
         public Application AddApplication(string applicationName, string url, bool isActive)
         {
             var application =_ctx.Applications.Add(new Application()

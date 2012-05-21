@@ -12,6 +12,7 @@ using Amazon.SimpleNotificationService.Model;
 using System.Configuration;
 using NLog;
 using System.Text.RegularExpressions;
+using System.Data.Entity;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -19,7 +20,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
     {
         private Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private DomainServices.ValidationService _validationService = new DomainServices.ValidationService(_logger);
         private DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
 
         // GET /api/paystreammessage
@@ -37,7 +37,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/messages
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
-            
+            DomainServices.ValidationService validationService = new DomainServices.ValidationService(_logger);
+
             User sender = null;
 
             try
@@ -56,7 +57,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return message;
             }
-            if (_validationService.AreMobileNumbersEqual(sender.MobileNumber,  request.recipientUri))
+            if (validationService.AreMobileNumbersEqual(sender.MobileNumber, request.recipientUri))
             {
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 message.ReasonPhrase = String.Format("Specified sender {0} is the same as the recipient {1}.", request.senderUri, request.recipientUri);

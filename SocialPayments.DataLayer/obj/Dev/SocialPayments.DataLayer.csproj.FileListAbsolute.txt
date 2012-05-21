@@ -1,7 +1,9 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.DataLayer.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.DataLayer.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.Domain.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.Domain.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\ResolveAssemblyReference.cache
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\SocialPayments.DataLayer.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\SocialPayments.DataLayer.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\obj\Dev\SocialPayments.DataLayer.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\NLog.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Dev\NLog.xml

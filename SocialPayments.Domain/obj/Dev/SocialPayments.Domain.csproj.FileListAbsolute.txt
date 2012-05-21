@@ -1,7 +1,7 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\SocialPayments.Domain.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\SocialPayments.Domain.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\EntityFramework.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\EntityFramework.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\ResolveAssemblyReference.cache
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\SocialPayments.Domain.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\SocialPayments.Domain.pdb
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\EntityFramework.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Dev\EntityFramework.xml
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\ResolveAssemblyReference.cache
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\SocialPayments.Domain.dll
+C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Dev\SocialPayments.Domain.pdb

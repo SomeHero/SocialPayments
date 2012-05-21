@@ -24,6 +24,13 @@ namespace SocialPayments.DomainServices
             tempMobileNumber = tempMobileNumber.Replace(")", "");
             tempMobileNumber = tempMobileNumber.Replace(" ", "");
 
+            if (tempMobileNumber.Length >= 10)
+            {
+                tempMobileNumber = String.Format("({0}) {1}-{2}", tempMobileNumber.Substring(0, 3),
+                    tempMobileNumber.Substring(3, 3),
+                    tempMobileNumber.Substring(6, 4));
+            }
+
             return tempMobileNumber;
         }
     }
