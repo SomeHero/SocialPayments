@@ -45,6 +45,9 @@ namespace SocialPayments.DomainServices
         }
         public void SendSMS(Guid apiKey, string mobileNumber, string message)
         {
+            if (apiKey == null || String.IsNullOrEmpty(mobileNumber) || String.IsNullOrEmpty(message))
+                throw new ArgumentNullException(String.Format("You must specify an APIKey, mobile number and Message to send an SMS"));
+
             var application = _applicationService.GetApplication(apiKey);
 
             //Log Request

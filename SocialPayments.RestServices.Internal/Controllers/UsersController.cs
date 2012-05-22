@@ -106,13 +106,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             String mobileNumber = formattingService.FormatMobileNumber(request.mobileNumber);
 
-            _logger.Log(LogLevel.Error, string.Format("I got here 1"));
-
             User user;
 
             //validate that email address is not already user
             user = _userService.FindUserByEmailAddress(request.userName);
-
 
             if (user != null)
             {
@@ -132,8 +129,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return errorMessage;
             }
 
-            _logger.Log(LogLevel.Error, string.Format("I got here 2"));
-
             try
             {
                 user = _ctx.Users.Add(new Domain.User()
@@ -147,7 +142,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     EmailAddress = request.emailAddress,
                     //IsLockedOut = isLockedOut,
                     //LastLoggedIn = System.DateTime.Now,
-                    MobileNumber = mobileNumber,
+                    MobileNumber = formattingService.RemoveFormattingFromMobileNumber(mobileNumber),
                     Password = securityService.Encrypt(request.password), //hash
                     SecurityPin = securityService.Encrypt(request.securityPin),
                     UserName = request.userName,

@@ -100,7 +100,7 @@ namespace SocialPayments.Workflows.Messages
             {
                 case Domain.MessageStatus.Submitted:
 
-                    _logger.Log(LogLevel.Error, String.Format("Starting MEssage Processor"));
+                    _logger.Log(LogLevel.Error, String.Format("Starting Payment Message Processor"));
             
                     IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx);
                     messageProcessor.Process(message);
@@ -150,10 +150,11 @@ namespace SocialPayments.Workflows.Messages
                 case Domain.MessageStatus.Refunded:
                     break;
                 case Domain.MessageStatus.Submitted:
+                    _logger.Log(LogLevel.Error, String.Format("Starting Request Message Processor"));
+            
+                    IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedRequestMessageProcessor(_ctx);
+                    messageProcessor.Process(message);
 
-                    //look for recipient
-                    //send sms and email to recipient
-                    //send sms and confirmation back to send
                     break;
                 case Domain.MessageStatus.RequestAccepted:
 

@@ -15,7 +15,7 @@ using System.Web;
 
 namespace SocialPayments.Services.MessageProcessors
 {
-    enum URIType
+    public enum URIType
     {
         MobileNumber,
         EmailAddress,
@@ -88,13 +88,11 @@ namespace SocialPayments.Services.MessageProcessors
             var sender = message.Sender;
             var recipient = _userService.GetUser(message.RecipientUri);
             message.Recipient = recipient;
-
-            _logger.Log(LogLevel.Info, "I am Here");
+            
             var senderName = String.IsNullOrEmpty(sender.SenderName) ? _formattingService.FormatMobileNumber(sender.MobileNumber) : sender.SenderName;
             var recipientName = message.RecipientUri;
             //check to see if recipient uri is mobile #, email address, or ME code
-            _logger.Log(LogLevel.Info, "I am Here 2");
-            
+
             //Validate Payment
 
             //Batch Transacations
