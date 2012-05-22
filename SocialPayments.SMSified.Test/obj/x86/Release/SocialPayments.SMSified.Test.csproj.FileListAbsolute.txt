@@ -27,3 +27,4 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Release\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Release\SocialPayments.SMSified.Test.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Release\SocialPayments.SMSified.Test.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Release\ResolveAssemblyReference.cache

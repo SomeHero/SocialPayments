@@ -29,3 +29,32 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Deployment.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Razor.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.WorkflowServices.Users.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.WorkflowServices.Users.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.Workflows.Users.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Helpers.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Http.Common.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Mvc.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Razor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Deployment.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Razor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.DataLayer.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.DomainServices.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\EntityFramework.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.Workflows.Users.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Helpers.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Http.Common.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Mvc.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.Razor.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Deployment.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\System.Web.WebPages.Razor.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.DataLayer.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\bin\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\obj\Local\ResolveAssemblyReference.cache
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\obj\Local\SocialPayments.WorkflowServices.Users.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WorkflowServices.Users\obj\Local\SocialPayments.WorkflowServices.Users.pdb

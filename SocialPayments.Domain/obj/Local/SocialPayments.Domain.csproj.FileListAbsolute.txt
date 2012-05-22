@@ -19,3 +19,24 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Local\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Local\SocialPayments.Domain.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\obj\Local\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.dll.config
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\Microsoft.Web.Infrastructure.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Helpers.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Http.Common.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Mvc.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Razor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.Deployment.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.Razor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Helpers.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Http.Common.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Mvc.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.Razor.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.Deployment.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\bin\Local\System.Web.WebPages.Razor.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\obj\Local\ResolveAssemblyReference.cache
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\obj\Local\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Domain\obj\Local\SocialPayments.Domain.pdb

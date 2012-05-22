@@ -53,12 +53,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.DomainServic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A99FDA39-5E2A-4FAA-9DA3-68665FBC305C}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\APNS\DevKey\aps_developer_identity.p12 = ..\..\..\..\..\APNS\DevKey\aps_developer_identity.p12
 		Local.testsettings = Local.testsettings
 		SocialPayments.vsmdi = SocialPayments.vsmdi
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.Services.MessageProcessors.UnitTest", "SocialPayments.Services.MessageProcessors.UnitTest\SocialPayments.Services.MessageProcessors.UnitTest.csproj", "{4DE04131-2316-4F11-8E7D-8ACF2128421B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonAPNS", "..\..\MoonAPNS\Application\MoonApns\MoonAPNS.csproj", "{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -706,6 +709,31 @@ Global
 		{4DE04131-2316-4F11-8E7D-8ACF2128421B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4DE04131-2316-4F11-8E7D-8ACF2128421B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4DE04131-2316-4F11-8E7D-8ACF2128421B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Beta|Any CPU.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Beta|Mixed Platforms.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Beta|Mixed Platforms.Build.0 = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Beta|x86.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Beta|x86.Build.0 = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Debug|x86.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Debug|x86.Build.0 = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Dev|Any CPU.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Dev|Mixed Platforms.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Dev|Mixed Platforms.Build.0 = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Dev|x86.ActiveCfg = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Dev|x86.Build.0 = Debug|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Local|Any CPU.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Local|Mixed Platforms.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Local|Mixed Platforms.Build.0 = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Local|x86.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Local|x86.Build.0 = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Release|Any CPU.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Release|x86.ActiveCfg = Release|x86
+		{A91E03EF-6532-4896-89C4-9FCEC1D8D4DB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

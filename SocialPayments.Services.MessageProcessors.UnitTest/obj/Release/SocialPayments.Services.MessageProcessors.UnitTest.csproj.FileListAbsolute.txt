@@ -18,3 +18,29 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Release\SocialPayments.Services.MessageProcessors.UnitTest.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Release\SocialPayments.Services.MessageProcessors.UnitTest.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.MessageProcessors.UnitTest.dll.config
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Release\ResolveAssemblyReference.cache
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Release\SocialPayments.Services.MessageProcessors.UnitTest.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.MessageProcessors.UnitTest.dll.config
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.MessageProcessors.UnitTest.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.MessageProcessors.UnitTest.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\EntityFramework.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DataLayer.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DomainServices.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DomainServices.UnitTests.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.IMessageProcessor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\NLog.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DataLayer.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.DomainServices.UnitTests.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.IMessageProcessor.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\EntityFramework.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Release\SocialPayments.Services.MessageProcessors.UnitTest.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\MoonAPNS.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\Newtonsoft.Json.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\MoonAPNS.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\Newtonsoft.Json.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\aps_developer_identity.p12

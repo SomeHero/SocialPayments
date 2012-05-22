@@ -20,3 +20,22 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\GenerateResource.write.1.tlog
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe.config
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\EntityFramework.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DataLayer.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DomainServices.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Jobs.ProcessOpenPaymentsJob.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DataLayer.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\SocialPayments.Jobs.ProcessOpenPaymentsJob.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\bin\x86\Local\EntityFramework.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\ResolveAssemblyReference.cache
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.ProjectInstaller.resources
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\GenerateResource.read.1.tlog
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\GenerateResource.write.1.tlog
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.exe
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.WindowsServices.OpenPaymentsScheduler\obj\x86\Local\SocialPayments.WindowsServices.OpenPaymentsScheduler.pdb
