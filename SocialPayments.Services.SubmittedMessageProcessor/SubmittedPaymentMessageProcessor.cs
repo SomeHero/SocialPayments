@@ -157,7 +157,7 @@ namespace SocialPayments.Services.MessageProcessors
                 _logger.Log(LogLevel.Info, String.Format("Send SMS to Payee not found"));
 
                 var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
-                
+
                 //Send out SMS message to sender
                 _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
@@ -171,7 +171,7 @@ namespace SocialPayments.Services.MessageProcessors
                 _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
 
                 _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
-                
+
                 if (recipientType == URIType.MobileNumber)
                 {
                     //Send out SMS message to recipient
@@ -183,7 +183,7 @@ namespace SocialPayments.Services.MessageProcessors
 
                 emailSubject = String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount);
                 emailBody = String.Format(_recipientConfirmationEmailBody, senderName, message.Amount, _mobileWebSiteUrl);
-               
+
                 if (recipientType == URIType.EmailAddress)
                 {
                     //Send confirmation email to recipient
@@ -192,11 +192,6 @@ namespace SocialPayments.Services.MessageProcessors
                     _emailService.SendEmail(message.ApiKey, fromAddress, message.RecipientUri, emailSubject, emailBody);
 
                 }
-
-                var replacementElements = new List<KeyValuePair<string, string>>();
-                replacementElements.Add(new KeyValuePair<string, string>("EMAILADDRESS", sender.EmailAddress));
-
-                _emailService.SendEmail(sender.EmailAddress, emailSubject, "Welcome/Registration", replacementElements);
 
             }
             _logger.Log(LogLevel.Info, String.Format("Updating Payment"));

@@ -71,6 +71,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string userId { get; set; }
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
+            public bool setupSecurityPin { get; set; }
+            public int upperLimit { get; set; }
         }
         public class FacebookSignInRequest
         {

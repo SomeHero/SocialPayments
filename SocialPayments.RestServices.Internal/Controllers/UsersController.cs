@@ -217,7 +217,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     userId = user.UserId.ToString(),
                     mobileNumber = user.MobileNumber,
-                    paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : "")
+                    paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
+                    setupSecurityPin = user.SetupSecurityPin,
+                    upperLimit = Convert.ToInt32(user.Limit)
                 };
 
                 return new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);

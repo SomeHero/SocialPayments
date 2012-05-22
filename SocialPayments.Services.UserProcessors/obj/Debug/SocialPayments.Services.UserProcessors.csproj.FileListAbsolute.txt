@@ -1,0 +1,1 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.UserProcessors\obj\Debug\ResolveAssemblyReference.cache

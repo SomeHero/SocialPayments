@@ -107,7 +107,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RegistrationWorkflow.cs" />
+    <Compile Include="UserWorkflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +122,10 @@
     <ProjectReference Include="..\SocialPayments.Domain\SocialPayments.Domain.csproj">
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialPayments.Services.UserProcessors\SocialPayments.Services.UserProcessors.csproj">
+      <Project>{5BC9EB6A-DB46-4CC6-8D3F-9CF2B6AB748B}</Project>
+      <Name>SocialPayments.Services.UserProcessors</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
