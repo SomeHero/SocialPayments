@@ -43,6 +43,8 @@ namespace SocialPayments.DomainServices
         }
         public bool SendEmail(string toEmailAddress, string emailSubject, string templateName, List<KeyValuePair<string, string>> replacementElements)
         {
+            _logger.Log(LogLevel.Info, String.Format("{0} - Sending Email to {1} using Template {2}", "", toEmailAddress, templateName));
+            
             string elasticEmailUrl = @"https://api.elasticemail.com/mailer/send";
             string elasticEmailUserName = "notify@paidthx.com";
             string elasticEmailApiKey = "20a00674-374b-4190-81ee-8fb96798a69c";
@@ -76,6 +78,8 @@ namespace SocialPayments.DomainServices
         }
         public bool SendEmail(Guid apiKey, string fromAddress, string toAddress, string subject, string body)
         {
+            _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}; +", apiKey, toAddress, fromAddress));
+            
             //Create Email Log
             var application = _applicationService.GetApplication(apiKey);
 
@@ -86,18 +90,22 @@ namespace SocialPayments.DomainServices
             sc.EnableSsl = true;
             try
             {
+                _logger.Log(LogLevel.Info, String.Format("Sending Email {0} {1}", sc.Host, sc.Port));
+               
                 sc.Send(fromAddress, toAddress, subject, body);
 
+                _logger.Log(LogLevel.Info, String.Format("I am Here"));
+               
                 //Update Email Status
-                _emailLogService.UpdateEmailLog(emailLog.ApiKey, emailLog.FromEmailAddress, emailLog.ToEmailAddress, emailLog.Subject, emailLog.Body,
+                _emailLogService.UpdateEmailLog(emailLog.Id, emailLog.FromEmailAddress, emailLog.ToEmailAddress, emailLog.Subject, emailLog.Body,
                     Domain.EmailStatus.Sent, System.DateTime.Now);
 
-                _logger.Log(LogLevel.Info, String.Format("Email Sent  to {0}.", toAddress));
+                _logger.Log(LogLevel.Info, String.Format("Email Sent  to {0}", toAddress));
 
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email to {0}. {1}.", toAddress, ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email to {0}. {1}", toAddress, ex.Message));
 
                 //Update Email Status
                 _emailLogService.UpdateEmailLog(emailLog.Id, emailLog.FromEmailAddress, emailLog.ToEmailAddress, emailLog.Subject, emailLog.Body,

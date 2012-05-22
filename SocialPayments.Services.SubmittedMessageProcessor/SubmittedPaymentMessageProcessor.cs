@@ -72,11 +72,15 @@ namespace SocialPayments.Services.MessageProcessors
             string fromAddress = "jrhodes2705@gmail.com";
             URIType recipientType = URIType.MobileNumber;
 
+            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0}", message.RecipientUri));
+            
             if (_validationService.IsEmailAddress(message.RecipientUri))
                 recipientType = URIType.EmailAddress;
             else if (_validationService.IsMECode(message.RecipientUri))
                 recipientType = URIType.MECode;
 
+            _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
+            
             string smsMessage;
             string emailSubject;
             string emailBody;
@@ -85,13 +89,17 @@ namespace SocialPayments.Services.MessageProcessors
             var recipient = _userService.GetUser(message.RecipientUri);
             message.Recipient = recipient;
 
+            _logger.Log(LogLevel.Info, "I am Here");
             var senderName = String.IsNullOrEmpty(sender.SenderName) ? _formattingService.FormatMobileNumber(sender.MobileNumber) : sender.SenderName;
             var recipientName = message.RecipientUri;
             //check to see if recipient uri is mobile #, email address, or ME code
-
+            _logger.Log(LogLevel.Info, "I am Here 2");
+            
             //Validate Payment
 
             //Batch Transacations
+            _logger.Log(LogLevel.Info, String.Format("Batching Transactions for message {0}", message.Id));
+
             try
             {
                 _transactionBatchService.BatchTransactions(message);

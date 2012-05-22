@@ -13,6 +13,7 @@ namespace SocialPayments.DomainServices
     public class SMSService
     {
         private ApplicationService _applicationService;
+        private FormattingServices _formattingServices;
         private SMSLogService _smsLogService;
         private IDbContext _ctx;
         private Logger _logger;
@@ -22,6 +23,7 @@ namespace SocialPayments.DomainServices
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
             _applicationService = new ApplicationService(_ctx);
+            _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }
         public SMSService(IDbContext context, Logger logger)
@@ -29,12 +31,14 @@ namespace SocialPayments.DomainServices
             _ctx = context;
             _logger = logger;
             _applicationService = new ApplicationService(_ctx);
+            _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }
         public SMSService(ApplicationService applicationService, SMSLogService smsLogService, IDbContext context
             , Logger logger)
         {
             _applicationService = applicationService;
+            _formattingServices = new FormattingServices();
             _smsLogService = smsLogService;
             _ctx = context;
             _logger = logger;
@@ -58,7 +62,7 @@ namespace SocialPayments.DomainServices
             string senderNumber = "2892100266";
 
             //format to number
-            string toMobileNumber = String.Format("{0}{1}", "1", mobileNumber.Replace(@"-", @""));
+            string toMobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(mobileNumber);
 
             //var aliases = _ctx.MobileDeviceAliases
             //    .FirstOrDefault(m => m.MobileNumber == mobileNumber);

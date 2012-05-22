@@ -8,11 +8,12 @@ using NLog;
 using System.Text.RegularExpressions;
 using SocialPayments.Services.IMessageProcessor;
 using SocialPayments.Domain;
+using SocialPayments.DataLayer.Interfaces;
 namespace SocialPayments.Workflows.Messages
 {
     public class MessageWorkflow
     {
-        private Context _ctx = new Context();
+        private Context _ctx;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         private DomainServices.ApplicationService _applicationService;
@@ -23,9 +24,19 @@ namespace SocialPayments.Workflows.Messages
                         
         public MessageWorkflow()
         {
+            _ctx = new Context();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _emailService = new DomainServices.EmailService(_ctx);
-            _applicationService= new ApplicationService();
+            _applicationService= new ApplicationService(_ctx);
+            _smsLogService = new SMSLogService(_ctx);
+            _smsService = new DomainServices.SMSService(_applicationService, _smsLogService, _ctx, _logger);
+        }
+        public MessageWorkflow(IDbContext context)
+        {
+            _ctx = new Context();
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _emailService = new DomainServices.EmailService(_ctx);
+            _applicationService = new ApplicationService(_ctx);
             _smsLogService = new SMSLogService(_ctx);
             _smsService = new DomainServices.SMSService(_applicationService, _smsLogService, _ctx, _logger);
         }
@@ -47,6 +58,8 @@ namespace SocialPayments.Workflows.Messages
             if (message == null)
                 throw new ArgumentException("Invalid Message Id", "Id");
 
+
+            _logger.Log(LogLevel.Info, String.Format("Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
             switch (message.MessageType)
             {
                 case Domain.MessageType.Payment:
@@ -56,6 +69,8 @@ namespace SocialPayments.Workflows.Messages
                     }
                     catch (Exception ex)
                     {
+                        _logger.Log(LogLevel.Error, String.Format("Error Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
+            
                         throw ex;
                     }
 
@@ -72,15 +87,21 @@ namespace SocialPayments.Workflows.Messages
 
                     break;
             }
+            _logger.Log(LogLevel.Info, String.Format("Finished Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
+            
         }
 
         private void ProcessPayment(Message message)
         {
+            _logger.Log(LogLevel.Error, String.Format("Processing Payment"));
+            
             String smsMessage = "";
             switch (message.MessageStatus)
             {
                 case Domain.MessageStatus.Submitted:
 
+                    _logger.Log(LogLevel.Error, String.Format("Starting MEssage Processor"));
+            
                     IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx);
                     messageProcessor.Process(message);
 

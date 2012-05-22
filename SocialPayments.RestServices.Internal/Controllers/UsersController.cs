@@ -18,9 +18,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UsersController : ApiController
     {
-        private Context _ctx = new Context();
+        private static Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private DomainServices.UserService _userService = new DomainServices.UserService();
+        private DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
         private DomainServices.SecurityService securityService = new DomainServices.SecurityService();
         private DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
 
@@ -179,20 +179,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                //_logger.Log(LogLevel.Error, string.Format("Calling Amazon SNS."));
+                _logger.Log(LogLevel.Error, string.Format("Calling Amazon SNS."));
 
-                //AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
+                AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
 
-                //client.Publish(new PublishRequest()
-                //{
-                //    Message = user.UserId.ToString(),
-                //    TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
-                //    Subject = "New User Registration"
-                //});
+                client.Publish(new PublishRequest()
+                {
+                    Message = user.UserId.ToString(),
+                    TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
+                    Subject = "New User Registration"
+                });
             }
             catch (Exception ex)
             {
-                //_logger.Log(LogLevel.Info, string.Format("Call Amazon SNS. Exception {1}.", ex.Message));
+                _logger.Log(LogLevel.Fatal, string.Format("Call Amazon SNS. Exception {0}.", ex.Message));
             }
 
             var responseMessage = new UserModels.SubmitUserResponse()

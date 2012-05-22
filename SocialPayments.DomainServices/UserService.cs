@@ -19,6 +19,7 @@ namespace SocialPayments.DomainServices
     public class UserService
     {
         private IDbContext _ctx;
+        private Logger _logger = LogManager.GetCurrentClassLogger();
         private SecurityService securityService = new SecurityService();
         private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
 
@@ -76,26 +77,40 @@ namespace SocialPayments.DomainServices
         }
         public User GetUser(string userUri)
         {
+            _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
+
             var phoneNumber = Regex.Replace(userUri, @"[^\d]", "");
 
-            User user;
+            User user = null;
 
-            if (userUri[0].Equals('$'))
+            try
             {
-                var meCode = _ctx.MECodes
-                    .Include("User")
-                    .FirstOrDefault(m => m.MeCode.Equals(userUri));
+                if (userUri.Length > 0)
+                {
+                    if (userUri[0].Equals('$'))
+                    {
+                        var meCode = _ctx.MECodes
+                            .Include("User")
+                            .FirstOrDefault(m => m.MeCode.Equals(userUri));
 
-                if (meCode == null)
-                    return null;
+                        if (meCode == null)
+                            return null;
 
-                user = meCode.User;
+                        user = meCode.User;
 
-                return user;
+                        return user;
+                    }
+                }
+
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.MobileNumber == phoneNumber || u.EmailAddress == userUri);
+
             }
-
-            user = _ctx.Users
-                .FirstOrDefault(u => u.MobileNumber == phoneNumber || u.EmailAddress == userUri);
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User {0}", userUri));
+            }
+            _logger.Log(LogLevel.Debug, String.Format("User Found"));
 
             return user;
         }

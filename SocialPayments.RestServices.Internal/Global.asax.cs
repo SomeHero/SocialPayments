@@ -68,6 +68,9 @@ namespace SocialPayments.RestServices.Internal
 
         protected void Application_Start()
         {
+            var config = GlobalConfiguration.Configuration;
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+
             _logger.Log(LogLevel.Info, String.Format("Starting application {0}", "API Internal"));
 
             try

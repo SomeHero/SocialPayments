@@ -16,14 +16,14 @@ namespace SocialPayments.Domain
         public String SenderUri { get; set; }
         public Guid SenderId { get; set; }
         [ForeignKey("SenderId")]
-        public User Sender { get; set; }
+        public virtual User Sender { get; set; }
         public String RecipientUri { get; set; }
         public Guid? RecipientId { get; set; }
         [ForeignKey("RecipientId")]
-        public User Recipient { get; set; }
+        public virtual User Recipient { get; set; }
         public Guid? SenderAccountId { get; set; }
         [ForeignKey("SenderAccountId")]
-        public PaymentAccount SenderAccount { get; set; }
+        public virtual PaymentAccount SenderAccount { get; set; }
         public Double Amount { get; set; }
         public String Comments { get; set; }
         public DateTime CreateDate { get; set; }

@@ -1,4 +1,3 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\SocialPayments.SMSified.Test.exe.config
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\SocialPayments.SMSified.Test.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\SocialPayments.SMSified.Test.pdb
@@ -25,5 +24,6 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\System.Web.WebPages.Deployment.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\System.Web.WebPages.Razor.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\bin\Debug\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Debug\SocialPayments.SMSified.Test.exe
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.SMSified.Test\obj\x86\Debug\SocialPayments.SMSified.Test.pdb

@@ -37,6 +37,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/messages
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
+            _logger.Log(LogLevel.Info,String.Format("{0} - New Message Posted {1} {2}", request.apiKey, request.senderUri, request.recipientUri));
+           
             DomainServices.ValidationService validationService = new DomainServices.ValidationService(_logger);
 
             User sender = null;
@@ -143,12 +145,22 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
 
-                client.Publish(new PublishRequest()
+                try
                 {
-                    Message = message.Id.ToString(),
-                    TopicArn = ConfigurationManager.AppSettings["MessagePostedTopicARN"],
-                    Subject = "New Message Receivied"
-                });
+                    _logger.Log(LogLevel.Info, String.Format("Pushing Message {0} to Amazon SNS", message.Id));
+
+                    client.Publish(new PublishRequest()
+                    {
+                        Message = message.Id.ToString(),
+                        TopicArn = ConfigurationManager.AppSettings["MessagePostedTopicARN"],
+                        Subject = "New Message Receivied"
+                    });
+                }
+                catch(Exception ex)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Pusing Message {0} to Amazon SNS. {1}", message.Id, ex.Message));
+                }
+
             }
             catch (Exception ex)
             {
