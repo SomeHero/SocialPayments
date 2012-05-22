@@ -283,6 +283,74 @@ namespace SocialPayments.DomainServices
                 }
             }
         }
+        public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
+            string deviceToken)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", accountId));
+
+            User user = null;
+
+            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+
+            try
+            {
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+
+                if (user == null)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Create new user.", accountId));
+
+                    user = _ctx.Users.Add(new Domain.User()
+                    {
+                        UserId = Guid.NewGuid(),
+                        ApiKey = apiKey,
+                        CreateDate = System.DateTime.Now,
+                        PasswordChangedDate = DateTime.UtcNow,
+                        PasswordFailuresSinceLastSuccess = 3,
+                        LastPasswordFailureDate = DateTime.UtcNow,
+                        EmailAddress = emailAddress,
+                        //IsLockedOut = isLockedOut,
+                        //LastLoggedIn = System.DateTime.Now,
+                        UserName = "fb_" + accountId,
+                        UserStatus = Domain.UserStatus.Submitted,
+                        IsConfirmed = false,
+                        LastLoggedIn = System.DateTime.Now,
+                        Limit = Convert.ToDouble(ConfigurationManager.AppSettings["InitialPaymentLimit"]),
+                        RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
+                        Password = "tempPassword",
+                        SetupPassword = false,
+                        SetupSecurityPin = false,
+                        Roles = new Collection<Role>()
+                        {
+                            memberRole
+                        },
+                        DeviceToken = deviceToken,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        PaymentAccounts = new Collection<PaymentAccount>(),
+                        FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                            TokenExpiration = System.DateTime.Now.AddDays(30),
+                            OAuthToken = ""
+                        }
+                    });
+
+                    _ctx.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in with Facebook. {0}", ex.Message));
+
+                throw ex;
+            }
+
+            return user;
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));

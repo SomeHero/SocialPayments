@@ -231,6 +231,40 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
         }
 
+        //POST /api/users/signin_withfacebook
+        public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
+        {
+            Domain.User user = null;
+
+            try
+            {
+                user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
+                    request.deviceToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+
+                var message = new HttpResponseMessage<UserModels.FacebookSignInResponse>(HttpStatusCode.InternalServerError);
+                message.ReasonPhrase = ex.Message;
+
+                return message;
+            }
+
+            bool hasACHAccount = false;
+
+            if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
+                hasACHAccount = true;
+
+            var response = new UserModels.FacebookSignInResponse() {
+                hasACHAccount = hasACHAccount,
+                hasSecurityPin = user.SetupSecurityPin,
+                userId = user.UserId.ToString()
+            };
+
+            return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
+        }
+
         // DELETE /api/user/5
         public void Delete(int id)
         {

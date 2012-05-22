@@ -40,6 +40,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             _transactions = new FakeTransactionSet();
             _transactionBatch = new FakeTransactionBatchSet();
             _meCodes = new FakeMECodeSet();
+            _roles = new FakeRoleSet();
         }
         public IDbSet<Application> Applications
         {

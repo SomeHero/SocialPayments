@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="9516f888-df93-4d29-9626-16f1105c3a10" name="James@JAMES-PC 2012-05-21 22:45:13" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="63f1875e-6356-47de-9b24-1f557b223cad">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment userDeploymentRoot="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\TestResults" useDefaultDeploymentRoot="false" enabled="false" runDeploymentRoot="James_JAMES-PC 2012-05-21 22_45_13">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Test\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.IMessageProcessor\bin\Test\SocialPayments.Services.IMessageProcessor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Test\SocialPayments.Domain.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Test\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Test\SocialPayments.DataLayer.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Test\SocialPayments.Services.SubmittedMessageProcessor.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-21T22:45:13.4570313-04:00" queuing="2012-05-21T22:45:18.3417969-04:00" start="2012-05-21T22:45:18.8105469-04:00" finish="2012-05-21T22:45:55.1982422-04:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="RegisteredUserWithFacebookAccountCanSignIn" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.domainservices.unittests\bin\test\socialpayments.domainservices.unittests.dll" id="fba2231e-a36b-4817-e346-ea4ea84c2d77">
+      <Execution id="e371d801-6af7-408f-afe1-9a7085b75a55" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.DomainServices.UnitTests/bin/Test/SocialPayments.DomainServices.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.DomainServices.UnitTests.UserServicesTest, SocialPayments.DomainServices.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="RegisteredUserWithFacebookAccountCanSignIn" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="fba2231e-a36b-4817-e346-ea4ea84c2d77" executionId="e371d801-6af7-408f-afe1-9a7085b75a55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="e371d801-6af7-408f-afe1-9a7085b75a55" testId="fba2231e-a36b-4817-e346-ea4ea84c2d77" testName="RegisteredUserWithFacebookAccountCanSignIn" computerName="JAMES-PC" duration="00:00:32.2362127" startTime="2012-05-21T22:45:19.5449219-04:00" endTime="2012-05-21T22:45:53.7138672-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e371d801-6af7-408f-afe1-9a7085b75a55">
+    </UnitTestResult>
+  </Results>
+</TestRun>

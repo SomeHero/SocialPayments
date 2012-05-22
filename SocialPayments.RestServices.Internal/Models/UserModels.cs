@@ -72,6 +72,21 @@ namespace SocialPayments.RestServices.Internal.Models
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
         }
+        public class FacebookSignInRequest
+        {
+            public string apiKey { get; set; }
+            public string accountId { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public string emailAddress { get; set; }
+            public string deviceToken { get; set; }
+        }
+        public class FacebookSignInResponse
+        {
+            public bool hasSecurityPin { get; set; }
+            public bool hasACHAccount { get; set; }
+            public string userId { get; set; }
+        }
         public class MECodeResponse
         {
             public string Id { get; set; }

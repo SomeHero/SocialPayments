@@ -1,0 +1,14 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.Workflows.Users.dll.config
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.Workflows.Users.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.Workflows.Users.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\NLog.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.DomainServices.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.DomainServices.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\bin\Test\NLog.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Test\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Test\SocialPayments.Workflows.Users.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Workflows.Users\obj\Test\SocialPayments.Workflows.Users.pdb

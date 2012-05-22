@@ -29,6 +29,12 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
+                name: "SignInWithFacebook",
+                routeTemplate: "api/users/signin_withfacebook",
+                defaults: new { controller = "Users", action = "SignInWithFacebook" }
+            );
+
+            routes.MapHttpRoute(
                 name: "ValidateUser",
                 routeTemplate: "api/users/validate_user",
                 defaults: new { controller = "Users", action = "ValidateUser" }
