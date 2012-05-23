@@ -13,14 +13,16 @@ using System.Configuration;
 using NLog;
 using System.Text.RegularExpressions;
 using System.Data.Entity;
+using SocialPayments.DataLayer.Interfaces;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class PaystreamMessagesController : ApiController
     {
-        private Context _ctx = new Context();
+        private IDbContext _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
+        private DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
 
         // GET /api/paystreammessage
         public IEnumerable<string> Get()
@@ -108,6 +110,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             //TODO: confirm recipient is valid???
 
+            URIType recipientUriType = _messageServices.GetURIType(request.recipientUri);
+            URIType senderUri = _messageServices.GetURIType(request.senderUri);
+
+            string recipientUri = request.recipientUri;
+            string senderUri = request.senderUri;
+
+            if (recipientUriType == URIType.MobileNumber)
+                recipientUri = _formattingService.RemoveFormattingFromMobileNumber(recipientUri);
+
+            if (senderUri == URIType.MobileNumber)
+                senderUri = _formattingService.RemoveFormattingFromMobileNumber(senderUri);
+
             //TODO: confirm amount is within payment limits
 
             //TODO: try to add message
@@ -133,8 +147,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     MessageStatusValue = (int)messageStatus,
                     MessageType = messageType,
                     MessageTypeValue = (int)messageType,
-                    RecipientUri = _formattingService.FormatMobileNumber(request.recipientUri),
-                    SenderUri = _formattingService.FormatMobileNumber(request.senderUri),
+                    RecipientUri = recipientUri,
+                    SenderUri = senderUri,
                     Sender = sender,
                     SenderId = sender.UserId,
                     SenderAccount = senderAccount,

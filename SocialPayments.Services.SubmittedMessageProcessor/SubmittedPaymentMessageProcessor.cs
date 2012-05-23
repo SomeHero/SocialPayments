@@ -12,6 +12,7 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Net;
 using System.IO;
 using System.Web;
+using MoonAPNS;
 
 namespace SocialPayments.Services.MessageProcessors
 {
@@ -45,10 +46,14 @@ namespace SocialPayments.Services.MessageProcessors
 
         private string _senderSMSMessageRecipientNotRegistered= "Your payment of {0:C} was delivered to {1}. The payment is pending unit {1} completes registration with PaidThx. Go to {2}";
         private string _recipientSMSMessageRecipientNotRegistered = "{0} just sent you {1:C} using PaidThx.  Go to {2} to complete the transaction.";
+
+        private string _recipientWasPaidNotification = "{0} {1} sent you {2:C} using PaidThx!";
+        private string _recipientRequestNotification = "{0} {1} requested {2:C} from you using PaidThx!";
+
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
         private string _mobileWebSiteUrl = @"http://beta.paidthx.com/mobile/";
-        
+       
         public SubmittedPaymentMessageProcessor() {
             _ctx  = new DataLayer.Context();
             _logger = LogManager.GetCurrentClassLogger();
@@ -133,7 +138,7 @@ namespace SocialPayments.Services.MessageProcessors
                 emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, _mobileWebSiteUrl);
 
                 _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
-
+                
                 //Send confirmation email to recipient
                 _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
 
@@ -144,11 +149,54 @@ namespace SocialPayments.Services.MessageProcessors
 
                 if (recipient.DeviceToken.Length > 0)
                 {
-                    //Push Notification to phone
+                    _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
+                    
+
+                    // We need to know the number of pending requests that the user must take action on for the application badge #
+                    // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                    //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                    //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                    //      Opening the application is sufficient
+                    var numPending = _ctx.Messages.Where(p => p.MessageType.Equals(Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending)).ToList<Domain.Message>();
+
+                    NotificationPayload payload = null;
+                    String notification;
+
+                    // Send a mobile push notification
+                    if (message.MessageType == Domain.MessageType.Payment)
+                    {
+                        notification = String.Format(_recipientWasPaidNotification, sender.FirstName, sender.LastName, message.Amount);
+                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count()+1);
+                        payload.AddCustom("nType", "recPCNF");
+                    }
+                    else if (message.MessageType == Domain.MessageType.PaymentRequest)
+                    {
+                        notification = String.Format(_recipientRequestNotification, sender.FirstName, sender.LastName, message.Amount);
+                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
+                        payload.AddCustom("nType", "recPRQ");
+                    }
+
+                    /*
+                     *  Payment Notification Types:
+                     *      Payment Request [recPRQ]
+                     *          - Recipient receives notification that takes them to the
+                     *                 paystream detail view about that payment request
+                     *      Payment Confirmation [recPCNF]
+                     *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                     */
+                    
+                    payload.AddCustom("tID", message.Id);
+                    var notificationList = new List<NotificationPayload>() { payload };
+
+                    var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12" , "KKreap1566");
+                    var result = push.SendToApple(notificationList); // You are done!
                 }
                 if (recipient.FacebookUser != null)
                 {
                     //Send Facebook Message
+                    // I don't think we can do this through the server. Nice try though.
+                    // We should, however, publish something to the user's page that says sender sent payment
+                    
                 }
             }
             else

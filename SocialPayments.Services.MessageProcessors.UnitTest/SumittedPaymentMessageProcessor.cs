@@ -87,16 +87,17 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "jrhodes2705@gmail.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043550001",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
             _ctx.SaveChanges();
@@ -108,7 +109,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000219",
             };
 
@@ -126,12 +127,12 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Id = messageId,
                 MessageStatus = Domain.MessageStatus.Pending,
                 MessageType = Domain.MessageType.Payment,
-                RecipientUri = "8043879693",
+                RecipientUri = "7082504915",
                 Sender = sender,
                 SenderId = senderId,
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
-                SenderUri ="8043879693",
+                SenderUri ="7082504915",
                 Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
@@ -166,16 +167,19 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "james@paidthx.com",
+                FirstName = "Your",
+                LastName = "Mommy",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043550001",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
             var recipient = _ctx.Users.Add(new Domain.User()
@@ -183,16 +187,17 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "jrhodes2705@gmail.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043879693",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
             _ctx.SaveChanges();
@@ -204,7 +209,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000219",
             };
 
@@ -215,7 +220,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000211",
             };
 
@@ -234,15 +239,16 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
                 MessageStatus = Domain.MessageStatus.Pending,
-                MessageType = Domain.MessageType.Payment,
-                RecipientUri = "8043879693",
+                MessageType = Domain.MessageType.PaymentRequest,
+                RecipientUri = "7082504915",
                 Sender = sender,
                 SenderId = senderId,
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
-                SenderUri = "8043879693",
+                SenderUri = "7082504915",
                 Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
+            
 
             _ctx.SaveChanges();
 
@@ -250,7 +256,28 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
 
             processor.Process(message);
 
-            Assert.AreEqual(2, _ctx.Transactions.Count());
+            var message2 = _ctx.Messages.Add(new Domain.Message()
+            {
+                Amount = 1,
+                Application = application,
+                ApiKey = apiKey,
+                Comments = "Test Payment",
+                CreateDate = System.DateTime.Now,
+                Id = messageId,
+                MessageStatus = Domain.MessageStatus.Pending,
+                MessageType = Domain.MessageType.Payment,
+                RecipientUri = "7082504915",
+                Sender = sender,
+                SenderId = senderId,
+                SenderAccount = senderAccount,
+                SenderAccountId = senderAccountId,
+                SenderUri = "7082504915",
+                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+            });
+
+            processor.Process(message2);
+
+            Assert.AreEqual(4, _ctx.Transactions.Count()); // Two Transactions are Created Here
         }
         [TestMethod]
         public void WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated()
@@ -275,9 +302,9 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "jrhodes2705@gmail.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043550001",
+                MobileNumber = "7082504915",
                 Password = "james123",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
@@ -296,7 +323,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000219",
             };
 
@@ -314,12 +341,12 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Id = messageId,
                 MessageStatus = Domain.MessageStatus.Pending,
                 MessageType = Domain.MessageType.Payment,
-                RecipientUri = "james@paidthx.com",
+                RecipientUri = "chris@pdthx.me",
                 Sender = sender,
                 SenderId = senderId,
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
-                SenderUri = "8043879693",
+                SenderUri = "7082504915",
                 Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
@@ -355,16 +382,17 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "james@paidthx.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043550001",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
             var recipient = _ctx.Users.Add(new Domain.User()
@@ -372,16 +400,17 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "jrhodes2705@gmail.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043879693",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
             _ctx.SaveChanges();
@@ -393,7 +422,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000219",
             };
 
@@ -404,7 +433,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 IsActive = true,
                 CreateDate = System.DateTime.Now,
                 Id = senderAccountId,
-                NameOnAccount = "James Rhodes",
+                NameOnAccount = "Chris Magee",
                 RoutingNumber = "053000211",
             };
 
@@ -424,12 +453,12 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Id = messageId,
                 MessageStatus = Domain.MessageStatus.Pending,
                 MessageType = Domain.MessageType.Payment,
-                RecipientUri = "jrhodes2705@gmail.com",
+                RecipientUri = "chris@pdthx.me",
                 Sender = sender,
                 SenderId = senderId,
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
-                SenderUri = "8043879693",
+                SenderUri = "7082504915",
                 Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 
@@ -482,16 +511,17 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Application = application,
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
-                EmailAddress = "jrhodes2705@gmail.com",
+                EmailAddress = "chris@pdthx.me",
                 Limit = 100,
-                MobileNumber = "8043879693",
-                Password = "james123",
+                MobileNumber = "7082504915",
+                Password = "asdf",
                 PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
                 IsConfirmed = true,
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
                 UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4",
                 MECodes = new System.Collections.ObjectModel.Collection<Domain.MECode>()
             });
 
@@ -555,7 +585,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderId = senderId,
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
-                SenderUri = "8043879693",
+                SenderUri = "7082504915",
                 Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 

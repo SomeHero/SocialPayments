@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="0731e7c0-312f-43a2-8c34-0c94630e97f1" name="James@JAMES-PC 2012-05-22 17:04:31" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="63f1875e-6356-47de-9b24-1f557b223cad">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment userDeploymentRoot="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\TestResults" useDefaultDeploymentRoot="false" enabled="false" runDeploymentRoot="James_JAMES-PC 2012-05-22 17_04_31">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.Deployment.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\System.Web.Http.Common.4.0.20126.16343\lib\net40\System.Web.Http.Common.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Test\SocialPayments.DataLayer.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Test\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.Helpers.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetMvc.4.0.20126.16343\lib\net40\System.Web.Mvc.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Test\SocialPayments.Domain.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Test\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.IMessageProcessor\bin\Test\SocialPayments.Services.IMessageProcessor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.Razor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\packages\AspNetRazor.Core.2.0.20126.16343\lib\net40\System.Web.Razor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Test\SocialPayments.Services.SubmittedMessageProcessor.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-22T17:04:31.4687500-04:00" queuing="2012-05-22T17:04:34.2187500-04:00" start="2012-05-22T17:04:34.5312500-04:00" finish="2012-05-22T17:05:11.3125000-04:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\test\socialpayments.services.messageprocessors.unittest.dll" id="9348b3c8-0ebe-7192-620d-3e0b8e10480c">
+      <Execution id="f6ddefbb-ff6e-4809-bc52-4f2297e9c942" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Test/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="9348b3c8-0ebe-7192-620d-3e0b8e10480c" executionId="f6ddefbb-ff6e-4809-bc52-4f2297e9c942" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="f6ddefbb-ff6e-4809-bc52-4f2297e9c942" testId="9348b3c8-0ebe-7192-620d-3e0b8e10480c" testName="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithKnownRecipientTwoTransactionsAreCreated" computerName="JAMES-PC" duration="00:00:33.8778646" startTime="2012-05-22T17:04:35.0312500-04:00" endTime="2012-05-22T17:05:10.1406250-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6ddefbb-ff6e-4809-bc52-4f2297e9c942">
+    </UnitTestResult>
+  </Results>
+</TestRun>

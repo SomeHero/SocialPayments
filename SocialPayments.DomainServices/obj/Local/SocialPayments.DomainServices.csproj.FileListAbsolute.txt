@@ -12,3 +12,17 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Local\PagedList.xml
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Local\SocialPayments.DomainServices.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\obj\Local\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.dll.config
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\PagedList.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DataLayer.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.Domain.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DataLayer.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.Domain.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\EntityFramework.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\PagedList.xml
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\obj\Local\ResolveAssemblyReference.cache
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\obj\Local\SocialPayments.DomainServices.dll
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\obj\Local\SocialPayments.DomainServices.pdb
+C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices\bin\Local\EntityFramework.dll

@@ -34,3 +34,7 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\obj\Test\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\obj\Test\SocialPayments.WorkflowServices.PaystreamMessages.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\obj\Test\SocialPayments.WorkflowServices.PaystreamMessages.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\bin\MoonAPNS.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\bin\Newtonsoft.Json.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\bin\MoonAPNS.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.PaystreamMessages\bin\Newtonsoft.Json.xml

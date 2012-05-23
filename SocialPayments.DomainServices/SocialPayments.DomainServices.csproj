@@ -129,6 +129,7 @@
     <Compile Include="EmailLogService.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="FormattingServices.cs" />
+    <Compile Include="MessageServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityService.cs" />
     <Compile Include="SMSLogService.cs" />

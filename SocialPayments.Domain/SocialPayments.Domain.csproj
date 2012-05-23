@@ -188,6 +188,7 @@
     <Compile Include="TransactionCategory.cs" />
     <Compile Include="TransactionStatus.cs" />
     <Compile Include="TransactionType.cs" />
+    <Compile Include="URIType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserAttribute.cs" />
     <Compile Include="UserAttributePermission.cs" />

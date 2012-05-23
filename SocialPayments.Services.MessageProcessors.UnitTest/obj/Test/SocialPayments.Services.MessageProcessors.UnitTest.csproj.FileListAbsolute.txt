@@ -18,3 +18,8 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Test\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Test\SocialPayments.Services.MessageProcessors.UnitTest.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\obj\Test\SocialPayments.Services.MessageProcessors.UnitTest.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Test\aps_developer_identity.p12
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Test\MoonAPNS.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Test\MoonAPNS.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Test\Newtonsoft.Json.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Test\Newtonsoft.Json.xml
