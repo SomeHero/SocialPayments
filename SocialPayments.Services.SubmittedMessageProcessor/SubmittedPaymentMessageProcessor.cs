@@ -47,8 +47,8 @@ namespace SocialPayments.Services.MessageProcessors
         private string _senderSMSMessageRecipientNotRegistered= "Your payment of {0:C} was delivered to {1}. The payment is pending unit {1} completes registration with PaidThx. Go to {2}";
         private string _recipientSMSMessageRecipientNotRegistered = "{0} just sent you {1:C} using PaidThx.  Go to {2} to complete the transaction.";
 
-        private string _recipientWasPaidNotification = "{0} {1} sent you {2:C} using PaidThx!";
-        private string _recipientRequestNotification = "{0} {1} requested {2:C} from you using PaidThx!";
+        private string _recipientWasPaidNotification = "{0} sent you {1:C} using PaidThx!";
+        private string _recipientRequestNotification = "{0} requested {1:C} from you using PaidThx!";
 
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
@@ -117,36 +117,51 @@ namespace SocialPayments.Services.MessageProcessors
             //Attempt to assign payment to Payee
             if (recipient != null)
             {
-                recipientName = String.IsNullOrEmpty(recipient.SenderName) ? _formattingService.FormatMobileNumber(message.RecipientUri) : recipient.SenderName;
+                recipientName = recipient.UserName;
+
+                if (!String.IsNullOrEmpty(recipient.SenderName))
+                    recipientName = recipient.SenderName;
+                else if (!String.IsNullOrEmpty(recipient.MobileNumber))
+                    recipientName = _formattingService.FormatMobileNumber(recipient.MobileNumber);
 
                 //Send out SMS Message to recipient
-                _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
+                if (!String.IsNullOrEmpty(recipient.MobileNumber))
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
 
-                smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, _mobileWebSiteUrl);
-                _smsService.SendSMS(message.ApiKey, recipient.MobileNumber, smsMessage);
-
+                    smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, _mobileWebSiteUrl);
+                    _smsService.SendSMS(message.ApiKey, recipient.MobileNumber, smsMessage);
+                }
                 //Send SMS Message to sender
-                _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender"));
+                if (!String.IsNullOrEmpty(sender.MobileNumber))
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender"));
 
-                smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, _mobileWebSiteUrl);
-                _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
+                    smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, _mobileWebSiteUrl);
+                    _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
 
+                }
                 //Send confirmation email to sender
-                _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Sender"));
+                if (!String.IsNullOrEmpty(sender.EmailAddress))
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Sender"));
 
-                emailSubject = String.Format(_senderConfirmationEmailSubject, recipientName);
-                emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, _mobileWebSiteUrl);
+                    emailSubject = String.Format(_senderConfirmationEmailSubject, recipientName);
+                    emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, _mobileWebSiteUrl);
 
-                _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
-                
+                    _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
+                }
                 //Send confirmation email to recipient
-                _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
+                if (!String.IsNullOrEmpty(recipient.EmailAddress))
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
 
-                emailSubject = String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount);
-                emailBody = String.Format(_recipientConfirmationEmailBody, senderName, message.Amount, _mobileWebSiteUrl);
+                    emailSubject = String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount);
+                    emailBody = String.Format(_recipientConfirmationEmailBody, senderName, message.Amount, _mobileWebSiteUrl);
 
-                _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
+                    _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
 
+                }
                 if (recipient.DeviceToken.Length > 0)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
@@ -157,21 +172,23 @@ namespace SocialPayments.Services.MessageProcessors
                     //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
                     //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
                     //      Opening the application is sufficient
-                    var numPending = _ctx.Messages.Where(p => p.MessageType.Equals(Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending)).ToList<Domain.Message>();
+                    var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
 
+                    _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+                    
                     NotificationPayload payload = null;
                     String notification;
 
                     // Send a mobile push notification
                     if (message.MessageType == Domain.MessageType.Payment)
                     {
-                        notification = String.Format(_recipientWasPaidNotification, sender.FirstName, sender.LastName, message.Amount);
+                        notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
                         payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count()+1);
                         payload.AddCustom("nType", "recPCNF");
                     }
                     else if (message.MessageType == Domain.MessageType.PaymentRequest)
                     {
-                        notification = String.Format(_recipientRequestNotification, sender.FirstName, sender.LastName, message.Amount);
+                        notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
                         payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
                         payload.AddCustom("nType", "recPRQ");
                     }
@@ -188,8 +205,25 @@ namespace SocialPayments.Services.MessageProcessors
                     payload.AddCustom("tID", message.Id);
                     var notificationList = new List<NotificationPayload>() { payload };
 
-                    var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12" , "KKreap1566");
-                    var result = push.SendToApple(notificationList); // You are done!
+                    List<string> result;
+
+                    try
+                    {
+                        var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                        result = push.SendToApple(notificationList); // You are done!
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                        var exception = ex.InnerException;
+
+                        while (exception != null)
+                        {
+                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+                        
+                        }
+                    }
+                    
                 }
                 if (recipient.FacebookUser != null)
                 {
@@ -207,19 +241,23 @@ namespace SocialPayments.Services.MessageProcessors
                 var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
 
                 //Send out SMS message to sender
-                _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
+                if (!String.IsNullOrEmpty(sender.MobileNumber))
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
-                smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, link);
-                _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
+                    smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, link);
+                    _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
+                }
+                if (!String.IsNullOrEmpty(sender.EmailAddress))
+                {
+                    emailSubject = String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri);
+                    emailBody = String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri);
 
-                emailSubject = String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri);
-                emailBody = String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri);
+                    //Send confirmation email to sender
+                    _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
 
-                //Send confirmation email to sender
-                _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
-
-                _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
-
+                    _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
+                }
                 if (recipientType == URIType.MobileNumber)
                 {
                     //Send out SMS message to recipient

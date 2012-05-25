@@ -71,3 +71,9 @@
 2012-05-21 23:17:44.7998 SocialPayments.DomainServices.UserService Sign in with Facebook 1234abcd
 2012-05-21 23:17:47.7216 SocialPayments.DataLayer.Context Creating Model
 2012-05-21 23:18:41.8935 SocialPayments.DomainServices.UserService Unable to find user with Facebook account 1234abcd.  Create new user.
+2012-05-23 13:31:43.4697 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-23 13:34:09.5166 SocialPayments.DomainServices.UserService Sign in with Facebook 1234abcdsds
+2012-05-23 13:34:11.6884 SocialPayments.DataLayer.Context Creating Model
+2012-05-23 13:36:07.5908 SocialPayments.DomainServices.UserService Unable to find user with Facebook account 1234abcdsds.  Create new user.
+2012-05-23 14:04:42.2343 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-24 22:51:09.7529 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal

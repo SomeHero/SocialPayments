@@ -50,5 +50,16 @@ namespace SocialPayments.DomainServices
         {
             return uri[0].Equals('$');
         }
+
+        public bool IsFacebookAccount(string uri)
+        {
+            if (uri.Length < 4)
+                return false;
+
+            if (uri.Substring(0, 3).Equals("fb_"))
+                return true;
+
+            return false;
+        }
     }
 }

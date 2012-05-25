@@ -51,7 +51,8 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="MoonAPNS">
+    <Reference Include="MoonAPNS, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\MoonAPNS.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -71,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CancelledPaymentMessageProcessor.cs" />
     <Compile Include="SubmittedPaymentMessageProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmittedRequestMessageProcessor.cs" />

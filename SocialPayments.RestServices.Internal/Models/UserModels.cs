@@ -40,17 +40,18 @@ namespace SocialPayments.RestServices.Internal.Models
             public string apiKey { get; set; }
             public string userName { get; set; }
             public string password { get; set; }
-            public string mobileNumber { get; set; }
             public string emailAddress { get; set; }
-            public string securityPin { get; set; }
             public string registrationMethod { get; set; }
             public string deviceToken { get; set; }
         }
         public class SubmitUserResponse
         {
             public string userId { get; set; }
-            public string mobileNumber { get; set; }
             public string errorResponse { get; set; }
+        }
+        public class UpdateSecurityPin
+        {
+            public string securityPin { get; set; }
         }
         public class UpdateUserRequest
         {

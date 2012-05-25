@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using SocialPayments.DataLayer.Interfaces;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace SocialPayments.DomainServices
 {
@@ -22,6 +23,8 @@ namespace SocialPayments.DomainServices
         private Logger _logger = LogManager.GetCurrentClassLogger();
         private SecurityService securityService = new SecurityService();
         private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
+        int defaultNumPasswordFailures = 3;
+        int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -31,32 +34,37 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
         }
-        public User AddUser(string userName, string password, string emailAddress, bool isLockedOut, string mobileNumber, string securityPin, 
-            UserStatus userStatus, string accountNumber,
-            PaymentAccountType accountType, string nameOnAccount, string routingNumber)
+        public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken)
         {
 
-            mobileNumber = formattingServices.FormatMobileNumber(mobileNumber);
+            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
-            var user = _ctx.Users.Add(new User()
+            var user = _ctx.Users.Add(new Domain.User()
             {
+                UserId = Guid.NewGuid(),
+                ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
+                PasswordChangedDate = DateTime.UtcNow,
+                PasswordFailuresSinceLastSuccess = defaultNumPasswordFailures,
+                LastPasswordFailureDate = DateTime.UtcNow,
                 EmailAddress = emailAddress,
                 //IsLockedOut = isLockedOut,
                 //LastLoggedIn = System.DateTime.Now,
-                MobileNumber = mobileNumber,
-                Password = password,
-                PaymentAccounts = new Collection<PaymentAccount> {
-                    new PaymentAccount() { 
-                        AccountNumber = accountNumber,
-                        AccountType = accountType,
-                        NameOnAccount =  nameOnAccount,
-                        RoutingNumber = routingNumber
-                    }
-                },
-                SecurityPin = securityPin,
+                Password = securityService.Encrypt(password), //hash
+                SecurityPin = "",
                 UserName = userName,
-                UserStatus = userStatus,
+                UserStatus = Domain.UserStatus.Submitted,
+                IsConfirmed = false,
+                LastLoggedIn = System.DateTime.Now,
+                Limit = Convert.ToDouble(defaultUpperLimit),
+                RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
+                SetupPassword = false,
+                SetupSecurityPin = false,
+                Roles = new Collection<Role>()
+                    {
+                        memberRole
+                    },
+                DeviceToken = deviceToken
             });
 
             _ctx.SaveChanges();
@@ -79,16 +87,17 @@ namespace SocialPayments.DomainServices
         {
             _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
 
-            var phoneNumber = Regex.Replace(userUri, @"[^\d]", "");
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
+
+            var uriType = messageServices.GetURIType(userUri);
 
             User user = null;
 
             try
             {
-                if (userUri.Length > 0)
+                switch (uriType)
                 {
-                    if (userUri[0].Equals('$'))
-                    {
+                    case URIType.MECode:
                         var meCode = _ctx.MECodes
                             .Include("User")
                             .FirstOrDefault(m => m.MeCode.Equals(userUri));
@@ -99,20 +108,30 @@ namespace SocialPayments.DomainServices
                         user = meCode.User;
 
                         return user;
-                    }
-                }
 
-                user = _ctx.Users
-                    .FirstOrDefault(u => u.MobileNumber == phoneNumber || u.EmailAddress == userUri);
+                    case URIType.EmailAddress:
+                        user = _ctx.Users
+                            .FirstOrDefault(u => u.EmailAddress == userUri);
+
+                        return user;
+
+                    case URIType.MobileNumber:
+                        var phoneNumber = formattingServices.RemoveFormattingFromMobileNumber(userUri);
+
+                        user = _ctx.Users
+                            .FirstOrDefault(u => u.MobileNumber == phoneNumber);
+
+                        return user;
+
+                }
 
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Exception Getting User {0}", userUri));
             }
-            _logger.Log(LogLevel.Debug, String.Format("User Found"));
 
-            return user;
+            return null;
         }
         public bool ConfirmUser(string accountConfirmationToken)
         {
@@ -176,12 +195,12 @@ namespace SocialPayments.DomainServices
             var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
 
             user.EmailAddress = emailAddress;
-           // user.IsLockedOut = isLockedOut;
-           // user.LastUpdatedDate = System.DateTime.Now;
+            // user.IsLockedOut = isLockedOut;
+            // user.LastUpdatedDate = System.DateTime.Now;
             user.MobileNumber = mobileNumber;
             user.Password = password;
             //user.SecurityPin = securityPin;
-           // user.UserStatus = userStatus;
+            // user.UserStatus = userStatus;
 
             _ctx.SaveChanges();
         }
@@ -243,18 +262,18 @@ namespace SocialPayments.DomainServices
                 logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
 
                 bool verificationSucceeded = false;
-                
+
                 try
                 {
                     logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
                     verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
-                        
+
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
                 }
-                
+
                 logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
 
                 if (verificationSucceeded)
@@ -283,10 +302,44 @@ namespace SocialPayments.DomainServices
                 }
             }
         }
+        public User SetupSecurityPin(string userId, string securityPin)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.SecurityPin = securityService.Encrypt(securityPin);
+
+            _ctx.SaveChanges();
+
+            return user;
+        }
+
+        public User GetUserById(string userId)
+        {
+            Guid userIdGuid;
+
+            Guid.TryParse(userId, out userIdGuid);
+
+            if (userIdGuid == null)
+                throw new ArgumentException(String.Format("UserId {0} Not Valid.", userId));
+
+            var user = _ctx.Users
+                .FirstOrDefault(u => u.UserId.Equals(userIdGuid));
+
+            return user;
+        }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
             string deviceToken)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", accountId));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
 
             User user = null;
 
@@ -299,7 +352,7 @@ namespace SocialPayments.DomainServices
 
                 if (user == null)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Create new user.", accountId));
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Create new user.", accountId, emailAddress));
 
                     user = _ctx.Users.Add(new Domain.User()
                     {
@@ -341,6 +394,18 @@ namespace SocialPayments.DomainServices
                     _ctx.SaveChanges();
                 }
             }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage));
+                    }
+                }
+
+                throw dbEx;
+            }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in with Facebook. {0}", ex.Message));
@@ -355,36 +420,14 @@ namespace SocialPayments.DomainServices
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));
         }
-        public void ProcessUser(Guid userId)
-        {
-            //AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
-
-            //var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-            //var payments = _ctx.Payments.Select(p => p.ToMobileNumber.Equals(user.MobileNumber)) as IQueryable<Payment>;
-
-            //foreach (var payment in payments)
-            //{
-            //    payment.FromAccount = user.PaymentAccounts[0];
-
-            //    _ctx.SaveChanges();
-
-            //    client.Publish(new PublishRequest()
-            //    {
-            //        Message = payment.Id.ToString(),
-            //        TopicArn = "arn:aws:sns:us-east-1:102476399870:SocialPaymentNotifications",
-            //        Subject = "New Payment Receivied"
-            //    });
-            //}
-
-
-        }
 
         public User FindUserByMobileNumber(string mobileNumber)
         {
+            var tempMobileNumber = formattingServices.RemoveFormattingFromMobileNumber(mobileNumber);
+
             return _ctx.Users
                 .Include("PaymentAccounts")
-                .FirstOrDefault(u => u.MobileNumber == mobileNumber);
+                .FirstOrDefault(u => u.MobileNumber == tempMobileNumber);
         }
 
 
@@ -394,8 +437,5 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
-
-
-
     }
 }

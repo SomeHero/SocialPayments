@@ -34,3 +34,7 @@ C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.Sub
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\MoonAPNS.pdb
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\Newtonsoft.Json.xml
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\NLog.config
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\MoonAPNS.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\Newtonsoft.Json.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\MoonAPNS.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\Newtonsoft.Json.xml

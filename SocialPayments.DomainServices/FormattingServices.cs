@@ -10,7 +10,8 @@ namespace SocialPayments.DomainServices
     public class FormattingServices
     {
         private Logger _logger = LogManager.GetCurrentClassLogger();
-        
+        private static Regex digitsOnly = new Regex(@"[^\d]");
+
         public FormattingServices()
         {
         }
@@ -18,15 +19,16 @@ namespace SocialPayments.DomainServices
         public string RemoveFormattingFromMobileNumber(string mobileNumber)
         {
             _logger.Log(LogLevel.Info, String.Format("Remove Formatting from Mobile Number {0}", mobileNumber));
-            string tempMobileNumber = mobileNumber;
 
-            if (tempMobileNumber[0] == 1)
+            if (String.IsNullOrEmpty(mobileNumber))
+                return "";
+            
+            string tempMobileNumber = digitsOnly.Replace(mobileNumber, "");
+
+            if (tempMobileNumber[0] == '1')
                 tempMobileNumber = tempMobileNumber.Substring(1, tempMobileNumber.Length - 1);
 
-            tempMobileNumber = tempMobileNumber.Replace("-", "");
-            tempMobileNumber = tempMobileNumber.Replace("(", "");
-            tempMobileNumber = tempMobileNumber.Replace(")", "");
-            tempMobileNumber = tempMobileNumber.Replace(" ", "");
+            _logger.Log(LogLevel.Info, String.Format("Remove Formatting from Mobile Number Result {0}", tempMobileNumber));
 
             return tempMobileNumber;
 

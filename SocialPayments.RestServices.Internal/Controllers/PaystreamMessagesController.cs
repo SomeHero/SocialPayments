@@ -22,8 +22,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private IDbContext _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
-        private DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
-
+        
         // GET /api/paystreammessage
         public IEnumerable<string> Get()
         {
@@ -40,14 +39,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
             _logger.Log(LogLevel.Info,String.Format("{0} - New Message Posted {1} {2}", request.apiKey, request.senderUri, request.recipientUri));
-           
+
+            DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
             DomainServices.ValidationService validationService = new DomainServices.ValidationService(_logger);
+            DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
+            DomainServices.UserService userServices = new DomainServices.UserService(_ctx);
 
             User sender = null;
 
+
+            URIType recipientUriType = _messageServices.GetURIType(request.recipientUri);
+            URIType senderUriType = _messageServices.GetURIType(request.senderUri);
+
+            string recipientUri = request.recipientUri;
+            string senderUri = request.senderUri;
+
+
+            if (recipientUriType == URIType.MobileNumber)
+                recipientUri = _formattingService.RemoveFormattingFromMobileNumber(recipientUri);
+
+            if (senderUriType == URIType.MobileNumber)
+                senderUri = _formattingService.RemoveFormattingFromMobileNumber(senderUri);
+
             try
             {
-                sender = GetUser(request.senderUri);
+                sender = userServices.GetUser(senderUri);
             }
             catch (Exception ex)
             {
@@ -109,18 +125,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
 
             //TODO: confirm recipient is valid???
-
-            URIType recipientUriType = _messageServices.GetURIType(request.recipientUri);
-            URIType senderUri = _messageServices.GetURIType(request.senderUri);
-
-            string recipientUri = request.recipientUri;
-            string senderUri = request.senderUri;
-
-            if (recipientUriType == URIType.MobileNumber)
-                recipientUri = _formattingService.RemoveFormattingFromMobileNumber(recipientUri);
-
-            if (senderUri == URIType.MobileNumber)
-                senderUri = _formattingService.RemoveFormattingFromMobileNumber(senderUri);
 
             //TODO: confirm amount is within payment limits
 
@@ -231,16 +235,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return null;
 
-        }
-
-        private User GetUser(string mobileNumber)
-        {
-
-            var user = _ctx.Users
-                .Include("PaymentAccounts")
-                .FirstOrDefault(u => u.MobileNumber.Equals(mobileNumber));
-
-            return user;
         }
     }
 }

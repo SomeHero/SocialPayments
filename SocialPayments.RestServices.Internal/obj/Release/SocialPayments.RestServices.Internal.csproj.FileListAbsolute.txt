@@ -38,3 +38,5 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\obj\Release\SocialPayments.RestServices.Internal.pdb
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.RestServices.Internal\obj\Release\ResolveAssemblyReference.cache
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.RestServices.Internal\obj\Release\SocialPayments.RestServices.Internal.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\AWSSDK.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.RestServices.Internal\bin\AWSSDK.xml

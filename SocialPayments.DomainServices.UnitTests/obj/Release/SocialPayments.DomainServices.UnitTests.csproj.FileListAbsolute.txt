@@ -42,3 +42,18 @@ C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServic
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.xml
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Deployment.xml
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Razor.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\Microsoft.Web.Infrastructure.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Helpers.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Http.Common.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Mvc.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Razor.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Deployment.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Razor.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Helpers.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Http.Common.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Mvc.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.Razor.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Deployment.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\System.Web.WebPages.Razor.xml

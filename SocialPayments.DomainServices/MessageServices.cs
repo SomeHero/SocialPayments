@@ -35,6 +35,8 @@ namespace SocialPayments.DomainServices
                 uriType = URIType.EmailAddress;
             else if (_validationService.IsMECode(uri))
                 uriType = URIType.MECode;
+            else if (_validationService.IsFacebookAccount(uri))
+                uriType = URIType.FacebookAccount;
 
             return uriType;
         }

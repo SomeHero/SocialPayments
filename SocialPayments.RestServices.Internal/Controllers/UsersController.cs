@@ -18,9 +18,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UsersController : ApiController
     {
-        private static Context _ctx = new Context();
+        private Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
         private DomainServices.SecurityService securityService = new DomainServices.SecurityService();
         private DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
 
@@ -33,9 +32,21 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/users/5
         public HttpResponseMessage<UserModels.UserResponse> Get(string id)
         {
-            var user = GetUser(id);
+             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
 
-            //TODO: check to make sure user exists
+             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+
+             User user = null;
+
+             try
+             {
+                 user = _userService.GetUserById(id);
+             }
+             catch (Exception ex)
+             {
+                 _logger.Log(LogLevel.Info, String.Format("Unable to find user by id {0}. {1}", id, ex.Message));
+             }
+
             if (user == null)
             {
                 var message = new HttpResponseMessage<UserModels.UserResponse>(HttpStatusCode.NotFound);
@@ -60,37 +71,52 @@ namespace SocialPayments.RestServices.Internal.Controllers
             if (receivedPayments.Count() > 0)
                 receivedTotal = receivedPayments.Sum(m => m.Amount);
 
-            var userResponse = new UserModels.UserResponse()
+            _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
+
+            UserModels.UserResponse userResponse = null;
+
+            try
             {
-                address = user.Address,
-                city = user.City,
-                createDate = user.CreateDate.Value.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                culture = user.Culture,
-                emailAddress = user.EmailAddress,
-                firstName = user.FirstName,
-                isConfirmed = user.IsConfirmed,
-                isLockedOut = user.IsLockedOut,
-                lastLoggedIn = user.LastLoggedIn.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                lastName = user.LastName,
-                lastPasswordFailureDate = user.LastPasswordFailureDate,
-                mobileNumber = user.MobileNumber,
-                passwordFailuresSinceLastSuccess = user.PasswordFailuresSinceLastSuccess,
-                senderName = user.SenderName,
-                state = user.State,
-                timeZone = user.TimeZone,
-                userId = user.UserId,
-                userName = user.UserName,
-                userStatus = user.UserStatus.ToString(),
-                zip = user.Zip,
-                userAttributes = user.UserAttributes.Select(a => new UserModels.UserAttribute()
+                userResponse = new UserModels.UserResponse()
                 {
-                    AttributeName = a.UserAttribute.AttributeName,
-                    AttributeValue = a.AttributeValue
-                }).ToList(),
-                upperLimit = user.Limit,
-                totalMoneyReceived = receivedTotal,
-                totalMoneySent = sentTotal
-            };
+                    address = user.Address,
+                    city = user.City,
+                    createDate = user.CreateDate.Value.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                    culture = user.Culture,
+                    emailAddress = user.EmailAddress,
+                    firstName = user.FirstName,
+                    isConfirmed = user.IsConfirmed,
+                    isLockedOut = user.IsLockedOut,
+                    lastLoggedIn = user.LastLoggedIn.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                    lastName = user.LastName,
+                    lastPasswordFailureDate = user.LastPasswordFailureDate,
+                    mobileNumber = user.MobileNumber,
+                    passwordFailuresSinceLastSuccess = user.PasswordFailuresSinceLastSuccess,
+                    senderName = user.SenderName,
+                    state = user.State,
+                    timeZone = user.TimeZone,
+                    userId = user.UserId,
+                    userName = user.UserName,
+                    userStatus = user.UserStatus.ToString(),
+                    zip = user.Zip,
+                    userAttributes = user.UserAttributes.Select(a => new UserModels.UserAttribute()
+                    {
+                        AttributeName = a.UserAttribute.AttributeName,
+                        AttributeValue = a.AttributeValue
+                    }).ToList(),
+                    upperLimit = user.Limit,
+                    totalMoneyReceived = receivedTotal,
+                    totalMoneySent = sentTotal
+                };
+            } 
+            catch(Exception ex)
+            {
+                string errorMessage = ex.Message;
+
+                _logger.ErrorException(String.Format("Unhandled exception formatting User Response {0}. {1}", id, errorMessage), ex);
+
+                throw new HttpResponseException(errorMessage, HttpStatusCode.InternalServerError);
+            }
 
             return new HttpResponseMessage<UserModels.UserResponse>(userResponse, HttpStatusCode.OK);
         }
@@ -100,12 +126,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.userName));
 
-            int defaultNumPasswordFailures = 0;
-
+            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+       
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
-            String mobileNumber = formattingService.FormatMobileNumber(request.mobileNumber);
+            //_logger.Log(LogLevel.Error, string.Format("Formatting Mobile Number"));
 
+            //try
+            //{
+            //    if (!String.IsNullOrEmpty(request.mobileNumber))
+            //    {
+
+            //        formattingService.RemoveFormattingFromMobileNumber(request.mobileNumber);
+
+            //        _logger.Log(LogLevel.Error, string.Format("Registering User Mobile Number {0}", mobileNumber));
+
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.Log(LogLevel.Error, string.Format("Exception formatting mobile number. {0}", ex.Message));
+
+            //}
             User user;
 
             //validate that email address is not already user
@@ -118,53 +160,32 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return errorMessage;
             }
-            //ValidateUser the phone number is not already registered
-            user = _userService.FindUserByMobileNumber(mobileNumber);
 
-            if (user != null)
-            {
-                var errorMessage = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.BadRequest);
-                errorMessage.ReasonPhrase = String.Format("The mobile number {0} is already registered.", request.mobileNumber);
+            //if(!String.IsNullOrEmpty(mobileNumber))
+            //{
+            //    user = _userService.FindUserByMobileNumber(mobileNumber);
 
-                return errorMessage;
-            }
+            //    if (user != null)
+            //    {
+            //        var errorMessage = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.BadRequest);
+            //        errorMessage.ReasonPhrase = String.Format("The mobile number {0} is already registered.", request.mobileNumber);
+
+            //        return errorMessage;
+            //    }
+            //}
 
             try
             {
-                user = _ctx.Users.Add(new Domain.User()
-                {
-                    UserId = Guid.NewGuid(),
-                    ApiKey = new Guid(request.apiKey),
-                    CreateDate = System.DateTime.Now,
-                    PasswordChangedDate = DateTime.UtcNow,
-                    PasswordFailuresSinceLastSuccess = defaultNumPasswordFailures,
-                    LastPasswordFailureDate = DateTime.UtcNow,
-                    EmailAddress = request.emailAddress,
-                    //IsLockedOut = isLockedOut,
-                    //LastLoggedIn = System.DateTime.Now,
-                    MobileNumber = formattingService.RemoveFormattingFromMobileNumber(mobileNumber),
-                    Password = securityService.Encrypt(request.password), //hash
-                    SecurityPin = securityService.Encrypt(request.securityPin),
-                    UserName = request.userName,
-                    UserStatus = Domain.UserStatus.Submitted,
-                    IsConfirmed = false,
-                    LastLoggedIn = System.DateTime.Now,
-                    Limit = Convert.ToDouble(ConfigurationManager.AppSettings["InitialPaymentLimit"]),
-                    RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                    SetupPassword = false,
-                    SetupSecurityPin = false,
-                    Roles = new Collection<Role>()
-                    {
-                        memberRole
-                    },
-                    DeviceToken = request.deviceToken
-                });
+                _logger.Log(LogLevel.Info, String.Format("Adding user {0}", request.userName));
+
+                user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
+                    request.deviceToken);
 
                 _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, string.Format("Exception registering user {0}. Exception {1}.", request.mobileNumber, ex.Message));
+                _logger.Log(LogLevel.Error, string.Format("Exception registering user {0}. Exception {1}.", request.emailAddress, ex.Message));
 
                 var message = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.InternalServerError);
                 message.ReasonPhrase = String.Format("Unable to register user. {0}", ex.Message);
@@ -192,8 +213,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             var responseMessage = new UserModels.SubmitUserResponse()
             {
-                userId = user.UserId.ToString(),
-                mobileNumber = user.MobileNumber
+                userId = user.UserId.ToString()
             };
 
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
@@ -202,12 +222,50 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // PUT /api/user/5
         public void Put(int id, string value)
         {
+
         }
 
+        //POST /api/users/{userId}/setup_securitypin
+        public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Setting up Security Pin for {0}", id));
+
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            if(request.securityPin.Length < 4)
+            {
+                var error = @"Invalid Security Pin";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
+
+                var message =  new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+
+            try
+            {
+                userService.SetupSecurityPin(id, request.securityPin);
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
         //POST /api/users/validate_user
         public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
         {
-            var userService = new DomainServices.UserService();
+            var userService = new DomainServices.UserService(_ctx);
 
             User user;
             var isValid = userService.ValidateUser(request.userName, request.password, out user);
@@ -231,6 +289,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/signin_withfacebook
         public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
+            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+       
             Domain.User user = null;
 
             try
@@ -265,28 +325,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // DELETE /api/user/5
         public void Delete(int id)
         {
-        }
-
-
-        private User GetUser(string id)
-        {
-            Guid userId;
-
-            Guid.TryParse(id, out userId);
-
-            if (userId == null)
-                return null;
-
-            var user = _ctx.Users
-                .Include("PaymentAccounts")
-                .Include("UserAttributes")
-                .Include("UserAttributes.UserAttribute")
-                .FirstOrDefault(u => u.UserId.Equals(userId));
-
-            if (user == null)
-                return null;
-
-            return user;
         }
     }
 }

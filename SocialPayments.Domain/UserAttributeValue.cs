@@ -14,7 +14,7 @@ namespace SocialPayments.Domain
         public User User { get; set; }
         public Guid UserAttributeId { get; set; }
         [ForeignKey("UserAttributeId")]
-        public UserAttribute UserAttribute { get; set; }
+        public virtual UserAttribute UserAttribute { get; set; }
         public string AttributeValue { get; set; }
     }
 }

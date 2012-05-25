@@ -874,7 +874,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SocialPayments.Installers.OpenPaymentsService"
         "ProductCode" = "8:{4CE27D59-B125-4458-84FD-067A4C00A2F7}"
-        "PackageCode" = "8:{BEDF5A90-BF91-4247-9CC7-ADB40B5744E9}"
+        "PackageCode" = "8:{7B1D898A-C74A-45CC-BBCB-ACE8062458D8}"
         "UpgradeCode" = "8:{2D57B9DD-091A-4EE1-883F-1A68C22D1951}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

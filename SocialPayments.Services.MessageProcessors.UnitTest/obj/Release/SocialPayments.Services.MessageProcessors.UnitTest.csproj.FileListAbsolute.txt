@@ -44,3 +44,8 @@ C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.Mes
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\MoonAPNS.pdb
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\Newtonsoft.Json.xml
 C:\Users\cjmagee\Desktop\PaidThxTests\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\aps_developer_identity.p12
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\aps_developer_identity.p12
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\MoonAPNS.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\Newtonsoft.Json.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\MoonAPNS.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.MessageProcessors.UnitTest\bin\Release\Newtonsoft.Json.xml

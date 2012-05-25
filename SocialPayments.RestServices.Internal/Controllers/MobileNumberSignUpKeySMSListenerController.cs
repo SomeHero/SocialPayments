@@ -6,12 +6,15 @@ using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DataLayer;
 using System.Net;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class MobileNumberSignUpKeySMSListenerController : ApiController
     {
         private Context _ctx = new Context();
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+        private DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/mobilenumbersignupkeysmslistener
         public IEnumerable<string> Get()
@@ -28,21 +31,33 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/mobilenumbersignupkeysmslistener
         public HttpStatusCode Post(MobileNumberSignUpKeySMSListenerModels.UpdateSignUpKeyRequest request)
         {
+            _logger.Log(LogLevel.Info, String.Format("Received request for Registration SignUp Key"));
+
             Guid signUpKeyGuid;
             var signUpKey = request.inboundSMSMessageNotification.inboundSMSMessage.message;
-            var mobileNumber = request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress;
+            var mobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress);
+
+            _logger.Log(LogLevel.Info, String.Format("Request details Mobile Number {0}; SignUp Key {1}", mobileNumber, signUpKey));
 
             Guid.TryParse(signUpKey, out signUpKeyGuid);
 
             if (signUpKeyGuid == null)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Unable to parse Guid {0}", signUpKey));
+
                 return HttpStatusCode.BadRequest;
+            }
 
-            var mobileNumberSignUpKey = _ctx.MobileNumberSignUpKeys.FirstOrDefault(m => m.SignUpKey.Equals(signUpKeyGuid));
+            var user = _ctx.Users.FirstOrDefault(u => u.UserId.Equals(signUpKeyGuid));
 
-            if(mobileNumberSignUpKey == null)
+            if (user == null)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Unable to find user {0}", signUpKey));
+
                 return HttpStatusCode.BadRequest;
+            }
 
-            mobileNumberSignUpKey.MobileNumber = mobileNumber;
+            user.MobileNumber = mobileNumber;
 
             _ctx.SaveChanges();
 

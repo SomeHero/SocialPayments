@@ -26,6 +26,7 @@ namespace SocialPayments.Services.UserProcessors
         private string _mobileValidationMessage = "Welcome to PdThx.   Your verfication codes are {0} and {1}.";
         private string _templateName = "Welcome/Registration";
         private string _welcomeEmailSubject = "Welcome to PaidThx";
+        private string _activationUrl = "http://www.paidthx.com/mobile/confirmation?{0}";
 
         public SubmittedUserProcessor()
         {
@@ -80,7 +81,8 @@ namespace SocialPayments.Services.UserProcessors
 
                 var replacementElements = new List<KeyValuePair<string, string>>();
                 replacementElements.Add(new KeyValuePair<string, string>("EMAILADDRESS", user.EmailAddress));
-
+                replacementElements.Add(new KeyValuePair<string, string>("LINK_ACTIVATION", String.Format(_activationUrl, user.ConfirmationToken)));
+                
                 _emailService.SendEmail(user.EmailAddress, emailSubject, _templateName, replacementElements);
 
             }

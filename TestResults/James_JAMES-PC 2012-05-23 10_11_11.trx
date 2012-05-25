@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="a104f992-8455-4b6d-b5fa-b922a7806d0a" name="James@JAMES-PC 2012-05-23 10:11:11" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="63f1875e-6356-47de-9b24-1f557b223cad">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="James_JAMES-PC 2012-05-23 10_11_11">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Test\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Test\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Test\SocialPayments.Domain.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Test\SocialPayments.DataLayer.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.UserProcessors\bin\Release\SocialPayments.Services.UserProcessors.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-23T10:11:11.0478516-04:00" queuing="2012-05-23T10:11:20.9697266-04:00" start="2012-05-23T10:11:21.6572266-04:00" finish="2012-05-23T10:12:15.8281250-04:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestMethod1" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.users.unittests\bin\release\socialpayments.services.users.unittests.dll" id="c3db43dc-9f04-c6b5-29fd-dadcd58a3d86">
+      <Execution id="2f167ee8-12c1-4132-b0cd-d2173a9f7720" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.Users.UnitTests/bin/Release/SocialPayments.Services.Users.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.Users.UnitTests.UnitTest1, SocialPayments.Services.Users.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod1" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="c3db43dc-9f04-c6b5-29fd-dadcd58a3d86" executionId="2f167ee8-12c1-4132-b0cd-d2173a9f7720" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="2f167ee8-12c1-4132-b0cd-d2173a9f7720" testId="c3db43dc-9f04-c6b5-29fd-dadcd58a3d86" testName="TestMethod1" computerName="JAMES-PC" duration="00:00:46.9406675" startTime="2012-05-23T10:11:22.8447266-04:00" endTime="2012-05-23T10:12:14.5468750-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f167ee8-12c1-4132-b0cd-d2173a9f7720">
+    </UnitTestResult>
+  </Results>
+</TestRun>
