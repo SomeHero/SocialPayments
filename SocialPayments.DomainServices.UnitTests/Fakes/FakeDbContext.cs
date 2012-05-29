@@ -25,6 +25,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<BetaSignup> _betaSignUps;
         private IDbSet<MobileNumberSignUpKey> _mobileNumberSignUpKey;
         private IDbSet<MECode> _meCodes;
+        private IDbSet<PaymentAccountVerification> _paymentAccountVerifications;
 
         public FakeDbContext()
         {
@@ -41,6 +42,8 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             _transactionBatch = new FakeTransactionBatchSet();
             _meCodes = new FakeMECodeSet();
             _roles = new FakeRoleSet();
+            _paymentAccounts = new FakePaymentAccountSet();
+            _paymentAccountVerifications = new FakePaymentAccountVerificationSet();
         }
         public IDbSet<Application> Applications
         {
@@ -116,6 +119,11 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         {
             get { return _meCodes; }
             set { _meCodes = value; }
+        }
+        public IDbSet<PaymentAccountVerification> PaymentAccountVerifications
+        {
+            get { return _paymentAccountVerifications; }
+            set { _paymentAccountVerifications = value; }
         }
         public void SaveChanges()
         {

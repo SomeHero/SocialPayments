@@ -24,7 +24,6 @@ namespace SocialPayments.Domain
         [Required()]
         [MaxLength(100)]
         public virtual string UserName { get; set; }
-        [Required()]
         [MaxLength(250)]
         [DataType(DataType.EmailAddress)]
         public virtual string EmailAddress { get; set; }
@@ -35,19 +34,26 @@ namespace SocialPayments.Domain
         public virtual bool IsConfirmed { get; set; }
         public virtual int PasswordFailuresSinceLastSuccess { get; set; }
         public virtual Nullable<DateTime> LastPasswordFailureDate { get; set; }
+        [MaxLength(100)]
         public virtual string ConfirmationToken { get; set; }
         public virtual Nullable<DateTime> CreateDate { get; set; }
         public virtual Nullable<DateTime> PasswordChangedDate { get; set; }
+        [MaxLength(10)]
         public virtual string MobileVerificationCode1 { get; set; }
+        [MaxLength(10)]
         public virtual string MobileVerificationCode2 { get; set; }
+        [MaxLength(100)]
         public virtual string PasswordVerificationToken { get; set; }
         public virtual Nullable<DateTime> PasswordVerificationTokenExpirationDate { get; set; }
 
         public virtual Collection<Role> Roles { get; set; }
+        [MaxLength(50)]
         public virtual string MobileNumber { get; set; }
         public virtual string SecurityPin { get; set; }
         public virtual bool IsLockedOut { get; set; }
+        [MaxLength(100)]
         public virtual string TimeZone { get; set; }
+        [MaxLength(100)]
         public virtual string Culture { get; set; }
         public virtual Collection<UserAttributeValue> UserAttributes { get; set; }
         public int UserStatusValue { get; set; }
@@ -71,17 +77,25 @@ namespace SocialPayments.Domain
         public virtual bool SetupPassword { get; set; }
         public virtual Collection<PaymentAccount> PaymentAccounts { get; set; }
 
+        [MaxLength(100)]
         public string FirstName { get; set; }
+        [MaxLength(100)]
         public string LastName { get; set; }
+        [MaxLength(100)]
         public string Address { get; set; }
+        [MaxLength(50)]
         public string City { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
+        [MaxLength(10)]
         public string Zip { get; set; }
+        [MaxLength(255)]
         public string SenderName { get; set; }
         [Column(name:"FBUserId")]
         public FBUser FacebookUser { get; set; }
 
         public virtual Collection<Message> Messages { get; set; }
+        [MaxLength(100)]
         public string DeviceToken { get; set; }
 
         public virtual Collection<MECode> MECodes { get; set; }

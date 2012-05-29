@@ -7,14 +7,19 @@ using SocialPayments.RestServices.Internal.Models;
 using System.Net;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using NLog;
+using System.Configuration;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UserPaymentAccountsController : ApiController
     {
         private Context _ctx = new Context();
+        private Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-
+        private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+       
         // GET /api/{userId}/paymentaccounts
         public IEnumerable<string> Get(string userId)
         {
@@ -83,6 +88,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return message;
             }
 
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["PaymentAccountPostedTopicARN"], "New ACH Account Submitted", account.Id.ToString());
+          
             var response = new AccountModels.SubmitAccountResponse()
             {
                 paymentAccountId = account.Id.ToString()
@@ -92,6 +99,39 @@ namespace SocialPayments.RestServices.Internal.Controllers
             //TODO: add uri for created account to response header
 
             return responseMessage;
+        }
+
+        //POST /api/{userId}/paymentaccounts/{id}/verify_account
+        public HttpResponseMessage VerifyAccount(string userId, string id, AccountVerificationRequest request)
+        {
+            DomainServices.PaymentAccountVerificationService verificationService =
+                new DomainServices.PaymentAccountVerificationService(_ctx, _logger);
+
+            double depositAmount1 = 0;
+            double depositAmount2 = 0;
+
+            Double.TryParse(request.depositAmount1.ToString(), out depositAmount1);
+            Double.TryParse(request.depositAmount2.ToString(), out depositAmount2);
+
+            if (depositAmount1 == 0 || depositAmount2 == 0)
+            {
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = "Invalid deposit amount specified";
+
+                return responseMessage;
+            }
+
+            var result = verificationService.VerifyAccount(userId, id, depositAmount1, depositAmount2);
+
+            if (!result)
+            {
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = "Not verified";
+
+                return responseMessage;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         // PUT /api/{userId}/paymentaccounts/{id}

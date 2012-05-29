@@ -162,8 +162,8 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AccountVerificationRequest.cs" />
     <Compile Include="Controllers\ApplicationsController.cs" />
-    <Compile Include="Controllers\MobileNumberSignUpKeyController.cs" />
     <Compile Include="Controllers\MobileNumberSignUpKeySMSListenerController.cs" />
     <Compile Include="Controllers\PaystreamMessagesController.cs" />
     <Compile Include="Controllers\UserMeCodesController.cs" />

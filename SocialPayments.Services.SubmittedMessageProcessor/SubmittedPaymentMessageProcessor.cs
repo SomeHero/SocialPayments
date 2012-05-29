@@ -13,6 +13,7 @@ using System.Net;
 using System.IO;
 using System.Web;
 using MoonAPNS;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.Services.MessageProcessors
 {
@@ -34,7 +35,7 @@ namespace SocialPayments.Services.MessageProcessors
         private ValidationService _validationService;
         private UserService _userService;
         private SMSService _smsService;
-        private EmailService _emailService;
+        private IEmailService _emailService;
 
         private string _recipientSMSMessage = "{1} just sent you {0:C} using PaidThx.  The payment has been submitted for processing. Go to {2}.";
         private string _senderSMSMessage = "Your payment in the amount {0:C} was delivered to {1}.  The payment has been submitted for processing. Go to {2}";
@@ -53,7 +54,10 @@ namespace SocialPayments.Services.MessageProcessors
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
         private string _mobileWebSiteUrl = @"http://beta.paidthx.com/mobile/";
-       
+
+        private string _paymentReceivedRecipientNotRegisteredTemplate = "Payment Received Recipient Not Registered";
+        private string _paymentReceivedRecipientRegisteredTemplate = "Payment Received Recipient Registered";
+
         public SubmittedPaymentMessageProcessor() {
             _ctx  = new DataLayer.Context();
             _logger = LogManager.GetCurrentClassLogger();
@@ -157,10 +161,28 @@ namespace SocialPayments.Services.MessageProcessors
                     _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
 
                     emailSubject = String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount);
-                    emailBody = String.Format(_recipientConfirmationEmailBody, senderName, message.Amount, _mobileWebSiteUrl);
-
-                    _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
-
+                    
+            //Payment Registered Recipient
+            //first_name
+            //last_name
+            //rec_amount
+            //rec_sender
+            //rec_sender_photo_url
+            //rec_datetime formatted DayOfWeek, MM dd(rd) at hh:mm:tt
+            //rec_comments
+            //app_user
+            //link_registration - empty
+                    _emailService.SendEmail(recipient.EmailAddress, emailSubject, _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("first_name", recipient.FirstName),
+                        new KeyValuePair<string, string>("last_name", recipient.LastName),
+                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
+                        new KeyValuePair<string, string>("rec_sender", senderName),
+                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
+                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
+                        new KeyValuePair<string, string>("rec_comments", message.Comments),
+                        new KeyValuePair<string, string>("link_registration", "")
+                    });
                 }
                 if (recipient.DeviceToken.Length > 0)
                 {
@@ -268,18 +290,37 @@ namespace SocialPayments.Services.MessageProcessors
                 }
 
                 emailSubject = String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount);
-                emailBody = String.Format(_recipientConfirmationEmailBody, senderName, message.Amount, _mobileWebSiteUrl);
-
+                
+                //Payment Registered Recipient
+                //first_name
+                //last_name
+                //rec_amount
+                //rec_sender
+                //rec_sender_photo_url
+                //rec_datetime formatted DayOfWeek, MM dd(rd) at hh:mm:tt
+                //rec_comments
+                //app_user
+                //link_registration - empty
                 if (recipientType == URIType.EmailAddress)
                 {
                     //Send confirmation email to recipient
                     _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient (Recipient is not an registered user)."));
 
-                    _emailService.SendEmail(message.ApiKey, fromAddress, message.RecipientUri, emailSubject, emailBody);
-
+                    _emailService.SendEmail(message.RecipientUri, emailSubject, _paymentReceivedRecipientNotRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string, string>("first_name", ""),
+                        new KeyValuePair<string, string>("last_name", ""),
+                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
+                        new KeyValuePair<string, string>("rec_sender", senderName),
+                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
+                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
+                        new KeyValuePair<string, string>("rec_comments", message.Comments),
+                        new KeyValuePair<string, string>("link_registration", link)
+                    });
                 }
 
             }
+
             _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
 
             message.MessageStatus = MessageStatus.Pending;

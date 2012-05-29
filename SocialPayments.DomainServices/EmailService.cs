@@ -10,10 +10,11 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Web;
 using System.Net;
 using System.IO;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
-    public class EmailService
+    public class EmailService: IEmailService
     {
         private IDbContext _ctx;
         private Logger _logger;
@@ -81,7 +82,7 @@ namespace SocialPayments.DomainServices
             _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}; +", apiKey, toAddress, fromAddress));
             
             //Create Email Log
-            var application = _applicationService.GetApplication(apiKey);
+            var application = _applicationService.GetApplication(apiKey.ToString());
 
             var emailLog = _emailLogService.AddEmailLog(application.ApiKey, fromAddress, toAddress, subject, body, null);
 
@@ -95,10 +96,12 @@ namespace SocialPayments.DomainServices
                 sc.Send(fromAddress, toAddress, subject, body);
 
                 _logger.Log(LogLevel.Info, String.Format("I am Here"));
-               
+
+                emailLog.EmailStatus = EmailStatus.Sent;
+                emailLog.SentDate = System.DateTime.Now;
+
                 //Update Email Status
-                _emailLogService.UpdateEmailLog(emailLog.Id, emailLog.FromEmailAddress, emailLog.ToEmailAddress, emailLog.Subject, emailLog.Body,
-                    Domain.EmailStatus.Sent, System.DateTime.Now);
+                _emailLogService.UpdateEmailLog(emailLog);
 
                 _logger.Log(LogLevel.Info, String.Format("Email Sent  to {0}", toAddress));
 
@@ -107,9 +110,9 @@ namespace SocialPayments.DomainServices
             {
                 _logger.Log(LogLevel.Error, String.Format("Exception Sending Email to {0}. {1}", toAddress, ex.Message));
 
+                emailLog.EmailStatus = EmailStatus.Failed;
                 //Update Email Status
-                _emailLogService.UpdateEmailLog(emailLog.Id, emailLog.FromEmailAddress, emailLog.ToEmailAddress, emailLog.Subject, emailLog.Body,
-                   Domain.EmailStatus.Failed, null);
+                _emailLogService.UpdateEmailLog(emailLog);
 
                 return false;
             }

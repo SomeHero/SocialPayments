@@ -60,6 +60,7 @@
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -72,7 +73,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptPaymentRequestMessageProcessor.cs" />
     <Compile Include="CancelledPaymentMessageProcessor.cs" />
+    <Compile Include="CompletePaymentMessageProcessor.cs" />
+    <Compile Include="CompletePaymentRequestMessageProcessor.cs" />
+    <Compile Include="ExpiredPaymentRequestMessageProcessor.cs" />
+    <Compile Include="IgnorePaymentRequestMessageProcessor.cs" />
+    <Compile Include="Interfaces\IMessageProcessor.cs" />
+    <Compile Include="RefundedPaymentMessageProcessor.cs" />
+    <Compile Include="RejectPaymentRequestMessageProcessor.cs" />
+    <Compile Include="ReturnedNSFPaymentMessageProcessor.cs" />
     <Compile Include="SubmittedPaymentMessageProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmittedRequestMessageProcessor.cs" />
@@ -89,10 +99,6 @@
     <ProjectReference Include="..\SocialPayments.Domain\SocialPayments.Domain.csproj">
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SocialPayments.Services.IMessageProcessor\SocialPayments.Services.IMessageProcessor.csproj">
-      <Project>{9AF99E2B-5BD4-4C38-B490-153FCFE73797}</Project>
-      <Name>SocialPayments.Services.IMessageProcessor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

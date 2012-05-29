@@ -44,14 +44,8 @@ namespace SocialPayments.DomainServices
         {
             return _ctx.Calendars.FirstOrDefault(c => c.Id == id);
         }
-        public void UpdateCalendar(int id, string calendarCode, List<CalendarDate> calendarDates, CalendarType calendarType)
+        public void UpdateCalendar(Calendar calendar)
         {
-            var calendar = GetCalendar(id);
-
-            calendar.CalendarCode = calendarCode;
-            calendar.CalendarDates = calendarDates;
-            calendar.CalendarType = calendarType;
-
             _ctx.SaveChanges();
         }
         public void DeleteCalendar(int id)

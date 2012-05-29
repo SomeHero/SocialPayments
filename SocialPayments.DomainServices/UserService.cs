@@ -51,7 +51,6 @@ namespace SocialPayments.DomainServices
                 //IsLockedOut = isLockedOut,
                 //LastLoggedIn = System.DateTime.Now,
                 Password = securityService.Encrypt(password), //hash
-                SecurityPin = "",
                 UserName = userName,
                 UserStatus = Domain.UserStatus.Submitted,
                 IsConfirmed = false,
@@ -190,18 +189,17 @@ namespace SocialPayments.DomainServices
 
             return true;
         }
-        public void UpdateUser(Guid userId, string mobileNumber, string emailAddress, string password, string securityPin, bool isLockedOut, UserStatus userStatus)
+
+        public void UpdateUser(User user)
         {
-            var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
+            if (!String.IsNullOrEmpty(user.MobileNumber))
+                user.MobileNumber = formattingServices.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
-            user.EmailAddress = emailAddress;
-            // user.IsLockedOut = isLockedOut;
-            // user.LastUpdatedDate = System.DateTime.Now;
-            user.MobileNumber = mobileNumber;
-            user.Password = password;
-            //user.SecurityPin = securityPin;
-            // user.UserStatus = userStatus;
-
+            if (!String.IsNullOrEmpty(user.SecurityPin))
+            {
+                user.SecurityPin = securityService.Encrypt(user.SecurityPin);
+                user.SetupSecurityPin = true;
+            }
             _ctx.SaveChanges();
         }
         public void DeleteUser(Guid userId)
@@ -226,80 +224,79 @@ namespace SocialPayments.DomainServices
                 throw CreateArgumentNullOrEmptyException("password");
             }
 
-            using (Context context = new Context())
+            User user = null;
+
+            user = _ctx.Users
+                .Include("PaymentAccounts")
+                .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
+
+            if (user == null)
             {
-                User user = null;
-
-                user = context.Users
+                logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
+                user = _ctx.Users
                     .Include("PaymentAccounts")
-                    .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
-                if (user == null)
-                {
-                    logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
-                    user = context.Users
-                        .Include("PaymentAccounts")
-                        .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
-                }
-                if (user == null)
-                {
-                    logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
-                    user = context.Users
-                        .Include("PaymentAccounts")
-                        .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
-                }
-                if (user == null)
-                {
-                    logger.Log(LogLevel.Warn, "Unable to find user by user name.");
-                    foundUser = null;
-                    return false;
-                }
-                //if (!user.IsConfirmed)
-                //{
-                //    foundUser = null;
-                //    return false;
-                //}
-                var hashedPassword = securityService.Encrypt(password);
-                logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
+                    .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
+            }
+            if (user == null)
+            {
+                logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
+                user = _ctx.Users
+                    .Include("PaymentAccounts")
+                    .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
+            }
+            if (user == null)
+            {
+                logger.Log(LogLevel.Warn, "Unable to find user by user name.");
+                foundUser = null;
+                return false;
+            }
+            //if (!user.IsConfirmed)
+            //{
+            //    foundUser = null;
+            //    return false;
+            //}
+            var hashedPassword = securityService.Encrypt(password);
+            logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
 
-                bool verificationSucceeded = false;
+            bool verificationSucceeded = false;
 
-                try
-                {
-                    logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
-                    verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
+            try
+            {
+                logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
+                verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
 
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
-                }
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
+            }
 
-                logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
+            logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
 
-                if (verificationSucceeded)
+            if (verificationSucceeded)
+            {
+                user.PasswordFailuresSinceLastSuccess = 0;
+            }
+            else
+            {
+                int failures = user.PasswordFailuresSinceLastSuccess;
+                if (failures != -1)
                 {
-                    user.PasswordFailuresSinceLastSuccess = 0;
+                    user.PasswordFailuresSinceLastSuccess += 1;
+                    user.LastPasswordFailureDate = DateTime.UtcNow;
                 }
-                else
-                {
-                    int failures = user.PasswordFailuresSinceLastSuccess;
-                    if (failures != -1)
-                    {
-                        user.PasswordFailuresSinceLastSuccess += 1;
-                        user.LastPasswordFailureDate = DateTime.UtcNow;
-                    }
-                }
-                context.SaveChanges();
-                if (verificationSucceeded)
-                {
-                    foundUser = user;
-                    return true;
-                }
-                else
-                {
-                    foundUser = null;
-                    return false;
-                }
+            }
+            _ctx.SaveChanges();
+
+            if (verificationSucceeded)
+            {
+                foundUser = user;
+                return true;
+            }
+            else
+            {
+                foundUser = null;
+                return false;
             }
         }
         public User SetupSecurityPin(string userId, string securityPin)

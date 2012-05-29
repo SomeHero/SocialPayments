@@ -77,3 +77,44 @@
 2012-05-23 13:36:07.5908 SocialPayments.DomainServices.UserService Unable to find user with Facebook account 1234abcdsds.  Create new user.
 2012-05-23 14:04:42.2343 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
 2012-05-24 22:51:09.7529 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:15:31.3759 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:16:39.6259 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:16:45.4072 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 11:17:21.7197 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. Column 'MobileNumber' in table 'Users' is of a type that is invalid for use as a key column in an index.
+2012-05-25 11:29:42.2822 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:30:37.6992 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:32:58.6992 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. An error occurred while executing the command definition. See the inner exception for details.
+2012-05-25 11:33:19.9960 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:33:20.7265 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:33:23.0947 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 11:33:34.6445 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. Cannot find the object "PayPoints" because it does not exist or you do not have permissions.
+2012-05-25 11:40:28.8232 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:40:59.5361 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:41:01.5410 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 11:42:40.8369 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. Column 'MobileNumber' in table 'Users' is of a type that is invalid for use as a key column in an index.
+2012-05-25 11:47:25.1835 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:47:55.9824 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:47:57.9179 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 11:48:55.1083 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. An exception occurred while initializing the database. See the InnerException for details.
+2012-05-25 11:51:04.2343 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 11:51:20.3632 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 11:51:22.0185 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 12:00:07.4843 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 12:00:45.3056 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 12:01:16.5800 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 12:01:17.3457 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 12:01:19.0634 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 12:01:53.8085 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. Incorrect syntax near the keyword 'Constraint'.
+2012-05-25 12:02:42.9248 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 12:03:02.7158 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 12:03:04.8613 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 12:04:05.9628 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. An exception occurred while initializing the database. See the InnerException for details.
+2012-05-25 12:04:43.5205 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 12:04:50.9521 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 12:04:52.9335 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 12:05:01.8994 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. Incorrect syntax near the keyword 'where'.
+2012-05-25 12:05:38.8378 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 12:06:02.9707 SocialPayments.DataLayer.Context Creating Model
+2012-05-25 12:06:04.4423 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-05-25 13:11:52.8271 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-05-25 13:11:55.2607 SocialPayments.DataLayer.Context Creating Model

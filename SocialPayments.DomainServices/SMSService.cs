@@ -48,7 +48,7 @@ namespace SocialPayments.DomainServices
             if (apiKey == null || String.IsNullOrEmpty(mobileNumber) || String.IsNullOrEmpty(message))
                 throw new ArgumentNullException(String.Format("You must specify an APIKey, mobile number and Message to send an SMS"));
 
-            var application = _applicationService.GetApplication(apiKey);
+            var application = _applicationService.GetApplication(apiKey.ToString());
 
             //Log Request
             var smsLog = _smsLogService.AddSMSLog(apiKey, mobileNumber, message, Domain.SMSStatus.Pending, null);
@@ -99,11 +99,16 @@ namespace SocialPayments.DomainServices
             // Evaluate result of HTTP request.
             if (res.StatusCode == HttpStatusCode.Created)
             {
-                _smsLogService.UpdateSMSLog(smsLog.Id, smsLog.MobileNumber, smsLog.Message, Domain.SMSStatus.Sent, System.DateTime.Now);
+                smsLog.SMSStatus = Domain.SMSStatus.Sent;
+                smsLog.SentDate = System.DateTime.Now;
+
+                _smsLogService.UpdateSMSLog(smsLog);
             }
             else
             {
-                _smsLogService.UpdateSMSLog(smsLog.Id, smsLog.MobileNumber, smsLog.Message, Domain.SMSStatus.Failed, null);
+                smsLog.SMSStatus = Domain.SMSStatus.Failed;
+
+                _smsLogService.UpdateSMSLog(smsLog);
             }
         }
     }

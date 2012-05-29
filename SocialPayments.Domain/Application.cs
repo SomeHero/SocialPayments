@@ -13,5 +13,7 @@ namespace SocialPayments.Domain
         [Key]
         public Guid ApiKey { get; set; }
         public bool IsActive { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
     }
 }

@@ -83,10 +83,6 @@
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocialPayments.Services.IMessageProcessor\SocialPayments.Services.IMessageProcessor.csproj">
-      <Project>{9AF99E2B-5BD4-4C38-B490-153FCFE73797}</Project>
-      <Name>SocialPayments.Services.IMessageProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SocialPayments.Services.SubmittedMessageProcessor\SocialPayments.Services.MessageProcessors.csproj">
       <Project>{D89D77FD-B69B-4010-B072-A0A26F0C0194}</Project>
       <Name>SocialPayments.Services.MessageProcessors</Name>

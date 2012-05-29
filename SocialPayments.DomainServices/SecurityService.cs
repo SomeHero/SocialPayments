@@ -52,7 +52,7 @@ namespace SocialPayments.DomainServices
 
             return Decrypt(encryptedText, passPhrase, saltValue, hashAlgorithm, passwordIterations, initVector, keySize);
         }
-        public string DecryptLastFour(string encryptedText)
+        internal string DecryptLastFour(string encryptedText)
         {
             var cc = Decrypt(encryptedText);
 
@@ -98,7 +98,7 @@ namespace SocialPayments.DomainServices
         /// <returns>
         /// Encrypted value formatted as a base64-encoded string.
         /// </returns>
-        private string Encrypt(string plainText,
+        public string Encrypt(string plainText,
                                      string passPhrase,
                                      string saltValue,
                                      string hashAlgorithm,
@@ -215,7 +215,7 @@ namespace SocialPayments.DomainServices
         /// the Encrypt function which was called to generate the
         /// ciphertext.
         /// </remarks>
-        private static string Decrypt(string cipherText,
+        public static string Decrypt(string cipherText,
                                      string passPhrase,
                                      string saltValue,
                                      string hashAlgorithm,

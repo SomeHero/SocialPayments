@@ -30,6 +30,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<BetaSignup> BetaSignUps { get; set; }
         public IDbSet<MobileNumberSignUpKey> MobileNumberSignUpKeys { get; set; }
         public IDbSet<MECode> MECodes { get; set; }
+        public IDbSet<PaymentAccountVerification> PaymentAccountVerifications { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -133,6 +134,13 @@ namespace SocialPayments.DataLayer
         {
             _logger.Log(LogLevel.Info, String.Format("Seeding Database"));
 
+            //create unique constraints
+            context.Database.ExecuteSqlCommand("CREATE UNIQUE INDEX IX_UserName ON Users (UserName)");
+            context.Database.ExecuteSqlCommand("CREATE UNIQUE NONCLUSTERED INDEX IX_EmailAddress ON Users (EmailAddress) where EmailAddress Is Not Null and EmailAddress != ''");
+            context.Database.ExecuteSqlCommand("CREATE UNIQUE NONCLUSTERED INDEX IX_MobileNumber ON Users (MobileNumber) where MobileNumber Is Not Null and MobileNumber != ''");
+
+            //context.Database.ExecuteSqlCommand("CREATE UNIQUE INDEX IX_PayPoint ON PayPoints (URI)");
+
             var adminRole = context.Roles.Add(new Role()
             {
                 RoleId = Guid.NewGuid(),
@@ -208,8 +216,8 @@ namespace SocialPayments.DataLayer
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                 UserId = Guid.NewGuid(),
                 EmailAddress = "test@gmail.com",
-                MobileNumber = "804-355-5555",
-                UserName = "8043555555",
+                MobileNumber = "8043555555",
+                UserName = "test@gmail.com",
                 Password = securityService.Encrypt("testuser"),
                 SecurityPin = securityService.Encrypt("1111"),
                 PaymentAccounts = new Collection<PaymentAccount>() {

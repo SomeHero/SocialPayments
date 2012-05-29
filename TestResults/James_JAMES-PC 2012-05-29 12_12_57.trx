@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="4794a7a8-1749-4940-b712-30203eb71630" name="James@JAMES-PC 2012-05-29 12:12:57" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Trace and Test Impact" id="0f6a2b5b-2f0e-4e40-bd8f-ceb87423dee9">
+    <Description>These are test settings for Trace and Test Impact.</Description>
+    <Deployment runDeploymentRoot="James_JAMES-PC 2012-05-29 12_12_57">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Local\SocialPayments.DataLayer.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.UserProcessors\bin\Release\SocialPayments.Services.UserProcessors.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+        <DataCollectors>
+          <DataCollector uri="datacollector://microsoft/SystemInfo/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.DataCollection.SystemInfo.SystemInfoDataCollector, Microsoft.VisualStudio.TestTools.DataCollection.SystemInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="System Information">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/ActionLog/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.ManualTest.ActionLog.ActionLogPlugin, Microsoft.VisualStudio.TestTools.ManualTest.ActionLog, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Actions">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/HttpProxy/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.HttpProxyCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="ASP.NET Client Proxy for IntelliTrace and Test Impact">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/TestImpact/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.TestImpactDataCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Test Impact">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/TraceDebugger/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.TraceDebuggerDataCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="IntelliTrace">
+          </DataCollector>
+        </DataCollectors>
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-29T12:12:57.9003906-04:00" queuing="2012-05-29T12:13:01.2607421-04:00" start="2012-05-29T12:13:07.3710937-04:00" finish="2012-05-29T12:13:15.7919921-04:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <CollectorDataEntries>
+      <Collector agentName="JAMES-PC" uri="datacollector://microsoft/SystemInfo/1.0" collectorDisplayName="System Information">
+        <UriAttachments>
+          <UriAttachment>
+            <A href="JAMES-PC\SystemInformation.xml">System Information from JAMES-PC</A>
+          </UriAttachment>
+        </UriAttachments>
+      </Collector>
+    </CollectorDataEntries>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="WhenANewUserRegistersElasticEmailIsSent" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.users.unittests\bin\release\socialpayments.services.users.unittests.dll" id="0af67da2-aa69-eaa9-d8e2-b8b1ec26e6ee">
+      <Execution id="d0c4f9a1-d954-4253-8d5e-4a6abe518aa4" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.Users.UnitTests/bin/Release/SocialPayments.Services.Users.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.Users.UnitTests.SubmittedUserProcessorTests, SocialPayments.Services.Users.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenANewUserRegistersElasticEmailIsSent" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="0af67da2-aa69-eaa9-d8e2-b8b1ec26e6ee" executionId="d0c4f9a1-d954-4253-8d5e-4a6abe518aa4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="d0c4f9a1-d954-4253-8d5e-4a6abe518aa4" testId="0af67da2-aa69-eaa9-d8e2-b8b1ec26e6ee" testName="WhenANewUserRegistersElasticEmailIsSent" computerName="JAMES-PC" duration="00:00:03.7586268" startTime="2012-05-29T12:13:08.3310546-04:00" endTime="2012-05-29T12:13:14.5205078-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0c4f9a1-d954-4253-8d5e-4a6abe518aa4">
+      <CollectorDataEntries>
+        <Collector agentName="JAMES-PC" uri="datacollector://microsoft/SystemInfo/1.0" collectorDisplayName="System Information">
+          <UriAttachments>
+            <UriAttachment>
+              <A href="JAMES-PC\SystemInformation.xml">System Information from JAMES-PC</A>
+            </UriAttachment>
+          </UriAttachments>
+        </Collector>
+        <Collector agentName="JAMES-PC" uri="datacollector://microsoft/TestImpact/1.0" collectorDisplayName="Test Impact">
+          <UriAttachments>
+            <UriAttachment>
+              <A href="JAMES-PC\testimpact.xml">Test Impact Data</A>
+            </UriAttachment>
+          </UriAttachments>
+        </Collector>
+      </CollectorDataEntries>
+    </UnitTestResult>
+  </Results>
+</TestRun>

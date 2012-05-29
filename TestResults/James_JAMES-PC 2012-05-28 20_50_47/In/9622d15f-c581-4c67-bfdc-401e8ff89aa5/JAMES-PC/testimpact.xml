@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="WhenANewUserRegistersMicroPaymentsAreCreated" IsTestCase="false" TestCaseId="0" AutomatedTestId="9caced43-1642-359c-3127-e248e645d590">
+  <Signatures>
+    <Signature>05141DAF99F3BF250036528B9403091999BA12C4</Signature>
+    <Signature>CBD5847E79FC3EA981F7C0BC8DC9F432A6800045</Signature>
+    <Signature>C90874CBFC9D9FBC3181103B8E3500185CBA583D</Signature>
+  </Signatures>
+</Test>

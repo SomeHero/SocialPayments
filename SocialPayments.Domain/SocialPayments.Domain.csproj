@@ -150,6 +150,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountStatusType.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="BatchFile.cs" />
     <Compile Include="BatchFileStatus.cs" />
@@ -168,6 +169,8 @@
     <Compile Include="MobileNumberSignUpKey.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PaymentAccount.cs" />
+    <Compile Include="PaymentAccountVerification.cs" />
+    <Compile Include="PaymentAccountVerificationStatus.cs" />
     <Compile Include="PaymentAudit.cs" />
     <Compile Include="PaymentBatch.cs" />
     <Compile Include="PaymentAccountType.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="PaymentRequest.cs" />
     <Compile Include="PaymentRequestStatus.cs" />
     <Compile Include="PaymentStatus.cs" />
+    <Compile Include="PayPoint.cs" />
     <Compile Include="ProfileBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />

@@ -1,0 +1,13 @@
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.Services.PaymentAccounts.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.Services.PaymentAccounts.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\NLog.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.DataLayer.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.Domain.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.DomainServices.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.DataLayer.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.DomainServices.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\SocialPayments.Domain.pdb
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\bin\Release\NLog.xml
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\obj\Release\ResolveAssemblyReference.cache
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\obj\Release\SocialPayments.Services.PaymentAccounts.dll
+C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentAccounts\obj\Release\SocialPayments.Services.PaymentAccounts.pdb

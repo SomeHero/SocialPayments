@@ -9,8 +9,9 @@ namespace SocialPayments.Domain
     {
         Submitted = 0,
         PendingActivation = 1,
-        Active = 2,
+        Verified = 2,
         Disabled = 3,
-        Deleted = 4
+        Deleted = 4,
+        NeedsReVerification =5
     }
 }

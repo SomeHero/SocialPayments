@@ -43,7 +43,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                application = applicationService.GetApplication(apiKey);
+                application = applicationService.GetApplication(apiKey.ToString());
             }
             catch (Exception ex)
             {
@@ -105,17 +105,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if(apiKey == null)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application.  ApiKey could not be parsed as a GUID. {0}", id));
+                _logger.Log(LogLevel.Error, String.Format("Exception Updating Application.  ApiKey {0} could not be parsed as a GUID.", id));
 
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 message.ReasonPhrase = "Invalid ApiKey.  Cannot be parsed to GUID.";
 
                 return message;
             }
 
+            Application application = null;
+
             try
             {
-                applicationService.UpdateApplication(request.name, apiKey, request.url, request.isActive);
+                application = applicationService.GetApplication(id);
+            }
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application.  Application with the API Key {0} not found. {0}", id, ex.Message));
+
+                var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.ReasonPhrase = "Application Resource Not Found.";
+
+                return message;
+            }
+
+
+            try
+            {
+                application.IsActive = request.isActive;
+                application.ApplicationName = request.name;
+                application.Url = request.url;
+
+                applicationService.UpdateApplication(application);
             }
             catch (Exception ex)
             {

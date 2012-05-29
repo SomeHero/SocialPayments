@@ -48,20 +48,9 @@ namespace SocialPayments.DomainServices
         {
             return _ctx.EmailLog.FirstOrDefault(e => e.Id == id);
         }
-        public EmailLog UpdateEmailLog(Guid id, string fromAddress, string toAddress, string subject, string body, EmailStatus emailStatus, DateTime? sentDate)
+        public void UpdateEmailLog(EmailLog emailLog)
         {
-            var emailLog = GetEmailLog(id);
-
-            emailLog.FromEmailAddress = fromAddress;
-            emailLog.ToEmailAddress = toAddress;
-            emailLog.Body = body;
-            emailLog.Subject = subject;
-            emailLog.EmailStatus = emailStatus;
-            emailLog.SentDate = sentDate;
-
             _ctx.SaveChanges();
-
-            return emailLog;
         }
     }
 }

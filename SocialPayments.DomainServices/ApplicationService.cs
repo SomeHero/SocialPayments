@@ -38,23 +38,26 @@ namespace SocialPayments.DomainServices
         {
             return _ctx.Applications.Select(a => a).ToList<Application>();
         }
-        public Application GetApplication(Guid apiKey)
+        public Application GetApplication(string apiKey)
         {
-            return _ctx.Applications.FirstOrDefault(a => a.ApiKey.Equals(apiKey));
-        }
-        public void UpdateApplication(string applicationName, Guid apiKey, string url, bool isActive)
-        {
-            var application = GetApplication(apiKey);
+            Guid apiKeyGuid;
 
-            application.ApplicationName = applicationName;
-            application.Url = url;
-            application.IsActive = isActive;
+            Guid.TryParse(apiKey, out apiKeyGuid);
+
+            if (apiKeyGuid == null)
+                throw new ArgumentException("Invalid Application Specified. Not a Guid");
+
+            return _ctx.Applications.FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
+        }
+        public void UpdateApplication(Application application)
+        {
+            application.LastUpdatedDate = System.DateTime.Now;
 
             _ctx.SaveChanges();
         }
         public void DeleteApplication(Guid apiKey)
         {
-            var application = GetApplication(apiKey);
+            var application = GetApplication(apiKey.ToString());
 
             _ctx.Applications.Remove(application);
 

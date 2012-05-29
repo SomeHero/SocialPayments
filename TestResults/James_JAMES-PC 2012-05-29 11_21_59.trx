@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="a386a63f-189f-4a01-9ed0-fb04eda45a1f" name="James@JAMES-PC 2012-05-29 11:21:59" runUser="James-PC\James" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Trace and Test Impact" id="0f6a2b5b-2f0e-4e40-bd8f-ceb87423dee9">
+    <Description>These are test settings for Trace and Test Impact.</Description>
+    <Deployment userDeploymentRoot="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\TestResults" useDefaultDeploymentRoot="false" runDeploymentRoot="James_JAMES-PC 2012-05-29 11_21_59">
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.SubmittedMessageProcessor\bin\Release\SocialPayments.Services.SubmittedMessageProcessor.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices.UnitTests\bin\Release\SocialPayments.DomainServices.UnitTests.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DataLayer\bin\Local\SocialPayments.DataLayer.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.DomainServices\bin\Local\SocialPayments.DomainServices.dll" />
+      <DeploymentItem filename="C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Domain\bin\Local\SocialPayments.Domain.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+        <DataCollectors>
+          <DataCollector uri="datacollector://microsoft/SystemInfo/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.DataCollection.SystemInfo.SystemInfoDataCollector, Microsoft.VisualStudio.TestTools.DataCollection.SystemInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="System Information">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/ActionLog/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.ManualTest.ActionLog.ActionLogPlugin, Microsoft.VisualStudio.TestTools.ManualTest.ActionLog, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Actions">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/HttpProxy/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.HttpProxyCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="ASP.NET Client Proxy for IntelliTrace and Test Impact">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/TestImpact/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.TestImpactDataCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Test Impact">
+          </DataCollector>
+          <DataCollector uri="datacollector://microsoft/TraceDebugger/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.TraceDebuggerDataCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="IntelliTrace">
+          </DataCollector>
+        </DataCollectors>
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-29T11:21:59.0253906-04:00" queuing="2012-05-29T11:22:00.0781250-04:00" start="2012-05-29T11:22:05.1875000-04:00" finish="2012-05-29T11:25:49.7812500-04:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="1" executed="1" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="JAMES-PC" outcome="Error" timestamp="2012-05-29T11:25:49.7656250-04:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" storage="c:\users\james\documents\visual studio 2010\projects\socialpayments\socialpayments.services.messageprocessors.unittest\bin\release\socialpayments.services.messageprocessors.unittest.dll" id="d463e2d2-a104-180b-b12e-04353ae3902b">
+      <Execution id="838e437a-1ae0-4c25-a344-9bd36c4248df" />
+      <TestMethod codeBase="C:/Users/James/documents/visual studio 2010/Projects/SocialPayments/SocialPayments.Services.MessageProcessors.UnitTest/bin/Release/SocialPayments.Services.MessageProcessors.UnitTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="SocialPayments.Services.MessageProcessors.UnitTest.SumittedPaymentMessageProcessor, SocialPayments.Services.MessageProcessors.UnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="d463e2d2-a104-180b-b12e-04353ae3902b" executionId="838e437a-1ae0-4c25-a344-9bd36c4248df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="838e437a-1ae0-4c25-a344-9bd36c4248df" testId="d463e2d2-a104-180b-b12e-04353ae3902b" testName="WhenPendingPaymentMessageWithEmailAddressRecipientUriProcessedWithUnknownRecipientOneTransactionIsCreated" computerName="JAMES-PC" duration="00:03:44.2343750" startTime="2012-05-29T11:22:05.5468750-04:00" endTime="2012-05-29T11:25:49.7812500-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="838e437a-1ae0-4c25-a344-9bd36c4248df">
+      <DataCollectorMessages>
+        <DataCollectorMessage timestamp="2012-05-29T11:22:13.5468750-04:00" dataCollectorUri="datacollector://microsoft/HttpProxy/1.0" dataCollectorFriendlyName="ASP.NET Client Proxy for IntelliTrace and Test Impact" agentName="JAMES-PC" level="Warning">
+          <Text>An error occurred while processing a web request: PRXY0027: Unable to connect to the server described by the URI: api.elasticemail.com:443. No connection could be made because the target machine actively refused it 127.0.0.1:8888</Text>
+        </DataCollectorMessage>
+      </DataCollectorMessages>
+    </UnitTestResult>
+  </Results>
+</TestRun>

@@ -26,10 +26,15 @@ namespace SocialPayments.RestServices.Internal.Models
             public String senderUri { get; set; }
             public String senderAccountId { get; set; }
             public String recipientUri { get; set; }
+            public String securityPin { get; set; }
             public Double amount { get; set; }
             public String comments { get; set; }
             public String messageType { get; set; }
         }
+        public class AcceptPaymentRequestModel
+        {
+        }
+
         public class UpdateMessageRequest {
             public String Id { get; set; }
             public String senderUri { get; set; }

@@ -89,15 +89,17 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenUpdatingNameApplicationNameIsChanged()
         {
             string apiKey = "bda11d91-7ade-4da1-855d-24adfe39d174";
-            string applicationName = "Updated Application Name";
+            string applicationName = "Application Name";
+            string updatedApplicationName = "Update Application Name";
             bool isActive = true;
             string url = "http://www.test.com";
 
-            _applicationService.UpdateApplication(applicationName, Guid.Parse(apiKey), url, isActive);
+            var application = _applicationService.AddApplication(applicationName, url, isActive);
 
-            var app = _ctx.Applications.FirstOrDefault(a => a.ApiKey == Guid.Parse(apiKey));
+            application.ApplicationName = updatedApplicationName;
+            _applicationService.UpdateApplication(application);
 
-            Assert.AreEqual(applicationName, app.ApplicationName);
+            Assert.AreEqual(updatedApplicationName, application.ApplicationName);
 
         }
     }

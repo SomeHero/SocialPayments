@@ -33,33 +33,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Received request for Registration SignUp Key"));
 
-            Guid signUpKeyGuid;
+            DomainServices.UserService userService = new DomainServices.UserService();
+
             var signUpKey = request.inboundSMSMessageNotification.inboundSMSMessage.message;
             var mobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress);
 
             _logger.Log(LogLevel.Info, String.Format("Request details Mobile Number {0}; SignUp Key {1}", mobileNumber, signUpKey));
 
-            Guid.TryParse(signUpKey, out signUpKeyGuid);
+            Domain.User user;
 
-            if (signUpKeyGuid == null)
+            try
             {
-                _logger.Log(LogLevel.Warn, String.Format("Unable to parse Guid {0}", signUpKey));
-
-                return HttpStatusCode.BadRequest;
+                user = userService.GetUserById(signUpKey);
             }
-
-            var user = _ctx.Users.FirstOrDefault(u => u.UserId.Equals(signUpKeyGuid));
-
-            if (user == null)
+            catch (Exception ex)
             {
-                _logger.Log(LogLevel.Warn, String.Format("Unable to find user {0}", signUpKey));
+                _logger.Log(LogLevel.Warn, String.Format("Exception Process Registration SMS Signup for user {0}. {1}", signUpKey, ex.Message));
 
                 return HttpStatusCode.BadRequest;
             }
 
             user.MobileNumber = mobileNumber;
-
-            _ctx.SaveChanges();
+            userService.UpdateUser(user);
 
             return HttpStatusCode.OK;
         }

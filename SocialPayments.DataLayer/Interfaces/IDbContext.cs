@@ -24,6 +24,7 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<BetaSignup> BetaSignUps { get; set; }
         IDbSet<MobileNumberSignUpKey> MobileNumberSignUpKeys { get; set; }
         IDbSet<MECode> MECodes { get; set; }
+        IDbSet<PaymentAccountVerification> PaymentAccountVerifications { get; set; }
 
         void SaveChanges();
     }

@@ -42,19 +42,9 @@ namespace SocialPayments.DomainServices
         {
             return _ctx.SMSLog.FirstOrDefault(s => s.Id == id);
         }
-        public SMSLog UpdateSMSLog(Guid id, string mobileNumber, string message, Domain.SMSStatus smsStatus, DateTime? sentDate)
+        public void UpdateSMSLog(SMSLog smsLog)
         {
-            var smsLog = GetSMSLog(id);
-
-            smsLog.MobileNumber = mobileNumber;
-            smsLog.Message = message;
-            smsLog.SMSStatus = smsStatus;
-            smsLog.SentDate = sentDate;
-            smsLog.LastUpdatedDate = System.DateTime.Now;
-
             _ctx.SaveChanges();
-
-            return smsLog;
         }
     }
 }

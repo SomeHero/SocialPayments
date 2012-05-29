@@ -8,6 +8,7 @@ namespace SocialPayments.Domain
     public enum TransactionCategory
     {
         Payment = 1,
-        Fee = 2
+        Fee = 2,
+        AccountVerification = 3
     }
 }

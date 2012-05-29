@@ -36,9 +36,9 @@ namespace SocialPayments.DomainServices
         public string FormatMobileNumber(string mobileNumber)
         {
             _logger.Log(LogLevel.Info, String.Format("Formatting Mobile Number {0}", mobileNumber));
-            string tempMobileNumber = mobileNumber;
+            string tempMobileNumber = digitsOnly.Replace(mobileNumber, "");
 
-            if (tempMobileNumber[0] == 1)
+            if (tempMobileNumber[0] == '1')
                 tempMobileNumber = tempMobileNumber.Substring(1, tempMobileNumber.Length - 1);
 
             tempMobileNumber = tempMobileNumber.Replace("-", "");

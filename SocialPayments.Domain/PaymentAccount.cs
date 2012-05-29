@@ -21,9 +21,9 @@ namespace SocialPayments.Domain
             set { PaymentAccountTypeId = (int)value; }
         }
         public bool IsActive { get; set; }
-       // public int AccountStatusValue { get; set; }
-       // [ForeignKey("AccountStatusValue")]
-       // public AccountStatusType AccountStatus { get; set; }
+       public int AccountStatusValue { get; set; }
+       [ForeignKey("AccountStatusValue")]
+       public AccountStatusType AccountStatus { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
     }

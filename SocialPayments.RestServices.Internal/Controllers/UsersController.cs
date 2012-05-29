@@ -13,6 +13,7 @@ using Amazon.SimpleNotificationService.Model;
 using System.Configuration;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -22,7 +23,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.SecurityService securityService = new DomainServices.SecurityService();
         private DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-
+        private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+       
         // GET /api/user
         public IEnumerable<string> Get()
         {
@@ -193,23 +195,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return message;
             }
 
-            try
-            {
-                _logger.Log(LogLevel.Error, string.Format("Calling Amazon SNS."));
-
-                AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
-
-                client.Publish(new PublishRequest()
-                {
-                    Message = user.UserId.ToString(),
-                    TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
-                    Subject = "New User Registration"
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Fatal, string.Format("Call Amazon SNS. Exception {0}.", ex.Message));
-            }
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "New User Account Created", user.UserId.ToString());
 
             var responseMessage = new UserModels.SubmitUserResponse()
             {
