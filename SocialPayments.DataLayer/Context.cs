@@ -207,7 +207,8 @@ namespace SocialPayments.DataLayer
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                 ApplicationName = "MyApp",
                 IsActive = true,
-                Url = "myurl.com"
+                Url = "myurl.com",
+                CreateDate = System.DateTime.Now
             });
             context.SaveChanges();
 
@@ -263,21 +264,24 @@ namespace SocialPayments.DataLayer
                     adminRole
                 }
             });
-            context.Users.Add(new User()
+            var james = context.Users.Add(new User()
             {
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                 UserId = Guid.NewGuid(),
                 EmailAddress = "james@paidthx.com",
-                MobileNumber = "",
+                MobileNumber = "8043879693",
                 UserName = "james@paidthx.com",
                 Password = securityService.Encrypt("james123"),
                 SecurityPin = securityService.Encrypt("2589"),
+                SetupPassword = true,
+                SetupSecurityPin = true,
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
                 UserStatus = UserStatus.Verified,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
+                Limit = 100,
                 Roles = new Collection<Role>()
                 {
                     adminRole,
@@ -297,6 +301,56 @@ namespace SocialPayments.DataLayer
                     }
                 }
             });
+
+            var other = context.Users.Add(new User()
+            {
+                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                UserId = Guid.NewGuid(),
+                EmailAddress = "james@pdthx.me",
+                MobileNumber = "8043550001",
+                UserName = "james@pdthx.me",
+                Password = securityService.Encrypt("james123"),
+                SecurityPin = securityService.Encrypt("2589"),
+                SetupPassword = true,
+                SetupSecurityPin = true,
+                IsLockedOut = false,
+                CreateDate = System.DateTime.Now,
+                LastLoggedIn = System.DateTime.Now,
+                UserStatus = UserStatus.Verified,
+                IsConfirmed = true,
+                RegistrationMethod = UserRegistrationMethod.Test,
+                Limit = 100,
+                Roles = new Collection<Role>()
+                {
+                    adminRole,
+                    memberRole
+                },
+                UserAttributes = new Collection<UserAttributeValue>()
+                {
+                    new UserAttributeValue() {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = firstNameUserAttribute.Id,
+                        AttributeValue = "James"
+                    },
+                    new UserAttributeValue() {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = lastNameUserAttribute.Id,
+                        AttributeValue = "Rhodes"
+                    }
+                }
+            });
+
+            var meCode = context.MECodes.Add(new MECode()
+            {
+                ApprovedDate = System.DateTime.Now,
+                CreateDate = System.DateTime.Now,
+                Id = Guid.NewGuid(),
+                IsActive = true,
+                IsApproved = true,
+                MeCode = "$therealjamesrhodes",
+                User = other
+            });
+
             context.SaveChanges();
 
             var user = context.Users.FirstOrDefault(u => u.EmailAddress == "test@gmail.com");

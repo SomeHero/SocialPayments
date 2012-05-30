@@ -1,8 +1,0 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\bin\Debug\SMSListener.Tests.dll.config
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\bin\Debug\SMSListener.Tests.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\bin\Debug\SMSListener.Tests.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\bin\Debug\SMSListener.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\bin\Debug\SMSListener.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\obj\Debug\SMSListener.Tests.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SMSListener.Tests\obj\Debug\SMSListener.Tests.pdb

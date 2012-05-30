@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="WhenAddingToSMSLogSMSLogIsAdded" IsTestCase="false" TestCaseId="0" AutomatedTestId="ee83915d-90eb-6ce4-3ecd-c9a8afec792a">
-  <Signatures>
-    <Signature>22B0133F1B511C70B5C4B8483C053D3390B4D280</Signature>
-    <Signature>052A72BD786AEF1A63749F3DBCB52A74B0358583</Signature>
-    <Signature>FA38932A1060003E391A4261D2B132F091CB4685</Signature>
-  </Signatures>
-</Test>

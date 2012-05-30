@@ -20,9 +20,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class PaystreamMessagesController : ApiController
     {
-        private IDbContext _ctx = new Context();
+        private static IDbContext _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private static DomainServices.MessageServices _messageServices;
+        private static DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
         private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
         private DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
         
@@ -54,6 +54,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderUri, request.recipientUri, ex.Message));
+
                 responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 responseMessage.ReasonPhrase = ex.Message;
 

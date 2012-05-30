@@ -15,10 +15,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
     {
         private Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
+
             var user = GetUser(userId);
 
             if (user == null)
@@ -34,23 +37,45 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 .OrderByDescending(m => m.CreateDate)
                 .ToList<Message>();
 
-            List<MessageModels.MessageResponse> messageResponse = null;
+            List<MessageModels.MessageResponse> messageResponse = new List<MessageModels.MessageResponse>();
+
+            URIType senderUriType = URIType.MECode;
+            URIType recipientUriType = URIType.MECode;
 
             try
             {
-
-                messageResponse = messages.Select(m => new MessageModels.MessageResponse()
+                foreach (var message in messages)
                 {
-                    amount = m.Amount,
-                    comments = m.Comments,
-                    createDate = m.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                    Id = m.Id,
-                    //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                    messageStatus = m.MessageStatus.ToString(),
-                    messageType = m.MessageType.ToString(),
-                    recipientUri = m.RecipientUri,
-                    senderUri = m.SenderUri
-                }).ToList();
+                    senderUriType = URIType.MECode;
+                    recipientUriType = URIType.MECode;
+                    
+                    senderUriType = messageServices.GetURIType(message.SenderUri);
+                    recipientUriType = messageServices.GetURIType(message.RecipientUri);
+
+                    _logger.Log(LogLevel.Error, String.Format("URI Formats {0} {1}", senderUriType, recipientUriType));
+
+                    String direction = "In";
+
+                    if (message.SenderId.Equals(user.UserId))
+                        direction = "Out";
+
+                    messageResponse.Add(new MessageModels.MessageResponse()
+                    {
+                        amount = message.Amount,
+                        comments = message.Comments,
+                        createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                        Id = message.Id,
+                        //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                        messageStatus = message.MessageStatus.ToString(),
+                        messageType = message.MessageType.ToString(),
+                        recipientUri = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri),
+                        senderUri = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri),
+                        direction = direction
+                    });
+
+                    _logger.Log(LogLevel.Error, String.Format("Added MEssage {0} {1}", senderUriType, recipientUriType));
+
+                }
             }
             catch (Exception ex)
             {

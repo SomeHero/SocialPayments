@@ -20,6 +20,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public String lastUpdatedDate { get; set; }
             public String messageType { get; set; }
             public String messageStatus { get; set; }
+            public String direction { get; set; }
         }
         public class SubmitMessageRequest {
             public string apiKey { get; set; }

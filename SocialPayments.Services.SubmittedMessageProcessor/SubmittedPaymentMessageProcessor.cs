@@ -168,7 +168,7 @@ namespace SocialPayments.Services.MessageProcessors
             //rec_amount
             //rec_sender
             //rec_sender_photo_url
-            //rec_datetime formatted DayOfWeek, MM dd(rd) at hh:mm:tt
+            //rec_datetime formatted dddd, MMMM dd(rd) at hh:mm tt
             //rec_comments
             //app_user
             //link_registration - empty
@@ -179,9 +179,10 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
                         new KeyValuePair<string, string>("rec_sender", senderName),
                         new KeyValuePair<string, string>("rec_sender_photo_url", ""),
-                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
+                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("dddd, MMMM dd at hh:mm tt")),
                         new KeyValuePair<string, string>("rec_comments", message.Comments),
-                        new KeyValuePair<string, string>("link_registration", "")
+                        new KeyValuePair<string, string>("link_registration", ""),
+                        new KeyValuePair<string, string>("app_user", "false")
                     });
                 }
                 if (recipient.DeviceToken.Length > 0)
@@ -315,7 +316,8 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("rec_sender_photo_url", ""),
                         new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
                         new KeyValuePair<string, string>("rec_comments", message.Comments),
-                        new KeyValuePair<string, string>("link_registration", link)
+                        new KeyValuePair<string, string>("link_registration", link),
+                        new KeyValuePair<string, string>("app_user", "false")
                     });
                 }
 

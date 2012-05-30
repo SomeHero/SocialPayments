@@ -64,7 +64,7 @@ namespace SocialPayments.DomainServices
             if (messageType.ToUpper() == "PAYMENT")
                 type = MessageType.Payment;
 
-            if (messageType == "PAYMENTREQUEST")
+            if (messageType.ToUpper() == "PAYMENTREQUEST")
                 type = MessageType.PaymentRequest;
 
             try
@@ -82,6 +82,7 @@ namespace SocialPayments.DomainServices
             {
                 var message = String.Format("Invalid Security Pin");
                 _logger.Log(LogLevel.Info, message);
+                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, securityPin));
 
                 throw new Exception(message);
             }
@@ -137,7 +138,7 @@ namespace SocialPayments.DomainServices
                 
                 _logger.Log(LogLevel.Debug, String.Format("Exception getting application {0}. {1}", apiKey, message));
 
-                throw new ArgumentException(message);
+                throw new InvalidOperationException(message);
             }
 
             if (recipientUriType == URIType.MECode)
@@ -146,7 +147,7 @@ namespace SocialPayments.DomainServices
                      .FirstOrDefault(m => m.MeCode.Equals(recipientUri));
 
                 if (meCode == null)
-                    throw new ArgumentException("MECode not found.", "recipientUri");
+                    throw new ArgumentException("MECode not found.");
             }
 
             //TODO: confirm recipient is valid???

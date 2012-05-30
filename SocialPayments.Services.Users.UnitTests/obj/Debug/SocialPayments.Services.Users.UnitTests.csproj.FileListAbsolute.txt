@@ -6,14 +6,12 @@ C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPaymen
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DomainServices.UnitTests.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.Services.UserProcessors.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\NLog.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DomainServices_Accessor.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DataLayer.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DomainServices.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.Domain.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DomainServices.UnitTests.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.Services.UserProcessors.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\NLog.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\bin\Debug\SocialPayments.DomainServices_Accessor.pdb
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\obj\Debug\SocialPayments.Services.Users.UnitTests.dll
 C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.Users.UnitTests\obj\Debug\SocialPayments.Services.Users.UnitTests.pdb
