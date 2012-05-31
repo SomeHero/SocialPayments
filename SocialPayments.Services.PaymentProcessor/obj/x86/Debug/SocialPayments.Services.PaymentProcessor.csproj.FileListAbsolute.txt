@@ -1,5 +1,0 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentProcessor\bin\Debug\SocialPayments.Services.PaymentProcessor.exe
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentProcessor\bin\Debug\SocialPayments.Services.PaymentProcessor.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentProcessor\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentProcessor\obj\x86\Debug\SocialPayments.Services.PaymentProcessor.exe
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Services.PaymentProcessor\obj\x86\Debug\SocialPayments.Services.PaymentProcessor.pdb

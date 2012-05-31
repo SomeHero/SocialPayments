@@ -1,1 +1,0 @@
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.BatchFileServices.NachaBatchFile\obj\Release\ResolveAssemblyReference.cache

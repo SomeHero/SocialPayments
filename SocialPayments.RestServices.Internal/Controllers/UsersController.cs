@@ -210,6 +210,36 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
 
         }
+        [HttpPost]
+        public HttpResponseMessage ChangeSecurityPin(string id, UserModels.ChangeSecurityPinRequest request)
+        {
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            var user = userService.GetUserById(id);
+
+            if (!securityService.Decrypt(user.SecurityPin).Equals(request.currentSecurityPin))
+            {
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = "Security Pin doesn't match";
+                return message;
+            }
+            if (request.newSecurityPin.Length < 4)
+            {
+                var error = @"Invalid Security Pin";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+
+            user.SecurityPin = securityService.Encrypt(request.newSecurityPin);
+            userService.UpdateUser(user);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
 
         //POST /api/users/{userId}/setup_securitypin
         public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)

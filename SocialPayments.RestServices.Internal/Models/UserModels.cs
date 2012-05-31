@@ -53,6 +53,11 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string securityPin { get; set; }
         }
+        public class ChangeSecurityPinRequest
+        {
+            public string currentSecurityPin { get; set; }
+            public string newSecurityPin { get; set; }
+        }
         public class UpdateUserRequest
         {
 
