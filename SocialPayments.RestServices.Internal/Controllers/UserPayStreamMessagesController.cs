@@ -42,6 +42,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             URIType senderUriType = URIType.MECode;
             URIType recipientUriType = URIType.MECode;
 
+            string senderName = "";
+            string recipientName = "";
+
             try
             {
                 foreach (var message in messages)
@@ -51,6 +54,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     
                     senderUriType = messageServices.GetURIType(message.SenderUri);
                     recipientUriType = messageServices.GetURIType(message.RecipientUri);
+
+                    if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
+                        senderName = message.Sender.FirstName + " " + message.Sender.LastName;
+                    else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
+                        senderName = message.senderFirstName + " " + message.Sender.LastName;
+                    else
+                        senderName = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
+
+                    if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
+                        recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
+                    else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
+                        recipientName = message.recipientFirstName + " " + message.recipientLastName;
+                    else
+                        recipientName = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
 
                     _logger.Log(LogLevel.Error, String.Format("URI Formats {0} {1}", senderUriType, recipientUriType));
 
@@ -70,7 +87,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         messageType = message.MessageType.ToString(),
                         recipientUri = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri),
                         senderUri = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri),
-                        direction = direction
+                        direction = direction,
+                        latitude = message.Latitude,
+                        longitutde = message.Longitude,
+                        senderName = senderName,
+                        senderImageUri = message.senderImageUri,
+                        recipientName = recipientName,
+                        recipientImageUri = message.recipientImageUri
                     });
 
                     _logger.Log(LogLevel.Error, String.Format("Added MEssage {0} {1}", senderUriType, recipientUriType));

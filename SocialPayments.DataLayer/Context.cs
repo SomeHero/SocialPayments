@@ -299,7 +299,20 @@ namespace SocialPayments.DataLayer
                         UserAttributeId = lastNameUserAttribute.Id,
                         AttributeValue = "Rhodes"
                     }
-                }
+                },
+                FirstName = "James",
+                LastName = "Rhodes",
+                PaymentAccounts = new Collection<PaymentAccount>() {
+                    new PaymentAccount() { 
+                        Id=Guid.NewGuid(), 
+                        AccountNumber = securityService.Encrypt("411111111111"), 
+                        AccountType = PaymentAccountType.Checking, 
+                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                        RoutingNumber= securityService.Encrypt("053000219"),
+                        CreateDate = System.DateTime.Now,
+                        IsActive = true
+                    }
+                },
             });
 
             var other = context.Users.Add(new User()

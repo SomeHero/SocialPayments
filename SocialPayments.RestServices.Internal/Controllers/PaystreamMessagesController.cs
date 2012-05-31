@@ -24,8 +24,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private static DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
         private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-        private DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
-        
+        private static DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
+        private static DomainServices.TransactionBatchService _transactionBatchService =
+            new DomainServices.TransactionBatchService(_ctx, _logger);
+
         // GET /api/paystreammessage
         public IEnumerable<string> Get()
         {
@@ -41,7 +43,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/messages
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
-           _logger.Log(LogLevel.Info,String.Format("{0} - New Message Posted {1} {2}", request.apiKey, request.senderUri, request.recipientUri));
+           _logger.Log(LogLevel.Info,String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderUri, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
            Domain.Message message = null;
            HttpResponseMessage responseMessage;
@@ -49,7 +51,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
            try {
 
                message = _messageServices.AddMessage(request.apiKey, request.senderUri, request.recipientUri, request.senderAccountId,
-                   request.amount, request.comments, request.messageType, request.securityPin);
+                   request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
+                  request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
                 
             }
             catch (Exception ex)
@@ -85,6 +88,22 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/paystreammessages/{id}/accept_request
         public HttpResponseMessage AcceptPaymentRequest(string id, MessageModels.AcceptPaymentRequestModel request)
         {
+            Domain.Message message;
+
+            try
+            {
+                message = _messageServices.GetMessage(id);
+            }
+            catch (Exception ex)
+            {
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = ex.Message;
+
+                return responseMessage;
+            }
+
+            _transactionBatchService.BatchTransactions(message);
+
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/reject_request

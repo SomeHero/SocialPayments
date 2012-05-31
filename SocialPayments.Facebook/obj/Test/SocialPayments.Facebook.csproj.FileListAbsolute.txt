@@ -1,7 +1,0 @@
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\SocialPayments.Facebook.pdb
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\System.Web.Helpers.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\bin\System.Web.Helpers.xml
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\obj\Test\ResolveAssemblyReference.cache
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\obj\Test\SocialPayments.Facebook.dll
-C:\Users\James\documents\visual studio 2010\Projects\SocialPayments\SocialPayments.Facebook\obj\Test\SocialPayments.Facebook.pdb

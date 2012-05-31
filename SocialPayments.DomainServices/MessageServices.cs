@@ -45,6 +45,12 @@ namespace SocialPayments.DomainServices
         public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin)
         {
+            return AddMessage(apiKey, senderUri, recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
+                "", "", "");
+        }
+        public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
+            string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        {
             User sender = null;
 
             URIType recipientUriType = GetURIType(recipientUri);
@@ -141,6 +147,7 @@ namespace SocialPayments.DomainServices
                 throw new InvalidOperationException(message);
             }
 
+            Domain.User recipient = null;
             if (recipientUriType == URIType.MECode)
             {
                 var meCode = _context.MECodes
@@ -148,8 +155,16 @@ namespace SocialPayments.DomainServices
 
                 if (meCode == null)
                     throw new ArgumentException("MECode not found.");
+
+                recipient = meCode.User;
             }
 
+            if(recipientUriType == URIType.EmailAddress)
+                recipient = _userServices.FindUserByEmailAddress(recipientUri);
+            if(recipientUriType == URIType.MobileNumber)
+                recipient = _userServices.FindUserByMobileNumber(recipientUri);
+            if(recipientUriType == URIType.FacebookAccount)
+                recipient = _userServices.GetUser(recipientUri);
             //TODO: confirm recipient is valid???
 
             //TODO: confirm amount is within payment limits
@@ -178,7 +193,12 @@ namespace SocialPayments.DomainServices
                      Sender = sender,
                      SenderId = sender.UserId,
                      SenderAccount = senderAccount,
-                     SenderAccountId = senderAccount.Id
+                     SenderAccountId = senderAccount.Id,
+                     Latitude = latitude,
+                     Longitude = longitude,
+                     recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
+                     recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
+                     recipientImageUri = recipientImageUri
                  });
 
                 _context.SaveChanges();
@@ -252,6 +272,24 @@ namespace SocialPayments.DomainServices
             return null;
 
         }
-   
+
+
+        public Domain.Message GetMessage(string id)
+        {
+            Guid messageId;
+
+            Guid.TryParse(id, out messageId);
+
+            if (messageId == null)
+                throw new Exception("Invalid Message Id");
+
+            var message = _context.Messages
+                .FirstOrDefault(m => m.Id == messageId);
+
+            if (message == null)
+                throw new Exception("Invalid Message Id.");
+
+            return message;
+        }
     }
 }

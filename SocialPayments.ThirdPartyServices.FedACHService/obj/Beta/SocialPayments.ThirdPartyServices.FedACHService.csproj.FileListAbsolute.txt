@@ -1,5 +1,0 @@
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.ThirdPartyServices.FedACHService\bin\Beta\SocialPayments.ThirdPartyServices.FedACHService.dll
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.ThirdPartyServices.FedACHService\bin\Beta\SocialPayments.ThirdPartyServices.FedACHService.pdb
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.ThirdPartyServices.FedACHService\obj\Beta\ResolveAssemblyReference.cache
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.ThirdPartyServices.FedACHService\obj\Beta\SocialPayments.ThirdPartyServices.FedACHService.dll
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.ThirdPartyServices.FedACHService\obj\Beta\SocialPayments.ThirdPartyServices.FedACHService.pdb

@@ -1,5 +1,0 @@
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.BatchFiles\bin\Beta\SocialPayments.WorkflowServices.BatchFiles.dll
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.BatchFiles\bin\Beta\SocialPayments.WorkflowServices.BatchFiles.pdb
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.BatchFiles\obj\Beta\ResolveAssemblyReference.cache
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.BatchFiles\obj\Beta\SocialPayments.WorkflowServices.BatchFiles.dll
-C:\Users\James\Documents\Visual Studio 2010\Projects\SocialPayments\SocialPayments.WorkflowServices.BatchFiles\obj\Beta\SocialPayments.WorkflowServices.BatchFiles.pdb

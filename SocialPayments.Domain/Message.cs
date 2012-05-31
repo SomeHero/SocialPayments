@@ -42,5 +42,13 @@ namespace SocialPayments.Domain
         }
 
         public virtual Collection<Transaction> Transactions { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string senderFirstName { get; set; }
+        public string senderLastName { get; set; }
+        public string senderImageUri { get; set; }
+        public string recipientFirstName { get; set; }
+        public string recipientLastName { get; set; }
+        public string recipientImageUri { get; set; }
     }
 }
