@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.WindowsServi
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SocialPayments.Installers.NachaBatchFileService", "SocialPayments.Installers.NachaBatchFileService\SocialPayments.Installers.NachaBatchFileService.vdproj", "{B60C949D-332D-47A7-9C70-06D752605D9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.Test", "SocialPayments.Test\SocialPayments.Test.csproj", "{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.UI.Controls", "SocialPayments.UI.Controls\SocialPayments.UI.Controls.csproj", "{DF435856-BFEE-4A5A-8D76-F2E611969944}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.Providers", "SocialPayments.Providers\SocialPayments.Providers.csproj", "{86E68734-1E7C-4A3C-94FF-61951A5DF68A}"
@@ -298,35 +296,6 @@ Global
 		{B60C949D-332D-47A7-9C70-06D752605D9B}.Test|Mixed Platforms.Build.0 = Test
 		{B60C949D-332D-47A7-9C70-06D752605D9B}.Test|x86.ActiveCfg = Test
 		{B60C949D-332D-47A7-9C70-06D752605D9B}.Test|x86.Build.0 = Test
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Beta|Any CPU.ActiveCfg = Beta|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Beta|Mixed Platforms.ActiveCfg = Beta|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Beta|Mixed Platforms.Build.0 = Beta|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Beta|x86.ActiveCfg = Beta|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Beta|x86.Build.0 = Beta|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Debug|x86.ActiveCfg = Debug|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Debug|x86.Build.0 = Debug|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Dev|Any CPU.ActiveCfg = Dev|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Dev|Mixed Platforms.ActiveCfg = Dev|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Dev|Mixed Platforms.Build.0 = Dev|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Dev|x86.ActiveCfg = Dev|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Dev|x86.Build.0 = Dev|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Local|Any CPU.ActiveCfg = Local|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Local|Mixed Platforms.ActiveCfg = Local|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Local|Mixed Platforms.Build.0 = Local|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Local|x86.ActiveCfg = Local|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Local|x86.Build.0 = Local|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Release|Any CPU.ActiveCfg = Release|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Release|Mixed Platforms.Build.0 = Release|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Release|x86.ActiveCfg = Release|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Release|x86.Build.0 = Release|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Test|Any CPU.ActiveCfg = Test|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Test|Mixed Platforms.ActiveCfg = Test|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Test|Mixed Platforms.Build.0 = Test|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Test|x86.ActiveCfg = Test|x86
-		{577EEA6E-A343-4DF1-95F3-CA862A7F4CF9}.Test|x86.Build.0 = Test|x86
 		{DF435856-BFEE-4A5A-8D76-F2E611969944}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
 		{DF435856-BFEE-4A5A-8D76-F2E611969944}.Beta|Any CPU.Build.0 = Beta|Any CPU
 		{DF435856-BFEE-4A5A-8D76-F2E611969944}.Beta|Mixed Platforms.ActiveCfg = Beta|Any CPU
