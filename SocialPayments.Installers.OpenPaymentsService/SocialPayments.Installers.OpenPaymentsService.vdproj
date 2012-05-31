@@ -45,31 +45,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
+        "MsmKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "OwnerKey" = "8:_CA8C43F02DFB47FD91538427F5EF20CD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
+        "MsmKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "OwnerKey" = "8:_3D3CE1E9E9D77F851466BDF54962C537"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
+        "MsmKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "OwnerKey" = "8:_7204BCF7E5E58DAF3EC4A4B2AD346FFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
+        "MsmKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "OwnerKey" = "8:_643B49E63B9BDB4D8668A66CDAAE065F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
+        "MsmKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "OwnerKey" = "8:_D656975BB5ABDBDEB62BE478DBE098FC"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -178,7 +178,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BD66140FA3316FC484C79BB30786FF09"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_3D3CE1E9E9D77F851466BDF54962C537"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E29CD17285316E3749ABB6C451454319"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F316BF6EAAEE6F5C9775D0176DE32BFA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -202,31 +220,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BD66140FA3316FC484C79BB30786FF09"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E29CD17285316E3749ABB6C451454319"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F316BF6EAAEE6F5C9775D0176DE32BFA"
+        "OwnerKey" = "8:_57F34253C2A59932F31322E0CE10FB19"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_34D5AA2C42F29B76480A8EF4DDF03D13"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_55BE8E268679391FCDF6EEA31BEA52B8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -600,14 +600,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_55BE8E268679391FCDF6EEA31BEA52B8"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_57F34253C2A59932F31322E0CE10FB19"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_55BE8E268679391FCDF6EEA31BEA52B8"
+                    "_57F34253C2A59932F31322E0CE10FB19"
                     {
                     "Name" = "8:EntityFramework.dll"
                     "Attributes" = "3:512"
@@ -874,7 +874,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SocialPayments.Installers.OpenPaymentsService"
         "ProductCode" = "8:{4CE27D59-B125-4458-84FD-067A4C00A2F7}"
-        "PackageCode" = "8:{C0767A24-0E73-4007-A788-A7DECDA8D3F5}"
+        "PackageCode" = "8:{2135297B-86A9-43A8-A987-62DCFBD8E97D}"
         "UpgradeCode" = "8:{2D57B9DD-091A-4EE1-883F-1A68C22D1951}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

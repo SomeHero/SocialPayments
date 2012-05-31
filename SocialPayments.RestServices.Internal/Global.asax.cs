@@ -35,6 +35,12 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+            name: "ChangeSecurityPin",
+            routeTemplate: "api/users/{id}/change_securitypin",
+            defaults: new { controller = "Users", action = "ChangeSecurityPin" }
+            );
+
+            routes.MapHttpRoute(
                 name: "SignInWithFacebook",
                 routeTemplate: "api/users/signin_withfacebook",
                 defaults: new { controller = "Users", action = "SignInWithFacebook" }
