@@ -17,14 +17,6 @@ using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.Services.MessageProcessors
 {
-    public enum URIType
-    {
-        MobileNumber,
-        EmailAddress,
-        MECode,
-        FacebookAccount
-    }
-
     public class SubmittedPaymentMessageProcessor : IMessageProcessor.IMessageProcessor
     {
         private IDbContext _ctx;
@@ -36,6 +28,7 @@ namespace SocialPayments.Services.MessageProcessors
         private UserService _userService;
         private SMSService _smsService;
         private IEmailService _emailService;
+        private MessageServices _messageService;
 
         private string _recipientSMSMessage = "{1} just sent you {0:C} using PaidThx.  The payment has been submitted for processing. Go to {2}.";
         private string _senderSMSMessage = "Your payment in the amount {0:C} was delivered to {1}.  The payment has been submitted for processing. Go to {2}";
@@ -77,16 +70,12 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
+            _messageService = new MessageServices(_ctx);
 
             string fromAddress = "jrhodes2705@gmail.com";
-            URIType recipientType = URIType.MobileNumber;
+            URIType recipientType = _messageService.GetURIType(message.RecipientUri);
 
             _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0}", message.RecipientUri));
-            
-            if (_validationService.IsEmailAddress(message.RecipientUri))
-                recipientType = URIType.EmailAddress;
-            else if (_validationService.IsMECode(message.RecipientUri))
-                recipientType = URIType.MECode;
 
             _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
             
@@ -97,8 +86,8 @@ namespace SocialPayments.Services.MessageProcessors
             var sender = message.Sender;
             var recipient = _userService.GetUser(message.RecipientUri);
             message.Recipient = recipient;
-            
-            var senderName = String.IsNullOrEmpty(sender.SenderName) ? _formattingService.FormatMobileNumber(sender.MobileNumber) : sender.SenderName;
+
+            var senderName = _userService.GetSenderName(sender);
             var recipientName = message.RecipientUri;
             //check to see if recipient uri is mobile #, email address, or ME code
 
@@ -153,7 +142,7 @@ namespace SocialPayments.Services.MessageProcessors
                     emailSubject = String.Format(_senderConfirmationEmailSubject, recipientName);
                     emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, _mobileWebSiteUrl);
 
-                    _emailService.SendEmail(message.ApiKey, fromAddress, recipient.EmailAddress, emailSubject, emailBody);
+                    _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
                 }
                 //Send confirmation email to recipient
                 if (!String.IsNullOrEmpty(recipient.EmailAddress))

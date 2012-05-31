@@ -286,6 +286,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             User user;
             var isValid = userService.ValidateUser(request.userName, request.password, out user);
 
+            bool hasACHAccount = false;
+            if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
+                hasACHAccount = true;
+
             if (isValid){
                 var message = new UserModels.ValidateUserResponse()
                 {
@@ -293,7 +297,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     mobileNumber = user.MobileNumber,
                     paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
                     setupSecurityPin = user.SetupSecurityPin,
-                    upperLimit = Convert.ToInt32(user.Limit)
+                    upperLimit = Convert.ToInt32(user.Limit),
+                    hasACHAccount = hasACHAccount,
+                    hasSecurityPin = user.SetupSecurityPin
                 };
 
                 return new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
@@ -305,6 +311,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/signin_withfacebook
         public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", request.deviceToken));
+
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
        
             Domain.User user = null;
@@ -332,7 +340,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var response = new UserModels.FacebookSignInResponse() {
                 hasACHAccount = hasACHAccount,
                 hasSecurityPin = user.SetupSecurityPin,
-                userId = user.UserId.ToString()
+                userId = user.UserId.ToString(),
+                mobileNumber = (!String.IsNullOrEmpty(user.MobileNumber) ? user.MobileNumber : ""),
+                paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
+                upperLimit = Convert.ToInt32(user.Limit)
             };
 
             return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);

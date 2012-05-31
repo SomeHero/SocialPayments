@@ -84,11 +84,19 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException(String.Format("Sender {0} Not Found", senderUri));
             }
 
+            if (sender == null)
+            {
+                var message = String.Format("Unable to find sender {0}", senderUri);
+                _logger.Log(LogLevel.Debug, message);
+
+                throw new Exception(message);
+            }
+
             if(!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
             {
                 var message = String.Format("Invalid Security Pin");
                 _logger.Log(LogLevel.Info, message);
-                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, securityPin));
+                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
 
                 throw new Exception(message);
             }
@@ -171,6 +179,14 @@ namespace SocialPayments.DomainServices
 
             //TODO: try to add message
             Domain.Message messageItem;
+
+            _logger.Log(LogLevel.Info, "Adding Message");
+                
+            if (sender == null || senderAccount == null)
+            {
+                _logger.Log(LogLevel.Info, "Sender or Sender Account Not Set");
+                throw new Exception("Sender or Sender Account Not Set");
+            }
 
             try
             {

@@ -74,6 +74,8 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class ValidateUserResponse
         {
+            public bool hasSecurityPin { get; set; }
+            public bool hasACHAccount { get; set; }
             public string userId { get; set; }
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
@@ -94,6 +96,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool hasSecurityPin { get; set; }
             public bool hasACHAccount { get; set; }
             public string userId { get; set; }
+            public string mobileNumber { get; set; }
+            public string paymentAccountId { get; set; }
+            public int upperLimit { get; set; }
         }
         public class MECodeResponse
         {

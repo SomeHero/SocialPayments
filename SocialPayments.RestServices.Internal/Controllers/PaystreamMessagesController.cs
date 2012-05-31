@@ -76,16 +76,19 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // POST /api/paystreammessages/{id}/cancel_payment
+        [HttpPost]
         public HttpResponseMessage CancelPayment(string id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/refund_payment
+        [HttpPost]
         public HttpResponseMessage RefundPayment(string id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/accept_request
+        [HttpPost]
         public HttpResponseMessage AcceptPaymentRequest(string id, MessageModels.AcceptPaymentRequestModel request)
         {
             Domain.Message message;
@@ -107,11 +110,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/reject_request
+        [HttpPost]
         public HttpResponseMessage RejectPaymentReqeust(string id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/ignore_request
+        [HttpPost]
         public HttpResponseMessage IgnorePaymentRequest(string id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);

@@ -33,7 +33,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Received request for Registration SignUp Key"));
 
-            DomainServices.UserService userService = new DomainServices.UserService();
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
 
             var signUpKey = request.inboundSMSMessageNotification.inboundSMSMessage.message;
             var mobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress);

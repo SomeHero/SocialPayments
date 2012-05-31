@@ -29,6 +29,32 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
+                name: "CancelPayment",
+                routeTemplate: "api/paystreammessages/{id}/cancel_payment",
+                defaults: new { controller = "PaystreamMessages", action = "CancelPayment" }
+            );
+            routes.MapHttpRoute(
+                name: "RefundPayment",
+                routeTemplate: "api/paystreammessages/{id}/refund_payment",
+                defaults: new { controller = "PaystreamMessages", action = "RefundPayment" }
+            );
+            routes.MapHttpRoute(
+                name: "AcceptPaymentRequest",
+                routeTemplate: "api/paystreammessages/{id}/accept_request",
+                defaults: new { controller = "PaystreamMessages", action = "AcceptPaymentRequest" }
+            );
+            routes.MapHttpRoute(
+                name: "RejectPaymentRequest",
+                routeTemplate: "api/paystreammessages/{id}/accept_request",
+                defaults: new { controller = "PaystreamMessages", action = "RejectPaymentRequest" }
+            );
+            routes.MapHttpRoute(
+                name: "IgnorePaymentRequest",
+                routeTemplate: "api/paystreammessages/{id}/ignore_request",
+                defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
+            );
+
+            routes.MapHttpRoute(
                 name: "SetupSecurityPin",
                 routeTemplate: "api/users/{id}/setup_securitypin",
                 defaults: new { controller = "Users", action = "SetupSecurityPin" }

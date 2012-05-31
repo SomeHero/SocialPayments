@@ -58,7 +58,8 @@ namespace SocialPayments.DomainServices
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
                 SetupPassword = false,
-                SetupSecurityPin = false,
+                SecurityPin = securityService.Encrypt("2589"),
+                SetupSecurityPin = true,
                 Roles = new Collection<Role>()
                     {
                         memberRole
@@ -90,12 +91,20 @@ namespace SocialPayments.DomainServices
 
             var uriType = messageServices.GetURIType(userUri);
 
+            _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
+
             User user = null;
 
             try
             {
                 switch (uriType)
                 {
+                    case URIType.FacebookAccount:
+                        user = _ctx.Users
+                            .FirstOrDefault(u => u.UserName.Equals(userUri));
+
+                        return user;
+
                     case URIType.MECode:
                         var meCode = _ctx.MECodes
                             .Include("User")
@@ -121,6 +130,9 @@ namespace SocialPayments.DomainServices
                             .FirstOrDefault(u => u.MobileNumber == phoneNumber);
 
                         return user;
+
+
+                            
 
                 }
 
@@ -384,8 +396,14 @@ namespace SocialPayments.DomainServices
                         }
                     });
 
-                    _ctx.SaveChanges();
                 }
+                else
+                {
+                    user.DeviceToken = deviceToken;
+                }
+
+                _ctx.SaveChanges();
+                    
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -429,6 +447,25 @@ namespace SocialPayments.DomainServices
             return _ctx.Users
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
+        }
+
+        public string GetSenderName(User sender)
+        {
+            if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
+                return sender.FirstName + " " + sender.LastName;
+
+            if(!String.IsNullOrEmpty(sender.SenderName))
+                return sender.SenderName;
+
+            if(!String.IsNullOrEmpty(sender.MobileNumber))
+                return formattingServices.FormatMobileNumber(sender.MobileNumber);
+
+            if (!String.IsNullOrEmpty(sender.EmailAddress))
+                return sender.EmailAddress;
+
+            return "PaidThx User";
+
+
         }
     }
 }
