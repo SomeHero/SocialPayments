@@ -195,11 +195,6 @@ namespace SocialPayments.DomainServices
             if (!String.IsNullOrEmpty(user.MobileNumber))
                 user.MobileNumber = formattingServices.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
-            if (!String.IsNullOrEmpty(user.SecurityPin))
-            {
-                user.SecurityPin = securityService.Encrypt(user.SecurityPin);
-                user.SetupSecurityPin = true;
-            }
             _ctx.SaveChanges();
         }
         public void DeleteUser(Guid userId)
@@ -313,6 +308,7 @@ namespace SocialPayments.DomainServices
             }
 
             user.SecurityPin = securityService.Encrypt(securityPin);
+            user.SetupSecurityPin = true;
 
             _ctx.SaveChanges();
 
