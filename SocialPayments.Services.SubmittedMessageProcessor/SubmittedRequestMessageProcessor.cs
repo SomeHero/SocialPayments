@@ -28,6 +28,7 @@ namespace SocialPayments.Services.MessageProcessors
         private UserService _userService;
         private SMSService _smsService;
         private EmailService _emailService;
+        private MessageServices _messageService;
 
         private string _recipientSMSMessage = "You received a PdThx request for {0:C} from {1}.";
         private string _recipientConfirmationEmailSubject = "You received a payment request for {0:C} from {1} using PaidThx.";
@@ -48,6 +49,7 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
+            _messageService = new MessageServices(_ctx);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
@@ -64,6 +66,7 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
+            _messageService = new MessageServices(_ctx);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
@@ -75,17 +78,14 @@ namespace SocialPayments.Services.MessageProcessors
             //Validate Payment Request
             //Batch Transacation WithDrawal
 
-            URIType recipientType = URIType.MobileNumber;
-           
-            if (_validationService.IsEmailAddress(message.RecipientUri))
-                recipientType = URIType.EmailAddress;
-            else if (_validationService.IsMECode(message.RecipientUri))
-                recipientType = URIType.MECode;
+            URIType recipientType = _messageService.GetURIType(message.RecipientUri);
 
             _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
             
             //Attempt to find the recipient of the request
             var sender = message.Sender;
+            _logger.Log(LogLevel.Info, String.Format("Getting Recipient"));
+
             var recipient = _userService.GetUser(message.RecipientUri);
             message.Recipient = recipient;
 
@@ -93,11 +93,17 @@ namespace SocialPayments.Services.MessageProcessors
             string emailSubject;
             string emailBody;
 
-            var senderName = String.IsNullOrEmpty(sender.SenderName) ? _formattingService.FormatMobileNumber(sender.MobileNumber) : sender.SenderName;
+            _logger.Log(LogLevel.Info, String.Format("Getting Sender"));
+
+            var senderName = _userService.GetSenderName(sender);
+            _logger.Log(LogLevel.Info, String.Format("Retrieved Sender Name {0}", senderName));
+
             var recipientName = message.RecipientUri;
             
             if (recipient != null)
             {
+                _logger.Log(LogLevel.Debug, String.Format("Recipient Found"));
+
                 //if the recipient has a mobile #; send SMS
                 if (!String.IsNullOrEmpty(recipient.MobileNumber))
                 {

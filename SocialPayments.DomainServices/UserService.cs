@@ -451,6 +451,8 @@ namespace SocialPayments.DomainServices
 
         public string GetSenderName(User sender)
         {
+            _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
+
             if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;
 

@@ -35,8 +35,14 @@ namespace SocialPayments.DomainServices
         }
         public string FormatMobileNumber(string mobileNumber)
         {
+            if (String.IsNullOrEmpty(mobileNumber))
+                return "";
+
             _logger.Log(LogLevel.Info, String.Format("Formatting Mobile Number {0}", mobileNumber));
             string tempMobileNumber = digitsOnly.Replace(mobileNumber, "");
+
+            if (String.IsNullOrEmpty(tempMobileNumber))
+                return "";
 
             if (tempMobileNumber[0] == '1')
                 tempMobileNumber = tempMobileNumber.Substring(1, tempMobileNumber.Length - 1);
