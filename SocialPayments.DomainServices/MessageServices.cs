@@ -113,9 +113,46 @@ namespace SocialPayments.DomainServices
                 throw new Exception(message);
             }
 
+            if (sender.PinCodeLockOutResetTimeout != null && System.DateTime.Now < sender.PinCodeLockOutResetTimeout)
+            {
+                var message = "This account is temporarily locked.  Please try again later.";
+                
+                _logger.Log(LogLevel.Info, message);
+                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
+
+                throw new Exception(message);
+            }
             if (!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
             {
-                var message = String.Format("Invalid Security Pin");
+                string message = String.Format("Invalid Security Pin");
+
+                if (sender.SetupSecurityPin) 
+                    sender.PinCodeFailuresSinceLastSuccess += 1;
+
+                if (sender.PinCodeFailuresSinceLastSuccess > 15)
+                {
+                    message = "Invalid Security Pin.  This account is temporarily locked due to security pin failures.";
+                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(15);
+                }
+
+                if (sender.PinCodeFailuresSinceLastSuccess > 10)
+                {
+                    message = "Invalid Security Pin.  This account is temporarily locked for 10 minutes due to security pin failures.";
+                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(10);
+                }
+
+                if (sender.PinCodeFailuresSinceLastSuccess > 5)
+                {
+                    message = "Invalid Security Pin.  This account is temporarily locked for 5 minutes due to security pin failures.";
+                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(5);
+                }
+
+                if (sender.PinCodeFailuresSinceLastSuccess > 2)
+                {
+                    message = "Invalid Security Pin.  This account is temporarily locked for 1 minute due to security pin failures.";
+                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(1);
+                }
+
                 _logger.Log(LogLevel.Info, message);
                 _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
 
