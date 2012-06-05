@@ -33,6 +33,8 @@ namespace SocialPayments.Domain
         public virtual string Password { get; set; }
         public virtual bool IsConfirmed { get; set; }
         public virtual int PasswordFailuresSinceLastSuccess { get; set; }
+        public virtual int PinCodeFailuresSinceLastSuccess { get; set; }
+        public virtual DateTime PinCodeLockOutResetTimeout { get; set; }
         public virtual Nullable<DateTime> LastPasswordFailureDate { get; set; }
         [MaxLength(100)]
         public virtual string ConfirmationToken { get; set; }
