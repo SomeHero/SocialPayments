@@ -130,6 +130,7 @@
     <Compile Include="FormattingServices.cs" />
     <Compile Include="Interfaces\IAmazonNotificationService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
+    <Compile Include="Interfaces\ISMSService.cs" />
     <Compile Include="MessageServices.cs" />
     <Compile Include="PaymentAccountService.cs" />
     <Compile Include="PaymentAccountVerificationService.cs" />

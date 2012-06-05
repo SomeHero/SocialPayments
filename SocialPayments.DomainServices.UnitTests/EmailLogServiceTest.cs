@@ -102,7 +102,8 @@ namespace SocialPayments.DomainServices.UnitTests
         [TestMethod()]
         public void WhenGettingEmailLogEntryByIdEmailLogIsReturned()
         {
-            _emailLogService = new EmailLogService(); // TODO: Initialize to an appropriate value
+            _emailLogService = new EmailLogService(_ctx); // TODO: Initialize to an appropriate value
+            _applicationService = new ApplicationService(_ctx);
 
             var application = _applicationService.AddApplication("Test", "http://www.test.com", true);
             var id = Guid.NewGuid();

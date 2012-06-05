@@ -31,8 +31,10 @@ namespace SocialPayments.DomainServices
 
             return transactionBatch;
         }
-        public void BatchTransactions(Message message)
+        public List<Transaction> BatchTransactions(Message message)
         {
+            var results = new List<Transaction>();
+
             var transactionBatch = GetOpenBatch();
 
             var withDrawalTransaction =
@@ -57,13 +59,15 @@ namespace SocialPayments.DomainServices
             transactionBatch.TotalNumberOfWithdrawals += 1;
             transactionBatch.TotalWithdrawalAmount += withDrawalTransaction.Amount;
 
+            results.Add(withDrawalTransaction);
+
             Transaction deposit;
 
             if (message.Recipient != null && message.Recipient.PaymentAccounts.Count > 0)
             {
                 _logger.Log(LogLevel.Info, String.Format("Found Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
-                
-                var depositTransaction = 
+
+                var depositTransaction =
                     new Domain.Transaction()
                     {
                         Amount = message.Amount,
@@ -84,6 +88,8 @@ namespace SocialPayments.DomainServices
                 transactionBatch.TotalNumberOfDeposits += 1;
                 transactionBatch.TotalDepositAmount += depositTransaction.Amount;
 
+                results.Add(depositTransaction);
+
                 message.Recipient = message.Recipient;
             }
 
@@ -91,10 +97,13 @@ namespace SocialPayments.DomainServices
             message.LastUpdatedDate = System.DateTime.Now;
 
             _ctx.SaveChanges();
-                       
+
+            return results;
+
         }
         public void BatchTransactions(List<Transaction> transactions)
         {
+           
             var transactionBatch = GetOpenBatch();
 
             foreach (var transaction in transactions)
@@ -125,23 +134,23 @@ namespace SocialPayments.DomainServices
                 .Where(expression);
 
             model = model.OrderByDescending(t => t.CreateDate);
-                
-                return model.ToList<TransactionBatch>();
+
+            return model.ToList<TransactionBatch>();
         }
         public TransactionBatch GetOpenBatch()
         {
             return _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
                                    AddTransactionBatch(new TransactionBatch()
-               {
-                    CreateDate = System.DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    IsClosed = false,
-                    TotalDepositAmount = 0,
-                    TotalNumberOfDeposits = 0,
-                    TotalWithdrawalAmount = 0,
-                    TotalNumberOfWithdrawals = 0,
-                    Transactions = new List<Transaction>()
-                });
+                                   {
+                                       CreateDate = System.DateTime.Now,
+                                       Id = Guid.NewGuid(),
+                                       IsClosed = false,
+                                       TotalDepositAmount = 0,
+                                       TotalNumberOfDeposits = 0,
+                                       TotalWithdrawalAmount = 0,
+                                       TotalNumberOfWithdrawals = 0,
+                                       Transactions = new List<Transaction>()
+                                   });
         }
 
         public List<Transaction> BatchTransactions()
@@ -151,7 +160,7 @@ namespace SocialPayments.DomainServices
                 .Include("Transactions")
                 .FirstOrDefault(t => t.IsClosed == false);
 
-            if(transactionBatch == null)
+            if (transactionBatch == null)
                 throw new Exception("No batch found while batching transactions");
 
             transactionBatch.TotalNumberOfDeposits = transactionBatch.Transactions.Where(t => t.Type == TransactionType.Deposit).Count();
@@ -165,12 +174,12 @@ namespace SocialPayments.DomainServices
             _ctx.SaveChanges();
 
             AddTransactionBatch(new TransactionBatch()
-                                    {
-                                        Id = Guid.NewGuid(),
-                                        CreateDate = System.DateTime.Now,
-                                        IsClosed = false
-                                                            
-                                    });
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                IsClosed = false
+
+            });
             return transactionBatch.Transactions;
         }
         private User GetRecipient(string uri)
@@ -197,23 +206,11 @@ namespace SocialPayments.DomainServices
         }
 
 
-        public void RemoveFromBatch(Message message)
+        public bool RemoveFromBatch(Transaction transaction)
         {
-            foreach (var temp in message.Transactions)
-            {
-                var transactionBatch = GetOpenBatch();
-                
-                if (temp.Status == TransactionStatus.Submitted || temp.Status == TransactionStatus.Pending)
-                {
-                    var transaction = transactionBatch.Transactions
-                        .FirstOrDefault(t => t.Id.Equals(temp.Id));
+            var transactionBatch = GetOpenBatch();
 
-                    transaction.LastUpdatedDate = System.DateTime.Now;
-                    transaction.Status = TransactionStatus.Cancelled;
-
-                    transactionBatch.Transactions.Remove(temp);
-                }
-            }
+            return transactionBatch.Transactions.Remove(transaction);
         }
     }
 }

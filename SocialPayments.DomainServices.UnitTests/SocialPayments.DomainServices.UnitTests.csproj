@@ -111,6 +111,9 @@
   <ItemGroup>
     <Compile Include="EmailLogServiceTest.cs" />
     <Compile Include="EmailServiceTest.cs" />
+    <Compile Include="Fakes\FakeEmailService.cs" />
+    <Compile Include="Fakes\FakeSMSService.cs" />
+    <Compile Include="Fakes\FakeAmazonNotificationService.cs" />
     <Compile Include="Fakes\FakeApplicationSet.cs" />
     <Compile Include="Fakes\FakeBatchFileSet.cs" />
     <Compile Include="Fakes\FakeBetaSignUpSet.cs" />
