@@ -15,7 +15,11 @@ namespace SocialPayments.Domain
         Failed = 5,
         CancelPending = 6,
         RefundPending = 7,
-        RequestAccepted = 8,
-        RequestRejected = 9
+        RequestAcceptedPending = 8,
+        RequestRejectedPending = 9,
+        RequestRejected = 10,
+        ReturnPending = 11,
+        Returned = 12, 
+        Spam = 13
     }
 }

@@ -9,6 +9,7 @@ using NLog;
 using Amazon.SimpleNotificationService;
 using System.Configuration;
 using Amazon.SimpleNotificationService.Model;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
@@ -20,6 +21,8 @@ namespace SocialPayments.DomainServices
         private ApplicationService _applicationServices;
         private SecurityService _securityServices;
         private UserService _userServices;
+        private TransactionBatchService _transactionBatchServices;
+        private static IAmazonNotificationService _amazonNotificationService;
         private Logger _logger;
 
         public MessageServices()
@@ -30,17 +33,35 @@ namespace SocialPayments.DomainServices
             _formattingServices = new FormattingServices();
             _applicationServices = new ApplicationService(_context);
             _securityServices = new SecurityService();
+            _transactionBatchServices = new TransactionBatchService(_context, _logger);
             _userServices = new UserService(_context);
+            _amazonNotificationService = new DomainServices.AmazonNotificationService();
         }
         public MessageServices(IDbContext context)
         {
             _context = context;
             _logger = LogManager.GetCurrentClassLogger();
+
             _validationService = new ValidationService(_logger);
             _formattingServices = new FormattingServices();
             _applicationServices = new ApplicationService(_context);
             _securityServices = new SecurityService();
+            _transactionBatchServices = new TransactionBatchService(_context, _logger);
             _userServices = new UserService(_context);
+            _amazonNotificationService = new AmazonNotificationService();
+        }
+        public MessageServices(IDbContext context, IAmazonNotificationService amazonNotificationService)
+        {
+            _context = context;
+            _logger = LogManager.GetCurrentClassLogger();
+
+            _validationService = new ValidationService(_logger);
+            _formattingServices = new FormattingServices();
+            _applicationServices = new ApplicationService(_context);
+            _securityServices = new SecurityService();
+            _transactionBatchServices = new TransactionBatchService(_context, _logger);
+            _userServices = new UserService(_context);
+            _amazonNotificationService = amazonNotificationService;
         }
         public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin)
@@ -66,7 +87,7 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
 
             MessageType type = MessageType.Payment;
-            
+
             if (messageType.ToUpper() == "PAYMENT")
                 type = MessageType.Payment;
 
@@ -92,7 +113,7 @@ namespace SocialPayments.DomainServices
                 throw new Exception(message);
             }
 
-            if(!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
+            if (!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
             {
                 var message = String.Format("Invalid Security Pin");
                 _logger.Log(LogLevel.Info, message);
@@ -103,7 +124,7 @@ namespace SocialPayments.DomainServices
 
             if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
             {
-                var message =  String.Format("Sender and Recipient are the same");
+                var message = String.Format("Sender and Recipient are the same");
                 _logger.Log(LogLevel.Debug, message);
 
                 throw new InvalidOperationException(message);
@@ -149,7 +170,7 @@ namespace SocialPayments.DomainServices
             if (application == null)
             {
                 var message = String.Format("Application {0} was not found.", apiKey);
-                
+
                 _logger.Log(LogLevel.Debug, String.Format("Exception getting application {0}. {1}", apiKey, message));
 
                 throw new InvalidOperationException(message);
@@ -167,11 +188,11 @@ namespace SocialPayments.DomainServices
                 recipient = meCode.User;
             }
 
-            if(recipientUriType == URIType.EmailAddress)
+            if (recipientUriType == URIType.EmailAddress)
                 recipient = _userServices.FindUserByEmailAddress(recipientUri);
-            if(recipientUriType == URIType.MobileNumber)
+            if (recipientUriType == URIType.MobileNumber)
                 recipient = _userServices.FindUserByMobileNumber(recipientUri);
-            if(recipientUriType == URIType.FacebookAccount)
+            if (recipientUriType == URIType.FacebookAccount)
                 recipient = _userServices.GetUser(recipientUri);
             //TODO: confirm recipient is valid???
 
@@ -181,7 +202,7 @@ namespace SocialPayments.DomainServices
             Domain.Message messageItem;
 
             _logger.Log(LogLevel.Info, "Adding Message");
-                
+
             if (sender == null || senderAccount == null)
             {
                 _logger.Log(LogLevel.Info, "Sender or Sender Account Not Set");
@@ -192,30 +213,30 @@ namespace SocialPayments.DomainServices
             {
                 MessageStatus messageStatus = MessageStatus.Submitted;
 
-                 messageItem = _context.Messages.Add(new Message()
-                 {
-                     Amount = amount,
-                     Application = application,
-                     ApiKey = application.ApiKey,
-                     Comments = comments,
-                     CreateDate = System.DateTime.Now,
-                     Id = Guid.NewGuid(),
-                     MessageStatus = MessageStatus.Pending,
-                     MessageStatusValue = (int)messageStatus,
-                     MessageType = type,
-                     MessageTypeValue = (int)type,
-                     RecipientUri = recipientUri,
-                     SenderUri = senderUri,
-                     Sender = sender,
-                     SenderId = sender.UserId,
-                     SenderAccount = senderAccount,
-                     SenderAccountId = senderAccount.Id,
-                     Latitude = latitude,
-                     Longitude = longitude,
-                     recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
-                     recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
-                     recipientImageUri = recipientImageUri
-                 });
+                messageItem = _context.Messages.Add(new Message()
+                {
+                    Amount = amount,
+                    Application = application,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    MessageStatus = MessageStatus.Pending,
+                    MessageStatusValue = (int)messageStatus,
+                    MessageType = type,
+                    MessageTypeValue = (int)type,
+                    RecipientUri = recipientUri,
+                    SenderUri = senderUri,
+                    Sender = sender,
+                    SenderId = sender.UserId,
+                    SenderAccount = senderAccount,
+                    SenderAccountId = senderAccount.Id,
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
+                    recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
+                    recipientImageUri = recipientImageUri
+                });
 
                 _context.SaveChanges();
 
@@ -226,6 +247,8 @@ namespace SocialPayments.DomainServices
 
                 throw new Exception(message);
             }
+
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", messageItem.Id.ToString());
 
             return messageItem;
         }
@@ -241,33 +264,80 @@ namespace SocialPayments.DomainServices
             if (message == null)
                 throw new ArgumentException("Invalid Message Id.", "Id");
 
-            if (message.MessageStatus != MessageStatus.Pending)
-                throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
-
-            foreach (var transaction in message.Transactions)
+            try
             {
-                transaction.Status = TransactionStatus.Cancelled;
-                //transaction.DateCancelled = System.DateTime;
+                message.LastUpdatedDate = System.DateTime.Now;
+                message.MessageStatus = MessageStatus.CancelPending;
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
-            _context.SaveChanges();
-
-            //remove from batch
-
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
 
         }
-        public URIType GetURIType(string uri)
+        public void AcceptPaymentRequest(string id)
         {
-            var uriType = URIType.MobileNumber;
+            Guid messageId;
 
-            if (_validationService.IsEmailAddress(uri))
-                uriType = URIType.EmailAddress;
-            else if (_validationService.IsMECode(uri))
-                uriType = URIType.MECode;
-            else if (_validationService.IsFacebookAccount(uri))
-                uriType = URIType.FacebookAccount;
+            Guid.TryParse(id, out messageId);
 
-            return uriType;
+            var message = _context.Messages
+                .FirstOrDefault(m => m.Id == messageId);
+
+            if (message == null)
+                throw new ArgumentException("Invalid Message Id.", "Id");
+
+            if (!(message.MessageStatus == MessageStatus.Pending || message.MessageStatus == MessageStatus.Submitted))
+                throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
+
+            try
+            {
+                message.MessageStatus = MessageStatus.RequestAcceptedPending;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
+
+        }
+        public void RejectPaymentRequest(string id)
+        {
+            Guid messageId;
+
+            Guid.TryParse(id, out messageId);
+
+            var message = _context.Messages
+                .FirstOrDefault(m => m.Id == messageId);
+
+            if (message == null)
+                throw new ArgumentException("Invalid Message Id.", "Id");
+
+            if (!(message.MessageStatus == MessageStatus.Pending || message.MessageStatus == MessageStatus.Submitted))
+                throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
+
+            try
+            {
+                message.MessageStatus = MessageStatus.RequestRejected;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
+
         }
         private PaymentAccount GetAccount(User sender, string id)
         {
@@ -306,6 +376,19 @@ namespace SocialPayments.DomainServices
                 throw new Exception("Invalid Message Id.");
 
             return message;
+        } 
+        public URIType GetURIType(string uri)
+        {
+            var uriType = URIType.MobileNumber;
+
+            if (_validationService.IsEmailAddress(uri))
+                uriType = URIType.EmailAddress;
+            else if (_validationService.IsMECode(uri))
+                uriType = URIType.MECode;
+            else if (_validationService.IsFacebookAccount(uri))
+                uriType = URIType.FacebookAccount;
+
+            return uriType;
         }
     }
 }

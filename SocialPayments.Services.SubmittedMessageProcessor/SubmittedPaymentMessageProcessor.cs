@@ -26,7 +26,7 @@ namespace SocialPayments.Services.MessageProcessors
         private TransactionBatchService _transactionBatchService;
         private ValidationService _validationService;
         private UserService _userService;
-        private SMSService _smsService;
+        private ISMSService _smsService;
         private IEmailService _emailService;
         private MessageServices _messageService;
 
@@ -56,10 +56,12 @@ namespace SocialPayments.Services.MessageProcessors
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public SubmittedPaymentMessageProcessor(IDbContext context)
+        public SubmittedPaymentMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
+            _smsService = smsService;
+            _emailService = emailService;
         }
 
         public bool Process(Message message)
@@ -67,10 +69,10 @@ namespace SocialPayments.Services.MessageProcessors
             _formattingService = new FormattingServices();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _validationService = new ValidationService(_logger);
-            _smsService = new SMSService(_ctx);
-            _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+
+            IAmazonNotificationService _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             string fromAddress = "jrhodes2705@gmail.com";
             URIType recipientType = _messageService.GetURIType(message.RecipientUri);
@@ -98,7 +100,12 @@ namespace SocialPayments.Services.MessageProcessors
 
             try
             {
-                _transactionBatchService.BatchTransactions(message);
+                var transactions = _transactionBatchService.BatchTransactions(message);
+
+                foreach (var transaction in transactions)
+                {
+                    message.Transactions.Add(transaction);
+                }
             }
             catch (Exception ex)
             {

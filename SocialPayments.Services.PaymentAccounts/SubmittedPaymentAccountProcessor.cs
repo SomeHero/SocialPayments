@@ -37,7 +37,7 @@ namespace SocialPayments.Services.PaymentAccounts
 
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _paymentAccountVerificationService = new PaymentAccountVerificationService(_ctx, _logger);
-            _emailService = new EmailService(_ctx, _logger);
+            _emailService = emailService;
         }
         public bool Process(PaymentAccount paymentAccount)
         {

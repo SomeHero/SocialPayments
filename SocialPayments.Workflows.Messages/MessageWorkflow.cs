@@ -87,6 +87,7 @@ namespace SocialPayments.Workflows.Messages
 
                     break;
             }
+
             _logger.Log(LogLevel.Info, String.Format("Finished Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
             
         }
@@ -95,20 +96,26 @@ namespace SocialPayments.Workflows.Messages
         {
             _logger.Log(LogLevel.Error, String.Format("Processing Payment"));
             
-            String smsMessage = "";
+            IMessageProcessor messageProcessor;
+
             switch (message.MessageStatus)
             {
                 case Domain.MessageStatus.Submitted:
 
-                    _logger.Log(LogLevel.Error, String.Format("Starting Payment Message Processor"));
+                    _logger.Log(LogLevel.Error, String.Format("Starting Submitted Payment Message Processor"));
             
-                    IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx);
+                    messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx, _emailService, _smsService);
                     messageProcessor.Process(message);
 
                     break;
 
                 //remove associated transactions from batch and cancel transactions
                 case Domain.MessageStatus.CancelPending:
+
+                    _logger.Log(LogLevel.Error, String.Format("Starting Cancelled Payment Message Processor"));
+            
+                    messageProcessor = new SocialPayments.Services.MessageProcessors.CancelledPaymentMessageProcessor(_ctx, _emailService, _smsService);
+                    messageProcessor.Process(message);
 
                     break;
                 case Domain.MessageStatus.Cancelled:
@@ -130,7 +137,6 @@ namespace SocialPayments.Workflows.Messages
 
                 case Domain.MessageStatus.Refunded:
                     //terminal state
-
                     break;
             }
         }
@@ -156,7 +162,7 @@ namespace SocialPayments.Workflows.Messages
                     messageProcessor.Process(message);
 
                     break;
-                case Domain.MessageStatus.RequestAccepted:
+                case Domain.MessageStatus.RequestAcceptedPending:
 
                     //validate sender and recipient
                     //create withdraw and deposit records and batch
