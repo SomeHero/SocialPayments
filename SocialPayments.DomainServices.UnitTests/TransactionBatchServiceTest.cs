@@ -7,11 +7,12 @@ using SocialPayments.Domain;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using SocialPayments.DomainServices.UnitTests.Fakes;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.DomainServices.UnitTests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for TransactionBatchServiceTest and is intended
     ///to contain all TransactionBatchServiceTest Unit Tests
@@ -75,10 +76,12 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatchingMessageWithOpenBatchWithWithdrawAndDepositTransactionThenTransactionsInBatchIs2()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService);
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            SecurityService securityService = new SecurityService();
 
             var transactionBatchGuid = Guid.NewGuid();
             var transactionAmount = 2.75;
@@ -99,7 +102,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var application = applicationService.AddApplication("Test", "http://www.test.com", true);
             var sender = userService.AddUser(application.ApiKey, "sender@paidthx.com", "pdthx123",
                 "sender@paidthx.com", "1234");
-            sender.SecurityPin = "2589";
+            sender.SecurityPin = securityService.Encrypt("2589");
             userService.UpdateUser(sender);
 
             var senderPaymentAccount = paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "Sender PaidThx",
@@ -136,10 +139,12 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatchingMessageWithNoOpenBatchesWithWithdrawlAndDepositTransactionsThenTransactionsInBatchIs2()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService);
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            SecurityService securityService = new SecurityService();
 
             var transactionBatchGuid = Guid.NewGuid();
             var transactionAmount = 2.75;
@@ -160,7 +165,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var application = applicationService.AddApplication("Test", "http://www.test.com", true);
             var sender = userService.AddUser(application.ApiKey, "sender@paidthx.com", "pdthx123",
                 "sender@paidthx.com", "1234");
-            sender.SecurityPin = "2589";
+            sender.SecurityPin = securityService.Encrypt("2589");
             userService.UpdateUser(sender);
 
             var senderPaymentAccount = paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "Sender PaidThx",
@@ -196,10 +201,12 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatchingMessageWithOpenBatchWithOnlyWithdrawThenTransactionsInBatchIs1()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService);
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            SecurityService securityService = new SecurityService();
 
             var transactionBatchGuid = Guid.NewGuid();
             var transactionAmount = 2.75;
@@ -220,7 +227,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var application = applicationService.AddApplication("Test", "http://www.test.com", true);
             var sender = userService.AddUser(application.ApiKey, "sender@paidthx.com", "pdthx123",
                 "sender@paidthx.com", "1234");
-            sender.SecurityPin = "2589";
+            sender.SecurityPin = securityService.Encrypt("2589");
             userService.UpdateUser(sender);
 
             var senderPaymentAccount = paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "Sender PaidThx",
@@ -245,10 +252,12 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatchingMessageWithNoOpenBatchWithWithdrawlOnlyThenTransactionsInBatchIs1()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService); 
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            SecurityService securityService = new SecurityService();
 
             var transactionBatchGuid = Guid.NewGuid();
             var transactionAmount = 2.75;
@@ -269,7 +278,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var application = applicationService.AddApplication("Test", "http://www.test.com", true);
             var sender = userService.AddUser(application.ApiKey, "sender@paidthx.com", "pdthx123",
                 "sender@paidthx.com", "1234");
-            sender.SecurityPin = "2589";
+            sender.SecurityPin = securityService.Encrypt("2589");
             userService.UpdateUser(sender);
 
             var senderPaymentAccount = paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "Sender PaidThx",
@@ -294,7 +303,8 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatching3TransactionsWithOpenBatchTransactionsInBatchIs3()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService); 
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
@@ -384,7 +394,8 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenBatching5TransactionsWithOpenBatchTransactionsInBatchIs5()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
+            IAmazonNotificationService amazonNotificationService = new FakeAmazonNotificationService();
+            MessageServices messageService = new MessageServices(_ctx, amazonNotificationService); 
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
@@ -501,7 +512,6 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenGettingOpenBatchWithAnOpenBatchCurrentBatchIsReturned()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
@@ -528,7 +538,6 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenGettingOpenBatchWithNoOpenBatchesNewBatchIsCreated()
         {
             ApplicationService applicationService = new ApplicationService(_ctx);
-            MessageServices messageService = new MessageServices(_ctx);
             UserService userService = new UserService(_ctx);
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
@@ -552,13 +561,78 @@ namespace SocialPayments.DomainServices.UnitTests
             Assert.AreNotEqual(transactionBatchGuid, transactionBatch.Id);
         }
         [TestMethod]
-        public void WhenRemovingMessageWithDepositAndWithdrawlTransactionInBatchTransactionCountInBatchIsReducedBy2()
+        public void WhenRemovingSingleTransactionFromBatchBatchReturnsTrue()
         {
+            TransactionBatchService transactionBatchService = new TransactionBatchService(_ctx, _logger);
 
-        }
-        [TestMethod]
-        public void WhenRemovingMessageWithWithdrawlTransactionInBatchTransactionCountInBatchIsReducedBy1()
-        {
+            var transactionBatch = _ctx.TransactionBatches.Add(new TransactionBatch()
+            {
+                CreateDate = System.DateTime.Now,
+                Id = Guid.NewGuid(),
+                IsClosed = false,
+                Transactions = new List<Transaction>()
+            });
+
+            transactionBatchService.BatchTransactions(new List<Transaction>()
+            {
+                new Transaction() {
+                    Amount = 5,
+                    Category = TransactionCategory.Payment,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    Status = TransactionStatus.Pending,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Type = TransactionType.Deposit
+                },
+                new Transaction() {
+                    Amount = 10,
+                    Category = TransactionCategory.Payment,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    Status = TransactionStatus.Pending,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Type = TransactionType.Deposit
+                },
+                new Transaction() {
+                    Amount = 15,
+                    Category = TransactionCategory.Payment,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    Status = TransactionStatus.Pending,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Type = TransactionType.Deposit
+                },
+                new Transaction() {
+                    Amount = 20,
+                    Category = TransactionCategory.Payment,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    Status = TransactionStatus.Pending,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Type = TransactionType.Deposit
+                }
+            });
+
+            var transactionToRemove = new Transaction()
+            {
+                Amount = 5,
+                Category = TransactionCategory.Payment,
+                Id = Guid.NewGuid(),
+                PaymentChannelType = PaymentChannelType.Single,
+                Status = TransactionStatus.Pending,
+                StandardEntryClass = StandardEntryClass.Web,
+                Type = TransactionType.Deposit
+            };
+
+            transactionBatchService.BatchTransactions(new List<Transaction>() {
+                transactionToRemove
+            });
+
+            var numberOfTransactionInBatch = transactionBatch.Transactions.Count;
+
+            bool result = transactionBatchService.RemoveFromBatch(transactionToRemove);
+
+            Assert.IsTrue(result);
         }
     }
 }

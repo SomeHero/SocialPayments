@@ -23,6 +23,8 @@ namespace SocialPayments.DomainServices
         private Logger _logger = LogManager.GetCurrentClassLogger();
         private SecurityService securityService = new SecurityService();
         private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
+        private DomainServices.ValidationService _validationService = new DomainServices.ValidationService();
+
         int defaultNumPasswordFailures = 3;
         int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
 
@@ -87,9 +89,7 @@ namespace SocialPayments.DomainServices
         {
             _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
 
-            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
-
-            var uriType = messageServices.GetURIType(userUri);
+            var uriType = GetURIType(userUri);
 
             _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
 
@@ -468,6 +468,19 @@ namespace SocialPayments.DomainServices
             return "PaidThx User";
 
 
+        }
+        public URIType GetURIType(string uri)
+        {
+            var uriType = URIType.MobileNumber;
+
+            if (_validationService.IsEmailAddress(uri))
+                uriType = URIType.EmailAddress;
+            else if (_validationService.IsMECode(uri))
+                uriType = URIType.MECode;
+            else if (_validationService.IsFacebookAccount(uri))
+                uriType = URIType.FacebookAccount;
+
+            return uriType;
         }
     }
 }

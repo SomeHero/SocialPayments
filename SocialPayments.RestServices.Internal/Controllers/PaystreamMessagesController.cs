@@ -22,8 +22,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
     {
         private static IDbContext _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private static DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
-        private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+        private static IAmazonNotificationService amazonNotificationService = new DomainServices.AmazonNotificationService();
+        private static DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx, amazonNotificationService);
         private static DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
         private static DomainServices.TransactionBatchService _transactionBatchService =
             new DomainServices.TransactionBatchService(_ctx, _logger);
@@ -43,17 +43,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/messages
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
-           _logger.Log(LogLevel.Info,String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderUri, request.recipientUri, request.recipientFirstName, request.recipientLastName));
+            _logger.Log(LogLevel.Info, String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderUri, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
-           Domain.Message message = null;
-           HttpResponseMessage responseMessage;
+            Domain.Message message = null;
+            HttpResponseMessage responseMessage;
 
-           try {
+            try
+            {
 
-               message = _messageServices.AddMessage(request.apiKey, request.senderUri, request.recipientUri, request.senderAccountId,
-                   request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
-                  request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
-                
+                message = _messageServices.AddMessage(request.apiKey, request.senderUri, request.recipientUri, request.senderAccountId,
+                    request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
+                   request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
+
             }
             catch (Exception ex)
             {
@@ -64,10 +65,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return responseMessage;
             }
-           if (message != null)
-           {
-               _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
-           }
 
             responseMessage = new HttpResponseMessage(HttpStatusCode.Created);
             //responseMessage.Headers.C
@@ -79,6 +76,24 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage CancelPayment(string id)
         {
+            _logger.Log(LogLevel.Debug, String.Format("Cancel Payment {0} Started", id));
+
+            try
+            {
+                _messageServices.CancelMessage(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Cancelling Payment {0}. {1}", id, ex.Message));
+
+                var messageResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                messageResponse.ReasonPhrase = ex.Message;
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+
+            _logger.Log(LogLevel.Debug, String.Format("Cancel Payment {0} Ended", id));
+
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/refund_payment

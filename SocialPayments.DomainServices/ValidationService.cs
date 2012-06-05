@@ -12,6 +12,10 @@ namespace SocialPayments.DomainServices
         private DomainServices.FormattingServices formattingServices = new FormattingServices();
         private Logger _logger;
 
+        public ValidationService()
+        {
+            _logger = LogManager.GetCurrentClassLogger();
+        }
         public ValidationService(Logger logger)
         {
             _logger = logger;

@@ -7,6 +7,8 @@ using System.Linq;
 using SocialPayments.DataLayer.Interfaces;
 using SocialPayments.Domain;
 using SocialPayments.DomainServices.UnitTests.Fakes;
+using NLog;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.DomainServices.UnitTests
 {
@@ -20,9 +22,13 @@ namespace SocialPayments.DomainServices.UnitTests
     public class MessageServicesTest
     {
         private IDbContext _ctx = new FakeDbContext();
+        private Logger _logger = LogManager.GetCurrentClassLogger();
         private UserService _userService;
         private MessageServices _messageService;
         private PaymentAccountService _paymentAccountService;
+        private TransactionBatchService _transactionBatchService;
+        private SecurityService _securityService;
+        private IAmazonNotificationService _amazonNotificationService;
 
         private TestContext testContextInstance;
 
@@ -47,10 +53,11 @@ namespace SocialPayments.DomainServices.UnitTests
         //You can use the following additional attributes as you write your tests:
         //
         //Use ClassInitialize to run code before running the first test in the class
-        //[ClassInitialize()]
-        //public static void MyClassInitialize(TestContext testContext)
-        //{
-        //}
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+           
+        }
         //
         //Use ClassCleanup to run code after all tests in a class have run
         //[ClassCleanup()]
@@ -76,8 +83,10 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenPaymentMessageReceivedWithRecipientUriUnRegisteredMobileNumberMessageCountIs1()
         {
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
             _paymentAccountService = new PaymentAccountService(_ctx);
+            _securityService = new SecurityService();
 
             var application = _ctx.Applications.Add(new Application()
             {
@@ -87,7 +96,8 @@ namespace SocialPayments.DomainServices.UnitTests
                 Url = "http://www.test.com"
             });
 
-            var securityPin = "2578";
+            var securityPin = _securityService.Encrypt("2589");
+
             var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
                 "james123", "jrhodes2705@gmail.com", "");
 
@@ -113,8 +123,10 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenPaymentMessageReceivedWithRecipientUriUnRegistreredEmailAddressMessageCountIs1()
         {
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
             _paymentAccountService = new PaymentAccountService(_ctx);
+            _securityService = new SecurityService();
 
             var application = _ctx.Applications.Add(new Application()
             {
@@ -124,7 +136,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Url = "http://www.test.com"
             });
 
-            var securityPin = "2589";
+            var securityPin = _securityService.Encrypt("2589");
 
             var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
                 "james123", "jrhodes2705@gmail.com", "");
@@ -152,8 +164,10 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenPaymentMessageReceivedWithRecipientUriRegisteredMeCodeMessageCountIs1()
         {
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
             _paymentAccountService = new PaymentAccountService(_ctx);
+            _securityService = new SecurityService();
 
             var application = _ctx.Applications.Add(new Application()
             {
@@ -163,7 +177,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Url = "http://www.test.com"
             });
 
-            var securityPin = "2589";
+            var securityPin = _securityService.Encrypt("2589");
 
             var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
                 "james123", "jrhodes2705@gmail.com", "");
@@ -215,8 +229,10 @@ namespace SocialPayments.DomainServices.UnitTests
         public void WhenPaymentMessageReceivedWithRecipientUriUnKnownMeCodeArgumentExceptionOccurs()
         {
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
             _paymentAccountService = new PaymentAccountService(_ctx);
+            _securityService = new SecurityService();
 
             var application = _ctx.Applications.Add(new Application()
             {
@@ -226,7 +242,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Url = "http://www.test.com"
             });
 
-            var securityPin = "2589";
+            var securityPin = _securityService.Encrypt("2589");
 
             var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
                 "james123", "jrhodes2705@gmail.com", "");
@@ -257,6 +273,195 @@ namespace SocialPayments.DomainServices.UnitTests
             var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, meCodeValue, senderAccount.Id.ToString(),
                 10.00, "Test Payment", "Payment", securityPin);
 
+        }
+        [TestMethod]
+        public void WhenPaymentMessageThatIsInOpenBatchIsCancelledThenMessageStatusIsCancelled()
+        {
+            _userService = new UserService(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+            _paymentAccountService = new PaymentAccountService(_ctx);
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _securityService = new SecurityService();
+
+            var application = _ctx.Applications.Add(new Application()
+            {
+                ApiKey = Guid.NewGuid(),
+                ApplicationName = "Test",
+                IsActive = true,
+                Url = "http://www.test.com"
+            });
+
+            var securityPin = _securityService.Encrypt("2589");
+
+            var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
+                "james123", "jrhodes2705@gmail.com", "");
+
+            sender.MobileNumber = "804-387-9693";
+            _userService.UpdateUser(sender);
+
+            sender.SecurityPin = _securityService.Encrypt(securityPin);
+            sender.SetupSecurityPin = true;
+
+            _userService.UpdateUser(sender);
+
+            var senderAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+             
+            sender.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            sender.PaymentAccounts.Add(senderAccount);
+
+            var recipient = _userService.AddUser(application.ApiKey, "james@paidthx.com",
+                "james123", "james@paidthx.com", "");
+
+            var recipientAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+
+            recipient.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            recipient.PaymentAccounts.Add(recipientAccount);
+
+
+            var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, recipient.EmailAddress,
+                senderAccount.Id.ToString(), 1.00, "Test Payment", "Payment", securityPin);
+
+            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
+
+            _ctx.SaveChanges();
+
+            var transactions =  _transactionBatchService.BatchTransactions(message);
+
+            foreach (var transaction in transactions)
+            {
+                message.Transactions.Add(transaction);
+            }
+
+            _messageService.CancelMessage(message.Id.ToString());
+
+            Assert.AreEqual(MessageStatus.Cancelled, message.MessageStatus);
+            Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
+
+        }
+        [TestMethod]
+        public void WhenPaymentRequestIsRejectedThenMessageStatusIsUpdatedToRequestCancelled()
+        {
+            _userService = new UserService(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+            _paymentAccountService = new PaymentAccountService(_ctx);
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _securityService = new SecurityService();
+
+            var application = _ctx.Applications.Add(new Application()
+            {
+                ApiKey = Guid.NewGuid(),
+                ApplicationName = "Test",
+                IsActive = true,
+                Url = "http://www.test.com"
+            });
+
+            var securityPin = _securityService.Encrypt("2589");
+
+            var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
+                "james123", "jrhodes2705@gmail.com", "");
+
+            sender.MobileNumber = "804-387-9693";
+            _userService.UpdateUser(sender);
+
+            sender.SecurityPin = _securityService.Encrypt(securityPin);
+            sender.SetupSecurityPin = true;
+
+            _userService.UpdateUser(sender);
+
+            var senderAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+
+            sender.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            sender.PaymentAccounts.Add(senderAccount);
+
+            var recipient = _userService.AddUser(application.ApiKey, "james@paidthx.com",
+                "james123", "james@paidthx.com", "");
+
+            var recipientAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+
+            recipient.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            recipient.PaymentAccounts.Add(recipientAccount);
+
+
+            var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, recipient.EmailAddress,
+                senderAccount.Id.ToString(), 1.00, "Test Payment", "PaymentRequest", securityPin);
+
+            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
+
+            _ctx.SaveChanges();
+
+            _messageService.RejectPaymentRequest(message.Id.ToString());
+
+            Assert.AreEqual(MessageStatus.RequestRejected, message.MessageStatus);
+            Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
+        }
+        [TestMethod]
+        public void WhenPaymentRequestIsAcceptedThenMessageStatusIsUpdatedToRequestAccepted()
+        {
+            _userService = new UserService(_ctx);
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+            _paymentAccountService = new PaymentAccountService(_ctx);
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _securityService = new SecurityService();
+
+            var application = _ctx.Applications.Add(new Application()
+            {
+                ApiKey = Guid.NewGuid(),
+                ApplicationName = "Test",
+                IsActive = true,
+                Url = "http://www.test.com"
+            });
+
+            var securityPin = _securityService.Encrypt("2589");
+
+            var sender = _userService.AddUser(application.ApiKey, "jrhodes@paidthx.com",
+                "james123", "jrhodes2705@gmail.com", "");
+
+            sender.MobileNumber = "804-387-9693";
+            _userService.UpdateUser(sender);
+
+            sender.SecurityPin = _securityService.Encrypt(securityPin);
+            sender.SetupSecurityPin = true;
+
+            _userService.UpdateUser(sender);
+
+            var senderAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+
+            sender.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            sender.PaymentAccounts.Add(senderAccount);
+
+            var recipient = _userService.AddUser(application.ApiKey, "james@paidthx.com",
+                "james123", "james@paidthx.com", "");
+
+            var recipientAccount = _paymentAccountService.AddPaymentAccount(sender.UserId.ToString(), "James G Rhodes", "053000219",
+                "1234123412", "Checking");
+
+            recipient.PaymentAccounts = new System.Collections.ObjectModel.Collection<PaymentAccount>();
+            recipient.PaymentAccounts.Add(recipientAccount);
+
+
+            var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, recipient.EmailAddress,
+                senderAccount.Id.ToString(), 1.00, "Test Payment", "Payment", securityPin);
+
+            message.Recipient = recipient;
+
+            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
+
+            _ctx.SaveChanges();
+
+            _messageService.AcceptPaymentRequest(message.Id.ToString());
+
+            var transactionBatch = _transactionBatchService.GetOpenBatch();
+
+            Assert.AreEqual(MessageStatus.RequestAcceptedPending, message.MessageStatus);
+            Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
         }
     }
 }

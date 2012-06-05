@@ -12,6 +12,7 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Net;
 using System.IO;
 using System.Web;
+using SocialPayments.DomainServices.Interfaces;
 
 
 namespace SocialPayments.Services.MessageProcessors
@@ -26,8 +27,9 @@ namespace SocialPayments.Services.MessageProcessors
         private TransactionBatchService _transactionBatchService;
         private ValidationService _validationService;
         private UserService _userService;
-        private SMSService _smsService;
-        private EmailService _emailService;
+        private ISMSService _smsService;
+        private IEmailService _emailService;
+        private IAmazonNotificationService _amazonNotificationService;
         private MessageServices _messageService;
 
         private string _recipientSMSMessage = "You received a PdThx request for {0:C} from {1}.";
@@ -49,7 +51,7 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
@@ -66,10 +68,28 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
+        }
+        public SubmittedRequestMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
+        {
+            _ctx = context;
+            _logger = LogManager.GetCurrentClassLogger();
+
+            _formattingService = new FormattingServices();
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _validationService = new ValidationService(_logger);
+            _smsService = smsService;
+            _emailService = emailService;
+            _userService = new UserService(_ctx);
+            _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+
+            _fromAddress = "jrhodes2705@gmail.com";
+
         }
         public bool Process(Message message)
         {
