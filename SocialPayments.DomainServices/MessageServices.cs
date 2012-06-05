@@ -119,6 +119,7 @@ namespace SocialPayments.DomainServices
                 var message = "This account is temporarily locked.  Please try again later.";
                 var exception = new AccountLockedPinCodeFailures(message);
                 exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                exception.LockOutInterval = 1;
                 exception.TemporaryLockout = true;
 
                 _logger.Log(LogLevel.Info, message);
@@ -182,9 +183,14 @@ namespace SocialPayments.DomainServices
                 _logger.Log(LogLevel.Info, message);
                 _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
 
+                _context.SaveChanges();
+
                 throw exception;
             }
 
+            sender.PinCodeLockOutResetTimeout = null;
+            sender.PinCodeFailuresSinceLastSuccess = 0;
+            
             if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
             {
                 var message = String.Format("Sender and Recipient are the same");
