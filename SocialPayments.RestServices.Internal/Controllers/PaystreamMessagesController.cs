@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Data.Entity;
 using SocialPayments.DataLayer.Interfaces;
 using SocialPayments.DomainServices.Interfaces;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -55,6 +56,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
                    request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
 
+            }
+            catch (AccountLockedPinCodeFailures ex)
+            {
+                responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = String.Format("Invalid Pincode.  Your account has been temporarily locked for {0} minutes", ex.LockOutInterval);
+
+                return responseMessage;
             }
             catch (Exception ex)
             {

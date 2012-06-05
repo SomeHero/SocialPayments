@@ -22,9 +22,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string messageStatus { get; set; }
             public string direction { get; set; }
             public string senderName { get; set; }
-            public string senderImageUri { get; set; }
+            public string transactionImageUri { get; set; }
             public string recipientName { get; set; }
-            public string recipientImageUri { get; set; }
             public double latitude { get; set; }
             public double longitutde { get; set; }
         }
