@@ -46,10 +46,12 @@ namespace SocialPayments.Services.MessageProcessors
 
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
-        private string _mobileWebSiteUrl = @"http://beta.paidthx.com/mobile/";
-
+        private string _mobileWebSiteUrl = System.Configuration.ConfigurationManager.AppSettings["MobileWebSetURL"];
+       
         private string _paymentReceivedRecipientNotRegisteredTemplate = "Payment Received Recipient Not Registered";
         private string _paymentReceivedRecipientRegisteredTemplate = "Payment Received Recipient Registered";
+
+        private string _defaultAvatarImage = System.Configuration.ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
 
         public SubmittedPaymentMessageProcessor() {
             _ctx  = new DataLayer.Context();
@@ -77,7 +79,7 @@ namespace SocialPayments.Services.MessageProcessors
             string fromAddress = "jrhodes2705@gmail.com";
             URIType recipientType = _messageService.GetURIType(message.RecipientUri);
 
-            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0}", message.RecipientUri));
+            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0} - {1}", message.RecipientUri, _defaultAvatarImage));
 
             _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
             
@@ -168,18 +170,25 @@ namespace SocialPayments.Services.MessageProcessors
             //rec_comments
             //app_user
             //link_registration - empty
-                    _emailService.SendEmail(recipient.EmailAddress, emailSubject, _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                    try
                     {
-                        new KeyValuePair<string, string>("first_name", recipient.FirstName),
-                        new KeyValuePair<string, string>("last_name", recipient.LastName),
-                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
-                        new KeyValuePair<string, string>("rec_sender", senderName),
-                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
-                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("dddd, MMMM dd at hh:mm tt")),
-                        new KeyValuePair<string, string>("rec_comments", message.Comments),
-                        new KeyValuePair<string, string>("link_registration", ""),
-                        new KeyValuePair<string, string>("app_user", "false")
-                    });
+                        _emailService.SendEmail(recipient.EmailAddress, emailSubject, _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                        {
+                            new KeyValuePair<string, string>("first_name", recipient.FirstName),
+                            new KeyValuePair<string, string>("last_name", recipient.LastName),
+                            new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
+                            new KeyValuePair<string, string>("rec_sender", senderName),
+                            new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
+                            new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                            new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                            new KeyValuePair<string, string>("link_registration", ""),
+                            new KeyValuePair<string, string>("app_user", "false")
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
+                    }
                 }
                 if (recipient.DeviceToken.Length > 0)
                 {
@@ -309,9 +318,9 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("last_name", ""),
                         new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
                         new KeyValuePair<string, string>("rec_sender", senderName),
-                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
-                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
-                        new KeyValuePair<string, string>("rec_comments", message.Comments),
+                        new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
+                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                        new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                         new KeyValuePair<string, string>("link_registration", link),
                         new KeyValuePair<string, string>("app_user", "false")
                     });

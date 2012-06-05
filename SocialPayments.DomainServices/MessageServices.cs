@@ -10,6 +10,7 @@ using Amazon.SimpleNotificationService;
 using System.Configuration;
 using Amazon.SimpleNotificationService.Model;
 using SocialPayments.DomainServices.Interfaces;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.DomainServices
 {
@@ -116,49 +117,80 @@ namespace SocialPayments.DomainServices
             if (sender.PinCodeLockOutResetTimeout != null && System.DateTime.Now < sender.PinCodeLockOutResetTimeout)
             {
                 var message = "This account is temporarily locked.  Please try again later.";
-                
+                var exception = new AccountLockedPinCodeFailures(message);
+                exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                exception.LockOutInterval = 1;
+                exception.TemporaryLockout = true;
+
                 _logger.Log(LogLevel.Info, message);
                 _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
 
-                throw new Exception(message);
+                throw exception;
             }
             if (!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
             {
                 string message = String.Format("Invalid Security Pin");
 
+                AccountLockedPinCodeFailures exception = null; 
+
                 if (sender.SetupSecurityPin) 
                     sender.PinCodeFailuresSinceLastSuccess += 1;
 
                 if (sender.PinCodeFailuresSinceLastSuccess > 15)
-                {
+                { 
                     message = "Invalid Security Pin.  This account is temporarily locked due to security pin failures.";
+                    exception = new AccountLockedPinCodeFailures(message);
+                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                    exception.TemporaryLockout = true;
+                    exception.LockOutInterval = 15;
+
                     sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(15);
                 }
 
                 if (sender.PinCodeFailuresSinceLastSuccess > 10)
                 {
                     message = "Invalid Security Pin.  This account is temporarily locked for 10 minutes due to security pin failures.";
+                    exception = new AccountLockedPinCodeFailures(message);
+                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                    exception.TemporaryLockout = true;
+                    exception.LockOutInterval = 10; 
+                    
                     sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(10);
                 }
 
                 if (sender.PinCodeFailuresSinceLastSuccess > 5)
                 {
                     message = "Invalid Security Pin.  This account is temporarily locked for 5 minutes due to security pin failures.";
+                    exception = new AccountLockedPinCodeFailures(message);
+                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                    exception.TemporaryLockout = true;
+                    exception.LockOutInterval = 5; 
+                    
                     sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(5);
                 }
 
                 if (sender.PinCodeFailuresSinceLastSuccess > 2)
                 {
                     message = "Invalid Security Pin.  This account is temporarily locked for 1 minute due to security pin failures.";
+                    exception = new AccountLockedPinCodeFailures(message);
+                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
+                    exception.TemporaryLockout = true;
+                    exception.LockOutInterval = 1;
+
                     sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(1);
                 }
 
                 _logger.Log(LogLevel.Info, message);
                 _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
 
-                throw new Exception(message);
+                _context.SaveChanges();
+
+                throw exception;
             }
 
+            sender.PinCodeLockOutResetTimeout = null;
+            sender.PinCodeFailuresSinceLastSuccess = 0;
+            
             if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
             {
                 var message = String.Format("Sender and Recipient are the same");

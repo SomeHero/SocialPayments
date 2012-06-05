@@ -9,6 +9,8 @@ using SocialPayments.Domain;
 using SocialPayments.DomainServices.UnitTests.Fakes;
 using NLog;
 using SocialPayments.DomainServices.Interfaces;
+using SocialPayments.Services.MessageProcessors.UnitTest;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.DomainServices.UnitTests
 {
@@ -462,6 +464,185 @@ namespace SocialPayments.DomainServices.UnitTests
 
             Assert.AreEqual(MessageStatus.RequestAcceptedPending, message.MessageStatus);
             Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
+        }
+        [TestMethod]
+        public void WhenSubmittingAPaymentWithInvalidPinCodeThenNumberOfPinCodeFailuesIncrements()
+        {
+            _securityService = new SecurityService();
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+            
+            var senderEmail = "james@paidthx.com";
+            var senderMobileNumber = "8043879693";
+
+            var application =  Mother.CreateApplication(_ctx);
+            var sender = Mother.CreateSender(_ctx, application, senderEmail, senderMobileNumber);
+            var senderAccount = Mother.CreatePaymentAccount(_ctx, sender);
+
+            sender.SecurityPin = _securityService.Encrypt("2589");
+
+            Domain.Message message = null;
+            int pinCodeFailures = 0;
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            Assert.AreEqual(pinCodeFailures, sender.PinCodeFailuresSinceLastSuccess);
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            Assert.AreEqual(pinCodeFailures, sender.PinCodeFailuresSinceLastSuccess);
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            Assert.AreEqual(pinCodeFailures, sender.PinCodeFailuresSinceLastSuccess);
+
+            //Assert.IsNotNull(sender.PinCodeLockOutResetTimeout);
+
+        }
+
+        [TestMethod]
+        public void WhenSubmittingAPaymentWithInvalidPinCode3TimesThenPinCodeLockOutResetTimeIsNotNull()
+        {
+            _securityService = new SecurityService();
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+
+            var senderEmail = "james@paidthx.com";
+            var senderMobileNumber = "8043879693";
+
+            var application = Mother.CreateApplication(_ctx);
+            var sender = Mother.CreateSender(_ctx, application, senderEmail, senderMobileNumber);
+            var senderAccount = Mother.CreatePaymentAccount(_ctx, sender);
+
+            sender.SecurityPin = _securityService.Encrypt("2589");
+
+            Domain.Message message = null;
+            int pinCodeFailures = 0;
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (AccountLockedPinCodeFailures ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            Assert.IsNotNull(sender.PinCodeLockOutResetTimeout);
+
+        }
+        [TestMethod]
+        [ExpectedException(typeof(AccountLockedPinCodeFailures))]
+        public void WhenSubmittingAPaymentWithInvalidPinCode3TimesAndThenSubmittedAgainThenAccountLockedOutExceptionOccurs()
+        {
+            _securityService = new SecurityService();
+            _amazonNotificationService = new FakeAmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+
+            var senderEmail = "james@paidthx.com";
+            var senderMobileNumber = "8043879693";
+
+            var application = Mother.CreateApplication(_ctx);
+            var sender = Mother.CreateSender(_ctx, application, senderEmail, senderMobileNumber);
+            var senderAccount = Mother.CreatePaymentAccount(_ctx, sender);
+
+            sender.SecurityPin = _securityService.Encrypt("2589");
+
+            Domain.Message message = null;
+            int pinCodeFailures = 0;
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (Exception ex)
+            {
+                //ignore ex
+            }
+
+            try
+            {
+                message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "1111");
+            }
+            catch (AccountLockedPinCodeFailures ex)
+            {
+                //ignore ex
+            }
+
+            pinCodeFailures += 1;
+
+            message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, "8043550001", senderAccount.Id.ToString(),
+                10.00, "Test Payment", "Payment", "2589");
+
         }
     }
 }
