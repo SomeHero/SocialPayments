@@ -27,7 +27,7 @@ namespace SocialPayments.DomainServices
 
         int defaultNumPasswordFailures = 3;
         int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
-
+        private string _fbImageUrlFormat = "http://graph.facebook.com/{0}/picture";
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public UserService() { }
@@ -393,13 +393,15 @@ namespace SocialPayments.DomainServices
                             Id = Guid.NewGuid(),
                             TokenExpiration = System.DateTime.Now.AddDays(30),
                             OAuthToken = ""
-                        }
+                        },
+                        ImageUrl = String.Format(_fbImageUrlFormat, accountId)
                     });
 
                 }
                 else
                 {
                     user.DeviceToken = deviceToken;
+                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
                 }
 
                 _ctx.SaveChanges();

@@ -34,7 +34,7 @@ namespace SocialPayments.Domain
         public virtual bool IsConfirmed { get; set; }
         public virtual int PasswordFailuresSinceLastSuccess { get; set; }
         public virtual int PinCodeFailuresSinceLastSuccess { get; set; }
-        public virtual DateTime PinCodeLockOutResetTimeout { get; set; }
+        public virtual DateTime? PinCodeLockOutResetTimeout { get; set; }
         public virtual Nullable<DateTime> LastPasswordFailureDate { get; set; }
         [MaxLength(100)]
         public virtual string ConfirmationToken { get; set; }
@@ -101,6 +101,8 @@ namespace SocialPayments.Domain
         public string DeviceToken { get; set; }
 
         public virtual Collection<MECode> MECodes { get; set; }
+        [MaxLength(255)]
+        public string ImageUrl { get; set; }
 
 
         

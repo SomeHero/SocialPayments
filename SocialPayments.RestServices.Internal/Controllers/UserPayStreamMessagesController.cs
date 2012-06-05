@@ -72,10 +72,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     _logger.Log(LogLevel.Error, String.Format("URI Formats {0} {1}", senderUriType, recipientUriType));
 
                     String direction = "In";
-
+                    
                     if (message.SenderId.Equals(user.UserId))
                         direction = "Out";
 
+                    string transactionImageUrl = String.Empty;
+
+                    if (direction == "In")
+                    {
+                        if(message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
+                            transactionImageUrl = message.Sender.ImageUrl;
+                    }
+                    else
+                    {
+                        if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
+                            transactionImageUrl = message.Recipient.ImageUrl;
+                        else
+                            transactionImageUrl = message.recipientImageUri;
+                    }
+                    
                     messageResponse.Add(new MessageModels.MessageResponse()
                     {
                         amount = message.Amount,
@@ -91,9 +106,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         latitude = message.Latitude,
                         longitutde = message.Longitude,
                         senderName = senderName,
-                        senderImageUri = message.senderImageUri,
-                        recipientName = recipientName,
-                        recipientImageUri = message.recipientImageUri
+                        transactionImageUri = transactionImageUrl,
+                        recipientName = recipientName
                     });
 
                     _logger.Log(LogLevel.Error, String.Format("Added MEssage {0} {1}", senderUriType, recipientUriType));
