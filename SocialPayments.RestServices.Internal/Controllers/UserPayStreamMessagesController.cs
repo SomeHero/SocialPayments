@@ -94,7 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     messageResponse.Add(new MessageModels.MessageResponse()
                     {
                         amount = message.Amount,
-                        comments = message.Comments,
+                        comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
                         createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                         Id = message.Id,
                         //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
