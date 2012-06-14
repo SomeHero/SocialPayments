@@ -205,6 +205,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
         }
         
+        // POST /api/user/{id}/personalize_user
+        public HttpResponseMessage PersonalizeUser(string id, UserModels.PersonalizeUserRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Start Personalize User"));
+
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            var user = userService.GetUserById(id);
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.ImageUrl = request.ImageUrl;
+
+            try
+            {
+                userService.UpdateUser(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Info, String.Format("Unhandled Expression Updating User {0}. {1}", id, ex.Message));
+                
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                responseMessage.ReasonPhrase = "Unable to update user";
+
+                return responseMessage;
+            }
+
+            _logger.Log(LogLevel.Info, String.Format("Completed Personalize User"));
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
         // PUT /api/user/5
         public void Put(int id, string value)
         {

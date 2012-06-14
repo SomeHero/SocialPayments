@@ -58,6 +58,12 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/paystreammessages/{id}/ignore_request",
                 defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
             );
+            //api/user/{id}/personalize_user
+            routes.MapHttpRoute(
+                name: "PersonalizeUser",
+                routeTemplate: "api/users/{id}/personalize_user",
+                defaults: new { controller = "Users", action = "PersonalizeUser" }
+            );
 
             routes.MapHttpRoute(
                 name: "SetupSecurityPin",

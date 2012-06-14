@@ -119,5 +119,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool IsApproved { get; set; }
             public bool IsActive { get; set; }
         }
+        public class PersonalizeUserRequest
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string ImageUrl { get; set; }
+        }
     }
 }
