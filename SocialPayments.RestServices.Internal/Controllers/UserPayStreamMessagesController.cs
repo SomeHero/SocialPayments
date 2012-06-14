@@ -13,13 +13,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UserPayStreamMessagesController : ApiController
     {
-        private Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {
+            Context _ctx = new Context();
             DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
 
             var user = GetUser(userId);
@@ -90,6 +90,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         else
                             transactionImageUrl = message.recipientImageUri;
                     }
+
+                    var status = message.Status;
+
+                    _logger.Log(LogLevel.Info, String.Format("Message Status {0}", status));
                     
                     messageResponse.Add(new MessageModels.MessageResponse()
                     {
@@ -98,7 +102,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                         Id = message.Id,
                         //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                        messageStatus = message.MessageStatus.ToString(),
+                        messageStatus =  message.Status.ToString(),
                         messageType = message.MessageType.ToString(),
                         recipientUri = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri),
                         senderUri = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri),
@@ -132,6 +136,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         private User GetUser(string id)
         {
+            Context _ctx = new Context();
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
+
             Guid userId;
 
             Guid.TryParse(id, out userId);

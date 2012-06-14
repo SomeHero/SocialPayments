@@ -9,17 +9,12 @@ namespace SocialPayments.Domain
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid MessageId { get; set; }
-        [ForeignKey("MessageId")]
-        public virtual Message Message { get; set; }
+        public Guid? PaymentId { get; set; }
+        [ForeignKey("PaymentId")]
+        public virtual Payment Payment { get; set; }
         public Guid FromAccountId { get; set; }
         [ForeignKey("FromAccountId")]
-        public virtual PaymentAccount FromAccount
-        {
-            get;
-            set;
-        }
-
+        public virtual PaymentAccount FromAccount { get; set; }
         public double Amount { get; set; }
         public int TransactionStatusId { get; set; }
         public TransactionStatus Status
@@ -55,12 +50,12 @@ namespace SocialPayments.Domain
         public DateTime CreateDate { get; set; }
         public DateTime? SentDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
-        public Guid TransactionBatchId { get; set; }
 
+        public Guid? TransactionBatchId { get; set; }
         [ForeignKey("TransactionBatchId")]
         public virtual TransactionBatch TransactionBatch { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 

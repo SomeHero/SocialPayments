@@ -32,10 +32,10 @@ namespace SocialPayments.Services.MessageProcessors
         {
            
             //batch payment
-            var transactions =  _transactionBatchService.BatchTransactions(message);
+           // var transactions =  _transactionBatchService.BatchTransactions(message);
 
             message.LastUpdatedDate = System.DateTime.Now;
-            message.MessageStatus = Domain.MessageStatus.Pending;
+            message.Status = Domain.PaystreamMessageStatus.Processing;
 
             _ctx.SaveChanges();
 

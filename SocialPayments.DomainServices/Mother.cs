@@ -101,14 +101,14 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = Guid.NewGuid(),
-                MessageStatus = Domain.MessageStatus.Submitted,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = messageType,
                 RecipientUri = recipientUri,
                 Sender = sender,
                 SenderId = sender.UserId,
                 SenderAccountId = sender.PaymentAccounts[0].Id,
                 SenderUri = senderUri,
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 
             context.SaveChanges();
@@ -126,7 +126,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = Guid.NewGuid(),
-                MessageStatus = Domain.MessageStatus.Submitted,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = messageType,
                 RecipientUri = recipientUri,
                 Sender = sender,
@@ -134,7 +134,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderId = sender.UserId,
                 SenderAccountId = sender.PaymentAccounts[0].Id,
                 SenderUri = senderUri,
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
             context.SaveChanges();

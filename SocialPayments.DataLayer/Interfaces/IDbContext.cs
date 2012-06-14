@@ -14,6 +14,7 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<UserAttribute> UserAttributes { get; set; }
         IDbSet<Role> Roles { get; set; }
         IDbSet<Message> Messages { get; set; }
+        IDbSet<Payment> Payments { get; set; }
         IDbSet<PaymentAccount> PaymentAccounts { get; set; }
         IDbSet<BatchFile> BatchFiles { get; set; }
         IDbSet<Calendar> Calendars { get; set; }

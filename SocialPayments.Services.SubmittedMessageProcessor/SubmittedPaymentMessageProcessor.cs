@@ -14,6 +14,7 @@ using System.IO;
 using System.Web;
 using MoonAPNS;
 using SocialPayments.DomainServices.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.Services.MessageProcessors
 {
@@ -89,7 +90,6 @@ namespace SocialPayments.Services.MessageProcessors
 
             var sender = message.Sender;
             var recipient = _userService.GetUser(message.RecipientUri);
-            message.Recipient = recipient;
 
             var senderName = _userService.GetSenderName(sender);
             var recipientName = message.RecipientUri;
@@ -102,12 +102,66 @@ namespace SocialPayments.Services.MessageProcessors
 
             try
             {
-                var transactions = _transactionBatchService.BatchTransactions(message);
+                var transactionsList = new Collection<Transaction>();
 
-                foreach (var transaction in transactions)
+                message.Recipient = recipient;
+                //Create Payment
+                message.Payment = new Payment()
                 {
-                    message.Transactions.Add(transaction);
+                    Amount = message.Amount,
+                    ApiKey = message.ApiKey,
+                    Comments = message.Comments,
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    PaymentStatus = PaymentStatus.Pending,
+                    SenderAccount = message.SenderAccount,
+                };
+
+                transactionsList.Add(_ctx.Transactions.Add(new Transaction()
+                {
+                    Amount = message.Payment.Amount,
+                    Category = TransactionCategory.Payment,
+                    CreateDate = System.DateTime.Now,
+                    FromAccount = message.SenderAccount,
+                    Id = Guid.NewGuid(),
+                    Payment = message.Payment,
+                    PaymentChannelType = PaymentChannelType.Single,
+                    SentDate = System.DateTime.Now,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Status = TransactionStatus.Pending,
+                    //TransactionBatch = transactionBatch,
+                    Type = TransactionType.Withdrawal,
+                    User = sender
+                }));
+                
+                if (recipient != null && recipient.PaymentAccounts[0] != null)
+                {
+                    transactionsList.Add(_ctx.Transactions.Add(new Transaction()
+                    {
+                        Amount = message.Payment.Amount,
+                        Category = TransactionCategory.Payment,
+                        CreateDate = System.DateTime.Now,
+                        FromAccount = recipient.PaymentAccounts[0],
+                        Id = Guid.NewGuid(),
+                        Payment = message.Payment,
+                        PaymentChannelType = PaymentChannelType.Single,
+                        SentDate = System.DateTime.Now,
+                        StandardEntryClass = StandardEntryClass.Web,
+                        Status = TransactionStatus.Pending,
+                        //TransactionBatch = transactionBatch,
+                        Type = TransactionType.Deposit,
+                        User = sender
+                    }));
                 }
+
+                _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
+
+                message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                _transactionBatchService.AddTransactionsToBatch(transactionsList);
+
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -181,7 +235,7 @@ namespace SocialPayments.Services.MessageProcessors
                             new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                            new KeyValuePair<string, string>("link_registration", ""),
+                            new KeyValuePair<string, string>("link_registration", "http://paidthx.com/mobile"),
                             new KeyValuePair<string, string>("app_user", "false")
                         });
                     }
@@ -200,7 +254,7 @@ namespace SocialPayments.Services.MessageProcessors
                     //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
                     //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
                     //      Opening the application is sufficient
-                    var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
+                    var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
 
                     _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
                     
@@ -260,6 +314,7 @@ namespace SocialPayments.Services.MessageProcessors
                     // We should, however, publish something to the user's page that says sender sent payment
                     
                 }
+
             }
             else
             {
@@ -327,13 +382,6 @@ namespace SocialPayments.Services.MessageProcessors
                 }
 
             }
-
-            _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
-
-            message.MessageStatus = MessageStatus.Pending;
-            message.LastUpdatedDate = System.DateTime.Now;
-
-            _ctx.SaveChanges();
 
             return true;
 

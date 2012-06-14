@@ -73,6 +73,8 @@ namespace SocialPayments.DomainServices
         public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
+            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderUri, recipientUri));
+
             User sender = null;
 
             URIType recipientUriType = GetURIType(recipientUri);
@@ -114,80 +116,7 @@ namespace SocialPayments.DomainServices
                 throw new Exception(message);
             }
 
-            if (sender.PinCodeLockOutResetTimeout != null && System.DateTime.Now < sender.PinCodeLockOutResetTimeout)
-            {
-                var message = "This account is temporarily locked.  Please try again later.";
-                var exception = new AccountLockedPinCodeFailures(message);
-                exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
-                exception.LockOutInterval = 1;
-                exception.TemporaryLockout = true;
-
-                _logger.Log(LogLevel.Info, message);
-                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
-
-                throw exception;
-            }
-            if (!sender.SetupSecurityPin || !(sender.SecurityPin.Equals(_securityServices.Encrypt(securityPin))))
-            {
-                string message = String.Format("Invalid Security Pin");
-
-                AccountLockedPinCodeFailures exception = null; 
-
-                if (sender.SetupSecurityPin) 
-                    sender.PinCodeFailuresSinceLastSuccess += 1;
-
-                if (sender.PinCodeFailuresSinceLastSuccess > 15)
-                { 
-                    message = "Invalid Security Pin.  This account is temporarily locked due to security pin failures.";
-                    exception = new AccountLockedPinCodeFailures(message);
-                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
-                    exception.TemporaryLockout = true;
-                    exception.LockOutInterval = 15;
-
-                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(15);
-                }
-
-                if (sender.PinCodeFailuresSinceLastSuccess > 10)
-                {
-                    message = "Invalid Security Pin.  This account is temporarily locked for 10 minutes due to security pin failures.";
-                    exception = new AccountLockedPinCodeFailures(message);
-                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
-                    exception.TemporaryLockout = true;
-                    exception.LockOutInterval = 10; 
-                    
-                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(10);
-                }
-
-                if (sender.PinCodeFailuresSinceLastSuccess > 5)
-                {
-                    message = "Invalid Security Pin.  This account is temporarily locked for 5 minutes due to security pin failures.";
-                    exception = new AccountLockedPinCodeFailures(message);
-                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
-                    exception.TemporaryLockout = true;
-                    exception.LockOutInterval = 5; 
-                    
-                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(5);
-                }
-
-                if (sender.PinCodeFailuresSinceLastSuccess > 2)
-                {
-                    message = "Invalid Security Pin.  This account is temporarily locked for 1 minute due to security pin failures.";
-                    exception = new AccountLockedPinCodeFailures(message);
-                    exception.NumberOfFailures = sender.PinCodeFailuresSinceLastSuccess;
-                    exception.TemporaryLockout = true;
-                    exception.LockOutInterval = 1;
-
-                    sender.PinCodeLockOutResetTimeout = System.DateTime.Now.AddMinutes(1);
-                }
-
-                _logger.Log(LogLevel.Info, message);
-                _logger.Log(LogLevel.Info, String.Format("{0} - {1}", sender.SecurityPin, _securityServices.Encrypt(securityPin)));
-
-                _context.SaveChanges();
-
-                throw exception;
-            }
-
+          
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
             
@@ -245,24 +174,8 @@ namespace SocialPayments.DomainServices
                 throw new InvalidOperationException(message);
             }
 
-            Domain.User recipient = null;
-            if (recipientUriType == URIType.MECode)
-            {
-                var meCode = _context.MECodes
-                     .FirstOrDefault(m => m.MeCode.Equals(recipientUri));
+            Domain.User recipient = _userServices.GetUser(recipientUri);
 
-                if (meCode == null)
-                    throw new ArgumentException("MECode not found.");
-
-                recipient = meCode.User;
-            }
-
-            if (recipientUriType == URIType.EmailAddress)
-                recipient = _userServices.FindUserByEmailAddress(recipientUri);
-            if (recipientUriType == URIType.MobileNumber)
-                recipient = _userServices.FindUserByMobileNumber(recipientUri);
-            if (recipientUriType == URIType.FacebookAccount)
-                recipient = _userServices.GetUser(recipientUri);
             //TODO: confirm recipient is valid???
 
             //TODO: confirm amount is within payment limits
@@ -280,8 +193,6 @@ namespace SocialPayments.DomainServices
 
             try
             {
-                MessageStatus messageStatus = MessageStatus.Submitted;
-
                 messageItem = _context.Messages.Add(new Message()
                 {
                     Amount = amount,
@@ -290,8 +201,8 @@ namespace SocialPayments.DomainServices
                     Comments = comments,
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
-                    MessageStatus = MessageStatus.Pending,
-                    MessageStatusValue = (int)messageStatus,
+                    Status = PaystreamMessageStatus.Processing,
+                    WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
                     MessageType = type,
                     MessageTypeValue = (int)type,
                     RecipientUri = recipientUri,
@@ -319,6 +230,8 @@ namespace SocialPayments.DomainServices
 
             _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", messageItem.Id.ToString());
 
+            _logger.Log(LogLevel.Info, String.Format("Completed Adding a Message. {0} to {1}", recipientUri, senderUri));
+
             return messageItem;
         }
         public void CancelMessage(string id)
@@ -336,7 +249,8 @@ namespace SocialPayments.DomainServices
             try
             {
                 message.LastUpdatedDate = System.DateTime.Now;
-                message.MessageStatus = MessageStatus.CancelPending;
+                message.Status = PaystreamMessageStatus.Cancelled;
+                message.WorkflowStatus = PaystreamMessageWorkflowStatus.Pending;
 
                 _context.SaveChanges();
             }
@@ -345,7 +259,7 @@ namespace SocialPayments.DomainServices
                 throw ex;
             }
 
-            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
+            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", id);
 
         }
         public void AcceptPaymentRequest(string id)
@@ -360,12 +274,12 @@ namespace SocialPayments.DomainServices
             if (message == null)
                 throw new ArgumentException("Invalid Message Id.", "Id");
 
-            if (!(message.MessageStatus == MessageStatus.Pending || message.MessageStatus == MessageStatus.Submitted))
+            if (!(message.Status == PaystreamMessageStatus.Processing))
                 throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
 
             try
             {
-                message.MessageStatus = MessageStatus.RequestAcceptedPending;
+                message.Status = PaystreamMessageStatus.Accepted;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 _context.SaveChanges();
@@ -390,12 +304,12 @@ namespace SocialPayments.DomainServices
             if (message == null)
                 throw new ArgumentException("Invalid Message Id.", "Id");
 
-            if (!(message.MessageStatus == MessageStatus.Pending || message.MessageStatus == MessageStatus.Submitted))
+            if (!(message.Status == PaystreamMessageStatus.Processing))
                 throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
 
             try
             {
-                message.MessageStatus = MessageStatus.RequestRejected;
+                message.Status = PaystreamMessageStatus.Rejected;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 _context.SaveChanges();

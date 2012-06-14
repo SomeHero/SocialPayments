@@ -132,7 +132,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "7082504915",
                 Sender = sender,
@@ -140,7 +140,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri ="7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
             _ctx.SaveChanges();
@@ -245,7 +245,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.PaymentRequest,
                 RecipientUri = "7082504915",
                 Sender = sender,
@@ -253,7 +253,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = "7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
             
 
@@ -271,7 +271,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "7082504915",
                 Sender = sender,
@@ -279,7 +279,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = "7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 
             processor.Process(message2);
@@ -346,7 +346,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "james@paidthx.com",
                 Sender = sender,
@@ -354,7 +354,6 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = "7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
             _ctx.SaveChanges();
@@ -458,7 +457,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "james@paidthx.com",
                 Sender = sender,
@@ -466,7 +465,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = "7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 
             _ctx.SaveChanges();
@@ -585,7 +584,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "$jrhodes",
                 Sender = sender,
@@ -593,7 +592,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = "7082504915",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
+               // Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>(),
             });
 
             _ctx.SaveChanges();
