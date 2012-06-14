@@ -94,7 +94,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                Status = Domain.PaystreamMessageStatus.Processing,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = recipientEmail,
                 Sender = sender,
@@ -102,21 +102,21 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri = senderEmail,
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
             _ctx.SaveChanges();
 
             _submittedMessageProcessor.Process(message);
 
-            message.MessageStatus = Domain.MessageStatus.CancelPending;
+            message.Status = Domain.PaystreamMessageStatus.Cancelled;
 
             var transactionBatch = _transactionBatchServices.GetOpenBatch();
             var transactionsInBatchBeforeCancel = transactionBatch.Transactions.Count;
 
             _cancelledMessageProcessor.Process(message);
 
-            Assert.AreEqual(Domain.MessageStatus.Cancelled, message.MessageStatus);
+            Assert.AreEqual(Domain.PaystreamMessageStatus.Cancelled, message.Status);
             Assert.AreEqual(transactionBatch.Transactions.Count, transactionsInBatchBeforeCancel - 1);
 
         }

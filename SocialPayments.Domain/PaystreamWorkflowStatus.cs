@@ -5,12 +5,10 @@ using System.Text;
 
 namespace SocialPayments.Domain
 {
-    public enum TransactionStatus
+    public enum PaystreamMessageWorkflowStatus
     {
         Pending = 1,
         Complete = 2,
-        Failed = 3,
-        Returned = 4,
-        Cancelled = 5
+        Failed = 3
     }
 }

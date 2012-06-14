@@ -31,7 +31,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             logger.Log(LogLevel.Info, String.Format("Creating Nacha ACH File at {0}", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")));
 
             logger.Log(LogLevel.Info, String.Format("Batching Transactions"));
-            var transactions = transactionBatchService.BatchTransactions();
+            var transactionBatch = transactionBatchService.BatchTransactions();
 
             FileGenerator fileGeneratorService = new FileGenerator();
             fileGeneratorService.CompanyIdentificationNumber = ConfigurationManager.AppSettings["CompanyIdentificationNumber"];
@@ -43,19 +43,31 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             fileGeneratorService.OriginatingTransitRoutingNumber = ConfigurationManager.AppSettings["OriginatingTransitRoutingNumber"];
             fileGeneratorService.CompanyDiscretionaryData = ConfigurationManager.AppSettings["CompanyDiscretionaryData"];
 
-            logger.Log(LogLevel.Info, String.Format("Processing Transactions"));
-            
-            var results = fileGeneratorService.ProcessFile(transactions);
+            logger.Log(LogLevel.Info, String.Format("Processing Transactions for batch {0}", transactionBatch.Id));
 
-            logger.Log(LogLevel.Info, String.Format("Creating Batch File"));
-            
+            List<string> results = null;
+
+            try
+            {
+                results = fileGeneratorService.ProcessFile(transactionBatch.Transactions);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, String.Format("Exception processing Nacha File. {0}", ex.Message));
+
+                throw ex;
+            }
+
+            logger.Log(LogLevel.Info, String.Format("Creating batch file for batch {0}", transactionBatch.Id));
+
             StringBuilder sb = new StringBuilder();
             results.ForEach(s => sb.AppendLine(s));
             string fileContext = sb.ToString();
 
-            logger.Log(LogLevel.Info, String.Format("Uploading Batch File to S3 Server"));
-            
             string bucketName = ConfigurationManager.AppSettings["NachaFileBucketName"];
+            
+            logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
+            
             if (String.IsNullOrEmpty(bucketName))
                 throw new Exception("S3 bucket name for NachaFileBucketName not configured");
 
@@ -67,7 +79,14 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 ContentBody = fileContext,
                 Key = "NACHA_FILE_" + System.DateTime.Now.ToString("MMddyy_Hmmss")
             };
-            s3Client.PutObject(putRequest); 
+            try
+            {
+                s3Client.PutObject(putRequest);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, String.Format("Unable to upload nacha file to S3. {0}", ex.Message));
+            }
 
             //Move all payments to paid
             //Update Batch File

@@ -15,6 +15,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<UserAttribute> _userAttributes;
         private IDbSet<Role> _roles;
         private IDbSet<Message> _messages;
+        private IDbSet<Payment> _payments;
         private IDbSet<PaymentAccount> _paymentAccounts;
         private IDbSet<BatchFile> _batchFiles;
         private IDbSet<Calendar> _calendars;
@@ -69,6 +70,11 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         {
             get { return _messages; }
             set { _messages = value; }
+        }
+        public IDbSet<Payment> Payments
+        {
+            get { return _payments; }
+            set { _payments = value; }
         }
         public IDbSet<PaymentAccount> PaymentAccounts
         {

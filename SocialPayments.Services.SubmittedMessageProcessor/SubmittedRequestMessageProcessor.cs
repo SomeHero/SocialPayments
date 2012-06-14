@@ -226,7 +226,7 @@ namespace SocialPayments.Services.MessageProcessors
             //Update Payment Status
             _logger.Log(LogLevel.Info, String.Format("Updating Payment Request"));
 
-            message.MessageStatus = MessageStatus.Pending;
+            message.Status = PaystreamMessageStatus.Processing;
             message.LastUpdatedDate = System.DateTime.Now;
 
             _ctx.SaveChanges();

@@ -54,7 +54,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
             _submittedMessageProcessor.Process(message);
 
             //Change the payment request to AcceptPending
-            message.MessageStatus = Domain.MessageStatus.RequestAcceptedPending;
+            message.Status = Domain.PaystreamMessageStatus.Accepted;
 
             //Process the payment request
             _acceptPaymentRequestMessageProccess.Process(message);
@@ -65,7 +65,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
             Assert.AreEqual(2, transactionBatch.Transactions.Count);
 
             //Assert that the Status of the Request is Pending
-            Assert.AreEqual(Domain.MessageStatus.Pending, message.MessageStatus);
+            Assert.AreEqual(Domain.PaystreamMessageStatus.Processing, message.Status);
         }
     }
 }

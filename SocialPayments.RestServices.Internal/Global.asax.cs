@@ -45,8 +45,13 @@ namespace SocialPayments.RestServices.Internal
             );
             routes.MapHttpRoute(
                 name: "RejectPaymentRequest",
-                routeTemplate: "api/paystreammessages/{id}/accept_request",
+                routeTemplate: "api/paystreammessages/{id}/reject_request",
                 defaults: new { controller = "PaystreamMessages", action = "RejectPaymentRequest" }
+            );
+            routes.MapHttpRoute(
+                name: "CancelPaymentRequest",
+                routeTemplate: "api/paystreammessages/{id}/cancel_request",
+                defaults: new { controller = "PaystreamMessages", action = "CancelRequest" }
             );
             routes.MapHttpRoute(
                 name: "IgnorePaymentRequest",

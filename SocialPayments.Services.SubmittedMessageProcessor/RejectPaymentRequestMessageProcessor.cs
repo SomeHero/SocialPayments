@@ -29,7 +29,7 @@ namespace SocialPayments.Services.MessageProcessors
         {
             //change status of message
             message.LastUpdatedDate = System.DateTime.Now;
-            message.MessageStatus = Domain.MessageStatus.RequestRejected;
+            //message.Status = Domain.PaystreamMessageStatus.RequestRejected;
 
             _ctx.SaveChanges();
 
