@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using SocialPayments.DomainServices.UnitTests.Fakes;
 using SocialPayments.DomainServices.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.DomainServices.UnitTests
 {
@@ -95,7 +96,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -125,7 +126,7 @@ namespace SocialPayments.DomainServices.UnitTests
 
             message.Recipient = userService.FindUserByEmailAddress(recipient.EmailAddress);
 
-            transactionBatchService.BatchTransactions(message);
+            //transactionBatchService.BatchTransactions(message);
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -158,7 +159,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -188,7 +189,7 @@ namespace SocialPayments.DomainServices.UnitTests
 
             message.Recipient = userService.FindUserByEmailAddress(recipient.EmailAddress);
 
-            transactionBatchService.BatchTransactions(message);
+            //transactionBatchService.BatchTransactions(message);
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -220,7 +221,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -239,7 +240,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var message = messageService.AddMessage(application.ApiKey.ToString(), sender.EmailAddress, "recipient@paidthx.com",
                 senderPaymentAccount.Id.ToString(), transactionAmount, "Test Payment", "Payment", "2589");
 
-            transactionBatchService.BatchTransactions(message);
+            //transactionBatchService.BatchTransactions(message);
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -271,7 +272,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -290,7 +291,7 @@ namespace SocialPayments.DomainServices.UnitTests
             var message = messageService.AddMessage(application.ApiKey.ToString(), sender.EmailAddress, "recipient@paidthx.com",
                 senderPaymentAccount.Id.ToString(), transactionAmount, "Test Payment", "Payment", "2589");
 
-            transactionBatchService.BatchTransactions(message);
+            //transactionBatchService.BatchTransactions(message);
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -321,7 +322,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -346,7 +347,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Withdrawal,
                 User = sender
             };
@@ -359,7 +360,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Withdrawal,
                 User = sender
             };
@@ -372,17 +373,17 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
                 User = sender
             };
 
-            transactionBatchService.BatchTransactions(new List<Transaction>()
-            {
-                transaction1,
-                transaction2,
-                transaction3
-            });
+            //transactionBatchService.BatchTransactions(new List<Transaction>()
+            //{
+            //    transaction1,
+            //    transaction2,
+            //    transaction3
+            //});
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -412,7 +413,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
             _ctx.SaveChanges();
 
@@ -437,7 +438,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Withdrawal,
                 User = sender
             };
@@ -450,7 +451,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Withdrawal,
                 User = sender
             };
@@ -463,7 +464,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
                 User = sender
             };
@@ -476,7 +477,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
                 User = sender
             };
@@ -489,18 +490,18 @@ namespace SocialPayments.DomainServices.UnitTests
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
                 User = sender
             };
-            transactionBatchService.BatchTransactions(new List<Transaction>()
-            {
-                transaction1,
-                transaction2,
-                transaction3,
-                transaction4,
-                transaction5
-            });
+            //transactionBatchService.BatchTransactions(new List<Transaction>()
+            //{
+            //    transaction1,
+            //    transaction2,
+            //    transaction3,
+            //    transaction4,
+            //    transaction5
+            //});
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
 
@@ -527,7 +528,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
@@ -553,7 +554,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 TotalNumberOfDeposits = 0,
                 TotalWithdrawalAmount = 0,
                 TotalNumberOfWithdrawals = 0,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
 
             var transactionBatch = transactionBatchService.GetOpenBatch();
@@ -570,48 +571,48 @@ namespace SocialPayments.DomainServices.UnitTests
                 CreateDate = System.DateTime.Now,
                 Id = Guid.NewGuid(),
                 IsClosed = false,
-                Transactions = new List<Transaction>()
+                Transactions = new Collection<Transaction>()
             });
 
-            transactionBatchService.BatchTransactions(new List<Transaction>()
-            {
-                new Transaction() {
-                    Amount = 5,
-                    Category = TransactionCategory.Payment,
-                    Id = Guid.NewGuid(),
-                    PaymentChannelType = PaymentChannelType.Single,
-                    Status = TransactionStatus.Pending,
-                    StandardEntryClass = StandardEntryClass.Web,
-                    Type = TransactionType.Deposit
-                },
-                new Transaction() {
-                    Amount = 10,
-                    Category = TransactionCategory.Payment,
-                    Id = Guid.NewGuid(),
-                    PaymentChannelType = PaymentChannelType.Single,
-                    Status = TransactionStatus.Pending,
-                    StandardEntryClass = StandardEntryClass.Web,
-                    Type = TransactionType.Deposit
-                },
-                new Transaction() {
-                    Amount = 15,
-                    Category = TransactionCategory.Payment,
-                    Id = Guid.NewGuid(),
-                    PaymentChannelType = PaymentChannelType.Single,
-                    Status = TransactionStatus.Pending,
-                    StandardEntryClass = StandardEntryClass.Web,
-                    Type = TransactionType.Deposit
-                },
-                new Transaction() {
-                    Amount = 20,
-                    Category = TransactionCategory.Payment,
-                    Id = Guid.NewGuid(),
-                    PaymentChannelType = PaymentChannelType.Single,
-                    Status = TransactionStatus.Pending,
-                    StandardEntryClass = StandardEntryClass.Web,
-                    Type = TransactionType.Deposit
-                }
-            });
+            //transactionBatchService.BatchTransactions(new List<Transaction>()
+            //{
+            //    new Transaction() {
+            //        Amount = 5,
+            //        Category = TransactionCategory.Payment,
+            //        Id = Guid.NewGuid(),
+            //        PaymentChannelType = PaymentChannelType.Single,
+            //        Status = TransactionStatus.Pending,
+            //        StandardEntryClass = StandardEntryClass.Web,
+            //        Type = TransactionType.Deposit
+            //    },
+            //    new Transaction() {
+            //        Amount = 10,
+            //        Category = TransactionCategory.Payment,
+            //        Id = Guid.NewGuid(),
+            //        PaymentChannelType = PaymentChannelType.Single,
+            //        Status = TransactionStatus.Pending,
+            //        StandardEntryClass = StandardEntryClass.Web,
+            //        Type = TransactionType.Deposit
+            //    },
+            //    new Transaction() {
+            //        Amount = 15,
+            //        Category = TransactionCategory.Payment,
+            //        Id = Guid.NewGuid(),
+            //        PaymentChannelType = PaymentChannelType.Single,
+            //        Status = TransactionStatus.Pending,
+            //        StandardEntryClass = StandardEntryClass.Web,
+            //        Type = TransactionType.Deposit
+            //    },
+            //    new Transaction() {
+            //        Amount = 20,
+            //        Category = TransactionCategory.Payment,
+            //        Id = Guid.NewGuid(),
+            //        PaymentChannelType = PaymentChannelType.Single,
+            //        Status = TransactionStatus.Pending,
+            //        StandardEntryClass = StandardEntryClass.Web,
+            //        Type = TransactionType.Deposit
+            //    }
+            //});
 
             var transactionToRemove = new Transaction()
             {
@@ -624,13 +625,13 @@ namespace SocialPayments.DomainServices.UnitTests
                 Type = TransactionType.Deposit
             };
 
-            transactionBatchService.BatchTransactions(new List<Transaction>() {
-                transactionToRemove
-            });
+            //transactionBatchService.BatchTransactions(new List<Transaction>() {
+            //    transactionToRemove
+            //});
 
             var numberOfTransactionInBatch = transactionBatch.Transactions.Count;
 
-            bool result = transactionBatchService.RemoveFromBatch(transactionToRemove);
+            bool result = false; // transactionBatchService.RemoveTransactionsFromBatch(transactionToRemove);
 
             Assert.IsTrue(result);
         }

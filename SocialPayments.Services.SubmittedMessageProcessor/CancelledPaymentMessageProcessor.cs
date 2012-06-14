@@ -37,24 +37,23 @@ namespace SocialPayments.Services.MessageProcessors
         {
             _logger.Log(LogLevel.Info, String.Format("Processing Cancel Message for Message {0}", message.Id.ToString()));
 
-            bool removeSuccess = false;
             try
             {
-                
-                foreach (var transaction in message.Transactions)
+
+                if (message.Payment != null)
                 {
-                    removeSuccess = _transactionBatchService.RemoveFromBatch(transaction);
+                    _logger.Log(LogLevel.Debug, String.Format("Removing {0} item(s) from batch", message.Payment.Transactions.Count));
 
-                    if(!removeSuccess)
-                        break;
+                    _transactionBatchService.RemoveTransactionsFromBatch(message.Payment.Transactions);
 
-                    transaction.Status = TransactionStatus.Cancelled;
-                    transaction.LastUpdatedDate = System.DateTime.Now;
-                }
+                    foreach (var transaction in message.Payment.Transactions)
+                    {
+                        transaction.Status = TransactionStatus.Cancelled;
+                        transaction.LastUpdatedDate = System.DateTime.Now;
+                    }
 
-                if (removeSuccess)
-                {
-                    message.MessageStatus = MessageStatus.Cancelled;
+                    message.Payment.PaymentStatus = PaymentStatus.Cancelled;
+                    message.LastUpdatedDate = System.DateTime.Now;
 
                     _ctx.SaveChanges();
 

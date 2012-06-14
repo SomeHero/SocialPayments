@@ -148,3 +148,24 @@
 2012-06-05 10:08:24.6269 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
 2012-06-05 10:08:30.5019 SocialPayments.DataLayer.Context Creating Model
 2012-06-05 10:08:31.8613 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-06-11 14:28:45.2216 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-11 14:32:23.9218 SocialPayments.DataLayer.Context Creating Model
+2012-06-11 14:32:37.8828 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. The database creation succeeded, but the creation of the database objects did not. See InnerException for details.
+2012-06-11 14:37:33.1152 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-11 14:37:37.6640 SocialPayments.DataLayer.Context Creating Model
+2012-06-11 14:38:11.4091 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. The database creation succeeded, but the creation of the database objects did not. See InnerException for details.
+2012-06-11 14:43:01.8076 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-11 14:43:02.8798 SocialPayments.DataLayer.Context Creating Model
+2012-06-12 00:19:56.8740 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-12 00:20:24.5312 SocialPayments.DataLayer.Context Creating Model
+2012-06-12 00:24:34.5566 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-12 00:25:09.5273 SocialPayments.DataLayer.Context Creating Model
+2012-06-12 00:25:33.6523 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-06-12 00:26:31.7304 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. An exception occurred while initializing the database. See the InnerException for details.
+2012-06-12 00:30:29.7998 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-12 00:32:46.2802 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-12 00:33:14.1552 SocialPayments.DataLayer.Context Creating Model
+2012-06-12 00:33:27.4833 SocialPayments.DataLayer.MyInitializer Seeding Database
+2012-06-12 00:34:16.5771 SocialPayments.RestServices.Internal.Controllers.ApplicationsController Unhandled exception getting application 1. An exception occurred while initializing the database. See the InnerException for details.
+2012-06-13 11:26:06.5087 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal
+2012-06-13 12:47:57.8193 SocialPayments.RestServices.Internal.WebApiApplication Starting application API Internal

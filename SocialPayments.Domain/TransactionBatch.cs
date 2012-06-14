@@ -18,6 +18,6 @@ namespace SocialPayments.Domain
         public DateTime? LastDateUpdated { get; set; }
         public bool IsClosed { get; set; }
 
-        public virtual List<Transaction> Transactions { get; set; } 
+        public virtual Collection<Transaction> Transactions { get; set; } 
     }
 }

@@ -326,20 +326,18 @@ namespace SocialPayments.DomainServices.UnitTests
             var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, recipient.EmailAddress,
                 senderAccount.Id.ToString(), 1.00, "Test Payment", "Payment", securityPin);
 
-            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
-
             _ctx.SaveChanges();
 
-            var transactions =  _transactionBatchService.BatchTransactions(message);
+            //var transactions =  _transactionBatchService.BatchTransactions(message);
 
-            foreach (var transaction in transactions)
-            {
-                message.Transactions.Add(transaction);
-            }
+           // foreach (var transaction in transactions)
+           // {
+               // message.Transactions.Add(transaction);
+           // }
 
             _messageService.CancelMessage(message.Id.ToString());
 
-            Assert.AreEqual(MessageStatus.Cancelled, message.MessageStatus);
+            Assert.AreEqual(PaystreamMessageStatus.Cancelled, message.Status);
             Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
 
         }
@@ -393,13 +391,13 @@ namespace SocialPayments.DomainServices.UnitTests
             var message = _messageService.AddMessage(application.ApiKey.ToString(), sender.MobileNumber, recipient.EmailAddress,
                 senderAccount.Id.ToString(), 1.00, "Test Payment", "PaymentRequest", securityPin);
 
-            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
+           // message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
 
             _ctx.SaveChanges();
 
             _messageService.RejectPaymentRequest(message.Id.ToString());
 
-            Assert.AreEqual(MessageStatus.RequestRejected, message.MessageStatus);
+            Assert.AreEqual(PaystreamMessageStatus.Rejected, message.Status);
             Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
         }
         [TestMethod]
@@ -454,7 +452,7 @@ namespace SocialPayments.DomainServices.UnitTests
 
             message.Recipient = recipient;
 
-            message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
+            //message.Transactions = new System.Collections.ObjectModel.Collection<Transaction>();
 
             _ctx.SaveChanges();
 
@@ -462,7 +460,7 @@ namespace SocialPayments.DomainServices.UnitTests
 
             var transactionBatch = _transactionBatchService.GetOpenBatch();
 
-            Assert.AreEqual(MessageStatus.RequestAcceptedPending, message.MessageStatus);
+            Assert.AreEqual(PaystreamMessageStatus.Accepted, message.Status);
             Assert.IsTrue(((FakeAmazonNotificationService)_amazonNotificationService).WasCalled);
         }
         [TestMethod]

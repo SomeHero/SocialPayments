@@ -8,6 +8,7 @@ namespace SocialPayments.Domain
     public enum MessageType
     {
         Payment = 0,
-        PaymentRequest = 1
+        PaymentRequest = 1,
+        Update = 2
     }
 }

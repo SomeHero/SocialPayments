@@ -19,6 +19,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<UserAttribute> UserAttributes { get; set; }
         public IDbSet<Role> Roles { get; set; }
         public IDbSet<Message> Messages { get; set; }
+        public IDbSet<Payment> Payments { get; set; }
         public IDbSet<PaymentAccount> PaymentAccounts { get; set; }
         public IDbSet<BatchFile> BatchFiles { get; set; }
         public IDbSet<Calendar> Calendars { get; set; }
@@ -54,28 +55,22 @@ namespace SocialPayments.DataLayer
                     .WillCascadeOnDelete(false);
 
                 modelBuilder.Entity<Message>()
-                    .HasRequired(m => m.Sender)
-                    .WithMany()
-                    .HasForeignKey(m => m.SenderId)
-                    .WillCascadeOnDelete(false);
-
-                modelBuilder.Entity<Message>()
                     .HasOptional(m => m.Recipient)
                     .WithMany()
                     .HasForeignKey(m => m.RecipientId)
                     .WillCascadeOnDelete(false);
 
-                modelBuilder.Entity<Transaction>()
-                    .HasRequired(t => t.FromAccount)
-                    .WithMany()
-                    .HasForeignKey(t => t.FromAccountId)
+                modelBuilder.Entity<Message>()
+                    .HasOptional(m => m.Payment)
+                    .WithOptionalDependent(p => p.Message)
+                    .Map(m => m.MapKey("PaymentId"))
                     .WillCascadeOnDelete(false);
-
-                modelBuilder.Entity<Transaction>()
-                     .HasRequired(t => t.User)
-                     .WithMany()
-                     .HasForeignKey(t => t.UserId)
-                     .WillCascadeOnDelete(false);
+                    
+                modelBuilder.Entity<Payment>()
+                    .HasRequired(m => m.Application)
+                    .WithMany()
+                    .HasForeignKey(m => m.ApiKey)
+                    .WillCascadeOnDelete(false);
 
                 modelBuilder.Entity<User>()
                     .HasOptional(u => u.FacebookUser)
@@ -202,7 +197,7 @@ namespace SocialPayments.DataLayer
                 Description = "Member",
                 RoleName = "Member"
             });
-            context.Applications.Add(new Application()
+            var application = context.Applications.Add(new Application()
             {
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                 ApplicationName = "MyApp",
@@ -315,7 +310,7 @@ namespace SocialPayments.DataLayer
                 },
             });
 
-            var other = context.Users.Add(new User()
+            var sender = context.Users.Add(new User()
             {
                 ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                 UserId = Guid.NewGuid(),
@@ -350,7 +345,18 @@ namespace SocialPayments.DataLayer
                         UserAttributeId = lastNameUserAttribute.Id,
                         AttributeValue = "Rhodes"
                     }
-                }
+                },
+                PaymentAccounts = new Collection<PaymentAccount>() {
+                    new PaymentAccount() { 
+                        Id=Guid.NewGuid(), 
+                        AccountNumber = securityService.Encrypt("9999999999"), 
+                        AccountType = PaymentAccountType.Checking, 
+                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                        RoutingNumber= securityService.Encrypt("053000219"),
+                        CreateDate = System.DateTime.Now,
+                        IsActive = true
+                    }
+                },
             });
 
             var meCode = context.MECodes.Add(new MECode()
@@ -361,14 +367,10 @@ namespace SocialPayments.DataLayer
                 IsActive = true,
                 IsApproved = true,
                 MeCode = "$therealjamesrhodes",
-                User = other
+                User = sender
             });
 
-            context.SaveChanges();
-
-            var user = context.Users.FirstOrDefault(u => u.EmailAddress == "test@gmail.com");
-            var application = context.Applications.FirstOrDefault(a => a.ApiKey == new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"));
-
+           
             var transactionBatch = context.TransactionBatches.Add(new TransactionBatch()
                                                                       {
                                                                           Id = Guid.NewGuid(),
@@ -376,57 +378,176 @@ namespace SocialPayments.DataLayer
                                                                           IsClosed = false
                                                                       });
 
-            var message = context.Messages.Add(new Message()
+            context.SaveChanges();
+
+            var sentMessage = context.Messages.Add(new Message()
             {
                 Id = Guid.NewGuid(),
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                MessageStatus = MessageStatus.Submitted,
-                MessageStatusValue = (int)MessageStatus.Submitted,
+                Status = PaystreamMessageStatus.Processing,
                 MessageType = MessageType.Payment,
                 MessageTypeValue = (int)MessageType.Payment,
-                RecipientUri = "804-387-9693",
-                Sender = user,
-                SenderId = user.UserId,
-                SenderUri = user.MobileNumber,
-                SenderAccount = user.PaymentAccounts[0],
-                SenderAccountId = user.PaymentAccounts[0].Id,
+                Recipient = sender,
+                RecipientUri = sender.MobileNumber,
+                Sender = james,
+                SenderUri = james.MobileNumber,
+                SenderAccount = sender.PaymentAccounts[0],
                 CreateDate = System.DateTime.Now,
                 Application = application,
             });
-            
-            message.Transactions = new Collection<Transaction>()
-                                       {
-                                           new Transaction()
-                                               {
-                                                   Amount = 20.55,
-                                                   Category = TransactionCategory.Payment,
-                                                   CreateDate = System.DateTime.Now,
-                                                   FromAccountId = user.PaymentAccounts[0].Id,
-                                                   Id = Guid.NewGuid(),
-                                                   MessageId = message.Id,
-                                                   TransactionBatchId = transactionBatch.Id,
-                                                   Type = TransactionType.Withdrawal,
-                                                   StandardEntryClass =  Domain.StandardEntryClass.Web,
-                                                   PaymentChannelType = Domain.PaymentChannelType.Single,
-                                                   UserId = user.UserId
-                                               },
-                                               new Transaction()
-                                               {
-                                                       Amount = 20.55,
-                                                   Category = TransactionCategory.Payment,
-                                                   CreateDate = System.DateTime.Now,
-                                                   FromAccountId = user.PaymentAccounts[0].Id,
-                                                   Id = Guid.NewGuid(),
-                                                   MessageId = message.Id,
-                                                   TransactionBatchId = transactionBatch.Id,
-                                                   Type = TransactionType.Deposit,
-                                                   StandardEntryClass =  Domain.StandardEntryClass.Web,
-                                                   PaymentChannelType = Domain.PaymentChannelType.Single,
-                                                    UserId = user.UserId
-                                               }
-                                       };
+
+            var sentPayment = sentMessage.Payment = new Payment()
+            {
+                    Id = Guid.NewGuid(),
+                    Amount = sentMessage.Amount,
+                    ApiKey = sentMessage.ApiKey,
+                    Comments = sentMessage.Comments,
+                    Message = sentMessage,
+                    CreateDate = System.DateTime.Now,
+                    PaymentStatus = PaymentStatus.Pending,
+                    RecipientAccount = james.PaymentAccounts[0],
+                    SenderAccount = sentMessage.Sender.PaymentAccounts[0],
+                    Transactions = new Collection<Transaction>()
+                };
+
+            sentPayment.Transactions.Add(new Transaction()
+            {
+                ACHTransactionId = "",
+                Amount = sentPayment.Amount,
+                Category = TransactionCategory.Payment,
+                CreateDate = System.DateTime.Now,
+                FromAccount = sentPayment.SenderAccount,
+                Id = Guid.NewGuid(),
+                PaymentChannelType = PaymentChannelType.Single,
+                StandardEntryClass = StandardEntryClass.Web,
+                TransactionBatch = transactionBatch,
+                Type = TransactionType.Withdrawal,
+                User = sentMessage.Sender,
+                Payment = sentPayment,
+                Status = TransactionStatus.Pending,
+            });
+
+            sentPayment.Transactions.Add(new Transaction()
+            {
+                ACHTransactionId = "",
+                Amount = sentPayment.Amount,
+                Category = TransactionCategory.Payment,
+                CreateDate = System.DateTime.Now,
+                FromAccount = sentPayment.RecipientAccount,
+                Id = Guid.NewGuid(),
+                PaymentChannelType = PaymentChannelType.Single,
+                StandardEntryClass = StandardEntryClass.Web,
+                TransactionBatch = transactionBatch,
+                Type = TransactionType.Deposit,
+                User = sentMessage.Recipient,
+                Payment = sentPayment,
+                Status = TransactionStatus.Pending,
+            });
+
+
+            var acceptRequest = context.Messages.Add(new Message()
+            {
+                Id = Guid.NewGuid(),
+                Amount = 1.00,
+                ApiKey = application.ApiKey,
+                Comments = "Test Payment Message",
+                Status = PaystreamMessageStatus.Processing,
+                MessageType = MessageType.PaymentRequest,
+                Recipient = james,
+                RecipientUri = james.MobileNumber,
+                Sender = sender,
+                SenderUri = sender.MobileNumber,
+                SenderAccount = sender.PaymentAccounts[0],
+                CreateDate = System.DateTime.Now,
+                Application = application,
+            });
+
+            var sendRequest = context.Messages.Add(new Message()
+            {
+                Id = Guid.NewGuid(),
+                Amount = 1.00,
+                ApiKey = application.ApiKey,
+                Comments = "Test Payment Message",
+                Status = PaystreamMessageStatus.Processing,
+                MessageType = MessageType.PaymentRequest,
+                Recipient = sender,
+                RecipientUri = sender.MobileNumber,
+                Sender = james,
+                SenderUri = james.MobileNumber,
+                SenderAccount = sender.PaymentAccounts[0],
+                CreateDate = System.DateTime.Now,
+                Application = application,
+            });
+
+            var receivedMessage = context.Messages.Add(new Message()
+            {
+                Id = Guid.NewGuid(),
+                Amount = 12.00,
+                ApiKey = application.ApiKey,
+                Comments = "thanks for the cheeseburger",
+                Status = PaystreamMessageStatus.Processing,
+                MessageType = MessageType.Payment,
+                MessageTypeValue = (int)MessageType.Payment,
+                Recipient = james,
+                RecipientUri = james.MobileNumber,
+                Sender = sender,
+                SenderUri = sender.MobileNumber,
+                SenderAccount = sender.PaymentAccounts[0],
+                CreateDate = System.DateTime.Now,
+                Application = application,
+            });
+
+            var receivedPayment = receivedMessage.Payment = new Payment()
+            {
+                Id = Guid.NewGuid(),
+                Amount = receivedMessage.Amount,
+                ApiKey = receivedMessage.ApiKey,
+                Comments = receivedMessage.Comments,
+                Message = receivedMessage,
+                CreateDate = System.DateTime.Now,
+                PaymentStatus = PaymentStatus.Pending,
+                RecipientAccount = james.PaymentAccounts[0],
+                SenderAccount = receivedMessage.Sender.PaymentAccounts[0],
+                Transactions = new Collection<Transaction>()
+            };
+
+            receivedPayment.Transactions.Add(new Transaction()
+            {
+                ACHTransactionId = "",
+                Amount = receivedPayment.Amount,
+                Category = TransactionCategory.Payment,
+                CreateDate = System.DateTime.Now,
+                FromAccount = receivedPayment.SenderAccount,
+                Id = Guid.NewGuid(),
+                PaymentChannelType = PaymentChannelType.Single,
+                StandardEntryClass = StandardEntryClass.Web,
+                TransactionBatch = transactionBatch,
+                Type = TransactionType.Withdrawal,
+                User = receivedMessage.Sender,
+                Payment = receivedPayment,
+                Status = TransactionStatus.Pending,
+            });
+
+            receivedPayment.Transactions.Add(new Transaction()
+            {
+                ACHTransactionId = "",
+                Amount = receivedPayment.Amount,
+                Category = TransactionCategory.Payment,
+                CreateDate = System.DateTime.Now,
+                FromAccount = receivedPayment.RecipientAccount,
+                Id = Guid.NewGuid(),
+                PaymentChannelType = PaymentChannelType.Single,
+                StandardEntryClass = StandardEntryClass.Web,
+                TransactionBatch = transactionBatch,
+                Type = TransactionType.Deposit,
+                User = receivedMessage.Recipient,
+                Payment = receivedPayment,
+                Status = TransactionStatus.Pending,
+            });
+
+            context.SaveChanges();
 
             var calendar = context.Calendars.Add(new Calendar()
             {

@@ -34,14 +34,18 @@ namespace SocialPayments.Domain
             get { return (MessageType)MessageTypeValue; }
             set { MessageTypeValue = (int)value; }
         }
-        public int MessageStatusValue { get; set; }
-        public MessageStatus MessageStatus
+        public int StatusValue { get; set; }
+        public PaystreamMessageStatus Status
         {
-            get { return (MessageStatus)MessageStatusValue; }
-            set { MessageStatusValue = (int)value; }
+            get { return (PaystreamMessageStatus)StatusValue; }
+            set { StatusValue = (int)value; }
         }
-
-        public virtual Collection<Transaction> Transactions { get; set; }
+        public int WorkflowStatusValue { get; set; }
+        public PaystreamMessageWorkflowStatus WorkflowStatus
+        {
+            get { return (PaystreamMessageWorkflowStatus)WorkflowStatusValue; }
+            set { WorkflowStatusValue = (int)value; }
+        }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string senderFirstName { get; set; }
@@ -50,5 +54,7 @@ namespace SocialPayments.Domain
         public string recipientFirstName { get; set; }
         public string recipientLastName { get; set; }
         public string recipientImageUri { get; set; }
+
+        public virtual Payment Payment { get; set; }
     }
 }

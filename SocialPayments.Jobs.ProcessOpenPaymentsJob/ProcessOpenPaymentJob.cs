@@ -28,7 +28,7 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
         
         public void Execute(JobExecutionContext context)
         {
-            var payments = _ctx.Messages.Where(p => p.MessageStatus == Domain.MessageStatus.Pending);
+            var payments = _ctx.Messages.Where(p => p.Status == Domain.PaystreamMessageStatus.Processing);
             int numberOfDaysOpenThreshold = 10;
             foreach (var payment in payments)
             {
@@ -37,19 +37,19 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
                 if (payment.CreateDate.AddDays(numberOfDaysOpenThreshold).Date > System.DateTime.Now.Date)
                 {
                     //Create a transaction to deposit payment amount in payer's account
-                    payment.Transactions.Add(new Domain.Transaction()
-                    {
-                        Amount = payment.Amount,
-                        Category = Domain.TransactionCategory.Payment,
-                        CreateDate = System.DateTime.Now,
-                        FromAccountId = payment.SenderAccountId.Value,
-                        PaymentChannelType = Domain.PaymentChannelType.Single,
-                        //PaymentId = payment.Id,
-                        StandardEntryClass = Domain.StandardEntryClass.Web,
-                        Status = Domain.TransactionStatus.Pending,
-                        TransactionBatchId = transactionBatch.Id,
-                        Type = Domain.TransactionType.Deposit
-                    });
+                    //payment.Transactions.Add(new Domain.Transaction()
+                    //{
+                    //    Amount = payment.Amount,
+                    //    Category = Domain.TransactionCategory.Payment,
+                    //    CreateDate = System.DateTime.Now,
+                    //    FromAccountId = payment.SenderAccountId.Value,
+                    //    PaymentChannelType = Domain.PaymentChannelType.Single,
+                    //    //PaymentId = payment.Id,
+                    //    StandardEntryClass = Domain.StandardEntryClass.Web,
+                    //    Status = Domain.TransactionStatus.Pending,
+                    //    TransactionBatchId = transactionBatch.Id,
+                    //    Type = Domain.TransactionType.Deposit
+                    //});
                 }
             }
 

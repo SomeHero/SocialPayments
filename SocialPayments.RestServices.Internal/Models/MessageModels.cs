@@ -45,6 +45,9 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class AcceptPaymentRequestModel
         {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+            public string paymentAccountId { get; set; }
         }
 
         public class UpdateMessageRequest {

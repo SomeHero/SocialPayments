@@ -71,9 +71,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\NLog\.NET Framework 4.0\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="SprightlySoftAWS">
-      <HintPath>..\..\..\..\..\Desktop\SprightlySoft_SNSAutoConfirm_v1.0\SNSAutoConfirm\SNSAutoConfirm\bin\SprightlySoftAWS.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />

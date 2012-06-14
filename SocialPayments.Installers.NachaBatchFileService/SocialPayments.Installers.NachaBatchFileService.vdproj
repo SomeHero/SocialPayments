@@ -33,30 +33,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_B5B558F1D939C4ECF9A4E1FD3E08B536"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_AF6134D7398438E3EAF6923610C9BCDE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_AC909A884E159E6A9122C9869C42E5CB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -107,6 +83,30 @@
         {
         "MsmKey" = "8:_B5B558F1D939C4ECF9A4E1FD3E08B536"
         "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_B5B558F1D939C4ECF9A4E1FD3E08B536"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_AF6134D7398438E3EAF6923610C9BCDE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_AC909A884E159E6A9122C9869C42E5CB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -184,12 +184,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_AC909A884E159E6A9122C9869C42E5CB"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -208,7 +202,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_324D4CC044479F45F95018309006431F"
+        "OwnerKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D56211C2204888D161524A6C7DA24A96"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -551,37 +551,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_324D4CC044479F45F95018309006431F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_324D4CC044479F45F95018309006431F"
-                    {
-                    "Name" = "8:NLog.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NLog.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_87CE5615D419FBECFE3344F67E67919C"
             {
             "AssemblyRegister" = "3:1"
@@ -689,6 +658,37 @@
                     }
                 }
             "SourcePath" = "8:SocialPayments.DomainServices.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D56211C2204888D161524A6C7DA24A96"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D56211C2204888D161524A6C7DA24A96"
+                    {
+                    "Name" = "8:NLog.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NLog.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
@@ -825,7 +825,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{E9F7C6AC-8ED4-4AE6-9E7C-C90CEBBC8493}"
+        "PackageCode" = "8:{49AC39B0-AFF0-4E44-BF86-764AFCAE9299}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

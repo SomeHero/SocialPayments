@@ -162,7 +162,6 @@
     <Compile Include="FBUser.cs" />
     <Compile Include="MECode.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="MessageStatus.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="MobileDeviceAlias.cs" />
     <Compile Include="MobileNumberSignUpKey.cs" />
@@ -177,7 +176,10 @@
     <Compile Include="PaymentRequest.cs" />
     <Compile Include="PaymentRequestStatus.cs" />
     <Compile Include="PaymentStatus.cs" />
+    <Compile Include="PaymentWorkflowStatus.cs" />
     <Compile Include="PayPoint.cs" />
+    <Compile Include="PaystreamMessageStatus.cs" />
+    <Compile Include="PaystreamWorkflowStatus.cs" />
     <Compile Include="ProfileBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="TransactionCategory.cs" />
     <Compile Include="TransactionStatus.cs" />
     <Compile Include="TransactionType.cs" />
+    <Compile Include="TransactionWorkflowStatus.cs" />
     <Compile Include="URIType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserAttribute.cs" />
