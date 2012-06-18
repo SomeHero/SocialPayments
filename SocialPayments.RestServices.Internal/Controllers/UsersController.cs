@@ -73,8 +73,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
             if (receivedPayments.Count() > 0)
                 receivedTotal = receivedPayments.Sum(m => m.Amount);
 
+            string preferredPaymentAccountId = "";
+            string preferredReceiveAccountId = "";
+
+            if (user.PaymentAccounts != null && user.PaymentAccounts.Count > 0)
+            {
+                preferredPaymentAccountId = user.PaymentAccounts[0].Id.ToString();
+                preferredReceiveAccountId = user.PaymentAccounts[0].Id.ToString();
+            }
+            
             _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
 
+            string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
 
             try
@@ -87,14 +97,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     culture = user.Culture,
                     emailAddress = user.EmailAddress,
                     firstName = user.FirstName,
+                    lastName = user.LastName,
+                    imageUrl = (user.ImageUrl != null ? user.ImageUrl : ""),
                     isConfirmed = user.IsConfirmed,
                     isLockedOut = user.IsLockedOut,
                     lastLoggedIn = user.LastLoggedIn.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                    lastName = user.LastName,
                     lastPasswordFailureDate = user.LastPasswordFailureDate,
                     mobileNumber = user.MobileNumber,
                     passwordFailuresSinceLastSuccess = user.PasswordFailuresSinceLastSuccess,
-                    senderName = user.SenderName,
+                    senderName = userName,
                     state = user.State,
                     timeZone = user.TimeZone,
                     userId = user.UserId,
@@ -108,7 +119,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     }).ToList(),
                     upperLimit = user.Limit,
                     totalMoneyReceived = receivedTotal,
-                    totalMoneySent = sentTotal
+                    totalMoneySent = sentTotal,
+                    preferredPaymentAccountId = preferredPaymentAccountId,
+                    preferredReceiveAccountId = preferredReceiveAccountId
                 };
             } 
             catch(Exception ex)

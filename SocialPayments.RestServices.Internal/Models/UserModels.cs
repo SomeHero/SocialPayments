@@ -24,6 +24,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string lastLoggedIn { get; set; }
             public string firstName { get; set; }
             public string lastName { get; set; }
+            public string imageUrl { get; set; }
             public string address { get; set; }
             public string city { get; set; }
             public string state { get; set; }
@@ -31,6 +32,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string senderName { get; set; }
             public double upperLimit { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
+            public string preferredPaymentAccountId { get; set; }
+            public string preferredReceiveAccountId { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
