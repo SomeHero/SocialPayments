@@ -241,6 +241,69 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+
+        public HttpResponseMessage ChangePassword(string id, UserModels.ChangePasswordRequest request
+        {
+            _logger.Log(LogLevel.Info, String.Format("Changing password for: {0}", id));
+
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            var user = userService.GetUserById(id);
+
+            if (!user.Password.Equals(securityService.Encrypt(request.currentPassword))
+            {
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = "Password doesn't match";
+                return message;
+            }
+
+            user.Password = securityService.Encrypt(request.newPassword);
+            userService.UpdateUser(user);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        //POST /api/users/{userId}/registerpushnotifications
+        public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Registering push notifications for Android for: {0}", id));
+
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            var user = userService.GetUserById(id);
+
+            if (!user.DeviceToken.Equals(request.deviceToken))
+            {
+                try
+                {
+                    userService.addPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    var error = ex.Message;
+
+                    _logger.Log(LogLevel.Error, String.Format("Unable to register push notifications for {0}. {1}", id, error));
+
+                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    message.ReasonPhrase = error;
+
+                    return message;
+                }
+            }
+            else
+            {
+                var error = "DeviceTokens match, no need to reregister for Android push.";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to register push notifications for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+        }
+
         //POST /api/users/{userId}/setup_securitypin
         public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)
         {
@@ -290,7 +353,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
                 hasACHAccount = true;
 
-            if (isValid){
+            if (isValid)
+            {
                 var message = new UserModels.ValidateUserResponse()
                 {
                     userId = user.UserId.ToString(),

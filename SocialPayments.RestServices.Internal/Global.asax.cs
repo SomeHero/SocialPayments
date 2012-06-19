@@ -61,9 +61,9 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
-            name: "ChangeSecurityPin",
-            routeTemplate: "api/users/{id}/change_securitypin",
-            defaults: new { controller = "Users", action = "ChangeSecurityPin" }
+                name: "ChangeSecurityPin",
+                routeTemplate: "api/users/{id}/change_securitypin",
+                defaults: new { controller = "Users", action = "ChangeSecurityPin" }
             );
 
             routes.MapHttpRoute(
@@ -82,6 +82,18 @@ namespace SocialPayments.RestServices.Internal
                 name: "UserMECodes",
                 routeTemplate: "api/users/{userId}/mecodes/{id}",
                 defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
+            );
+
+            routes.MapHttpRoute(
+                name: "ChangePassword",
+                routeTemplate: "api/users/{id}/change_password",
+                defaults: new { controller = "Users", action = "ChangePassword" }
+            );
+
+            routes.MapHttpRoute(
+            name: "RegisterPushNotifications",
+            routeTemplate: "api/users/{id}/registerpushnotifications",
+            defaults: new { controller = "Users", action = "RegisterForPushNotifcations" }
             );
 
 

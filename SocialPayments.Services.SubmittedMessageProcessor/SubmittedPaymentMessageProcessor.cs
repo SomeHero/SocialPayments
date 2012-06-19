@@ -176,63 +176,75 @@ namespace SocialPayments.Services.MessageProcessors
                 }
                 if (recipient.DeviceToken.Length > 0)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
-                    
-
-                    // We need to know the number of pending requests that the user must take action on for the application badge #
-                    // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
-                    //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
-                    //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
-                    //      Opening the application is sufficient
-                    var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
-
-                    _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
-                    
-                    NotificationPayload payload = null;
-                    String notification;
-
-                    // Send a mobile push notification
-                    if (message.MessageType == Domain.MessageType.Payment)
+                    if (recipient.RegistrationId.Length > 0)
                     {
-                        notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
-                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count()+1);
-                        payload.AddCustom("nType", "recPCNF");
+                        _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
+                        //Fix this.
+                        string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                        AndroidNotificationService.sendAndroidPushNotification(
+                            auth_token, recipient.UserId.ToString(), recipient.RegistrationId, message);
                     }
-                    else if (message.MessageType == Domain.MessageType.PaymentRequest)
+                    else
                     {
-                        notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
-                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
-                        payload.AddCustom("nType", "recPRQ");
-                    }
 
-                    /*
-                     *  Payment Notification Types:
-                     *      Payment Request [recPRQ]
-                     *          - Recipient receives notification that takes them to the
-                     *                 paystream detail view about that payment request
-                     *      Payment Confirmation [recPCNF]
-                     *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
-                     */
-                    
-                    payload.AddCustom("tID", message.Id);
-                    var notificationList = new List<NotificationPayload>() { payload };
+                        _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
 
-                    List<string> result;
 
-                    try
-                    {
-                        var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
-                        result = push.SendToApple(notificationList); // You are done!
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
-                        var exception = ex.InnerException;
+                        // We need to know the number of pending requests that the user must take action on for the application badge #
+                        // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                        //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                        //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                        //      Opening the application is sufficient
+                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
 
-                        while (exception != null)
+                        _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+
+                        NotificationPayload payload = null;
+                        String notification;
+
+                        // Send a mobile push notification
+                        if (message.MessageType == Domain.MessageType.Payment)
                         {
-                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
-                        
+                            notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count() + 1);
+                            payload.AddCustom("nType", "recPCNF");
+                        }
+                        else if (message.MessageType == Domain.MessageType.PaymentRequest)
+                        {
+                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
+                            payload.AddCustom("nType", "recPRQ");
+                        }
+
+                        /*
+                         *  Payment Notification Types:
+                         *      Payment Request [recPRQ]
+                         *          - Recipient receives notification that takes them to the
+                         *                 paystream detail view about that payment request
+                         *      Payment Confirmation [recPCNF]
+                         *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                         */
+
+                        payload.AddCustom("tID", message.Id);
+                        var notificationList = new List<NotificationPayload>() { payload };
+
+                        List<string> result;
+
+                        try
+                        {
+                            var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                            result = push.SendToApple(notificationList); // You are done!
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                            var exception = ex.InnerException;
+
+                            while (exception != null)
+                            {
+                                _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+
+                            }
                         }
                     }
                     

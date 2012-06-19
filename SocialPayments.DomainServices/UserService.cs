@@ -327,6 +327,26 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User addPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to add Android Push Notification Registration Id for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.RegistrationId = registrationId;
+
+            _ctx.SaveChanges();
+
+            return user;
+        }
+
         public User GetUserById(string userId)
         {
             Guid userIdGuid;

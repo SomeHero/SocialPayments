@@ -119,5 +119,16 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool IsApproved { get; set; }
             public bool IsActive { get; set; }
         }
+        public class ChangePasswordRequest
+        {
+            public string currentPassword;
+            public string newPassword;
+        }
+
+        public class PushNotificationRequest
+        {
+            public string registrationId { get; set; }
+            public string deviceToken { get; set; }
+        }
     }
 }

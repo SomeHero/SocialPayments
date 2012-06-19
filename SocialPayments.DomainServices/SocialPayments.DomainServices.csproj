@@ -101,9 +101,8 @@
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\NLog\.NET Framework 4.0\NLog.dll</HintPath>
+    <Reference Include="NLog">
+      <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PagedList">
       <HintPath>..\packages\PagedList.1.10\lib\net40\PagedList.dll</HintPath>
@@ -124,6 +123,7 @@
     <Compile Include="AmazonNotificationService.cs" />
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
+    <Compile Include="AndroidNotificationService.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="EmailLogService.cs" />
     <Compile Include="EmailService.cs" />
