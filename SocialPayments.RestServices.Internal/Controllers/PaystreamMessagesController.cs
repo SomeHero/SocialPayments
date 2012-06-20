@@ -92,7 +92,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/messages
         public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderUri, request.recipientUri, request.recipientFirstName, request.recipientLastName));
+            _logger.Log(LogLevel.Info, String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
             Domain.Message message = null;
             HttpResponseMessage responseMessage;
@@ -100,7 +100,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
 
-                message = _messageServices.AddMessage(request.apiKey, request.senderUri, request.recipientUri, request.senderAccountId,
+                message = _messageServices.AddMessage(request.apiKey, request.senderId, request.recipientUri, request.senderAccountId,
                     request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
                    request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
 
@@ -114,8 +114,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderUri, request.recipientUri, ex.Message));
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.Message));
 
+                var innerException = ex.InnerException;
+
+                while (innerException != null)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Inner Exception. {0}", ex.Message));
+
+                    innerException = innerException.InnerException;
+                }
                 responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 responseMessage.ReasonPhrase = ex.Message;
 

@@ -64,27 +64,23 @@ namespace SocialPayments.DomainServices
             _userServices = new UserService(_context);
             _amazonNotificationService = amazonNotificationService;
         }
-        public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
+        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin)
         {
-            return AddMessage(apiKey, senderUri, recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
+            return AddMessage(apiKey, senderId, recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
                 "", "", "");
         }
-        public Message AddMessage(string apiKey, string senderUri, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
+        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderUri, recipientUri));
+            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderId, recipientUri));
 
             User sender = null;
 
             URIType recipientUriType = GetURIType(recipientUri);
-            URIType senderUriType = GetURIType(senderUri);
 
             if (recipientUriType == URIType.MobileNumber)
                 recipientUri = _formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
-
-            if (senderUriType == URIType.MobileNumber)
-                senderUri = _formattingServices.RemoveFormattingFromMobileNumber(senderUri);
 
             if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST"))
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
@@ -99,18 +95,18 @@ namespace SocialPayments.DomainServices
 
             try
             {
-                sender = _userServices.GetUser(senderUri);
+                sender = _userServices.GetUserById(senderId);
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Debug, String.Format("Exception getting Sender {0}. {1}", senderUri, ex.Message));
+                _logger.Log(LogLevel.Debug, String.Format("Exception getting Sender {0}. {1}", senderId, ex.Message));
 
-                throw new ArgumentException(String.Format("Sender {0} Not Found", senderUri));
+                throw new ArgumentException(String.Format("Sender {0} Not Found", senderId));
             }
 
             if (sender == null)
             {
-                var message = String.Format("Unable to find sender {0}", senderUri);
+                var message = String.Format("Unable to find sender {0}", senderId);
                 _logger.Log(LogLevel.Debug, message);
 
                 throw new Exception(message);
@@ -145,7 +141,7 @@ namespace SocialPayments.DomainServices
 
             if (senderAccount == null)
             {
-                var message = String.Format("The senderAccountId is invalid.");
+                var message = String.Format("The senderAccountId {0} is invalid.", senderAccountId);
                 _logger.Log(LogLevel.Debug, message);
 
                 throw new ArgumentException(message);
@@ -190,6 +186,8 @@ namespace SocialPayments.DomainServices
                 _logger.Log(LogLevel.Info, "Sender or Sender Account Not Set");
                 throw new Exception("Sender or Sender Account Not Set");
             }
+
+            var senderUri = sender.UserName;
 
             try
             {
@@ -330,6 +328,8 @@ namespace SocialPayments.DomainServices
 
             if (accountId == null)
                 return null;
+
+            _logger.Log(LogLevel.Info, String.Format("# of accounts {0}", sender.PaymentAccounts.Count));
 
             foreach (var account in sender.PaymentAccounts)
             {

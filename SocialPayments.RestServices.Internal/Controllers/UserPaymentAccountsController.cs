@@ -21,16 +21,40 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
        
         // GET /api/{userId}/paymentaccounts
-        public IEnumerable<string> Get(string userId)
+        public HttpResponseMessage<List<AccountModels.AccountResponse>> Get(string userId)
         {
-            return new string[] { "value1", "value2" };
+            var user = GetUser(userId);
+
+            if (user == null)
+            {
+                var message = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.NotFound);
+
+                message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                return message;
+            }
+
+            var accounts = _ctx.PaymentAccounts
+                .Where(a => a.UserId == user.UserId).ToList();
+
+            var accountResponse = accounts.Select(a => new AccountModels.AccountResponse()
+            {
+                AccountNumber = a.AccountNumber,
+                AccountType = a.AccountType.ToString(),
+                NameOnAccount = a.NameOnAccount,
+                Id = a.Id.ToString(),
+                RoutingNumber = a.RoutingNumber,
+                UserId = a.UserId.ToString()
+            }).ToList<AccountModels.AccountResponse>();
+
+            return new HttpResponseMessage<List<AccountModels.AccountResponse>>(accountResponse, HttpStatusCode.OK);
         }
 
         // GET /api/{userId}/paymentaccounts/{id}
-        public string Get(string userId, string id)
-        {
-            return "value";
-        }
+        //public HttpResponseMessage<AccountModels.AccountResponse> Get(string userId, string id)
+        //{
+        //    return new HttpResponseMessage<AccountModels.AccountResponse>(
+
+        //}
 
         // POST /api/{userId}/paymentaccounts
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> Post(string userId, AccountModels.SubmitAccountRequest request)
@@ -135,13 +159,76 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // PUT /api/{userId}/paymentaccounts/{id}
-        public void Put(string userId, string id, AccountModels.UpdateAccountRequest request)
+        public HttpResponseMessage Put(string userId, string id, AccountModels.UpdateAccountRequest request)
         {
+            var user = GetUser(userId);
+
+            if (user == null)
+            {
+                var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+
+                message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                return message;
+            }
+
+            Guid accountId;
+
+            Guid.TryParse(id, out accountId);
+
+            if (accountId == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
+
+            if (userAccount == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            userAccount.NameOnAccount = request.NameOnAccount;
+            userAccount.RoutingNumber = request.RoutingNumber
+            userAccount.LastUpdatedDate = System.DateTime.Now;
+
+            _ctx.SaveChanges();
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         // DELETE /api/{userId}/paymentaccounts/{id}
-        public void Delete(string userId, string id)
+        public HttpResponseMessage Delete(string userId, string id)
         {
+            var user = GetUser(userId);
+
+            if (user == null)
+            {
+                var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+
+                message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                return message;
+            }
+
+            Guid accountId;
+
+            Guid.TryParse(id, out accountId);
+
+            if (accountId == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
+
+            if (userAccount == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            userAccount.Deleted = true;
+            userAccount.LastUpdatedDate = System.DateTime.Now;
+
+            _ctx.SaveChanges();
         }
         private User GetUser(string id)
         {
