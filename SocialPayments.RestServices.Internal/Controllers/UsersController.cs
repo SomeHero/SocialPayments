@@ -213,7 +213,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return message;
             }
 
-            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "New User Account Created", user.UserId.ToString());
+            try
+            {
+                _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "New User Account Created", user.UserId.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, string.Format("AmazonPNS failed when registering user {0}. Exception {1}.", request.emailAddress, ex.Message));
+            }
 
             var responseMessage = new UserModels.SubmitUserResponse()
             {
@@ -299,6 +306,55 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //POST /api/users/{userId}/setup_securityquestion
+        public HttpResponseMessage SetupSecurityQuestion(string id, UserModels.UpdateSecurityQuestion request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Setting up Security Question for {0}", id));
+
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+
+            if (request.questionId < 0)
+            {
+                var error = @"Invalid Security Question Index";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+            if (request.questionAnswer.Length < 1)
+            {
+                var error = @"Invalid Security Question Length";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+
+            try
+            {
+                userService.SetupSecurityQuestion(id, request.questionId,request.questionAnswer);
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
+
+                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                message.ReasonPhrase = error;
+
+                return message;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
         //POST /api/users/{userId}/setup_securitypin
         public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)
         {
@@ -366,7 +422,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     setupSecurityPin = user.SetupSecurityPin,
                     upperLimit = Convert.ToInt32(user.Limit),
                     hasACHAccount = hasACHAccount,
-                    hasSecurityPin = user.SetupSecurityPin
+                    hasSecurityPin = user.SetupSecurityPin,
+                    setupSecurityQuestion = ( user.SecurityQuestionID >= 0 ? true : false ), // If SecurityQuestion setup (value not null > -1 ), return true.
+                    isLockedOut = user.IsLockedOut
                 };
 
                 return new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
@@ -416,7 +474,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 userId = user.UserId.ToString(),
                 mobileNumber = (!String.IsNullOrEmpty(user.MobileNumber) ? user.MobileNumber : ""),
                 paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
-                upperLimit = Convert.ToInt32(user.Limit)
+                upperLimit = Convert.ToInt32(user.Limit),
+                setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false),  // If SecurityQuestion setup (value not null > -1 ), return true.
+                isLockedOut = user.IsLockedOut
             };
             
             if(isNewUser)

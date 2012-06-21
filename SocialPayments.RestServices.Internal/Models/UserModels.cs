@@ -37,6 +37,8 @@ namespace SocialPayments.RestServices.Internal.Models
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
+
+            public bool setupSecurityPin { get; set; }
         }
         public class SubmitUserRequest
         {
@@ -55,6 +57,11 @@ namespace SocialPayments.RestServices.Internal.Models
         public class UpdateSecurityPin
         {
             public string securityPin { get; set; }
+        }
+        public class UpdateSecurityQuestion
+        {
+            public int questionId { get; set; }
+            public string questionAnswer { get; set; }
         }
         public class ChangeSecurityPinRequest
         {
@@ -84,6 +91,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string paymentAccountId { get; set; }
             public bool setupSecurityPin { get; set; }
             public int upperLimit { get; set; }
+
+            // Added Security Question Implementation
+            public bool setupSecurityQuestion { get; set; }
+            public bool isLockedOut { get; set; }
         }
         public class FacebookSignInRequest
         {
@@ -102,6 +113,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
             public int upperLimit { get; set; }
+
+            // Added Security Question Implementation
+            public bool setupSecurityQuestion { get; set; }
+            public bool isLockedOut { get; set; }
         }
         public class MECodeResponse
         {

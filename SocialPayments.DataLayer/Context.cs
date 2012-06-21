@@ -32,6 +32,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<MobileNumberSignUpKey> MobileNumberSignUpKeys { get; set; }
         public IDbSet<MECode> MECodes { get; set; }
         public IDbSet<PaymentAccountVerification> PaymentAccountVerifications { get; set; }
+        public IDbSet<SecurityQuestion> SecurityQuestions { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -76,6 +77,12 @@ namespace SocialPayments.DataLayer
                     .HasOptional(u => u.FacebookUser)
                     .WithOptionalDependent(f => f.User)
                     .Map(m => m.MapKey("FBUserId"));
+
+                modelBuilder.Entity<User>()
+                    .HasOptional(m => m.SecurityQuestion)
+                    .WithMany()
+                    .HasForeignKey(u=> u.SecurityQuestionID)
+                    .WillCascadeOnDelete(false);
 
                 modelBuilder.Entity<MECode>()
                     .HasRequired(m => m.User)
@@ -566,6 +573,78 @@ namespace SocialPayments.DataLayer
                         SelectedDate = date
                     });
             }
+            context.SaveChanges();
+            
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 0,
+                Question = "Childhood Nickname",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 1,
+                Question = "Last 4 digis of drivers license",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 2,
+                Question = "City you met your significant other",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 3,
+                Question = "Street you lived on in 3rd grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 4,
+                Question = "Oldest sibling's birth month and year",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 5,
+                Question = "Childhood phone number including area code",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 6,
+                Question = "Oldest cousin's first and last name",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 7,
+                Question = "City your parents met",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 8,
+                Question = "Last name of your 3rd grade teacher",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 9,
+                Question = "Your first kiss was with...",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 10,
+                Question = "Your childhood hero",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 11,
+                Question = "Your dream job",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 12,
+                Question = "School you attended for 6th grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion() {
+                Id = 13,
+                Question = "Oldest sibling's middle name",
+                IsActive = true
+            });
             context.SaveChanges();
 
             base.Seed(context);

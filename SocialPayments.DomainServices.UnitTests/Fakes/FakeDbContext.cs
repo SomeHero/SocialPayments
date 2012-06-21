@@ -27,6 +27,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<MobileNumberSignUpKey> _mobileNumberSignUpKey;
         private IDbSet<MECode> _meCodes;
         private IDbSet<PaymentAccountVerification> _paymentAccountVerifications;
+        private IDbSet<SecurityQuestion> _securityQuestions;
 
         public FakeDbContext()
         {
@@ -130,6 +131,11 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         {
             get { return _paymentAccountVerifications; }
             set { _paymentAccountVerifications = value; }
+        }
+        public IDbSet<SecurityQuestion> SecurityQuestions
+        {
+            get { return _securityQuestions; }
+            set { _securityQuestions = value; }
         }
         public void SaveChanges()
         {

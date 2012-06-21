@@ -327,6 +327,27 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User SetupSecurityQuestion(string userId, int questionId, string questionAnswer)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.SecurityQuestionID = questionId;
+            user.SecurityQuestionAnswer = securityService.Encrypt(questionAnswer);
+
+            _ctx.SaveChanges();
+
+            return user;
+        }
+
         public User GetUserById(string userId)
         {
             Guid userIdGuid;
