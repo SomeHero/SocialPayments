@@ -94,6 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     lastPasswordFailureDate = user.LastPasswordFailureDate,
                     mobileNumber = user.MobileNumber,
                     passwordFailuresSinceLastSuccess = user.PasswordFailuresSinceLastSuccess,
+                    registrationId = user.RegistrationId,
                     senderName = user.SenderName,
                     state = user.State,
                     timeZone = user.TimeZone,
@@ -272,7 +273,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             var user = userService.GetUserById(id);
 
-            if (!user.DeviceToken.Equals(request.deviceToken))
+            if (!user.RegistrationId.Equals(request.registrationId))
             {
                 try
                 {

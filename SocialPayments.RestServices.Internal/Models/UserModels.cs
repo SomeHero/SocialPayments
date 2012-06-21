@@ -31,6 +31,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string senderName { get; set; }
             public double upperLimit { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
+            public string registrationId { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
