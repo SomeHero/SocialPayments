@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -34,6 +34,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public List<UserAttribute> userAttributes { get; set; }
             public string preferredPaymentAccountId { get; set; }
             public string preferredReceiveAccountId { get; set; }
+            public string registrationId { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
@@ -142,6 +143,17 @@ namespace SocialPayments.RestServices.Internal.Models
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string ImageUrl { get; set; }
+        }
+        public class ChangePasswordRequest
+        {
+            public string currentPassword;
+            public string newPassword;
+        }
+
+        public class PushNotificationRequest
+        {
+            public string registrationId { get; set; }
+            public string deviceToken { get; set; }
         }
     }
 }

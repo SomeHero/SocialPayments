@@ -99,6 +99,7 @@ namespace SocialPayments.Domain
         public virtual Collection<Message> Messages { get; set; }
         [MaxLength(100)]
         public string DeviceToken { get; set; }
+        public string RegistrationId { get; set; }
 
         public virtual Collection<MECode> MECodes { get; set; }
         [MaxLength(255)]
