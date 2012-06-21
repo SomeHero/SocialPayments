@@ -362,6 +362,43 @@
                 }
             }
         }
+        "New Beta"
+        {
+        "DisplayName" = "8:New Beta"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:New Beta\\SocialPayments.Installers.NachaBatchFileService.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
         "Release"
         {
         "DisplayName" = "8:Release"
@@ -825,7 +862,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{DA7936D0-4E9B-4C6D-B5AE-BB10519FF28B}"
+        "PackageCode" = "8:{98BE8E85-9851-49DE-829C-34B877915692}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1346,7 +1383,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_87A088AEAF144770AEEAC75D7C7C6817"
             {
-            "SourcePath" = "8:..\\SocialPayments.WindowsServices.NachaBatchScheduler\\obj\\x86\\Dev\\SocialPayments.WindowsServices.NachaBatchScheduler.exe"
+            "SourcePath" = "8:..\\SocialPayments.WindowsServices.NachaBatchScheduler\\obj\\x86\\Beta\\SocialPayments.WindowsServices.NachaBatchScheduler.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"

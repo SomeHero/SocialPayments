@@ -59,9 +59,8 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                SetupPassword = false,
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupSecurityPin = true,
+                SetupPassword = true,
+                SetupSecurityPin = false,
                 Roles = new Collection<Role>()
                     {
                         memberRole

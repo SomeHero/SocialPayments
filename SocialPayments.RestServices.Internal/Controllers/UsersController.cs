@@ -311,6 +311,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Setting up Security Question for {0}", id));
 
+            Context _ctx = new Context();
             DomainServices.UserService userService = new DomainServices.UserService(_ctx);
 
             if (request.questionId < 0)
