@@ -71,21 +71,16 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\bin\AWSSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\MvcApplication1\packages\EntityFramework.4.1.10331.0\lib\net40\EntityFramework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EntityFramework">
+      <HintPath>..\Libraries\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\NLog\.NET Framework 4.0\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="SprightlySoftAWS">
-      <HintPath>..\..\..\..\..\Desktop\SprightlySoft_SNSAutoConfirm_v1.0\SNSAutoConfirm\SNSAutoConfirm\bin\SprightlySoftAWS.dll</HintPath>
+    <Reference Include="NLog">
+      <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -162,6 +157,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Models\AccountVerificationRequest.cs" />
     <Compile Include="Controllers\ApplicationsController.cs" />
     <Compile Include="Controllers\MobileNumberSignUpKeySMSListenerController.cs" />
@@ -175,6 +171,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApplicationModels.cs" />
+    <Compile Include="Models\SecurityQuestionModel.cs" />
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeyModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeySMSListenerModels.cs" />

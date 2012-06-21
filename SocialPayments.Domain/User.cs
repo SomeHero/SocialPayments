@@ -104,8 +104,11 @@ namespace SocialPayments.Domain
         [MaxLength(255)]
         public string ImageUrl { get; set; }
 
-
-        
+        // Security Question
+        public virtual SecurityQuestion SecurityQuestion { get; set; }
+        public virtual int? SecurityQuestionID { get; set; }
+        [MaxLength(50)]
+        public virtual string SecurityQuestionAnswer { get; set; }
     }
 
 }

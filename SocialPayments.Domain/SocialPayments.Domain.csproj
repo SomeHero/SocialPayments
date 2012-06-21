@@ -157,6 +157,7 @@
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />
+    <Compile Include="SecurityQuestions.cs" />
     <Compile Include="EmailLog.cs" />
     <Compile Include="EmailStatus.cs" />
     <Compile Include="FBUser.cs" />
