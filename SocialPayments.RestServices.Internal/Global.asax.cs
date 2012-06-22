@@ -104,7 +104,7 @@ namespace SocialPayments.RestServices.Internal
             routes.MapHttpRoute(
             name: "RegisterPushNotifications",
             routeTemplate: "api/users/{id}/registerpushnotifications",
-            defaults: new { controller = "Users", action = "RegisterForPushNotifcations" }
+            defaults: new { controller = "Users", action = "RegisterForPushNotifications" }
             );
 
 

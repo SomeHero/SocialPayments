@@ -91,7 +91,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 Comments = "Test Payment",
                 CreateDate = System.DateTime.Now,
                 Id = messageId,
-                MessageStatus = Domain.MessageStatus.Pending,
+                //MessageStatus = Domain.MessageStatus.Pending,
                 MessageType = Domain.MessageType.Payment,
                 RecipientUri = "4439777232",
                 Sender = sender,
@@ -99,7 +99,7 @@ namespace SocialPayments.DomainServices.UnitTests
                 SenderAccount = senderAccount,
                 SenderAccountId = senderAccountId,
                 SenderUri ="7574691582",
-                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
+                //Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
             });
 
             _ctx.SaveChanges();
