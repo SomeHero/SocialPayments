@@ -10,6 +10,9 @@ using System.Net;
 using System.IO;
 using System.Collections.Specialized;
 using System.Web;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace SocialPayments.DomainServices
 {
@@ -112,7 +115,7 @@ namespace SocialPayments.DomainServices
             }
             postDataBuilder.Append("&").Append("data.notificationString").Append("=").Append(text);
             byte[] postData = ASCIIEncoding.UTF8.GetBytes(postDataBuilder.ToString());
-
+            SetCertPolicy();
             string url = @"https://android.apis.google.com/c2dm/send";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "POST";
@@ -127,6 +130,18 @@ namespace SocialPayments.DomainServices
 
             return (int)res.StatusCode;
 
+        }
+
+        public static void SetCertPolicy()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += RemoteCertValidate;
+        }
+
+        private static bool RemoteCertValidate(object sender, X509Certificate cert, X509Chain chain,
+                SslPolicyErrors error)
+        {
+            // trust any cert!!!
+            return true;
         }
     }
 }
