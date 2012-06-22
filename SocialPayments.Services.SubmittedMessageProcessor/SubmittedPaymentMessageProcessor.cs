@@ -117,6 +117,8 @@ namespace SocialPayments.Services.MessageProcessors
                     SenderAccount = message.SenderAccount,
                 };
 
+                _logger.Log(LogLevel.Info, String.Format("Batching widthrawal from {0}", sender.UserId));
+
                 transactionsList.Add(_ctx.Transactions.Add(new Transaction()
                 {
                     Amount = message.Payment.Amount,
@@ -134,8 +136,10 @@ namespace SocialPayments.Services.MessageProcessors
                     User = sender
                 }));
                 
-                if (recipient != null && recipient.PaymentAccounts[0] != null)
+                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0)
                 {
+                    _logger.Log(LogLevel.Info, String.Format("Batching deposit to {0}", recipient.UserId));
+
                     transactionsList.Add(_ctx.Transactions.Add(new Transaction()
                     {
                         Amount = message.Payment.Amount,
@@ -244,15 +248,22 @@ namespace SocialPayments.Services.MessageProcessors
                         _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
                     }
                 }
-                if (recipient.DeviceToken.Length > 0)
+                if (!String.IsNullOrEmpty(recipient.DeviceToken))
                 {
-                    if (recipient.RegistrationId.Length > 0)
+                    if (!String.IsNullOrEmpty(recipient.RegistrationId))
                     {
                         _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
                         //Fix this.
-                        string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
-                        AndroidNotificationService.sendAndroidPushNotification(
-                            auth_token, recipient.UserId.ToString(), recipient.RegistrationId, message);
+                        try
+                        {
+                            string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                            AndroidNotificationService.sendAndroidPushNotification(
+                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                        }
                     }
                     else
                     {
@@ -265,7 +276,7 @@ namespace SocialPayments.Services.MessageProcessors
                         //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
                         //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
                         //      Opening the application is sufficient
-                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
+                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
 
                         _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
 

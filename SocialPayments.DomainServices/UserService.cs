@@ -59,9 +59,8 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                SetupPassword = false,
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupSecurityPin = true,
+                SetupPassword = true,
+                SetupSecurityPin = false,
                 Roles = new Collection<Role>()
                     {
                         memberRole
@@ -383,7 +382,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken)
+            string deviceToken, out bool isNewUser)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
 
@@ -399,6 +398,8 @@ namespace SocialPayments.DomainServices
                 if (user == null)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Create new user.", accountId, emailAddress));
+
+                    isNewUser = true;
 
                     user = _ctx.Users.Add(new Domain.User()
                     {
@@ -435,12 +436,14 @@ namespace SocialPayments.DomainServices
                             TokenExpiration = System.DateTime.Now.AddDays(30),
                             OAuthToken = ""
                         },
-                        ImageUrl = String.Format(_fbImageUrlFormat, accountId)
+                        ImageUrl = String.Format(_fbImageUrlFormat, accountId),
                     });
 
                 }
                 else
                 {
+                    isNewUser = false;
+
                     user.DeviceToken = deviceToken;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
                 }
