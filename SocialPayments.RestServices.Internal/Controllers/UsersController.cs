@@ -96,6 +96,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     city = user.City,
                     createDate = user.CreateDate.Value.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                     culture = user.Culture,
+                    deviceToken = user.DeviceToken,
                     emailAddress = user.EmailAddress,
                     firstName = user.FirstName,
                     lastName = user.LastName,
@@ -107,7 +108,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     mobileNumber = user.MobileNumber,
                     passwordFailuresSinceLastSuccess = user.PasswordFailuresSinceLastSuccess,
                     registrationId = user.RegistrationId,
-                    senderName = user.SenderName,
+                    senderName = userName,
                     state = user.State,
                     timeZone = user.TimeZone,
                     userId = user.UserId,
@@ -123,7 +124,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     totalMoneyReceived = receivedTotal,
                     totalMoneySent = sentTotal,
                     preferredPaymentAccountId = preferredPaymentAccountId,
-                    preferredReceiveAccountId = preferredReceiveAccountId
+                    preferredReceiveAccountId = preferredReceiveAccountId,
+                    setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true)
                 };
             } 
             catch(Exception ex)
@@ -358,15 +360,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
 
-        public HttpResponseMessage ChangePassword(string id, UserModels.ChangePasswordRequest request
+        public HttpResponseMessage ChangePassword(string id, UserModels.ChangePasswordRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Changing password for: {0}", id));
 
+            Context _ctx = new Context();
             DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-
+            DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+            
             var user = userService.GetUserById(id);
 
-            if (!user.Password.Equals(securityService.Encrypt(request.currentPassword))
+            if (!user.Password.Equals(securityService.Encrypt(request.currentPassword)))
             {
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 message.ReasonPhrase = "Password doesn't match";
@@ -384,11 +388,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Registering push notifications for Android for: {0}", id));
 
+            Context _ctx = new Context();
             DomainServices.UserService userService = new DomainServices.UserService(_ctx);
 
             var user = userService.GetUserById(id);
 
-            if (!user.RegistrationId.Equals(request.registrationId))
+            if (String.IsNullOrEmpty(user.RegistrationId) || (!String.IsNullOrEmpty(user.RegistrationId) && !user.RegistrationId.Equals(request.registrationId)))
             {
                 try
                 {

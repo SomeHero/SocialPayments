@@ -11,6 +11,7 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public Guid userId { get; set; }
             public string userName { get; set; }
+            public string deviceToken { get; set; }
             public string emailAddress { get; set; }
             public bool isConfirmed { get; set; }
             public int passwordFailuresSinceLastSuccess { get; set; }
