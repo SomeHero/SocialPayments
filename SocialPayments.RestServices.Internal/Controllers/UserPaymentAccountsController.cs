@@ -50,6 +50,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     UserId = a.UserId.ToString()
                 }).ToList<AccountModels.AccountResponse>();
 
+                
+
                 return new HttpResponseMessage<List<AccountModels.AccountResponse>>(accountResponse, HttpStatusCode.OK);
             }
          }
@@ -116,6 +118,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     _ctx.SaveChanges();
 
                     user.SecurityPin = _securityService.Encrypt(request.SecurityPin);
+
+                    user.SecurityQuestionID = request.SecurityQuestionID;
+                    user.SecurityQuestionAnswer = _securityService.Encrypt(request.SecurityQuestionAnswer);
 
                     _userService.UpdateUser(user);
                 }

@@ -24,6 +24,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string AccountNumber { get; set; }
             public string AccountType { get; set; }
             public string SecurityPin { get; set; }
+            public int SecurityQuestionID { get; set; }
+            public string SecurityQuestionAnswer { get; set; }
         }
         public class SubmitAccountResponse
         {
