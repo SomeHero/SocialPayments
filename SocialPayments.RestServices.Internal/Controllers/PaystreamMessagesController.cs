@@ -108,7 +108,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (AccountLockedPinCodeFailures ex)
             {
                 responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                responseMessage.ReasonPhrase = String.Format("Invalid Pincode.  Your account has been temporarily locked for {0} minutes", ex.LockOutInterval);
+                responseMessage.ReasonPhrase = String.Format("Invalid Pincode.  Your account has been locked, and you have been locked out for your security.");
 
                 return responseMessage;
             }

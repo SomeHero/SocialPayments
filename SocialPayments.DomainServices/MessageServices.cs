@@ -112,7 +112,15 @@ namespace SocialPayments.DomainServices
                 throw new Exception(message);
             }
 
-          
+            // Check for user locked out of account.. return failed and with custom PinCode Failures Exception.
+            if (sender.IsLockedOut)
+            {
+                var message = String.Format("Sender {0} is currenty locked out, payment failed.", senderId);
+                _logger.Log(LogLevel.Error, message);
+
+                throw new AccountLockedPinCodeFailures(message);
+            }
+
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
             
@@ -152,7 +160,7 @@ namespace SocialPayments.DomainServices
 
             try
             {
-                application = _applicationServices.GetApplication(apiKey); ;
+                application = _applicationServices.GetApplication(apiKey); ; // Is this an error James?
             }
             catch (Exception ex)
             {
