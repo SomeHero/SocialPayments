@@ -552,7 +552,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             
             if(isNewUser)
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.Created);
-            else 
+            else
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
         }
 
