@@ -107,6 +107,11 @@ namespace SocialPayments.RestServices.Internal
             defaults: new { controller = "Users", action = "RegisterForPushNotifications" }
             );
 
+            routes.MapHttpRoute(
+                name: "AddUserPaymentAccounts",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/add_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "AddAccount" }
+            );
 
             routes.MapHttpRoute(
                 name: "UserPaymentAccounts",

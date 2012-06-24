@@ -284,7 +284,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     senderLastName = message.recipientLastName,
                     senderImageUri = message.recipientImageUri,
                     SenderAccount = paymentAccount,
-                    SenderUri = message.RecipientUri
+                    SenderUri = message.RecipientUri,
+                    WorkflowStatus = PaystreamMessageWorkflowStatus.Pending
                 });
 
                 _ctx.SaveChanges();
