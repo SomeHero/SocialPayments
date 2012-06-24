@@ -370,7 +370,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             
             var user = userService.GetUserById(id);
 
-            if (!user.Password.Equals(securityService.Encrypt(request.currentPassword)))
+            if (!securityService.Decrypt(user.Password).Equals(request.currentPassword))
             {
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 message.ReasonPhrase = "Password doesn't match";

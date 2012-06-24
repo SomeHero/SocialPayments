@@ -147,8 +147,8 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class ChangePasswordRequest
         {
-            public string currentPassword;
-            public string newPassword;
+            public string currentPassword { get; set; }
+            public string newPassword { get; set; }
         }
 
         public class PushNotificationRequest
