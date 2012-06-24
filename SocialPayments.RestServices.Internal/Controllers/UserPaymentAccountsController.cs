@@ -145,6 +145,82 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return responseMessage;
             }
         }
+        // POST /api/{userId}/paymentaccounts/add_account
+        public HttpResponseMessage<AccountModels.SubmitAccountResponse> AddAccount(string userId, AccountModels.AddAccountRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+
+                var user = _userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+
+                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                    return message;
+                }
+
+                //TODO: validate routing number
+
+                PaymentAccountType accountType = PaymentAccountType.Checking;
+
+                if (request.AccountType.ToUpper() == "CHECKING")
+                    accountType = PaymentAccountType.Checking;
+                else if (request.AccountType.ToUpper() == "SAVINGS")
+                    accountType = PaymentAccountType.Savings;
+                else
+                {
+                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = String.Format("Account Type specified in the request is invalid.  Valid account types are {0} or {1}", "Savings", "Checking");
+
+                    return message;
+                }
+
+
+                PaymentAccount account;
+
+                try
+                {
+                    account = _ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
+                    {
+                        Id = Guid.NewGuid(),
+                        AccountNumber = _securityService.Encrypt(request.AccountNumber),
+                        RoutingNumber = _securityService.Encrypt(request.RoutingNumber),
+                        NameOnAccount = _securityService.Encrypt(request.NameOnAccount),
+                        AccountType = accountType,
+                        UserId = user.UserId,
+                        IsActive = true,
+                        CreateDate = System.DateTime.Now
+                    });
+
+                    _ctx.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                    message.ReasonPhrase = String.Format("Internal Service Error. {0}", ex.Message);
+
+                    return message;
+                }
+
+                _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["PaymentAccountPostedTopicARN"], "New ACH Account Submitted", account.Id.ToString());
+
+                var response = new AccountModels.SubmitAccountResponse()
+                {
+                    paymentAccountId = account.Id.ToString()
+                };
+
+                var responseMessage = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(response, HttpStatusCode.Created);
+                //TODO: add uri for created account to response header
+
+                return responseMessage;
+            }
+        }
 
         //POST /api/{userId}/paymentaccounts/{id}/verify_account
         public HttpResponseMessage VerifyAccount(string userId, string id, AccountVerificationRequest request)
