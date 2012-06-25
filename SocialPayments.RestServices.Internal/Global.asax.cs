@@ -29,6 +29,11 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
+                name: "UploadImage",
+                routeTemplate: "api/fileupload",
+                defaults: new { controller = "FileUpload", action = "PostUploadFile" }
+            );
+            routes.MapHttpRoute(
                 name: "CancelPayment",
                 routeTemplate: "api/paystreammessages/{id}/cancel_payment",
                 defaults: new { controller = "PaystreamMessages", action = "CancelPayment" }
