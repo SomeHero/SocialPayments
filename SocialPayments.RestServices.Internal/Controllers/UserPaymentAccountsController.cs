@@ -38,13 +38,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }
 
                 var accounts = _ctx.PaymentAccounts
-                    .Where(a => a.UserId == user.UserId).ToList();
+                    .Where(a => a.UserId == user.UserId  && a.IsActive).ToList();
 
                 var accountResponse = accounts.Select(a => new AccountModels.AccountResponse()
                 {
                     AccountNumber = GetLastFour(_securityService.Decrypt(a.AccountNumber)),
                     AccountType = a.AccountType.ToString(),
                     NameOnAccount = _securityService.Decrypt(a.NameOnAccount),
+                    Nickname = a.Nickname,
                     Id = a.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(a.RoutingNumber),
                     UserId = a.UserId.ToString()
@@ -62,6 +63,78 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //    return new HttpResponseMessage<AccountModels.AccountResponse>(
 
         //}
+
+        // POST /api/{userid}/paymentaccounts/set_preferred_send_account
+        public HttpResponseMessage SetPreferredSendAccount(string userId, AccountModels.ChangePreferredAccountRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
+
+                var user = _userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+
+                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                    return message;
+                }
+
+                var paymentAccount = paymentAccountService.GetPaymentAccount(request.PaymentAccountId);
+
+                if (paymentAccount == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = String.Format("Invalid account id {0} specified in the request", request.PaymentAccountId);
+
+                    return message;
+                }
+                user.PreferredSendAccount = paymentAccount;
+
+                _ctx.SaveChanges();
+
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        // POST /api/{userId}/paymentaccounts/set_preferred_receive_account
+        public HttpResponseMessage SetPreferredReceiveAccount(string userId, AccountModels.ChangePreferredAccountRequest request)
+        {
+            using(var _ctx = new Context())
+            {
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
+
+                var user = _userService.GetUserById(userId);
+
+                 if (user == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+
+                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                    return message;
+                }
+
+                var paymentAccount = paymentAccountService.GetPaymentAccount(request.PaymentAccountId);
+
+                if(paymentAccount == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = String.Format("Invalid account id {0} specified in the request", request.PaymentAccountId);
+
+                    return message;
+                }
+                user.PreferredReceiveAccount = paymentAccount;
+
+                _ctx.SaveChanges();
+
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
 
         // POST /api/{userId}/paymentaccounts
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> Post(string userId, AccountModels.SubmitAccountRequest request)
@@ -106,6 +179,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     account = _ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
                     {
                         Id = Guid.NewGuid(),
+                        Nickname = request.Nickname,
                         AccountNumber = _securityService.Encrypt(request.AccountNumber),
                         RoutingNumber = _securityService.Encrypt(request.RoutingNumber),
                         NameOnAccount = _securityService.Encrypt(request.NameOnAccount),
@@ -116,6 +190,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     });
 
                     _ctx.SaveChanges();
+
+                    user.PreferredReceiveAccount = account;
+                    user.PreferredSendAccount = account;
 
                     user.SecurityPin = _securityService.Encrypt(request.SecurityPin);
 
@@ -188,6 +265,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     account = _ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
                     {
                         Id = Guid.NewGuid(),
+                        Nickname = request.Nickname,
                         AccountNumber = _securityService.Encrypt(request.AccountNumber),
                         RoutingNumber = _securityService.Encrypt(request.RoutingNumber),
                         NameOnAccount = _securityService.Encrypt(request.NameOnAccount),
@@ -296,8 +374,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
-                userAccount.NameOnAccount = request.NameOnAccount;
-                userAccount.RoutingNumber = request.RoutingNumber;
+                PaymentAccountType accountType = PaymentAccountType.Checking;
+
+                if (request.AccountType.ToUpper() == "CHECKING")
+                    accountType = PaymentAccountType.Checking;
+                else if (request.AccountType.ToUpper() == "SAVINGS")
+                    accountType = PaymentAccountType.Savings;
+
+                userAccount.Nickname = request.Nickname;
+                userAccount.NameOnAccount = _securityService.Encrypt(request.NameOnAccount);
+                userAccount.RoutingNumber = _securityService.Encrypt(request.RoutingNumber);
+                userAccount.AccountType = accountType;
                 userAccount.LastUpdatedDate = System.DateTime.Now;
 
                 _ctx.SaveChanges();
@@ -307,39 +394,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // DELETE /api/{userId}/paymentaccounts/{id}
-        //public HttpResponseMessage Delete(string userId, string id)
-        //{
-        //    var user = GetUser(userId);
+        public HttpResponseMessage Delete(string userId, string id)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
 
-        //    if (user == null)
-        //    {
-        //        var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                var user = _userService.GetUserById(userId);
 
-        //        message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-        //        return message;
-        //    }
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
 
-        //    Guid accountId;
+                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                    return message;
+                }
 
-        //    Guid.TryParse(id, out accountId);
+                Guid accountId;
 
-        //    if (accountId == null)
-        //    {
-        //        return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        //    }
+                Guid.TryParse(id, out accountId);
 
-        //    var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
+                if (accountId == null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
 
-        //    if (userAccount == null)
-        //    {
-        //        return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        //    }
+                var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
 
-        //    //userAccount.Deleted = true;
-        //    userAccount.LastUpdatedDate = System.DateTime.Now;
+                if (userAccount == null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
 
-        //    _ctx.SaveChanges();
-        //}
+                userAccount.IsActive = false;
+                userAccount.LastUpdatedDate = System.DateTime.Now;
+
+                _ctx.SaveChanges();
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
         private string GetLastFour(string p)
         {
             if (p.Length <= 4)
