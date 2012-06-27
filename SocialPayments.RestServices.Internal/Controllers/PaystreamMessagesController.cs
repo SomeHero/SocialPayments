@@ -33,6 +33,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             new DomainServices.UserService(_ctx);
         private static DomainServices.PaymentAccountService _paymentAccountServices =
             new DomainServices.PaymentAccountService(_ctx);
+        private static DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
 
         // GET /api/paystreammessage
         public HttpResponseMessage<MessageModels.MessageResponse> Get(string id)
@@ -96,6 +97,23 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             Domain.Message message = null;
             HttpResponseMessage responseMessage;
+
+            var user = _userService.GetUserById(request.senderId);
+
+            if(user == null)
+            {
+                responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = String.Format("Invalid Sender Id {0} specified in the request", request.senderId);
+
+                return responseMessage;
+            }
+
+            if(!(_securityService.Encrypt(request.securityPin).Equals(user.SecurityPin))) {
+                responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = String.Format("Security Pin Invalid");
+
+                return responseMessage;
+            }
 
             try
             {

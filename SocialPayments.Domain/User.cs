@@ -110,6 +110,13 @@ namespace SocialPayments.Domain
         public virtual int? SecurityQuestionID { get; set; }
         [MaxLength(50)]
         public virtual string SecurityQuestionAnswer { get; set; }
+
+        //Preferred Accounts
+        public virtual Guid? PreferredSendAccountId { get; set; }
+        public virtual PaymentAccount PreferredSendAccount { get; set; }
+
+        public virtual Guid? PreferredReceiveAccountId { get; set; }
+        public virtual PaymentAccount PreferredReceiveAccount { get; set; }
     }
 
 }

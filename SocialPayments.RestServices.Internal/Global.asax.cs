@@ -118,6 +118,19 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "UserPaymentAccounts", action = "AddAccount" }
             );
 
+
+            routes.MapHttpRoute(
+                name: "SetPreferredSendAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_send_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredSendAccount" }
+            );
+
+            routes.MapHttpRoute(
+                name: "SetPreferredReceiveAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_receive_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredReceiveAccount" }
+            );
+
             routes.MapHttpRoute(
                 name: "UserPaymentAccounts",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/{id}",
