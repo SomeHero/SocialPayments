@@ -19,7 +19,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         
         public Task<HttpResponseMessage<FileUploadResponse>> PostUploadFile()
         {
-            fileName = String.Format("file_{0}.png", DateTime.Now.ToFileTime());
+            fileName = String.Format("file_{0}.jpg", DateTime.Now.ToFileTime());
 
             return UploadFileAsync().ContinueWith<HttpResponseMessage<FileUploadResponse>>((tsk) =>
             {

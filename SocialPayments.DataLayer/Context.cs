@@ -84,6 +84,18 @@ namespace SocialPayments.DataLayer
                     .HasForeignKey(u=> u.SecurityQuestionID)
                     .WillCascadeOnDelete(false);
 
+                modelBuilder.Entity<User>()
+                    .HasOptional(m => m.PreferredSendAccount)
+                    .WithMany()
+                    .HasForeignKey(u => u.PreferredSendAccountId)
+                    .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<User>()
+                    .HasOptional(m => m.PreferredReceiveAccount)
+                    .WithMany()
+                    .HasForeignKey(u => u.PreferredReceiveAccountId)
+                    .WillCascadeOnDelete(false);
+
                 modelBuilder.Entity<MECode>()
                     .HasRequired(m => m.User)
                     .WithMany()
@@ -226,6 +238,7 @@ namespace SocialPayments.DataLayer
                 PaymentAccounts = new Collection<PaymentAccount>() {
                     new PaymentAccount() { 
                         Id=Guid.NewGuid(), 
+                        Nickname = "Wachivia ****1111",
                         AccountNumber = securityService.Encrypt("411111111111"), 
                         AccountType = PaymentAccountType.Checking, 
                         NameOnAccount= securityService.Encrypt("Test User"), 
@@ -307,6 +320,7 @@ namespace SocialPayments.DataLayer
                 PaymentAccounts = new Collection<PaymentAccount>() {
                     new PaymentAccount() { 
                         Id=Guid.NewGuid(), 
+                        Nickname = "BB&T ****1111",
                         AccountNumber = securityService.Encrypt("411111111111"), 
                         AccountType = PaymentAccountType.Checking, 
                         NameOnAccount= securityService.Encrypt("James Rhodes"), 
@@ -356,6 +370,7 @@ namespace SocialPayments.DataLayer
                 PaymentAccounts = new Collection<PaymentAccount>() {
                     new PaymentAccount() { 
                         Id=Guid.NewGuid(), 
+                        Nickname = "Wells Fargo ****9999",
                         AccountNumber = securityService.Encrypt("9999999999"), 
                         AccountType = PaymentAccountType.Checking, 
                         NameOnAccount= securityService.Encrypt("James Rhodes"), 
