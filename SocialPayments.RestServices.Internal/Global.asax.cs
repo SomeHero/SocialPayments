@@ -29,11 +29,6 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
-                name: "UploadImage",
-                routeTemplate: "api/fileupload",
-                defaults: new { controller = "FileUpload", action = "PostUploadFile" }
-            );
-            routes.MapHttpRoute(
                 name: "CancelPayment",
                 routeTemplate: "api/paystreammessages/{id}/cancel_payment",
                 defaults: new { controller = "PaystreamMessages", action = "CancelPayment" }
@@ -69,7 +64,12 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/{id}/personalize_user",
                 defaults: new { controller = "Users", action = "PersonalizeUser" }
             );
-
+            routes.MapHttpRoute(
+                name: "ValidateSecurityQuestion",
+                routeTemplate: "api/users/{id}/validate_security_question",
+                defaults: new { controller = "SecurityQuestions", action = "ValidateSecurityQuestion" }
+            );
+         
             routes.MapHttpRoute(
                 name: "SetupSecurityPin",
                 routeTemplate: "api/users/{id}/setup_securitypin",
@@ -99,7 +99,11 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/{userId}/mecodes/{id}",
                 defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
             );
-
+            routes.MapHttpRoute(
+    name: "UploadMemberImage",
+    routeTemplate: "api/users/{id}/upload_member_image",
+    defaults: new { controller = "Users", action = "UploadMemberImage" }
+);
             routes.MapHttpRoute(
                 name: "ChangePassword",
                 routeTemplate: "api/users/{id}/change_password",

@@ -14,6 +14,7 @@ using System.Configuration;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using SocialPayments.DomainServices.Interfaces;
+using System.Threading.Tasks;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -125,7 +126,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     totalMoneySent = sentTotal,
                     preferredPaymentAccountId = preferredPaymentAccountId,
                     preferredReceiveAccountId = preferredReceiveAccountId,
-                    setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true)
+                    setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true),
+                    securityQuestion = (user.SecurityQuestion != null ? user.SecurityQuestion.Question : ""),
+                    securityQuestionId = user.SecurityQuestionID
                 };
             } 
             catch(Exception ex)
@@ -267,6 +270,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Completed Personalize User"));
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+        // POST /api/users/{id}/upload_member_image
+        public Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
+        {
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(
+                    Request.CreateResponse(HttpStatusCode.UnsupportedMediaType));
+            }
+
+            var provider = new RenamingMultipartFormDataStreamProvider(String.Format(@"{0}\{1}", @"c:\memberImages", id));
+
+            // Read the form data and return an async task.
+            var task = Request.Content.ReadAsMultipartAsync(provider).
+                ContinueWith<HttpResponseMessage>(readTask =>
+                {
+                    if (readTask.IsFaulted || readTask.IsCanceled)
+                    {
+                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    }
+
+                    // This illustrates how to get the file names.
+                    foreach (var file in provider.BodyPartFileNames)
+                    {
+                        _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
+                        _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
+                    }
+                    return new HttpResponseMessage(HttpStatusCode.Created);
+                });
+
+            return task;
         }
         // PUT /api/user/5
         public void Put(int id, string value)

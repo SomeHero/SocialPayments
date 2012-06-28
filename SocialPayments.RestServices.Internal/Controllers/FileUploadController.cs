@@ -10,53 +10,55 @@ using System.Net;
 using NLog;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net.Http.Headers;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
+    public class RenamingMultipartFormDataStreamProvider : MultipartFormDataStreamProvider
+    {
+        public RenamingMultipartFormDataStreamProvider(string root) : base(root)
+        { }
+        protected override string GetLocalFileName(HttpContentHeaders headers)
+        {
+            return String.Format(@"image_{0}.png", System.DateTime.Now.ToFileTime());
+        }
+    }
+
     public class FileUploadController : ApiController
     {
-        string fileName = "";
-        
-        public Task<HttpResponseMessage<FileUploadResponse>> PostUploadFile()
-        {
-            fileName = String.Format("file_{0}.jpg", DateTime.Now.ToFileTime());
+        private Logger _logger = LogManager.GetCurrentClassLogger();
 
-            return UploadFileAsync().ContinueWith<HttpResponseMessage<FileUploadResponse>>((tsk) =>
+        public Task<HttpResponseMessage> PostUploadFile()
+        {
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
             {
-               
-                HttpResponseMessage<FileUploadResponse> response = null;
-
-                if (tsk.IsCompleted)
-                {
-                    response = new HttpResponseMessage<FileUploadResponse>(new FileUploadResponse() {
-                       FileName = fileName 
-                    }, HttpStatusCode.Created);
-                }
-                else if (tsk.IsFaulted || tsk.IsCanceled)
-                {
-                    response = new HttpResponseMessage<FileUploadResponse>(HttpStatusCode.InternalServerError);
-                }
-
-                return response;
-            });
-        }
-
-        public Task UploadFileAsync()
-        {
-            return this.Request.Content.ReadAsStreamAsync().ContinueWith((tsk) => { SaveToFile(tsk.Result); },
-                                                                         TaskContinuationOptions.OnlyOnRanToCompletion);
-        }
-
-        private void SaveToFile(Stream requestStream)
-        {
-            
-            using (FileStream targetStream = File.Create("C:\\memberImages\\" + fileName))
-            {
-                using (requestStream)
-                {
-                    requestStream.CopyTo(targetStream);
-                }
+                throw new HttpResponseException(
+                    Request.CreateResponse(HttpStatusCode.UnsupportedMediaType));
             }
+
+            var provider = new RenamingMultipartFormDataStreamProvider(@"c:\memberImages");
+            
+            // Read the form data and return an async task.
+            var task = Request.Content.ReadAsMultipartAsync(provider).
+                ContinueWith<HttpResponseMessage>(readTask =>
+                {
+                    if (readTask.IsFaulted || readTask.IsCanceled)
+                    {
+                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    }
+
+                    // This illustrates how to get the file names.
+                    foreach (var file in provider.BodyPartFileNames)
+                    {
+                        _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
+                        _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
+                    }
+                    return new HttpResponseMessage(HttpStatusCode.Created);
+                });
+
+            return task;
         }
+
     }
 }
