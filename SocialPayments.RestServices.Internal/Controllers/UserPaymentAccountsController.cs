@@ -11,6 +11,7 @@ using NLog;
 using System.Configuration;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DataLayer.Interfaces;
+using System.Threading.Tasks;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -300,6 +301,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
+        // POST /api/users/{id}/PaymentAccounts/upload_check_image
+        public Task<HttpResponseMessage> UploadCheckImage([FromUri] string id)
+        {
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(
+                    Request.CreateResponse(HttpStatusCode.UnsupportedMediaType));
+            }
+
+            var provider = new RenamingMultipartFormDataStreamProvider(String.Format(@"{0}\{1}", @"c:\checkImages", id));
+
+            // Read the form data and return an async task.
+            var task = Request.Content.ReadAsMultipartAsync(provider).
+                ContinueWith<HttpResponseMessage>(readTask =>
+                {
+                    if (readTask.IsFaulted || readTask.IsCanceled)
+                    {
+                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    }
+
+                    // This illustrates how to get the file names.
+                    foreach (var file in provider.BodyPartFileNames)
+                    {
+                        _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
+                        _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
+                    }
+                    return new HttpResponseMessage(HttpStatusCode.Created);
+                });
+
+            return task;
+        }
         //POST /api/{userId}/paymentaccounts/{id}/verify_account
         public HttpResponseMessage VerifyAccount(string userId, string id, AccountVerificationRequest request)
         {

@@ -122,7 +122,11 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "UserPaymentAccounts", action = "AddAccount" }
             );
 
-
+            routes.MapHttpRoute(
+name: "UploadCheckImage",
+routeTemplate: "api/users/{id}/PaymentAccounts/upload_check_image",
+defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" }
+);
             routes.MapHttpRoute(
                 name: "SetPreferredSendAccount",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_send_account",
