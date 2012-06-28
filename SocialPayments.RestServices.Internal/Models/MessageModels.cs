@@ -44,6 +44,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string recipientImageUri { get; set; }
             
         }
+        public class SubmitMessageResponse
+        {
+            public bool isLockedOut { get; set; }
+            public int numberOfPinCodeFailures { get; set; }
+        }
         public class AcceptPaymentRequestModel
         {
             public string userId { get; set; }

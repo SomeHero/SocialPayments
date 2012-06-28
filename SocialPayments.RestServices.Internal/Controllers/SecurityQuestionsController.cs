@@ -42,8 +42,54 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return "value";
         }
 
+        //POST /api/{userId}/validate_security_question
+        public HttpResponseMessage ValidateSecurityQuestion(string id, SecurityQuestionModel.ValidateQuestionRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+
+                User user;
+
+                // Validate that it finds a user
+                user = _userService.GetUserById(id);
+
+                if (user == null)
+                {
+                    var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    errorMessage.ReasonPhrase = String.Format("The user's account cannot be found for user {0}", id);
+
+                    return errorMessage;
+                }
+                if (user.SecurityQuestionID == null || String.IsNullOrEmpty(user.SecurityQuestionAnswer))
+                {
+                    var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    errorMessage.ReasonPhrase = String.Format("No security question was setup for user {0}", id);
+
+                    return errorMessage;
+                }
+               
+                if (request.questionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer), StringComparison.OrdinalIgnoreCase))
+                {
+                    user.IsLockedOut = false;
+                    user.PinCodeFailuresSinceLastSuccess = 0;
+
+                    _userService.UpdateUser(user);
+
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    errorMessage.ReasonPhrase = String.Format("Invalid security question or answer, please try again.");
+
+                    return errorMessage;
+                }
+            }
+        }
         // POST /api/{userId}/securityquestion
-        public HttpResponseMessage Post(string userId, SecurityQuestionModel.ValidateQuestionRequest request)
+        public HttpResponseMessage Post(string userId, SecurityQuestionModel.SetupQuestionRequest request)
         {
             Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
@@ -77,7 +123,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 user.IsLockedOut = false;
 
                 _userService.UpdateUser(user);
-                _ctx.SaveChanges();
+
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
