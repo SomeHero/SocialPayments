@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SocialPayments.DataLayer;
-using System.Text.RegularExpressions;
-using SocialPayments.Services.IMessageProcessor;
-using SocialPayments.DomainServices;
-using SocialPayments.Domain;
-using NLog;
-using SocialPayments.DataLayer.Interfaces;
-using System.Net;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using MoonAPNS;
+using NLog;
+using SocialPayments.DataLayer;
+using SocialPayments.DataLayer.Interfaces;
+using SocialPayments.Domain;
+using SocialPayments.DomainServices;
 using SocialPayments.DomainServices.Interfaces;
-using System.Collections.ObjectModel;
+using SocialPayments.Services.IMessageProcessor;
 
 namespace SocialPayments.Services.MessageProcessors
 {
@@ -258,7 +258,7 @@ namespace SocialPayments.Services.MessageProcessors
                         {
                             string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
                             AndroidNotificationService.sendAndroidPushNotification(
-                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, message);
+                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, senderName, message);
                         }
                         catch (Exception ex)
                         {
