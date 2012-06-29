@@ -86,8 +86,9 @@ namespace SocialPayments.DomainServices
             
         }
 
-        public static int sendAndroidPushNotification(String auth_token, String userId, String registrationId, Message message)
+        public static int sendAndroidPushNotification(String auth_token, String userId, String registrationId, String senderName, Message message)
         {
+            var log = LogManager.GetCurrentClassLogger();
             string paymentNotificationText = "{0} sent you {1:C} using PaidThx!";
             string requestNotificationText = "{0} requested {1:C} from you using PaidThx!";
 
@@ -103,11 +104,13 @@ namespace SocialPayments.DomainServices
 
             if (message.MessageType == Domain.MessageType.Payment)
             {
-                text = String.Format(paymentNotificationText, message.Sender.SenderName, message.Amount);
+                text = String.Format(paymentNotificationText, senderName, message.Amount);
+                log.Log(LogLevel.Info, String.Format("Sending Android Push for Payment: {0}", text));
             }
             else if (message.MessageType == Domain.MessageType.PaymentRequest)
             {
-                text = String.Format(requestNotificationText, message.Sender.SenderName, message.Amount);
+                text = String.Format(requestNotificationText, senderName, message.Amount);
+                log.Log(LogLevel.Info, String.Format("Sending Android Push for Payment Request: {0}", text));
             }
             else
             {
