@@ -105,7 +105,7 @@ namespace SocialPayments.DomainServices.UnitTests
             _ctx.SaveChanges();
 
             string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
-            Assert.AreEqual(201, AndroidNotificationService.sendAndroidPushNotification(auth_token, senderId.ToString(), registrationId, message));
+            Assert.AreEqual(201, AndroidNotificationService.sendAndroidPushNotification(auth_token, senderId.ToString(), registrationId, "Test", message));
         }
     }
 }

@@ -158,5 +158,17 @@ namespace SocialPayments.RestServices.Internal.Models
             public string registrationId { get; set; }
             public string deviceToken { get; set; }
         }
+        public class AddUserPayPointRequest
+        {
+            public string PayPointType { get; set; }
+            public string Uri { get; set; }
+        }
+        public class UserPayPointResponse
+        {
+            public string Id { get; set; }
+            public string UserId { get; set; }
+            public string Uri { get; set; }
+            public string Type { get; set; }
+        }
     }
 }
