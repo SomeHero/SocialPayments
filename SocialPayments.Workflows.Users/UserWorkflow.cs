@@ -75,7 +75,7 @@ namespace SocialPayments.Workflows.Users
             switch (user.UserStatus)
             {
                 case UserStatus.Submitted:
-                    IUserProcessor processor = new SubmittedUserProcessor(_ctx);
+                    IUserProcessor processor = new SubmittedUserProcessor(_ctx, emailService, smsService);
                     processor.Process(user);
 
                     break;

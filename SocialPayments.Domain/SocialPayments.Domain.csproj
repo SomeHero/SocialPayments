@@ -96,10 +96,25 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'New Beta|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\New Beta\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\SocialPayments.Domain.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK, Version=1.3.16.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\bin\AWSSDK.dll</HintPath>
+    <Reference Include="AWSSDK">
+      <HintPath>..\Libraries\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
@@ -157,12 +172,14 @@
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />
+    <Compile Include="NotificationType.cs" />
+    <Compile Include="PayPointType.cs" />
+    <Compile Include="SecurityQuestions.cs" />
     <Compile Include="EmailLog.cs" />
     <Compile Include="EmailStatus.cs" />
     <Compile Include="FBUser.cs" />
     <Compile Include="MECode.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="MessageStatus.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="MobileDeviceAlias.cs" />
     <Compile Include="MobileNumberSignUpKey.cs" />
@@ -177,7 +194,10 @@
     <Compile Include="PaymentRequest.cs" />
     <Compile Include="PaymentRequestStatus.cs" />
     <Compile Include="PaymentStatus.cs" />
+    <Compile Include="PaymentWorkflowStatus.cs" />
     <Compile Include="PayPoint.cs" />
+    <Compile Include="PaystreamMessageStatus.cs" />
+    <Compile Include="PaystreamWorkflowStatus.cs" />
     <Compile Include="ProfileBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
@@ -191,6 +211,7 @@
     <Compile Include="TransactionCategory.cs" />
     <Compile Include="TransactionStatus.cs" />
     <Compile Include="TransactionType.cs" />
+    <Compile Include="TransactionWorkflowStatus.cs" />
     <Compile Include="URIType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserAttribute.cs" />
@@ -198,6 +219,8 @@
     <Compile Include="UserAttributeValue.cs" />
     <Compile Include="UserAudit.cs" />
     <Compile Include="UserLoginAudit.cs" />
+    <Compile Include="UserNotification.cs" />
+    <Compile Include="UserPayPoint.cs" />
     <Compile Include="UserRegistrationMethod.cs" />
     <Compile Include="UserSMSAuthentication.cs" />
     <Compile Include="UserStatus.cs" />

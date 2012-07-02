@@ -13,13 +13,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UserPayStreamMessagesController : ApiController
     {
-        private Context _ctx = new Context();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {
+            Context _ctx = new Context();
             DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
 
             var user = GetUser(userId);
@@ -72,18 +72,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     _logger.Log(LogLevel.Error, String.Format("URI Formats {0} {1}", senderUriType, recipientUriType));
 
                     String direction = "In";
-
+                    
                     if (message.SenderId.Equals(user.UserId))
                         direction = "Out";
 
+                    string transactionImageUrl = String.Empty;
+
+                    if (direction == "In")
+                    {
+                        if(message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
+                            transactionImageUrl = message.Sender.ImageUrl;
+                    }
+                    else
+                    {
+                        if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
+                            transactionImageUrl = message.Recipient.ImageUrl;
+                        else
+                            transactionImageUrl = message.recipientImageUri;
+                    }
+
+                    var status = message.Status;
+
+                    _logger.Log(LogLevel.Info, String.Format("Message Status {0}", status));
+                    
                     messageResponse.Add(new MessageModels.MessageResponse()
                     {
                         amount = message.Amount,
-                        comments = message.Comments,
+                        comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
                         createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                         Id = message.Id,
                         //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                        messageStatus = message.MessageStatus.ToString(),
+                        messageStatus =  message.Status.ToString(),
                         messageType = message.MessageType.ToString(),
                         recipientUri = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri),
                         senderUri = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri),
@@ -91,9 +110,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         latitude = message.Latitude,
                         longitutde = message.Longitude,
                         senderName = senderName,
-                        senderImageUri = message.senderImageUri,
-                        recipientName = recipientName,
-                        recipientImageUri = message.recipientImageUri
+                        transactionImageUri = transactionImageUrl,
+                        recipientName = recipientName
                     });
 
                     _logger.Log(LogLevel.Error, String.Format("Added MEssage {0} {1}", senderUriType, recipientUriType));
@@ -118,6 +136,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         private User GetUser(string id)
         {
+            Context _ctx = new Context();
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
+
             Guid userId;
 
             Guid.TryParse(id, out userId);

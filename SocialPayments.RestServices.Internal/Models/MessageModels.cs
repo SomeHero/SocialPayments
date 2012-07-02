@@ -22,15 +22,15 @@ namespace SocialPayments.RestServices.Internal.Models
             public string messageStatus { get; set; }
             public string direction { get; set; }
             public string senderName { get; set; }
-            public string senderImageUri { get; set; }
+            public string transactionImageUri { get; set; }
             public string recipientName { get; set; }
-            public string recipientImageUri { get; set; }
             public double latitude { get; set; }
             public double longitutde { get; set; }
         }
         public class SubmitMessageRequest {
             public string apiKey { get; set; }
-            public string senderUri { get; set; }
+            public string senderId { get; set; }
+           // public string senderUri { get; set; }
             public string senderAccountId { get; set; }
             public string recipientUri { get; set; }
             public string securityPin { get; set; }
@@ -44,8 +44,16 @@ namespace SocialPayments.RestServices.Internal.Models
             public string recipientImageUri { get; set; }
             
         }
+        public class SubmitMessageResponse
+        {
+            public bool isLockedOut { get; set; }
+            public int numberOfPinCodeFailures { get; set; }
+        }
         public class AcceptPaymentRequestModel
         {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+            public string paymentAccountId { get; set; }
         }
 
         public class UpdateMessageRequest {

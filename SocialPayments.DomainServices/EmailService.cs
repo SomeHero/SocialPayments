@@ -53,8 +53,13 @@ namespace SocialPayments.DomainServices
 
             StringBuilder mergeFields = new StringBuilder();
             foreach(var item in replacementElements) {
-                mergeFields.Append("&");
-                mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+                if (item.Key != null && item.Value != null)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Merge Fields {0} = {1}", item.Key.ToUpper(), item.Value));
+
+                    mergeFields.Append("&");
+                    mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+                }
             }
             
             string requestBody = String.Format(elasticEmailPost, elasticEmailUserName, elasticEmailApiKey,
@@ -79,7 +84,7 @@ namespace SocialPayments.DomainServices
         }
         public bool SendEmail(Guid apiKey, string fromAddress, string toAddress, string subject, string body)
         {
-            _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}; +", apiKey, toAddress, fromAddress));
+            _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}", apiKey, toAddress, fromAddress));
             
             //Create Email Log
             var application = _applicationService.GetApplication(apiKey.ToString());

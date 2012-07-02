@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -23,9 +23,11 @@ namespace SocialPayments.DomainServices
         private Logger _logger = LogManager.GetCurrentClassLogger();
         private SecurityService securityService = new SecurityService();
         private DomainServices.FormattingServices formattingServices = new DomainServices.FormattingServices();
+        private DomainServices.ValidationService _validationService = new DomainServices.ValidationService();
+
         int defaultNumPasswordFailures = 3;
         int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
-
+        private string _fbImageUrlFormat = "http://graph.facebook.com/{0}/picture";
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public UserService() { }
@@ -57,9 +59,8 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                SetupPassword = false,
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupSecurityPin = true,
+                SetupPassword = true,
+                SetupSecurityPin = false,
                 Roles = new Collection<Role>()
                     {
                         memberRole
@@ -87,9 +88,7 @@ namespace SocialPayments.DomainServices
         {
             _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
 
-            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
-
-            var uriType = messageServices.GetURIType(userUri);
+            var uriType = GetURIType(userUri);
 
             _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
 
@@ -327,6 +326,47 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User SetupSecurityQuestion(string userId, int questionId, string questionAnswer)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.SecurityQuestionID = questionId;
+            user.SecurityQuestionAnswer = securityService.Encrypt(questionAnswer);
+
+            _ctx.SaveChanges();
+
+            return user;
+        }
+
+        public User addPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to add Android Push Notification Registration Id for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.RegistrationId = registrationId;
+
+            _ctx.SaveChanges();
+
+            return user;
+        }
+
         public User GetUserById(string userId)
         {
             Guid userIdGuid;
@@ -342,7 +382,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken)
+            string deviceToken, out bool isNewUser)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
 
@@ -358,6 +398,8 @@ namespace SocialPayments.DomainServices
                 if (user == null)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Create new user.", accountId, emailAddress));
+
+                    isNewUser = true;
 
                     user = _ctx.Users.Add(new Domain.User()
                     {
@@ -393,13 +435,17 @@ namespace SocialPayments.DomainServices
                             Id = Guid.NewGuid(),
                             TokenExpiration = System.DateTime.Now.AddDays(30),
                             OAuthToken = ""
-                        }
+                        },
+                        ImageUrl = String.Format(_fbImageUrlFormat, accountId),
                     });
 
                 }
                 else
                 {
+                    isNewUser = false;
+
                     user.DeviceToken = deviceToken;
+                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
                 }
 
                 _ctx.SaveChanges();
@@ -468,6 +514,19 @@ namespace SocialPayments.DomainServices
             return "PaidThx User";
 
 
+        }
+        public URIType GetURIType(string uri)
+        {
+            var uriType = URIType.MobileNumber;
+
+            if (_validationService.IsEmailAddress(uri))
+                uriType = URIType.EmailAddress;
+            else if (_validationService.IsMECode(uri))
+                uriType = URIType.MECode;
+            else if (_validationService.IsFacebookAccount(uri))
+                uriType = URIType.FacebookAccount;
+
+            return uriType;
         }
     }
 }

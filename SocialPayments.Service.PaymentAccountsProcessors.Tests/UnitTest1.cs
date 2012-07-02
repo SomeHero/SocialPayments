@@ -72,7 +72,7 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             _ctx = new FakeDbContext();
 
             UserService userService = new UserService(_ctx);
-            IEmailService emailService = null;
+            IEmailService emailService = new FakeEmailService();
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             SubmittedPaymentAccountProcessor processor = new SubmittedPaymentAccountProcessor(_ctx, emailService);
 
@@ -81,7 +81,9 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             var user = userService.AddUser(userId, "jrhodes621", "james123", "jrhodes621@gmail.com", "1234");
             var paymentAccount = paymentAccountService.AddPaymentAccount(userId.ToString(), "James G Rhodes", "053000219", "1234123412",
                 "Checking");
-
+            user.PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>();
+            user.PaymentAccounts.Add(paymentAccount);
+            
             processor.Process(paymentAccount);
 
             var paymentAccountVerification = _ctx.PaymentAccountVerifications.ElementAt(0);
@@ -96,7 +98,7 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             _ctx = new FakeDbContext();
 
             UserService userService = new UserService(_ctx);
-            IEmailService emailService = null;
+            IEmailService emailService = new FakeEmailService();
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             SubmittedPaymentAccountProcessor processor = new SubmittedPaymentAccountProcessor(_ctx, emailService);
 
@@ -105,7 +107,9 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             var user = userService.AddUser(userId, "jrhodes621", "james123", "jrhodes621@gmail.com", "1234");
             var paymentAccount = paymentAccountService.AddPaymentAccount(userId.ToString(), "James G Rhodes", "053000219", "1234123412",
                 "Checking");
-
+            user.PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>();
+            user.PaymentAccounts.Add(paymentAccount);
+            
             processor.Process(paymentAccount);
 
             var paymentAccountVerification = _ctx.PaymentAccountVerifications.ElementAt(0);
@@ -118,7 +122,7 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             _ctx = new FakeDbContext();
 
             UserService userService = new UserService(_ctx);
-            IEmailService emailService = null;
+            IEmailService emailService = new FakeEmailService();
             PaymentAccountService paymentAccountService = new PaymentAccountService(_ctx);
             SubmittedPaymentAccountProcessor processor = new SubmittedPaymentAccountProcessor(_ctx, emailService);
 
@@ -127,7 +131,9 @@ namespace SocialPayments.Service.PaymentAccountsProcessors.Tests
             var user = userService.AddUser(userId, "jrhodes621", "james123", "jrhodes621@gmail.com", "1234");
             var paymentAccount = paymentAccountService.AddPaymentAccount(userId.ToString(), "James G Rhodes", "053000219", "1234123412",
                 "Checking");
-
+            user.PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>();
+            user.PaymentAccounts.Add(paymentAccount);
+            
             processor.Process(paymentAccount);
 
             var paymentAccountVerification = _ctx.PaymentAccountVerifications.ElementAt(0);

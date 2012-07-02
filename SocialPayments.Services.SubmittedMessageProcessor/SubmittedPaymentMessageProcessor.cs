@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SocialPayments.DataLayer;
-using System.Text.RegularExpressions;
-using SocialPayments.Services.IMessageProcessor;
-using SocialPayments.DomainServices;
-using SocialPayments.Domain;
-using NLog;
-using SocialPayments.DataLayer.Interfaces;
-using System.Net;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using MoonAPNS;
+using NLog;
+using SocialPayments.DataLayer;
+using SocialPayments.DataLayer.Interfaces;
+using SocialPayments.Domain;
+using SocialPayments.DomainServices;
 using SocialPayments.DomainServices.Interfaces;
+using SocialPayments.Services.IMessageProcessor;
 
 namespace SocialPayments.Services.MessageProcessors
 {
@@ -26,7 +27,7 @@ namespace SocialPayments.Services.MessageProcessors
         private TransactionBatchService _transactionBatchService;
         private ValidationService _validationService;
         private UserService _userService;
-        private SMSService _smsService;
+        private ISMSService _smsService;
         private IEmailService _emailService;
         private MessageServices _messageService;
 
@@ -46,20 +47,24 @@ namespace SocialPayments.Services.MessageProcessors
 
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
-        private string _mobileWebSiteUrl = @"http://beta.paidthx.com/mobile/";
-
+        private string _mobileWebSiteUrl = System.Configuration.ConfigurationManager.AppSettings["MobileWebSetURL"];
+       
         private string _paymentReceivedRecipientNotRegisteredTemplate = "Payment Received Recipient Not Registered";
         private string _paymentReceivedRecipientRegisteredTemplate = "Payment Received Recipient Registered";
+
+        private string _defaultAvatarImage = System.Configuration.ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
 
         public SubmittedPaymentMessageProcessor() {
             _ctx  = new DataLayer.Context();
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public SubmittedPaymentMessageProcessor(IDbContext context)
+        public SubmittedPaymentMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
+            _smsService = smsService;
+            _emailService = emailService;
         }
 
         public bool Process(Message message)
@@ -67,15 +72,15 @@ namespace SocialPayments.Services.MessageProcessors
             _formattingService = new FormattingServices();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _validationService = new ValidationService(_logger);
-            _smsService = new SMSService(_ctx);
-            _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+
+            IAmazonNotificationService _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             string fromAddress = "jrhodes2705@gmail.com";
             URIType recipientType = _messageService.GetURIType(message.RecipientUri);
 
-            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0}", message.RecipientUri));
+            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0} - {1}", message.RecipientUri, _defaultAvatarImage));
 
             _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
             
@@ -85,7 +90,6 @@ namespace SocialPayments.Services.MessageProcessors
 
             var sender = message.Sender;
             var recipient = _userService.GetUser(message.RecipientUri);
-            message.Recipient = recipient;
 
             var senderName = _userService.GetSenderName(sender);
             var recipientName = message.RecipientUri;
@@ -98,7 +102,70 @@ namespace SocialPayments.Services.MessageProcessors
 
             try
             {
-                _transactionBatchService.BatchTransactions(message);
+                var transactionsList = new Collection<Transaction>();
+
+                message.Recipient = recipient;
+                //Create Payment
+                message.Payment = new Payment()
+                {
+                    Amount = message.Amount,
+                    ApiKey = message.ApiKey,
+                    Comments = message.Comments,
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    PaymentStatus = PaymentStatus.Pending,
+                    SenderAccount = message.SenderAccount,
+                };
+
+                _logger.Log(LogLevel.Info, String.Format("Batching widthrawal from {0}", sender.UserId));
+
+                transactionsList.Add(_ctx.Transactions.Add(new Transaction()
+                {
+                    Amount = message.Payment.Amount,
+                    Category = TransactionCategory.Payment,
+                    CreateDate = System.DateTime.Now,
+                    FromAccount = message.SenderAccount,
+                    Id = Guid.NewGuid(),
+                    Payment = message.Payment,
+                    PaymentChannelType = PaymentChannelType.Single,
+                    SentDate = System.DateTime.Now,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Status = TransactionStatus.Pending,
+                    //TransactionBatch = transactionBatch,
+                    Type = TransactionType.Withdrawal,
+                    User = sender
+                }));
+                
+                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Batching deposit to {0}", recipient.UserId));
+
+                    transactionsList.Add(_ctx.Transactions.Add(new Transaction()
+                    {
+                        Amount = message.Payment.Amount,
+                        Category = TransactionCategory.Payment,
+                        CreateDate = System.DateTime.Now,
+                        FromAccount = recipient.PaymentAccounts[0],
+                        Id = Guid.NewGuid(),
+                        Payment = message.Payment,
+                        PaymentChannelType = PaymentChannelType.Single,
+                        SentDate = System.DateTime.Now,
+                        StandardEntryClass = StandardEntryClass.Web,
+                        Status = TransactionStatus.Pending,
+                        //TransactionBatch = transactionBatch,
+                        Type = TransactionType.Deposit,
+                        User = sender
+                    }));
+                }
+
+                _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
+
+                message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                _transactionBatchService.AddTransactionsToBatch(transactionsList);
+
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -161,78 +228,104 @@ namespace SocialPayments.Services.MessageProcessors
             //rec_comments
             //app_user
             //link_registration - empty
-                    _emailService.SendEmail(recipient.EmailAddress, emailSubject, _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
-                    {
-                        new KeyValuePair<string, string>("first_name", recipient.FirstName),
-                        new KeyValuePair<string, string>("last_name", recipient.LastName),
-                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
-                        new KeyValuePair<string, string>("rec_sender", senderName),
-                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
-                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("dddd, MMMM dd at hh:mm tt")),
-                        new KeyValuePair<string, string>("rec_comments", message.Comments),
-                        new KeyValuePair<string, string>("link_registration", ""),
-                        new KeyValuePair<string, string>("app_user", "false")
-                    });
-                }
-                if (recipient.DeviceToken.Length > 0)
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
-                    
-
-                    // We need to know the number of pending requests that the user must take action on for the application badge #
-                    // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
-                    //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
-                    //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
-                    //      Opening the application is sufficient
-                    var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.MessageStatusValue.Equals((int)Domain.MessageStatus.Pending));
-
-                    _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
-                    
-                    NotificationPayload payload = null;
-                    String notification;
-
-                    // Send a mobile push notification
-                    if (message.MessageType == Domain.MessageType.Payment)
-                    {
-                        notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
-                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count()+1);
-                        payload.AddCustom("nType", "recPCNF");
-                    }
-                    else if (message.MessageType == Domain.MessageType.PaymentRequest)
-                    {
-                        notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
-                        payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
-                        payload.AddCustom("nType", "recPRQ");
-                    }
-
-                    /*
-                     *  Payment Notification Types:
-                     *      Payment Request [recPRQ]
-                     *          - Recipient receives notification that takes them to the
-                     *                 paystream detail view about that payment request
-                     *      Payment Confirmation [recPCNF]
-                     *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
-                     */
-                    
-                    payload.AddCustom("tID", message.Id);
-                    var notificationList = new List<NotificationPayload>() { payload };
-
-                    List<string> result;
-
                     try
                     {
-                        var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
-                        result = push.SendToApple(notificationList); // You are done!
+                        _emailService.SendEmail(recipient.EmailAddress, emailSubject, _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                        {
+                            new KeyValuePair<string, string>("first_name", recipient.FirstName),
+                            new KeyValuePair<string, string>("last_name", recipient.LastName),
+                            new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
+                            new KeyValuePair<string, string>("rec_sender", senderName),
+                            new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
+                            new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                            new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                            new KeyValuePair<string, string>("link_registration", "http://paidthx.com/mobile"),
+                            new KeyValuePair<string, string>("app_user", "false")
+                        });
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
-                        var exception = ex.InnerException;
-
-                        while (exception != null)
+                        _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
+                    }
+                }
+                if (!String.IsNullOrEmpty(recipient.DeviceToken))
+                {
+                    if (!String.IsNullOrEmpty(recipient.RegistrationId))
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
+                        //Fix this.
+                        try
                         {
-                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
-                        
+                            string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                            AndroidNotificationService.sendAndroidPushNotification(
+                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, senderName, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                        }
+                    }
+                    else
+                    {
+
+                        _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
+
+
+                        // We need to know the number of pending requests that the user must take action on for the application badge #
+                        // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                        //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                        //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                        //      Opening the application is sufficient
+                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
+
+                        _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+
+                        NotificationPayload payload = null;
+                        String notification;
+
+                        // Send a mobile push notification
+                        if (message.MessageType == Domain.MessageType.Payment)
+                        {
+                            notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count() + 1);
+                            payload.AddCustom("nType", "recPCNF");
+                        }
+                        else if (message.MessageType == Domain.MessageType.PaymentRequest)
+                        {
+                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
+                            payload.AddCustom("nType", "recPRQ");
+                        }
+
+                        /*
+                         *  Payment Notification Types:
+                         *      Payment Request [recPRQ]
+                         *          - Recipient receives notification that takes them to the
+                         *                 paystream detail view about that payment request
+                         *      Payment Confirmation [recPCNF]
+                         *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                         */
+
+                        payload.AddCustom("tID", message.Id);
+                        var notificationList = new List<NotificationPayload>() { payload };
+
+                        List<string> result;
+
+                        try
+                        {
+                            var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                            result = push.SendToApple(notificationList); // You are done!
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                            var exception = ex.InnerException;
+
+                            while (exception != null)
+                            {
+                                _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+
+                            }
                         }
                     }
                     
@@ -244,6 +337,7 @@ namespace SocialPayments.Services.MessageProcessors
                     // We should, however, publish something to the user's page that says sender sent payment
                     
                 }
+
             }
             else
             {
@@ -302,22 +396,15 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("last_name", ""),
                         new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
                         new KeyValuePair<string, string>("rec_sender", senderName),
-                        new KeyValuePair<string, string>("rec_sender_photo_url", ""),
-                        new KeyValuePair<string, string>("rec_datetime", message.CreateDate.ToString("MM, dd yyyy hh:mm tt")),
-                        new KeyValuePair<string, string>("rec_comments", message.Comments),
+                        new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
+                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                        new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                         new KeyValuePair<string, string>("link_registration", link),
                         new KeyValuePair<string, string>("app_user", "false")
                     });
                 }
 
             }
-
-            _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
-
-            message.MessageStatus = MessageStatus.Pending;
-            message.LastUpdatedDate = System.DateTime.Now;
-
-            _ctx.SaveChanges();
 
             return true;
 
