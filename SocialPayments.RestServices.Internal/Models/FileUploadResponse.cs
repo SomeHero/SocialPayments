@@ -7,6 +7,6 @@ namespace SocialPayments.RestServices.Internal.Models
 {
     public class FileUploadResponse
     {
-        public string FileName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

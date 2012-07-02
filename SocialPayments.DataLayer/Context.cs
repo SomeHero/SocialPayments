@@ -33,6 +33,10 @@ namespace SocialPayments.DataLayer
         public IDbSet<MECode> MECodes { get; set; }
         public IDbSet<PaymentAccountVerification> PaymentAccountVerifications { get; set; }
         public IDbSet<SecurityQuestion> SecurityQuestions { get; set; }
+        public IDbSet<NotificationType> NotificationTypes { get; set; }
+        public IDbSet<PayPointType> PayPointTypes { get; set; }
+        public IDbSet<UserPayPoint> UserPayPoints { get; set; }
+        public IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -152,6 +156,7 @@ namespace SocialPayments.DataLayer
             context.Database.ExecuteSqlCommand("CREATE UNIQUE INDEX IX_UserName ON Users (UserName)");
             context.Database.ExecuteSqlCommand("CREATE UNIQUE NONCLUSTERED INDEX IX_EmailAddress ON Users (EmailAddress) where EmailAddress Is Not Null and EmailAddress != ''");
             context.Database.ExecuteSqlCommand("CREATE UNIQUE NONCLUSTERED INDEX IX_MobileNumber ON Users (MobileNumber) where MobileNumber Is Not Null and MobileNumber != ''");
+            context.Database.ExecuteSqlCommand("CREATE UNIQUE NONCLUSTERED INDEX IX_PayPointURI ON UserPayPoints (Uri)");
 
             //context.Database.ExecuteSqlCommand("CREATE UNIQUE INDEX IX_PayPoint ON PayPoints (URI)");
 
@@ -223,6 +228,54 @@ namespace SocialPayments.DataLayer
                 IsActive = true,
                 Url = "myurl.com",
                 CreateDate = System.DateTime.Now
+            });
+            var emailPayPointType = context.PayPointTypes.Add(new PayPointType()
+            {
+                Active = true,
+                Id = 1,
+                Name = "EmailAddress"
+            });
+            var phonePayPointType = context.PayPointTypes.Add(new PayPointType()
+            {
+                Active = true,
+                Id = 2,
+                Name = "Phone"
+            });
+            var facebookPayPoint = context.PayPointTypes.Add(new PayPointType()
+            {
+                Active = true,
+                Id = 3,
+                Name = "Facebook"
+            });
+            var meCodePayPoint = context.PayPointTypes.Add(new PayPointType()
+            {
+                Active = true,
+                Id = 4,
+                Name = "MeCode"
+            });
+            var twitterPayPoint = context.PayPointTypes.Add(new PayPointType()
+            {
+                Active = true,
+                Id = 5,
+                Name = "Twitter"
+            });
+            var smsNotificationType = context.NotificationTypes.Add(new NotificationType()
+            {
+                Active = true,
+                Id = 1,
+                Type = "SMS"
+            });
+            var emailNotificationType = context.NotificationTypes.Add(new NotificationType()
+            {
+                Active = true,
+                Id = 2,
+                Type = "Email"
+            });
+            var pushNotificationType = context.NotificationTypes.Add(new NotificationType()
+            {
+                Active = true,
+                Id = 3,
+                Type = "Push"
             });
             context.SaveChanges();
 

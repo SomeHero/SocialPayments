@@ -146,6 +146,9 @@
     <Compile Include="EmailLogServiceTest.cs" />
     <Compile Include="EmailServiceTest.cs" />
     <Compile Include="Fakes\FakeEmailService.cs" />
+    <Compile Include="Fakes\FakeNotificationTypeSet.cs" />
+    <Compile Include="Fakes\FakePayPointTypeSet.cs" />
+    <Compile Include="Fakes\FakeSecurityQuestionSet.cs" />
     <Compile Include="Fakes\FakeSMSService.cs" />
     <Compile Include="Fakes\FakeAmazonNotificationService.cs" />
     <Compile Include="Fakes\FakeApplicationSet.cs" />
