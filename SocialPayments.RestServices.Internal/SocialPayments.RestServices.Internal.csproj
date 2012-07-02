@@ -188,6 +188,7 @@
   <ItemGroup>
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
+    <Compile Include="Controllers\UserPayPointsController.cs" />
     <Compile Include="Models\AccountVerificationRequest.cs" />
     <Compile Include="Controllers\ApplicationsController.cs" />
     <Compile Include="Controllers\MobileNumberSignUpKeySMSListenerController.cs" />

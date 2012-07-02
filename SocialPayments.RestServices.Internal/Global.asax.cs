@@ -95,6 +95,17 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+name: "UserPayPoints",
+routeTemplate: "api/users/{userId}/PayPoints/{id}",
+defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+);
+            routes.MapHttpRoute(
+    name: "UserPayPointsWithType",
+    routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
+    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type= RouteParameter.Optional }
+);
+
+            routes.MapHttpRoute(
                 name: "UserMECodes",
                 routeTemplate: "api/users/{userId}/mecodes/{id}",
                 defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }

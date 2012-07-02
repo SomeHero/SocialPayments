@@ -28,6 +28,10 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<MECode> _meCodes;
         private IDbSet<PaymentAccountVerification> _paymentAccountVerifications;
         private IDbSet<SecurityQuestion> _securityQuestions;
+        private IDbSet<NotificationType> _notificationTypes;
+        private IDbSet<PayPointType> _payPointTypes;
+        private IDbSet<UserPayPoint> _userPayPoints;
+        private IDbSet<UserNotification> _userNotificationConfigurations;
 
         public FakeDbContext()
         {
@@ -46,6 +50,9 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             _roles = new FakeRoleSet();
             _paymentAccounts = new FakePaymentAccountSet();
             _paymentAccountVerifications = new FakePaymentAccountVerificationSet();
+            _securityQuestions = new FakeSecurityQuestionSet();
+            _notificationTypes = new FakeNotificationTypeSet();
+            _payPointTypes = new FakePayPointTypeSet();
         }
         public IDbSet<Application> Applications
         {
@@ -136,6 +143,26 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         {
             get { return _securityQuestions; }
             set { _securityQuestions = value; }
+        }
+        public IDbSet<NotificationType> NotificationTypes
+        {
+            get { return _notificationTypes; }
+            set { _notificationTypes = value; }
+        }
+        public IDbSet<PayPointType> PayPointTypes
+        {
+            get { return _payPointTypes; }
+            set { _payPointTypes = value; }
+        }
+        public IDbSet<UserPayPoint> UserPayPoints
+        {
+            get { return _userPayPoints; }
+            set { _userPayPoints = value; }
+        }
+        public IDbSet<UserNotification> UserNotificationConfigurations 
+        { 
+            get { return _userNotificationConfigurations; }
+            set { _userNotificationConfigurations = value; }
         }
         public void SaveChanges()
         {

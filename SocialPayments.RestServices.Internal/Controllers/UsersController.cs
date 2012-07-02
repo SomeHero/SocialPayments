@@ -15,6 +15,8 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using SocialPayments.DomainServices.Interfaces;
 using System.Threading.Tasks;
+using Amazon.S3.Model;
+using System.IO;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -272,7 +274,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/users/{id}/upload_member_image
-        public Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
+        public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -285,20 +287,52 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             // Read the form data and return an async task.
             var task = Request.Content.ReadAsMultipartAsync(provider).
-                ContinueWith<HttpResponseMessage>(readTask =>
+                ContinueWith < HttpResponseMessage<FileUploadResponse>>(readTask =>
                 {
                     if (readTask.IsFaulted || readTask.IsCanceled)
                     {
-                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        return new HttpResponseMessage<FileUploadResponse>(HttpStatusCode.InternalServerError);
                     }
 
+                    var fileName = "";
                     // This illustrates how to get the file names.
                     foreach (var file in provider.BodyPartFileNames)
                     {
                         _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
                         _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
+
+                        fileName = file.Value;
                     }
-                    return new HttpResponseMessage(HttpStatusCode.Created);
+
+                    string bucketName = ConfigurationManager.AppSettings["MemberImagesBucketName"];
+
+                   // _logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
+
+                    if (String.IsNullOrEmpty(bucketName))
+                        throw new Exception("S3 bucket name for MemberImages not configured");
+
+                    var fileContent = File.OpenRead(fileName);
+
+                    Amazon.S3.AmazonS3Client s3Client = new Amazon.S3.AmazonS3Client();
+                    PutObjectRequest putRequest = new PutObjectRequest()
+                    {
+                        BucketName = bucketName,
+                        InputStream = fileContent,
+                        Key = String.Format("{0}/image1.png", id)
+                    };
+                    try
+                    {
+                        s3Client.PutObject(putRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unable to upload member image to S3. {0}", ex.Message));
+                    }
+
+                    return new HttpResponseMessage<FileUploadResponse>(
+                        new FileUploadResponse() {
+                            ImageUrl = String.Format("http://memberimages.paidthx.com/{0}/image1.png", id)
+                        }, HttpStatusCode.Created);
                 });
 
             return task;
