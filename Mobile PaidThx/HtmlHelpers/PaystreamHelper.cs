@@ -15,8 +15,8 @@ namespace Mobile_PaidThx.HtmlHelpers
 
             var tempUri = formattingService.FormatMobileNumber(uri);
 
-            if (tempUri.Length >= 10)
-                return new MvcHtmlString(String.Format("({0}) {1}-{2}", tempUri.Substring(0, 3), tempUri.Substring(3, 3), tempUri.Substring(6, 4)));
+           // if (tempUri.Length >= 10)
+    //               return new MvcHtmlString(String.Format("({0}) {1}-{2}", tempUri.Substring(0, 3), tempUri.Substring(3, 3), tempUri.Substring(6, 4)));
             
             return new MvcHtmlString(uri);
         }

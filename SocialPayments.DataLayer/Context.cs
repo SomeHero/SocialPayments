@@ -143,7 +143,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
+    public class MyInitializer :System.Data.Entity.DropCreateDatabaseIfModelChanges<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -291,13 +291,15 @@ namespace SocialPayments.DataLayer
                 PaymentAccounts = new Collection<PaymentAccount>() {
                     new PaymentAccount() { 
                         Id=Guid.NewGuid(), 
-                        Nickname = "Wachivia ****1111",
+                        Nickname = "Wachovia ****1111",
                         AccountNumber = securityService.Encrypt("411111111111"), 
                         AccountType = PaymentAccountType.Checking, 
                         NameOnAccount= securityService.Encrypt("Test User"), 
                         RoutingNumber= securityService.Encrypt("053000219"),
                         CreateDate = System.DateTime.Now,
-                        IsActive = true
+                        IsActive = true,
+                        BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                        BankName = "Wachovia"
                     }
                 },
                 IsLockedOut = false,
@@ -379,7 +381,9 @@ namespace SocialPayments.DataLayer
                         NameOnAccount= securityService.Encrypt("James Rhodes"), 
                         RoutingNumber= securityService.Encrypt("053000219"),
                         CreateDate = System.DateTime.Now,
-                        IsActive = true
+                        IsActive = true,
+                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                        BankName = "BB&T"
                     }
                 },
             });
@@ -429,7 +433,9 @@ namespace SocialPayments.DataLayer
                         NameOnAccount= securityService.Encrypt("James Rhodes"), 
                         RoutingNumber= securityService.Encrypt("053000219"),
                         CreateDate = System.DateTime.Now,
-                        IsActive = true
+                        IsActive = true,
+                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                        BankName = "Wells Fargo"
                     }
                 },
             });
