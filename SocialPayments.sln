@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.WorkflowServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.Images", "SocialPayments.Images\SocialPayments.Images.csproj", "{AF9805E5-23C5-44B6-B712-2C0B14EBF97C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobile PaidThx", "..\Mobile-Beta\Mobile PaidThx\Mobile PaidThx.csproj", "{1A06816D-C32D-45F3-A2BB-6819730115CC}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SocialPayments1.vsmdi
@@ -1001,6 +1003,36 @@ Global
 		{AF9805E5-23C5-44B6-B712-2C0B14EBF97C}.Test|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AF9805E5-23C5-44B6-B712-2C0B14EBF97C}.Test|Mixed Platforms.Build.0 = Release|Any CPU
 		{AF9805E5-23C5-44B6-B712-2C0B14EBF97C}.Test|x86.ActiveCfg = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Beta|Any CPU.Build.0 = Beta|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Beta|Mixed Platforms.ActiveCfg = Beta|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Beta|Mixed Platforms.Build.0 = Beta|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Beta|x86.ActiveCfg = Beta|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Dev|Mixed Platforms.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Dev|Mixed Platforms.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Dev|x86.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Local|Any CPU.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Local|Any CPU.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Local|Mixed Platforms.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Local|Mixed Platforms.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Local|x86.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Test|Any CPU.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Test|Any CPU.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Test|Mixed Platforms.ActiveCfg = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Test|Mixed Platforms.Build.0 = Dev|Any CPU
+		{1A06816D-C32D-45F3-A2BB-6819730115CC}.Test|x86.ActiveCfg = Dev|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
