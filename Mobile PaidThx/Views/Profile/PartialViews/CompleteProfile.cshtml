@@ -1,0 +1,42 @@
+﻿@model Mobile_PaidThx.Models.ProfileModels
+<script src="@Url.Content("~/Scripts/complete-profile.js")" type="text/javascript"></script>
+<div id="profile-complete" class="panel main-body dialog">
+<span id="complete-profile-close" class="dialog-close"></span>
+@Html.ValidationSummary()
+ @if (Model.Payment != null)
+ {
+        <text>
+        <h2>
+            Congratulations, you are now ready to start using PaidThx!</h2>
+        <p>
+            Your <b>@String.Format("{0:C}", Model.Payment.Amount)</b> in incoming payments are now being processed.  To view and track payments, visit your Paystream, where you can access all your PaidThx activity.
+        </p>
+        </text>
+ }
+
+    <h2>Complete Your Profile</h2>
+    <p>
+        Your profile is 50% complete.  Completing your profile makes it easier for you and your network to use PaidThx together.
+    </p>
+    <h2>Personalize Your Payments</h2>
+    <form id="frmCompleteProfile" action="CompleteProfile" method="post">
+    <p><input type="text" id="txtSenderName" name="SenderName" placeholder="Create a PaidThx Sender Name" required /></p>
+    <p class="notes">Your Sender Name will appear when you transfer money to others via PaidThx.  If you don’t enter one, we will use your first and last name, or phone.</p>
+    <h2>Link your Social Accounts</h2>
+    <div id="socialNetworkIcons" class="clearfix:after" style="height: 58px;">
+    <dl>
+        <dd style="float: left;"><img src="@Url.Content("~/Content/images/facebook_icon.gif")" /></dd>
+        <dd style="float: left;"><img src="@Url.Content("~/Content/images/twitter_icon.gif")" /></dd>
+        <dd style="float: left;"><img src="@Url.Content("~/Content/images/plus_icon.gif")" /></dd>
+        <dd style="float: left;"><img src="@Url.Content("~/Content/images/s_icon.gif")" /></dd>
+    </dl>
+    </div>
+    <p class="clearfix:before" style="margin-top: 28px;">
+        <button type="submit" id="btnUpdateProfile" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update Profile</span></button>
+    </p>
+    </form>
+    <p>
+            <button type="submit" id="btnSkipStep" class="imgbtn"><img src="@Url.Content("~/Content/images/skip-step-button-icon.png")" alt="" /><span>Skip This Step</span></button>
+    </p>
+
+</div>

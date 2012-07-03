@@ -1,0 +1,58 @@
+﻿@model Mobile_PaidThx.Models.RegisterModel
+<a href="#create"></a>
+<div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
+    <div id="logo" style="float: left">
+        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
+    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
+        Register
+    </div>
+</div>
+<div id="main-body" class="panel">
+    @Html.ValidationSummary()
+    @if (Model.Payment != null)
+    {
+        <text>
+            <h2>@Model.Payment.Sender has sent you @String.Format("{0:C}", Model.Payment.Amount).</h2>
+            <div class="thought">
+                <p>@Model.Payment.Comments</p>
+                <span class="arrow"></span>
+            </div>
+            <p>To accept this payment, signup for your PaidThx account. It's safe, secure and free!</p>
+        </text>
+    }
+    else
+    {
+        <text>
+            <h2>SignUp for PaidThx.</h2>
+        </text>
+    }
+    <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "RegisterWithFacebook/&scope=email&state=pickle")'"><img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign Up With Facebook </span></button>
+    <p class="note-emphasis">OR</p>
+
+    <div id="registration-form">
+        <form id="frmRegister" action="@Url.Content("~/Register/Index")" method="post">
+            <input type="text" id="email" class="required email" placeholder="Enter Your Email Address" name="Email" />
+            @if (Model.Payment == null)
+            {
+                <text>
+                    <input type="text" id="txtMobileNumber" class="required" placeholder="Enter Your Mobile #" name="MobileNumber" />
+                </text>
+            }
+            <input type="password" id="password" class="required" placeholder="Create a Password" name="Password" />
+            <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password" name="ConfirmPassword" />
+            @if(Model.Payment != null)
+            {
+                <text>
+                    <input type="hidden" id="hdnMobileNumber" class="required" name="MobileNumber" value="@Model.Payment.MobileNumber" />
+                </text>
+            }
+            <button type="submit" id="register-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Create My Account</span></button>
+        </form>
+    </div>
+    <div id="main-body-sub-links">
+        <p style="text-align: center">
+            Already
+                a member of PaidThx? <a href="@Url.Content("~/Account/SignIn")" data-ajax="false">Sign In</a></p>
+    </div>
+   
+</div>

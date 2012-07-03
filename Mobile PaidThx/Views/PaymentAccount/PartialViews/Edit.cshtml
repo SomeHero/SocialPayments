@@ -1,0 +1,40 @@
+﻿@model Mobile_PaidThx.Models.EditPaymentAccountModel
+@{
+    ViewBag.Title = "PaymentAccouunt";
+}
+<div id="accounts-edit" class="panel main-body dialog">
+    <span id="edit-close" class="dialog-close"></span>
+    @Html.ValidationSummary()
+    <h2>
+        Edit Account</h2>
+    <p>
+        <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
+            required value="@Model.Nickname" /></p>
+    <p>
+        <input type="text" id="txtNameOnAccount" name="NameOnAccount" placeholder=" Name on the Account"
+            required value="@Model.NameOnAccount" /></p>
+    <p>
+        <input type="text" id="txtRoutingNumber" name="RoutingNumber" placeholder="Routing Number"
+            required value="@Model.RoutingNumber" /></p>
+    <p>
+        <input type="text" id="txtAccountNumber" name="AccountNumber" placeholder="Account Number"
+            required value="@Model.AccountNumber" /></p>
+    <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" />
+            <label for="radio-choice-1">
+                Checking</label>
+            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" checked="checked" />
+            <label for="radio-choice-2">
+                Savings</label>
+        </fieldset>
+    </div>
+    <p>
+        <button type="submit" id="update-account" class="imgbtn">
+            <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
+                Account</span></button></p>
+        <p>
+        <button type="submit" id="remove-account" class="imgbtn">
+            <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Remove
+                Account</span></button></p>
+</div>
