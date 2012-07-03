@@ -32,6 +32,8 @@ namespace Mobile_PaidThx.Models
     }
     public class BankAccountModel
     {
+        public string BankName { get; set; }
+        public string BankIconURL { get; set; }
         public string PaymentAccountId { get; set; }
         public string Nickname { get; set; }
         public string NameOnAccouont { get; set; }

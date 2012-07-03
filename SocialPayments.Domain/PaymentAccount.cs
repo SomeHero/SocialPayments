@@ -18,7 +18,7 @@ namespace SocialPayments.Domain
         [MaxLength(255)]
         public string RoutingNumber { get; set; }
         [MaxLength(255)]
-        public string AccountNumber { get; set; }
+        public string AccountNumber { get; set; }   
         public int PaymentAccountTypeId { get; set; }
         public PaymentAccountType AccountType 
         {
@@ -31,5 +31,9 @@ namespace SocialPayments.Domain
        public AccountStatusType AccountStatus { get; set; }
        public DateTime CreateDate { get; set; }
        public DateTime? LastUpdatedDate { get; set; }
+        [MaxLength (255)]
+        public string BankIconURL {get; set;}
+        [MaxLength (100)]
+        public string BankName { get; set; }
     }
 }

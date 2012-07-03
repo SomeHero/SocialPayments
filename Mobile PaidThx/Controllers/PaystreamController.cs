@@ -27,7 +27,7 @@ namespace Mobile_PaidThx.Controllers
                 var messageServices = new MessageServices();
                 var userId = (Guid)Session["UserId"];
                 var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
+                var securityService = new SecurityService();
                 if (Session["User"] == null)
                     return RedirectToAction("SignIn", "Account", null);
 
@@ -53,15 +53,24 @@ namespace Mobile_PaidThx.Controllers
 
                 foreach (var paymentAccount in user.PaymentAccounts)
                 {
+                    var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
+                    if (tempNumber.Length > 3)
+                    {
+                       tempNumber = tempNumber.Substring(tempNumber.Length - 4);
+                    }
                     bankAccounts.Add(new BankAccountModel()
                     {
+                        BankName = paymentAccount.BankName,
+                        BankIconURL = paymentAccount.BankIconURL,
                         PaymentAccountId = paymentAccount.Id.ToString(),
-                        AccountNumber = paymentAccount.AccountNumber,
+                        AccountNumber = "******" + tempNumber,
                         AccountType = paymentAccount.AccountType.ToString(),
-                        NameOnAccouont = paymentAccount.NameOnAccount,
-                        Nickname = "Nickname",
-                        RoutingNumber = paymentAccount.RoutingNumber
+                        NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
+                        Nickname = paymentAccount.Nickname,
+                        RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+
                     });
+
                 }
 
                 var model = new PaystreamModels.PaystreamModel()
