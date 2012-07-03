@@ -21,7 +21,8 @@
                 <li class="">
                     <a href="#" data-val="@bankAccount.PaymentAccountId" class="edit-payment-account">
                     <div class="bank-icon">
-                        <img src="@Url.Content("~/Content/images/bank.png")" alt="Bank Name" />
+                        
+                        <img src="@bankAccount.BankIconURL" alt="@bankAccount.BankName" />
                     </div>
                     <div class="bank-info">
                         <strong>@bankAccount.Nickname</strong> - @bankAccount.AccountType - @bankAccount.AccountNumber
