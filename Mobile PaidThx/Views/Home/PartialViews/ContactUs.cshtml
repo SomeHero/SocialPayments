@@ -1,0 +1,33 @@
+﻿@model Mobile_PaidThx.Models.ContactUsModel
+           <div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
+    <div id="logo" style="float: left">
+        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
+    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
+       Contact Us
+    </div>
+</div>
+<div id="main-body" class="panel">
+    @Html.ValidationSummary()
+    <h2>Contact Us</h2>
+    @if (Model.MessageSubmitted)
+    {
+        <text>
+            <p class="message-response">Thank you for your interest in PaidThx.  We will follow up with you shortly.</p>
+        </text>
+    }
+    else
+    {
+        <p>We welcome any and all feedback.  Enter your message, along with your name and contact information, in the form below and we'll get back to you.</p>
+    }
+    <div id="registration-form">
+        <form id="frmContactUs" action="@Url.Content("~/Home/ContactUs")" method="post" data-ajax="false">
+
+            <p><input type="text" id="txtName" class="required" placeholder="Your Name" name="Name" /></p>
+            <p><input type="text" id="txtEmail" class="required" placeholder="Your Email" name="Email" /></p>
+            <p><input type="text" id="txtPhone" placeholder="Phone #" name="Phone" /></p>
+            <p><textarea id="txtMessage" placeholder="Message" name="Message" style="height: 100px"></textarea></p>
+
+         <p><button type="submit" id="submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Contact Us</span></button></p>
+    </form>
+    </div>
+</div>
