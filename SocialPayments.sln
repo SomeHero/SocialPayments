@@ -71,7 +71,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.WorkflowServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialPayments.Images", "SocialPayments.Images\SocialPayments.Images.csproj", "{AF9805E5-23C5-44B6-B712-2C0B14EBF97C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobile PaidThx", "..\Mobile-Beta\Mobile PaidThx\Mobile PaidThx.csproj", "{1A06816D-C32D-45F3-A2BB-6819730115CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobile PaidThx", "Mobile PaidThx\Mobile PaidThx.csproj", "{1A06816D-C32D-45F3-A2BB-6819730115CC}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
