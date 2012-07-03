@@ -209,7 +209,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken);
 
-                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
