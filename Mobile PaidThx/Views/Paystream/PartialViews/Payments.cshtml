@@ -1,0 +1,94 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+<div id="main-body" class="panel">
+    <h2>Your Payments</h2>
+    <input type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
+
+    <div class="paystream-filters">
+        <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream first">
+            <input type="checkbox" name="cbSent" id="cbSentPayments" class="custom" checked />
+            <label for="cbSentPayments">Sent</label>
+            <input type="checkbox" name="cbReceived" id="cbReceivedPayments" class="custom" checked />
+            <label for="cbReceivedPayments">Received</label>
+        </fieldset>
+    
+        <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream">
+            <input type="checkbox" name="cbPending" id="cbPendingPayments" class="custom" checked />
+            <label for="cbPendingPayments">Pending</label>
+            <input type="checkbox" name="cbComplete" id="cbCompletePayments" class="custom" checked />
+            <label for="cbCompletePayments">Complete</label>
+        </fieldset>
+    </div>
+
+    <ul id="transactionsListPayments" data-role="listview" class="transactions">
+    @foreach (var transaction in Model.PaymentReceipts)
+    { 
+        <li class="@Html.GetTransactionCssClass(transaction)"><a href="#">
+
+              <span class="trans-type">
+            @switch (transaction.Direction)
+            {
+                case "Out":
+                         <text>
+                        <img src="@Url.Content("~/Content/images/list-funds-sent-icon.png")" alt="Sending Funds" />
+                        </text>
+                             break;
+                             case "In":
+                        <text>
+                        <img src="@Url.Content("~/Content/images/list-funds-receive-icon.png")" alt="Receiving Funds" />
+                        </text>
+                             break;
+            }
+            </span>
+            <div class="trans-title">
+            @switch (transaction.Direction)
+            {
+                case "In":
+                    <text>
+                    <strong>@Html.FormatUri(transaction.SenderUri)</strong>
+                    </text>
+                       break;
+                case "Out":
+                    <text>
+                    <strong>@Html.FormatUri(transaction.RecipientUri)</strong>
+                    </text>
+                       break;
+            }
+                <em>@transaction.TransactionDate</em>
+            </div>
+            <span class="trans-amount">
+            @switch (transaction.TransactionStatus)
+            {
+                case Mobile_PaidThx.Models.TransactionStatus.Cancelled:
+                    <text>
+                        <span class="status"><img src="@Url.Content("~/Content/images/list-status-cancelled-icon.png")" alt="Status Cancelled" /></span>
+                    </text>
+                                                  break;
+                case Mobile_PaidThx.Models.TransactionStatus.Complete:
+                    <text>
+                        <span class="status"><img src="@Url.Content("~/Content/images/list-status-complete-icon.png")" alt="Status Pending" /></span>
+                    </text>
+                                                  break;
+                case Mobile_PaidThx.Models.TransactionStatus.Pending:
+                    <text>
+                        <span class="status"><img src="@Url.Content("~/Content/images/list-status-pending-icon.png")" alt="Status Pending" /></span>
+                    </text>
+                                                  break;
+                case Mobile_PaidThx.Models.TransactionStatus.Returned:
+                    <text>
+                        <span class="status"><img src="@Url.Content("~/Content/images/list-status-returned-icon.png")" alt="Status Returned" /></span>
+                    </text>
+                                                  break;
+                case Mobile_PaidThx.Models.TransactionStatus.Submitted:
+                    <text>
+                        <span class="status"><img src="@Url.Content("~/Content/images/list-status-submitted-icon.png")" alt="Status Submitted" /></span>
+                    </text>
+                                                  break;
+
+            }
+                @string.Format("{0:C}", transaction.Amount)
+            </span>
+        </a></li>
+    }
+    </ul>
+        <p id="resultsFilteredPayments" style="display: none">You have filtered all of payments in your Paystream.</p>
+</div>

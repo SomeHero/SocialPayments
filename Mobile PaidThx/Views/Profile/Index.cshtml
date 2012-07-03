@@ -1,0 +1,44 @@
+﻿@model Mobile_PaidThx.Models.ProfileModels
+<div id="container">
+    <div id="header">
+    <dl id="main-tabs" class="tabs contained" data-role="listview">
+        <dd>
+            <a href="#simpleContained1" class="first">Send $</a></dd>
+        <dd>
+            <a href="#simpleContained2">Request $</a></dd>
+        <dd>
+            <a href="#simpleContained3">Paystream</a></dd>
+        <dd>
+            <a href="#simpleContained4" class="active tab-settings"></a></dd>
+    </dl>
+    </div>
+    <div id="content-container">
+        <ul class="tabs-content contained" data-role="listview">
+            <li id="simpleContained1Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/SendMoney", Model);}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained2Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/RequestMoney", Model);}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained3Tab">
+                <div id="main-container">
+                     @{Html.RenderPartial("PartialViews/PayStream", Model);}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li class="active" id="simpleContained4Tab">
+                <div id="main-container">
+                     @{Html.RenderPartial("PartialViews/Settings", Model);}
+                     @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+        

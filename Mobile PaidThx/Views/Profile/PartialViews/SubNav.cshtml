@@ -1,0 +1,20 @@
+﻿@model Mobile_PaidThx.Models.ProfileModels
+<dl id="sub-nav" class="tabs">
+  <dd><a href="#profileSubNav1" class="active"><span id="profile">Profile</span></a></dd>
+  <dd><a href="#profileSubNav2"><span id="payments">Accounts</span></a></dd>
+  <dd><a href="#profileSubNav3"><span  id="preferences">Preferences</span></a></dd>
+</dl>
+<div id="content-sub-nav">
+    <ul class="tabs-content">
+        <li id="profileSubNav1Tab" class="active">
+              @{Html.RenderPartial("../Profile/PartialViews/Settings", Model);}
+        </li>
+        <li id="profileSubNav2Tab">
+            @{Html.RenderPartial("../PaymentAccount/PartialViews/List", Model.PaymentAccountsList, new ViewDataDictionary());}
+        </li>
+        <li id="profileSubNav3Tab">
+            Preferences
+        </li>
+
+    </ul>
+</div>
