@@ -90,17 +90,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="SocialPayments.ThirdPartyServices.FedACHService">
+      <HintPath>..\SocialPayments.ThirdPartyServices.FedACHService\obj\Debug\SocialPayments.ThirdPartyServices.FedACHService.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System" />
@@ -403,7 +401,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="logs\" />
+    <Folder Include="Models\logs\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
   </ItemGroup>
   <ItemGroup>
@@ -473,10 +471,9 @@
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocialPayments.ThirdPartyServices.FedACHService\SocialPayments.ThirdPartyServices.FedACHService.csproj">
-      <Project>{77F37AEC-FB67-41D3-9627-FA647BBD550F}</Project>
-      <Name>SocialPayments.ThirdPartyServices.FedACHService</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

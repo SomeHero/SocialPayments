@@ -46,7 +46,9 @@ namespace Mobile_PaidThx.Controllers
                    TransactionStatus = TransactionStatus.Pending,
                    TransactionType = TransactionType.Deposit,
                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? MessageType.Payment : MessageType.PaymentRequest),
-                   Direction = m.Direction
+                   Direction = m.Direction,
+                   TransactionImageUri = m.TransactionImageUrl,
+                   Comments = m.Comments
                 }).ToList();
 
                 var bankAccounts = new List<BankAccountModel>();
