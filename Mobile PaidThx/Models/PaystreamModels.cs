@@ -25,6 +25,8 @@ namespace Mobile_PaidThx.Models
             public TransactionStatus TransactionStatus { get; set; }
             public MessageType MessageType { get; set; }
             public string Direction { get; set; }
+            public string Comments { get; set; }
+            public string TransactionImageUri { get; set; }
         }
         public class AlertModel
         {
