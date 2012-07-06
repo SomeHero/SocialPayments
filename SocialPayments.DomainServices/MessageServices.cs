@@ -349,6 +349,24 @@ namespace SocialPayments.DomainServices
             return null;
 
         }
+        public List<Domain.Message> GetOutstandingMessage(User user)
+        {
+            var formattingService = new DomainServices.FormattingServices();
+            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+            List<Domain.Message> messages = _context.Messages
+                .Where(m => m.RecipientUri == "8043879693")
+                .OrderByDescending(m => m.CreateDate).ToList();
+
+            foreach (var message in messages)
+            {
+                message.SenderName = formattingService.FormatUserName(user);
+            }
+
+            return messages;
+
+        }
+
         public List<Domain.Message> GetMessages(Guid userId)
         {
             Domain.User user;

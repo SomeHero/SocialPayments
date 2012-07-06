@@ -41,6 +41,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx); ;
 
              User user = null;
 
@@ -87,9 +88,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             
             _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
+            _logger.Log(LogLevel.Info, String.Format("# of paypoints {0}", user.PayPoints.Count));
 
             string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
+
+            var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
             try
             {
@@ -130,7 +134,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     preferredReceiveAccountId = preferredReceiveAccountId,
                     setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true),
                     securityQuestion = (user.SecurityQuestion != null ? user.SecurityQuestion.Question : ""),
-                    securityQuestionId = user.SecurityQuestionID
+                    securityQuestionId = user.SecurityQuestionID,
+                    pendingMessages = outstandingMessages.Select(m => new MessageModels.MessageResponse() {
+                        amount = m.Amount,
+                        comments = m.Comments,
+                        createDate = formattingService.FormatDateTimeForJSON(m.CreateDate),
+                        lastUpdatedDate = formattingService.FormatDateTimeForJSON(m.LastUpdatedDate),
+                        direction = m.Direction,
+                        Id = m.Id,
+                        latitude = m.Latitude,
+                        longitutde = m.Longitude,
+                        messageStatus = m.Status.ToString(),
+                        messageType = m.MessageType.ToString(),
+                        recipientName = m.RecipientName,
+                        recipientUri = m.RecipientUri,
+                        senderName = m.SenderName,
+                        senderUri = m.SenderUri,
+                       transactionImageUri = m.TransactionImageUrl
+                    }).ToList(),
+                    userPayPoints = (user.PayPoints != null ? user.PayPoints.Select(p => new UserModels.UserPayPointResponse() {
+                        Id = p.Id.ToString(),
+                        Type = p.Type.Name,
+                        Uri = p.URI,
+                        UserId = p.UserId.ToString()
+                    }).ToList() : null),
+                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
+                        AccountNumber = securityService.Decrypt(a.AccountNumber),
+                        AccountType = a.AccountType.ToString(),
+                        Id = a.Id.ToString(),
+                        NameOnAccount = securityService.Decrypt(a.NameOnAccount),
+                        Nickname = a.Nickname,
+                        RoutingNumber = securityService.Decrypt(a.RoutingNumber),
+                        UserId = a.UserId.ToString()
+                    }).ToList() : null),
+                    userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
+                        new UserModels.UserConfigurationResponse() {
+                            Id = c.Id.ToString(),
+                            UserId = c.UserId.ToString(),
+                            ConfigurationKey = c.ConfigurationKey,
+                            ConfigurationValue = c.ConfigurationValue,
+                            ConfigurationType = c.ConfigurationType 
+                        }).ToList() : null),                                                                                                                                 
+                                                                                                                                                                   numberOfPaysteamUpdates = 2
                 };
             } 
             catch(Exception ex)

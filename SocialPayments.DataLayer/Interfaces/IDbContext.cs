@@ -31,6 +31,10 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<PayPointType> PayPointTypes { get; set; }
         IDbSet<UserPayPoint> UserPayPoints { get; set; }
         IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
+        IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
 
         void SaveChanges();
     }
