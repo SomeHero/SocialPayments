@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Mobile_PaidThx.HtmlHelpers
 {
+
     public static class PaystreamHelperExtensions
     {
         public static MvcHtmlString FormatUri(this HtmlHelper helper, string uri)
@@ -15,10 +16,144 @@ namespace Mobile_PaidThx.HtmlHelpers
 
             var tempUri = formattingService.FormatMobileNumber(uri);
 
-           // if (tempUri.Length >= 10)
-    //               return new MvcHtmlString(String.Format("({0}) {1}-{2}", tempUri.Substring(0, 3), tempUri.Substring(3, 3), tempUri.Substring(6, 4)));
-            
-            return new MvcHtmlString(uri);
+            return new MvcHtmlString(tempUri);
+        }
+
+        public static String formatTime(DateTime time)
+        {
+            String timeAgo = "";
+            DateTime currentTime = DateTime.Now;
+            //if today, go "minutes ago" / "hours ago"
+            if (time.Date == currentTime.Date)
+            {
+                if (time.Hour == currentTime.Hour)
+                {
+                    // "minutes ago"
+                    return timeAgo += (currentTime.Minute - time.Minute) + " minutes ago";
+                }
+                else
+                {
+                    // hours ago
+                    return timeAgo += (currentTime.Hour - time.Hour) + " hours ago";
+                }
+
+            }
+            else
+            {
+                // just show date and time
+                return time.ToShortDateString() + " @ " + time.ToShortTimeString();
+            }
+        }
+
+        public static String FormatDate(DateTime sentTime)
+        {
+            String header = "";
+            DateTime currentTime = DateTime.Now;
+            // if it is the user's today date
+            if (sentTime.Date == currentTime.Date)
+            {
+                // if currently same hour, then show head as minutes ago
+                if (sentTime.Hour == currentTime.Hour)
+                {
+                    return header += (currentTime.Minute - sentTime.Minute) + " minutes ago";
+                }
+                // return hours ago
+                else
+                {
+                    return header += (currentTime.Hour - sentTime.Hour) + " hours ago";
+                }
+            }
+            else
+            {
+                // check within last 7 days
+                DateTime aWeekEarlier = currentTime.AddDays(-7);
+                if (sentTime.Date.CompareTo(currentTime) < 0 && sentTime.Date.CompareTo(aWeekEarlier) > 0)
+                {
+                    return header += "This week";
+                }
+                // check within this month
+                else
+                {
+                    if (sentTime.Month == currentTime.Month)
+                    {
+                        return header += "This month";
+                    }
+                    else
+                    {
+                        // check last month
+                        DateTime lastMonth = currentTime.AddMonths(-1);
+                        if (sentTime.Month == lastMonth.Month)
+                        {
+                            return header += "Last month";
+                        }
+                        else
+                        {
+                            int month = sentTime.Month;
+                            if (month == 1)
+                            {
+                                return header += "January " + sentTime.Year;
+
+                            }
+                            else if (month == 2)
+                            {
+                                return header += "February " + sentTime.Year;
+
+                            }
+                            else if (month == 3)
+                            {
+                                return header += "March " + sentTime.Year;
+
+                            }
+                            else if (month == 4)
+                            {
+                                return header += "April " + sentTime.Year;
+
+                            }
+                            else if (month == 5)
+                            {
+                                return header += "May " + sentTime.Year;
+
+                            }
+                            else if (month == 6)
+                            {
+                                return header += "June " + sentTime.Year;
+
+                            }
+                            else if (month == 7)
+                            {
+                                return header += "July " + sentTime.Year;
+
+                            }
+                            else if (month == 8)
+                            {
+                                return header += "August " + sentTime.Year;
+
+                            }
+                            else if (month == 9)
+                            {
+                                return header += "September " + sentTime.Year;
+
+                            }
+                            else if (month == 10)
+                            {
+                                return header += "October " + sentTime.Year;
+                            }
+
+                            else if (month == 11)
+                            {
+                                return header += "November " + sentTime.Year;
+
+                            }
+                            else
+                            {
+                                return header += "December " + sentTime.Year;
+
+                            }
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

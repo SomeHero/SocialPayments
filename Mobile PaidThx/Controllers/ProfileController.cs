@@ -79,7 +79,9 @@ namespace Mobile_PaidThx.Controllers
                              SenderUri = transaction.SenderUri,
                              TransactionDate = transaction.CreateDate,
                              TransactionType = Mobile_PaidThx.Models.TransactionType.Deposit,
-                             TransactionStatus = transactionStatus
+                             TransactionStatus = transactionStatus,
+                             TransactionImageUri = transaction.TransactionImageUrl,
+                             Comments = transaction.Comments
                          });
                      }
                  }
@@ -208,7 +210,9 @@ namespace Mobile_PaidThx.Controllers
                                 SenderUri = transaction.SenderUri,
                                 TransactionDate = transaction.CreateDate,
                                 TransactionType = Mobile_PaidThx.Models.TransactionType.Withdrawal,
-                                TransactionStatus = Models.TransactionStatus.Pending
+                                TransactionStatus = Models.TransactionStatus.Pending,
+                                TransactionImageUri = transaction.TransactionImageUrl,
+                                Comments = transaction.Comments
                             });
                         }
                     }
@@ -486,7 +490,9 @@ namespace Mobile_PaidThx.Controllers
                     SenderUri = m.SenderUri,
                     TransactionDate = m.CreateDate,
                     TransactionStatus = Mobile_PaidThx.Models.TransactionStatus.Pending,
-                    TransactionType = Mobile_PaidThx.Models.TransactionType.Deposit
+                    TransactionType = Mobile_PaidThx.Models.TransactionType.Deposit,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
                 }).ToList();
 
                 var alerts = GetAlerts(user.UserId);
@@ -652,7 +658,9 @@ namespace Mobile_PaidThx.Controllers
                                 SenderUri = transaction.SenderUri,
                                 TransactionDate = transaction.CreateDate,
                                 TransactionType = Mobile_PaidThx.Models.TransactionType.Withdrawal,
-                                TransactionStatus = transactionStatus
+                                TransactionStatus = transactionStatus,
+                                TransactionImageUri = transaction.TransactionImageUrl,
+                                Comments = transaction.Comments
                             });
                         }
                     }
