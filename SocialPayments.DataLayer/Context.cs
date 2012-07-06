@@ -37,6 +37,10 @@ namespace SocialPayments.DataLayer
         public IDbSet<PayPointType> PayPointTypes { get; set; }
         public IDbSet<UserPayPoint> UserPayPoints { get; set; }
         public IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
+        public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        public IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        public IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -229,6 +233,30 @@ namespace SocialPayments.DataLayer
                 Url = "myurl.com",
                 CreateDate = System.DateTime.Now
             });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Facebook",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Twitter",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "LinkedIn",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Google +",
+                Active = true
+            });
             var emailPayPointType = context.PayPointTypes.Add(new PayPointType()
             {
                 Active = true,
@@ -311,7 +339,24 @@ namespace SocialPayments.DataLayer
                 Roles = new Collection<Role>()
                 {
                     memberRole
-                }
+                },
+                PayPoints = new Collection<UserPayPoint>()
+                {
+                    new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = emailPayPointType,
+                        URI = "test@gmail.com"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = phonePayPointType,
+                        URI = "8043555555"
+                    },
+                },
             });
 
             context.Users.Add(new User()
@@ -384,6 +429,30 @@ namespace SocialPayments.DataLayer
                         IsActive = true,
                          BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
                         BankName = "BB&T"
+                    }
+                },
+                PayPoints = new Collection<UserPayPoint>()
+                {
+                    new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = emailPayPointType,
+                        URI = "james@paidthx.com"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = phonePayPointType,
+                        URI = "8043879693"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = meCodePayPoint,
+                        URI = "$jamesrhodes"
                     }
                 },
             });
