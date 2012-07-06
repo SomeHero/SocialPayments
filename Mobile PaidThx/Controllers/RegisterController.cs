@@ -42,6 +42,7 @@ namespace Mobile_PaidThx.Controllers
         {
             using (var ctx = new Context())
             {
+                var userService = new SocialPayments.DomainServices.UserService(ctx);
                 var securityService = new SocialPayments.DomainServices.SecurityService();
                 logger.Error(String.Format("Registrer User {0}", model.Email));
 
@@ -63,35 +64,8 @@ namespace Mobile_PaidThx.Controllers
 
                 try
                 {
-
-                    user = ctx.Users.Add(new User()
-                    {
-                        UserId = Guid.NewGuid(),
-                        ApiKey = new Guid(_apiKey),
-                        CreateDate = System.DateTime.Now,
-                        PasswordChangedDate = DateTime.UtcNow,
-                        PasswordFailuresSinceLastSuccess = 0,
-                        LastPasswordFailureDate = DateTime.UtcNow,
-                        EmailAddress = model.Email,
-                        //IsLockedOut = isLockedOut,
-                        //LastLoggedIn = System.DateTime.Now,
-                        MobileNumber = model.MobileNumber,
-                        Password = securityService.Encrypt(model.Password), //hash
-                        SecurityPin = securityService.Encrypt("1111"),
-                        UserName = model.Email,
-                        UserStatus = UserStatus.Submitted,
-                        UserStatusValue = (int)UserStatus.Submitted,
-                        IsConfirmed = false,
-                        LastLoggedIn = System.DateTime.Now,
-                        Limit = 0,
-                        RegistrationMethod = UserRegistrationMethod.Web,
-                        SetupPassword = false,
-                        SetupSecurityPin = false,
-                        Roles = new Collection<Role>()
-                        {
-                            memberRole
-                        }
-                    });
+                    user = user = userService.AddUser(Guid.Parse(_apiKey), model.Email, model.Password,model.Email,
+                    "");
                 }
                 catch (Exception ex)
                 {

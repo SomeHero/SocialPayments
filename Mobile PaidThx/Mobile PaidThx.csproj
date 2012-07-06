@@ -97,9 +97,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="SocialPayments.ThirdPartyServices.FedACHService">
-      <HintPath>..\SocialPayments.ThirdPartyServices.FedACHService\obj\Debug\SocialPayments.ThirdPartyServices.FedACHService.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -453,7 +450,6 @@
     <Content Include="Views\Paystream\PartialViews\Alerts.cshtml" />
     <Content Include="Views\PaymentAccount\PaymentAccouunt.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\Add.cshtml" />
-    <Content Include="HtmlHelpers\Nav\All.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\Edit.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\List.cshtml" />
     <Content Include="Views\Account\FBauth.cshtml" />
@@ -470,6 +466,10 @@
     <ProjectReference Include="..\..\SocialPayments\SocialPayments.Domain\SocialPayments.Domain.csproj">
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialPayments.ThirdPartyServices.FedACHService\SocialPayments.ThirdPartyServices.FedACHService.csproj">
+      <Project>{77F37AEC-FB67-41D3-9627-FA647BBD550F}</Project>
+      <Name>SocialPayments.ThirdPartyServices.FedACHService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

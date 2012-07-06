@@ -65,10 +65,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     amount = message.Amount,
                     comments = message.Comments,
-                    createDate = message.CreateDate.ToString("MM/dd/yyyy"),
+                    createDate = _formattingService.FormatDateTimeForJSON(message.CreateDate),
+                    lastUpdatedDate = _formattingService.FormatDateTimeForJSON(message.LastUpdatedDate),
                     direction = @"In",
                     Id = message.Id,
-                    lastUpdatedDate = (message.LastUpdatedDate != null ? message.LastUpdatedDate.Value.ToString("MM/dd/yyyy") : ""),
                     latitude = message.Latitude,
                     longitutde = message.Longitude,
                     messageStatus = message.Status.ToString(),

@@ -32,6 +32,8 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<PayPointType> _payPointTypes;
         private IDbSet<UserPayPoint> _userPayPoints;
         private IDbSet<UserNotification> _userNotificationConfigurations;
+        private IDbSet<ApplicationConfiguration> _applicationConfigurations { get; set; }
+        private IDbSet<UserConfiguration> _userConfigurations { get; set; }
 
         public FakeDbContext()
         {
@@ -164,6 +166,10 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             get { return _userNotificationConfigurations; }
             set { _userNotificationConfigurations = value; }
         }
+        public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        public  IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        public IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
         public void SaveChanges()
         {
             //return 0;
