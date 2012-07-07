@@ -63,6 +63,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return response;
             }
 
+            var userAttributes = _ctx.UserAttributes
+                .Select(u => u).ToList();
+
             //TODO: check to make sure passed in id is the calling application
 
             return new HttpResponseMessage<ApplicationModels.ApplicationResponse>(new ApplicationModels.ApplicationResponse()
@@ -70,7 +73,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 apiKey = application.ApiKey.ToString(),
                 id = application.ApiKey.ToString(),
                 isActive = application.IsActive,
-                url = application.Url
+                url = application.Url,
+                ConfigurationVariables = application.ConfigurationValues.Select(c => new ApplicationModels.ApplicationConfigurationResponse() {
+                    ApiKey = c.ApiKey.ToString(),
+                    ConfigurationKey = c.ConfigurationKey,
+                    ConfigurationValue = c.ConfigurationValue,
+                    ConfigurationType = c.ConfigurationType
+                }).ToList(),
+                ProfileItems = userAttributes.Select(a => new UserModels.UserAttribute() {
+                    AttributeName = a.AttributeName,
+                    AttributeValue = ""
+                }).ToList()
             }, HttpStatusCode.OK);
         }
 
