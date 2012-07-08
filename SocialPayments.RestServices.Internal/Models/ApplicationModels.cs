@@ -13,7 +13,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public String apiKey { get; set; }
             public bool isActive { get; set; }
             public List<ApplicationConfigurationResponse> ConfigurationVariables { get; set; }
-            public List<UserModels.UserAttribute> ProfileItems { get; set; }
+            public List<ProfileSectionResponse> ProfileSections { get; set; }
         }
         public class SubmitApplicationRequest
         {
@@ -39,6 +39,20 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string Key { get; set; }
             public string Value { get; set; }
+        }
+        public class ProfileSectionResponse
+        {
+            public int Id { get; set; }
+            public string SectionHeader { get; set; }
+            public int SortOrder { get; set; }
+
+            public virtual List<ProfileItemResponse> ProfileItems { get; set; }
+        }
+        public class ProfileItemResponse
+        {
+            public int Id { get; set; }
+            public string Label { get; set; }
+            public int SortOrder { get; set; }
         }
     }
 }
