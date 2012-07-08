@@ -177,7 +177,6 @@ namespace SocialPayments.RestServices.Internal.Models
             public string Uri { get; set; }
             public string Type { get; set; }
         }
-
         public class UserConfigurationResponse
         {
             public string Id { get; set; }
@@ -185,6 +184,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string ConfigurationKey { get; set; }
             public string ConfigurationValue { get; set; }
             public string ConfigurationType { get; set; }
+        }
+        public class UpdateUserConfigurationRequest
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
     }
 }
