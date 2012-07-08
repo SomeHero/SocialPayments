@@ -41,6 +41,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<UserConfiguration> UserConfigurations { get; set; }
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        public IDbSet<ProfileSection> ProfileSections { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -256,6 +257,90 @@ namespace SocialPayments.DataLayer
                 Id = Guid.NewGuid(),
                 Name = "Google +",
                 Active = true
+            });
+            context.ProfileSections.Add(new ProfileSection()
+            {
+                SectionHeader = "",
+                SortOrder = 1,
+                ProfileItems = new Collection<ProfileItem>()
+                {
+                    new ProfileItem() {
+                        Label = "First Name",
+                        SortOrder = 1
+                    },
+                    new ProfileItem() {
+                        Label = "Last Name",
+                        SortOrder = 2
+                    },
+                    new ProfileItem() {
+                        Label = "Phone",
+                        SortOrder = 3
+                    },
+                    new ProfileItem() {
+                        Label = "Email",
+                        SortOrder = 4
+                    },
+                    new ProfileItem() {
+                        Label = "Facebook",
+                        SortOrder = 5
+                    },
+                    new ProfileItem() {
+                        Label = "Twitter",
+                        SortOrder = 6
+                    },
+                    new ProfileItem() {
+                        Label = "About Me",
+                        SortOrder = 7
+                    },
+                    new ProfileItem() {
+                        Label = "Make Public",
+                        SortOrder = 8
+                    },
+                }
+            });
+            context.ProfileSections.Add(new ProfileSection()
+            {
+                SectionHeader = "Secure Information (Never Public)",
+                SortOrder = 2,
+                ProfileItems = new Collection<ProfileItem>()
+                {
+                    new ProfileItem() {
+                        Label = "Address",
+                        SortOrder = 1
+                    },
+                    new ProfileItem() {
+                        Label = "City",
+                        SortOrder = 2
+                    },
+                    new ProfileItem() {
+                        Label = "State  ",
+                        SortOrder = 3
+                    },
+                    new ProfileItem() {
+                        Label = "Zip",
+                        SortOrder = 4
+                    },
+                    new ProfileItem() {
+                        Label = "Photo ID",
+                        SortOrder = 5
+                    },
+                    new ProfileItem() {
+                        Label = "SSN",
+                        SortOrder = 6
+                    },
+                    new ProfileItem() {
+                        Label = "Birthday",
+                        SortOrder = 7
+                    },
+                    new ProfileItem() {
+                        Label = "Income",
+                        SortOrder = 8
+                    },
+                    new ProfileItem() {
+                        Label = "Credit Score",
+                        SortOrder = 9
+                    },
+                }
             });
             var emailPayPointType = context.PayPointTypes.Add(new PayPointType()
             {
