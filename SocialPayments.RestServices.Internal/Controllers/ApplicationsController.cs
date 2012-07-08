@@ -63,8 +63,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return response;
             }
 
-            var userAttributes = _ctx.UserAttributes
-                .Select(u => u).ToList();
+            var profileSections = _ctx.ProfileSections
+                .Select(u => u)
+                .OrderBy(u => u.SortOrder)
+                .ToList();
 
             //TODO: check to make sure passed in id is the calling application
 
@@ -80,9 +82,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     ConfigurationValue = c.ConfigurationValue,
                     ConfigurationType = c.ConfigurationType
                 }).ToList(),
-                ProfileItems = userAttributes.Select(a => new UserModels.UserAttribute() {
-                    AttributeName = a.AttributeName,
-                    AttributeValue = ""
+                ProfileSections = profileSections.Select(a => new ApplicationModels.ProfileSectionResponse() {
+                    Id = a.Id,
+                    SectionHeader = a.SectionHeader,
+                    SortOrder = a.SortOrder,
+                    ProfileItems = a.ProfileItems.Select(i  => new ApplicationModels.ProfileItemResponse() {
+                        Id = i.Id,
+                        Label = i.Label,
+                        SortOrder = i.SortOrder
+                    }).ToList()
                 }).ToList()
             }, HttpStatusCode.OK);
         }

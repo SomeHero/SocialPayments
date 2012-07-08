@@ -35,6 +35,7 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<UserConfiguration> UserConfigurations { get; set; }
         IDbSet<SocialNetwork> SocialNetworks { get; set; }
         IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        IDbSet<ProfileSection> ProfileSections { get; set; }
 
         void SaveChanges();
     }

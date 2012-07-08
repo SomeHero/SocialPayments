@@ -191,6 +191,8 @@
     <Compile Include="CalendarType.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="PayPointType.cs" />
+    <Compile Include="ProfileItem.cs" />
+    <Compile Include="ProfileSection.cs" />
     <Compile Include="SecurityQuestions.cs" />
     <Compile Include="EmailLog.cs" />
     <Compile Include="EmailStatus.cs" />

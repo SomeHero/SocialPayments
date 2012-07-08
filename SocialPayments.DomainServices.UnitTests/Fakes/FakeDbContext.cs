@@ -170,6 +170,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         public  IDbSet<UserConfiguration> UserConfigurations { get; set; }
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        public IDbSet<ProfileSection> ProfileSections { get; set; }
         public void SaveChanges()
         {
             //return 0;
