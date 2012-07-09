@@ -26,13 +26,29 @@ namespace Mobile_PaidThx.HtmlHelpers
             //if today, go "minutes ago" / "hours ago"
             if (time.Date == currentTime.Date)
             {
+                if (time.Minute == currentTime.Minute)
+                {
+                    if (currentTime.Second - time.Second == 1)
+                    {
+                        return "1 second ago";
+                    }
+                    return timeAgo += currentTime.Second - time.Second + " seconds ago";
+                }
                 if (time.Hour == currentTime.Hour)
                 {
+                    if (currentTime.Minute - time.Minute == 1)
+                    {
+                        return "1 minute ago";
+                    }
                     // "minutes ago"
                     return timeAgo += (currentTime.Minute - time.Minute) + " minutes ago";
                 }
                 else
                 {
+                    if (currentTime.Hour - time.Hour == 1)
+                    {
+                        return "1 hr ago";
+                    }
                     // hours ago
                     return timeAgo += (currentTime.Hour - time.Hour) + " hours ago";
                 }
@@ -52,16 +68,7 @@ namespace Mobile_PaidThx.HtmlHelpers
             // if it is the user's today date
             if (sentTime.Date == currentTime.Date)
             {
-                // if currently same hour, then show head as minutes ago
-                if (sentTime.Hour == currentTime.Hour)
-                {
-                    return header += (currentTime.Minute - sentTime.Minute) + " minutes ago";
-                }
-                // return hours ago
-                else
-                {
-                    return header += (currentTime.Hour - sentTime.Hour) + " hours ago";
-                }
+                return header += "Today";
             }
             else
             {
