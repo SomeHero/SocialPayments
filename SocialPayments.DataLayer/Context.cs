@@ -936,6 +936,57 @@ namespace SocialPayments.DataLayer
 
             }
 
+
+            for (var i = 10; i < 20; i++)
+            {
+                var amount = i;
+                var comments = "Thanks for drinks.";
+
+                context.Messages.Add(new Message()
+                {
+                    Id = Guid.NewGuid(),
+                    Amount = amount,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    Status = PaystreamMessageStatus.Processing,
+                    MessageType = MessageType.Payment,
+                    MessageTypeValue = (int)MessageType.Payment,
+                    RecipientUri = String.Format("james{0}@paidthx.com", i),
+                    Sender = james,
+                    SenderUri = james.MobileNumber,
+                    SenderAccount = james.PaymentAccounts[0],
+                    CreateDate = System.DateTime.Now,
+                    Application = application,
+                    Payment = new Payment()
+                    {
+                        Amount = amount,
+                        Application = application,
+                        Comments = comments,
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        PaymentStatus = PaymentStatus.Pending,
+                        SenderAccount = james.PaymentAccounts[0],
+                        Transactions = new Collection<Transaction>()
+                        {
+                            new Transaction() {
+                                Amount = amount,
+                                Category = TransactionCategory.Payment,
+                                CreateDate = System.DateTime.Now,
+                                FromAccount = james.PaymentAccounts[0],
+                                Id = Guid.NewGuid(),
+                                PaymentChannelType = PaymentChannelType.Single,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Complete,
+                                Type = TransactionType.Withdrawal,
+                                User =james
+                            }
+                        }
+                    }
+                });
+
+
+            }
+
             context.SaveChanges();
             
 
