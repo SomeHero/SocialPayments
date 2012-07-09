@@ -355,7 +355,7 @@ namespace SocialPayments.DomainServices
             var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = _context.Messages
-                .Where(m => m.RecipientUri == "8043879693")
+                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress)  && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
             foreach (var message in messages)

@@ -148,7 +148,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.DropCreateDatabaseIfModelChanges<Context>
+    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -390,6 +390,90 @@ namespace SocialPayments.DataLayer
                 Id = 3,
                 Type = "Push"
             });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 0,
+                Question = "Childhood Nickname",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 1,
+                Question = "Last 4 digis of drivers license",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 2,
+                Question = "City you met your significant other",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 3,
+                Question = "Street you lived on in 3rd grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 4,
+                Question = "Oldest sibling's birth month and year",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 5,
+                Question = "Childhood phone number including area code",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 6,
+                Question = "Oldest cousin's first and last name",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 7,
+                Question = "City your parents met",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 8,
+                Question = "Last name of your 3rd grade teacher",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 9,
+                Question = "Your first kiss was with...",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 10,
+                Question = "Your childhood hero",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 11,
+                Question = "Your dream job",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 12,
+                Question = "School you attended for 6th grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 13,
+                Question = "Oldest sibling's middle name",
+                IsActive = true
+            });
             context.SaveChanges();
 
             context.Users.Add(new User()
@@ -418,7 +502,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Roles = new Collection<Role>()
@@ -456,7 +540,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Roles = new Collection<Role>()
@@ -478,7 +562,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Limit = 100,
@@ -556,7 +640,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Limit = 100,
@@ -801,79 +885,59 @@ namespace SocialPayments.DataLayer
                         SelectedDate = date
                     });
             }
+
+            for (var i = 0; i < 10; i++)
+            {
+                var amount = i;
+                var comments = "Thanks for lunch.";
+
+                context.Messages.Add(new Message()
+                {
+                    Id = Guid.NewGuid(),
+                    Amount = amount,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    Status = PaystreamMessageStatus.Processing,
+                    MessageType = MessageType.Payment,
+                    MessageTypeValue = (int)MessageType.Payment,
+                    RecipientUri = "804355000" + i,
+                    Sender = james,
+                    SenderUri = james.MobileNumber,
+                    SenderAccount = james.PaymentAccounts[0],
+                    CreateDate = System.DateTime.Now,
+                    Application = application,
+                    Payment = new Payment()
+                    {
+                        Amount = amount,
+                        Application = application,
+                        Comments = comments,
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        PaymentStatus = PaymentStatus.Pending,
+                        SenderAccount = james.PaymentAccounts[0],
+                        Transactions = new Collection<Transaction>()
+                        {
+                            new Transaction() {
+                                Amount = amount,
+                                Category = TransactionCategory.Payment,
+                                CreateDate = System.DateTime.Now,
+                                FromAccount = james.PaymentAccounts[0],
+                                Id = Guid.NewGuid(),
+                                PaymentChannelType = PaymentChannelType.Single,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Complete,
+                                Type = TransactionType.Withdrawal,
+                                User =james
+                            }
+                        }
+                    }
+                });
+
+
+            }
+
             context.SaveChanges();
             
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 0,
-                Question = "Childhood Nickname",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 1,
-                Question = "Last 4 digis of drivers license",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 2,
-                Question = "City you met your significant other",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 3,
-                Question = "Street you lived on in 3rd grade",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 4,
-                Question = "Oldest sibling's birth month and year",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 5,
-                Question = "Childhood phone number including area code",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 6,
-                Question = "Oldest cousin's first and last name",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 7,
-                Question = "City your parents met",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 8,
-                Question = "Last name of your 3rd grade teacher",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 9,
-                Question = "Your first kiss was with...",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 10,
-                Question = "Your childhood hero",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 11,
-                Question = "Your dream job",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 12,
-                Question = "School you attended for 6th grade",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 13,
-                Question = "Oldest sibling's middle name",
-                IsActive = true
-            });
-            context.SaveChanges();
 
             base.Seed(context);
         }

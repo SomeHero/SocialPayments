@@ -63,6 +63,8 @@ namespace SocialPayments.DomainServices
         {
             var transactionBatch = GetOpenBatch();
 
+            _logger.Log(LogLevel.Info, String.Format("Batch {0} Transactions in Batch {1}", transactions.Count, transactionBatch.Id));
+
             foreach (var transaction in transactions)
             {
                 transactionBatch.Transactions.Add(transaction);
@@ -78,6 +80,8 @@ namespace SocialPayments.DomainServices
                     transactionBatch.TotalWithdrawalAmount += transaction.Amount;
                 }
             }
+
+            _ctx.SaveChanges();
         }
         public TransactionBatch BatchTransactions()
         {
@@ -88,11 +92,21 @@ namespace SocialPayments.DomainServices
 
             transactionBatch.IsClosed = true;
             transactionBatch.ClosedDate = System.DateTime.Now;
+
+            _logger.Log(LogLevel.Info, String.Format("Batching Transaction for transaction batch {0} with {1} transactions", transactionBatch.Id, transactionBatch.Transactions.Count()));
+
             foreach (var transaction in transactionBatch.Transactions)
             {
-                transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
-                transaction.Payment.PaymentStatus = PaymentStatus.Complete;
-                transaction.Status = TransactionStatus.Complete;
+                try
+                {
+                    transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
+                    transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                    transaction.Status = TransactionStatus.Complete;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Debug, String.Format("Warning Batching Transaction {0}. Exception: {1}", transaction.Id, ex.Message));
+                }
             }
             
             _ctx.SaveChanges();
