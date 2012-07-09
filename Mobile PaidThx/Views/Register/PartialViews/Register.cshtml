@@ -32,20 +32,9 @@
     <div id="registration-form">
         <form id="frmRegister" action="@Url.Content("~/Register/Index")" method="post">
             <input type="text" id="email" class="required email" placeholder="Enter Your Email Address" name="Email" />
-            @if (Model.Payment == null)
-            {
-                <text>
-                    <input type="text" id="txtMobileNumber" class="required" placeholder="Enter Your Mobile #" name="MobileNumber" />
-                </text>
-            }
+            <input type="text" id="txtMobileNumber" class="required" placeholder="Enter Your Mobile #" name="MobileNumber" />
             <input type="password" id="password" class="required" placeholder="Create a Password" name="Password" />
             <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password" name="ConfirmPassword" />
-            @if(Model.Payment != null)
-            {
-                <text>
-                    <input type="hidden" id="hdnMobileNumber" class="required" name="MobileNumber" value="@Model.Payment.MobileNumber" />
-                </text>
-            }
             <button type="submit" id="register-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Create My Account</span></button>
         </form>
     </div>
