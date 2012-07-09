@@ -6,6 +6,7 @@ using SocialPayments.Domain;
 using SocialPayments.DataLayer.Interfaces;
 using NLog;
 using SocialPayments.DataLayer;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices
 {
@@ -47,33 +48,70 @@ namespace SocialPayments.DomainServices
             if (!(accountType.ToUpper().Equals("SAVINGS") || accountType.ToUpper().Equals("CHECKING")))
                 throw new ArgumentException("Invalid Account Type Specifieid", "accountType");
 
-            Guid userIdGuid;
-
-            Guid.TryParse(userId, out userIdGuid);
-            
-            if(userIdGuid == null)
-                throw new ArgumentException("Invalid User Id Specified", "userId");
-
-            var paymentAccountType = PaymentAccountType.Checking;
-
-            if(accountType.ToUpper().Equals("SAVINGS"))
-                paymentAccountType = PaymentAccountType.Checking;
-
-            var paymentAccount = _ctx.PaymentAccounts.Add(new PaymentAccount()
+            Domain.PaymentAccount paymentAccount = null;
+            try
             {
-                Id = Guid.NewGuid(),
-                NameOnAccount = _securityServices.Encrypt(nameOnAccount),
-                RoutingNumber = _securityServices.Encrypt(routingNumber),
-                AccountNumber = _securityServices.Encrypt(accountNumber),
-                AccountStatus = AccountStatusType.Submitted,
-                AccountType = paymentAccountType,
-                CreateDate = System.DateTime.Now,
-                UserId = userIdGuid
-            });
+                using (var ctx = new Context())
+                {
+                    var userService = new UserService(ctx);
+                    var amazonNotificationService = new AmazonNotificationService();
 
-            _ctx.SaveChanges();
+                    var user = userService.GetUserById(userId);
+
+                    if (user == null)
+                    {
+                        throw new Exception(String.Format("User {0} Not Found", userId));
+                    }
+
+                    var paymentAccountType = PaymentAccountType.Checking;
+
+                    if (accountType.ToUpper().Equals("SAVINGS"))
+                        paymentAccountType = PaymentAccountType.Checking;
+
+                    paymentAccount = ctx.PaymentAccounts.Add(new PaymentAccount()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = user.UserId,
+                        NameOnAccount = _securityServices.Encrypt(nameOnAccount),
+                        RoutingNumber = _securityServices.Encrypt(routingNumber),
+                        AccountNumber = _securityServices.Encrypt(accountNumber),
+                        AccountStatus = AccountStatusType.Submitted,
+                        AccountType = paymentAccountType,
+                        CreateDate = System.DateTime.Now,
+                        BankName = "",
+                        BankIconURL = "",
+                        Nickname = ""
+                    });
+
+                    if (user.PreferredReceiveAccount == null)
+                        user.PreferredReceiveAccount = paymentAccount;
+                    if (user.PreferredSendAccount == null)
+                        user.PreferredSendAccount = paymentAccount;
+
+                    ctx.SaveChanges();
+
+                    if (user.UserStatus == UserStatus.Registered)
+                    {
+                        try
+                        {
+                            amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "Payment Account Added for user {0}", user.UserId.ToString());
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Error, string.Format("AmazonPNS failed when registering user {0}. Exception {1}.", user.UserId, ex.Message));
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Unhandled Exception Adding Payment Account. {0}", ex.Message));
+                throw ex; ; 
+            }
 
             return paymentAccount;
+               
         }
 
         public void UpdatePaymentAccount(PaymentAccount paymentAccount)
