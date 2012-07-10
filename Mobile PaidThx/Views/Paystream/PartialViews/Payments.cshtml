@@ -2,7 +2,10 @@
 <div id="main-body" class="panel">
     <h2>
         Your Payments</h2>
-    <input type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
+    @using (Html.BeginForm())
+    {
+        @Html.TextBox("SearchString")
+    }
     <div class="paystream-filters">
         <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream first">
             <input type="checkbox" name="cbSent" id="cbSentPayments" class="custom" checked />
@@ -24,6 +27,7 @@
     @{
         int i = 1;
         String prevHeader = "";
+        int size = Model.AllReceipts.Count();
     }
     <ul id="transactionsListPayments" data-role="listview" class="transactions">
         @foreach (var transaction in Model.PaymentReceipts)
@@ -149,6 +153,13 @@
 
         }
     </ul>
+    @{
+        if (size < 1)
+        {
+        <p id="noResults" style="font-size: medium; display: block">
+            No elements in paystream.</p>   
+        }
+    }
     <p id="resultsFilteredPayments" style="display: none">
         You have filtered all of payments in your Paystream.</p>
 </div>

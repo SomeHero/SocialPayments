@@ -172,9 +172,9 @@ namespace SocialPayments.DomainServices
 
                 throw CreateArgumentNullOrEmptyException("accountConfirmationToken");
             }
-            using (Context context = new Context())
+            using (Context ctx = new Context())
             {
-                user = _ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
+                user = ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
 
                 if (user == null)
                 {
@@ -185,7 +185,7 @@ namespace SocialPayments.DomainServices
 
                 confirmed = true;
                 user.IsConfirmed = true;
-                _ctx.SaveChanges();
+                ctx.SaveChanges();
             }
             if (!confirmed)
                 return false;

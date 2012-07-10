@@ -2,7 +2,11 @@
 <div id="main-body" class="panel">
     <h2>
         Your Paystream</h2>
-    <input type="text" id="txtSearchPaystreamAll" name="txtSearchPaystream" placeholder="Search Paystream" />
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.TextBox("SearchString")<input type="submit" value="Search" />;
+        }</div>
     <div class="paystream-filters">
         <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream first">
             <input type="checkbox" name="cbSent" id="cbSentAll" class="custom" checked />
@@ -24,14 +28,15 @@
     @{
         int i = 1;
         String prevHeader = "";
+        int size = Model.AllReceipts.Count();
     }
     <ul id="transactionsListAll" data-role="listview" class="transactions">
         @foreach (var transaction in Model.AllReceipts)
         {
+
             String header = Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.FormatDate(transaction.TransactionDate);
             if (!header.Equals(prevHeader))
             {
-
                 prevHeader = header;
             <div class="paystream-header">
                 @header
@@ -149,6 +154,12 @@
 
         }
     </ul>
+    @{
+        if(size < 1)
+        {
+         <p id="noResults" style="font-size:medium; display:block">No elements in paystream.</p>   
+        }
+    }
     <p id="resultsFilteredAll" style="display: none">
         You have filtered all transactions in your Paystream.</p>
 </div>

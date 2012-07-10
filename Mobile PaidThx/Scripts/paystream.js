@@ -6,10 +6,10 @@ function formatAmount(amount) {
 function formatDate(jsonDate) {
     var value = new Date(parseInt(jsonDate.substr(6)));
     var ap = "AM";
-    if(value.getHours() > 11)
+    if (value.getHours() > 11)
         ap = "PM";
 
-    return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " " + value.getHours() +":" + value.getMinutes() + ":" + value.getSeconds() + " " + ap;
+    return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " " + value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds() + " " + ap;
 }
 var updatePayStreamAll = function () {
     var otherUri = $('#txtSearchPaystreamAll').val();
@@ -17,7 +17,6 @@ var updatePayStreamAll = function () {
     var credits = $('#cbReceivedAll').is(':checked');
     var pending = $('#cbPendingAll').is(':checked');
     var complete = $('#cbCompleteAll').is(':checked');
-
 
     var serviceUrl = getBaseURL() + '/mobile/profile/UpdatePayStream'
     var paymentAttributes = {
