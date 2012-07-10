@@ -100,14 +100,20 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
             );
             routes.MapHttpRoute(
-    name: "UploadMemberImage",
-    routeTemplate: "api/users/{id}/upload_member_image",
-    defaults: new { controller = "Users", action = "UploadMemberImage" }
-);
+                name: "UploadMemberImage",
+                routeTemplate: "api/users/{id}/upload_member_image",
+                defaults: new { controller = "Users", action = "UploadMemberImage" }
+            );
             routes.MapHttpRoute(
                 name: "ChangePassword",
                 routeTemplate: "api/users/{id}/change_password",
                 defaults: new { controller = "Users", action = "ChangePassword" }
+            );
+
+            routes.MapHttpRoute(
+                name: "ForgotPassword",
+                routeTemplate: "api/users/{id}/forgot_password",
+                defaults: new { controller = "Users", action = "ForgotPassword" }
             );
 
             routes.MapHttpRoute(

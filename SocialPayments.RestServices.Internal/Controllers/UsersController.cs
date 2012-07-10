@@ -418,6 +418,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        public HttpResponseMessage ForgotPassword(string id, UserModels.ForgotPasswordRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("User Forgot Password, changing password for: {0}", id));
+
+            Context _ctx = new Context();
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+            
+            var user = userService.GetUserById(id);
+
+            if (!request.securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+            {
+                var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                errorMessage.ReasonPhrase = String.Format("Invalid security question or answer, please try again.");
+
+                return errorMessage;
+            }
+
+            user.Password = securityService.Encrypt(request.newPassword);
+            userService.UpdateUser(user);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {
