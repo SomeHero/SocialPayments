@@ -56,5 +56,15 @@ namespace SocialPayments.Domain
         public string recipientImageUri { get; set; }
 
         public virtual Payment Payment { get; set; }
+
+        [NotMapped]
+        public string Direction { get; set; }
+        [NotMapped]
+        public string SenderName { get; set; }
+        [NotMapped]
+        public string RecipientName { get; set; }
+        [NotMapped]
+        public string TransactionImageUrl { get; set; }
+
     }
 }

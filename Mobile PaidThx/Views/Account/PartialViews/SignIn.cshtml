@@ -1,0 +1,29 @@
+﻿<div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
+    <div id="logo" style="float: left">
+        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
+    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
+        Sign In
+    </div>
+</div>
+<div id="main-body" class="panel">
+    @Html.ValidationSummary()
+    <h2>Sign In to PaidThx</h2>
+    <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignInWithFacebook/&scope=email&state=pickle")'"><img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign In With Facebook </span></button>
+    <p class="note-emphasis">OR</p>
+    <div id="registration-form">
+        <form id="frmSignIn" action="@Url.Content("~/Account/SignIn")" method="post" data-transition="slide">
+
+            <input type="text" id="username" class="required" placeholder="Email Address or Phone #" name="Email" />
+
+            <input type="password" id="password" class="required" placeholder="Password" name="Password" />
+            <button type="submit" id="signin-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Sign In to PaidThx</span></button>
+        </form>
+    </div>
+    <div id="main-body-sub-links">
+        <p style="text-align: center">
+            <a href="@Url.Content("~/Account/ForgotEmail")" data-ajax="false">Forgot email or password</a></p>
+        <p style="text-align: center">
+            New to PaidThx? <a href="@Url.Content("~/Register/Index")" data-ajax="false">Sign Up Now</a>, It's Free!
+        </p>
+    </div>
+</div>

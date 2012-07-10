@@ -1,0 +1,20 @@
+﻿
+<script src="@Url.Content("~/Scripts/register.js")" type="text/javascript"></script>
+<input type="hidden" id="mobileNumber" name="MobileNumber" value="" />
+<div id="container">
+    <dl class="tabs contained">
+        <dd>
+            <a href="#simpleContained1" class="active">Home</a></dd>
+        <dd>
+            <a href="#simpleContained2">Send $</a></dd>
+                <dd>
+            <a href="#simpleContained2">Req. $</a></dd>
+                <dd>
+            <a href="#simpleContained2">Stream</a></dd>
+    </dl>
+    <ul class="tabs-content contained">
+        <li class="active" id="simpleContained1Tab">
+            @{Html.RenderPartial("PartialViews/HomePartial");}
+        </li>
+    </ul>
+</div>

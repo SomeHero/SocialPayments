@@ -15,6 +15,8 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using SocialPayments.DomainServices.Interfaces;
 using System.Threading.Tasks;
+using Amazon.S3.Model;
+using System.IO;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -39,6 +41,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx); ;
 
              User user = null;
 
@@ -85,9 +88,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             
             _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
+            _logger.Log(LogLevel.Info, String.Format("# of paypoints {0}", user.PayPoints.Count));
 
             string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
+
+            var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
             try
             {
@@ -128,7 +134,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     preferredReceiveAccountId = preferredReceiveAccountId,
                     setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true),
                     securityQuestion = (user.SecurityQuestion != null ? user.SecurityQuestion.Question : ""),
-                    securityQuestionId = user.SecurityQuestionID
+                    securityQuestionId = user.SecurityQuestionID,
+                    pendingMessages = outstandingMessages.Select(m => new MessageModels.MessageResponse() {
+                        amount = m.Amount,
+                        comments = m.Comments,
+                        createDate = formattingService.FormatDateTimeForJSON(m.CreateDate),
+                        lastUpdatedDate = formattingService.FormatDateTimeForJSON(m.LastUpdatedDate),
+                        direction = m.Direction,
+                        Id = m.Id,
+                        latitude = m.Latitude,
+                        longitutde = m.Longitude,
+                        messageStatus = m.Status.ToString(),
+                        messageType = m.MessageType.ToString(),
+                        recipientName = m.RecipientName,
+                        recipientUri = m.RecipientUri,
+                        senderName = m.SenderName,
+                        senderUri = m.SenderUri,
+                       transactionImageUri = m.TransactionImageUrl
+                    }).ToList(),
+                    userPayPoints = (user.PayPoints != null ? user.PayPoints.Select(p => new UserModels.UserPayPointResponse() {
+                        Id = p.Id.ToString(),
+                        Type = p.Type.Name,
+                        Uri = p.URI,
+                        UserId = p.UserId.ToString()
+                    }).ToList() : null),
+                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
+                        AccountNumber = securityService.Decrypt(a.AccountNumber),
+                        AccountType = a.AccountType.ToString(),
+                        Id = a.Id.ToString(),
+                        NameOnAccount = securityService.Decrypt(a.NameOnAccount),
+                        Nickname = a.Nickname,
+                        RoutingNumber = securityService.Decrypt(a.RoutingNumber),
+                        UserId = a.UserId.ToString()
+                    }).ToList() : null),
+                    userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
+                        new UserModels.UserConfigurationResponse() {
+                            Id = c.Id.ToString(),
+                            UserId = c.UserId.ToString(),
+                            ConfigurationKey = c.ConfigurationKey,
+                            ConfigurationValue = c.ConfigurationValue,
+                            ConfigurationType = c.ConfigurationType 
+                        }).ToList() : null),                                                                                                                                 
+                                                                                                                                                                   numberOfPaysteamUpdates = 2
                 };
             } 
             catch(Exception ex)
@@ -207,7 +254,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken);
 
-                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -272,7 +318,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
         // POST /api/users/{id}/upload_member_image
-        public Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
+        public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -285,20 +331,52 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             // Read the form data and return an async task.
             var task = Request.Content.ReadAsMultipartAsync(provider).
-                ContinueWith<HttpResponseMessage>(readTask =>
+                ContinueWith < HttpResponseMessage<FileUploadResponse>>(readTask =>
                 {
                     if (readTask.IsFaulted || readTask.IsCanceled)
                     {
-                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        return new HttpResponseMessage<FileUploadResponse>(HttpStatusCode.InternalServerError);
                     }
 
+                    var fileName = "";
                     // This illustrates how to get the file names.
                     foreach (var file in provider.BodyPartFileNames)
                     {
                         _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
                         _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
+
+                        fileName = file.Value;
                     }
-                    return new HttpResponseMessage(HttpStatusCode.Created);
+
+                    string bucketName = ConfigurationManager.AppSettings["MemberImagesBucketName"];
+
+                   // _logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
+
+                    if (String.IsNullOrEmpty(bucketName))
+                        throw new Exception("S3 bucket name for MemberImages not configured");
+
+                    var fileContent = File.OpenRead(fileName);
+
+                    Amazon.S3.AmazonS3Client s3Client = new Amazon.S3.AmazonS3Client();
+                    PutObjectRequest putRequest = new PutObjectRequest()
+                    {
+                        BucketName = bucketName,
+                        InputStream = fileContent,
+                        Key = String.Format("{0}/image1.png", id)
+                    };
+                    try
+                    {
+                        s3Client.PutObject(putRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unable to upload member image to S3. {0}", ex.Message));
+                    }
+
+                    return new HttpResponseMessage<FileUploadResponse>(
+                        new FileUploadResponse() {
+                            ImageUrl = String.Format("http://memberimages.paidthx.com/{0}/image1.png", id)
+                        }, HttpStatusCode.Created);
                 });
 
             return task;

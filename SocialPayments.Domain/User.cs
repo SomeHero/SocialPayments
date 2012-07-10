@@ -117,6 +117,12 @@ namespace SocialPayments.Domain
 
         public virtual Guid? PreferredReceiveAccountId { get; set; }
         public virtual PaymentAccount PreferredReceiveAccount { get; set; }
+
+        public virtual Collection<UserPayPoint> PayPoints { get; set; }
+        public virtual Collection<UserNotification> NotificationConfiguration { get; set; }
+
+        public virtual Collection<UserConfiguration> UserConfigurations { get; set; }
+        public virtual Collection<UserSocialNetwork> UserSocialNetworks { get; set; }
     }
 
 }

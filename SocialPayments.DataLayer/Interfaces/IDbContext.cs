@@ -27,6 +27,15 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<MECode> MECodes { get; set; }
         IDbSet<PaymentAccountVerification> PaymentAccountVerifications { get; set; }
         IDbSet<SecurityQuestion> SecurityQuestions { get; set; }
+        IDbSet<NotificationType> NotificationTypes { get; set; }
+        IDbSet<PayPointType> PayPointTypes { get; set; }
+        IDbSet<UserPayPoint> UserPayPoints { get; set; }
+        IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
+        IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        IDbSet<ProfileSection> ProfileSections { get; set; }
 
         void SaveChanges();
     }

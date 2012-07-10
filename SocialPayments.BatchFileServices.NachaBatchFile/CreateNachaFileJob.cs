@@ -31,7 +31,18 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             logger.Log(LogLevel.Info, String.Format("Creating Nacha ACH File at {0}", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")));
 
             logger.Log(LogLevel.Info, String.Format("Batching Transactions"));
-            var transactionBatch = transactionBatchService.BatchTransactions();
+            Domain.TransactionBatch transactionBatch = null;
+
+            try
+            {
+                transactionBatch = transactionBatchService.BatchTransactions();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Info, String.Format("Batching Transactions Exception {0}", ex.Message));
+                
+                throw ex;
+            }
 
             FileGenerator fileGeneratorService = new FileGenerator();
             fileGeneratorService.CompanyIdentificationNumber = ConfigurationManager.AppSettings["CompanyIdentificationNumber"];

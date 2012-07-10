@@ -123,7 +123,7 @@ namespace SocialPayments.DomainServices
 
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
-            
+
             if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
             {
                 var message = String.Format("Sender and Recipient are the same");
@@ -349,8 +349,85 @@ namespace SocialPayments.DomainServices
             return null;
 
         }
+        public List<Domain.Message> GetOutstandingMessage(User user)
+        {
+            var formattingService = new DomainServices.FormattingServices();
+            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+            List<Domain.Message> messages = _context.Messages
+                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress)  && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                .OrderByDescending(m => m.CreateDate).ToList();
+
+            foreach (var message in messages)
+            {
+                message.SenderName = formattingService.FormatUserName(user);
+            }
+
+            return messages;
+
+        }
+
+        public List<Domain.Message> GetMessages(Guid userId)
+        {
+            Domain.User user;
+
+            var messages = _context.Messages
+                .Where(m => m.SenderId == userId || m.RecipientId.Value == userId)
+                .OrderByDescending(m => m.CreateDate)
+                .ToList<Message>();
+
+            URIType senderUriType = URIType.MECode;
+            URIType recipientUriType = URIType.MECode;
+
+            string senderName = "";
+            string recipientName = "";
+
+            foreach (var message in messages)
+            {
+                senderUriType = URIType.MECode;
+                recipientUriType = URIType.MECode;
+
+                senderUriType = GetURIType(message.SenderUri);
+                recipientUriType = GetURIType(message.RecipientUri);
+
+                if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
+                    senderName = message.Sender.FirstName + " " + message.Sender.LastName;
+                else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
+                    senderName = message.senderFirstName + " " + message.Sender.LastName;
+                else
+                    senderName = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
+
+                if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
+                    recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
+                else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
+                    recipientName = message.recipientFirstName + " " + message.recipientLastName;
+                else
+                    recipientName = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
+
+                message.SenderName = senderName;
+                message.RecipientName = recipientName;
+                message.Direction = "In";
+
+                if (message.SenderId.Equals(userId))
+                    message.Direction = "Out";
 
 
+                if (message.Direction == "In")
+                {
+                    if (message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
+                        message.TransactionImageUrl = message.Sender.ImageUrl;
+                }
+                else
+                {
+                    if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
+                        message.TransactionImageUrl = message.Recipient.ImageUrl;
+                    else
+                        message.TransactionImageUrl = message.recipientImageUri;
+                }
+            }
+
+            return messages;
+        }
         public Domain.Message GetMessage(string id)
         {
             Guid messageId;
@@ -367,7 +444,7 @@ namespace SocialPayments.DomainServices
                 throw new Exception("Invalid Message Id.");
 
             return message;
-        } 
+        }
         public URIType GetURIType(string uri)
         {
             var uriType = URIType.MobileNumber;

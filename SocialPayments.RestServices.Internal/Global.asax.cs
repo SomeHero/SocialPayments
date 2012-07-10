@@ -58,6 +58,7 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/paystreammessages/{id}/ignore_request",
                 defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
             );
+
             //api/user/{id}/personalize_user
             routes.MapHttpRoute(
                 name: "PersonalizeUser",
@@ -93,6 +94,17 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/validate_user",
                 defaults: new { controller = "Users", action = "ValidateUser" }
             );
+
+            routes.MapHttpRoute(
+name: "UserPayPoints",
+routeTemplate: "api/users/{userId}/PayPoints/{id}",
+defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+);
+            routes.MapHttpRoute(
+    name: "UserPayPointsWithType",
+    routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
+    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type= RouteParameter.Optional }
+);
 
             routes.MapHttpRoute(
                 name: "UserMECodes",
@@ -143,6 +155,12 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
                 name: "SetPreferredReceiveAccount",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_receive_account",
                 defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredReceiveAccount" }
+            );
+
+            routes.MapHttpRoute(
+                name: "UserConfigurations",
+                routeTemplate: "api/users/{userId}/Configurations/{id}",
+                defaults: new { controller = "UserConfigurations", id = RouteParameter.Optional }
             );
 
             routes.MapHttpRoute(
