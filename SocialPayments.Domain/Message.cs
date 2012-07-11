@@ -54,6 +54,7 @@ namespace SocialPayments.Domain
         public string recipientFirstName { get; set; }
         public string recipientLastName { get; set; }
         public string recipientImageUri { get; set; }
+        public string shortUrl { get; set; }
 
         public virtual Payment Payment { get; set; }
 

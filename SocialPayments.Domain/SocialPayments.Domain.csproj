@@ -247,6 +247,7 @@
     <Compile Include="UserSMSAuthentication.cs" />
     <Compile Include="UserSocialNetwork.cs" />
     <Compile Include="UserStatus.cs" />
+    <Compile Include="UserType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
