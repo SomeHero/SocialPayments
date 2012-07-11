@@ -63,6 +63,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
+        "OwnerKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
         "OwnerKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
         "MsmSig" = "8:_UNDEFINED"
@@ -161,6 +173,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -687,6 +705,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7218DB2DAD6406248685EAECA7E87489"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e"
+                "ScatterAssemblies"
+                {
+                    "_7218DB2DAD6406248685EAECA7E87489"
+                    {
+                    "Name" = "8:Common.Logging.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Common.Logging.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_83ADBF7EB5481321201FD68A6FE082EB"
             {
             "AssemblyRegister" = "3:1"
@@ -910,7 +959,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{A29D9199-19C9-4883-8096-A4A672935719}"
+        "PackageCode" = "8:{5317AB64-D4E7-474C-990F-585FDEDAA52B}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
