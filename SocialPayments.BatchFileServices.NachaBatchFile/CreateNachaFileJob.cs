@@ -61,47 +61,49 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             try
             {
                 results = fileGeneratorService.ProcessFile(transactionBatch.Transactions);
+
+                logger.Log(LogLevel.Info, String.Format("Creating batch file for batch {0}", transactionBatch.Id));
+
+                StringBuilder sb = new StringBuilder();
+                results.ForEach(s => sb.AppendLine(s));
+                string fileContext = sb.ToString();
+
+                string bucketName = ConfigurationManager.AppSettings["NachaFileBucketName"];
+
+                logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
+
+                if (String.IsNullOrEmpty(bucketName))
+                    throw new Exception("S3 bucket name for NachaFileBucketName not configured");
+
+                Amazon.S3.AmazonS3Client s3Client = new Amazon.S3.AmazonS3Client();
+                PutObjectRequest putRequest = new PutObjectRequest()
+                {
+                    ServerSideEncryptionMethod = ServerSideEncryptionMethod.AES256,
+                    BucketName = bucketName,
+                    ContentBody = fileContext,
+                    Key = "NACHA_FILE_" + System.DateTime.Now.ToString("MMddyy_Hmmss")
+                };
+                try
+                {
+                    s3Client.PutObject(putRequest);
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unable to upload nacha file to S3. {0}", ex.Message));
+                }
+
+                //Move all payments to paid
+                //Update Batch File
+                //Start BatchFile Workflow
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, String.Format("Exception processing Nacha File. {0}", ex.Message));
+                logger.ErrorException("Unhandled Exception Processing Nacha File", ex);
 
                 throw ex;
             }
 
-            logger.Log(LogLevel.Info, String.Format("Creating batch file for batch {0}", transactionBatch.Id));
-
-            StringBuilder sb = new StringBuilder();
-            results.ForEach(s => sb.AppendLine(s));
-            string fileContext = sb.ToString();
-
-            string bucketName = ConfigurationManager.AppSettings["NachaFileBucketName"];
-            
-            logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
-            
-            if (String.IsNullOrEmpty(bucketName))
-                throw new Exception("S3 bucket name for NachaFileBucketName not configured");
-
-            Amazon.S3.AmazonS3Client s3Client = new Amazon.S3.AmazonS3Client();
-            PutObjectRequest putRequest = new PutObjectRequest()
-            {
-                ServerSideEncryptionMethod = ServerSideEncryptionMethod.AES256,
-                BucketName = bucketName,
-                ContentBody = fileContext,
-                Key = "NACHA_FILE_" + System.DateTime.Now.ToString("MMddyy_Hmmss")
-            };
-            try
-            {
-                s3Client.PutObject(putRequest);
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Error, String.Format("Unable to upload nacha file to S3. {0}", ex.Message));
-            }
-
-            //Move all payments to paid
-            //Update Batch File
-            //Start BatchFile Workflow
+           
         }
     }
 }
