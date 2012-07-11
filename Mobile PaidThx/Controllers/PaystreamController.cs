@@ -17,11 +17,11 @@ namespace Mobile_PaidThx.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private FormattingServices formattingService = new FormattingServices();
 
-        public ActionResult Index()
+        public ActionResult Index(String searchString)
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
-            
+
             using (var ctx = new Context())
             {
                 var messageServices = new MessageServices();
@@ -34,22 +34,27 @@ namespace Mobile_PaidThx.Controllers
                 var alerts = GetAlerts(user.UserId);
 
                 logger.Log(LogLevel.Debug, String.Format("Getting Payment Accounts"));
-                
+
                 var messages = messageServices.GetMessages(user.UserId);
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
-                   Amount = m.Amount,
-                   RecipientUri = m.RecipientUri,
-                   SenderUri = m.SenderUri,
-                   TransactionDate = m.CreateDate,
-                   TransactionStatus = TransactionStatus.Pending,
-                   TransactionType = TransactionType.Deposit,
-                   MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? MessageType.Payment : MessageType.PaymentRequest),
-                   Direction = m.Direction,
-                   TransactionImageUri = m.TransactionImageUrl,
-                   Comments = m.Comments
+                    Amount = m.Amount,
+                    RecipientUri = m.RecipientUri,
+                    SenderUri = m.SenderUri,
+                    TransactionDate = m.CreateDate,
+                    TransactionStatus = TransactionStatus.Pending,
+                    TransactionType = TransactionType.Deposit,
+                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? MessageType.Payment : MessageType.PaymentRequest),
+                    Direction = m.Direction,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
                 }).ToList();
+
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(searchString.ToUpper()) || p.SenderUri.ToUpper().Contains(searchString.ToUpper())).ToList();
+                }
 
                 var bankAccounts = new List<BankAccountModel>();
 
@@ -58,7 +63,7 @@ namespace Mobile_PaidThx.Controllers
                     var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
                     if (tempNumber.Length > 3)
                     {
-                       tempNumber = tempNumber.Substring(tempNumber.Length - 4);
+                        tempNumber = tempNumber.Substring(tempNumber.Length - 4);
                     }
                     bankAccounts.Add(new BankAccountModel()
                     {
