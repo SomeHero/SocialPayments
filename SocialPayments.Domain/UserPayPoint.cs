@@ -8,16 +8,16 @@ namespace SocialPayments.Domain
 {
     public class UserPayPoint
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual Guid UserId { get; set; }
         [ForeignKey("UserId")]
-        public User User { get; set; }
-        public int PayPointTypeId { get; set; }
+        public virtual User User { get; set; }
+        public virtual int PayPointTypeId { get; set; }
         [ForeignKey("PayPointTypeId")]
-        public PayPointType Type { get; set; }
+        public virtual PayPointType Type { get; set; }
         [MaxLength(50)]
-        public string URI { get; set; }
-        public bool IsActive { get; set; }
-        public DateTime CreateDate { get; set; }
+        public virtual string URI { get; set; }
+        public virtual bool IsActive { get; set; }
+        public virtual DateTime CreateDate { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
         private int numberInCurrentBatch;
         private int numberOfBatches;
         private int numberOfRecords;
+        private FormattingServices formattingService = new FormattingServices();
         private SecurityService securityService = new SecurityService();
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -249,12 +250,12 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             }
         
             string routingNumber = securityService.Decrypt(transaction.FromAccount.RoutingNumber);
-            sb.Append(routingNumber.PadLeft(9, ' '));  //Receiving DFI Identification
+            sb.Append(routingNumber.Truncate(9).PadLeft(9, ' '));  //Receiving DFI Identification
 
             string accountNumber = securityService.Decrypt(transaction.FromAccount.AccountNumber);
-            sb.Append(accountNumber.PadRight(17, ' '));  //DFI Account Number
-            sb.Append((transaction.Amount * 100).ToString().PadLeft(10, '0'));  //Amount
-            sb.Append(transaction.FromAccount.User.MobileNumber.PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
+            sb.Append(accountNumber.Truncate(17).PadRight(17, ' '));  //DFI Account Number
+            sb.Append((transaction.Amount * 100).ToString().Truncate(10).PadLeft(10, '0'));  //Amount
+            sb.Append(formattingService.FormatUserName(transaction.FromAccount.User).Truncate(15).PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
 
             string nameOnAccount = securityService.Decrypt(transaction.FromAccount.NameOnAccount);
             sb.Append(nameOnAccount.Truncate(22).PadRight(22, ' '));   //Individual Name

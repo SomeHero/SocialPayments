@@ -38,8 +38,14 @@ namespace SocialPayments.DomainServices
         }
         public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken)
         {
-
+            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "");
+        }
+        public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
+            string mobileNumber)
+        {
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+
+            mobileNumber = formattingServices.RemoveFormattingFromMobileNumber(mobileNumber);
 
             var user = _ctx.Users.Add(new Domain.User()
             {
@@ -47,11 +53,11 @@ namespace SocialPayments.DomainServices
                 ApiKey = apiKey,
                 CreateDate = System.DateTime.Now,
                 PasswordChangedDate = DateTime.UtcNow,
-                PasswordFailuresSinceLastSuccess = defaultNumPasswordFailures,
-                LastPasswordFailureDate = DateTime.UtcNow,
+                PasswordFailuresSinceLastSuccess = 0,
                 EmailAddress = emailAddress,
                 //IsLockedOut = isLockedOut,
                 //LastLoggedIn = System.DateTime.Now,
+                MobileNumber = (!String.IsNullOrEmpty(mobileNumber) ? mobileNumber : null),
                 Password = securityService.Encrypt(password), //hash
                 UserName = userName,
                 UserStatus = Domain.UserStatus.Submitted,
@@ -65,8 +71,18 @@ namespace SocialPayments.DomainServices
                     {
                         memberRole
                     },
-                DeviceToken = deviceToken
+                DeviceToken = (!String.IsNullOrEmpty(deviceToken) ? deviceToken : null)
             });
+
+            var messages = _ctx.Messages
+                .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
+                    && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                    .ToList();
+
+            foreach (var message in messages)
+            {
+                message.Recipient = user;
+            }
 
             _ctx.SaveChanges();
 
@@ -156,9 +172,9 @@ namespace SocialPayments.DomainServices
 
                 throw CreateArgumentNullOrEmptyException("accountConfirmationToken");
             }
-            using (Context context = new Context())
+            using (Context ctx = new Context())
             {
-                user = _ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
+                user = ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
 
                 if (user == null)
                 {
@@ -169,7 +185,7 @@ namespace SocialPayments.DomainServices
 
                 confirmed = true;
                 user.IsConfirmed = true;
-                _ctx.SaveChanges();
+                ctx.SaveChanges();
             }
             if (!confirmed)
                 return false;

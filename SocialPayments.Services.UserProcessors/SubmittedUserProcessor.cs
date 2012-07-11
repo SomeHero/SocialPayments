@@ -68,7 +68,7 @@ namespace SocialPayments.Services.UserProcessors
                 user.MobileVerificationCode1 = "1234";
                 user.MobileVerificationCode2 = "4321";
 
-                user.UserStatus = UserStatus.Pending;
+                user.UserStatus = UserStatus.Registered;
 
                 _ctx.SaveChanges();
 
