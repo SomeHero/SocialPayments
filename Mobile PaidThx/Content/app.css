@@ -631,11 +631,11 @@ a.fbSignIn span, button.fbSignIn span
 }
 .paystream-row
 {
-    background: #E6E6E6;
+    background: #F7F7F7;
 }
 .paystream-row-alt
 {
-    background: #FAFAFA;
+    background: #FFFFFF;
 }
 @media screen and (orientation: portrait){
     label.error { margin-left: 0; display: block; }

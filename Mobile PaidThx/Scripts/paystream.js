@@ -3,13 +3,42 @@
 function formatAmount(amount) {
     return "$" + amount.toFixed(2);
 }
+function formatPhoneNumber(number) {
+    return "("+number.substring(0, 3)+ ") " + number.substring(3, 6) + "-" + number.substring(6, number.length);
+}
 function formatDate(jsonDate) {
     var value = new Date(parseInt(jsonDate.substr(6)));
-    var ap = "AM";
-    if(value.getHours() > 11)
-        ap = "PM";
+    var today = new Date();
 
-    return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " " + value.getHours() +":" + value.getMinutes() + ":" + value.getSeconds() + " " + ap;
+    if (value.getMonth() == today.getMonth() && value.getDate() == today.getDate() && value.getYear() == today.getYear()) {
+        if (value.getMinutes() == today.getMinutes()) {
+            return (today.getSeconds() - value.getSeconds()) + " seconds ago";
+        }
+        else if (value.getHours() == today.getHours()) {
+            if (today.getMinutes() - value.getMinutes() == 1) {
+                return "1 minute ago";
+            }
+            else {
+                return (today.getMinutes() - value.getMinutes()) + " minutes ago";
+            }
+        }
+        else {
+            if (today.getHours() - value.getHours() == 1) {
+                return "1 hour ago";
+            }
+            else {
+                return (today.getHours() - value.getHours()) + " hours ago";
+            }
+        }
+    }
+    else {
+
+        var ap = "AM";
+        if (value.getHours() > 11)
+            ap = "PM";
+
+        return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " @ " + value.getHours() + ":" + value.getMinutes() + " " + ap;
+    }
 }
 var updatePayStreamAll = function () {
     var otherUri = $('#txtSearchPaystreamAll').val();
@@ -18,8 +47,7 @@ var updatePayStreamAll = function () {
     var pending = $('#cbPendingAll').is(':checked');
     var complete = $('#cbCompleteAll').is(':checked');
 
-
-    var serviceUrl = getBaseURL() + '/mobile/profile/UpdatePayStream'
+    var serviceUrl = getBaseURL() + 'Profile/UpdatePayStream';
     var paymentAttributes = {
         OtherUri: otherUri,
         Debits: debits,
@@ -44,7 +72,7 @@ var updatePayStreamAll = function () {
             } else {
                 $("#resultsFilteredAll").hide();
                 $("#transactionTemplate").tmpl(data)
-                    .appendTo("#transactionsListAll");
+    .appendTo("#transactionsListAll");
             }
 
         },
@@ -61,8 +89,7 @@ var updatePayStreamRequests = function () {
     var pending = $('#cbPendingRequests').is(':checked');
     var complete = $('#cbCompleteRequests').is(':checked');
 
-
-    var serviceUrl = getBaseURL() + '/mobile/profile/UpdatePayStream'
+    var serviceUrl = getBaseURL() + 'profile/UpdatePayStreamRequests'
     var paymentAttributes = {
         OtherUri: otherUri,
         Debits: debits,
@@ -105,7 +132,8 @@ var updatePayStreamPayments = function () {
     var complete = $('#cbCompletePayments').is(':checked');
 
 
-    var serviceUrl = getBaseURL() + '/mobile/profile/UpdatePayStream'
+    var serviceUrl = getBaseURL() + 'profile/UpdatePayStreamPayments';
+
     var paymentAttributes = {
         OtherUri: otherUri,
         Debits: debits,

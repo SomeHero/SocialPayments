@@ -10,6 +10,8 @@ namespace SocialPayments.Domain
         Submitted = 0,
         Registered = 1,
         Active = 2,
-        InActive = 3
+        InActive = 3,
+        Verified = 4,
+        Pending = 5
     }
 }
