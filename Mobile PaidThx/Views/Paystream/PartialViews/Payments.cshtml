@@ -2,10 +2,7 @@
 <div id="main-body" class="panel">
     <h2>
         Your Payments</h2>
-    @using (Html.BeginForm())
-    {
-        @Html.TextBox("SearchString")
-    }
+    <input type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
     <div class="paystream-filters">
         <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream first">
             <input type="checkbox" name="cbSent" id="cbSentPayments" class="custom" checked />
