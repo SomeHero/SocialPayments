@@ -135,7 +135,7 @@ namespace Mobile_PaidThx.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(EditPaymentAccountModel model)
+        public ActionResult Edit(string id, EditPaymentAccountModel model)
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
@@ -147,7 +147,7 @@ namespace Mobile_PaidThx.Controllers
                 if (Session["User"] == null)
                     return RedirectToAction("SignIn", "Account", null);
 
-                var paymentAccount = user.PaymentAccounts.Where(a => a.Id == new Guid(model.PaymentAccountId));
+                var paymentAccount = user.PaymentAccounts.Where(a => a.Id == new Guid(id));
 
                 if (paymentAccount == null)
                 {
