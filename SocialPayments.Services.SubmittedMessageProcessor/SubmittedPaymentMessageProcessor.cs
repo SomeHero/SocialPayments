@@ -16,6 +16,7 @@ using SocialPayments.DomainServices;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.Services.IMessageProcessor;
 
+
 namespace SocialPayments.Services.MessageProcessors
 {
     public class SubmittedPaymentMessageProcessor : IMessageProcessor.IMessageProcessor
@@ -51,6 +52,8 @@ namespace SocialPayments.Services.MessageProcessors
        
         private string _paymentReceivedRecipientNotRegisteredTemplate = "Payment Received Recipient Not Registered";
         private string _paymentReceivedRecipientRegisteredTemplate = "Payment Received Recipient Registered";
+        
+        private string _ShortenedBaseURL = "http://www.paidthx.com/{0}";
 
         private string _defaultAvatarImage = System.Configuration.ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
 
@@ -58,7 +61,7 @@ namespace SocialPayments.Services.MessageProcessors
             _ctx  = new DataLayer.Context();
             _logger = LogManager.GetCurrentClassLogger();
         }
-
+        
         public SubmittedPaymentMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
         {
             _ctx = context;
@@ -157,7 +160,7 @@ namespace SocialPayments.Services.MessageProcessors
                         User = sender
                     }));
                 }
-
+                
                 _logger.Log(LogLevel.Info, String.Format("Updating Payment"));
 
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
@@ -174,6 +177,14 @@ namespace SocialPayments.Services.MessageProcessors
                 throw ex;
             }
 
+            // Get shortened URL here...
+            // TODO: SHORTEN URL
+            GoogleURLShorten service = new GoogleURLShorten();
+            var shortenedUrl = service.ShortenURL(String.Format(_ShortenedBaseURL, message.Id));
+
+            _logger.Log(LogLevel.Info, String.Format("Shortened URL Created -> {0}", shortenedUrl));
+
+
             //Attempt to assign payment to Payee
             if (recipient != null)
             {
@@ -189,7 +200,7 @@ namespace SocialPayments.Services.MessageProcessors
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
 
-                    smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, _mobileWebSiteUrl);
+                    smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, shortenedUrl);
                     _smsService.SendSMS(message.ApiKey, recipient.MobileNumber, smsMessage);
                 }
                 //Send SMS Message to sender
@@ -197,7 +208,7 @@ namespace SocialPayments.Services.MessageProcessors
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender"));
 
-                    smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, _mobileWebSiteUrl);
+                    smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, shortenedUrl);
                     _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
 
                 }
@@ -207,7 +218,7 @@ namespace SocialPayments.Services.MessageProcessors
                     _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Sender"));
 
                     emailSubject = String.Format(_senderConfirmationEmailSubject, recipientName);
-                    emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, _mobileWebSiteUrl);
+                    emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, shortenedUrl);
 
                     _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
                 }
@@ -239,7 +250,7 @@ namespace SocialPayments.Services.MessageProcessors
                             new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                            new KeyValuePair<string, string>("link_registration", "http://paidthx.com/mobile"),
+                            new KeyValuePair<string, string>("link_registration", shortenedUrl),
                             new KeyValuePair<string, string>("app_user", "false")
                         });
                     }
@@ -337,21 +348,19 @@ namespace SocialPayments.Services.MessageProcessors
                     // We should, however, publish something to the user's page that says sender sent payment
                     
                 }
-
             }
             else
             {
-
                 _logger.Log(LogLevel.Info, String.Format("Send SMS to Payee not found"));
 
-                var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
+                // var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
 
                 //Send out SMS message to sender
                 if (!String.IsNullOrEmpty(sender.MobileNumber))
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
-                    smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, link);
+                    smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, shortenedUrl);
                     _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
                 }
                 if (!String.IsNullOrEmpty(sender.EmailAddress))
@@ -369,7 +378,7 @@ namespace SocialPayments.Services.MessageProcessors
                     //Send out SMS message to recipient
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient (Recipient is not an registered user)."));
 
-                    smsMessage = String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, link);
+                    smsMessage = String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, shortenedUrl);
                     _smsService.SendSMS(message.ApiKey, message.RecipientUri, smsMessage);
                 }
 
@@ -399,7 +408,7 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
                         new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                         new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                        new KeyValuePair<string, string>("link_registration", link),
+                        new KeyValuePair<string, string>("link_registration", shortenedUrl),
                         new KeyValuePair<string, string>("app_user", "false")
                     });
                 }
