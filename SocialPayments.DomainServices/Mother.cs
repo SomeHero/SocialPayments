@@ -37,7 +37,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified,
+                UserStatus = Domain.UserStatus.Active,
                 DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 
@@ -63,7 +63,7 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
                 SecurityPin = "1234",
                 SetupPassword = true,
                 SetupSecurityPin = true,
-                UserStatus = Domain.UserStatus.Verified,
+                UserStatus = Domain.UserStatus.Active,
                 DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4"
             });
 

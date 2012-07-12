@@ -43,6 +43,13 @@ namespace SocialPayments.RestServices.Internal.Models
             public double totalMoneyReceived { get; set; }
 
             public bool setupSecurityPin { get; set; }
+            public int numberOfPaysteamUpdates { get; set; }
+
+            public List<UserPayPointResponse> userPayPoints { get; set; }
+            public List<MessageModels.MessageResponse> pendingMessages { get; set; }
+            public List<AccountModels.AccountResponse> bankAccounts { get; set; }
+            public List<UserModels.UserConfigurationResponse> userConfigurationVariables { get; set; }
+
         }
         public class SubmitUserRequest
         {
@@ -169,6 +176,19 @@ namespace SocialPayments.RestServices.Internal.Models
             public string UserId { get; set; }
             public string Uri { get; set; }
             public string Type { get; set; }
+        }
+        public class UserConfigurationResponse
+        {
+            public string Id { get; set; }
+            public string UserId { get; set; }
+            public string ConfigurationKey { get; set; }
+            public string ConfigurationValue { get; set; }
+            public string ConfigurationType { get; set; }
+        }
+        public class UpdateUserConfigurationRequest
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
     }
 }

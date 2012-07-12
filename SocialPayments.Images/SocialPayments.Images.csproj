@@ -99,6 +99,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="assets\contact-icon.gif" />
+    <Content Include="bankicons\bank.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

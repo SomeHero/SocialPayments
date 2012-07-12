@@ -42,6 +42,7 @@ namespace Mobile_PaidThx.Controllers
         {
             using (var ctx = new Context())
             {
+                var userService = new SocialPayments.DomainServices.UserService(ctx);
                 var securityService = new SocialPayments.DomainServices.SecurityService();
                 logger.Error(String.Format("Registrer User {0}", model.Email));
 
@@ -60,38 +61,12 @@ namespace Mobile_PaidThx.Controllers
                 }
 
                 User user = null;
+                string mobileNumber = "";
 
                 try
                 {
-
-                    user = ctx.Users.Add(new User()
-                    {
-                        UserId = Guid.NewGuid(),
-                        ApiKey = new Guid(_apiKey),
-                        CreateDate = System.DateTime.Now,
-                        PasswordChangedDate = DateTime.UtcNow,
-                        PasswordFailuresSinceLastSuccess = 0,
-                        LastPasswordFailureDate = DateTime.UtcNow,
-                        EmailAddress = model.Email,
-                        //IsLockedOut = isLockedOut,
-                        //LastLoggedIn = System.DateTime.Now,
-                        MobileNumber = model.MobileNumber,
-                        Password = securityService.Encrypt(model.Password), //hash
-                        SecurityPin = securityService.Encrypt("1111"),
-                        UserName = model.Email,
-                        UserStatus = UserStatus.Submitted,
-                        UserStatusValue = (int)UserStatus.Submitted,
-                        IsConfirmed = false,
-                        LastLoggedIn = System.DateTime.Now,
-                        Limit = 0,
-                        RegistrationMethod = UserRegistrationMethod.Web,
-                        SetupPassword = false,
-                        SetupSecurityPin = false,
-                        Roles = new Collection<Role>()
-                        {
-                            memberRole
-                        }
-                    });
+                     user = userService.AddUser(Guid.Parse(_apiKey), model.Email, model.Password, model.Email,
+                    "", model.MobileNumber);
                 }
                 catch (Exception ex)
                 {
@@ -155,6 +130,7 @@ namespace Mobile_PaidThx.Controllers
                 }
 
                 Session["UserId"] = user.UserId;
+
                 return RedirectToAction("ValidateMobileDevice");
             }
         }
@@ -328,13 +304,23 @@ namespace Mobile_PaidThx.Controllers
 
             logger.Log(LogLevel.Info, String.Format("Displaying ValidateMobileDevice View"));
 
-            PaymentModel paymentModel = null;
-            if (Session["Payment"] != null)
-                paymentModel = (PaymentModel)Session["Payment"];
+            using (var ctx = new Context())
+            {
+                var userService = new SocialPayments.DomainServices.UserService(ctx);
+                var formattingService = new SocialPayments.DomainServices.FormattingServices();
 
-            return View(new MobileDeviceVerificationModel() {
-                Payment = paymentModel
-            });
+                var user = userService.GetUserById(Session["UserId"].ToString());
+
+                PaymentModel paymentModel = null;
+                if (Session["Payment"] != null)
+                    paymentModel = (PaymentModel)Session["Payment"];
+
+                return View(new MobileDeviceVerificationModel()
+                {
+                    Payment = paymentModel,
+                    MobileNumber = formattingService.FormatMobileNumber(user.MobileNumber)
+                });
+            }
         }
         [HttpPost]
         public ActionResult ValidateMobileDevice(MobileDeviceVerificationModel model)
@@ -402,6 +388,7 @@ namespace Mobile_PaidThx.Controllers
         {
             using (var ctx = new Context())
             {
+                var paymentAccountService = new SocialPayments.DomainServices.PaymentAccountService(ctx);
                 var securityService = new SocialPayments.DomainServices.SecurityService();
                 logger.Error(String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
 
@@ -449,28 +436,11 @@ namespace Mobile_PaidThx.Controllers
 
                 PaymentAccount paymentAccount = null;
 
-                PaymentAccountType paymentAccountType = PaymentAccountType.Savings;
-
-                switch (model.AccountType)
-                {
-                    case "Checking":
-                        paymentAccountType = PaymentAccountType.Checking;
-                        break;
-                    case "Savings":
-                        paymentAccountType = PaymentAccountType.Savings;
-                        break;
-                }
                 try
                 {
-                    paymentAccount = ctx.PaymentAccounts.Add(new PaymentAccount()
-                    {
-                        AccountNumber = securityService.Encrypt(model.AccountNumber),
-                        AccountType = paymentAccountType,
-                        NameOnAccount = securityService.Encrypt(model.NameOnAccount),
-                        RoutingNumber = securityService.Encrypt(model.RoutingNumber),
-                        Id = Guid.NewGuid(),
-                        UserId = userId
-                    });
+                    paymentAccount = paymentAccountService.AddPaymentAccount(user.UserId.ToString(), model.NameOnAccount,
+                        model.RoutingNumber, model.AccountNumber, model.AccountType);
+
                 }
                 catch (Exception ex)
                 {
@@ -479,8 +449,7 @@ namespace Mobile_PaidThx.Controllers
 
                     return View(model);
                 }
-                user.UserStatus = UserStatus.Pending;
-                user.UserStatusValue = (int)UserStatus.Pending;
+                user.UserStatus = UserStatus.Registered;
 
                 try
                 {
@@ -498,17 +467,7 @@ namespace Mobile_PaidThx.Controllers
                 Session["User"] = user;
                 Session["UserId"] = user.UserId;
 
-                AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
-
-                client.Publish(new PublishRequest()
-                {
-                    Message = userId.ToString(),
-                    TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
-                    Subject = "New User ACH Account Setup"
-                });
-
-
-                return RedirectToAction("CompleteProfile", "Profile");
+                return RedirectToAction("Index", "Paystream");
             }
         }
 

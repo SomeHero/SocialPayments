@@ -145,6 +145,7 @@ namespace Mobile_PaidThx.Controllers
         }
         [HttpPost]
         public ActionResult Edit(EditPaymentAccountModel model, string Id)
+
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
@@ -158,6 +159,7 @@ namespace Mobile_PaidThx.Controllers
 
                 if (model.AccountType.ToLower().Equals("checking"))
                     paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
+
                 if (paymentAccount == null)
                 {
                     ModelState.AddModelError("", "Unable to edit payment account");

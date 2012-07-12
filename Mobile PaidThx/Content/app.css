@@ -455,7 +455,7 @@ a.fbSignIn span, button.fbSignIn span
 /* ---------- [ Paystream Transactions ] ---------- */
 .trans-type 
 {
-    width: 28px;
+    width: 80px;
     float: left;
     display: block;
     overflow: hidden;
@@ -472,9 +472,11 @@ a.fbSignIn span, button.fbSignIn span
 }
 .trans-title strong 
 {
-    height: 30px;
+   height: 30px;
+    font-size:14px;
     clear: both;
     display: block;
+    font-weight:bolder;
     white-space: normal;
     overflow: hidden;
 }
@@ -493,17 +495,91 @@ a.fbSignIn span, button.fbSignIn span
     text-align: right;
     padding-right: 5px;
 }
+.trans-comment
+{
+    padding-top:20px;
+    font-size: 14px;
+    font-style:italic;
+    color:#a8a9ab;
+    font-weight: normal;
+}
+.title-pay-in
+{
+    font-size: 12px;
+    font-style:normal;
+    font-weight: normal;
+    color:#1c8839;
+}
+.title-pay-out
+{
+    font-size: 12px;
+    font-style:normal;
+    font-weight: normal;
+    color:#269bb8;
+}
+.title-request-in
+{
+    font-size: 12px;
+    font-style:normal;
+    font-weight: normal;
+    color:#86acb5;
+}
+.title-request-out
+{
+    font-size: 12px;
+    font-style:normal;
+    font-weight: normal;
+    color:#81b28e;
+}
 .trans-amount 
 {
-    padding: 13px 5px 0 0;
+    padding: 15px 20px 0 0;
     float: right;
-    display: block;
+    display:inline-block;
     text-align: right;
     text-shadow: none;
     font-size: 14px;
     font-weight: normal;
     vertical-align: middle;
-    width: 90px;
+    width: 110px;
+}
+.gray-above
+{
+    padding-bottom:10px;
+    color:#a8a9ab;
+    font-size:14px;
+    font-style:italic;
+}
+.gray-out
+{
+    padding-top:10px;
+    color:#a8a9ab;
+    font-size:14px;
+    font-style:italic;
+}
+.paystream-pay-in
+{
+   font-size:20px;
+    font-weight:bold;
+    color:#1c8839;
+}
+.paystream-pay-out
+{
+    font-size:20px;
+    font-weight:bold;
+    color:#269bb8;
+}
+.paystream-request-in
+{
+    font-size:20px;
+    font-weight:bold;
+    color:#86acb5;
+}
+.paystream-request-out
+{
+    font-size:20px;
+    font-weight:bold;
+    color:#81b28e;
 }
 .receive .trans-amount
 {
@@ -516,6 +592,15 @@ a.fbSignIn span, button.fbSignIn span
 .pending .trans-amount
 {
     color: #6d6e71;
+}
+.paystream-header
+{
+    background: #919191;
+    color: #FFFFFF;
+    font-size:16px;   
+    text-indent: 10px;
+    letter-spacing: 1px;
+    padding: 6px;
 }
 .member-name 
 {
@@ -543,6 +628,14 @@ a.fbSignIn span, button.fbSignIn span
     display: block;
     float: left;
     margin: 5px 10px 5px 0px;
+}
+.paystream-row
+{
+    background: #F7F7F7;
+}
+.paystream-row-alt
+{
+    background: #FFFFFF;
 }
 @media screen and (orientation: portrait){
     label.error { margin-left: 0; display: block; }

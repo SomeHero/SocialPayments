@@ -22,7 +22,16 @@ namespace Mobile_PaidThx
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+                "Help", // Route name
+                "Help", // URL with parameters
+                new { controller = "Help", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Privacy", // Route name
+                "Privacy", // URL with parameters
+                new { controller = "Privacy", action = "Index" } // Parameter defaults
+            );
             routes.MapRoute(
                    "PaymentAccount",
                    "PaymentAccount/{action}/{id}",
@@ -63,7 +72,7 @@ namespace Mobile_PaidThx
                 "{messageId}", // URL with parameters
                 new { controller = "Home", action = "Index" } // Parameter defaults
             );
-
+            
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters

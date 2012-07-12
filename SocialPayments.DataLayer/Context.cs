@@ -37,6 +37,13 @@ namespace SocialPayments.DataLayer
         public IDbSet<PayPointType> PayPointTypes { get; set; }
         public IDbSet<UserPayPoint> UserPayPoints { get; set; }
         public IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
+        public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        public IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        public IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<Merchant> Merchants { get; set; }
+
 
         public Context() : base("name=DataContext") { }
 
@@ -143,7 +150,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.DropCreateDatabaseIfModelChanges<Context>
+    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -229,6 +236,114 @@ namespace SocialPayments.DataLayer
                 Url = "myurl.com",
                 CreateDate = System.DateTime.Now
             });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Facebook",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Twitter",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "LinkedIn",
+                Active = true
+            });
+            context.SocialNetworks.Add(new SocialNetwork()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Google +",
+                Active = true
+            });
+            context.ProfileSections.Add(new ProfileSection()
+            {
+                SectionHeader = "",
+                SortOrder = 1,
+                ProfileItems = new Collection<ProfileItem>()
+                {
+                    new ProfileItem() {
+                        Label = "First Name",
+                        SortOrder = 1
+                    },
+                    new ProfileItem() {
+                        Label = "Last Name",
+                        SortOrder = 2
+                    },
+                    new ProfileItem() {
+                        Label = "Phone",
+                        SortOrder = 3
+                    },
+                    new ProfileItem() {
+                        Label = "Email",
+                        SortOrder = 4
+                    },
+                    new ProfileItem() {
+                        Label = "Facebook",
+                        SortOrder = 5
+                    },
+                    new ProfileItem() {
+                        Label = "Twitter",
+                        SortOrder = 6
+                    },
+                    new ProfileItem() {
+                        Label = "About Me",
+                        SortOrder = 7
+                    },
+                    new ProfileItem() {
+                        Label = "Make Public",
+                        SortOrder = 8
+                    },
+                }
+            });
+            context.ProfileSections.Add(new ProfileSection()
+            {
+                SectionHeader = "Secure Information (Never Public)",
+                SortOrder = 2,
+                ProfileItems = new Collection<ProfileItem>()
+                {
+                    new ProfileItem() {
+                        Label = "Address",
+                        SortOrder = 1
+                    },
+                    new ProfileItem() {
+                        Label = "City",
+                        SortOrder = 2
+                    },
+                    new ProfileItem() {
+                        Label = "State  ",
+                        SortOrder = 3
+                    },
+                    new ProfileItem() {
+                        Label = "Zip",
+                        SortOrder = 4
+                    },
+                    new ProfileItem() {
+                        Label = "Photo ID",
+                        SortOrder = 5
+                    },
+                    new ProfileItem() {
+                        Label = "SSN",
+                        SortOrder = 6
+                    },
+                    new ProfileItem() {
+                        Label = "Birthday",
+                        SortOrder = 7
+                    },
+                    new ProfileItem() {
+                        Label = "Income",
+                        SortOrder = 8
+                    },
+                    new ProfileItem() {
+                        Label = "Credit Score",
+                        SortOrder = 9
+                    },
+                }
+            });
             var emailPayPointType = context.PayPointTypes.Add(new PayPointType()
             {
                 Active = true,
@@ -277,6 +392,90 @@ namespace SocialPayments.DataLayer
                 Id = 3,
                 Type = "Push"
             });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 0,
+                Question = "Childhood Nickname",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 1,
+                Question = "Last 4 digits of drivers license",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 2,
+                Question = "City you met your significant other",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 3,
+                Question = "Street you lived on in 3rd grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 4,
+                Question = "Oldest sibling's birth month and year",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 5,
+                Question = "Childhood phone number including area code",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 6,
+                Question = "Oldest cousin's first and last name",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 7,
+                Question = "City your parents met",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 8,
+                Question = "Last name of your 3rd grade teacher",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 9,
+                Question = "Your first kiss was with...",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 10,
+                Question = "Your childhood hero",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 11,
+                Question = "Your dream job",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 12,
+                Question = "School you attended for 6th grade",
+                IsActive = true
+            });
+            context.SecurityQuestions.Add(new SecurityQuestion()
+            {
+                Id = 13,
+                Question = "Oldest sibling's middle name",
+                IsActive = true
+            });
             context.SaveChanges();
 
             context.Users.Add(new User()
@@ -305,13 +504,31 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Roles = new Collection<Role>()
                 {
                     memberRole
-                }
+                },
+                PayPoints = new Collection<UserPayPoint>()
+                {
+                    new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = emailPayPointType,
+                        URI = "test@gmail.com"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = phonePayPointType,
+                        URI = "8043555555"
+                    },
+                },
+                UserType = UserType.Individual
             });
 
             context.Users.Add(new User()
@@ -326,13 +543,14 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Roles = new Collection<Role>()
                 {
                     adminRole
-                }
+                },
+                UserType = UserType.Individual
             });
             var james = context.Users.Add(new User()
             {
@@ -348,7 +566,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Limit = 100,
@@ -386,6 +604,31 @@ namespace SocialPayments.DataLayer
                         BankName = "BB&T"
                     }
                 },
+                PayPoints = new Collection<UserPayPoint>()
+                {
+                    new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = emailPayPointType,
+                        URI = "james@paidthx.com"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = phonePayPointType,
+                        URI = "8043879693"
+                    },
+                     new UserPayPoint() {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsActive = true,
+                        Type = meCodePayPoint,
+                        URI = "$jamesrhodes"
+                    }
+                },
+                UserType = UserType.Individual
             });
 
             var sender = context.Users.Add(new User()
@@ -402,7 +645,7 @@ namespace SocialPayments.DataLayer
                 IsLockedOut = false,
                 CreateDate = System.DateTime.Now,
                 LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Verified,
+                UserStatus = UserStatus.Active,
                 IsConfirmed = true,
                 RegistrationMethod = UserRegistrationMethod.Test,
                 Limit = 100,
@@ -438,6 +681,7 @@ namespace SocialPayments.DataLayer
                         BankName = "Wells Fargo"
                     }
                 },
+                UserType = UserType.Individual
             });
 
             var meCode = context.MECodes.Add(new MECode()
@@ -647,79 +891,247 @@ namespace SocialPayments.DataLayer
                         SelectedDate = date
                     });
             }
+
+            for (var i = 0; i < 10; i++)
+            {
+                var amount = i;
+                var comments = "Thanks for lunch.";
+
+                context.Messages.Add(new Message()
+                {
+                    Id = Guid.NewGuid(),
+                    Amount = amount,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    Status = PaystreamMessageStatus.Processing,
+                    MessageType = MessageType.Payment,
+                    MessageTypeValue = (int)MessageType.Payment,
+                    RecipientUri = "804355000" + i,
+                    Sender = james,
+                    SenderUri = james.MobileNumber,
+                    SenderAccount = james.PaymentAccounts[0],
+                    CreateDate = System.DateTime.Now,
+                    Application = application,
+                    Payment = new Payment()
+                    {
+                        Amount = amount,
+                        Application = application,
+                        Comments = comments,
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        PaymentStatus = PaymentStatus.Pending,
+                        SenderAccount = james.PaymentAccounts[0],
+                        Transactions = new Collection<Transaction>()
+                        {
+                            new Transaction() {
+                                Amount = amount,
+                                Category = TransactionCategory.Payment,
+                                CreateDate = System.DateTime.Now,
+                                FromAccount = james.PaymentAccounts[0],
+                                Id = Guid.NewGuid(),
+                                PaymentChannelType = PaymentChannelType.Single,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Complete,
+                                Type = TransactionType.Withdrawal,
+                                User =james
+                            }
+                        }
+                    }
+                });
+
+
+            }
+
+
+            for (var i = 10; i < 20; i++)
+            {
+                var amount = i;
+                var comments = "Thanks for drinks.";
+
+                context.Messages.Add(new Message()
+                {
+                    Id = Guid.NewGuid(),
+                    Amount = amount,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    Status = PaystreamMessageStatus.Processing,
+                    MessageType = MessageType.Payment,
+                    MessageTypeValue = (int)MessageType.Payment,
+                    RecipientUri = String.Format("james{0}@paidthx.com", i),
+                    Sender = james,
+                    SenderUri = james.MobileNumber,
+                    SenderAccount = james.PaymentAccounts[0],
+                    CreateDate = System.DateTime.Now,
+                    Application = application,
+                    Payment = new Payment()
+                    {
+                        Amount = amount,
+                        Application = application,
+                        Comments = comments,
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        PaymentStatus = PaymentStatus.Pending,
+                        SenderAccount = james.PaymentAccounts[0],
+                        Transactions = new Collection<Transaction>()
+                        {
+                            new Transaction() {
+                                Amount = amount,
+                                Category = TransactionCategory.Payment,
+                                CreateDate = System.DateTime.Now,
+                                FromAccount = james.PaymentAccounts[0],
+                                Id = Guid.NewGuid(),
+                                PaymentChannelType = PaymentChannelType.Single,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Complete,
+                                Type = TransactionType.Withdrawal,
+                                User =james
+                            }
+                        }
+                    }
+                });
+
+
+            }
+
+            var merchant1 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Richmond Road Runners",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "rrr@ric.org",
+                    UserName = "rrr@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    OrganizationName = "Richmond Road Runners",
+                    UserType = UserType.NonProfit
+                },
+                MerchantType = MerchantType.Regular
+
+            });
+
+            var merchant2 = context.Merchants.Add(new Merchant() {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Richmond Sports League",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "ricsports@ric.org",
+                    UserName = "ricsports@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    }
+                },
+                MerchantType = MerchantType.Regular
+            });
+            var merchant3 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Richmond Beard League",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "beardleague@ric.org",
+                    UserName = "beardleague@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    }
+                },
+                MerchantType = MerchantType.Regular
+            });
+
+
             context.SaveChanges();
             
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 0,
-                Question = "Childhood Nickname",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 1,
-                Question = "Last 4 digis of drivers license",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 2,
-                Question = "City you met your significant other",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 3,
-                Question = "Street you lived on in 3rd grade",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 4,
-                Question = "Oldest sibling's birth month and year",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 5,
-                Question = "Childhood phone number including area code",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 6,
-                Question = "Oldest cousin's first and last name",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 7,
-                Question = "City your parents met",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 8,
-                Question = "Last name of your 3rd grade teacher",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 9,
-                Question = "Your first kiss was with...",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 10,
-                Question = "Your childhood hero",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 11,
-                Question = "Your dream job",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 12,
-                Question = "School you attended for 6th grade",
-                IsActive = true
-            });
-            context.SecurityQuestions.Add(new SecurityQuestion() {
-                Id = 13,
-                Question = "Oldest sibling's middle name",
-                IsActive = true
-            });
-            context.SaveChanges();
 
             base.Seed(context);
         }

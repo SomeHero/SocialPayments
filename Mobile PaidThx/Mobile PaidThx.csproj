@@ -87,13 +87,8 @@
       <HintPath>..\Libraries\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Libraries\Newtonsoft.Json.dll</HintPath>
@@ -155,9 +150,11 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Base\PaidThxBaseController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentAccountController.cs" />
     <Compile Include="Controllers\PaystreamController.cs" />
+    <Compile Include="Controllers\PrivacyController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Global.asax.cs">
@@ -369,6 +366,9 @@
     <Content Include="Web.Remote.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Help\index.cshtml" />
+    <Content Include="Views\Privacy\Index.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
@@ -403,7 +403,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="logs\" />
+    <Folder Include="Models\logs\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
   </ItemGroup>
   <ItemGroup>
@@ -455,7 +455,6 @@
     <Content Include="Views\Paystream\PartialViews\Alerts.cshtml" />
     <Content Include="Views\PaymentAccount\PaymentAccouunt.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\Add.cshtml" />
-    <Content Include="HtmlHelpers\Nav\All.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\Edit.cshtml" />
     <Content Include="Views\PaymentAccount\PartialViews\List.cshtml" />
     <Content Include="Views\Account\FBauth.cshtml" />
@@ -477,6 +476,9 @@
       <Project>{77F37AEC-FB67-41D3-9627-FA647BBD550F}</Project>
       <Name>SocialPayments.ThirdPartyServices.FedACHService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

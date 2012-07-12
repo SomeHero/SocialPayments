@@ -127,8 +127,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\EntityFramework.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -232,6 +233,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SocialPayments.DataLayer\SocialPayments.DataLayer.csproj">
+      <Project>{A06817CB-EF0F-49B3-B6ED-879EA399590A}</Project>
+      <Name>SocialPayments.DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SocialPayments.DomainServices\SocialPayments.DomainServices.csproj">
       <Project>{B8F91D46-468B-4E47-9BA3-7026ED7F9C3E}</Project>
       <Name>SocialPayments.DomainServices</Name>
