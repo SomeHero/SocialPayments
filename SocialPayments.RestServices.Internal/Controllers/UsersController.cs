@@ -620,7 +620,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/signin_withfacebook
         public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", request.deviceToken));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0} {1}", request.deviceToken, request.oAuthToken));
 
             Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
@@ -635,7 +635,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
-                    request.deviceToken, out isNewUser);
+                    request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), out isNewUser);
             }
             catch (Exception ex)
             {
