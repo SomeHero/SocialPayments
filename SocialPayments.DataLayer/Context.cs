@@ -42,6 +42,8 @@ namespace SocialPayments.DataLayer
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
         public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<Merchant> Merchants { get; set; }
+
 
         public Context() : base("name=DataContext") { }
 
@@ -399,7 +401,7 @@ namespace SocialPayments.DataLayer
             context.SecurityQuestions.Add(new SecurityQuestion()
             {
                 Id = 1,
-                Question = "Last 4 digis of drivers license",
+                Question = "Last 4 digits of drivers license",
                 IsActive = true
             });
             context.SecurityQuestions.Add(new SecurityQuestion()
@@ -991,123 +993,140 @@ namespace SocialPayments.DataLayer
 
             }
 
-            var organization1 = context.Users.Add(new User()
+            var merchant1 = context.Merchants.Add(new Merchant()
             {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "rrr@ric.org",
-                UserName = "rrr@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Road Runners",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "rrr@ric.org",
+                    UserName = "rrr@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    OrganizationName = "Richmond Road Runners",
+                    UserType = UserType.NonProfit
                 },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
-                    }
-                },
-                OrganizationName = "Richmond Road Runners",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
+
             });
 
-            var organization2 = context.Users.Add(new User()
-            {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "ricsports@ric.org",
-                UserName = "ricsports@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+            var merchant2 = context.Merchants.Add(new Merchant() {
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Sports League",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
-                },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "ricsports@ric.org",
+                    UserName = "ricsports@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
                     }
                 },
-                OrganizationName = "Richmond Sports League",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
             });
-            var organization3 = context.Users.Add(new User()
+            var merchant3 = context.Merchants.Add(new Merchant()
             {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "beardleague@ric.org",
-                UserName = "beardleague@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Beard League",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
-                },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "beardleague@ric.org",
+                    UserName = "beardleague@ric.org",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
                     }
                 },
-                OrganizationName = "Richmond Beard League",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
             });
 
 
