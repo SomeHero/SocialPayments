@@ -62,8 +62,14 @@ namespace Mobile_PaidThx.Controllers
                 {
                     if (paymentAccount.IsActive)
                     {
-                        tempNumber = tempNumber.Substring(tempNumber.Length - 4);
-                    }
+                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
+
+                        if(tempNumber.Length > 3)
+                        {
+                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
+                        }
+                    
+                    
                     bankAccounts.Add(new BankAccountModel()
                     {
                         BankName = paymentAccount.BankName,
