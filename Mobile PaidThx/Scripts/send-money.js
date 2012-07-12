@@ -5,6 +5,7 @@ $(document).ready(function () {
     $("#frmSendMoney").validate({
         submitHandler: function (form) {
             form.submit();
+            alert("test");
         }
     });
 });
