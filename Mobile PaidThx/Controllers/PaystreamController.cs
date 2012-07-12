@@ -60,8 +60,7 @@ namespace Mobile_PaidThx.Controllers
 
                 foreach (var paymentAccount in user.PaymentAccounts)
                 {
-                    var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-                    if (tempNumber.Length > 3)
+                    if (paymentAccount.IsActive)
                     {
                         tempNumber = tempNumber.Substring(tempNumber.Length - 4);
                     }
@@ -76,7 +75,8 @@ namespace Mobile_PaidThx.Controllers
                         Nickname = paymentAccount.Nickname,
                         RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
 
-                    });
+                        });
+                    }
 
                 }
 
