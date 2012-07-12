@@ -24,13 +24,13 @@ namespace SocialPayments.Services
             public string longUrl { get; set; }
         }
 
-        public string ShortenURL(string longurl)
+        public string ShortenURL(string baseUrl, string messageid)
         {
             string googReturnedJson = string.Empty;
             JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
  
             GoogleShortenedURLRequest googSentJson = new GoogleShortenedURLRequest();
-            googSentJson.longUrl = longurl;
+            googSentJson.longUrl = String.Format("{0}{1}", baseUrl, messageid);
             
             // Convert googSentJson to JSON
             string jsonData = javascriptSerializer.Serialize(googSentJson);
@@ -59,7 +59,12 @@ namespace SocialPayments.Services
             }
 
             GoogleShortenedURLResponse googUrl = javascriptSerializer.Deserialize<GoogleShortenedURLResponse>(googReturnedJson);
-            return googUrl.id;
+
+            var shortCode = googUrl.id.Substring(googUrl.id.LastIndexOf("/") + 1, googUrl.id.Length - googUrl.id.LastIndexOf("/") - 1);
+
+            var shortUrl = String.Format("{0}i/{1}", baseUrl, shortCode);
+
+            return shortUrl;
         }
     }
 }

@@ -22,6 +22,12 @@ namespace Mobile_PaidThx
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                "RedirectShortner", // Route name
+                "i/{id}", // URL with parameters
+                new { controller = "Home", action = "ClaimPayment" } // Parameter defaults
+            );
             routes.MapRoute(
                 "Help", // Route name
                 "Help", // URL with parameters
