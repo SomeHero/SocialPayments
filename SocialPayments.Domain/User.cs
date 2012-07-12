@@ -97,7 +97,7 @@ namespace SocialPayments.Domain
         [MaxLength(255)]
         public string SenderName { get; set; }
         [Column(name:"FBUserId")]
-        public FBUser FacebookUser { get; set; }
+        public virtual FBUser FacebookUser { get; set; }
 
         public virtual Collection<Message> Messages { get; set; }
         [MaxLength(100)]
