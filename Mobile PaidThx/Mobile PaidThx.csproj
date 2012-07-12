@@ -153,7 +153,9 @@
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentAccountController.cs" />
-    <Compile Include="Controllers\PaystreamController.cs" />
+    <Compile Include="Controllers\PaystreamController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\PrivacyController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -441,6 +443,7 @@
     <Content Include="Views\Account\ForgotEmail.cshtml" />
     <Content Include="Web.Beta.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
