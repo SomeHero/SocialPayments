@@ -40,15 +40,15 @@
         <li class="receive pending ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c" data-theme="c">
             <div class="ui-btn-inner ui-li">
                 <div class="ui-btn-text">
-                    <a href="#" class="ui-link-inherit">
+                    <a onclick="openOffersDialog();" class="ui-link-inherit">
                         <span class="trans-type">
-                        <img src="/Content/images/noavatar.png" alt="Picture">
+                        <img src="/Content/images/noavatar.png" alt="Picture"/>
                         </span>
-                        <div class="trans-title">
+                            <div class="trans-title">
                             {{if Direction == "In" }}
-                            <strong>${formatPhoneNumber(SenderUri)}</strong>
+                            <strong>${formatUri(SenderUri)}</strong>
                             {{else}}
-                            <strong>${formatPhoneNumber(RecipientUri)}</strong>
+                            <strong>${formatUri(RecipientUri)}</strong>
                             {{/if}}
                             
                             {{if MessageType == "1" && Direction == "In"}}
@@ -98,6 +98,50 @@
                 <span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
             </div>
         </li>
+    </script>
+    <script id="dialogTemplate" type="text/html">
+    <a onclick="closeOffersDialog('popup');" class="paystream-dialog-closebtn"></a>
+    <div class="paystream-dialog-title-bg">
+    {{if MessageType == "1" && Direction == "In"}}
+    $ Received{{/if}}
+    {{if MessageType == "1" && Direction == "Out"}}
+    $ Sent{{/if}}
+    {{if MessageType == "0" && Direction == "In"}}
+    Request Received{{/if}}
+    {{if MessageType == "0" && Direction == "Out"}}
+    Request Sent{{/if}}    
+    </div>
+    <div style="overflow:auto; height:90%">
+       <div class="paystream-dialog-inner-display">
+         <div class="paystream-wrapper"><div class="paystream-user">
+          <img src="/Content/images/noavatar.png" alt="user"/>
+         </div>
+         <div class="paystream-user-next"><img src="/Content/images/noavatar.png" alt="user2pic" />
+         </div>
+         <div class="user-statement">
+         ${formatUri(SenderUri)}
+            <div style="padding-top:10px; text-align: center">
+            
+            {{if MessageType == "0"}}
+            requested{{/if}}
+            {{if MessageType == "1"}}
+            sent
+            {{/if}}
+                        
+            <span style="color: #40A37A">${formatAmount(Amount)}</span> to</div>
+            <div style="padding-top:10px; text-align: right">
+            <span style="color: #40A37A">${formatUri(RecipientUri)}</span></div>
+         </div>
+       </div>
+
+        <p class="speech-bubble-border top"><span style="font-size: 15px">${Comments}</span></p>
+
+        <div class="paystream-date">on ${formatDialogDate(TransactionDate)}</div>
+        </div>
+        <div class="paystream-subbar">CURRENT STATUS</div>
+        <div class="paystream-status-dialog">Processing</div>
+        <div class="paystream-subbar">WHAT NEXT?</div>
+    </div>
     </script>
 </head>
 <body class="ui-mobile-viewport">

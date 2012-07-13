@@ -17,6 +17,7 @@ namespace Mobile_PaidThx.Models
         }
         public class PaymentModel
         {
+            public string Id { get; set; }
             public string SenderUri { get; set; }
             public string RecipientUri { get; set; }
             public Double Amount { get; set; }

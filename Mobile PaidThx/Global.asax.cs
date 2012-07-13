@@ -70,8 +70,8 @@ namespace Mobile_PaidThx
             );
             routes.MapRoute(
                 "Profile", // Route name
-                "Profile/{action}", // URL with parameters
-                new { controller = "Profile", action = "Index" } // Parameter defaults
+                "Profile/{action}/{id}", // URL with parameters
+                new { controller = "Profile", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
                 "Receive", // Route name

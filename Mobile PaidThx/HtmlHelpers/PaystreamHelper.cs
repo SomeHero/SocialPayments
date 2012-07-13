@@ -17,12 +17,34 @@ namespace Mobile_PaidThx.HtmlHelpers
     {
         public static MvcHtmlString FormatUri(this HtmlHelper helper, string uri)
         {
+            if (uri == null || uri.Length == 0)
+            {
+                return new MvcHtmlString("PdThx User");
+            }
+            bool isNumber = true;
+            for (int i = 0; i < uri.Length; i++)
+            {
+                if (!Char.IsDigit(uri.ElementAt(i)))
+                {
+                    isNumber = false;
+                    break;
+                }
+            }
 
-            SocialPayments.DomainServices.FormattingServices formattingService = new SocialPayments.DomainServices.FormattingServices();
+            if (isNumber)
+            {
 
-            var tempUri = formattingService.FormatMobileNumber(uri);
+                SocialPayments.DomainServices.FormattingServices formattingService = new SocialPayments.DomainServices.FormattingServices();
 
-            return new MvcHtmlString(tempUri);
+                var tempUri = formattingService.FormatMobileNumber(uri);
+
+                return new MvcHtmlString(tempUri);
+            }
+            else
+            {
+                return new MvcHtmlString(uri);
+            }
+
         }
 
         public static String formatTime(DateTime time)

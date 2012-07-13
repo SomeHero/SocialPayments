@@ -3,9 +3,25 @@
 function formatAmount(amount) {
     return "$" + amount.toFixed(2);
 }
-function formatPhoneNumber(number) {
-    return "("+number.substring(0, 3)+ ") " + number.substring(3, 6) + "-" + number.substring(6, number.length);
+
+function formatUri(userUri) {
+    if (isNaN(userUri.substring(0, userUri.length))) {
+        return userUri;
+    }
+    else {
+        return "(" + userUri.substring(0, 3) + ") " + userUri.substring(3, 6) + "-" + userUri.substring(6, userUri.length);
+    }
 }
+
+function formatDialogDate(jsonDate) {
+    var value = new Date(parseInt(jsonDate.substr(6)));
+    var ap = "AM";
+    if (value.getHours() > 11)
+        ap = "PM";
+
+    return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " at " + value.getHours() + ":" + value.getMinutes() + " " + ap;
+}
+
 function formatDate(jsonDate) {
     var value = new Date(parseInt(jsonDate.substr(6)));
     var today = new Date();
@@ -40,6 +56,45 @@ function formatDate(jsonDate) {
         return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear() + " @ " + value.getHours() + ":" + value.getMinutes() + " " + ap;
     }
 }
+
+function openOffersDialog(transactionId) {
+    var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamDialog/' + transactionId;
+
+    $.ajax({
+        url: serviceUrl,
+        dataType: "json",
+        processData: false,
+        success: function (data) {
+            $("#popup").empty();
+            $("#dialogTemplate").tmpl(data)
+    .appendTo("#popup");
+        },
+        error: function (objRequest, next, errorThrown) {
+            alert(next);
+            $("#error-block").appendTo(next);
+        }
+    });
+
+    $('#overlay').fadeIn('fast', function () {
+        $('#popup').css('display', 'block');
+        $('#popup').animate({ 'left': '5%' }, 500);
+    });
+}
+
+
+function closeOffersDialog(prospectElementID) {
+    $(function ($) {
+        $(document).ready(function () {
+            $('#' + prospectElementID).css('position', 'absolute');
+            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
+                $('#' + prospectElementID).css('position', 'fixed');
+                $('#' + prospectElementID).css('left', '100%');
+                $('#overlay').fadeOut('fast');
+            });
+        });
+    });
+}
+
 var updatePayStreamAll = function () {
     var otherUri = $('#txtSearchPaystreamAll').val();
     var debits = $('#cbSentAll').is(':checked');
