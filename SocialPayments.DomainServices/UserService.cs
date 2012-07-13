@@ -172,9 +172,9 @@ namespace SocialPayments.DomainServices
 
                 throw CreateArgumentNullOrEmptyException("accountConfirmationToken");
             }
-            using (Context context = new Context())
+            using (Context ctx = new Context())
             {
-                user = _ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
+                user = ctx.Users.FirstOrDefault(Usr => Usr.ConfirmationToken.Equals(accountConfirmationToken));
 
                 if (user == null)
                 {
@@ -185,7 +185,7 @@ namespace SocialPayments.DomainServices
 
                 confirmed = true;
                 user.IsConfirmed = true;
-                _ctx.SaveChanges();
+                ctx.SaveChanges();
             }
             if (!confirmed)
                 return false;
@@ -398,9 +398,9 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, out bool isNewUser)
+            string deviceToken, string oAuthToken, DateTime tokenExpiration, out bool isNewUser)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
             User user = null;
 
@@ -449,8 +449,8 @@ namespace SocialPayments.DomainServices
                         {
                             FBUserID = accountId,
                             Id = Guid.NewGuid(),
-                            TokenExpiration = System.DateTime.Now.AddDays(30),
-                            OAuthToken = ""
+                            TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
                         },
                         ImageUrl = String.Format(_fbImageUrlFormat, accountId),
                     });
@@ -462,6 +462,21 @@ namespace SocialPayments.DomainServices
 
                     user.DeviceToken = deviceToken;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
+                    if (user.FacebookUser != null)
+                    {
+                        user.FacebookUser.OAuthToken = oAuthToken;
+                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                    }
+                    else
+                    {
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                           // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                    }
                 }
 
                 _ctx.SaveChanges();

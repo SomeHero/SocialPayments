@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Text;
 using System.IO;
 using Newtonsoft.Json;
+using System.Configuration;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -28,7 +29,7 @@ namespace Mobile_PaidThx.Controllers
         private string fbState = "pickle"; //TODO: randomly generate this per session
         private string fbAppID = "332189543469634";
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
-        private string fbTokenRedirectURL = "http://dev.paidthx.com/mobile/SignInWithFacebook/";
+        private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         //
         // GET: /Account/LogOn

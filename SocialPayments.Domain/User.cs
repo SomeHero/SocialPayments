@@ -79,6 +79,9 @@ namespace SocialPayments.Domain
         public virtual bool SetupPassword { get; set; }
         public virtual Collection<PaymentAccount> PaymentAccounts { get; set; }
 
+        [MaxLength(255)]
+        public string OrganizationName { get; set; }
+
         [MaxLength(100)]
         public string FirstName { get; set; }
         [MaxLength(100)]
@@ -94,7 +97,7 @@ namespace SocialPayments.Domain
         [MaxLength(255)]
         public string SenderName { get; set; }
         [Column(name:"FBUserId")]
-        public FBUser FacebookUser { get; set; }
+        public virtual FBUser FacebookUser { get; set; }
 
         public virtual Collection<Message> Messages { get; set; }
         [MaxLength(100)]
@@ -117,6 +120,10 @@ namespace SocialPayments.Domain
 
         public virtual Guid? PreferredReceiveAccountId { get; set; }
         public virtual PaymentAccount PreferredReceiveAccount { get; set; }
+
+        public int UserTypeId { get; set; }
+        [ForeignKey("UserTypeId")]
+        public UserType UserType { get; set; }
 
         public virtual Collection<UserPayPoint> PayPoints { get; set; }
         public virtual Collection<UserNotification> NotificationConfiguration { get; set; }

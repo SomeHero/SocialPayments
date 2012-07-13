@@ -86,7 +86,12 @@ namespace Mobile_PaidThx.Controllers
                 return View("Register", model);
             }
         }
+        public void ClaimPayment(string id)
+        {
+            logger.Info(String.Format("The id is {0}", id));
 
+            Response.Redirect(String.Format("http://goo.gl/{0}", id));
+        }
         public ActionResult About()
         {
             logger.Log(LogLevel.Info, String.Format("Displaying About PaidThx View"));

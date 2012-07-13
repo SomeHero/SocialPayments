@@ -190,6 +190,8 @@
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />
+    <Compile Include="Merchant.cs" />
+    <Compile Include="MerchantType.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="PayPointType.cs" />
     <Compile Include="ProfileItem.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="UserSMSAuthentication.cs" />
     <Compile Include="UserSocialNetwork.cs" />
     <Compile Include="UserStatus.cs" />
+    <Compile Include="UserType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

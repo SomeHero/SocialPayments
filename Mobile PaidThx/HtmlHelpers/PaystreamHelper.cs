@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Mobile_PaidThx.Models;
+
+using SocialPayments.DataLayer;
+using SocialPayments.Domain;
+using SocialPayments.DomainServices;
+using NLog;
 
 namespace Mobile_PaidThx.HtmlHelpers
 {

@@ -25,81 +25,81 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-             logger.Log(LogLevel.Info, String.Format("Displaying Profile View"));
+            logger.Log(LogLevel.Info, String.Format("Displaying Profile View"));
 
-             using (var ctx = new Context())
-             {
+            using (var ctx = new Context())
+            {
 
-                 if (Session["UserId"] == null)
-                     return RedirectToAction("SignIn", "Account", null);
+                if (Session["UserId"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
 
-                 var userId = (Guid)Session["UserId"];
-                 var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+                var userId = (Guid)Session["UserId"];
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
 
-                 if (Session["User"] == null)
-                     return RedirectToAction("SignIn", "Account", null);
+                if (Session["User"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
 
-                 var model = new ProfileModels()
-                 {
-                     FirstName = user.FirstName,
-                     LastName = user.LastName,
-                     AccountType = "Personal",
-                     MobileNumber = user.MobileNumber,
-                     EmailAddress = user.EmailAddress,
-                     Address = user.Address,
-                     City = user.City,
-                     State = user.State,
-                     Zip = user.Zip,
-                     SenderName = user.SenderName
-                 };
+                var model = new ProfileModels()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    AccountType = "Personal",
+                    MobileNumber = user.MobileNumber,
+                    EmailAddress = user.EmailAddress,
+                    Address = user.Address,
+                    City = user.City,
+                    State = user.State,
+                    Zip = user.Zip,
+                    SenderName = user.SenderName
+                };
 
 
 
-                 var paymentAccountId = user.PaymentAccounts[0].Id;
+                var paymentAccountId = user.PaymentAccounts[0].Id;
 
-                 logger.Log(LogLevel.Info, paymentAccountId);
+                logger.Log(LogLevel.Info, paymentAccountId);
 
-                 var messages = ctx.Messages
-                     .Where(m => m.SenderId == user.UserId || m.RecipientId.Value == user.UserId)
-                     .OrderByDescending(m => m.CreateDate)
-                     .ToList<Message>();
+                var messages = ctx.Messages
+                    .Where(m => m.SenderId == user.UserId || m.RecipientId.Value == user.UserId)
+                    .OrderByDescending(m => m.CreateDate)
+                    .ToList<Message>();
 
-                 var transactionStatus = Mobile_PaidThx.Models.TransactionStatus.Submitted;
+                var transactionStatus = Mobile_PaidThx.Models.TransactionStatus.Submitted;
 
-                 logger.Log(LogLevel.Info, messages.Count());
+                logger.Log(LogLevel.Info, messages.Count());
 
-                 try
-                 {
+                try
+                {
 
-                     foreach (var transaction in messages)
-                     {
-                         model.TransactionReceipts.Add(new PaystreamModels.PaymentModel()
-                         {
-                             Amount = transaction.Amount,
-                             SenderUri = transaction.SenderUri,
-                             TransactionDate = transaction.CreateDate,
-                             TransactionType = Mobile_PaidThx.Models.TransactionType.Deposit,
-                             TransactionStatus = transactionStatus,
-                             TransactionImageUri = transaction.TransactionImageUrl,
-                             Comments = transaction.Comments
-                         });
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     logger.Log(LogLevel.Info, String.Format("Unhandled Exception {0}", ex.Message));
-                     var innerException = ex.InnerException;
+                    foreach (var transaction in messages)
+                    {
+                        model.TransactionReceipts.Add(new PaystreamModels.PaymentModel()
+                        {
+                            Amount = transaction.Amount,
+                            SenderUri = transaction.SenderUri,
+                            TransactionDate = transaction.CreateDate,
+                            TransactionType = Mobile_PaidThx.Models.TransactionType.Deposit,
+                            TransactionStatus = transactionStatus,
+                            TransactionImageUri = transaction.TransactionImageUrl,
+                            Comments = transaction.Comments
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, String.Format("Unhandled Exception {0}", ex.Message));
+                    var innerException = ex.InnerException;
 
-                     while (innerException != null)
-                     {
-                         logger.Log(LogLevel.Info, String.Format("Unhandled Exception {0}", innerException.Message));
-                         innerException = innerException.InnerException;
-                     }
+                    while (innerException != null)
+                    {
+                        logger.Log(LogLevel.Info, String.Format("Unhandled Exception {0}", innerException.Message));
+                        innerException = innerException.InnerException;
+                    }
 
-                 }
+                }
 
-                 return View(model);
-             }
+                return View(model);
+            }
         }
         [HttpPost]
         public ActionResult Index(UpdateProfileModel model)
@@ -197,7 +197,7 @@ namespace Mobile_PaidThx.Controllers
                     var messages = ctx.Messages
                         .Where(m => m.SenderId == user.UserId || m.RecipientId.Value == user.UserId)
                         .OrderByDescending(m => m.CreateDate)
-                        .ToList<Message>(); 
+                        .ToList<Message>();
 
                     try
                     {
@@ -233,6 +233,143 @@ namespace Mobile_PaidThx.Controllers
                 return View(model);
             }
         }
+
+        [HttpPost]
+        public ActionResult UpdatePayStreamRequests(PaymentAttributes model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Updating PayStream"));
+
+            using (var ctx = new Context())
+            {
+
+                var userId = (Guid)Session["UserId"];
+
+                if (Session["UserId"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (Session["User"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var messageServices = new MessageServices();
+                var messages = messageServices.GetMessages(user.UserId);
+
+                var payments = messages.Select(m => new PaystreamModels.PaymentModel()
+                {
+                    Amount = m.Amount,
+                    RecipientUri = m.RecipientUri,
+                    SenderUri = m.SenderUri,
+                    TransactionDate = m.CreateDate,
+                    TransactionStatus = Models.TransactionStatus.Pending,
+                    TransactionType = Models.TransactionType.Deposit,
+                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? Models.MessageType.Payment : Models.MessageType.PaymentRequest),
+                    Direction = m.Direction,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
+                }).ToList();
+
+                payments = payments.Where(p => p.MessageType == Models.MessageType.PaymentRequest).ToList();
+
+                if (!String.IsNullOrEmpty(model.OtherUri))
+                {
+                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(model.OtherUri.ToUpper()) || p.SenderUri.ToUpper().Contains(model.OtherUri.ToUpper())).ToList();
+                }
+
+                if (model.Debits && !model.Credits) // sent
+                {
+                    payments = payments.Where(p => p.Direction == "Out").ToList();
+                }
+
+                if (model.Credits && !model.Debits) // received
+                {
+                    payments = payments.Where(p => p.Direction == "In").ToList();
+                }
+
+                if (model.Complete && !model.Pending) // filter only completed
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Complete).ToList();
+                }
+
+                if (!model.Complete && model.Pending)
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Pending).ToList();
+                }
+
+                logger.Log(LogLevel.Info, "Serializing Transaction Receipts");
+                return Json(payments);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePayStreamPayments(PaymentAttributes model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Updating PayStream"));
+
+            using (var ctx = new Context())
+            {
+
+                var userId = (Guid)Session["UserId"];
+
+                if (Session["UserId"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (Session["User"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var messageServices = new MessageServices();
+                var messages = messageServices.GetMessages(user.UserId);
+
+                var payments = messages.Select(m => new PaystreamModels.PaymentModel()
+                {
+                    Amount = m.Amount,
+                    RecipientUri = m.RecipientUri,
+                    SenderUri = m.SenderUri,
+                    TransactionDate = m.CreateDate,
+                    TransactionStatus = Models.TransactionStatus.Pending,
+                    TransactionType = Models.TransactionType.Deposit,
+                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? Models.MessageType.Payment : Models.MessageType.PaymentRequest),
+                    Direction = m.Direction,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
+                }).ToList();
+
+                payments = payments.Where(p => p.MessageType == Models.MessageType.Payment).ToList();
+
+                if (!String.IsNullOrEmpty(model.OtherUri))
+                {
+                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(model.OtherUri.ToUpper()) || p.SenderUri.ToUpper().Contains(model.OtherUri.ToUpper())).ToList();
+                }
+
+                if (model.Debits && !model.Credits) // sent
+                {
+                    payments = payments.Where(p => p.Direction == "Out").ToList();
+                }
+
+                if (model.Credits && !model.Debits) // received
+                {
+                    payments = payments.Where(p => p.Direction == "In").ToList();
+                }
+
+                if (model.Complete && !model.Pending) // filter only completed
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Complete).ToList();
+                }
+
+                if (!model.Complete && model.Pending)
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Pending).ToList();
+                }
+
+                logger.Log(LogLevel.Info, "Serializing Transaction Receipts");
+                return Json(payments);
+            }
+
+        }
+
         [HttpPost]
         public ActionResult UpdatePayStream(PaymentAttributes model)
         {
@@ -251,22 +388,50 @@ namespace Mobile_PaidThx.Controllers
                 if (Session["User"] == null)
                     return RedirectToAction("SignIn", "Account", null);
 
-                List<PaymentModel> transactionReceipts = null;
+                var messageServices = new MessageServices();
+                var messages = messageServices.GetMessages(user.UserId);
 
-                try
+                var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
-                   // transactionReceipts = GetTransactionReceipts(user, model);
-                }
-                catch (Exception ex)
+                    Amount = m.Amount,
+                    RecipientUri = m.RecipientUri,
+                    SenderUri = m.SenderUri,
+                    TransactionDate = m.CreateDate,
+                    TransactionStatus = Models.TransactionStatus.Pending,
+                    TransactionType = Models.TransactionType.Deposit,
+                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? Models.MessageType.Payment : Models.MessageType.PaymentRequest),
+                    Direction = m.Direction,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
+                }).ToList();
+
+                if (!String.IsNullOrEmpty(model.OtherUri))
                 {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled exception getting transaction receipts for user {0}. {1}", user.UserId, ex.Message));
-                    throw ex;
+                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(model.OtherUri.ToUpper()) || p.SenderUri.ToUpper().Contains(model.OtherUri.ToUpper())).ToList();
                 }
 
+                if (model.Debits && !model.Credits) // sent
+                {
+                    payments = payments.Where(p => p.Direction == "Out").ToList();
+                }
+
+                if (model.Credits && !model.Debits) // received
+                {
+                    payments = payments.Where(p => p.Direction == "In").ToList();
+                }
+
+                if (model.Complete && !model.Pending) // filter only completed
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Complete).ToList();
+                }
+
+                if (!model.Complete && model.Pending)
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Pending).ToList();
+                }
 
                 logger.Log(LogLevel.Info, "Serializing Transaction Receipts");
-
-                return Json(transactionReceipts);
+                return Json(payments);
             }
 
         }
@@ -276,7 +441,7 @@ namespace Mobile_PaidThx.Controllers
 
             using (var ctx = new Context())
             {
-                
+
                 var userId = (Guid)Session["UserId"];
 
                 if (Session["UserId"] == null)
@@ -374,7 +539,7 @@ namespace Mobile_PaidThx.Controllers
                 }
 
                 return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-                        
+
             }
         }
         public ActionResult RequestMoney()
@@ -464,7 +629,7 @@ namespace Mobile_PaidThx.Controllers
                 }
 
                 return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-                        
+
             }
         }
         public ActionResult CompleteProfile()

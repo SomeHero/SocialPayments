@@ -115,6 +115,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string lastName { get; set; }
             public string emailAddress { get; set; }
             public string deviceToken { get; set; }
+            public string oAuthToken { get; set; }
+            //public DateTime tokenExpiration { get; set; }
         }
         public class FacebookSignInResponse
         {
