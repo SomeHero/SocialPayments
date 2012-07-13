@@ -9,11 +9,12 @@
 <div id="main-body" class="panel">
     <h2>
         Request Money</h2>
-     <form id="frmRequestMoney" action="@Url.Content("~/Profile/RequestMoney")" method="post">
+    <form id="frmRequestMoney" action="@Url.Content("~/Profile/RequestMoney")" method="post">
     <p>
         <label for="txtSendTo">
             Request From:</label>
-        <input type="text" id="txtSendTo" name="RecipientUri" placeholder="Name, email or phone #" required />
+        <input type="text" id="txtSendTo" name="RecipientUri" placeholder="Name, email or phone #"
+            required />
     </p>
     <p>
         <label for="txtAmount">
@@ -23,10 +24,13 @@
     <p>
         <label for="txtComments" style="margin-bottom: 15px">
             Notes/Messages:</label>
-        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc" required></textarea>
+        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+            required></textarea>
     </p>
     <p>
-        <button type="submit" id="btnRequestMoney" class="imgbtn"><img src="@Url.Content("~/Content/images/request-money-button-icon.png")" alt="" /><span>Request Money Now</span></button>
+        <button type="submit" id="btnRequestMoney" class="imgbtn">
+            <img src="@Url.Content("~/Content/images/request-money-button-icon.png")" alt="" /><span>Request
+                Money Now</span></button>
     </p>
     </form>
 </div>
