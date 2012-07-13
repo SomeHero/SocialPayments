@@ -168,6 +168,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string newPassword { get; set; }
         }
 
+        public class ResetPasswordRequest
+        {
+            public string emailAddress { get; set; }
+        }
+
         public class PushNotificationRequest
         {
             public string registrationId { get; set; }

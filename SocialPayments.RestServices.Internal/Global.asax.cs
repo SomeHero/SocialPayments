@@ -18,7 +18,7 @@ namespace SocialPayments.RestServices.Internal
     public class WebApiApplication : System.Web.HttpApplication
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -70,7 +70,7 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/{id}/validate_security_question",
                 defaults: new { controller = "SecurityQuestions", action = "ValidateSecurityQuestion" }
             );
-         
+
             routes.MapHttpRoute(
                 name: "SetupSecurityPin",
                 routeTemplate: "api/users/{id}/setup_securitypin",
@@ -103,7 +103,7 @@ defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
             routes.MapHttpRoute(
     name: "UserPayPointsWithType",
     routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
-    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type= RouteParameter.Optional }
+    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type = RouteParameter.Optional }
 );
 
             routes.MapHttpRoute(
@@ -126,6 +126,12 @@ defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
                 name: "ForgotPassword",
                 routeTemplate: "api/users/{id}/forgot_password",
                 defaults: new { controller = "Users", action = "ForgotPassword" }
+            );
+
+            routes.MapHttpRoute(
+                name: "ResetPasswordEmail",
+                routeTemplate: "api/users/reset_password",
+                defaults: new { controller = "Users", action = "ResetPassword" }
             );
 
             routes.MapHttpRoute(
@@ -205,7 +211,7 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
 
                 throw ex;
             }
-            
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

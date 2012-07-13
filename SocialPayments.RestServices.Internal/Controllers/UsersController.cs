@@ -17,13 +17,14 @@ using SocialPayments.DomainServices.Interfaces;
 using System.Threading.Tasks;
 using Amazon.S3.Model;
 using System.IO;
+using System.Text;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UsersController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+        private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
         public IEnumerable<string> Get()
@@ -518,6 +519,56 @@ namespace SocialPayments.RestServices.Internal.Controllers
             userService.UpdateUser(user);
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        //POST api/users/reset_password
+        public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
+        {
+            Context _ctx = new Context();
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            DomainServices.ValidationService validateService = new DomainServices.ValidationService();
+
+            var user = userService.FindUserByEmailAddress(request.emailAddress);
+
+            if (user == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+            else if (!String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                string name = formattingService.FormatUserName(user);
+                Guid passwordResetGuid = Guid.NewGuid();
+                DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+                PasswordResetAttempt passwordResetDb = new PasswordResetAttempt()
+                {
+                    Clicked = false,
+                    User = user,
+                    ExpiresDate = expiresDate,
+                    Id = passwordResetGuid
+                };
+
+                string link = String.Format("http://www.paidthx.com/mobile/reset_password/{0}", passwordResetGuid);
+
+                StringBuilder body = new StringBuilder();
+                body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+                body.Append("You asked us to reset your PaidThx password. ");
+                body.Append("To complete the process, please click on the link below ");
+                body.Append("or paste it into your browser:").AppendLine().AppendLine();
+                body.AppendLine(link).AppendLine();
+                body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+                body.AppendLine("Thank you,").AppendLine();
+                body.Append("The PaidThx Team");
+                
+                emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
         }
 
         //POST /api/users/{userId}/registerpushnotifications
