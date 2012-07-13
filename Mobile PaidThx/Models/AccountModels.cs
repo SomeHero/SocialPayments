@@ -48,4 +48,8 @@ namespace Mobile_PaidThx.Models
 
         public bool PasswordSent { get; set; }
     }
+    public class PasswordResetModel
+    {
+        public string SecurityQuestion { get; set; }
+    }
 }
