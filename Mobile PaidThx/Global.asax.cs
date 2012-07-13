@@ -24,6 +24,11 @@ namespace Mobile_PaidThx
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "ResetPassword", // Route name
+                "reset_password/{id}", // URL with parameters
+                new { controller = "Account", action = "PasswordReset" } // Parameter defaults
+            );
+            routes.MapRoute(
                 "RedirectShortner", // Route name
                 "i/{id}", // URL with parameters
                 new { controller = "Home", action = "ClaimPayment" } // Parameter defaults
