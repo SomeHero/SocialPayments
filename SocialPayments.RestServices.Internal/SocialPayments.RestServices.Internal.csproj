@@ -207,6 +207,7 @@
     <Compile Include="Controllers\ApplicationConfigurationsController.cs" />
     <Compile Include="Controllers\BetaSignupsController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
+    <Compile Include="Controllers\MerchantsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
     <Compile Include="Controllers\UserPayPointsController.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Models\ApplicationModels.cs" />
     <Compile Include="Models\BetaSignUpModels.cs" />
     <Compile Include="Models\FileUploadResponse.cs" />
+    <Compile Include="Models\MerchantModels.cs" />
     <Compile Include="Models\SecurityQuestionModel.cs" />
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeyModels.cs" />
@@ -372,7 +374,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>6606</DevelopmentServerPort>
+          <DevelopmentServerPort>4685</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
