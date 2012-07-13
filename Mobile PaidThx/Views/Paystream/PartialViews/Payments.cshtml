@@ -1,7 +1,5 @@
-﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+﻿﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
 <div id="main-body" class="panel">
-    <h2>
-        Your Payments</h2>
     <input type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
     <div class="paystream-filters">
         <fieldset data-role="controlgroup" data-type="horizontal" class="cbListPaystream first">
@@ -154,7 +152,7 @@
         if (size < 1)
         {
         <p id="noResults" style="font-size: medium; display: block">
-            No elements in paystream.</p>   
+            No elements in paystream.</p>
         }
     }
     <p id="resultsFilteredPayments" style="display: none">
