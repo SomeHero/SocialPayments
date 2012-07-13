@@ -91,7 +91,7 @@ namespace Mobile_PaidThx.Controllers
                 var userService = new UserService(ctx);
 
                 bool isNewUser = false;
-                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", out isNewUser);
+                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30), out isNewUser);
 
                 //validate fbAccount.Id is associated with active user
                 if (user == null)
@@ -169,6 +169,9 @@ namespace Mobile_PaidThx.Controllers
                     }
                     sr.Close();
                 }
+
+                fbAccount.accessToken = token;
+                fbAccount.tokenExpires = tokenExp;
 
                 //Use Graph API to get FB UserID and email
                 string requestStuff = "https://graph.facebook.com/me?access_token=" + token;
@@ -382,6 +385,14 @@ namespace Mobile_PaidThx.Controllers
             Session.Abandon();
 
             return RedirectToAction("SignIn", "Account");
+        }
+
+        public ActionResult PasswordReset(string id)
+        {
+            return View(new PasswordResetModel()
+            {
+                SecurityQuestion = "Last 4 Digits of your name?"
+            });
         }
 
         private static HttpWebRequest GetWebRequest(string formattedUri)
