@@ -193,6 +193,7 @@
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantType.cs" />
     <Compile Include="NotificationType.cs" />
+    <Compile Include="PasswordResetAttempt.cs" />
     <Compile Include="PayPointType.cs" />
     <Compile Include="ProfileItem.cs" />
     <Compile Include="ProfileSection.cs" />

@@ -1002,8 +1002,8 @@ namespace SocialPayments.DataLayer
                 {
                     ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                     UserId = Guid.NewGuid(),
-                    EmailAddress = "rrr@ric.org",
-                    UserName = "rrr@ric.org",
+                    EmailAddress = "rrr@paidthx.me",
+                    UserName = "rrr@paidthx.me",
                     Password = securityService.Encrypt("james123"),
                     SecurityPin = securityService.Encrypt("2589"),
                     SetupPassword = true,
@@ -1049,8 +1049,8 @@ namespace SocialPayments.DataLayer
                 {
                     ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                     UserId = Guid.NewGuid(),
-                    EmailAddress = "ricsports@ric.org",
-                    UserName = "ricsports@ric.org",
+                    EmailAddress = "ricsports@paidthx.me",
+                    UserName = "ricsports@paidthx.me",
                     Password = securityService.Encrypt("james123"),
                     SecurityPin = securityService.Encrypt("2589"),
                     SetupPassword = true,
@@ -1093,8 +1093,8 @@ namespace SocialPayments.DataLayer
                 {
                     ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
                     UserId = Guid.NewGuid(),
-                    EmailAddress = "beardleague@ric.org",
-                    UserName = "beardleague@ric.org",
+                    EmailAddress = "beardleague@paidthx.me",
+                    UserName = "beardleague@paidthx.me",
                     Password = securityService.Encrypt("james123"),
                     SecurityPin = securityService.Encrypt("2589"),
                     SetupPassword = true,
@@ -1128,7 +1128,66 @@ namespace SocialPayments.DataLayer
                 },
                 MerchantType = MerchantType.Regular
             });
+            var merchant4 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "American Cancer Society",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "amc@paidthx.me",
+                    UserName = "amc@paidthx.me",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/acs_logo.png",
+                },
+                MerchantType = MerchantType.NonProfit,
 
+            });
+
+            context.SaveChanges();
+
+            merchant1.User.PreferredReceiveAccount = merchant1.User.PaymentAccounts[0];
+            merchant1.User.PreferredSendAccount = merchant1.User.PaymentAccounts[0];
+
+            merchant2.User.PreferredReceiveAccount = merchant2.User.PaymentAccounts[0];
+            merchant2.User.PreferredSendAccount = merchant2.User.PaymentAccounts[0];
+
+            merchant3.User.PreferredReceiveAccount = merchant3.User.PaymentAccounts[0];
+            merchant3.User.PreferredSendAccount = merchant3.User.PaymentAccounts[0];
+
+            merchant4.User.PreferredReceiveAccount = merchant4.User.PaymentAccounts[0];
+            merchant4.User.PreferredSendAccount = merchant4.User.PaymentAccounts[0];
 
             context.SaveChanges();
             

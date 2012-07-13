@@ -172,7 +172,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 try
                 {
 
-                    message = _messageServices.AddMessage(request.apiKey, request.senderId, request.recipientUri, request.senderAccountId,
+                    message = _messageServices.AddMessage(request.apiKey, request.senderId, request.recipientId, request.recipientUri, request.senderAccountId,
                         request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
                        request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
 
