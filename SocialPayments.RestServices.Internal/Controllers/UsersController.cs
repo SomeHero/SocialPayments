@@ -534,11 +534,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (user == null)
             {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = "Invalid User";
+
+                return message;
             }
-            else if (!String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+            else if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = "Invalid Email Address";
+
+                return message;
             }
             else
             {
@@ -554,7 +561,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Id = passwordResetGuid
                 };
 
-                string link = String.Format("http://www.paidthx.com/mobile/reset_password/{0}", passwordResetGuid);
+                string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
 
                 StringBuilder body = new StringBuilder();
                 body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
@@ -567,6 +574,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 body.Append("The PaidThx Team");
                 
                 emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
+               
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }

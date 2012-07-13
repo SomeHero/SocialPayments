@@ -16,12 +16,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             using (var ctx = new Context())
             {
-                return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(ctx.Merchants.Select(m =>new MerchantModels.MerchantResponseModel()
+                var merchants = ctx.Merchants
+                    .Select(m => m)
+                    .ToList();
+                
+                var results = merchants.Select(m =>new MerchantModels.MerchantResponseModel()
                  {
-                     Id = m.Id,
+                     Id = m.UserId,
                      Name = m.Name,
-                     MerchantImageUrl = "http://image.paidthx.com/assets/contact-icon.gif"
-                 }).ToList(), HttpStatusCode.OK);
+                     MerchantImageUrl = (!String.IsNullOrEmpty(m.User.ImageUrl) ? m.User.ImageUrl : "http://image.paidthx.com/assets/contact-icon.gif"),
+                     PreferredReceiveAccountId =(m.User.PreferredReceiveAccount != null ? m.User.PreferredReceiveAccount.Id.ToString() : ""),
+                     PreferredSendAccountId = (m.User.PreferredReceiveAccount != null ? m.User.PreferredSendAccount.Id.ToString() : ""),
+                 }).ToList();
+                 
+                 return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(results, HttpStatusCode.OK);
             }
         }
 

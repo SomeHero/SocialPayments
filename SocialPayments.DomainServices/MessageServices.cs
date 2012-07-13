@@ -67,20 +67,16 @@ namespace SocialPayments.DomainServices
         public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin)
         {
-            return AddMessage(apiKey, senderId, recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
+            return AddMessage(apiKey, senderId, "", recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
                 "", "", "");
         }
-        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
+        public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
             string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
             _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderId, recipientUri));
 
             User sender = null;
-
-            URIType recipientUriType = GetURIType(recipientUri);
-
-            if (recipientUriType == URIType.MobileNumber)
-                recipientUri = _formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
+            User recipient = null;
 
             if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST"))
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
@@ -124,14 +120,32 @@ namespace SocialPayments.DomainServices
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
 
-            if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
+            if(!String.IsNullOrEmpty(recipientId))
             {
-                var message = String.Format("Sender and Recipient are the same");
-                _logger.Log(LogLevel.Debug, message);
+                recipient = _userServices.GetUserById(recipientId);
 
-                throw new InvalidOperationException(message);
+                if (recipient == null)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Recipient Specified {0} not found", recipientId));
+
+                    throw new Exception(String.Format("Recipient Specified {0} not found", recipientId));
+                }
+            } 
+            else 
+            {
+                URIType recipientUriType = GetURIType(recipientUri);
+
+                if (recipientUriType == URIType.MobileNumber)
+                    recipientUri = _formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
+
+                if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
+                {
+                    var message = String.Format("Sender and Recipient are the same");
+                    _logger.Log(LogLevel.Debug, message);
+
+                    throw new InvalidOperationException(message);
+                }
             }
-
             PaymentAccount senderAccount = null;
 
             try
@@ -178,8 +192,6 @@ namespace SocialPayments.DomainServices
                 throw new InvalidOperationException(message);
             }
 
-            Domain.User recipient = _userServices.GetUser(recipientUri);
-
             //TODO: confirm recipient is valid???
 
             //TODO: confirm amount is within payment limits
@@ -211,6 +223,7 @@ namespace SocialPayments.DomainServices
                     WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
                     MessageType = type,
                     MessageTypeValue = (int)type,
+                    Recipient = recipient,
                     RecipientUri = recipientUri,
                     SenderUri = senderUri,
                     Sender = sender,
