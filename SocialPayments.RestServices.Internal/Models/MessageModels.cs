@@ -30,6 +30,7 @@ namespace SocialPayments.RestServices.Internal.Models
         public class SubmitMessageRequest {
             public string apiKey { get; set; }
             public string senderId { get; set; }
+            public string recipientId { get; set; }
            // public string senderUri { get; set; }
             public string senderAccountId { get; set; }
             public string recipientUri { get; set; }
