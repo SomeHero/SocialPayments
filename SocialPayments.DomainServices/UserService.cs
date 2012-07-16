@@ -572,7 +572,18 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
+        //public double GetUserInstantLimit(User User)
+        //{
+        //    var _verifiedPaymentAmounts = _ctx.Messages
+        //        .Where(m => m.SenderId.Equals(User.UserId) && m.MessageType.Equals((int)MessageType.Payment) && m.CreateDate > System.DateTime.Now.AddHours(-24)  && m.Payment.PaymentVerificationLevel.Equals((int)PaymentVerificationLevel.UnVerified));
 
+        //    var amountSent = _verifiedPaymentAmounts.Sum(m => m.Amount);
+
+        //    if(amountSent > 0)
+        //        return 100 - amountSent;
+        //    else
+        //        return 0;
+        //}
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
