@@ -27,7 +27,16 @@ namespace SocialPayments.RestServices.Internal
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapHttpRoute(
+               name: "Donate",
+               routeTemplate: "api/paystreammessages/donate",
+               defaults: new { controller = "PaystreamMessages", action = "Donate" }
+           );
+            routes.MapHttpRoute(
+                name: "AcceptPledge",
+                routeTemplate: "api/paystreammessages/accept_pledge",
+                defaults: new { controller = "PaystreamMessages", action = "AcceptPledge" }
+            );
             routes.MapHttpRoute(
                 name: "CancelPayment",
                 routeTemplate: "api/paystreammessages/{id}/cancel_payment",
