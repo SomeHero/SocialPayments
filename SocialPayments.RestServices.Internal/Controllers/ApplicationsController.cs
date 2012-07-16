@@ -91,7 +91,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Label = i.Label,
                         SortOrder = i.SortOrder,
                         UserAttributeId =  i.UserAttribute.Id
-                    }).ToList()
+                    })
+                    .OrderBy(i => i.SortOrder)
+                    .ToList()
                 }).ToList()
             }, HttpStatusCode.OK);
         }
