@@ -409,11 +409,20 @@ namespace Mobile_PaidThx.Controllers
                 if (passwordResetDb == null)
                 {
                     ModelState.AddModelError("", "Invalid Attempt");
+                    return View(model);
                 }
 
                 if (passwordResetDb.ExpiresDate < System.DateTime.Now)
                 {
                     ModelState.AddModelError("", "Password reset link has expired.");
+                    passwordResetDb.Clicked = true;
+                    return View(model);
+                }
+
+                if (passwordResetDb.Clicked)
+                {
+                    ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
+                    return View(model);
                 }
 
 
@@ -426,7 +435,7 @@ namespace Mobile_PaidThx.Controllers
 
                     return View(model);
                 }
-
+                passwordResetDb.Clicked = true;
                 model.HasSecurityQuestion = true;
                 model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
 
@@ -446,7 +455,7 @@ namespace Mobile_PaidThx.Controllers
 
                     try
                     {
-                        string id = Session["resetPasswordId"].ToString();
+                        string id = Session["resetPasswordQuestionId"].ToString();
                         Guid idGuid;
 
                         Guid.TryParse(id, out idGuid);
@@ -465,8 +474,16 @@ namespace Mobile_PaidThx.Controllers
                             ModelState.AddModelError("", "Invalid Attempt");
                         }
 
-                        userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
-                        return View("SignIn");
+                        if (model.SecurityQuestionAnswer == null)
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
+                            return View("SignIn");
+                        }
+                        else
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
+                            return View("SignIn");
+                        }
                     }
                     catch (Exception ex)
                     {
