@@ -545,10 +545,7 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
             }
 
-            user.Password = securityService.Encrypt(newPassword);
-            UpdateUser(user);
-
-            return user;
+            return ResetPassword(userId, newPassword);
         }
 
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
