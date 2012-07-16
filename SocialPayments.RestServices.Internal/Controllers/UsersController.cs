@@ -501,58 +501,62 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST api/users/reset_password
         public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
         {
-            Context _ctx = new Context();
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.ValidationService validateService = new DomainServices.ValidationService();
-
-            var user = userService.FindUserByEmailAddress(request.emailAddress);
-
-            if (user == null)
+            using (var _ctx = new Context())
             {
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Invalid User";
+                DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+                DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+                DomainServices.ValidationService validateService = new DomainServices.ValidationService();
 
-                return message;
-            }
-            else if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
-            {
+                var user = userService.FindUserByEmailAddress(request.emailAddress);
 
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Invalid Email Address";
-
-                return message;
-            }
-            else
-            {
-                string name = formattingService.FormatUserName(user);
-                Guid passwordResetGuid = Guid.NewGuid();
-                DateTime expiresDate = System.DateTime.Now.AddHours(3);
-
-                PasswordResetAttempt passwordResetDb = new PasswordResetAttempt()
+                if (user == null)
                 {
-                    Clicked = false,
-                    User = user,
-                    ExpiresDate = expiresDate,
-                    Id = passwordResetGuid
-                };
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid User";
 
-                string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+                    return message;
+                }
+                else if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+                {
 
-                StringBuilder body = new StringBuilder();
-                body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
-                body.Append("You asked us to reset your PaidThx password. ");
-                body.Append("To complete the process, please click on the link below ");
-                body.Append("or paste it into your browser:").AppendLine().AppendLine();
-                body.AppendLine(link).AppendLine();
-                body.AppendLine("This link will be active for 3 hours only.").AppendLine();
-                body.AppendLine("Thank you,").AppendLine();
-                body.Append("The PaidThx Team");
-                
-                emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
-               
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid Email Address";
+
+                    return message;
+                }
+                else
+                {
+                    string name = formattingService.FormatUserName(user);
+                    Guid passwordResetGuid = Guid.NewGuid();
+                    DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+                    PasswordResetAttempt passwordResetDb = _ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
+                    {
+                        Clicked = false,
+                        User = user,
+                        ExpiresDate = expiresDate,
+                        Id = passwordResetGuid
+                    });
+
+                    _ctx.SaveChanges();
+
+                    string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+
+                    StringBuilder body = new StringBuilder();
+                    body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+                    body.Append("You asked us to reset your PaidThx password. ");
+                    body.Append("To complete the process, please click on the link below ");
+                    body.Append("or paste it into your browser:").AppendLine().AppendLine();
+                    body.AppendLine(link).AppendLine();
+                    body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+                    body.AppendLine("Thank you,").AppendLine();
+                    body.Append("The PaidThx Team");
+
+                    emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
+
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
             }
         }
 
