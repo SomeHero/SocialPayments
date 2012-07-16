@@ -89,7 +89,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     ProfileItems = a.ProfileItems.Select(i  => new ApplicationModels.ProfileItemResponse() {
                         Id = i.Id,
                         Label = i.Label,
-                        SortOrder = i.SortOrder
+                        SortOrder = i.SortOrder,
+                        UserAttributeId =  i.UserAttribute.Id
                     }).ToList()
                 }).ToList()
             }, HttpStatusCode.OK);

@@ -125,6 +125,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     zip = user.Zip,
                     userAttributes = user.UserAttributes.Select(a => new UserModels.UserAttribute()
                     {
+                        AttributeId = a.UserAttributeId,
                         AttributeName = a.UserAttribute.AttributeName,
                         AttributeValue = a.AttributeValue
                     }).ToList(),

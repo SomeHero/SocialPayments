@@ -105,6 +105,16 @@ namespace SocialPayments.Services.MessageProcessors
             //Batch Transacations
             _logger.Log(LogLevel.Info, String.Format("Batching Transactions for message {0}", message.Id));
 
+            //Calculate the # of hold days
+            var holdDays = 0;
+            var scheduledProcessingDate = System.DateTime.Now.Date;
+
+            if (sender.Limit > message.Payment.Amount)
+            {
+                holdDays = 3;
+                scheduledProcessingDate = scheduledProcessingDate.AddDays(holdDays);
+            }
+
             try
             {
                 var transactionsList = new Collection<Transaction>();
@@ -120,9 +130,11 @@ namespace SocialPayments.Services.MessageProcessors
                     Id = Guid.NewGuid(),
                     PaymentStatus = PaymentStatus.Pending,
                     SenderAccount = message.SenderAccount,
+                    HoldDays = holdDays,
+                    ScheduledProcessingDate = scheduledProcessingDate
                 };
 
-                _logger.Log(LogLevel.Info, String.Format("Batching widthrawal from {0}", sender.UserId));
+                _logger.Log(LogLevel.Info, String.Format("Batching withrawal from {0}", sender.UserId));
 
                 transactionsList.Add(_ctx.Transactions.Add(new Transaction()
                 {
@@ -141,7 +153,7 @@ namespace SocialPayments.Services.MessageProcessors
                     User = sender
                 }));
                 
-                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0)
+                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0  && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Batching deposit to {0}", recipient.UserId));
 
@@ -159,7 +171,8 @@ namespace SocialPayments.Services.MessageProcessors
                         Status = TransactionStatus.Pending,
                         //TransactionBatch = transactionBatch,
                         Type = TransactionType.Deposit,
-                        User = sender
+                        User = sender,
+                        
                     }));
                 }
                 

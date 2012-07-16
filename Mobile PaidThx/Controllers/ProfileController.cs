@@ -540,7 +540,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     try
                     {
-                        messageService.AddMessage(_apiKey, user.UserId.ToString(), model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"Payment");
+                        messageService.AddMessage(_apiKey, user.UserId.ToString(), "", model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"Payment");
                         //ctx.Payments.Add(new Payment()
                         //{
                         //    Id = Guid.NewGuid(),
@@ -632,7 +632,7 @@ namespace Mobile_PaidThx.Controllers
                     try
                     {
                         //Request Money
-                        messageService.AddMessage(_apiKey, user.UserId.ToString(), model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"PaymentRequest");
+                        messageService.AddMessage(_apiKey, user.UserId.ToString(), "", model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"PaymentRequest");
 
                         //ctx.PaymentRequests.Add(new PaymentRequest()
                         //{
