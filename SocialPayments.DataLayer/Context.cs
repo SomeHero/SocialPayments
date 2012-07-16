@@ -831,7 +831,8 @@ namespace SocialPayments.DataLayer
                     SenderAccount = sentMessage.Sender.PaymentAccounts[0],
                     Transactions = new Collection<Transaction>(),
                     HoldDays = 0,
-                    ScheduledProcessingDate = System.DateTime.Now
+                    ScheduledProcessingDate = System.DateTime.Now,
+                    //PaymentVerificationLevel = PaymentVerificationLevel.Verified
                 };
 
             sentPayment.Transactions.Add(new Transaction()
@@ -934,7 +935,8 @@ namespace SocialPayments.DataLayer
                 SenderAccount = receivedMessage.Sender.PaymentAccounts[0],
                 Transactions = new Collection<Transaction>(),
                 HoldDays = 0,
-                ScheduledProcessingDate = System.DateTime.Now
+                ScheduledProcessingDate = System.DateTime.Now,
+                //PaymentVerificationLevel = PaymentVerificationLevel.Verified
             };
 
             receivedPayment.Transactions.Add(new Transaction()
@@ -1036,7 +1038,8 @@ namespace SocialPayments.DataLayer
                             }
                         },
                         HoldDays = 0,
-                        ScheduledProcessingDate = System.DateTime.Now
+                        ScheduledProcessingDate = System.DateTime.Now,
+                       // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
 
@@ -1089,7 +1092,8 @@ namespace SocialPayments.DataLayer
                             }
                         },
                         HoldDays = 0,
-                        ScheduledProcessingDate = System.DateTime.Now
+                        ScheduledProcessingDate = System.DateTime.Now,
+                       // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
 

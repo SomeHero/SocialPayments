@@ -33,6 +33,13 @@ namespace SocialPayments.Domain
             get { return (PaymentStatus)PaymentStatusValue; }
             set { PaymentStatusValue = (int)value; }
         }
+        //public int PaymentVerificationLevelValue { get; set; }
+        //public PaymentVerificationLevel PaymentVerificationLevel
+        //{
+        //    get { return (PaymentVerificationLevel)PaymentVerificationLevelValue; }
+        //    set { PaymentVerificationLevelValue = (int)value; }
+        //}
+
         public DateTime CreateDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
 
