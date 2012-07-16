@@ -109,7 +109,7 @@ namespace SocialPayments.Services.MessageProcessors
             var holdDays = 0;
             var scheduledProcessingDate = System.DateTime.Now.Date;
 
-            if (sender.Limit > message.Payment.Amount)
+            if (sender.Limit > message.Amount)
             {
                 holdDays = 3;
                 scheduledProcessingDate = scheduledProcessingDate.AddDays(holdDays);
