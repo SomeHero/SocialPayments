@@ -163,12 +163,6 @@ namespace SocialPayments.RestServices.Internal.Models
             public string newPassword { get; set; }
         }
 
-        public class ForgotPasswordRequest
-        {
-            public string securityQuestionAnswer { get; set; }
-            public string newPassword { get; set; }
-        }
-
         public class ResetPasswordRequest
         {
             public string emailAddress { get; set; }
