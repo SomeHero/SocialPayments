@@ -130,6 +130,8 @@ namespace SocialPayments.Domain
 
         public virtual Collection<UserConfiguration> UserConfigurations { get; set; }
         public virtual Collection<UserSocialNetwork> UserSocialNetworks { get; set; }
+
+        public virtual Merchant Merchant { get; set; }
     }
 
 }

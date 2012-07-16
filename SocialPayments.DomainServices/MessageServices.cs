@@ -64,16 +64,33 @@ namespace SocialPayments.DomainServices
             _userServices = new UserService(_context);
             _amazonNotificationService = amazonNotificationService;
         }
-        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
-            string securityPin)
+        public Message Donate(string apiKey, string senderId, string organizationId, string senderAccountId, double amount, string comments, string messageType)
         {
-            return AddMessage(apiKey, senderId, "", recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
+            var organization = _userServices.GetUserById(organizationId);
+
+            if(organization == null)
+                throw new Exception(String.Format("Unable to find organization {0}", organizationId));
+
+            return AddMessage(apiKey, senderId, organization.UserId.ToString(), organization.Merchant.Name, senderAccountId, amount, comments, "Payment");
+        }
+        public Message AcceptPledge(string apiKey, User sender, string onBehalfOfId, string recipientUri, double amount, string comments, string messageType)
+        {
+            var onBehalfOf = _userServices.GetUserById(onBehalfOfId);
+
+            if (onBehalfOf.PreferredReceiveAccount == null)
+                throw new Exception("Invalid Preferred Receive Account");
+
+            return AddMessage(apiKey, onBehalfOfId, "", recipientUri, onBehalfOf.PreferredReceiveAccount.Id.ToString(), amount, comments, "PaymentRequest");
+        }
+        public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType)
+        {
+            return AddMessage(apiKey, senderId, recipientId, recipientUri, senderAccountId, amount, comments, messageType, 0, 0,
                 "", "", "");
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
-            string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderId, recipientUri));
+            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1} with {2}", senderId, recipientUri, senderAccountId));
 
             User sender = null;
             User recipient = null;
@@ -120,19 +137,19 @@ namespace SocialPayments.DomainServices
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
 
-            if(!String.IsNullOrEmpty(recipientId))
+            if (!String.IsNullOrEmpty(recipientId))
             {
                 recipient = _userServices.GetUserById(recipientId);
 
                 if (recipient == null)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Recipient Specified {0} not found", recipientId));
+                    var message = String.Format("Recipeint {0} Not Found", recipientId);
+                    _logger.Log(LogLevel.Info, message);
 
-                    throw new Exception(String.Format("Recipient Specified {0} not found", recipientId));
+                    throw new Exception(message);
                 }
-            } 
-            else 
-            {
+            }
+            else {
                 URIType recipientUriType = GetURIType(recipientUri);
 
                 if (recipientUriType == URIType.MobileNumber)
@@ -146,6 +163,7 @@ namespace SocialPayments.DomainServices
                     throw new InvalidOperationException(message);
                 }
             }
+
             PaymentAccount senderAccount = null;
 
             try

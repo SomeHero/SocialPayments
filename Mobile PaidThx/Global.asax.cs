@@ -26,7 +26,7 @@ namespace Mobile_PaidThx
             routes.MapRoute(
                 "ResetPassword", // Route name
                 "reset_password/{id}", // URL with parameters
-                new { controller = "Account", action = "PasswordReset" } // Parameter defaults
+                new { controller = "Account", action = "ResetPassword" } // Parameter defaults
             );
             routes.MapRoute(
                 "RedirectShortner", // Route name

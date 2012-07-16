@@ -10,12 +10,12 @@ namespace SocialPayments.Domain
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        [Key(), ForeignKey("User")]
         public Guid UserId { get; set; }
         public MerchantType MerchantType { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
 
-        [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }
 }

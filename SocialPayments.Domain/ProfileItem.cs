@@ -18,5 +18,8 @@ namespace SocialPayments.Domain
 
         //ProfileItemType
         //UserAttribute
+        [ForeignKey("UserAttributeId")]
+        public UserAttribute UserAttribute { get; set; }
+        public Guid UserAttributeId { get; set; }
     }
 }
