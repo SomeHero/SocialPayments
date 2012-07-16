@@ -85,6 +85,7 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class UserAttribute
         {
+            public Guid AttributeId { get; set; }
             public string AttributeName { get; set; }
             public string AttributeValue { get; set; }
         }

@@ -391,12 +391,22 @@ namespace Mobile_PaidThx.Controllers
         {
             using(var ctx = new Context()) {
 
+                Guid idGuid;
+
+                Guid.TryParse(id, out idGuid);
+
+                if (idGuid == null)
+                {
+                    ModelState.AddModelError("", "Invalid Id");
+                }
+
+
                 SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
-                    .FirstOrDefault(p => p.Id == Guid.Parse(id));
+                    .FirstOrDefault(p => p.Id == idGuid);
 
                 ResetPasswordModel model = new ResetPasswordModel();
                 UserService userService = new UserService(ctx);
-                
+
                 if (passwordResetDb == null)
                 {
                     ModelState.AddModelError("", "Invalid Attempt");
@@ -407,13 +417,16 @@ namespace Mobile_PaidThx.Controllers
                     ModelState.AddModelError("", "Password reset link has expired.");
                 }
 
+
+                model.UserId = passwordResetDb.UserId.ToString();
                 if (passwordResetDb.User.SecurityQuestion == null)
                 {
                     model.SecurityQuestion = "";
                     model.HasSecurityQuestion = false;
+
+                    return View(model);
                 }
 
-                model.UserId = passwordResetDb.UserId.ToString();
                 model.HasSecurityQuestion = true;
                 model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
 

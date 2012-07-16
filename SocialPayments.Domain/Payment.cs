@@ -24,7 +24,9 @@ namespace SocialPayments.Domain
 
         public double Amount { get; set; }
         public string Comments { get; set; }
-        
+        public int HoldDays { get; set; }
+        public DateTime ScheduledProcessingDate { get; set; }
+
         public int PaymentStatusValue { get; set; }
         public PaymentStatus PaymentStatus
         {

@@ -26,7 +26,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                      Name = m.Name,
                      MerchantImageUrl = (!String.IsNullOrEmpty(m.User.ImageUrl) ? m.User.ImageUrl : "http://image.paidthx.com/assets/contact-icon.gif"),
                      PreferredReceiveAccountId =(m.User.PreferredReceiveAccount != null ? m.User.PreferredReceiveAccount.Id.ToString() : ""),
-                     PreferredSendAccountId = (m.User.PreferredReceiveAccount != null ? m.User.PreferredSendAccount.Id.ToString() : ""),
+                     PreferredSendAccountId = (m.User.PreferredSendAccount != null ? m.User.PreferredSendAccount.Id.ToString() : ""),
                  }).ToList();
                  
                  return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(results, HttpStatusCode.OK);
