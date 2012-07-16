@@ -504,9 +504,37 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User ResetPassword(string userId, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
         public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
         {
             var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
 
             if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
             {
