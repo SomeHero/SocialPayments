@@ -364,7 +364,7 @@ namespace Mobile_PaidThx.Controllers
                         SmtpClient sc = new SmtpClient();
                         sc.EnableSsl = true;
 
-                        sc.Send("admin@paidthx.com", user.EmailAddress, "You're PaidThx Password", sbBody.ToString());
+                        sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
 
                         model.PasswordSent = true;
                     }
@@ -387,12 +387,67 @@ namespace Mobile_PaidThx.Controllers
             return RedirectToAction("SignIn", "Account");
         }
 
-        public ActionResult PasswordReset(string id)
+        public ActionResult ResetPassword(string id)
         {
-            return View(new PasswordResetModel()
+            using(var ctx = new Context()) {
+
+                SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                    .FirstOrDefault(p => p.Id == Guid.Parse(id));
+
+                ResetPasswordModel model = new ResetPasswordModel();
+                UserService userService = new UserService(ctx);
+                
+                if (passwordResetDb == null)
+                {
+                    ModelState.AddModelError("", "Invalid Attempt");
+                }
+
+                if (passwordResetDb.ExpiresDate < System.DateTime.Now)
+                {
+                    ModelState.AddModelError("", "Password reset link has expired.");
+                }
+
+                if (passwordResetDb.User.SecurityQuestion == null)
+                {
+                    model.SecurityQuestion = "";
+                    model.HasSecurityQuestion = false;
+                }
+
+                model.UserId = passwordResetDb.UserId.ToString();
+                model.HasSecurityQuestion = true;
+                model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            if (model.NewPassword.Equals(model.ConfirmPassword))
             {
-                SecurityQuestion = "Last 4 Digits of your name?"
-            });
+                using (var ctx = new Context())
+                {
+                    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
+                    UserService userService = new UserService(ctx);
+
+                    try
+                    {
+                        userService.ResetPassword(model.UserId, model.SecurityQuestionAnswer, model.NewPassword);
+                        return View("SignIn");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "New password and confirm password do not match.");
+            }
+
+            return View(model);
         }
 
         private static HttpWebRequest GetWebRequest(string formattedUri)
