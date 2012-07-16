@@ -123,12 +123,6 @@ defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
             );
 
             routes.MapHttpRoute(
-                name: "ForgotPassword",
-                routeTemplate: "api/users/{id}/forgot_password",
-                defaults: new { controller = "Users", action = "ForgotPassword" }
-            );
-
-            routes.MapHttpRoute(
                 name: "ResetPasswordEmail",
                 routeTemplate: "api/users/reset_password",
                 defaults: new { controller = "Users", action = "ResetPassword" }

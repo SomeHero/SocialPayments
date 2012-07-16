@@ -504,6 +504,25 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+            {
+                var error = @"Security Question Incorrect";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to reset password for {0}. {1}", userId, error));
+
+                throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));
