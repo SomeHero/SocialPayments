@@ -404,8 +404,7 @@ namespace Mobile_PaidThx.Controllers
                 SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
                     .FirstOrDefault(p => p.Id == idGuid);
 
-                ResetPasswordModel model = new ResetPasswordModel();
-                UserService userService = new UserService(ctx);
+                ResetPasswordModelInput model = new ResetPasswordModelInput();
 
                 if (passwordResetDb == null)
                 {
@@ -418,7 +417,8 @@ namespace Mobile_PaidThx.Controllers
                 }
 
 
-                model.UserId = passwordResetDb.UserId.ToString();
+                Session["resetPasswordQuestionId"] = id;
+
                 if (passwordResetDb.User.SecurityQuestion == null)
                 {
                     model.SecurityQuestion = "";
@@ -435,7 +435,7 @@ namespace Mobile_PaidThx.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResetPassword(ResetPasswordModel model)
+        public ActionResult ResetPassword(ResetPasswordModelOutput model)
         {
             if (model.NewPassword.Equals(model.ConfirmPassword))
             {
@@ -446,7 +446,26 @@ namespace Mobile_PaidThx.Controllers
 
                     try
                     {
-                        userService.ResetPassword(model.UserId, model.SecurityQuestionAnswer, model.NewPassword);
+                        string id = Session["resetPasswordId"].ToString();
+                        Guid idGuid;
+
+                        Guid.TryParse(id, out idGuid);
+
+                        if (idGuid == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Id");
+                        }
+
+
+                        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                            .FirstOrDefault(p => p.Id == idGuid);
+
+                        if (passwordResetDb == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Attempt");
+                        }
+
+                        userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
                         return View("SignIn");
                     }
                     catch (Exception ex)

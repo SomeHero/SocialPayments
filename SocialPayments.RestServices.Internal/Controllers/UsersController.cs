@@ -525,6 +525,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return message;
                 }
+                else if (!validateService.IsEmailAddress(user.UserName))
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
+
+                    return message;
+                }
                 else
                 {
                     string name = formattingService.FormatUserName(user);
