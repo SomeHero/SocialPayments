@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     var header = $('#header');
     var getBaseURL = function () {
-        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
+        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
     }
     $(".edit-payment-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
@@ -12,38 +12,30 @@ $(document).ready(function () {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
-    $("#update-account").die('click').live('click', function () {
-        var paymentAccountId = $(this).attr('data-val');
-        $.post(getBaseURL() + "PaymentAccount/Edit/" + paymentAccountId,
-            $("#frmEditAccount").serialize(),
-            function (data) {
-                $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
-            });
-    });
-        $("#remove-account").click(function () {
+    $("#remove-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.post(getBaseURL() + "PaymentAccount/Remove/" + paymentAccountId,
             function (data) {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
-        $("#add-account").click(function () {
+    $("#add-account").click(function () {
         $.get(getBaseURL() + "PaymentAccount/Add", function (data) {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
-    $("#edit-close").click(function () {
-        $.get(getBaseURL() + "PaymentAccount/List", function (data) {
+    $("#edit-close").die('click').live('click', function () {
+        $.get(getBaseURL() + "PaymentAccount/List/", function (data) {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
-    $("#add-close").click(function () {
-        $.get(getBaseURL() + "PaymentAccount/List", function (data) {
+    $("#add-close").die('click').live('click', function () {
+        $.get(getBaseURL() + "PaymentAccount/List/", function (data) {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
     $("#add-account-submit").die('click').live('click', function () {
-        $.post(getBaseURL() + "PaymentAccount/Add",
+        $.post(getBaseURL() + "PaymentAccount/Add/",
             $("#frmAddAccount").serialize(),
             function (data) {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");

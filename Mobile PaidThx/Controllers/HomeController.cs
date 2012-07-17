@@ -63,7 +63,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     logger.Error(String.Format("Invalid payment record {0}", messageId));
 
-                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}."));
+                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}.", messageId));
 
                     return View("Register", new RegisterModel());
                 }

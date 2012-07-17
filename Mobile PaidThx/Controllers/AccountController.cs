@@ -153,7 +153,16 @@ namespace Mobile_PaidThx.Controllers
                     "&code=" + code;
 
                 HttpWebRequest wr = GetWebRequest(requestToken);
-                HttpWebResponse resp = (HttpWebResponse)wr.GetResponse();
+                HttpWebResponse resp = null;
+
+                try
+                {
+                    resp = (HttpWebResponse)wr.GetResponse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, ex.Message);
+                }
 
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
@@ -425,9 +434,6 @@ namespace Mobile_PaidThx.Controllers
                     return View(model);
                 }
 
-
-                Session["resetPasswordQuestionId"] = id;
-
                 if (passwordResetDb.User.SecurityQuestion == null)
                 {
                     model.SecurityQuestion = "";
@@ -444,7 +450,7 @@ namespace Mobile_PaidThx.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResetPassword(ResetPasswordModelOutput model)
+        public ActionResult ResetPassword(string id, ResetPasswordModelOutput model)
         {
             if (model.NewPassword.Equals(model.ConfirmPassword))
             {
@@ -455,7 +461,6 @@ namespace Mobile_PaidThx.Controllers
 
                     try
                     {
-                        string id = Session["resetPasswordQuestionId"].ToString();
                         Guid idGuid;
 
                         Guid.TryParse(id, out idGuid);
