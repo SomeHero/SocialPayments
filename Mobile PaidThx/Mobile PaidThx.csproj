@@ -380,6 +380,7 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\PartialViews\ResetPassword.cshtml" />
     <Content Include="Views\Account\PartialViews\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
@@ -448,7 +449,6 @@
     <Content Include="Views\Profile\PartialViews\SubNav.cshtml" />
     <Content Include="Views\Profile\PartialViews\CompleteProfile.cshtml" />
     <Content Include="Views\Profile\CompleteProfile.cshtml" />
-    <Content Include="Views\Account\ForgotEmail.cshtml" />
     <Content Include="Web.Beta.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
