@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     var header = $('#header');
     var getBaseURL = function () {
-        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
+        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
     }
     $("#dialog").click(function () {
         $.get(getBaseURL() + "PaymentAccount/Dialog", function (data) {

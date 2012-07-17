@@ -167,9 +167,9 @@ namespace Mobile_PaidThx.Controllers
                     });
             }
         }
+
         [HttpPost]
         public ActionResult Edit(EditPaymentAccountModel model, string Id)
-
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
@@ -179,8 +179,7 @@ namespace Mobile_PaidThx.Controllers
                 var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
                 var securityService = new SocialPayments.DomainServices.SecurityService();
                 var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
-                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;
-               // var paymentAccountId = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));// user.PaymentAccounts[3].Id;
+                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;           //Payment account Id always set as Savings!  Change logic here.
 
                 if (model.AccountType != null)
                 {
