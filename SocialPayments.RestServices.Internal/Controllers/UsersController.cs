@@ -581,7 +581,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 try
                 {
-                    userService.addPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
+                    userService.AddPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 catch (Exception ex)

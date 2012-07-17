@@ -159,6 +159,7 @@ namespace SocialPayments.DomainServices
 
             return null;
         }
+
         public bool ConfirmUser(string accountConfirmationToken)
         {
             var confirmed = false;
@@ -363,7 +364,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User addPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
+        public User AddPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
         {
             var user = GetUserById(userId);
 
