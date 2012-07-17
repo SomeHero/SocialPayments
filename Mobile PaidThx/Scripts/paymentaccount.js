@@ -6,12 +6,26 @@ $(document).ready(function () {
     var getBaseURL = function () {
         return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
     }
+    $("#dialog").click(function () {
+        $.get(getBaseURL() + "PaymentAccount/Dialog", function (data) {
+            $('#accounts-content').thml(data).trigger("pagecreate").trigger("refresh");
+        });
+    });
     $(".edit-payment-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.get(getBaseURL() + "PaymentAccount/Edit/" + paymentAccountId, function (data) {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
+    $("#update-account").die('click').live('click', function () {
+        var paymentAccountId = $(this).attr('data-val');
+        $.post(getBaseURL() + "PaymentAccount/Edit/" + paymentAccountId,
+            $("#frmEditAccount").serialize(),
+            function (data) {
+                $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
+            });
+    });
+
     $("#remove-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.post(getBaseURL() + "PaymentAccount/Remove/" + paymentAccountId,
@@ -41,4 +55,5 @@ $(document).ready(function () {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
+
 });

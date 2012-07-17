@@ -6,7 +6,7 @@ using System.Web;
 namespace Mobile_PaidThx.Models
 {
     public class PaymentAccountModels
-    {
+   { 
     }
     public class ListPaymentAccountModel
     {
@@ -24,6 +24,8 @@ namespace Mobile_PaidThx.Models
         public string RoutingNumber { get; set; }
         public string AccountNumber { get; set; }
         public string AccountType { get; set; }
+        public string DefaultRecieve { get; set; }
+        public string DefaultSend { get; set; }
     }
     public class EditPaymentAccountModel
     {
@@ -33,5 +35,7 @@ namespace Mobile_PaidThx.Models
         public string RoutingNumber { get; set; }
         public string AccountNumber { get; set; }
         public string AccountType { get; set; }
+        public string DefaultRecieve { get; set; }
+        public string DefaultSend { get; set; }
     }
 }

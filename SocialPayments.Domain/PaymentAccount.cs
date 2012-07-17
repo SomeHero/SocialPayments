@@ -35,5 +35,6 @@ namespace SocialPayments.Domain
         public string BankIconURL {get; set;}
         [MaxLength (100)]
         public string BankName { get; set; }
+
     }
 }

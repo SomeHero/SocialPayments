@@ -64,23 +64,20 @@ namespace Mobile_PaidThx.Controllers
                     if (paymentAccount.IsActive)
                     {
                         var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-
-                        if(tempNumber.Length > 3)
+                        if (tempNumber.Length > 3)
                         {
                             tempNumber = tempNumber.Substring(tempNumber.Length - 4);
                         }
-                    
-                    
-                    bankAccounts.Add(new BankAccountModel()
-                    {
-                        BankName = paymentAccount.BankName,
-                        BankIconURL = paymentAccount.BankIconURL,
-                        PaymentAccountId = paymentAccount.Id.ToString(),
-                        AccountNumber = "******" + tempNumber,
-                        AccountType = paymentAccount.AccountType.ToString(),
-                        NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                        Nickname = paymentAccount.Nickname,
-                        RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+                        bankAccounts.Add(new BankAccountModel()
+                        {
+                            BankName = paymentAccount.BankName,
+                            BankIconURL = paymentAccount.BankIconURL,
+                            PaymentAccountId = paymentAccount.Id.ToString(),
+                            AccountNumber = "******" + tempNumber,
+                            AccountType = paymentAccount.AccountType.ToString(),
+                            NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
+                            Nickname = paymentAccount.Nickname,
+                            RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
 
                         });
                     }

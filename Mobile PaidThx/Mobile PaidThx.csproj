@@ -376,6 +376,7 @@
     <Content Include="Views\Help\index.cshtml" />
     <Content Include="Views\Privacy\Index.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\PaymentAccount\PartialViews\Dialog.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\PartialViews\ResetPassword.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
