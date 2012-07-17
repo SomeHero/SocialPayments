@@ -17,13 +17,14 @@ using SocialPayments.DomainServices.Interfaces;
 using System.Threading.Tasks;
 using Amazon.S3.Model;
 using System.IO;
+using System.Text;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UsersController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+        private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
         public IEnumerable<string> Get()
@@ -124,6 +125,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     zip = user.Zip,
                     userAttributes = user.UserAttributes.Select(a => new UserModels.UserAttribute()
                     {
+                        AttributeId = a.UserAttributeId,
                         AttributeName = a.UserAttribute.AttributeName,
                         AttributeValue = a.AttributeValue
                     }).ToList(),
@@ -496,6 +498,75 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //POST api/users/reset_password
+        public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+                DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+                DomainServices.ValidationService validateService = new DomainServices.ValidationService();
+
+                var user = userService.FindUserByEmailAddress(request.emailAddress);
+
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid User";
+
+                    return message;
+                }
+                else if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+                {
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid Email Address";
+
+                    return message;
+                }
+                else if (!validateService.IsEmailAddress(user.UserName))
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
+
+                    return message;
+                }
+                else
+                {
+                    string name = formattingService.FormatUserName(user);
+                    Guid passwordResetGuid = Guid.NewGuid();
+                    DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+                    PasswordResetAttempt passwordResetDb = _ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
+                    {
+                        Clicked = false,
+                        User = user,
+                        ExpiresDate = expiresDate,
+                        Id = passwordResetGuid
+                    });
+
+                    _ctx.SaveChanges();
+
+                    string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+
+                    StringBuilder body = new StringBuilder();
+                    body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+                    body.Append("You asked us to reset your PaidThx password. ");
+                    body.Append("To complete the process, please click on the link below ");
+                    body.Append("or paste it into your browser:").AppendLine().AppendLine();
+                    body.AppendLine(link).AppendLine();
+                    body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+                    body.AppendLine("Thank you,").AppendLine();
+                    body.Append("The PaidThx Team");
+
+                    emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
+
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+            }
+        }
+
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {
@@ -620,7 +691,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/signin_withfacebook
         public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", request.deviceToken));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0} {1}", request.deviceToken, request.oAuthToken));
 
             Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
@@ -635,7 +706,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
-                    request.deviceToken, out isNewUser);
+                    request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), out isNewUser);
             }
             catch (Exception ex)
             {

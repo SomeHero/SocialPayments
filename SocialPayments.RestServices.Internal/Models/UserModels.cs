@@ -85,6 +85,7 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class UserAttribute
         {
+            public Guid AttributeId { get; set; }
             public string AttributeName { get; set; }
             public string AttributeValue { get; set; }
         }
@@ -115,6 +116,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string lastName { get; set; }
             public string emailAddress { get; set; }
             public string deviceToken { get; set; }
+            public string oAuthToken { get; set; }
+            //public DateTime tokenExpiration { get; set; }
         }
         public class FacebookSignInResponse
         {
@@ -158,6 +161,11 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string currentPassword { get; set; }
             public string newPassword { get; set; }
+        }
+
+        public class ResetPasswordRequest
+        {
+            public string emailAddress { get; set; }
         }
 
         public class PushNotificationRequest

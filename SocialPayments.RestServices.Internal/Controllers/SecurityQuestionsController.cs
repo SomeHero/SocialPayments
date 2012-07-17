@@ -37,9 +37,21 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // GET /api/securityquestion/5
-        public string Get(int id)
+        public HttpResponseMessage<SecurityQuestionModel.QuestionResponse> Get(int id)
         {
-            return "value";
+            Context _ctx = new Context();
+
+            var response = new SecurityQuestionModel.QuestionResponse();
+
+            foreach (SecurityQuestion question in _ctx.SecurityQuestions)
+            {
+                if (id.Equals(question.Id))
+                {
+                    response.Question = question.Question;
+                }
+            }
+
+            return new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(response, HttpStatusCode.OK);
         }
 
         //POST /api/{userId}/validate_security_question

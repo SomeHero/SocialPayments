@@ -64,23 +64,36 @@ namespace SocialPayments.DomainServices
             _userServices = new UserService(_context);
             _amazonNotificationService = amazonNotificationService;
         }
-        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
-            string securityPin)
+        public Message Donate(string apiKey, string senderId, string organizationId, string senderAccountId, double amount, string comments, string messageType)
         {
-            return AddMessage(apiKey, senderId, recipientUri, senderAccountId, amount, comments, messageType, securityPin, 0, 0,
+            var organization = _userServices.GetUserById(organizationId);
+
+            if(organization == null)
+                throw new Exception(String.Format("Unable to find organization {0}", organizationId));
+
+            return AddMessage(apiKey, senderId, organization.UserId.ToString(), organization.Merchant.Name, senderAccountId, amount, comments, "Payment");
+        }
+        public Message AcceptPledge(string apiKey, User sender, string onBehalfOfId, string recipientUri, double amount, string comments, string messageType)
+        {
+            var onBehalfOf = _userServices.GetUserById(onBehalfOfId);
+
+            if (onBehalfOf.PreferredReceiveAccount == null)
+                throw new Exception("Invalid Preferred Receive Account");
+
+            return AddMessage(apiKey, onBehalfOfId, "", recipientUri, onBehalfOf.PreferredReceiveAccount.Id.ToString(), amount, comments, "PaymentRequest");
+        }
+        public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType)
+        {
+            return AddMessage(apiKey, senderId, recipientId, recipientUri, senderAccountId, amount, comments, messageType, 0, 0,
                 "", "", "");
         }
-        public Message AddMessage(string apiKey, string senderId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
-            string securityPin, double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
+             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1}", senderId, recipientUri));
+            _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1} with {2}", senderId, recipientUri, senderAccountId));
 
             User sender = null;
-
-            URIType recipientUriType = GetURIType(recipientUri);
-
-            if (recipientUriType == URIType.MobileNumber)
-                recipientUri = _formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
+            User recipient = null;
 
             if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST"))
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
@@ -124,12 +137,31 @@ namespace SocialPayments.DomainServices
             sender.PinCodeLockOutResetTimeout = null;
             sender.PinCodeFailuresSinceLastSuccess = 0;
 
-            if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
+            if (!String.IsNullOrEmpty(recipientId))
             {
-                var message = String.Format("Sender and Recipient are the same");
-                _logger.Log(LogLevel.Debug, message);
+                recipient = _userServices.GetUserById(recipientId);
 
-                throw new InvalidOperationException(message);
+                if (recipient == null)
+                {
+                    var message = String.Format("Recipeint {0} Not Found", recipientId);
+                    _logger.Log(LogLevel.Info, message);
+
+                    throw new Exception(message);
+                }
+            }
+            else {
+                URIType recipientUriType = GetURIType(recipientUri);
+
+                if (recipientUriType == URIType.MobileNumber)
+                    recipientUri = _formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
+
+                if (recipientUriType == URIType.MobileNumber && _validationService.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
+                {
+                    var message = String.Format("Sender and Recipient are the same");
+                    _logger.Log(LogLevel.Debug, message);
+
+                    throw new InvalidOperationException(message);
+                }
             }
 
             PaymentAccount senderAccount = null;
@@ -178,8 +210,6 @@ namespace SocialPayments.DomainServices
                 throw new InvalidOperationException(message);
             }
 
-            Domain.User recipient = _userServices.GetUser(recipientUri);
-
             //TODO: confirm recipient is valid???
 
             //TODO: confirm amount is within payment limits
@@ -211,6 +241,7 @@ namespace SocialPayments.DomainServices
                     WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
                     MessageType = type,
                     MessageTypeValue = (int)type,
+                    Recipient = recipient,
                     RecipientUri = recipientUri,
                     SenderUri = senderUri,
                     Sender = sender,

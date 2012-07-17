@@ -398,9 +398,9 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, out bool isNewUser)
+            string deviceToken, string oAuthToken, DateTime tokenExpiration, out bool isNewUser)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
             User user = null;
 
@@ -449,8 +449,8 @@ namespace SocialPayments.DomainServices
                         {
                             FBUserID = accountId,
                             Id = Guid.NewGuid(),
-                            TokenExpiration = System.DateTime.Now.AddDays(30),
-                            OAuthToken = ""
+                            TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
                         },
                         ImageUrl = String.Format(_fbImageUrlFormat, accountId),
                     });
@@ -462,6 +462,21 @@ namespace SocialPayments.DomainServices
 
                     user.DeviceToken = deviceToken;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
+                    if (user.FacebookUser != null)
+                    {
+                        user.FacebookUser.OAuthToken = oAuthToken;
+                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                    }
+                    else
+                    {
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                           // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                    }
                 }
 
                 _ctx.SaveChanges();
@@ -489,6 +504,53 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User ResetPassword(string userId, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
+        public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+            {
+                var error = @"Security Question Incorrect";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to reset password for {0}. {1}", userId, error));
+
+                throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));
@@ -510,7 +572,23 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
+        public double GetUserInstantLimit(User User)
+        {
+            var timeToCheck = System.DateTime.Now.AddHours(-24);
 
+            var verifiedPaymentAmounts = _ctx.Messages
+                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck  && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.UnVerified));
+
+            var amountSent = 0;
+            
+            if(verifiedPaymentAmounts.Count() > 0)
+                verifiedPaymentAmounts.Sum(m => m.Amount);
+
+            if(amountSent > 0)
+                return 100 - amountSent;
+            else
+                return 0;
+        }
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));

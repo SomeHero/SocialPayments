@@ -63,7 +63,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     logger.Error(String.Format("Invalid payment record {0}", messageId));
 
-                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}."));
+                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}.", messageId));
 
                     return View("Register", new RegisterModel());
                 }
@@ -86,7 +86,12 @@ namespace Mobile_PaidThx.Controllers
                 return View("Register", model);
             }
         }
+        public void ClaimPayment(string id)
+        {
+            logger.Info(String.Format("The id is {0}", id));
 
+            Response.Redirect(String.Format("http://goo.gl/{0}", id));
+        }
         public ActionResult About()
         {
             logger.Log(LogLevel.Info, String.Format("Displaying About PaidThx View"));

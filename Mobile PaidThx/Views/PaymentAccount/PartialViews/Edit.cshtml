@@ -9,9 +9,7 @@
     @Html.ValidationSummary()
     <h2>
         Edit Account</h2>
-     
-        
-        
+
     <form id="frmEditAccount" action="@Url.Content("~/PaymentAccount/Edit")" method="post">
     <p>
         <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
@@ -46,7 +44,7 @@
         </fieldset>
     </div>
 
-    <p><button type="submit" id="update-account" class="imgbtn" data-val = "@Model.PaymentAccountId">     
+    <p><button type="button" id="update-account" class="imgbtn" data-val = "@Model.PaymentAccountId">     
             <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
                 Account</span></button></p>
 

@@ -1,42 +1,47 @@
-em { color: red; font-weight: bold; padding-right: .25em; }
-#container 
+em
+{
+    color: red;
+    font-weight: bold;
+    padding-right: .25em;
+}
+#container
 {
     background-image: url('images/bgnoise.gif');
     background-repeat: repeat;
 }
-ul.contained.tabs-content>li
-{ 
-    padding: 0; 
-    border: none; 
+ul.contained.tabs-content > li
+{
+    padding: 0;
+    border: none;
 }
 #content-container
 {
     margin: 0px 10px;
 }
-#main-container 
+#main-container
 {
     margin: 0;
     padding: 0;
 }
-#header-wrapper 
+#header-wrapper
 {
     margin: 15px 0px;
 }
-#page-title 
+#page-title
 {
-    position: absolute; 
-    bottom: 4px; 
-    right: 0; 
-    color: #41924d; 
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+    color: #41924d;
     font-size: 16px;
     font-weight: bold;
     font-family: Droid Sans;
 }
 #main-body, .main-body
 {
-    background-color: #fff; 
-    padding: 12px 12px 40px 12px; 
-    border-width: 1px; 
+    background-color: #fff;
+    padding: 12px 12px 40px 12px;
+    border-width: 1px;
     border-color: #d0d0d0;
 }
 #main-body h2, .main-body h2
@@ -92,7 +97,7 @@ ul.contained.tabs-content>li
     border-right: none;
     border-left: 1px solid #c7cdcc;
 }
-#main-tabs dd a.first 
+#main-tabs dd a.first
 {
     border-left: none !important;
 }
@@ -100,7 +105,7 @@ ul.contained.tabs-content>li
 {
     color: #757575;
     font-size: 13px;
-    font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
+    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
     text-shadow: none;
 }
 #main-tabs dd a.active
@@ -108,7 +113,7 @@ ul.contained.tabs-content>li
     color: #fff;
 }
 
-#sub-nav 
+#sub-nav
 {
     background-color: #51A5BA;
     height: 50px;
@@ -121,7 +126,7 @@ ul.contained.tabs-content>li
     color: #fff;
     margin-bottom: 20px;
 }
-#sub-nav dd a, #sub-nav dd a:active 
+#sub-nav dd a, #sub-nav dd a:active
 {
     background: none;
     color: #fff;
@@ -130,94 +135,94 @@ ul.contained.tabs-content>li
     line-height: 50px;
     font-weight: normal;
     font-size: 12px;
-    font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
+    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
     text-shadow: none;
 }
- #sub-nav dd a.active
- {
-     background-image: url('images/subnav-active-background.gif');
-     background-repeat: repeat-x;
-     background-position: center;
- }
- #sub-nav a #all
- {
-     background-image: url('images/sub-nav-all-icon.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
+#sub-nav dd a.active
+{
+    background-image: url('images/subnav-active-background.gif');
+    background-repeat: repeat-x;
+    background-position: center;
+}
+#sub-nav a #all
+{
+    background-image: url('images/sub-nav-all-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
 #sub-nav a.active #all
- {
-     background-image: url('images/sub-nav-all-icon-active.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
- #sub-nav a #payments
- {
-     background-image: url('images/sub-nav-payments-icon.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
+{
+    background-image: url('images/sub-nav-all-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #payments
+{
+    background-image: url('images/sub-nav-payments-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
 #sub-nav a.active #payments
- {
-     background-image: url('images/sub-nav-payments-icon-active.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
- #sub-nav a #requests
- {
-     background-image: url('images/sub-nav-requests-icon.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
+{
+    background-image: url('images/sub-nav-payments-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #requests
+{
+    background-image: url('images/sub-nav-requests-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
 #sub-nav a.active #requests
- {
-     background-image: url('images/sub-nav-requests-icon-active.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
- #sub-nav a #alerts
- {
-     background-image: url('images/sub-nav-alerts-icon.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
+{
+    background-image: url('images/sub-nav-requests-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #alerts
+{
+    background-image: url('images/sub-nav-alerts-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
 #sub-nav a.active #alerts
- {
-     background-image: url('images/sub-nav-alerts-icon-active.gif');
-     background-repeat: no-repeat;
-     background-position: left center;
-     padding-left: 15px;
- }
-#footer-menu 
+{
+    background-image: url('images/sub-nav-alerts-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#footer-menu
 {
     font-size: 11px;
     color: #8b8b8b;
 }
-#main-body-sub-links 
+#main-body-sub-links
 {
     font-size: 12px;
     color: #909090;
 }
-#securityCallout-wrapper 
+#securityCallout-wrapper
 {
     background-image: url('images/security_callout_left.gif');
     background-repeat: no-repeat;
 }
-#securityCallout 
+#securityCallout
 {
     background-image: url('images/security_callout_right.gif');
     background-repeat: no-repeat;
     margin-left: 48px;
     height: 82px;
 }
-#socialNetworkIcons dd 
+#socialNetworkIcons dd
 {
     margin-right: 20px;
 }
@@ -226,12 +231,12 @@ ul.contained.tabs-content>li
     float: left;
     margin: 10px 12px 16px 10px;
 }
-.notes 
+.notes
 {
     font-size: 11px;
-    color: #6d6e71;   
+    color: #6d6e71;
 }
-.note-emphasis 
+.note-emphasis
 {
     font-family: Times New Roman, Georgia, Serif;
     font-weight: normal;
@@ -239,7 +244,8 @@ ul.contained.tabs-content>li
     font-size: 18px;
     text-align: center;
 }
-label.error {
+label.error
+{
     color: red;
     font-size: 16px;
     font-weight: normal;
@@ -248,12 +254,12 @@ label.error {
     width: 100%;
     float: none;
 }
-.copyright 
+.copyright
 {
     font-size: 11px;
     color: #a2a2a2;
 }
-.thought 
+.thought
 {
     padding: 10px;
     border: 1px solid #ccd3d2;
@@ -262,14 +268,14 @@ label.error {
     -moz-border-radius: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#f5f6f5)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#f5f6f5));
     background: -webkit-linear-gradient(top, #f5f6f5, #e6e6e6);
-    background: -moz-linear-gradient(top, #f5f6f5, #e6e6e6); 
-    background: -ms-linear-gradient(top, #f5f6f5, #e6e6e6); 
+    background: -moz-linear-gradient(top, #f5f6f5, #e6e6e6);
+    background: -ms-linear-gradient(top, #f5f6f5, #e6e6e6);
     background: -o-linear-gradient(top, #f5f6f5, #e6e6e6);
     position: relative;
 }
-.thought p  
+.thought p
 {
     margin-bottom: 0;
     color: #676767;
@@ -277,7 +283,7 @@ label.error {
     font-size: 12px;
     text-shadow: none;
 }
-.thought .arrow 
+.thought .arrow
 {
     display: block;
     width: 10px;
@@ -288,18 +294,18 @@ label.error {
     background-image: url(images/thought-arrow-up.png);
     background-repeat: no-repeat;
 }
-    
-input.ui-input-text, textarea.ui-input-text 
+
+input.ui-input-text, textarea.ui-input-text
 {
     margin-bottom: 20px;
     font-size: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-shadow: none;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
     background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-    background: -moz-linear-gradient(top, #ffffff, #e6e6e6); 
-    background: -ms-linear-gradient(top, #ffffff, #e6e6e6); 
+    background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -ms-linear-gradient(top, #ffffff, #e6e6e6);
     background: -o-linear-gradient(top, #ffffff, #e6e6e6);
 }
 input::-webkit-input-placeholder
@@ -316,58 +322,59 @@ input:-moz-placeholder
     text-shadow: none;
     font-size: 12px;
 }
-#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach
+#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach, #reset-password-submit
 {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1d8639), to(#71b26d)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1d8639), to(#71b26d));
     background: -webkit-linear-gradient(top, #71b26d, #1d8639);
-    background: -moz-linear-gradient(top, #71b26d, #1d8639); 
-    background: -ms-linear-gradient(top, #71b26d, #1d8639); 
+    background: -moz-linear-gradient(top, #71b26d, #1d8639);
+    background: -ms-linear-gradient(top, #71b26d, #1d8639);
     background: -o-linear-gradient(top, #71b26d, #1d8639);
 }
 #add-account, #add-account-submit, #btnSkipStep
 {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a6bb), to(#6ac9e1)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a6bb), to(#6ac9e1));
     background: -webkit-linear-gradient(top, #6ac9e1, #52a6bb);
-    background: -moz-linear-gradient(top, #6ac9e1, #52a6bb); 
-    background: -ms-linear-gradient(top, #6ac9e1, #52a6bb); 
+    background: -moz-linear-gradient(top, #6ac9e1, #52a6bb);
+    background: -ms-linear-gradient(top, #6ac9e1, #52a6bb);
     background: -o-linear-gradient(top, #6ac9e1, #52a6bb);
 }
 #remove-account
 {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ca6431), to(#fd8403)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ca6431), to(#fd8403));
     background: -webkit-linear-gradient(top, #fd8403, #ca6431);
-    background: -moz-linear-gradient(top, #fd8403, #ca6431); 
-    background: -ms-linear-gradient(top, #fd8403, #ca6431); 
+    background: -moz-linear-gradient(top, #fd8403, #ca6431);
+    background: -ms-linear-gradient(top, #fd8403, #ca6431);
     background: -o-linear-gradient(top, #fd8403, #ca6431);
 }
-#signin-facebook-submit 
+#signin-facebook-submit
 {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#667cb2), to(#758fc7)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#667cb2), to(#758fc7));
     background: -webkit-linear-gradient(top, #758fc7, #667cb2);
-    background: -moz-linear-gradient(top, #758fc7, #667cb2); 
-    background: -ms-linear-gradient(top, #758fc7, #667cb2); 
+    background: -moz-linear-gradient(top, #758fc7, #667cb2);
+    background: -ms-linear-gradient(top, #758fc7, #667cb2);
     background: -o-linear-gradient(top, #758fc7, #667cb2);
 }
-a.imgbtn, button.imgbtn 
+a.imgbtn, button.imgbtn
 {
     display: block;
-    width:100%;
+    width: 100%;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     clear: both;
     margin-bottom: 10px;
-    border:0;
-    cursor:pointer;
+    border: 0;
+    cursor: pointer;
 }
-a.imgbtn:after, button.imgbtn:after  {
+a.imgbtn:after, button.imgbtn:after
+{
     content: ".";
     display: block;
     height: 0;
     clear: both;
     visibility: hidden;
 }
-a.imgbtn img, button.imgbtn img 
+a.imgbtn img, button.imgbtn img
 {
     border-right: 1px solid #4e9b54;
     padding: 0 10px;
@@ -378,7 +385,7 @@ a.imgbtn span, button.imgbtn span
     display: block;
     float: left;
     color: #fff;
-    font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
+    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
     font-weight: bold;
     font-size: 18px;
     padding-left: 10px;
@@ -391,69 +398,71 @@ a.imgbtn span, button.imgbtn span
 
 a.imgbtn span.ui-button-text, button.imgbtn span.ui-button-text
 {
-    border:0;
-    padding-left:0;
+    border: 0;
+    padding-left: 0;
 }
 a.fbSignIn img, button.fbSignIn img
 {
     border-right: 1px solid #597ea9;
     padding: 0 15px;
 }
-a.fbSignIn span, button.fbSignIn span 
+a.fbSignIn span, button.fbSignIn span
 {
     border-left: 1px solid #7b97d1;
 }
 
-.cbListPaystream 
+.cbListPaystream
 {
     float: right;
 }
-.cbListPaystream.first 
+.cbListPaystream.first
 {
     margin-right: 10px;
     float: left;
 }
-.paystream-filters:after {
+.paystream-filters:after
+{
     content: ".";
     display: block;
     height: 0;
     clear: both;
     visibility: hidden;
 }
-.ui-checkbox label 
+.ui-checkbox label
 {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff)); 
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
     background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-    background: -moz-linear-gradient(top, #ffffff, #e6e6e6); 
-    background: -ms-linear-gradient(top, #ffffff, #e6e6e6); 
+    background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -ms-linear-gradient(top, #ffffff, #e6e6e6);
     background: -o-linear-gradient(top, #ffffff, #e6e6e6);
 }
-.ui-checkbox label span 
+.ui-checkbox label span
 {
     font-size: 12px;
     color: #676767;
     font-weight: normal;
 }
-.ui-checkbox label span.ui-btn-inner 
+.ui-checkbox label span.ui-btn-inner
 {
     padding: 0.6em 10px;
 }
-.ui-checkbox label.ui-checkbox-on {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#d6dada)); 
+.ui-checkbox label.ui-checkbox-on
+{
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#d6dada));
     background: -webkit-linear-gradient(top, #d6dada, #e6e6e6);
-    background: -moz-linear-gradient(top, #d6dada, #e6e6e6); 
-    background: -ms-linear-gradient(top, #d6dada, #e6e6e6); 
+    background: -moz-linear-gradient(top, #d6dada, #e6e6e6);
+    background: -ms-linear-gradient(top, #d6dada, #e6e6e6);
     background: -o-linear-gradient(top, #d6dada, #e6e6e6);
     border: 1px solid #ccc;
 }
-.ui-checkbox label.ui-checkbox-on span 
+.ui-checkbox label.ui-checkbox-on span
 {
     color: #31879d !important;
     text-shadow: 1px 1px #fff;
 }
 
 /* ---------- [ Paystream Transactions ] ---------- */
-.trans-type 
+.trans-type
 {
     width: 80px;
     float: left;
@@ -461,7 +470,7 @@ a.fbSignIn span, button.fbSignIn span
     overflow: hidden;
     padding: 10px 0 0 0;
 }
-.trans-title 
+.trans-title
 {
     width: 45%;
     padding: 0 auto;
@@ -470,23 +479,23 @@ a.fbSignIn span, button.fbSignIn span
     text-shadow: none;
     display: inline-block;
 }
-.trans-title strong 
+.trans-title strong
 {
-   height: 30px;
-    font-size:14px;
+    height: 30px;
+    font-size: 14px;
     clear: both;
     display: block;
-    font-weight:bolder;
+    font-weight: bolder;
     white-space: normal;
     overflow: hidden;
 }
-.trans-title em 
+.trans-title em
 {
     font-size: 10px;
     font-weight: normal;
     color: #6d6e71;
 }
-.status 
+.status
 {
     width: 20px;
     float: left;
@@ -497,45 +506,45 @@ a.fbSignIn span, button.fbSignIn span
 }
 .trans-comment
 {
-    padding-top:20px;
+    padding-top: 20px;
     font-size: 14px;
-    font-style:italic;
-    color:#a8a9ab;
+    font-style: italic;
+    color: #a8a9ab;
     font-weight: normal;
 }
 .title-pay-in
 {
     font-size: 12px;
-    font-style:normal;
+    font-style: normal;
     font-weight: normal;
-    color:#1c8839;
+    color: #1c8839;
 }
 .title-pay-out
 {
     font-size: 12px;
-    font-style:normal;
+    font-style: normal;
     font-weight: normal;
-    color:#269bb8;
+    color: #269bb8;
 }
 .title-request-in
 {
     font-size: 12px;
-    font-style:normal;
+    font-style: normal;
     font-weight: normal;
-    color:#86acb5;
+    color: #86acb5;
 }
 .title-request-out
 {
     font-size: 12px;
-    font-style:normal;
+    font-style: normal;
     font-weight: normal;
-    color:#81b28e;
+    color: #81b28e;
 }
-.trans-amount 
+.trans-amount
 {
     padding: 15px 20px 0 0;
     float: right;
-    display:inline-block;
+    display: inline-block;
     text-align: right;
     text-shadow: none;
     font-size: 14px;
@@ -545,41 +554,41 @@ a.fbSignIn span, button.fbSignIn span
 }
 .gray-above
 {
-    padding-bottom:10px;
-    color:#a8a9ab;
-    font-size:14px;
-    font-style:italic;
+    padding-bottom: 10px;
+    color: #a8a9ab;
+    font-size: 14px;
+    font-style: italic;
 }
 .gray-out
 {
-    padding-top:10px;
-    color:#a8a9ab;
-    font-size:14px;
-    font-style:italic;
+    padding-top: 10px;
+    color: #a8a9ab;
+    font-size: 14px;
+    font-style: italic;
 }
 .paystream-pay-in
 {
-   font-size:20px;
-    font-weight:bold;
-    color:#1c8839;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1c8839;
 }
 .paystream-pay-out
 {
-    font-size:20px;
-    font-weight:bold;
-    color:#269bb8;
+    font-size: 20px;
+    font-weight: bold;
+    color: #269bb8;
 }
 .paystream-request-in
 {
-    font-size:20px;
-    font-weight:bold;
-    color:#86acb5;
+    font-size: 20px;
+    font-weight: bold;
+    color: #86acb5;
 }
 .paystream-request-out
 {
-    font-size:20px;
-    font-weight:bold;
-    color:#81b28e;
+    font-size: 20px;
+    font-weight: bold;
+    color: #81b28e;
 }
 .receive .trans-amount
 {
@@ -597,12 +606,12 @@ a.fbSignIn span, button.fbSignIn span
 {
     background: #919191;
     color: #FFFFFF;
-    font-size:16px;   
+    font-size: 16px;
     text-indent: 10px;
     letter-spacing: 1px;
     padding: 6px;
 }
-.member-name 
+.member-name
 {
     font-size: 14px;
     font-weight: bold;
@@ -612,7 +621,7 @@ a.fbSignIn span, button.fbSignIn span
     position: relative;
     display: block;
 }
-.dialog-close 
+.dialog-close
 {
     position: absolute;
     top: 5px;
@@ -637,11 +646,224 @@ a.fbSignIn span, button.fbSignIn span
 {
     background: #FFFFFF;
 }
-@media screen and (orientation: portrait){
-    label.error { margin-left: 0; display: block; }
+.paystream-dialog
+{
+    display: none;
+    width: 95%;
+    height: 100%;
+    background: #FFFFFF;
+    position: fixed;
+    right: 0%;
+    top: 0%;
+    z-index: 101;
+    border-left: 1px solid #888;
+    border-top: 1px solid #888;
+    border-top-left-radius: 4em;
+    -moz-border-radius-topleft: 4em;
+    -webkit-border-top-left-radius: 4em;
+}
+.overlay
+{
+    display: none;
+    background: black;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    opacity: 0.2;
 }
 
-@media screen and (orientation: landscape){
-    label.error { display: inline-block; margin-left: 22%; }
+.paystream-dialog-title-bg
+{
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    background: #E8E8E8;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top-left-radius: 2em;
+    -moz-border-radius-topleft: 2em;
+    -webkit-border-top-left-radius: 2em;
+}
+
+.paystream-dialog-inner-display
+{
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.paystream-dialog-closebtn
+{
+    background-image: url('images/close-dialog.gif');
+    height: 20px;
+    width: 21px;
+    background-repeat: no-repeat;
+    float: left;
+    top: 20px;
+    left: 20px;
+    position: relative;
+}
+
+.paystream-user
+{
+    width: 100px;
+    float: left;
+    display: block;
+    overflow: hidden;
+    padding: 10px 0 0 0;
+}
+
+.paystream-user-next
+{
+    width: 100px;
+    float: right;
+    display: block;
+    overflow: hidden;
+    padding: 10px 0 0 0;
+}
+
+.paystream-subbar
+{
+    background: #AAF0D3;
+    color: #40A37A;
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 10px;
+}
+
+.user-statement
+{
+    font-size: large;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+
+.paystream-date
+{
+    text-align: right;
+    font-size: medium;
+    font-style: italic;
+    color: #B3B3B3;
+    padding-bottom: 5px;
+}
+
+.paystream-wrapper
+{
+    display: block;
+    height: 120px;
+}
+
+.paystream-status-dialog
+{
+    text-align: center;
+    margin: 15px;
+    border-style: solid;
+    border-color: #A3A3A3;
+    border-width: 1px;
+    color: #B56B16;
+    font-weight: bold;
+    padding: 15px;
+}
+
+p
+{
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+.speech-bubble-border
+{
+    position: relative;
+    padding: 15px;
+    margin: 1em 0 3em;
+    border: 3px solid #B8B8B8;
+    color: #636363;
+    background: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.speech-bubble-border.top::after
+{
+    top: -13px;
+    bottom: auto;
+    left: 34px;
+    right: auto;
+    border-width: 0 13px 13px;
+}
+
+.speech-bubble-border::before
+{
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 27px;
+    border-width: 20px 20px 0;
+    border-style: solid;
+    border-color: #B8B8B8 transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble-border.top::before
+{
+    top: -20px;
+    bottom: auto;
+    left: 27px;
+    right: auto;
+    border-width: 0 20px 20px;
+}
+
+.speech-bubble-border::after
+{
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    left: 34px;
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: white transparent;
+    display: block;
+    width: 0;
+}
+
+.paystream-header-title
+{
+    padding: 22px;
+    text-align: center;
+    font-size: 20px;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
+    background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    color: #6E6E6E;
+    font-weight: bold;
+}
+
+@media screen and (orientation: portrait)
+{
+    label.error
+    {
+        margin-left: 0;
+        display: block;
+    }
+}
+
+@media screen and (orientation: landscape)
+{
+    label.error
+    {
+        display: inline-block;
+        margin-left: 22%;
+    }
 }
 

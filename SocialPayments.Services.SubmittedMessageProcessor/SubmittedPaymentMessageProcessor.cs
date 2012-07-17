@@ -31,6 +31,8 @@ namespace SocialPayments.Services.MessageProcessors
         private ISMSService _smsService;
         private IEmailService _emailService;
         private MessageServices _messageService;
+        private GoogleURLShorten _urlShortnerService;
+            
 
         private string _recipientSMSMessage = "{1} just sent you {0:C} using PaidThx.  The payment has been submitted for processing. Go to {2}.";
         private string _senderSMSMessage = "Your payment in the amount {0:C} was delivered to {1}.  The payment has been submitted for processing. Go to {2}";
@@ -50,16 +52,15 @@ namespace SocialPayments.Services.MessageProcessors
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
         private string _mobileWebSiteUrl = System.Configuration.ConfigurationManager.AppSettings["MobileWebSetURL"];
        
-        private string _paymentReceivedRecipientNotRegisteredTemplate = "Payment Received Recipient Not Registered";
-        private string _paymentReceivedRecipientRegisteredTemplate = "Payment Received Recipient Registered";
+        private string _paymentReceivedRecipientNotRegisteredTemplate = "Money Received - Not Registered";
+        private string _paymentReceivedRecipientRegisteredTemplate = "Money Received - Registered";
         
-        private string _ShortenedBaseURL = "http://www.paidthx.com/{0}";
-
         private string _defaultAvatarImage = System.Configuration.ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
 
         public SubmittedPaymentMessageProcessor() {
             _ctx  = new DataLayer.Context();
             _logger = LogManager.GetCurrentClassLogger();
+            _urlShortnerService = new GoogleURLShorten();
         }
         
         public SubmittedPaymentMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
@@ -68,6 +69,7 @@ namespace SocialPayments.Services.MessageProcessors
             _logger = LogManager.GetCurrentClassLogger();
             _smsService = smsService;
             _emailService = emailService;
+            _urlShortnerService = new GoogleURLShorten();
         }
 
         public bool Process(Message message)
@@ -103,6 +105,19 @@ namespace SocialPayments.Services.MessageProcessors
             //Batch Transacations
             _logger.Log(LogLevel.Info, String.Format("Batching Transactions for message {0}", message.Id));
 
+            //Calculate the # of hold days
+            var holdDays = 0;
+            var scheduledProcessingDate = System.DateTime.Now.Date;
+            var verificationLevel = PaymentVerificationLevel.Verified;
+            var verifiedLimit = _userService.GetUserInstantLimit(sender);
+
+            if (message.Amount > verifiedLimit)
+            {
+                holdDays = 3;
+                scheduledProcessingDate = scheduledProcessingDate.AddDays(holdDays);
+                verificationLevel = PaymentVerificationLevel.UnVerified;
+            }
+
             try
             {
                 var transactionsList = new Collection<Transaction>();
@@ -118,9 +133,12 @@ namespace SocialPayments.Services.MessageProcessors
                     Id = Guid.NewGuid(),
                     PaymentStatus = PaymentStatus.Pending,
                     SenderAccount = message.SenderAccount,
+                    HoldDays = holdDays,
+                    ScheduledProcessingDate = scheduledProcessingDate,
+                    PaymentVerificationLevel = verificationLevel
                 };
 
-                _logger.Log(LogLevel.Info, String.Format("Batching widthrawal from {0}", sender.UserId));
+                _logger.Log(LogLevel.Info, String.Format("Batching withrawal from {0}", sender.UserId));
 
                 transactionsList.Add(_ctx.Transactions.Add(new Transaction()
                 {
@@ -139,7 +157,7 @@ namespace SocialPayments.Services.MessageProcessors
                     User = sender
                 }));
                 
-                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0)
+                if (recipient != null && recipient.PaymentAccounts != null  && recipient.PaymentAccounts.Count > 0  && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Batching deposit to {0}", recipient.UserId));
 
@@ -157,7 +175,8 @@ namespace SocialPayments.Services.MessageProcessors
                         Status = TransactionStatus.Pending,
                         //TransactionBatch = transactionBatch,
                         Type = TransactionType.Deposit,
-                        User = sender
+                        User = sender,
+                        
                     }));
                 }
                 
@@ -165,6 +184,10 @@ namespace SocialPayments.Services.MessageProcessors
 
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
                 message.LastUpdatedDate = System.DateTime.Now;
+
+                message.shortUrl = _urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+
+                _logger.Log(LogLevel.Info, String.Format("Shortened URL Created -> {0}", message.shortUrl));
 
                 _transactionBatchService.AddTransactionsToBatch(transactionsList);
 
@@ -176,14 +199,6 @@ namespace SocialPayments.Services.MessageProcessors
 
                 throw ex;
             }
-
-            // Get shortened URL here...
-            // TODO: SHORTEN URL
-            GoogleURLShorten service = new GoogleURLShorten();
-            var shortenedUrl = service.ShortenURL(String.Format(_ShortenedBaseURL, message.Id));
-
-            _logger.Log(LogLevel.Info, String.Format("Shortened URL Created -> {0}", shortenedUrl));
-
 
             //Attempt to assign payment to Payee
             if (recipient != null)
@@ -200,7 +215,7 @@ namespace SocialPayments.Services.MessageProcessors
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
 
-                    smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, shortenedUrl);
+                    smsMessage = String.Format(_recipientSMSMessage, message.Amount, senderName, message.shortUrl);
                     _smsService.SendSMS(message.ApiKey, recipient.MobileNumber, smsMessage);
                 }
                 //Send SMS Message to sender
@@ -208,7 +223,7 @@ namespace SocialPayments.Services.MessageProcessors
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender"));
 
-                    smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, shortenedUrl);
+                    smsMessage = String.Format(_senderSMSMessage, message.Amount, recipientName, message.shortUrl);
                     _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
 
                 }
@@ -218,7 +233,7 @@ namespace SocialPayments.Services.MessageProcessors
                     _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Sender"));
 
                     emailSubject = String.Format(_senderConfirmationEmailSubject, recipientName);
-                    emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, shortenedUrl);
+                    emailBody = String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, message.shortUrl);
 
                     _emailService.SendEmail(message.ApiKey, fromAddress, sender.EmailAddress, emailSubject, emailBody);
                 }
@@ -250,7 +265,7 @@ namespace SocialPayments.Services.MessageProcessors
                             new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                            new KeyValuePair<string, string>("link_registration", shortenedUrl),
+                            new KeyValuePair<string, string>("link_registration", message.shortUrl),
                             new KeyValuePair<string, string>("app_user", "false")
                         });
                     }
@@ -360,7 +375,7 @@ namespace SocialPayments.Services.MessageProcessors
                 {
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
-                    smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, shortenedUrl);
+                    smsMessage = String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl);
                     _smsService.SendSMS(message.ApiKey, sender.MobileNumber, smsMessage);
                 }
                 if (!String.IsNullOrEmpty(sender.EmailAddress))
@@ -378,7 +393,7 @@ namespace SocialPayments.Services.MessageProcessors
                     //Send out SMS message to recipient
                     _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient (Recipient is not an registered user)."));
 
-                    smsMessage = String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, shortenedUrl);
+                    smsMessage = String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, message.shortUrl);
                     _smsService.SendSMS(message.ApiKey, message.RecipientUri, smsMessage);
                 }
 
@@ -408,9 +423,24 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("rec_sender_photo_url", (sender.ImageUrl != null ? sender.ImageUrl : _defaultAvatarImage)),
                         new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                         new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                        new KeyValuePair<string, string>("link_registration", shortenedUrl),
+                        new KeyValuePair<string, string>("link_registration", message.shortUrl),
                         new KeyValuePair<string, string>("app_user", "false")
                     });
+                }
+                if (recipientType == URIType.FacebookAccount)
+                {
+                    try
+                    {
+                        var client = new Facebook.FacebookClient("BAAEuHZBe8kkIBAJ8z8OCbZB4zDAOaFSDMdoanBReaor9mw8ZCJRwbDfhaDYGIGNARZBpRGaF4Ms8hdUAXHGy2BOkygo0yoBPh1hpBqcVM6VEIewyM3acOCFFskSZBxI5PBLKZCf2shEgZDZD");
+                        var args = new Dictionary<string, object>();
+                        args["message"] = String.Format("{0} sent you {1} from PaidThx.  Go to {2} to pick it up", senderName, message.Amount, message.shortUrl);
+                        client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, ex.Message);
+                    }
+
                 }
 
             }

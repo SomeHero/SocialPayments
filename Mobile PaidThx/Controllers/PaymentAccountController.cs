@@ -173,6 +173,7 @@ namespace Mobile_PaidThx.Controllers
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
+            
             using (var ctx = new Context())
             {               
                 var userId = (Guid)Session["UserId"];

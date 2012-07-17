@@ -39,6 +39,7 @@ namespace Mobile_PaidThx.Controllers
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
+                    Id = m.Id.ToString(),
                     Amount = m.Amount,
                     RecipientUri = m.RecipientUri,
                     SenderUri = m.SenderUri,

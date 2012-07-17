@@ -93,9 +93,15 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mobile|AnyCPU'">
+    <OutputPath>bin\Mobile\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.0.20\lib\net40-client\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Urlshortener.v1">
       <HintPath>..\Libraries\Google.Apis.Urlshortener.v1.dll</HintPath>
