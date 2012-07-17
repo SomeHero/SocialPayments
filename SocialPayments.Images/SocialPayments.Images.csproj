@@ -102,6 +102,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="assets\contact-icon.gif" />
+    <Content Include="assets\noavatar.png" />
     <Content Include="bankicons\bank.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -112,7 +113,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4700</DevelopmentServerPort>
+          <DevelopmentServerPort>6320</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
