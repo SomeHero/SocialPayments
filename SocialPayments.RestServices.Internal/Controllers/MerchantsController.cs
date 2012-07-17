@@ -34,9 +34,49 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // GET /api/merchants/5
-        public HttpResponseMessage Get(int id)
+        public HttpResponseMessage<MerchantModels.MerchantDetailResponse> Get(string id)
         {
-            return new HttpResponseMessage(HttpStatusCode.NotImplemented);
+            using (var ctx = new Context())
+            {
+                Guid idGuid;
+
+                Guid.TryParse(id, out idGuid);
+                 
+                if (idGuid == null)
+                {
+                    var responseMessage = String.Format("Invalid Id {0}", id);
+                    var response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.NotFound);
+
+                    response.ReasonPhrase = responseMessage;
+
+                    return response;
+                }
+                var merchant = ctx.Merchants
+                    .FirstOrDefault(m => m.UserId.Equals(idGuid));
+
+                if (merchant == null)
+                {
+                    var responseMessage = String.Format("Invalid Id {0}", id);
+                    var response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.NotFound);
+
+                    response.ReasonPhrase = responseMessage;
+
+                    return response;
+                }
+
+                return new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(new MerchantModels.MerchantDetailResponse()
+                {
+                    Id = merchant.UserId,
+                    Name = merchant.Name,
+                    MerchantTagLine = "Non Profit Tag Line",
+                    MerchantDescription = "Description goes here",
+                    MerchantImageUrl = (!String.IsNullOrEmpty(merchant.User.ImageUrl) ? merchant.User.ImageUrl : "http://image.paidthx.com/assets/contact-icon.gif"),
+                    PreferredReceiveAccountId = (merchant.User.PreferredReceiveAccount != null ? merchant.User.PreferredReceiveAccount.Id.ToString() : ""),
+                    PreferredSendAccountId = (merchant.User.PreferredSendAccount != null ? merchant.User.PreferredSendAccount.Id.ToString() : ""),
+                    SuggestedAmount = 50
+                }, HttpStatusCode.OK);
+
+            }
         }
 
         // POST /api/merchants
