@@ -32,7 +32,16 @@
                 Savings</label>
         </fieldset>
     </div>
-    <p>
+          <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <input type="checkbox" name="DefaultRecieve" id="radio-choice-3" value="Recieve"/>
+            <label for="radio-choice-3">
+                Default recieve account.</label>
+            <input type="checkbox" name="DefaultSend" id="radio-choice-4" value="Sending"/>
+            <label for="radio-choice-4">
+                Default Send account</label>
+        </fieldset>
+    </div> <p>
         <button type="button" id="add-account-submit" class="imgbtn">
             <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add
                 Account</span></button></p>

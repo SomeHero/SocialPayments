@@ -11,7 +11,7 @@
     <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignInWithFacebook/&scope=email&state=pickle")'"><img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign In With Facebook </span></button>
     <p class="note-emphasis">OR</p>
     <div id="registration-form">
-        <form id="frmSignIn" action="@Url.Content("~/Account/SignIn")" method="post" data-transition="slide">
+        <form id="frmSignIn" action="@Url.Content("~/Account/SignIn")" method="post">
 
             <input type="text" id="username" class="required" placeholder="Email Address or Phone #" name="Email" />
 

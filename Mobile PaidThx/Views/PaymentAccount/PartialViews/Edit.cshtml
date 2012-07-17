@@ -2,13 +2,14 @@
 @{
     ViewBag.Title = "PaymentAccouunt";
 }
+
 <script src="@Url.Content("~/Scripts/paymentaccount.js")" type="text/javascript"></script>
 <div id="accounts-edit" class="panel main-body dialog">
     <span id="edit-close" class="dialog-close"></span>
     @Html.ValidationSummary()
     <h2>
         Edit Account</h2>
-        <form id="frmEditAccount" action="@Url.Content("PaymentAccount/Edit")" method = "post">
+
     
     <p>
         <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
@@ -24,20 +25,38 @@
             required value="@Model.AccountNumber" /></p>
     <div data-role="fieldcontain">
         <fieldset data-role="controlgroup" data-type="horizontal">
-            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" />
+            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking"/>
             <label for="radio-choice-1">
                 Checking</label>
-            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" checked="checked" />
+            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings"/>
             <label for="radio-choice-2">
                 Savings</label>
+        </fieldset>
+    </div>
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <input type="checkbox" name="DefaultRecieve" id="radio-choice-3" value="Recieve"/>
+            <label for="radio-choice-3">
+                Default recieve account.</label>
+            <input type="checkbox" name="DefaultSend" id="radio-choice-4" value="Sending"/>
+            <label for="radio-choice-4">
+                Default Send account</label>
         </fieldset>
     </div>
 
     <p><button type="submit" id="update-account" class="imgbtn" data-val = "@Model.PaymentAccountId">     
             <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
-                Account</span></button></p></form>
+                Account</span></button></p>
 
         <p> <button type="submit" id="remove-account" class="imgbtn" data-val = "@Model.PaymentAccountId">
             <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Remove
-                Account</span></button></p>
+                Account</span></button></p>  
+
+               <div data-role ="dialog" data-theme="e">
+                   <div data-role="content">
+                        <p>This is the about page.</p>
+                        <a href ="#" data-rel="back" data-role="button">Back</a>
+                   </div>
+               </div>
+
 </div>
