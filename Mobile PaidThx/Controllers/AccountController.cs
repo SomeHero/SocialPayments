@@ -140,7 +140,7 @@ namespace Mobile_PaidThx.Controllers
             string response = null;
             string token = null;
             string tokenExp = null;
-            FacebookUserModels.FBuser fbAccount = null;
+            FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
 
 
             if (state == fbState)
@@ -152,6 +152,7 @@ namespace Mobile_PaidThx.Controllers
                     "&client_secret=" + fbAppSecret +
                     "&code=" + code;
 
+                logger.Log(LogLevel.Info, requestToken);
                 HttpWebRequest wr = GetWebRequest(requestToken);
                 HttpWebResponse resp = null;
 
@@ -167,13 +168,21 @@ namespace Mobile_PaidThx.Controllers
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
                     response = sr.ReadToEnd();
-                    if (response.Length > 0)
+
+                    
+                if (response.Length > 0)
                     {
+                        logger.Log(LogLevel.Info, response);
                         NameValueCollection qs = HttpUtility.ParseQueryString(response);
+       
                         if (qs["access_token"] != null)
                         {
                             token = qs["access_token"];
+                            logger.Log(LogLevel.Info, token);
+                        
                             tokenExp = qs["expires"];
+                            logger.Log(LogLevel.Info, tokenExp);
+                        
                         }
                     }
                     sr.Close();
