@@ -7,7 +7,6 @@ namespace SocialPayments.Domain
 {
     public enum TransactionStatus
     {
-        Submitted = 0,
         Pending = 1,
         Complete = 2,
         Failed = 3,

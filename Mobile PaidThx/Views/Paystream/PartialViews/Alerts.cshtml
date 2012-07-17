@@ -1,0 +1,14 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+
+@{
+    ViewBag.Title = "Alerts";
+}
+<div id="main-body" class="panel">
+<h2>Alerts</h2>
+@if (Model.Alerts.Count == 0)
+{
+    <text>
+        <p>You have received any alerts.</p>
+    </text>
+}
+</div>

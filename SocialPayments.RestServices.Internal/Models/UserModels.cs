@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +11,7 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public Guid userId { get; set; }
             public string userName { get; set; }
+            public string deviceToken { get; set; }
             public string emailAddress { get; set; }
             public bool isConfirmed { get; set; }
             public int passwordFailuresSinceLastSuccess { get; set; }
@@ -24,16 +25,31 @@ namespace SocialPayments.RestServices.Internal.Models
             public string lastLoggedIn { get; set; }
             public string firstName { get; set; }
             public string lastName { get; set; }
+            public string imageUrl { get; set; }
             public string address { get; set; }
             public string city { get; set; }
             public string state { get; set; }
             public string zip { get; set; }
             public string senderName { get; set; }
             public double upperLimit { get; set; }
+            public string securityQuestion { get; set; }
+            public int? securityQuestionId { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
+            public string preferredPaymentAccountId { get; set; }
+            public string preferredReceiveAccountId { get; set; }
+            public string registrationId { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
+
+            public bool setupSecurityPin { get; set; }
+            public int numberOfPaysteamUpdates { get; set; }
+
+            public List<UserPayPointResponse> userPayPoints { get; set; }
+            public List<MessageModels.MessageResponse> pendingMessages { get; set; }
+            public List<AccountModels.AccountResponse> bankAccounts { get; set; }
+            public List<UserModels.UserConfigurationResponse> userConfigurationVariables { get; set; }
+
         }
         public class SubmitUserRequest
         {
@@ -52,6 +68,11 @@ namespace SocialPayments.RestServices.Internal.Models
         public class UpdateSecurityPin
         {
             public string securityPin { get; set; }
+        }
+        public class UpdateSecurityQuestion
+        {
+            public int questionId { get; set; }
+            public string questionAnswer { get; set; }
         }
         public class ChangeSecurityPinRequest
         {
@@ -81,6 +102,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string paymentAccountId { get; set; }
             public bool setupSecurityPin { get; set; }
             public int upperLimit { get; set; }
+
+            // Added Security Question Implementation
+            public bool setupSecurityQuestion { get; set; }
+            public bool isLockedOut { get; set; }
         }
         public class FacebookSignInRequest
         {
@@ -99,6 +124,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string mobileNumber { get; set; }
             public string paymentAccountId { get; set; }
             public int upperLimit { get; set; }
+
+            // Added Security Question Implementation
+            public bool setupSecurityQuestion { get; set; }
+            public bool isLockedOut { get; set; }
         }
         public class MECodeResponse
         {
@@ -118,6 +147,48 @@ namespace SocialPayments.RestServices.Internal.Models
             public DateTime? ApprovedDate { get; set; }
             public bool IsApproved { get; set; }
             public bool IsActive { get; set; }
+        }
+        public class PersonalizeUserRequest
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string ImageUrl { get; set; }
+        }
+        public class ChangePasswordRequest
+        {
+            public string currentPassword { get; set; }
+            public string newPassword { get; set; }
+        }
+
+        public class PushNotificationRequest
+        {
+            public string registrationId { get; set; }
+            public string deviceToken { get; set; }
+        }
+        public class AddUserPayPointRequest
+        {
+            public string PayPointType { get; set; }
+            public string Uri { get; set; }
+        }
+        public class UserPayPointResponse
+        {
+            public string Id { get; set; }
+            public string UserId { get; set; }
+            public string Uri { get; set; }
+            public string Type { get; set; }
+        }
+        public class UserConfigurationResponse
+        {
+            public string Id { get; set; }
+            public string UserId { get; set; }
+            public string ConfigurationKey { get; set; }
+            public string ConfigurationValue { get; set; }
+            public string ConfigurationType { get; set; }
+        }
+        public class UpdateUserConfigurationRequest
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
     }
 }

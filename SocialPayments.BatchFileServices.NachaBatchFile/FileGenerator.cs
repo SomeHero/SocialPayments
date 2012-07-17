@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DomainServices;
+using NLog;
 
 namespace SocialPayments.BatchFileServices.NachaBatchFile
 {
@@ -24,7 +25,9 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
         private int numberInCurrentBatch;
         private int numberOfBatches;
         private int numberOfRecords;
+        private FormattingServices formattingService = new FormattingServices();
         private SecurityService securityService = new SecurityService();
+        private Logger _logger = LogManager.GetCurrentClassLogger();
 
         public FileGenerator()
         {
@@ -39,11 +42,13 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             OriginatingTransitRoutingNumber = "053000111";
 
         }
-        public List<string> ProcessFile(List<Transaction> transactions)
+        public List<string> ProcessFile(ICollection<Transaction> transactions)
         {
             DateTime processedDate = System.DateTime.Now;
             List<string> results = new List<string>();
             var batchNumber = 1;
+
+            _logger.Log(LogLevel.Info, String.Format("Start Process NACHA File for {0} with {1} transactions", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
 
             results.Add(CreateFileHeaderRecord(processedDate));
             results.Add(CreateBatchHeaderRecord(transactions, "PPD", "Test Transactions", processedDate, processedDate.AddDays(2), OriginatingTransitRoutingNumber, batchNumber));
@@ -51,7 +56,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 results.Add(CreateBatchDetailRecord(transaction));
             }
             results.Add(CreateBatchTrailerRecord(transactions, batchNumber));
-            results.Add(CreateFileTrailerRecord(transactions));
+            results.Add(CreateFileTrailerRecord(processedDate, transactions));
 
 
             var blockCountRecords = 10 - numberOfRecords%10;
@@ -61,11 +66,15 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 results.Add(CreateBlockTrailerRecord());
             }
 
-             return results;
+            _logger.Log(LogLevel.Info, String.Format("Complete Process NACHA File for {0} with {1} transactions", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
+            
+            return results;
         }
 
         private string CreateFileHeaderRecord(DateTime processedDate)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start File Header Record for {0}", processedDate.ToString("MM/dd/yy hh:mm")));
+
             numberOfRecords += 1;
 
             StringBuilder sb = new StringBuilder();
@@ -84,11 +93,15 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             sb.Append(ImmediateOriginName.Truncate(23).PadRight(23, ' '));   //Immediate Origination
             sb.Append("".PadLeft(8, ' '));
 
+            _logger.Log(LogLevel.Info, String.Format("Complete File Header Record for {0}", processedDate.ToString("MM/dd/yy hh:mm")));
+
             return sb.ToString();
         }
-        private string CreateBatchHeaderRecord(List<Transaction> transactions, string standardEntryClass, string entryDescription, DateTime companyDescriptiveDate,
+        private string CreateBatchHeaderRecord(ICollection<Transaction> transactions, string standardEntryClass, string entryDescription, DateTime companyDescriptiveDate,
             DateTime effectiveEntryDate, string originatingTransitRoutingNumber, int batchNumber)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start Batch Header Record for {0} with {1}", batchNumber, transactions.Count));
+
             numberOfRecords += 1;
             numberInCurrentBatch = 0;
 
@@ -109,10 +122,14 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             sb.Append(originatingTransitRoutingNumber.Truncate(8).PadLeft(8, ' '));   //Originating Financial Institution
             sb.Append(batchNumber.ToString().PadLeft(7, '0'));   //Batch Number
 
+            _logger.Log(LogLevel.Info, String.Format("Complete Batch Header Record for {0} with {1}", batchNumber, transactions.Count));
+
             return sb.ToString();
         }
-        private string CreateBatchTrailerRecord(List<Transaction> transactions, int batchNumber)
+        private string CreateBatchTrailerRecord(ICollection<Transaction> transactions, int batchNumber)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start Batch Trailer Record for {0} with {1}", batchNumber, transactions.Count));
+
             numberOfRecords += 1;
 
             string entryHash = CalcuateEntryHash(transactions);
@@ -140,10 +157,12 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             numberOfBatches += 1;
 
+            _logger.Log(LogLevel.Info, String.Format("Start Batch Trailer Record for {0} with {1}", batchNumber, transactions.Count));
+
             return sb.ToString();
         }
 
-        private string CalcuateEntryHash(List<Transaction> transactions)
+        private string CalcuateEntryHash(ICollection<Transaction> transactions)
         {
             Int64 entryHash = 0;
             foreach (Transaction transaction in transactions)
@@ -168,8 +187,10 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             return entryHashString;
         }
 
-        private string CreateFileTrailerRecord(List<Transaction> transactions)
+        private string CreateFileTrailerRecord(DateTime processedDate, ICollection<Transaction> transactions)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start File Trailer Record for {0} with {1}", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
+
             numberOfRecords += 1;
 
             string entryHash = CalcuateEntryHash(transactions);
@@ -197,10 +218,14 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             sb.Append(totalCreditAmount.ToString("0.00").Replace(".", "").PadLeft(12, '0'));     //Total Credit Amount
             sb.Append("".PadLeft(39, ' '));               //Reserved
 
+            _logger.Log(LogLevel.Info, String.Format("Complete File Trailer Record for {0} with {1}", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
+
             return sb.ToString();
         }
         private string CreateBatchDetailRecord(Transaction transaction)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start Batch Detail Record for transaction {0}", transaction.Id));
+
             achTxIDCount += 1;
             numberOfRecords += 1;
             numberInCurrentBatch += 1;
@@ -225,12 +250,12 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             }
         
             string routingNumber = securityService.Decrypt(transaction.FromAccount.RoutingNumber);
-            sb.Append(routingNumber.PadLeft(9, ' '));  //Receiving DFI Identification
+            sb.Append(routingNumber.Truncate(9).PadLeft(9, ' '));  //Receiving DFI Identification
 
             string accountNumber = securityService.Decrypt(transaction.FromAccount.AccountNumber);
-            sb.Append(accountNumber.PadRight(17, ' '));  //DFI Account Number
-            sb.Append((transaction.Amount * 100).ToString().PadLeft(10, '0'));  //Amount
-            sb.Append(transaction.FromAccount.User.MobileNumber.PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
+            sb.Append(accountNumber.Truncate(17).PadRight(17, ' '));  //DFI Account Number
+            sb.Append((transaction.Amount * 100).ToString().Truncate(10).PadLeft(10, '0'));  //Amount
+            sb.Append(formattingService.FormatUserName(transaction.FromAccount.User).Truncate(15).PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
 
             string nameOnAccount = securityService.Decrypt(transaction.FromAccount.NameOnAccount);
             sb.Append(nameOnAccount.Truncate(22).PadRight(22, ' '));   //Individual Name
@@ -260,10 +285,13 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             //Update Payment With ACHSubmitTransactionId and ACHFileName and ACH D/T
             transaction.ACHTransactionId = achTxIDCount.ToString();
 
+            _logger.Log(LogLevel.Info, String.Format("Complete Batch Detail Record for transaction {0}", transaction.Id));
+
             return sb.ToString();
         }
         private string CreateBlockTrailerRecord()
         {
+            
             numberOfRecords += 1;
 
             return "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999";

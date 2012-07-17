@@ -1,0 +1,36 @@
+﻿@model Mobile_PaidThx.Models.MobileDeviceVerificationModel
+<div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
+    <div id="logo" style="float: left">
+        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
+    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
+        Welcome
+    </div>
+</div>
+<div id="main-body" class="panel">
+    @Html.ValidationSummary()
+    <h2>
+        Welcome to PaidThx!</h2>
+    <p>
+        You have just joined PaidThx. The first Social Payment Network. Where sending and
+        receiving money is as easy as a swipe of a finger.</p>
+    <h2>
+        Verify Your Mobile Device</h2>
+    <p>
+        For security purposes, we have sent an SMS message containing a 5 digit verification
+        code to your mobile phone at <b>@Model.MobileNumber</b>. Please enter the 5 digit verification
+        code below and click Verify My Phone</p>
+    <form id="frmVerifyMobileDevice" method="post" action="ValidateMobileDevice">
+    <p>
+        <input type="text" id="verification-code" class="required input-text" placeholder="Enter Verification Code"
+            name="VerificationCode" value="" /></p>
+    <p>
+        <button type="submit" id="verify-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Verify My Phone</span></button>
+    </p>
+    </form>
+    <div id="main-body-sub-links">
+        <p style="text-align: center">
+            <a href="">@Model.MobileNumber is not my number</a></p>
+        <p style="text-align: center">
+            <a href="">Re-send Verification Code</a></p>
+    </div>
+</div>

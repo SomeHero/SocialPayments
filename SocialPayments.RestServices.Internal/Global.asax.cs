@@ -45,8 +45,13 @@ namespace SocialPayments.RestServices.Internal
             );
             routes.MapHttpRoute(
                 name: "RejectPaymentRequest",
-                routeTemplate: "api/paystreammessages/{id}/accept_request",
+                routeTemplate: "api/paystreammessages/{id}/reject_request",
                 defaults: new { controller = "PaystreamMessages", action = "RejectPaymentRequest" }
+            );
+            routes.MapHttpRoute(
+                name: "CancelPaymentRequest",
+                routeTemplate: "api/paystreammessages/{id}/cancel_request",
+                defaults: new { controller = "PaystreamMessages", action = "CancelRequest" }
             );
             routes.MapHttpRoute(
                 name: "IgnorePaymentRequest",
@@ -54,6 +59,18 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
             );
 
+            //api/user/{id}/personalize_user
+            routes.MapHttpRoute(
+                name: "PersonalizeUser",
+                routeTemplate: "api/users/{id}/personalize_user",
+                defaults: new { controller = "Users", action = "PersonalizeUser" }
+            );
+            routes.MapHttpRoute(
+                name: "ValidateSecurityQuestion",
+                routeTemplate: "api/users/{id}/validate_security_question",
+                defaults: new { controller = "SecurityQuestions", action = "ValidateSecurityQuestion" }
+            );
+         
             routes.MapHttpRoute(
                 name: "SetupSecurityPin",
                 routeTemplate: "api/users/{id}/setup_securitypin",
@@ -61,9 +78,9 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
-            name: "ChangeSecurityPin",
-            routeTemplate: "api/users/{id}/change_securitypin",
-            defaults: new { controller = "Users", action = "ChangeSecurityPin" }
+                name: "ChangeSecurityPin",
+                routeTemplate: "api/users/{id}/change_securitypin",
+                defaults: new { controller = "Users", action = "ChangeSecurityPin" }
             );
 
             routes.MapHttpRoute(
@@ -79,11 +96,66 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+name: "UserPayPoints",
+routeTemplate: "api/users/{userId}/PayPoints/{id}",
+defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+);
+            routes.MapHttpRoute(
+    name: "UserPayPointsWithType",
+    routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
+    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type= RouteParameter.Optional }
+);
+
+            routes.MapHttpRoute(
                 name: "UserMECodes",
                 routeTemplate: "api/users/{userId}/mecodes/{id}",
                 defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
             );
+            routes.MapHttpRoute(
+    name: "UploadMemberImage",
+    routeTemplate: "api/users/{id}/upload_member_image",
+    defaults: new { controller = "Users", action = "UploadMemberImage" }
+);
+            routes.MapHttpRoute(
+                name: "ChangePassword",
+                routeTemplate: "api/users/{id}/change_password",
+                defaults: new { controller = "Users", action = "ChangePassword" }
+            );
 
+            routes.MapHttpRoute(
+            name: "RegisterPushNotifications",
+            routeTemplate: "api/users/{id}/registerpushnotifications",
+            defaults: new { controller = "Users", action = "RegisterForPushNotifications" }
+            );
+
+            routes.MapHttpRoute(
+                name: "AddUserPaymentAccounts",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/add_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "AddAccount" }
+            );
+
+            routes.MapHttpRoute(
+name: "UploadCheckImage",
+routeTemplate: "api/users/{id}/PaymentAccounts/upload_check_image",
+defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" }
+);
+            routes.MapHttpRoute(
+                name: "SetPreferredSendAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_send_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredSendAccount" }
+            );
+
+            routes.MapHttpRoute(
+                name: "SetPreferredReceiveAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_receive_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredReceiveAccount" }
+            );
+
+            routes.MapHttpRoute(
+                name: "UserConfigurations",
+                routeTemplate: "api/users/{userId}/Configurations/{id}",
+                defaults: new { controller = "UserConfigurations", id = RouteParameter.Optional }
+            );
 
             routes.MapHttpRoute(
                 name: "UserPaymentAccounts",

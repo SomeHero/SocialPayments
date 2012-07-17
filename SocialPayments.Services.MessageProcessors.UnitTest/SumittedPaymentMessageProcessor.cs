@@ -597,5 +597,90 @@ namespace SocialPayments.Services.MessageProcessors.UnitTest
 
             Assert.AreEqual(2, _ctx.Transactions.Count());
         }
+
+        [TestMethod]
+        public void sendPaymentToAndroidPhone()
+        {
+            Guid messageId = Guid.NewGuid();
+            Guid apiKey = Guid.NewGuid();
+            Guid senderId = Guid.NewGuid();
+            Guid senderAccountId = Guid.NewGuid();
+
+            _ctx = new FakeDbContext();
+
+            var application = _ctx.Applications.Add(new Domain.Application()
+            {
+                ApiKey = apiKey,
+                ApplicationName = "Test App",
+                IsActive = true,
+                Url = "http:\\test.paidthx.com"
+            });
+
+            var sender = _ctx.Users.Add(new Domain.User()
+            {
+                Application = application,
+                ApiKey = apiKey,
+                CreateDate = System.DateTime.Now,
+                EmailAddress = "edward@pdthx.me",
+                Limit = 100,
+                MobileNumber = "4439777232",
+                Password = "asdf",
+                PaymentAccounts = new System.Collections.ObjectModel.Collection<Domain.PaymentAccount>(),
+                IsConfirmed = true,
+                SecurityPin = "1234",
+                SetupPassword = true,
+                SetupSecurityPin = true,
+                UserStatus = Domain.UserStatus.Verified,
+                DeviceToken = "6b0bf548627aecffe1a87b3febf62c9f6eda50c35b6acce067a21b365dcc94b4",
+                RegistrationId = "APA91bFvTMvUOIwR2neHvWdENYpmydo4eyLayM9ABl17Tj0WlR7n5u3O7Lf0PX-O3V5FbADew9c2dlpE9FmBXbdfGSSA45PTA_fjJjxJxM0Ld_ps7qE52DIM8pSP-yAR8sZK3Hv5mDCNPyxQ1YePpARP5ZAl1dUeFQ"
+            });
+
+            _ctx.SaveChanges();
+
+            var senderAccount = new Domain.PaymentAccount()
+            {
+                AccountNumber = "1234123412",
+                AccountType = Domain.PaymentAccountType.Checking,
+                IsActive = true,
+                CreateDate = System.DateTime.Now,
+                Id = senderAccountId,
+                NameOnAccount = "Edward Mitchell",
+                RoutingNumber = "053000219",
+            };
+
+            sender.PaymentAccounts.Add(senderAccount);
+
+            _ctx.SaveChanges();
+
+            var message = _ctx.Messages.Add(new Domain.Message()
+            {
+                Amount = 1,
+                Application = application,
+                ApiKey = apiKey,
+                Comments = "Test Payment",
+                CreateDate = System.DateTime.Now,
+                Id = messageId,
+                MessageStatus = Domain.MessageStatus.Pending,
+                MessageType = Domain.MessageType.Payment,
+                RecipientUri = "4439777232",
+                Sender = sender,
+                SenderId = senderId,
+                SenderAccount = senderAccount,
+                SenderAccountId = senderAccountId,
+                SenderUri = "7574691582",
+                Transactions = new System.Collections.ObjectModel.Collection<Domain.Transaction>()
+            });
+
+            _ctx.SaveChanges();
+
+            SubmittedPaymentMessageProcessor processor = new SubmittedPaymentMessageProcessor(_ctx);
+
+            processor.Process(message);
+
+            Assert.AreEqual(1, _ctx.Transactions.Count());
+            
+        }
     }
+
+    
 }

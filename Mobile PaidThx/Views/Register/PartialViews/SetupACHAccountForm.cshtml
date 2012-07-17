@@ -1,0 +1,57 @@
+﻿@model Mobile_PaidThx.Models.SetupACHAccountModel
+<div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
+    <div id="logo" style="float: left">
+        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
+    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
+        Enable Payments
+    </div>
+</div>
+<div id="main-body" class="panel">
+    @Html.ValidationSummary()
+    <h2>
+        Your Mobile Device is Verified!</h2>
+    @if (Model.Payment != null)
+    {
+        <text>
+        <p>
+            You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> in pending payments.
+            To enable sending and receiving of payments thru PaidThx, please enter your preferred
+            bank credentials.</p>
+        </text>
+    }
+    <h2>Enable Payments</h2>
+    <div class="panel">
+            At PaidThx, our first priority is your security and privacy.  We will not share your information with any 3rd party at any time for any reason.
+    </div>
+
+    <p style="text-align: center"><a href="">Learn more</a> about PaidThx security
+    <div id="setup-ach-account-form">
+        <form id="frmSetupACHAccount" action="SetupACHAccount" method="post">
+        <p>
+            <input type="text" id="nameOnAccount" name="NameOnAccount" class="required input-text"
+                placeholder="Name On Account" />
+        </p>
+        <p>
+            <input type="text" id="routingNumber" name="RoutingNumber" class="required input-text"
+                placeholder="Routing Number" />
+        </p>
+        <p>
+            <input type="text" id="accountNumber" name="AccountNumber" class="required input-text"
+                placeholder="Account Number" />
+        </p>
+        <div data-role="fieldcontain">
+            <fieldset data-role="controlgroup" data-type="horizontal">
+                <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" />
+                <label for="radio-choice-1">
+                    Checking</label>
+                <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" checked="checked" />
+                <label for="radio-choice-2">
+                    Savings</label>
+            </fieldset>
+        </div>
+        <p style="margin-top: 15px">
+            <button type="submit" id="button-submit-ach" class="imgbtn"><img src="@Url.Content("~/Content/images/enable-payments-button-icon.png")" alt="" /><span>Enable Payments</span></button>
+        </p>
+        </form>
+    </div>
+</div>

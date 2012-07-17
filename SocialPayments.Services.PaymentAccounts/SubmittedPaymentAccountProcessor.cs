@@ -37,7 +37,7 @@ namespace SocialPayments.Services.PaymentAccounts
 
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _paymentAccountVerificationService = new PaymentAccountVerificationService(_ctx, _logger);
-            _emailService = new EmailService(_ctx, _logger);
+            _emailService = emailService;
         }
         public bool Process(PaymentAccount paymentAccount)
         {
@@ -65,9 +65,9 @@ namespace SocialPayments.Services.PaymentAccounts
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
-                UserId = paymentAccount.UserId
+                User = paymentAccount.User
             });
             var deposit2 = _ctx.Transactions.Add(new Transaction()
             {
@@ -78,9 +78,9 @@ namespace SocialPayments.Services.PaymentAccounts
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Deposit,
-                UserId = paymentAccount.UserId
+                User = paymentAccount.User
             });
             var withdrawal = _ctx.Transactions.Add(new Transaction()
             {
@@ -91,24 +91,24 @@ namespace SocialPayments.Services.PaymentAccounts
                 Id = Guid.NewGuid(),
                 PaymentChannelType = PaymentChannelType.Single,
                 StandardEntryClass = StandardEntryClass.Web,
-                Status = TransactionStatus.Submitted,
+                Status = TransactionStatus.Pending,
                 Type = TransactionType.Withdrawal,
-                UserId = paymentAccount.UserId
+                User = paymentAccount.User
             });
 
             //batch two deposits into account and one withdrawal for total deposit amount
-            try
-            {
-                _transactionBatchService.BatchTransactions(new List<Transaction>() {
-                    deposit1,
-                    deposit2,
-                    withdrawal
-                });
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //try
+            //{
+            //    _transactionBatchService.BatchTransactions(new List<Transaction>() {
+            //        deposit1,
+            //        deposit2,
+            //        withdrawal
+            //    });
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
 
             //log to PaymentAccountVerification log table and estimate when settlement complete
             var paymentAccountVerification =  _paymentAccountVerificationService.AddVerification(paymentAccount.UserId.ToString(), paymentAccount.Id.ToString()

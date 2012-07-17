@@ -33,6 +33,8 @@ namespace SocialPayments.Domain
         public virtual string Password { get; set; }
         public virtual bool IsConfirmed { get; set; }
         public virtual int PasswordFailuresSinceLastSuccess { get; set; }
+        public virtual int PinCodeFailuresSinceLastSuccess { get; set; }
+        public virtual DateTime? PinCodeLockOutResetTimeout { get; set; }
         public virtual Nullable<DateTime> LastPasswordFailureDate { get; set; }
         [MaxLength(100)]
         public virtual string ConfirmationToken { get; set; }
@@ -77,6 +79,9 @@ namespace SocialPayments.Domain
         public virtual bool SetupPassword { get; set; }
         public virtual Collection<PaymentAccount> PaymentAccounts { get; set; }
 
+        [MaxLength(255)]
+        public string OrganizationName { get; set; }
+
         [MaxLength(100)]
         public string FirstName { get; set; }
         [MaxLength(100)]
@@ -97,11 +102,34 @@ namespace SocialPayments.Domain
         public virtual Collection<Message> Messages { get; set; }
         [MaxLength(100)]
         public string DeviceToken { get; set; }
+        public string RegistrationId { get; set; }
 
         public virtual Collection<MECode> MECodes { get; set; }
+        [MaxLength(255)]
+        public string ImageUrl { get; set; }
 
+        // Security Question
+        public virtual SecurityQuestion SecurityQuestion { get; set; }
+        public virtual int? SecurityQuestionID { get; set; }
+        [MaxLength(50)]
+        public virtual string SecurityQuestionAnswer { get; set; }
 
-        
+        //Preferred Accounts
+        public virtual Guid? PreferredSendAccountId { get; set; }
+        public virtual PaymentAccount PreferredSendAccount { get; set; }
+
+        public virtual Guid? PreferredReceiveAccountId { get; set; }
+        public virtual PaymentAccount PreferredReceiveAccount { get; set; }
+
+        public int UserTypeId { get; set; }
+        [ForeignKey("UserTypeId")]
+        public UserType UserType { get; set; }
+
+        public virtual Collection<UserPayPoint> PayPoints { get; set; }
+        public virtual Collection<UserNotification> NotificationConfiguration { get; set; }
+
+        public virtual Collection<UserConfiguration> UserConfigurations { get; set; }
+        public virtual Collection<UserSocialNetwork> UserSocialNetworks { get; set; }
     }
 
 }

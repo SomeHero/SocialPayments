@@ -63,6 +63,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return response;
             }
 
+            var profileSections = _ctx.ProfileSections
+                .Select(u => u)
+                .OrderBy(u => u.SortOrder)
+                .ToList();
+
             //TODO: check to make sure passed in id is the calling application
 
             return new HttpResponseMessage<ApplicationModels.ApplicationResponse>(new ApplicationModels.ApplicationResponse()
@@ -70,7 +75,23 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 apiKey = application.ApiKey.ToString(),
                 id = application.ApiKey.ToString(),
                 isActive = application.IsActive,
-                url = application.Url
+                url = application.Url,
+                ConfigurationVariables = application.ConfigurationValues.Select(c => new ApplicationModels.ApplicationConfigurationResponse() {
+                    ApiKey = c.ApiKey.ToString(),
+                    ConfigurationKey = c.ConfigurationKey,
+                    ConfigurationValue = c.ConfigurationValue,
+                    ConfigurationType = c.ConfigurationType
+                }).ToList(),
+                ProfileSections = profileSections.Select(a => new ApplicationModels.ProfileSectionResponse() {
+                    Id = a.Id,
+                    SectionHeader = a.SectionHeader,
+                    SortOrder = a.SortOrder,
+                    ProfileItems = a.ProfileItems.Select(i  => new ApplicationModels.ProfileItemResponse() {
+                        Id = i.Id,
+                        Label = i.Label,
+                        SortOrder = i.SortOrder
+                    }).ToList()
+                }).ToList()
             }, HttpStatusCode.OK);
         }
 
