@@ -275,5 +275,5 @@ $(document).ready(function () {
 });
 var getBaseURL = function () {
     return location.protocol + "//" + location.hostname +
-      (location.port && ":" + location.port) + "/";
+      (location.port && ":" + location.port) + "/mobile/";
 }
