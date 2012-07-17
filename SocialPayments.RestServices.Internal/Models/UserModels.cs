@@ -85,6 +85,7 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class UserAttribute
         {
+            public Guid AttributeId { get; set; }
             public string AttributeName { get; set; }
             public string AttributeValue { get; set; }
         }
@@ -159,12 +160,6 @@ namespace SocialPayments.RestServices.Internal.Models
         public class ChangePasswordRequest
         {
             public string currentPassword { get; set; }
-            public string newPassword { get; set; }
-        }
-
-        public class ForgotPasswordRequest
-        {
-            public string securityQuestionAnswer { get; set; }
             public string newPassword { get; set; }
         }
 

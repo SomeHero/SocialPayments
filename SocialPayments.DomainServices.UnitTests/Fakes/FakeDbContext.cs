@@ -34,6 +34,8 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<UserNotification> _userNotificationConfigurations;
         private IDbSet<ApplicationConfiguration> _applicationConfigurations { get; set; }
         private IDbSet<UserConfiguration> _userConfigurations { get; set; }
+        private IDbSet<Merchant> _merchants { get; set; }
+        private IDbSet<PasswordResetAttempt> _passwordResetAttempts { get; set; }
 
         public FakeDbContext()
         {
@@ -167,10 +169,12 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             set { _userNotificationConfigurations = value; }
         }
         public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
-        public  IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        public IDbSet<UserConfiguration> UserConfigurations { get; set; }
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
         public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<Merchant> Merchants { get; set; }
+        public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         public void SaveChanges()
         {
             //return 0;

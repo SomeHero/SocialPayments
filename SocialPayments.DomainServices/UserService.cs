@@ -504,6 +504,53 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User ResetPassword(string userId, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
+        public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+            {
+                var error = @"Security Question Incorrect";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to reset password for {0}. {1}", userId, error));
+
+                throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));
@@ -525,7 +572,23 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
+        public double GetUserInstantLimit(User User)
+        {
+            var timeToCheck = System.DateTime.Now.AddHours(-24);
 
+            var verifiedPaymentAmounts = _ctx.Messages
+                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck  && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.UnVerified));
+
+            var amountSent = 0;
+            
+            if(verifiedPaymentAmounts.Count() > 0)
+                verifiedPaymentAmounts.Sum(m => m.Amount);
+
+            if(amountSent > 0)
+                return 100 - amountSent;
+            else
+                return 0;
+        }
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));

@@ -140,7 +140,7 @@ namespace Mobile_PaidThx.Controllers
             string response = null;
             string token = null;
             string tokenExp = null;
-            FacebookUserModels.FBuser fbAccount = null;
+            FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
 
 
             if (state == fbState)
@@ -152,19 +152,37 @@ namespace Mobile_PaidThx.Controllers
                     "&client_secret=" + fbAppSecret +
                     "&code=" + code;
 
+                logger.Log(LogLevel.Info, requestToken);
                 HttpWebRequest wr = GetWebRequest(requestToken);
-                HttpWebResponse resp = (HttpWebResponse)wr.GetResponse();
+                HttpWebResponse resp = null;
+
+                try
+                {
+                    resp = (HttpWebResponse)wr.GetResponse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, ex.Message);
+                }
 
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
                     response = sr.ReadToEnd();
-                    if (response.Length > 0)
+
+                    
+                if (response.Length > 0)
                     {
+                        logger.Log(LogLevel.Info, response);
                         NameValueCollection qs = HttpUtility.ParseQueryString(response);
+       
                         if (qs["access_token"] != null)
                         {
                             token = qs["access_token"];
+                            logger.Log(LogLevel.Info, token);
+                        
                             tokenExp = qs["expires"];
+                            logger.Log(LogLevel.Info, tokenExp);
+                        
                         }
                     }
                     sr.Close();
@@ -364,7 +382,7 @@ namespace Mobile_PaidThx.Controllers
                         SmtpClient sc = new SmtpClient();
                         sc.EnableSsl = true;
 
-                        sc.Send("admin@paidthx.com", user.EmailAddress, "You're PaidThx Password", sbBody.ToString());
+                        sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
 
                         model.PasswordSent = true;
                     }
@@ -387,12 +405,112 @@ namespace Mobile_PaidThx.Controllers
             return RedirectToAction("SignIn", "Account");
         }
 
-        public ActionResult PasswordReset(string id)
+        public ActionResult ResetPassword(string id)
         {
-            return View(new PasswordResetModel()
+            using(var ctx = new Context()) {
+
+                Guid idGuid;
+
+                Guid.TryParse(id, out idGuid);
+
+                if (idGuid == null)
+                {
+                    ModelState.AddModelError("", "Invalid Id");
+                }
+
+
+                SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                    .FirstOrDefault(p => p.Id == idGuid);
+
+                ResetPasswordModelInput model = new ResetPasswordModelInput();
+
+                if (passwordResetDb == null)
+                {
+                    ModelState.AddModelError("", "Invalid Attempt");
+                    return View(model);
+                }
+
+                if (passwordResetDb.ExpiresDate < System.DateTime.Now)
+                {
+                    ModelState.AddModelError("", "Password reset link has expired.");
+                    passwordResetDb.Clicked = true;
+                    return View(model);
+                }
+
+                if (passwordResetDb.Clicked)
+                {
+                    ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
+                    return View(model);
+                }
+
+                if (passwordResetDb.User.SecurityQuestion == null)
+                {
+                    model.SecurityQuestion = "";
+                    model.HasSecurityQuestion = false;
+
+                    return View(model);
+                }
+                passwordResetDb.Clicked = true;
+                model.HasSecurityQuestion = true;
+                model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(string id, ResetPasswordModelOutput model)
+        {
+            if (model.NewPassword.Equals(model.ConfirmPassword))
             {
-                SecurityQuestion = "Last 4 Digits of your name?"
-            });
+                using (var ctx = new Context())
+                {
+                    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
+                    UserService userService = new UserService(ctx);
+
+                    try
+                    {
+                        Guid idGuid;
+
+                        Guid.TryParse(id, out idGuid);
+
+                        if (idGuid == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Id");
+                        }
+
+
+                        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                            .FirstOrDefault(p => p.Id == idGuid);
+
+                        if (passwordResetDb == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Attempt");
+                        }
+
+                        if (model.SecurityQuestionAnswer == null)
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
+                            return View("SignIn");
+                        }
+                        else
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
+                            return View("SignIn");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "New password and confirm password do not match.");
+            }
+
+            return View(model);
         }
 
         private static HttpWebRequest GetWebRequest(string formattedUri)
