@@ -12,6 +12,14 @@ $(document).ready(function () {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
         });
     });
+    $("#update-account").live('click', function () {
+        var paymentAccountId = $(this).attr('data-val');
+        $.post(getBaseURL() + "PaymentAccount/Edit/" + paymentAccountId,
+            $("#frmEditAccount").serialize(),
+            function (data) {
+                $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
+            });
+    });
     $("#remove-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.post(getBaseURL() + "PaymentAccount/Remove/" + paymentAccountId,
