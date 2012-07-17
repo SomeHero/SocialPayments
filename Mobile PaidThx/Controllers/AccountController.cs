@@ -350,14 +350,14 @@ namespace Mobile_PaidThx.Controllers
                 return View(model);
             }
         }
-        public ActionResult ForgotEmail()
+        public ActionResult ForgotPassword()
         {
             var model = new ForgotPasswordModel();
             model.PasswordSent = false;
-            return View();
+            return View(model);
         }
         [HttpPost]
-        public ActionResult ForgotEmail(ForgotPasswordModel model)
+        public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             using (var ctx = new Context())
             {
@@ -374,15 +374,14 @@ namespace Mobile_PaidThx.Controllers
 
                         if (user.EmailAddress.Length == 0)
                             throw new Exception(String.Format("No email address asssociated with username {0}", model.UserName));
-
-                        StringBuilder sbBody = new StringBuilder();
-                        sbBody.AppendFormat("Your password is {0}.", securityService.Decrypt(user.Password));
-
                         //Send Email
-                        SmtpClient sc = new SmtpClient();
-                        sc.EnableSsl = true;
+                        //SmtpClient sc = new SmtpClient();
+                        //sc.EnableSsl = true;
 
-                        sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
+                        //sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
+
+                        UserService userService = new UserService(ctx);
+                        userService.SendResetPasswordLink(user);
 
                         model.PasswordSent = true;
                     }

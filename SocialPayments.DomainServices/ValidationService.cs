@@ -50,6 +50,13 @@ namespace SocialPayments.DomainServices
             return isStrictMatch;
 
         }
+
+        public bool IsPhoneNumber(string uri)
+        {
+            string patternStrict = "[0-9]{10}";
+            Regex reStrict = new Regex(patternStrict);
+            return reStrict.IsMatch(uri);           
+        }
         public bool IsMECode(string uri)
         {
             return uri[0].Equals('$');
