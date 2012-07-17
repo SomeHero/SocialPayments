@@ -38,14 +38,23 @@ namespace Mobile_PaidThx.Controllers
                 {
                     if (paymentAccount.IsActive == true)
                     {
+                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
+                        if (tempNumber.Length > 3)
+                        {
+                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
+                        }
                         model.PaymentAccounts.Add(new BankAccountModel()
                         {
+                             BankName = paymentAccount.BankName,
+                            BankIconURL = paymentAccount.BankIconURL,
                             PaymentAccountId = paymentAccount.Id.ToString(),
-                            AccountNumber = securityService.Decrypt(paymentAccount.AccountNumber),
+                            AccountNumber = "******" + tempNumber,
                             AccountType = paymentAccount.AccountType.ToString(),
                             NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                            Nickname = "",
+                            Nickname = paymentAccount.Nickname,
                             RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+
+                           
                         });
                     }
                 }
@@ -81,6 +90,7 @@ namespace Mobile_PaidThx.Controllers
                     if (model.AccountType.ToLower().Equals("checking"))
                         paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
 
+
                     var paymentAccount = new SocialPayments.Domain.PaymentAccount()
                     {
                         Nickname = model.Nickname,
@@ -97,6 +107,20 @@ namespace Mobile_PaidThx.Controllers
                         BankName = "Temp"
                     };
 
+                    if (model.DefaultRecieve != null)
+                    {
+                        if (model.DefaultRecieve.ToLower().Equals("recieve"))
+                        {
+                            user.PreferredReceiveAccountId = paymentAccount.Id;
+                        }
+                    }
+                    if (model.DefaultSend != null)
+                    {
+                        if (model.DefaultSend.ToLower().Equals("sending"))
+                        {
+                            user.PreferredSendAccountId = paymentAccount.Id;
+                        }
+                    }
                     ctx.PaymentAccounts.Add(paymentAccount);
 
                     try
@@ -119,8 +143,8 @@ namespace Mobile_PaidThx.Controllers
    
         public PartialViewResult Edit(string Id)
         {
-            // if (Session["UserId"] == null)
-            //return RedirectToAction("SignIn", "Account", null);
+         //    if (Session["UserId"] == null)
+       //    return RedirectToAction("SignIn", "Account", null);
             using (var ctx = new Context())
             {
                 var userId = (Guid)Session["UserId"];
@@ -143,9 +167,9 @@ namespace Mobile_PaidThx.Controllers
                     });
             }
         }
+
         [HttpPost]
         public ActionResult Edit(EditPaymentAccountModel model, string Id)
-
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
@@ -156,11 +180,27 @@ namespace Mobile_PaidThx.Controllers
                 var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
                 var securityService = new SocialPayments.DomainServices.SecurityService();
                 var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
-                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;
+                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;           //Payment account Id always set as Savings!  Change logic here.
 
-                if (model.AccountType.ToLower().Equals("checking"))
-                    paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
-
+                if (model.AccountType != null)
+                {
+                    if (model.AccountType.ToLower().Equals("checking"))
+                        paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
+                }
+                if(model.DefaultRecieve != null)
+                {
+                    if (model.DefaultRecieve.ToLower().Equals("recieve"))
+                   {
+                       user.PreferredReceiveAccountId = paymentAccount.Id;
+                   }
+                }
+                if (model.DefaultSend != null)  
+                {
+                    if (model.DefaultSend.ToLower().Equals("sending"))
+                    {
+                        user.PreferredSendAccountId = paymentAccount.Id;
+                    }
+                }
                 if (paymentAccount == null)
                 {
                     ModelState.AddModelError("", "Unable to edit payment account");
@@ -173,6 +213,7 @@ namespace Mobile_PaidThx.Controllers
                 paymentAccount.Nickname = model.Nickname;
                 paymentAccount.RoutingNumber = securityService.Encrypt(model.RoutingNumber);
                 paymentAccount.PaymentAccountTypeId = paymentAccountTypeId;
+       
                 try
                 {
                     ctx.SaveChanges();
@@ -187,6 +228,11 @@ namespace Mobile_PaidThx.Controllers
             }
 
         }
+        public ActionResult Dialog()
+        {
+            return PartialView();
+        }
+
         [HttpPost]
         public ActionResult Remove(string Id, EditPaymentAccountModel model)
         {
@@ -195,6 +241,14 @@ namespace Mobile_PaidThx.Controllers
                 var userId = (Guid)Session["UserId"];
                 var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
                 var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
+                if (user.PreferredReceiveAccountId == paymentAccount.Id)
+                {                  
+                   
+                }
+                if (user.PreferredSendAccountId == paymentAccount.Id)
+                {
+                  //  Response.Write("Cannot remove account:  This is set as a Preferred Sending Account");
+                }
                 paymentAccount.IsActive = false;
                 try
                 {
