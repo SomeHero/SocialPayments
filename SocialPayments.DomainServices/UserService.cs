@@ -545,7 +545,10 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
             }
 
-            return ResetPassword(userId, newPassword);
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
         }
 
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
@@ -569,18 +572,23 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
-        //public double GetUserInstantLimit(User User)
-        //{
-        //    var _verifiedPaymentAmounts = _ctx.Messages
-        //        .Where(m => m.SenderId.Equals(User.UserId) && m.MessageType.Equals((int)MessageType.Payment) && m.CreateDate > System.DateTime.Now.AddHours(-24)  && m.Payment.PaymentVerificationLevel.Equals((int)PaymentVerificationLevel.UnVerified));
+        public double GetUserInstantLimit(User User)
+        {
+            var timeToCheck = System.DateTime.Now.AddHours(-24);
 
-        //    var amountSent = _verifiedPaymentAmounts.Sum(m => m.Amount);
+            var verifiedPaymentAmounts = _ctx.Messages
+                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck  && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.UnVerified));
 
-        //    if(amountSent > 0)
-        //        return 100 - amountSent;
-        //    else
-        //        return 0;
-        //}
+            var amountSent = 0;
+            
+            if(verifiedPaymentAmounts.Count() > 0)
+                verifiedPaymentAmounts.Sum(m => m.Amount);
+
+            if(amountSent > 0)
+                return 100 - amountSent;
+            else
+                return 0;
+        }
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));

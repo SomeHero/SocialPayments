@@ -153,7 +153,16 @@ namespace Mobile_PaidThx.Controllers
                     "&code=" + code;
 
                 HttpWebRequest wr = GetWebRequest(requestToken);
-                HttpWebResponse resp = (HttpWebResponse)wr.GetResponse();
+                HttpWebResponse resp = null;
+
+                try
+                {
+                    resp = (HttpWebResponse)wr.GetResponse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, ex.Message);
+                }
 
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {

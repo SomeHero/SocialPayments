@@ -197,6 +197,9 @@
     <Compile Include="MerchantType.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="PasswordResetAttempt.cs" />
+    <Compile Include="PaymentVerificationLevel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PayPointType.cs" />
     <Compile Include="ProfileItem.cs" />
     <Compile Include="ProfileSection.cs" />
