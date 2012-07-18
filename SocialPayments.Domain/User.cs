@@ -125,6 +125,8 @@ namespace SocialPayments.Domain
         [ForeignKey("UserTypeId")]
         public UserType UserType { get; set; }
 
+        public DateTime? LastViewedPaystream { get; set; }
+
         public virtual Collection<UserPayPoint> PayPoints { get; set; }
         public virtual Collection<UserNotification> NotificationConfiguration { get; set; }
 
