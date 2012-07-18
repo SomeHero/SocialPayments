@@ -151,7 +151,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
+    public class MyInitializer : System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
