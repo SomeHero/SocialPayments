@@ -181,7 +181,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
                         }).ToList() : null), 
-                    numberOfPaystreamUpdates = 2
+                    numberOfPaystreamUpdates = numberOfPayStreamUpdates
                 };
             } 
             catch(Exception ex)
