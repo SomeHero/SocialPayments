@@ -46,7 +46,6 @@ namespace SocialPayments.Services.MessageProcessors
         private string _recipientSMSMessageRecipientNotRegistered = "{0} just sent you {1:C} using PaidThx.  Go to {2} to complete the transaction.";
 
         private string _recipientWasPaidNotification = "{0} sent you {1:C} using PaidThx!";
-        private string _recipientRequestNotification = "{0} requested {1:C} from you using PaidThx!";
 
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
@@ -315,12 +314,6 @@ namespace SocialPayments.Services.MessageProcessors
                             notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
                             payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count() + 1);
                             payload.AddCustom("nType", "recPCNF");
-                        }
-                        else if (message.MessageType == Domain.MessageType.PaymentRequest)
-                        {
-                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
-                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
-                            payload.AddCustom("nType", "recPRQ");
                         }
 
                         /*

@@ -13,6 +13,7 @@ using System.Net;
 using System.IO;
 using System.Web;
 using SocialPayments.DomainServices.Interfaces;
+using MoonAPNS;
 
 
 namespace SocialPayments.Services.MessageProcessors
@@ -38,6 +39,7 @@ namespace SocialPayments.Services.MessageProcessors
         private string _senderSMSMessage = "Your PdThx request for {0:C} to {1} was sent.";
         private string _senderConfirmationEmailSubject = "Confirmation of your PaidThx request to {0}.";
         private string _senderConfirmationEmailBody = "Your PaidThx request in the amount of {0:C} was delivered to {1}.";
+        private string _recipientRequestNotification = "{0} requested {1:C} from you using PaidThx!";
         
         private string _fromAddress;
 
@@ -148,7 +150,78 @@ namespace SocialPayments.Services.MessageProcessors
                 //if the recipient has a device token; send a push notification
                 if (!String.IsNullOrEmpty(recipient.DeviceToken))
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Send Push Notification to Recipient"));
+                    if (!String.IsNullOrEmpty(recipient.RegistrationId))
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
+                        //Fix this.
+                        try
+                        {
+                            string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                            AndroidNotificationService.sendAndroidPushNotification(
+                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, senderName, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                        }
+                    }
+                    else
+                    {
+
+                        _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
+
+
+                        // We need to know the number of pending requests that the user must take action on for the application badge #
+                        // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                        //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                        //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                        //      Opening the application is sufficient
+                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
+
+                        _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+
+                        NotificationPayload payload = null;
+                        String notification;
+
+                        // Send a mobile push notification
+                        if (message.MessageType == Domain.MessageType.PaymentRequest)
+                        {
+                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
+                            payload.AddCustom("nType", "recPRQ");
+                        }
+
+                        /*
+                         *  Payment Notification Types:
+                         *      Payment Request [recPRQ]
+                         *          - Recipient receives notification that takes them to the
+                         *                 paystream detail view about that payment request
+                         *      Payment Confirmation [recPCNF]
+                         *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                         */
+
+                        payload.AddCustom("tID", message.Id);
+                        var notificationList = new List<NotificationPayload>() { payload };
+
+                        List<string> result;
+
+                        try
+                        {
+                            var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                            result = push.SendToApple(notificationList); // You are done!
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                            var exception = ex.InnerException;
+
+                            while (exception != null)
+                            {
+                                _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+
+                            }
+                        }
+                    }
 
                 }
                 //if the recipient has a linked facebook account; send a facebook message

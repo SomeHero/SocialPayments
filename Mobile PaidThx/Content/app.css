@@ -322,7 +322,7 @@ input:-moz-placeholder
     text-shadow: none;
     font-size: 12px;
 }
-#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach, #reset-password-submit
+#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach, #reset-password-submit, #btn-forgot-password-submit
 {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1d8639), to(#71b26d));
     background: -webkit-linear-gradient(top, #71b26d, #1d8639);

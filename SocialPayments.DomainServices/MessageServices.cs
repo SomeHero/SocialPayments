@@ -271,6 +271,7 @@ namespace SocialPayments.DomainServices
 
             return messageItem;
         }
+
         public void CancelMessage(string id)
         {
             Guid messageId;
