@@ -253,12 +253,7 @@ namespace SocialPayments.Services.MessageProcessors
                     _emailService.SendEmail(message.ApiKey, _fromAddress, message.RecipientUri, emailSubject, emailBody);
 
                 }
-                //if recipient Uri Type is facebook count, send a facebook message
-                if (recipientType == URIType.FacebookAccount)
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
-
-                }
+                
             }
 
             //if sender has mobile #, send confirmation email to sender
@@ -293,6 +288,35 @@ namespace SocialPayments.Services.MessageProcessors
             if (sender.FacebookUser != null)
             {
                 _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
+            }
+            if (recipientType == URIType.FacebookAccount)
+            {
+                try
+                {
+                    var client = new Facebook.FacebookClient(sender.FacebookUser.OAuthToken);
+                    var args = new Dictionary<string, object>();
+
+                    // All this next line is doing is ending it with a period if it does not end in a period or !
+                    // I'm sure this can be done better, but for now it looks good.
+                    var formattedComments = message.Comments.Trim();
+
+                    if (!(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
+                        formattedComments = String.Format("{0}.", formattedComments);
+
+                    args["message"] = String.Format("I requested ${0} from you using PaidThx. Why, you ask? {1} Click on this link to send me it! {2}", message.Amount, formattedComments, message.shortUrl);
+                    args["link"] = message.shortUrl;
+
+                    args["name"] = "PaidThx";
+                    args["caption"] = "The FREE Social Payment Network";
+                    args["picture"] = "http://www.crunchbase.com/assets/images/resized/0019/7057/197057v2-max-250x250.png";
+                    args["description"] = "PaidThx lets you send and receive money whenever you want, wherever you want. Whether you owe a friend a few bucks or want to donate to your favorite cause, it should be simple and not cost you a penny.";
+                    
+                    client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, ex.Message);
+                }
 
             }
 
