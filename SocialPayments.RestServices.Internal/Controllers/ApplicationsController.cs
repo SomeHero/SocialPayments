@@ -90,7 +90,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = i.Id,
                         Label = i.Label,
                         SortOrder = i.SortOrder,
-                        UserAttributeId =  i.UserAttribute.Id
+                        UserAttributeId =  i.UserAttribute.Id,
+                        Points = i.UserAttribute.Points,
+                        ItemType = i.ProfileItemType.ToString()
                     })
                     .OrderBy(i => i.SortOrder)
                     .ToList()

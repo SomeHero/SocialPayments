@@ -490,5 +490,27 @@ namespace SocialPayments.DomainServices
 
             return uriType;
         }
+
+        public int GetNumberOfPaystreamUpdates(User user)
+        {
+            using (var ctx = new Context())
+            {
+                var formattingService = new DomainServices.FormattingServices();
+                var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+                var lastViewedPaystreamDate = System.DateTime.MinValue;
+                if(user.LastViewedPaystream != null)
+                    lastViewedPaystreamDate = user.LastViewedPaystream.Value;
+
+                int pendingRequests = _context.Messages
+                    .Where(m => ((m.RecipientId == user.UserId) && ((m.MessageTypeValue.Equals((int)MessageType.Payment) && (m.CreateDate >= lastViewedPaystreamDate))
+                    || (m.MessageTypeValue.Equals((int)MessageType.PaymentRequest) && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing)))))
+                    .Select(m => m.Id)
+                    .Count();
+
+
+                return pendingRequests;
+            }
+        }
     }
 }
