@@ -287,7 +287,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
         }
-        
+                
         // POST /api/user/{id}/personalize_user
         public HttpResponseMessage PersonalizeUser(string id, UserModels.PersonalizeUserRequest request)
         {
