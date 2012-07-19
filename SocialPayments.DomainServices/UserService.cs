@@ -625,14 +625,16 @@ namespace SocialPayments.DomainServices
             var timeToCheck = System.DateTime.Now.AddHours(-24);
 
             var verifiedPaymentAmounts = _ctx.Messages
-                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.UnVerified));
+                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.Verified));
 
-            var amountSent = 0;
+            double amountSent = 0;
+
+            _logger.Log(LogLevel.Debug, String.Format("Getting Verified Limi {0}", verifiedPaymentAmounts.Count()));
 
             if (verifiedPaymentAmounts.Count() > 0)
-                verifiedPaymentAmounts.Sum(m => m.Amount);
+                amountSent = verifiedPaymentAmounts.Sum(m => m.Amount);
 
-            if (amountSent > 0)
+            if (100 - amountSent > 0)
                 return 100 - amountSent;
             else
                 return 0;

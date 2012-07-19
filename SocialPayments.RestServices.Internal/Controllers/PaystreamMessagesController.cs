@@ -336,11 +336,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     //Send to primary.
                     return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
                 }
-                else if (list.Count == 1)
-                {
-                    //Send to match.
-                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.OK);
-                }
                 else
                 {
                     //Determine who to send it to.
