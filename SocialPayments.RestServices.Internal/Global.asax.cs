@@ -32,6 +32,7 @@ namespace SocialPayments.RestServices.Internal
                routeTemplate: "api/paystreammessages/donate",
                defaults: new { controller = "PaystreamMessages", action = "Donate" }
            );
+
             routes.MapHttpRoute(
                 name: "AcceptPledge",
                 routeTemplate: "api/paystreammessages/accept_pledge",
@@ -66,6 +67,12 @@ namespace SocialPayments.RestServices.Internal
                 name: "IgnorePaymentRequest",
                 routeTemplate: "api/paystreammessages/{id}/ignore_request",
                 defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
+            );
+
+            routes.MapHttpRoute(
+                name: "MultipleURIRequest",
+                routeTemplate: "api/paystreammessages/multiple_uris",
+                defaults: new { controller = "PaystreamMessages", action = "DetermineRecipient" }
             );
 
             //api/user/{id}/personalize_user
