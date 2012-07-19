@@ -131,6 +131,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         AttributeValue = a.AttributeValue
                     }).ToList(),
                     upperLimit = user.Limit,
+                    instantLimit = _userService.GetUserInstantLimit(user),
                     totalMoneyReceived = receivedTotal,
                     totalMoneySent = sentTotal,
                     preferredPaymentAccountId = preferredPaymentAccountId,
