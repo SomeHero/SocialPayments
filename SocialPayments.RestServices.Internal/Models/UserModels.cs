@@ -32,6 +32,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string zip { get; set; }
             public string senderName { get; set; }
             public double upperLimit { get; set; }
+            public double instantLimit { get; set; }
             public string securityQuestion { get; set; }
             public int? securityQuestionId { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
