@@ -42,6 +42,9 @@ namespace SocialPayments.DataLayer
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
         public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<Merchant> Merchants { get; set; }
+        public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
+
 
         public Context() : base("name=DataContext") { }
 
@@ -148,7 +151,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
+    public class MyInitializer : System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -176,55 +179,150 @@ namespace SocialPayments.DataLayer
                 Id = Guid.NewGuid(),
                 AttributeName = "FirstName",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var lastNameUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "LastName",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var address1Attribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "Address1",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 5
             });
             var address2Attribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "Address2",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 0
             });
             var cityUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "City",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 10
             });
             var stateUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "State",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 10
             });
             var zipCodeUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "ZipCode",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
+            });
+            var phoneUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "phoneUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 50
+            });
+            var emailUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "emailUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 20
+            });
+            var faceBookUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "facebookUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 50
+            });
+            var twitterUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "twitterUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 50
+            });
+            var aboutMeUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "aboutMeUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 10
+            });
+            var makePublicUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "makePublicUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 5
+            });
+            var photoIdUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "photoIdUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 50
+            });
+            var ssnUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "ssnUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 50
+            });
+            var birthDayUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "birthdayUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 20
+            });
+            var incomeUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "incomeUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 20
+            });
+            var creditScoreUserAttribute = context.UserAttributes.Add(new UserAttribute()
+            {
+                Id = Guid.NewGuid(),
+                AttributeName = "creditScoreUserAttribute",
+                Approved = true,
+                IsActive = true,
+                Points = 20
             });
             var memberRole = context.Roles.Add(new Role()
             {
                 RoleId = Guid.NewGuid(),
                 Description = "Member",
-                RoleName = "Member"
+                RoleName = "Member",
             });
             var application = context.Applications.Add(new Application()
             {
@@ -266,35 +364,51 @@ namespace SocialPayments.DataLayer
                 {
                     new ProfileItem() {
                         Label = "First Name",
-                        SortOrder = 1
+                        SortOrder = 1,
+                        UserAttribute = firstNameUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Last Name",
-                        SortOrder = 2
+                        SortOrder = 2,
+                        UserAttribute = lastNameUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Phone",
-                        SortOrder = 3
+                        SortOrder = 3,
+                        UserAttribute = phoneUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Email",
-                        SortOrder = 4
+                        SortOrder = 4,
+                        UserAttribute = emailUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Facebook",
-                        SortOrder = 5
+                        SortOrder = 5,
+                        UserAttribute = faceBookUserAttribute,
+                        ProfileItemType = ProfileItemType.SocialAccount
                     },
                     new ProfileItem() {
                         Label = "Twitter",
-                        SortOrder = 6
+                        SortOrder = 6,
+                        UserAttribute = twitterUserAttribute,
+                        ProfileItemType = ProfileItemType.SocialAccount
                     },
                     new ProfileItem() {
                         Label = "About Me",
-                        SortOrder = 7
+                        SortOrder = 7,
+                        UserAttribute = aboutMeUserAttribute,
+                        ProfileItemType = ProfileItemType.LongText
                     },
                     new ProfileItem() {
                         Label = "Make Public",
-                        SortOrder = 8
+                        SortOrder = 8,
+                        UserAttribute = makePublicUserAttribute,
+                        ProfileItemType = ProfileItemType.Switch
                     },
                 }
             });
@@ -306,39 +420,57 @@ namespace SocialPayments.DataLayer
                 {
                     new ProfileItem() {
                         Label = "Address",
-                        SortOrder = 1
+                        SortOrder = 1,
+                        UserAttribute = address1Attribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "City",
-                        SortOrder = 2
+                        SortOrder = 2,
+                        UserAttribute = cityUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
-                        Label = "State  ",
-                        SortOrder = 3
+                        Label = "State",
+                        SortOrder = 3,
+                        UserAttribute = stateUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Zip",
-                        SortOrder = 4
+                        SortOrder = 4,
+                        UserAttribute = zipCodeUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Photo ID",
-                        SortOrder = 5
+                        SortOrder = 5,
+                        UserAttribute = photoIdUserAttribute,
+                        ProfileItemType = ProfileItemType.ImageCapture
                     },
                     new ProfileItem() {
                         Label = "SSN",
-                        SortOrder = 6
+                        SortOrder = 6,
+                        UserAttribute = ssnUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Birthday",
-                        SortOrder = 7
+                        SortOrder = 7,
+                        UserAttribute = birthDayUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Income",
-                        SortOrder = 8
+                        SortOrder = 8,
+                        UserAttribute = incomeUserAttribute,
+                        ProfileItemType = ProfileItemType.Picker
                     },
                     new ProfileItem() {
                         Label = "Credit Score",
-                        SortOrder = 9
+                        SortOrder = 9,
+                        UserAttribute = creditScoreUserAttribute,
+                        ProfileItemType = ProfileItemType.Picker
                     },
                 }
             });
@@ -399,7 +531,7 @@ namespace SocialPayments.DataLayer
             context.SecurityQuestions.Add(new SecurityQuestion()
             {
                 Id = 1,
-                Question = "Last 4 digis of drivers license",
+                Question = "Last 4 digits of drivers license",
                 IsActive = true
             });
             context.SecurityQuestions.Add(new SecurityQuestion()
@@ -609,21 +741,33 @@ namespace SocialPayments.DataLayer
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = emailPayPointType,
-                        URI = "james@paidthx.com"
+                        URI = "james@paidthx.com",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     },
                      new UserPayPoint() {
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = phonePayPointType,
-                        URI = "8043879693"
+                        URI = "8043879693",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     },
                      new UserPayPoint() {
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = meCodePayPoint,
-                        URI = "$jamesrhodes"
+                        URI = "$jamesrhodes",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     }
                 },
                 UserType = UserType.Individual
@@ -732,7 +876,10 @@ namespace SocialPayments.DataLayer
                     PaymentStatus = PaymentStatus.Pending,
                     RecipientAccount = james.PaymentAccounts[0],
                     SenderAccount = sentMessage.Sender.PaymentAccounts[0],
-                    Transactions = new Collection<Transaction>()
+                    Transactions = new Collection<Transaction>(),
+                    HoldDays = 0,
+                    ScheduledProcessingDate = System.DateTime.Now,
+                    //PaymentVerificationLevel = PaymentVerificationLevel.Verified
                 };
 
             sentPayment.Transactions.Add(new Transaction()
@@ -833,7 +980,10 @@ namespace SocialPayments.DataLayer
                 PaymentStatus = PaymentStatus.Pending,
                 RecipientAccount = james.PaymentAccounts[0],
                 SenderAccount = receivedMessage.Sender.PaymentAccounts[0],
-                Transactions = new Collection<Transaction>()
+                Transactions = new Collection<Transaction>(),
+                HoldDays = 0,
+                ScheduledProcessingDate = System.DateTime.Now,
+                //PaymentVerificationLevel = PaymentVerificationLevel.Verified
             };
 
             receivedPayment.Transactions.Add(new Transaction()
@@ -933,7 +1083,10 @@ namespace SocialPayments.DataLayer
                                 Type = TransactionType.Withdrawal,
                                 User =james
                             }
-                        }
+                        },
+                        HoldDays = 0,
+                        ScheduledProcessingDate = System.DateTime.Now,
+                       // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
 
@@ -984,132 +1137,1142 @@ namespace SocialPayments.DataLayer
                                 Type = TransactionType.Withdrawal,
                                 User =james
                             }
-                        }
+                        },
+                        HoldDays = 0,
+                        ScheduledProcessingDate = System.DateTime.Now,
+                       // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
 
 
             }
 
-            var organization1 = context.Users.Add(new User()
+            var merchant1 = context.Merchants.Add(new Merchant()
             {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "rrr@ric.org",
-                UserName = "rrr@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Road Runners",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "rrr@paidthx.me",
+                    UserName = "rrr@paidthx.me",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    OrganizationName = "Richmond Road Runners",
+                    UserType = UserType.NonProfit
                 },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
-                    }
-                },
-                OrganizationName = "Richmond Road Runners",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
+
             });
 
-            var organization2 = context.Users.Add(new User()
-            {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "ricsports@ric.org",
-                UserName = "ricsports@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+            var merchant2 = context.Merchants.Add(new Merchant() {
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Sports League",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
-                },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "ricsports@paidthx.me",
+                    UserName = "ricsports@paidthx.me",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
                     }
                 },
-                OrganizationName = "Richmond Sports League",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
             });
-            var organization3 = context.Users.Add(new User()
+            var merchant3 = context.Merchants.Add(new Merchant()
             {
-                ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
-                UserId = Guid.NewGuid(),
-                EmailAddress = "beardleague@ric.org",
-                UserName = "beardleague@ric.org",
-                Password = securityService.Encrypt("james123"),
-                SecurityPin = securityService.Encrypt("2589"),
-                SetupPassword = true,
-                SetupSecurityPin = true,
-                IsLockedOut = false,
+                Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                LastLoggedIn = System.DateTime.Now,
-                UserStatus = UserStatus.Active,
-                IsConfirmed = true,
-                RegistrationMethod = UserRegistrationMethod.Test,
-                Limit = 100,
-                Roles = new Collection<Role>()
+                Name = "Richmond Beard League",
+                User = new User()
                 {
-                    adminRole,
-                    memberRole
-                },
-                PaymentAccounts = new Collection<PaymentAccount>() {
-                    new PaymentAccount() { 
-                        Id=Guid.NewGuid(), 
-                        Nickname = "Wells Fargo ****9999",
-                        AccountNumber = securityService.Encrypt("9999999999"), 
-                        AccountType = PaymentAccountType.Checking, 
-                        NameOnAccount= securityService.Encrypt("James Rhodes"), 
-                        RoutingNumber= securityService.Encrypt("053000219"),
-                        CreateDate = System.DateTime.Now,
-                        IsActive = true,
-                         BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Wells Fargo"
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "beardleague@paidthx.me",
+                    UserName = "beardleague@paidthx.me",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
                     }
                 },
-                OrganizationName = "Richmond Beard League",
-                UserType = UserType.NonProfit
+                MerchantType = MerchantType.Regular
+            });
+            var merchant4 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Hostelling International USA",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "hostelling@paidthx.me",
+                    UserName = "hostelling@paidthx.me",
+                    Password = securityService.Encrypt("james123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_hostelling.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant5 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "American Cancer Society",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "acs@pdthx.me",
+                    UserName = "acs@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_acs.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant6 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "American Diabetes Association",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "ada@pdthx.me",
+                    UserName = "ada@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_americandiabetes.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant7 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "American Heart Association",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "aha@pdthx.me",
+                    UserName = "aha@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_americanheart.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant8 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Beta Theta Pi",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "betas@pdthx.me",
+                    UserName = "betas@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_beta.png",
+                },
+                MerchantType = MerchantType.Regular,
+
+            });
+            var merchant9 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Boy Scouts of America",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "boyscouts@pdthx.me",
+                    UserName = "boyscouts@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_bsa.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant10 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Central Virginia Soccer Association",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "cvsa@pdthx.me",
+                    UserName = "cvsa@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_cvsa.png",
+                },
+                MerchantType = MerchantType.Regular,
+
+            });
+            var merchant11 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Childsavers",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "childsavers@pdthx.me",
+                    UserName = "childsavers@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_childsavers.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant12 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Holy Redeemer by the Sea",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "obxparish@pdthx.me",
+                    UserName = "obxparish@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_obxparish.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant13 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Goodwill of Greater Washington",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "org_goodwill@pdthx.me",
+                    UserName = "org_goodwill@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_goodwill.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant14 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "March of Dimes Foundation",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "marchofdimes@pdthx.me",
+                    UserName = "marchofdimes@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_marchofdimes.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant15 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Nature Conservancy, Inc",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "natureconservancy@pdthx.me",
+                    UserName = "natureconservancy@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_natureconservancy.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant16 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "River City Sports and Social Club",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "rivercitysports@pdthx.me",
+                    UserName = "rivercitysports@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_rivercitysports.png",
+                },
+                MerchantType = MerchantType.Regular,
+
+            });
+            var merchant17 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Special Olympics",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "specialolympics@pdthx.me",
+                    UserName = "specialolympics@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_specialolympics.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant18 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Susan G. Komen for the Cure",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "susangkomen@pdthx.me",
+                    UserName = "susangkomen@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_teach4amer.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant19 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "The Rotary Foundation of Rotary International",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "rotaryfoundation@pdthx.me",
+                    UserName = "rotaryfoundation@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_rotary.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant20 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "U-Turn",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "uturn@pdthx.me",
+                    UserName = "uturn@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_uturn.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
             });
 
+            var merchant22 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "World Vision",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "worldvision@pdthx.me",
+                    UserName = "worldvision@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_worldvision.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant23 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "World Wildlife Fund",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "wwf@pdthx.me",
+                    UserName = "wwf@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_wwf.png",
+                },
+                MerchantType = MerchantType.NonProfit,
+
+            });
+            var merchant24 = context.Merchants.Add(new Merchant()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                Name = "Beta Tau Alpha",
+                User = new User()
+                {
+                    ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
+                    UserId = Guid.NewGuid(),
+                    EmailAddress = "zta@pdthx.me",
+                    UserName = "zta@pdthx.me",
+                    Password = securityService.Encrypt("pdthx123"),
+                    SecurityPin = securityService.Encrypt("2589"),
+                    SetupPassword = true,
+                    SetupSecurityPin = true,
+                    IsLockedOut = false,
+                    CreateDate = System.DateTime.Now,
+                    LastLoggedIn = System.DateTime.Now,
+                    UserStatus = UserStatus.Active,
+                    IsConfirmed = true,
+                    RegistrationMethod = UserRegistrationMethod.Test,
+                    Limit = 100,
+                    Roles = new Collection<Role>()
+                    {
+                        adminRole,
+                        memberRole
+                    },
+                    PaymentAccounts = new Collection<PaymentAccount>() {
+                        new PaymentAccount() { 
+                            Id=Guid.NewGuid(), 
+                            Nickname = "Wells Fargo ****9999",
+                            AccountNumber = securityService.Encrypt("9999999999"), 
+                            AccountType = PaymentAccountType.Checking, 
+                            NameOnAccount= securityService.Encrypt("James Rhodes"), 
+                            RoutingNumber= securityService.Encrypt("053000219"),
+                            CreateDate = System.DateTime.Now,
+                            IsActive = true,
+                             BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                            BankName = "Wells Fargo"
+                        }
+                    },
+                    ImageUrl = "http://memberimages.paidthx.com/org_zta.png",
+                },
+                MerchantType = MerchantType.Regular,
+
+            });
+            context.SaveChanges();
+
+            merchant1.User.PreferredReceiveAccount = merchant1.User.PaymentAccounts[0];
+            merchant1.User.PreferredSendAccount = merchant1.User.PaymentAccounts[0];
+
+            merchant2.User.PreferredReceiveAccount = merchant2.User.PaymentAccounts[0];
+            merchant2.User.PreferredSendAccount = merchant2.User.PaymentAccounts[0];
+
+            merchant3.User.PreferredReceiveAccount = merchant3.User.PaymentAccounts[0];
+            merchant3.User.PreferredSendAccount = merchant3.User.PaymentAccounts[0];
+
+            merchant4.User.PreferredReceiveAccount = merchant4.User.PaymentAccounts[0];
+            merchant4.User.PreferredSendAccount = merchant4.User.PaymentAccounts[0];
+
+            merchant5.User.PreferredReceiveAccount = merchant5.User.PaymentAccounts[0];
+            merchant5.User.PreferredSendAccount = merchant5.User.PaymentAccounts[0];
+
+            merchant6.User.PreferredReceiveAccount = merchant6.User.PaymentAccounts[0];
+            merchant6.User.PreferredSendAccount = merchant6.User.PaymentAccounts[0];
+
+            merchant7.User.PreferredReceiveAccount = merchant7.User.PaymentAccounts[0];
+            merchant7.User.PreferredSendAccount = merchant7.User.PaymentAccounts[0];
+
+            merchant8.User.PreferredReceiveAccount = merchant8.User.PaymentAccounts[0];
+            merchant8.User.PreferredSendAccount = merchant8.User.PaymentAccounts[0];
+
+            merchant9.User.PreferredReceiveAccount = merchant9.User.PaymentAccounts[0];
+            merchant9.User.PreferredSendAccount = merchant9.User.PaymentAccounts[0];
+
+            merchant10.User.PreferredReceiveAccount = merchant10.User.PaymentAccounts[0];
+            merchant10.User.PreferredSendAccount = merchant10.User.PaymentAccounts[0];
+
+            merchant11.User.PreferredReceiveAccount = merchant11.User.PaymentAccounts[0];
+            merchant11.User.PreferredSendAccount = merchant11.User.PaymentAccounts[0];
+
+            merchant12.User.PreferredReceiveAccount = merchant12.User.PaymentAccounts[0];
+            merchant12.User.PreferredSendAccount = merchant12.User.PaymentAccounts[0];
+
+            merchant13.User.PreferredReceiveAccount = merchant13.User.PaymentAccounts[0];
+            merchant13.User.PreferredSendAccount = merchant13.User.PaymentAccounts[0];
+
+            merchant14.User.PreferredReceiveAccount = merchant14.User.PaymentAccounts[0];
+            merchant14.User.PreferredSendAccount = merchant14.User.PaymentAccounts[0];
+
+            merchant15.User.PreferredReceiveAccount = merchant15.User.PaymentAccounts[0];
+            merchant15.User.PreferredSendAccount = merchant15.User.PaymentAccounts[0];
+
+            merchant16.User.PreferredReceiveAccount = merchant16.User.PaymentAccounts[0];
+            merchant16.User.PreferredSendAccount = merchant16.User.PaymentAccounts[0];
+
+            merchant17.User.PreferredReceiveAccount = merchant17.User.PaymentAccounts[0];
+            merchant17.User.PreferredSendAccount = merchant17.User.PaymentAccounts[0];
+
+            merchant18.User.PreferredReceiveAccount = merchant18.User.PaymentAccounts[0];
+            merchant18.User.PreferredSendAccount = merchant18.User.PaymentAccounts[0];
+
+            merchant19.User.PreferredReceiveAccount = merchant19.User.PaymentAccounts[0];
+            merchant19.User.PreferredSendAccount = merchant19.User.PaymentAccounts[0];
+
+            merchant20.User.PreferredReceiveAccount = merchant20.User.PaymentAccounts[0];
+            merchant20.User.PreferredSendAccount = merchant20.User.PaymentAccounts[0];
+
+            merchant22.User.PreferredReceiveAccount = merchant22.User.PaymentAccounts[0];
+            merchant22.User.PreferredSendAccount = merchant22.User.PaymentAccounts[0];
+
+            merchant23.User.PreferredReceiveAccount = merchant23.User.PaymentAccounts[0];
+            merchant23.User.PreferredSendAccount = merchant23.User.PaymentAccounts[0];
+
+            merchant24.User.PreferredReceiveAccount = merchant24.User.PaymentAccounts[0];
+            merchant24.User.PreferredSendAccount = merchant24.User.PaymentAccounts[0];
 
             context.SaveChanges();
             

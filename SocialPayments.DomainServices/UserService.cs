@@ -147,7 +147,7 @@ namespace SocialPayments.DomainServices
                         return user;
 
 
-                            
+
 
                 }
 
@@ -159,6 +159,7 @@ namespace SocialPayments.DomainServices
 
             return null;
         }
+
         public bool ConfirmUser(string accountConfirmationToken)
         {
             var confirmed = false;
@@ -363,7 +364,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User addPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
+        public User AddPushNotificationRegistrationId(string userId, string newDeviceToken, string registrationId)
         {
             var user = GetUserById(userId);
 
@@ -398,9 +399,9 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, out bool isNewUser)
+            string deviceToken, string oAuthToken, DateTime tokenExpiration, out bool isNewUser)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1}", accountId, emailAddress));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
             User user = null;
 
@@ -449,8 +450,8 @@ namespace SocialPayments.DomainServices
                         {
                             FBUserID = accountId,
                             Id = Guid.NewGuid(),
-                            TokenExpiration = System.DateTime.Now.AddDays(30),
-                            OAuthToken = ""
+                            TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
                         },
                         ImageUrl = String.Format(_fbImageUrlFormat, accountId),
                     });
@@ -462,10 +463,25 @@ namespace SocialPayments.DomainServices
 
                     user.DeviceToken = deviceToken;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
+                    if (user.FacebookUser != null)
+                    {
+                        user.FacebookUser.OAuthToken = oAuthToken;
+                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                    }
+                    else
+                    {
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                            // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                    }
                 }
 
                 _ctx.SaveChanges();
-                    
+
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -489,6 +505,100 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User ResetPassword(string userId, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
+        public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
+        {
+            var user = GetUserById(userId);
+
+            if (user == null)
+            {
+                var error = @"User Not Found";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+
+                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+            }
+
+            if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+            {
+                var error = @"Security Question Incorrect";
+
+                _logger.Log(LogLevel.Error, String.Format("Unable to reset password for {0}. {1}", userId, error));
+
+                throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
+            }
+
+            user.Password = securityService.Encrypt(newPassword);
+            UpdateUser(user);
+
+            return user;
+        }
+
+        public void SendResetPasswordLink(User user)
+        {
+            SendResetPasswordLink(user, new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"));
+        }
+
+        public void SendResetPasswordLink(User user, Guid ApiKey)
+        {
+            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            DomainServices.ValidationService validateService = new ValidationService();
+
+            if (!validateService.IsEmailAddress(user.UserName))
+            {
+                var message = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
+                
+                throw new ArgumentException(message);
+            }
+
+            string name = formattingService.FormatUserName(user);
+            Guid passwordResetGuid = Guid.NewGuid();
+            DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+            PasswordResetAttempt passwordResetDb = _ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
+            {
+                Clicked = false,
+                User = user,
+                ExpiresDate = expiresDate,
+                Id = passwordResetGuid
+            });
+
+            _ctx.SaveChanges();
+
+            string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+
+            StringBuilder body = new StringBuilder();
+            body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+            body.Append("You asked us to reset your PaidThx password. ");
+            body.Append("To complete the process, please click on the link below ");
+            body.Append("or paste it into your browser:").AppendLine().AppendLine();
+            body.AppendLine(link).AppendLine();
+            body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+            body.AppendLine("Thank you,").AppendLine();
+            body.Append("The PaidThx Team");
+
+            emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));
@@ -510,7 +620,23 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .FirstOrDefault(u => u.UserName == emailAddress || u.EmailAddress == emailAddress);
         }
+        public double GetUserInstantLimit(User User)
+        {
+            var timeToCheck = System.DateTime.Now.AddHours(-24);
 
+            var verifiedPaymentAmounts = _ctx.Messages
+                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.UnVerified));
+
+            var amountSent = 0;
+
+            if (verifiedPaymentAmounts.Count() > 0)
+                verifiedPaymentAmounts.Sum(m => m.Amount);
+
+            if (amountSent > 0)
+                return 100 - amountSent;
+            else
+                return 0;
+        }
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
@@ -518,10 +644,10 @@ namespace SocialPayments.DomainServices
             if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;
 
-            if(!String.IsNullOrEmpty(sender.SenderName))
+            if (!String.IsNullOrEmpty(sender.SenderName))
                 return sender.SenderName;
 
-            if(!String.IsNullOrEmpty(sender.MobileNumber))
+            if (!String.IsNullOrEmpty(sender.MobileNumber))
                 return formattingServices.FormatMobileNumber(sender.MobileNumber);
 
             if (!String.IsNullOrEmpty(sender.EmailAddress))

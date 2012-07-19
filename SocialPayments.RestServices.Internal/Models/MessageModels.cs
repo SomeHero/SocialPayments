@@ -27,9 +27,23 @@ namespace SocialPayments.RestServices.Internal.Models
             public double latitude { get; set; }
             public double longitutde { get; set; }
         }
+
+        public class MultipleURIRequest
+        {
+            public List<string> recipientUris { get; set; }
+        }
+
+        public class MultipleURIResponse
+        {
+            public string userUri { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+        }
+
         public class SubmitMessageRequest {
             public string apiKey { get; set; }
             public string senderId { get; set; }
+            public string recipientId { get; set; }
            // public string senderUri { get; set; }
             public string senderAccountId { get; set; }
             public string recipientUri { get; set; }
@@ -43,6 +57,36 @@ namespace SocialPayments.RestServices.Internal.Models
             public string recipientLastName { get; set; }
             public string recipientImageUri { get; set; }
             
+        }
+        public class SubmitDonateRequest
+        {
+            public string apiKey { get; set; }
+            public string senderId { get; set; }
+            public string organizationId { get; set; }
+            public string senderAccountId { get; set; }
+            public double amount { get; set; }
+            public string comments { get; set; }
+            public double latitude { get; set; }
+            public double longitude { get; set; }
+            public string recipientFirstName { get; set; }
+            public string recipientLastName { get; set; }
+            public string recipientImageUri { get; set; }
+            public string securityPin { get; set; }
+        }
+        public class SubmitPledgeRequest
+        {
+            public string apiKey { get; set; }
+            public string senderId { get; set; }
+            public string onBehalfOfId { get; set; }
+            public string recipientUri { get; set; }
+            public double amount { get; set; }
+            public string comments { get; set; }
+            public double latitude { get; set; }
+            public double longitude { get; set; }
+            public string recipientFirstName { get; set; }
+            public string recipientLastName { get; set; }
+            public string recipientImageUri { get; set; }
+            public string securityPin { get; set; }
         }
         public class SubmitMessageResponse
         {

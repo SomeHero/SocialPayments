@@ -17,13 +17,14 @@ using SocialPayments.DomainServices.Interfaces;
 using System.Threading.Tasks;
 using Amazon.S3.Model;
 using System.IO;
+using System.Text;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UsersController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+        private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
         public IEnumerable<string> Get()
@@ -93,6 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
 
+            var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
             try
@@ -124,6 +126,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     zip = user.Zip,
                     userAttributes = user.UserAttributes.Select(a => new UserModels.UserAttribute()
                     {
+                        AttributeId = a.UserAttributeId,
                         AttributeName = a.UserAttribute.AttributeName,
                         AttributeValue = a.AttributeValue
                     }).ToList(),
@@ -156,7 +159,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = p.Id.ToString(),
                         Type = p.Type.Name,
                         Uri = p.URI,
-                        UserId = p.UserId.ToString()
+                        UserId = p.UserId.ToString(),
+                        Verified = p.Verified,
+                        VerifiedDate = "",
+                        CreateDate = p.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy")
                     }).ToList() : null),
                     bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
                         AccountNumber = securityService.Decrypt(a.AccountNumber),
@@ -174,8 +180,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationKey = c.ConfigurationKey,
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
-                        }).ToList() : null),                                                                                                                                 
-                                                                                                                                                                   numberOfPaysteamUpdates = 2
+                        }).ToList() : null), 
+                    numberOfPaystreamUpdates = 2
                 };
             } 
             catch(Exception ex)
@@ -281,7 +287,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
         }
-        
+                
         // POST /api/user/{id}/personalize_user
         public HttpResponseMessage PersonalizeUser(string id, UserModels.PersonalizeUserRequest request)
         {
@@ -496,6 +502,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //POST api/users/reset_password
+        public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+                DomainServices.ValidationService validateService = new DomainServices.ValidationService();
+
+                if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+                {
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid Email Address";
+
+                    return message;
+                }
+
+                var user = userService.FindUserByEmailAddress(request.emailAddress);
+
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid User";
+
+                    return message;
+                }
+                else if (!validateService.IsEmailAddress(user.UserName))
+                {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
+
+                    return message;
+                }
+                else
+                {
+                    userService.SendResetPasswordLink(user, ApiKey);
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {
@@ -510,7 +558,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 try
                 {
-                    userService.addPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
+                    userService.AddPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 catch (Exception ex)
@@ -620,7 +668,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/signin_withfacebook
         public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}", request.deviceToken));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0} {1}", request.deviceToken, request.oAuthToken));
 
             Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
@@ -635,7 +683,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
-                    request.deviceToken, out isNewUser);
+                    request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), out isNewUser);
             }
             catch (Exception ex)
             {

@@ -75,6 +75,7 @@ namespace Mobile_PaidThx.Controllers
                     {
                         model.TransactionReceipts.Add(new PaystreamModels.PaymentModel()
                         {
+                            Id = transaction.Id.ToString(),
                             Amount = transaction.Amount,
                             SenderUri = transaction.SenderUri,
                             TransactionDate = transaction.CreateDate,
@@ -206,6 +207,7 @@ namespace Mobile_PaidThx.Controllers
 
                             model.TransactionReceipts.Add(new PaystreamModels.PaymentModel()
                             {
+                                Id = transaction.Id.ToString(),
                                 Amount = transaction.Amount,
                                 SenderUri = transaction.SenderUri,
                                 TransactionDate = transaction.CreateDate,
@@ -257,6 +259,7 @@ namespace Mobile_PaidThx.Controllers
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
+                    Id = m.Id.ToString(),
                     Amount = m.Amount,
                     RecipientUri = m.RecipientUri,
                     SenderUri = m.SenderUri,
@@ -325,6 +328,7 @@ namespace Mobile_PaidThx.Controllers
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
+                    Id = m.Id.ToString(),
                     Amount = m.Amount,
                     RecipientUri = m.RecipientUri,
                     SenderUri = m.SenderUri,
@@ -370,6 +374,52 @@ namespace Mobile_PaidThx.Controllers
 
         }
 
+        public ActionResult UpdatePayStreamDialog(string id)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Updating PayStream"));
+
+            using (var ctx = new Context())
+            {
+
+                var userId = (Guid)Session["UserId"];
+
+                if (Session["UserId"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (Session["User"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var messageServices = new MessageServices();
+                var message = messageServices.GetMessage(id);
+
+                message.Direction = "In";
+                if (message.Sender.UserId == user.UserId)
+                    message.Direction = "Out";
+
+                var messageType = Models.MessageType.Payment;
+                if (message.MessageType == SocialPayments.Domain.MessageType.PaymentRequest)
+                    messageType = Models.MessageType.PaymentRequest;
+
+                PaystreamModels.PaymentModel reference = new PaystreamModels.PaymentModel()
+                {
+                    Amount = message.Amount,
+                    Direction = message.Direction,
+                    MessageType = messageType,
+                    Comments = message.Comments,
+                    RecipientUri = message.RecipientUri,
+                    SenderUri = message.SenderUri,
+                    TransactionDate = message.CreateDate,
+                    TransactionStatus = Models.TransactionStatus.Pending,
+                    TransactionType = Models.TransactionType.Deposit,
+                    TransactionImageUri = message.TransactionImageUrl
+                };
+                
+                return Json(reference, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public ActionResult UpdatePayStream(PaymentAttributes model)
         {
@@ -393,6 +443,7 @@ namespace Mobile_PaidThx.Controllers
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
+                    Id = m.Id.ToString(),
                     Amount = m.Amount,
                     RecipientUri = m.RecipientUri,
                     SenderUri = m.SenderUri,
@@ -410,12 +461,12 @@ namespace Mobile_PaidThx.Controllers
                     payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(model.OtherUri.ToUpper()) || p.SenderUri.ToUpper().Contains(model.OtherUri.ToUpper())).ToList();
                 }
 
-                if (model.Debits && !model.Credits) // sent
+                if (model.Debits) // sent
                 {
                     payments = payments.Where(p => p.Direction == "Out").ToList();
                 }
 
-                if (model.Credits && !model.Debits) // received
+                if (model.Credits) // received
                 {
                     payments = payments.Where(p => p.Direction == "In").ToList();
                 }
@@ -489,8 +540,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     try
                     {
-                        messageService.AddMessage(_apiKey, user.UserId.ToString(), model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"Payment",
-                            "2589");
+                        messageService.AddMessage(_apiKey, user.UserId.ToString(), "", model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"Payment");
                         //ctx.Payments.Add(new Payment()
                         //{
                         //    Id = Guid.NewGuid(),
@@ -582,8 +632,7 @@ namespace Mobile_PaidThx.Controllers
                     try
                     {
                         //Request Money
-                        messageService.AddMessage(_apiKey, user.UserId.ToString(), model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"PaymentRequest",
-                            "2589");
+                        messageService.AddMessage(_apiKey, user.UserId.ToString(), "", model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"PaymentRequest");
 
                         //ctx.PaymentRequests.Add(new PaymentRequest()
                         //{

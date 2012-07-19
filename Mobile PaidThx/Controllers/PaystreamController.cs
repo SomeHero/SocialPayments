@@ -39,6 +39,7 @@ namespace Mobile_PaidThx.Controllers
 
                 var payments = messages.Select(m => new PaystreamModels.PaymentModel()
                 {
+                    Id = m.Id.ToString(),
                     Amount = m.Amount,
                     RecipientUri = m.RecipientUri,
                     SenderUri = m.SenderUri,
@@ -60,23 +61,26 @@ namespace Mobile_PaidThx.Controllers
 
                 foreach (var paymentAccount in user.PaymentAccounts)
                 {
-                    var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-                    if (tempNumber.Length > 3)
+                    if (paymentAccount.IsActive)
                     {
-                        tempNumber = tempNumber.Substring(tempNumber.Length - 4);
-                    }
-                    bankAccounts.Add(new BankAccountModel()
-                    {
-                        BankName = paymentAccount.BankName,
-                        BankIconURL = paymentAccount.BankIconURL,
-                        PaymentAccountId = paymentAccount.Id.ToString(),
-                        AccountNumber = "******" + tempNumber,
-                        AccountType = paymentAccount.AccountType.ToString(),
-                        NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                        Nickname = paymentAccount.Nickname,
-                        RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
+                        if (tempNumber.Length > 3)
+                        {
+                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
+                        }
+                        bankAccounts.Add(new BankAccountModel()
+                        {
+                            BankName = paymentAccount.BankName,
+                            BankIconURL = paymentAccount.BankIconURL,
+                            PaymentAccountId = paymentAccount.Id.ToString(),
+                            AccountNumber = "******" + tempNumber,
+                            AccountType = paymentAccount.AccountType.ToString(),
+                            NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
+                            Nickname = paymentAccount.Nickname,
+                            RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
 
-                    });
+                        });
+                    }
 
                 }
 

@@ -97,7 +97,7 @@ namespace SocialPayments.Domain
         [MaxLength(255)]
         public string SenderName { get; set; }
         [Column(name:"FBUserId")]
-        public FBUser FacebookUser { get; set; }
+        public virtual FBUser FacebookUser { get; set; }
 
         public virtual Collection<Message> Messages { get; set; }
         [MaxLength(100)]
@@ -125,11 +125,15 @@ namespace SocialPayments.Domain
         [ForeignKey("UserTypeId")]
         public UserType UserType { get; set; }
 
+        public DateTime? LastViewedPaystream { get; set; }
+
         public virtual Collection<UserPayPoint> PayPoints { get; set; }
         public virtual Collection<UserNotification> NotificationConfiguration { get; set; }
 
         public virtual Collection<UserConfiguration> UserConfigurations { get; set; }
         public virtual Collection<UserSocialNetwork> UserSocialNetworks { get; set; }
+
+        public virtual Merchant Merchant { get; set; }
     }
 
 }

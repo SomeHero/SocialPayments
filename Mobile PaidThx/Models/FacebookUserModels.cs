@@ -15,6 +15,8 @@ namespace Mobile_PaidThx.Models
             public FBLocation location { get; set; }
             public string email { get; set; }
             public string zipcode { get; set; }
+            public string accessToken { get; set; }
+            public string tokenExpires { get; set; }
         }
         public class FBLocation
         {

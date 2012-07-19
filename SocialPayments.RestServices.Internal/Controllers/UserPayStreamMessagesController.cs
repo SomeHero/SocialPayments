@@ -23,7 +23,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
            {
                 DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx);
                 DomainServices.UserService userServices = new DomainServices.UserService(_ctx);
-                
+               
                 var user = userServices.GetUserById(userId);
 
                 if (user == null)
@@ -33,6 +33,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return message;
                 }
+
+                user.LastViewedPaystream = System.DateTime.Now;
+                userServices.UpdateUser(user);
 
                 var messages = messageServices.GetMessages(user.UserId);
                 
@@ -52,7 +55,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         longitutde = m.Longitude,
                         senderName = m.SenderName,
                         transactionImageUri = m.TransactionImageUrl,
-                        recipientName = m.RecipientName
+                        recipientName = (m.Recipient != null ? _formattingServices.FormatUserName(m.Recipient) : m.RecipientName)
                     }).ToList();
 
                 return new HttpResponseMessage<List<MessageModels.MessageResponse>>(messageResponse, HttpStatusCode.OK);

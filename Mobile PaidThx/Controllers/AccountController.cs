@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Text;
 using System.IO;
 using Newtonsoft.Json;
+using System.Configuration;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -28,7 +29,7 @@ namespace Mobile_PaidThx.Controllers
         private string fbState = "pickle"; //TODO: randomly generate this per session
         private string fbAppID = "332189543469634";
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
-        private string fbTokenRedirectURL = "http://www.paidthx.com/mobile/SignInWithFacebook/";
+        private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         //
         // GET: /Account/LogOn
@@ -90,7 +91,7 @@ namespace Mobile_PaidThx.Controllers
                 var userService = new UserService(ctx);
 
                 bool isNewUser = false;
-                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", out isNewUser);
+                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30), out isNewUser);
 
                 //validate fbAccount.Id is associated with active user
                 if (user == null)
@@ -139,7 +140,7 @@ namespace Mobile_PaidThx.Controllers
             string response = null;
             string token = null;
             string tokenExp = null;
-            FacebookUserModels.FBuser fbAccount = null;
+            FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
 
 
             if (state == fbState)
@@ -151,23 +152,44 @@ namespace Mobile_PaidThx.Controllers
                     "&client_secret=" + fbAppSecret +
                     "&code=" + code;
 
+                logger.Log(LogLevel.Info, requestToken);
                 HttpWebRequest wr = GetWebRequest(requestToken);
-                HttpWebResponse resp = (HttpWebResponse)wr.GetResponse();
+                HttpWebResponse resp = null;
+
+                try
+                {
+                    resp = (HttpWebResponse)wr.GetResponse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, ex.Message);
+                }
 
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
                     response = sr.ReadToEnd();
-                    if (response.Length > 0)
+
+                    
+                if (response.Length > 0)
                     {
+                        logger.Log(LogLevel.Info, response);
                         NameValueCollection qs = HttpUtility.ParseQueryString(response);
+       
                         if (qs["access_token"] != null)
                         {
                             token = qs["access_token"];
+                            logger.Log(LogLevel.Info, token);
+                        
                             tokenExp = qs["expires"];
+                            logger.Log(LogLevel.Info, tokenExp);
+                        
                         }
                     }
                     sr.Close();
                 }
+
+                fbAccount.accessToken = token;
+                fbAccount.tokenExpires = tokenExp;
 
                 //Use Graph API to get FB UserID and email
                 string requestStuff = "https://graph.facebook.com/me?access_token=" + token;
@@ -328,14 +350,14 @@ namespace Mobile_PaidThx.Controllers
                 return View(model);
             }
         }
-        public ActionResult ForgotEmail()
+        public ActionResult ForgotPassword()
         {
             var model = new ForgotPasswordModel();
             model.PasswordSent = false;
-            return View();
+            return View(model);
         }
         [HttpPost]
-        public ActionResult ForgotEmail(ForgotPasswordModel model)
+        public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             using (var ctx = new Context())
             {
@@ -352,15 +374,14 @@ namespace Mobile_PaidThx.Controllers
 
                         if (user.EmailAddress.Length == 0)
                             throw new Exception(String.Format("No email address asssociated with username {0}", model.UserName));
-
-                        StringBuilder sbBody = new StringBuilder();
-                        sbBody.AppendFormat("Your password is {0}.", securityService.Decrypt(user.Password));
-
                         //Send Email
-                        SmtpClient sc = new SmtpClient();
-                        sc.EnableSsl = true;
+                        //SmtpClient sc = new SmtpClient();
+                        //sc.EnableSsl = true;
 
-                        sc.Send("admin@paidthx.com", user.EmailAddress, "You're PaidThx Password", sbBody.ToString());
+                        //sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
+
+                        UserService userService = new UserService(ctx);
+                        userService.SendResetPasswordLink(user);
 
                         model.PasswordSent = true;
                     }
@@ -381,6 +402,114 @@ namespace Mobile_PaidThx.Controllers
             Session.Abandon();
 
             return RedirectToAction("SignIn", "Account");
+        }
+
+        public ActionResult ResetPassword(string id)
+        {
+            using(var ctx = new Context()) {
+
+                Guid idGuid;
+
+                Guid.TryParse(id, out idGuid);
+
+                if (idGuid == null)
+                {
+                    ModelState.AddModelError("", "Invalid Id");
+                }
+
+
+                SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                    .FirstOrDefault(p => p.Id == idGuid);
+
+                ResetPasswordModelInput model = new ResetPasswordModelInput();
+
+                if (passwordResetDb == null)
+                {
+                    ModelState.AddModelError("", "Invalid Attempt");
+                    return View(model);
+                }
+
+                if (passwordResetDb.ExpiresDate < System.DateTime.Now)
+                {
+                    ModelState.AddModelError("", "Password reset link has expired.");
+                    passwordResetDb.Clicked = true;
+                    return View(model);
+                }
+
+                if (passwordResetDb.Clicked)
+                {
+                    ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
+                    return View(model);
+                }
+
+                if (passwordResetDb.User.SecurityQuestion == null)
+                {
+                    model.SecurityQuestion = "";
+                    model.HasSecurityQuestion = false;
+
+                    return View(model);
+                }
+                passwordResetDb.Clicked = true;
+                model.HasSecurityQuestion = true;
+                model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(string id, ResetPasswordModelOutput model)
+        {
+            if (model.NewPassword.Equals(model.ConfirmPassword))
+            {
+                using (var ctx = new Context())
+                {
+                    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
+                    UserService userService = new UserService(ctx);
+
+                    try
+                    {
+                        Guid idGuid;
+
+                        Guid.TryParse(id, out idGuid);
+
+                        if (idGuid == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Id");
+                        }
+
+
+                        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                            .FirstOrDefault(p => p.Id == idGuid);
+
+                        if (passwordResetDb == null)
+                        {
+                            ModelState.AddModelError("", "Invalid Attempt");
+                        }
+
+                        if (model.SecurityQuestionAnswer == null)
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
+                            return View("SignIn");
+                        }
+                        else
+                        {
+                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
+                            return View("SignIn");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "New password and confirm password do not match.");
+            }
+
+            return View(model);
         }
 
         private static HttpWebRequest GetWebRequest(string formattedUri)

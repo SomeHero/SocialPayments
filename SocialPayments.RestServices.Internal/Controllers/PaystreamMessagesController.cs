@@ -73,9 +73,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     longitutde = message.Longitude,
                     messageStatus = message.Status.ToString(),
                     messageType = message.MessageType.ToString(),
-                    recipientName = (message.Recipient != null ? _userService.GetSenderName(message.Recipient) : ""),
+                    recipientName = (message.Recipient != null ? _formattingService.FormatUserName(message.Recipient) : "No Name"),
                     recipientUri = message.RecipientUri,
-                    senderName = (message.Sender != null ? _userService.GetSenderName(message.Sender) : ""),
+                    senderName = (message.Sender != null ? _formattingService.FormatUserName(message.Sender) : "No Name"),
                     senderUri = message.SenderUri,
                     transactionImageUri = message.senderImageUri
                 },
@@ -87,10 +87,266 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // GET /api/paystreammessage/5
+        // GET /api/paystreammessages/5
         public string Get(int id)
         {
             return "value";
+        }
+        // POST /api/paystreammessages/donate
+        public HttpResponseMessage<MessageModels.SubmitMessageResponse> Donate(MessageModels.SubmitDonateRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.senderId, request.organizationId, request.recipientFirstName, request.recipientLastName));
+
+            using (var _ctx = new Context())
+            {
+                IAmazonNotificationService amazonNotificationService = new DomainServices.AmazonNotificationService();
+                DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx, amazonNotificationService);
+                DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
+                DomainServices.TransactionBatchService _transactionBatchService =
+                new DomainServices.TransactionBatchService(_ctx, _logger);
+                DomainServices.UserService _userService =
+                    new DomainServices.UserService(_ctx);
+                DomainServices.PaymentAccountService _paymentAccountServices =
+                    new DomainServices.PaymentAccountService(_ctx);
+                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+
+                Domain.Message message = null;
+                HttpResponseMessage<MessageModels.SubmitMessageResponse> responseMessage;
+
+                var user = _userService.GetUserById(request.senderId);
+
+                if (user == null)
+                {
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                    {
+                        isLockedOut = true,
+                        numberOfPinCodeFailures = 0
+                    }, HttpStatusCode.BadRequest);
+                    responseMessage.ReasonPhrase = String.Format("Invalid Sender Id {0} specified in the request", request.senderId);
+
+                    return responseMessage;
+                }
+
+                if (user.IsLockedOut)
+                {
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                    {
+                        isLockedOut = user.IsLockedOut,
+                        numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                    }, HttpStatusCode.BadRequest);
+                    responseMessage.ReasonPhrase = String.Format("Sender Account Locked");
+
+                    return responseMessage;
+                }
+                if (!(_securityService.Encrypt(request.securityPin).Equals(user.SecurityPin)))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                        {
+                            isLockedOut = user.IsLockedOut,
+                            numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                        }, HttpStatusCode.BadRequest);
+
+                        responseMessage.ReasonPhrase = String.Format("Security Pin Invalid.  Sender Account Locked.");
+                    }
+                    else
+                    {
+                        responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                        {
+                            isLockedOut = user.IsLockedOut,
+                            numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                        }, HttpStatusCode.BadRequest);
+
+                        responseMessage.ReasonPhrase = String.Format("Security Pin Invalid");
+                    }
+                    _userService.UpdateUser(user);
+
+                    return responseMessage;
+                }
+
+                try
+                {
+                    _messageServices.Donate(request.apiKey, request.senderId, request.organizationId, request.senderAccountId, request.amount, request.comments,
+                        "Payment");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.organizationId, ex.Message));
+
+                    var innerException = ex.InnerException;
+
+                    while (innerException != null)
+                    {
+                        _logger.Log(LogLevel.Fatal, String.Format("Inner Exception. {0}", ex.Message));
+
+                        innerException = innerException.InnerException;
+                    }
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
+                    responseMessage.ReasonPhrase = ex.Message;
+
+                    return responseMessage;
+                }
+
+                responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
+                //responseMessage.Headers.C
+
+                return responseMessage;
+            }
+        }
+        // POST /api/message/accept_pledge
+        public HttpResponseMessage<MessageModels.SubmitMessageResponse> AcceptPledge(MessageModels.SubmitPledgeRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.onBehalfOfId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
+
+            using (var _ctx = new Context())
+            {
+                IAmazonNotificationService amazonNotificationService = new DomainServices.AmazonNotificationService();
+                DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx, amazonNotificationService);
+                DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
+                DomainServices.TransactionBatchService _transactionBatchService =
+                new DomainServices.TransactionBatchService(_ctx, _logger);
+                DomainServices.UserService _userService =
+                    new DomainServices.UserService(_ctx);
+                DomainServices.PaymentAccountService _paymentAccountServices =
+                    new DomainServices.PaymentAccountService(_ctx);
+                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+
+                Domain.Message message = null;
+                HttpResponseMessage<MessageModels.SubmitMessageResponse> responseMessage;
+
+                var user = _userService.GetUserById(request.senderId);
+
+                if (user == null)
+                {
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                    {
+                        isLockedOut = true,
+                        numberOfPinCodeFailures = 0
+                    }, HttpStatusCode.BadRequest);
+                    responseMessage.ReasonPhrase = String.Format("Invalid Sender Id {0} specified in the request", request.senderId);
+
+                    return responseMessage;
+                }
+
+                if (user.IsLockedOut)
+                {
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                    {
+                        isLockedOut = user.IsLockedOut,
+                        numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                    }, HttpStatusCode.BadRequest);
+                    responseMessage.ReasonPhrase = String.Format("Sender Account Locked");
+
+                    return responseMessage;
+                }
+                if (!(_securityService.Encrypt(request.securityPin).Equals(user.SecurityPin)))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                        {
+                            isLockedOut = user.IsLockedOut,
+                            numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                        }, HttpStatusCode.BadRequest);
+
+                        responseMessage.ReasonPhrase = String.Format("Security Pin Invalid.  Sender Account Locked.");
+                    }
+                    else
+                    {
+                        responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
+                        {
+                            isLockedOut = user.IsLockedOut,
+                            numberOfPinCodeFailures = user.PinCodeFailuresSinceLastSuccess
+                        }, HttpStatusCode.BadRequest);
+
+                        responseMessage.ReasonPhrase = String.Format("Security Pin Invalid");
+                    }
+                    _userService.UpdateUser(user);
+
+                    return responseMessage;
+                }
+
+                try
+                {
+                    _messageServices.AcceptPledge(request.apiKey, user, request.onBehalfOfId, request.recipientUri, request.amount,
+                        request.comments, "PaymentRequest");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.Message));
+
+                    var innerException = ex.InnerException;
+
+                    while (innerException != null)
+                    {
+                        _logger.Log(LogLevel.Fatal, String.Format("Inner Exception. {0}", ex.Message));
+
+                        innerException = innerException.InnerException;
+                    }
+                    responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
+                    responseMessage.ReasonPhrase = ex.Message;
+
+                    return responseMessage;
+                }
+
+                responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
+                //responseMessage.Headers.C
+
+                return responseMessage;
+            }
+        }
+
+        public HttpResponseMessage<List<MessageModels.MultipleURIResponse>> DetermineRecipient(MessageModels.MultipleURIRequest request)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.UserService userService = new DomainServices.UserService(ctx);
+                List<MessageModels.MultipleURIResponse> list = new List<MessageModels.MultipleURIResponse>();
+                Dictionary<Guid, User> matchedUsers = new Dictionary<Guid, User>();
+
+                foreach (string uri in request.recipientUris)
+                {
+                    User user = userService.GetUser(uri);
+
+                    if (user != null)
+                    {
+                        if (!matchedUsers.ContainsKey(user.UserId))
+                        {
+                            list.Add(new MessageModels.MultipleURIResponse()
+                            {
+                                userUri = uri,
+                                firstName = user.FirstName,
+                                lastName = user.LastName
+                            });
+
+                            matchedUsers.Add(user.UserId, user);
+                        }
+                    }
+                }
+
+                if (list.Count == 0)
+                {
+                    //Send to primary.
+                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
+                }
+                else if (list.Count == 1)
+                {
+                    //Send to match.
+                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.OK);
+                }
+                else
+                {
+                    //Determine who to send it to.
+                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(list, HttpStatusCode.OK);
+                }
+            }
         }
 
         // POST /api/messages
@@ -172,8 +428,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 try
                 {
 
-                    message = _messageServices.AddMessage(request.apiKey, request.senderId, request.recipientUri, request.senderAccountId,
-                        request.amount, request.comments, request.messageType, request.securityPin, request.latitude, request.longitude,
+                    message = _messageServices.AddMessage(request.apiKey, request.senderId, "", request.recipientUri, request.senderAccountId,
+                        request.amount, request.comments, request.messageType, request.latitude, request.longitude,
                        request.recipientFirstName, request.recipientLastName, request.recipientImageUri);
 
                 }
