@@ -27,6 +27,19 @@ namespace SocialPayments.RestServices.Internal.Models
             public double latitude { get; set; }
             public double longitutde { get; set; }
         }
+
+        public class MultipleURIRequest
+        {
+            public List<string> recipientUris { get; set; }
+        }
+
+        public class MultipleURIResponse
+        {
+            public string userUri { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+        }
+
         public class SubmitMessageRequest {
             public string apiKey { get; set; }
             public string senderId { get; set; }
