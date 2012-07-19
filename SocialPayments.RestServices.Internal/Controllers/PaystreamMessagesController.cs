@@ -302,6 +302,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return responseMessage;
             }
         }
+
+        public HttpResponseMessage<List<MessageModels.MultipleURIResponse>> DetermineRecipient(MessageModels.MultipleURIRequest request)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.UserService userService = new DomainServices.UserService(ctx);
+                List<MessageModels.MultipleURIResponse> list = new List<MessageModels.MultipleURIResponse>();
+                Dictionary<Guid, User> matchedUsers = new Dictionary<Guid, User>();
+
+                foreach (string uri in request.recipientUris)
+                {
+                    User user = userService.GetUser(uri);
+
+                    if (user != null)
+                    {
+                        if (!matchedUsers.ContainsKey(user.UserId))
+                        {
+                            list.Add(new MessageModels.MultipleURIResponse()
+                            {
+                                userUri = uri,
+                                firstName = user.FirstName,
+                                lastName = user.LastName
+                            });
+
+                            matchedUsers.Add(user.UserId, user);
+                        }
+                    }
+                }
+
+                if (list.Count == 0)
+                {
+                    //Send to primary.
+                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
+                }
+                else
+                {
+                    //Determine who to send it to.
+                    return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(list, HttpStatusCode.OK);
+                }
+            }
+        }
+
         // POST /api/messages
         public HttpResponseMessage<MessageModels.SubmitMessageResponse> Post(MessageModels.SubmitMessageRequest request)
         {
