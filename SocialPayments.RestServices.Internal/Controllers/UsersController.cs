@@ -94,6 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
 
+            var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
             try
@@ -158,7 +159,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = p.Id.ToString(),
                         Type = p.Type.Name,
                         Uri = p.URI,
-                        UserId = p.UserId.ToString()
+                        UserId = p.UserId.ToString(),
+                        Verified = p.Verified,
+                        VerifiedDate = "",
+                        CreateDate = p.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy")
                     }).ToList() : null),
                     bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
                         AccountNumber = securityService.Decrypt(a.AccountNumber),
@@ -176,8 +180,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationKey = c.ConfigurationKey,
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
-                        }).ToList() : null),                                                                                                                                 
-                                                                                                                                                                   numberOfPaysteamUpdates = 2
+                        }).ToList() : null), 
+                    numberOfPaystreamUpdates = 2
                 };
             } 
             catch(Exception ex)
