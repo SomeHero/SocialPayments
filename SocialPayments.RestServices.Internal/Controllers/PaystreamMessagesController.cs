@@ -307,6 +307,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             using (var ctx = new Context())
             {
+                _logger.Log(LogLevel.Info, String.Format("Logged {0} uris.", request.recipientUris.Count()));
                 DomainServices.UserService userService = new DomainServices.UserService(ctx);
                 List<MessageModels.MultipleURIResponse> list = new List<MessageModels.MultipleURIResponse>();
                 Dictionary<Guid, User> matchedUsers = new Dictionary<Guid, User>();
