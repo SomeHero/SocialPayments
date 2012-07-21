@@ -141,14 +141,15 @@ namespace Mobile_PaidThx.Controllers
             string token = null;
             string tokenExp = null;
             FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
-
+            var redirect = String.Format(fbTokenRedirectURL, System.Web.HttpContext.Current.Request.Url.Host, System.Web.HttpContext.Current.Request.Url.Port == 80
+                ? string.Empty : ":" + System.Web.HttpContext.Current.Request.Url.Port);
 
             if (state == fbState)
             {
                 //Exchange FB Code for FB Token
                 string requestToken = "https://graph.facebook.com/oauth/access_token?" +
                     "client_id=" + fbAppID +
-                    "&redirect_uri=" + fbTokenRedirectURL +
+                    "&redirect_uri=" + redirect +
                     "&client_secret=" + fbAppSecret +
                     "&code=" + code;
 

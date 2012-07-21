@@ -27,6 +27,8 @@ namespace SocialPayments.RestServices.Internal
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+
             routes.MapHttpRoute(
                name: "Donate",
                routeTemplate: "api/paystreammessages/donate",
@@ -75,6 +77,12 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "PaystreamMessages", action = "DetermineRecipient" }
             );
 
+           // /api/Users/{0}/attributes
+            routes.MapHttpRoute(
+                name: "UserAttribute",
+                routeTemplate: "api/users/{id}/attributes",
+                defaults: new { controller = "UserAttributes" }
+            );
             //api/user/{id}/personalize_user
             routes.MapHttpRoute(
                 name: "PersonalizeUser",

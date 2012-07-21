@@ -215,7 +215,7 @@
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\MerchantsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
-    <Compile Include="Controllers\UserAttributeController.cs" />
+    <Compile Include="Controllers\UserAttributesController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
     <Compile Include="Controllers\UserPayPointsController.cs" />
     <Compile Include="Models\AccountVerificationRequest.cs" />
