@@ -937,7 +937,7 @@ p
 			text-decoration:none;
 		}
 		.nav-pdthx .ui-icon  { width: 30px!important; height:30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
-			#home .ui-icon { background:  url(../pdthx-icons/homeIcon.png) 50% 50% no-repeat; }
+			ui-icon-homeIcon { background: url("/images/home.png")50% 50% no-repeat ;}
 			#paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
 			#send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
 			#request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
@@ -982,4 +982,44 @@ p
 			background-color:#cccccc;
 			border-radius:10px;
 			color:white;
-			text-shadow:none}
+			text-shadow:none}      
+            #main-tabs a #tabHome {
+            background-image: url('images/tab-home-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabHome{
+            background-image: url('images/tab-home-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabPaystream {
+            background-image: url('images/tab-paystream-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabPaystream{
+            background-image: url('images/tab-paystream-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabSend {
+            background-image: url('images/tab-send-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabSend{
+            background-image: url('images/tab-send-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabRequest {
+            background-image: url('images/tab-request-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabRequest{
+            background-image: url('images/tab-request-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}

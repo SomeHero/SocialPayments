@@ -83,6 +83,7 @@ namespace Mobile_PaidThx
                 "{messageId}", // URL with parameters
                 new { controller = "Home", action = "Index" } // Parameter defaults
             );
+
             
             routes.MapRoute(
                 "Default", // Route name

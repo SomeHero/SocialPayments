@@ -7,11 +7,13 @@
     <div id="header">
     <dl id="main-tabs" class="tabs contained" data-role="listview">
         <dd>
-            <a href="#simpleContained1">Send $</a></dd>
+            <a href="#simpleContained0"id="tabHome">Home</a></dd>
         <dd>
-            <a href="#simpleContained2">Request $</a></dd>
+            <a href="#simpleContained1"id="tabSend">Send $</a></dd>
         <dd>
-            <a href="#simpleContained3" class="active">Paystream</a></dd>
+            <a href="#simpleContained2"id="tabRequest">Request $</a></dd>
+        <dd>
+            <a href="#simpleContained3" class="active"id="tabPaystream">Paystream</a></dd>
         <dd>
             <a href="#simpleContained4" class="tab-settings"></a></dd>
     </dl>
@@ -21,6 +23,12 @@
             <li id="simpleContained1Tab">
                 <div id="main-container">
                     @{Html.RenderPartial("PartialViews/SendMoney");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained0Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("../Home/PartialViews/HomePartial");}
                     @{Html.RenderPartial("_footer");}
                 </div>
             </li>

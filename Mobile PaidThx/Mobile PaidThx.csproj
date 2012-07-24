@@ -186,6 +186,7 @@
     <Content Include="apple-touch-icon.png" />
     <Content Include="Content\images\bank.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\home.png" />
     <Content Include="Content\images\skip-step-button-icon.png" />
     <Content Include="Content\images\request-money-button-icon.png" />
     <Content Include="Content\images\send-money-button-icon.png" />
@@ -331,6 +332,16 @@
     <Content Include="Scripts\script.js" />
     <Content Include="Scripts\setupACHAccount.js" />
     <Content Include="Scripts\verify-mobiledevice.js" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -456,6 +467,7 @@
     </Content>
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Paystream\Index.cshtml" />
     <Content Include="Views\Paystream\PartialViews\RequestMoney.cshtml" />
