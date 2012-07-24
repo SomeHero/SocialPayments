@@ -18,6 +18,10 @@ namespace SocialPayments.Domain
         [MaxLength(50)]
         public virtual string URI { get; set; }
         public virtual bool IsActive { get; set; }
+        public bool Verified { get; set; }
         public virtual DateTime CreateDate { get; set; }
+        public DateTime? VerifiedDate { get; set; }
+        public string VerificationLink { get; set; }
+        public string VerificationCode { get; set; }
     }
 }

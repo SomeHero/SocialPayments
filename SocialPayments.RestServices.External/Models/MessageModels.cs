@@ -31,6 +31,7 @@ namespace SocialPayments.RestServices.External.Models
             public String comments { get; set; }
             public String messageType { get; set; }
         }
+
         public class UpdateMessageRequest {
             public String Id { get; set; }
             public String senderUri { get; set; }

@@ -6,18 +6,31 @@ using System.Web.Http;
 using System.Net;
 using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DataLayer;
+using SocialPayments.Domain;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class MerchantsController : ApiController
     {
         // GET /api/merchants
-        public HttpResponseMessage<List<MerchantModels.MerchantResponseModel>> Get()
+        public HttpResponseMessage<List<MerchantModels.MerchantResponseModel>> Get(string type)
         {
+            if (type != "NonProfits" && type != "Organizations")
+            {
+                return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = "Type specified in request must be NonProfits or Organizations"
+                };
+            }
+
             using (var ctx = new Context())
             {
+                MerchantType merchantType = MerchantType.NonProfit;
+                if (type == "Organizations")
+                    merchantType = MerchantType.Regular;
+
                 var merchants = ctx.Merchants
-                    .Select(m => m)
+                    .Where(m => m.MerchantTypeValue.Equals((int)merchantType))
                     .ToList();
                 
                 var results = merchants.Select(m =>new MerchantModels.MerchantResponseModel()
@@ -34,7 +47,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // GET /api/merchants/5
-        public HttpResponseMessage<MerchantModels.MerchantDetailResponse> Get(string id)
+        public HttpResponseMessage<MerchantModels.MerchantDetailResponse> GetDetail(string id)
         {
             using (var ctx = new Context())
             {
