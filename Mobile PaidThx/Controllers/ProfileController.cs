@@ -272,7 +272,7 @@ namespace Mobile_PaidThx.Controllers
                     Comments = m.Comments
                 }).ToList();
 
-                payments = payments.Where(p => p.MessageType == Models.MessageType.PaymentRequest).ToList();
+                payments = payments.Where(p => p.Direction == "In" && p.MessageType == Models.MessageType.Payment).ToList();
 
                 if (!String.IsNullOrEmpty(model.OtherUri))
                 {
@@ -341,7 +341,76 @@ namespace Mobile_PaidThx.Controllers
                     Comments = m.Comments
                 }).ToList();
 
-                payments = payments.Where(p => p.MessageType == Models.MessageType.Payment).ToList();
+                payments = payments.Where(p => p.Direction == "Out" && p.MessageType == Models.MessageType.Payment).ToList();
+
+                if (!String.IsNullOrEmpty(model.OtherUri))
+                {
+                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(model.OtherUri.ToUpper()) || p.SenderUri.ToUpper().Contains(model.OtherUri.ToUpper())).ToList();
+                }
+
+                if (model.Debits && !model.Credits) // sent
+                {
+                    payments = payments.Where(p => p.Direction == "Out").ToList();
+                }
+
+                if (model.Credits && !model.Debits) // received
+                {
+                    payments = payments.Where(p => p.Direction == "In").ToList();
+                }
+
+                if (model.Complete && !model.Pending) // filter only completed
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Complete).ToList();
+                }
+
+                if (!model.Complete && model.Pending)
+                {
+                    payments = payments.Where(p => p.TransactionStatus == Models.TransactionStatus.Pending).ToList();
+                }
+
+                logger.Log(LogLevel.Info, "Serializing Transaction Receipts");
+                return Json(payments);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePayStreamAlerts(PaymentAttributes model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Updating PayStream"));
+
+            using (var ctx = new Context())
+            {
+
+                var userId = (Guid)Session["UserId"];
+
+                if (Session["UserId"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (Session["User"] == null)
+                    return RedirectToAction("SignIn", "Account", null);
+
+                var messageServices = new MessageServices();
+                var messages = messageServices.GetMessages(user.UserId);
+
+                var payments = messages.Select(m => new PaystreamModels.PaymentModel()
+                {
+                    Id = m.Id.ToString(),
+                    Amount = m.Amount,
+                    RecipientUri = m.RecipientUri,
+                    SenderUri = m.SenderUri,
+                    TransactionDate = m.CreateDate,
+                    TransactionStatus = Models.TransactionStatus.Pending,
+                    TransactionType = Models.TransactionType.Deposit,
+                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? Models.MessageType.Payment : Models.MessageType.PaymentRequest),
+                    Direction = m.Direction,
+                    TransactionImageUri = m.TransactionImageUrl,
+                    Comments = m.Comments
+                }).ToList();
+
+                payments = payments.Where(p => p.MessageType == Models.MessageType.PaymentRequest).ToList();
 
                 if (!String.IsNullOrEmpty(model.OtherUri))
                 {
@@ -730,7 +799,6 @@ namespace Mobile_PaidThx.Controllers
                     AllReceipts = null,
                     //PaymentReceipts = paymentReceipts,
                     //RequestReceipts = paymentRequests,
-                    Alerts = alerts,
                     ProfileModel = new ProfileModels()
                     {
                         FirstName = user.FirstName,
