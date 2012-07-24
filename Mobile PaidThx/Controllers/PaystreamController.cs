@@ -87,9 +87,9 @@ namespace Mobile_PaidThx.Controllers
                 var model = new PaystreamModels.PaystreamModel()
                 {
                     AllReceipts = payments,
-                    PaymentReceipts = payments.Where(p => p.MessageType == MessageType.Payment).ToList(),
-                    RequestReceipts = payments.Where(p => p.MessageType == MessageType.PaymentRequest).ToList(),
-                    Alerts = alerts,
+                    PaymentReceipts = payments.Where(p => p.Direction == "Out" && p.MessageType == MessageType.Payment).ToList(),
+                    RequestReceipts = payments.Where(p => p.Direction == "In" && p.MessageType ==  MessageType.Payment).ToList(),
+                    Alerts = payments.Where(p => p.MessageType == MessageType.PaymentRequest).ToList(),
                     ProfileModel = new ProfileModels()
                     {
                         FirstName = user.FirstName,

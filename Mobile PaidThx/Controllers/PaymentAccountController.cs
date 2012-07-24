@@ -163,7 +163,12 @@ namespace Mobile_PaidThx.Controllers
                         NameOnAccount = securityService.Decrypt(paymentAccount.NameOnAccount),
                         Nickname = paymentAccount.Nickname,
                         RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber),
-                        PaymentAccountId = paymentAccount.Id.ToString()
+                        PaymentAccountId = paymentAccount.Id.ToString(),
+                        AccountTypeOptions = new SelectListItem[] 
+                        {
+                            new SelectListItem() { Text = "Savings", Value = "Savings" },
+                            new SelectListItem() { Text = "Checking", Value= "Checking" }
+                        }
                     });
             }
         }

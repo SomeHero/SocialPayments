@@ -34,6 +34,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return message;
                 }
 
+                user.LastViewedPaystream = System.DateTime.Now;
+                userServices.UpdateUser(user);
+
                 var messages = messageServices.GetMessages(user.UserId);
                 
                 var messageResponse = messages.Select(m => new MessageModels.MessageResponse() 

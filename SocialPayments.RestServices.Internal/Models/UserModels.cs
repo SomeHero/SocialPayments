@@ -32,6 +32,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string zip { get; set; }
             public string senderName { get; set; }
             public double upperLimit { get; set; }
+            public double instantLimit { get; set; }
             public string securityQuestion { get; set; }
             public int? securityQuestionId { get; set; }
             public List<UserAttribute> userAttributes { get; set; }
@@ -43,7 +44,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public double totalMoneyReceived { get; set; }
 
             public bool setupSecurityPin { get; set; }
-            public int numberOfPaysteamUpdates { get; set; }
+            public int numberOfPaystreamUpdates { get; set; }
 
             public List<UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
@@ -184,6 +185,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public string UserId { get; set; }
             public string Uri { get; set; }
             public string Type { get; set; }
+            public bool Verified { get; set; }
+            public string VerifiedDate { get; set; }
+            public string CreateDate { get; set; }
         }
         public class UserConfigurationResponse
         {

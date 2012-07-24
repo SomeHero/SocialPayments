@@ -9,9 +9,13 @@
     @Html.ValidationSummary()
     <h2>
         Edit Account</h2>
+<<<<<<< HEAD
         <form id="frmEditAccount" action="@Url.Content("PaymentAccount/Edit")" method = "post">
     
+=======
+
     <form id="frmEditAccount" action="@Url.Content("~/PaymentAccount/Edit")" method="post">
+>>>>>>> upstream/development
     <p>
         <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
             required value="@Model.Nickname" /></p>
@@ -26,7 +30,7 @@
             required value="@Model.AccountNumber" /></p>
     <div data-role="fieldcontain">
         <fieldset data-role="controlgroup" data-type="horizontal">
-            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" />
+            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking"/>
             <label for="radio-choice-1">
                 Checking</label>
             <input type="radio" name="AccountType" id="radio-choice-2" value="Savings"/>

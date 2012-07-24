@@ -94,6 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             string userName = _userService.GetSenderName(user);
             UserModels.UserResponse userResponse = null;
 
+            var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
             try
@@ -130,6 +131,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         AttributeValue = a.AttributeValue
                     }).ToList(),
                     upperLimit = user.Limit,
+                    instantLimit = _userService.GetUserInstantLimit(user),
                     totalMoneyReceived = receivedTotal,
                     totalMoneySent = sentTotal,
                     preferredPaymentAccountId = preferredPaymentAccountId,
@@ -158,7 +160,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = p.Id.ToString(),
                         Type = p.Type.Name,
                         Uri = p.URI,
-                        UserId = p.UserId.ToString()
+                        UserId = p.UserId.ToString(),
+                        Verified = p.Verified,
+                        VerifiedDate = "",
+                        CreateDate = p.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy")
                     }).ToList() : null),
                     bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
                         AccountNumber = securityService.Decrypt(a.AccountNumber),
@@ -176,8 +181,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationKey = c.ConfigurationKey,
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
-                        }).ToList() : null),                                                                                                                                 
-                                                                                                                                                                   numberOfPaysteamUpdates = 2
+                        }).ToList() : null), 
+                    numberOfPaystreamUpdates = numberOfPayStreamUpdates
                 };
             } 
             catch(Exception ex)
@@ -283,7 +288,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
         }
-        
+                
         // POST /api/user/{id}/personalize_user
         public HttpResponseMessage PersonalizeUser(string id, UserModels.PersonalizeUserRequest request)
         {
@@ -504,9 +509,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
             using (var _ctx = new Context())
             {
                 DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-                DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
-                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
                 DomainServices.ValidationService validateService = new DomainServices.ValidationService();
+
+                if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
+                {
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = "Invalid Email Address";
+
+                    return message;
+                }
 
                 var user = userService.FindUserByEmailAddress(request.emailAddress);
 
@@ -514,14 +526,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                     message.ReasonPhrase = "Invalid User";
-
-                    return message;
-                }
-                else if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
-                {
-
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = "Invalid Email Address";
 
                     return message;
                 }
@@ -534,36 +538,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }
                 else
                 {
-                    string name = formattingService.FormatUserName(user);
-                    Guid passwordResetGuid = Guid.NewGuid();
-                    DateTime expiresDate = System.DateTime.Now.AddHours(3);
-
-                    PasswordResetAttempt passwordResetDb = _ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
-                    {
-                        Clicked = false,
-                        User = user,
-                        ExpiresDate = expiresDate,
-                        Id = passwordResetGuid
-                    });
-
-                    _ctx.SaveChanges();
-
-                    string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
-
-                    StringBuilder body = new StringBuilder();
-                    body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
-                    body.Append("You asked us to reset your PaidThx password. ");
-                    body.Append("To complete the process, please click on the link below ");
-                    body.Append("or paste it into your browser:").AppendLine().AppendLine();
-                    body.AppendLine(link).AppendLine();
-                    body.AppendLine("This link will be active for 3 hours only.").AppendLine();
-                    body.AppendLine("Thank you,").AppendLine();
-                    body.Append("The PaidThx Team");
-
-                    emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], request.emailAddress, "How to reset your PaidThx password", body.ToString());
-
-                    return new HttpResponseMessage(HttpStatusCode.OK);
+                    userService.SendResetPasswordLink(user, ApiKey);
                 }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
 
@@ -581,7 +559,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 try
                 {
-                    userService.addPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
+                    userService.AddPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 catch (Exception ex)

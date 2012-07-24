@@ -144,7 +144,7 @@ var updatePayStreamRequests = function () {
     var pending = $('#cbPendingRequests').is(':checked');
     var complete = $('#cbCompleteRequests').is(':checked');
 
-    var serviceUrl = getBaseURL() + 'profile/UpdatePayStreamRequests'
+    var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamRequests'
     var paymentAttributes = {
         OtherUri: otherUri,
         Debits: debits,
@@ -185,9 +185,7 @@ var updatePayStreamPayments = function () {
     var credits = $('#cbReceivedPayments').is(':checked');
     var pending = $('#cbPendingPayments').is(':checked');
     var complete = $('#cbCompletePayments').is(':checked');
-
-
-    var serviceUrl = getBaseURL() + 'profile/UpdatePayStreamPayments';
+    var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamPayments';
 
     var paymentAttributes = {
         OtherUri: otherUri,
@@ -223,6 +221,45 @@ var updatePayStreamPayments = function () {
         }
     });
 }
+
+var updatePayStreamRequests = function () {
+    var otherUri = $('#txtSearchPaystreamAlerts').val();
+    var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamAlerts'
+    var paymentAttributes = {
+        OtherUri: otherUri,
+        Debits: debits,
+        Credits: credits,
+        Pending: pending,
+        Complete: complete
+    };
+
+    var jsonData = $.toJSON(paymentAttributes);
+    $.ajax({
+        type: 'POST',
+        url: serviceUrl,
+        data: jsonData,
+        contentType: "application/json",
+        dataType: "json",
+        processData: false,
+        success: function (data) {
+            $("#transactionsListAlerts").empty();
+
+            if (data.length == 0) {
+                $("#resultsFilteredRequests").show();
+            } else {
+                $("#resultsFilteredRequests").hide();
+                $("#transactionTemplate").tmpl(data)
+                    .appendTo("#transactionsListAlerts");
+            }
+
+        },
+        error: function (objRequest, next, errorThrown) {
+            alert(next);
+            $("#error-block").appendTo(next);
+        }
+    });
+}
+
 $(document).ready(function () {
     $("#txtSearchPaystreamAll").keyup(function () {
         if ($('#txtSearchPaystreamAll').val().length > 2 || $('#txtSearchPaystreamAll').val().length == 0)
@@ -272,8 +309,13 @@ $(document).ready(function () {
     $('#cbCompletePayments').click(function () {
         updatePayStreamPayments();
     });
+
+    $("#txtSearchPaystreamAlerts").keyup(function () {
+        if ($('#txtSearchPaystreamAlerts').val().length > 2 || $('#txtSearchPaystreamAlerts').val().length == 0)
+            updatePayStreamAlerts();
+    });
 });
 var getBaseURL = function () {
     return location.protocol + "//" + location.hostname +
-      (location.port && ":" + location.port) + "/";
+      (location.port && ":" + location.port) + "/mobile/";
 }

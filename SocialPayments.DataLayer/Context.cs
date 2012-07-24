@@ -151,7 +151,7 @@ namespace SocialPayments.DataLayer
         }
     }
 
-    public class MyInitializer :System.Data.Entity.CreateDatabaseIfNotExists<Context>
+    public class MyInitializer : System.Data.Entity.CreateDatabaseIfNotExists<Context>
     {
         private SecurityService securityService = new SecurityService();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -179,132 +179,150 @@ namespace SocialPayments.DataLayer
                 Id = Guid.NewGuid(),
                 AttributeName = "FirstName",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var lastNameUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "LastName",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var address1Attribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "Address1",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 5
             });
             var address2Attribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "Address2",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 0
             });
             var cityUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "City",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 10
             });
             var stateUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "State",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 10
             });
             var zipCodeUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "ZipCode",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var phoneUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "phoneUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 50
             });
             var emailUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "emailUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var faceBookUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "facebookUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 50
             });
             var twitterUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "twitterUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 50
             });
             var aboutMeUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "aboutMeUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 10
             });
             var makePublicUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "makePublicUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 5
             });
             var photoIdUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "photoIdUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 50
             });
             var ssnUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "ssnUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 50
             });
             var birthDayUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "birthdayUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var incomeUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "incomeUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var creditScoreUserAttribute = context.UserAttributes.Add(new UserAttribute()
             {
                 Id = Guid.NewGuid(),
                 AttributeName = "creditScoreUserAttribute",
                 Approved = true,
-                IsActive = true
+                IsActive = true,
+                Points = 20
             });
             var memberRole = context.Roles.Add(new Role()
             {
                 RoleId = Guid.NewGuid(),
                 Description = "Member",
-                RoleName = "Member"
+                RoleName = "Member",
             });
             var application = context.Applications.Add(new Application()
             {
@@ -348,41 +366,49 @@ namespace SocialPayments.DataLayer
                         Label = "First Name",
                         SortOrder = 1,
                         UserAttribute = firstNameUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Last Name",
                         SortOrder = 2,
                         UserAttribute = lastNameUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Phone",
                         SortOrder = 3,
                         UserAttribute = phoneUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Email",
                         SortOrder = 4,
                         UserAttribute = emailUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Facebook",
                         SortOrder = 5,
-                        UserAttribute = faceBookUserAttribute
+                        UserAttribute = faceBookUserAttribute,
+                        ProfileItemType = ProfileItemType.SocialAccount
                     },
                     new ProfileItem() {
                         Label = "Twitter",
                         SortOrder = 6,
-                        UserAttribute = twitterUserAttribute
+                        UserAttribute = twitterUserAttribute,
+                        ProfileItemType = ProfileItemType.SocialAccount
                     },
                     new ProfileItem() {
                         Label = "About Me",
                         SortOrder = 7,
-                        UserAttribute = aboutMeUserAttribute
+                        UserAttribute = aboutMeUserAttribute,
+                        ProfileItemType = ProfileItemType.LongText
                     },
                     new ProfileItem() {
                         Label = "Make Public",
                         SortOrder = 8,
-                        UserAttribute = makePublicUserAttribute
+                        UserAttribute = makePublicUserAttribute,
+                        ProfileItemType = ProfileItemType.Switch
                     },
                 }
             });
@@ -396,46 +422,55 @@ namespace SocialPayments.DataLayer
                         Label = "Address",
                         SortOrder = 1,
                         UserAttribute = address1Attribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "City",
                         SortOrder = 2,
                         UserAttribute = cityUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "State",
                         SortOrder = 3,
                         UserAttribute = stateUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Zip",
                         SortOrder = 4,
                         UserAttribute = zipCodeUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Photo ID",
                         SortOrder = 5,
-                        UserAttribute = photoIdUserAttribute
+                        UserAttribute = photoIdUserAttribute,
+                        ProfileItemType = ProfileItemType.ImageCapture
                     },
                     new ProfileItem() {
                         Label = "SSN",
                         SortOrder = 6,
-                        UserAttribute = ssnUserAttribute
+                        UserAttribute = ssnUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Birthday",
                         SortOrder = 7,
-                        UserAttribute = birthDayUserAttribute
+                        UserAttribute = birthDayUserAttribute,
+                        ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
                         Label = "Income",
                         SortOrder = 8,
                         UserAttribute = incomeUserAttribute,
+                        ProfileItemType = ProfileItemType.Picker
                     },
                     new ProfileItem() {
                         Label = "Credit Score",
                         SortOrder = 9,
-                        UserAttribute = creditScoreUserAttribute
+                        UserAttribute = creditScoreUserAttribute,
+                        ProfileItemType = ProfileItemType.Picker
                     },
                 }
             });
@@ -706,21 +741,33 @@ namespace SocialPayments.DataLayer
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = emailPayPointType,
-                        URI = "james@paidthx.com"
+                        URI = "james@paidthx.com",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     },
                      new UserPayPoint() {
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = phonePayPointType,
-                        URI = "8043879693"
+                        URI = "8043879693",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     },
                      new UserPayPoint() {
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
                         IsActive = true,
                         Type = meCodePayPoint,
-                        URI = "$jamesrhodes"
+                        URI = "$jamesrhodes",
+                        VerifiedDate = System.DateTime.Now,
+                        Verified = true,
+                        VerificationCode = "1234",
+                        VerificationLink = ""
                     }
                 },
                 UserType = UserType.Individual

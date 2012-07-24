@@ -46,14 +46,20 @@ namespace SocialPayments.Services.MessageProcessors
         private string _recipientSMSMessageRecipientNotRegistered = "{0} just sent you {1:C} using PaidThx.  Go to {2} to complete the transaction.";
 
         private string _recipientWasPaidNotification = "{0} sent you {1:C} using PaidThx!";
-        private string _recipientRequestNotification = "{0} requested {1:C} from you using PaidThx!";
 
         private string _senderConfirmationEmailSubjectRecipientNotRegistered = "Confirmation of your payment to {0}.";
         private string _senderConfirmationEmailBodyRecipientNotRegistered = "Your payment in the amount of {0:C} was delivered to {1}.  {1} does not have an account with PaidThx.  We have sent their mobile number information about your payment and instructions to register.";
+
         private string _mobileWebSiteUrl = System.Configuration.ConfigurationManager.AppSettings["MobileWebSetURL"];
        
         private string _paymentReceivedRecipientNotRegisteredTemplate = "Money Received - Not Registered";
         private string _paymentReceivedRecipientRegisteredTemplate = "Money Received - Registered";
+
+        private string _facebookFriendWallPostMessageTemplate = "I sent you ${0} using PaidThx. Why, you ask? {1} Click on this link to pick it up! {2}";
+        private string _facebookFriendWallPostLinkTitleTemplate = "You were sent money!";
+        private string _facebookFriendWallPostPictureURL = "http://www.crunchbase.com/assets/images/resized/0019/7057/197057v2-max-250x250.png";
+        private string _facebookFriendWallPostDescription = "PaidThx lets you send and receive money whenever you want, wherever you want. It is easy to do, and doesn't cost you a penny.";
+        private string _facebookFriendWallPostCaption = "The FREE Social Payment Network";
         
         private string _defaultAvatarImage = System.Configuration.ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
 
@@ -316,12 +322,6 @@ namespace SocialPayments.Services.MessageProcessors
                             payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count() + 1);
                             payload.AddCustom("nType", "recPCNF");
                         }
-                        else if (message.MessageType == Domain.MessageType.PaymentRequest)
-                        {
-                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
-                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
-                            payload.AddCustom("nType", "recPRQ");
-                        }
 
                         /*
                          *  Payment Notification Types:
@@ -427,20 +427,34 @@ namespace SocialPayments.Services.MessageProcessors
                         new KeyValuePair<string, string>("app_user", "false")
                     });
                 }
-                if (recipientType == URIType.FacebookAccount)
+            }
+            if (recipientType == URIType.FacebookAccount)
+            {
+                try
                 {
-                    try
-                    {
-                        var client = new Facebook.FacebookClient("BAAEuHZBe8kkIBAJ8z8OCbZB4zDAOaFSDMdoanBReaor9mw8ZCJRwbDfhaDYGIGNARZBpRGaF4Ms8hdUAXHGy2BOkygo0yoBPh1hpBqcVM6VEIewyM3acOCFFskSZBxI5PBLKZCf2shEgZDZD");
-                        var args = new Dictionary<string, object>();
-                        args["message"] = String.Format("{0} sent you {1} from PaidThx.  Go to {2} to pick it up", senderName, message.Amount, message.shortUrl);
-                        client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Log(LogLevel.Error, ex.Message);
-                    }
+                    var client = new Facebook.FacebookClient(sender.FacebookUser.OAuthToken);
+                    var args = new Dictionary<string, object>();
 
+                    // All this next line is doing is ending it with a period if it does not end in a period or !
+                    // I'm sure this can be done better, but for now it looks good.
+                    var formattedComments = message.Comments.Trim();
+                    
+                    if ( !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
+                        formattedComments = String.Format("{0}.", formattedComments);
+
+                    args["message"] = String.Format(_facebookFriendWallPostMessageTemplate, message.Amount, formattedComments, message.shortUrl);
+                    args["link"] = message.shortUrl;
+
+                    args["name"] = _facebookFriendWallPostLinkTitleTemplate;
+                    args["caption"] = _facebookFriendWallPostCaption;
+                    args["picture"] = _facebookFriendWallPostPictureURL;
+                    args["description"] = _facebookFriendWallPostDescription;
+
+                    client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, ex.Message);
                 }
 
             }
