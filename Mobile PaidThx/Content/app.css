@@ -404,7 +404,7 @@ a.imgbtn span.ui-button-text, button.imgbtn span.ui-button-text
 a.fbSignIn img, button.fbSignIn img
 {
     border-right: 1px solid #597ea9;
-    padding: 0 15px;
+    padding: 0 5px;
 }
 a.fbSignIn span, button.fbSignIn span
 {
@@ -464,7 +464,7 @@ a.fbSignIn span, button.fbSignIn span
 /* ---------- [ Paystream Transactions ] ---------- */
 .trans-type
 {
-    width: 80px;
+    width: 40px;
     float: left;
     display: block;
     overflow: hidden;
@@ -472,7 +472,7 @@ a.fbSignIn span, button.fbSignIn span
 }
 .trans-title
 {
-    width: 45%;
+    width: 60%;
     padding: 0 auto;
     float: left;
     font-size: 11px;
@@ -482,7 +482,7 @@ a.fbSignIn span, button.fbSignIn span
 .trans-title strong
 {
     height: 30px;
-    font-size: 14px;
+    font-size: 12px;
     clear: both;
     display: block;
     font-weight: bolder;
@@ -506,87 +506,87 @@ a.fbSignIn span, button.fbSignIn span
 }
 .trans-comment
 {
-    padding-top: 20px;
-    font-size: 14px;
+    padding-top: 15px;
+    font-size: 10px;
     font-style: italic;
     color: #a8a9ab;
     font-weight: normal;
 }
 .title-pay-in
 {
-    font-size: 12px;
+    font-size: 10px;
     font-style: normal;
     font-weight: normal;
     color: #1c8839;
 }
 .title-pay-out
 {
-    font-size: 12px;
+    font-size: 10px;
     font-style: normal;
     font-weight: normal;
     color: #269bb8;
 }
 .title-request-in
 {
-    font-size: 12px;
+    font-size: 10px;
     font-style: normal;
     font-weight: normal;
     color: #86acb5;
 }
 .title-request-out
 {
-    font-size: 12px;
+    font-size: 10px;
     font-style: normal;
     font-weight: normal;
     color: #81b28e;
 }
 .trans-amount
 {
-    padding: 15px 20px 0 0;
+    padding: 5px 10px 0 0;
     float: right;
     display: inline-block;
     text-align: right;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: normal;
     vertical-align: middle;
-    width: 110px;
+    width: 20%;
 }
 .gray-above
 {
     padding-bottom: 10px;
     color: #a8a9ab;
-    font-size: 14px;
+    font-size: 10px;
     font-style: italic;
 }
 .gray-out
 {
     padding-top: 10px;
     color: #a8a9ab;
-    font-size: 14px;
+    font-size: 12px;
     font-style: italic;
 }
 .paystream-pay-in
 {
-    font-size: 20px;
+    font-size: 10px;
     font-weight: bold;
     color: #1c8839;
 }
 .paystream-pay-out
 {
-    font-size: 20px;
+    font-size: 10px;
     font-weight: bold;
     color: #269bb8;
 }
 .paystream-request-in
 {
-    font-size: 20px;
+    font-size: 10px;
     font-weight: bold;
     color: #86acb5;
 }
 .paystream-request-out
 {
-    font-size: 20px;
+    font-size: 10px;
     font-weight: bold;
     color: #81b28e;
 }
@@ -606,14 +606,14 @@ a.fbSignIn span, button.fbSignIn span
 {
     background: #919191;
     color: #FFFFFF;
-    font-size: 16px;
+    font-size: 13px;
     text-indent: 10px;
     letter-spacing: 1px;
     padding: 6px;
 }
 .member-name
 {
-    font-size: 14px;
+    font-size: 10px;
     font-weight: bold;
 }
 .dialog
@@ -677,12 +677,12 @@ a.fbSignIn span, button.fbSignIn span
 
 .paystream-dialog-title-bg
 {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
     background: #E8E8E8;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-top-left-radius: 2em;
     -moz-border-radius-topleft: 2em;
     -webkit-border-top-left-radius: 2em;
@@ -690,7 +690,6 @@ a.fbSignIn span, button.fbSignIn span
 
 .paystream-dialog-inner-display
 {
-    padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -709,7 +708,7 @@ a.fbSignIn span, button.fbSignIn span
 
 .paystream-user
 {
-    width: 100px;
+    width: 40px;
     float: left;
     display: block;
     overflow: hidden;
@@ -718,7 +717,7 @@ a.fbSignIn span, button.fbSignIn span
 
 .paystream-user-next
 {
-    width: 100px;
+    width: 40px;
     float: right;
     display: block;
     overflow: hidden;
@@ -729,14 +728,14 @@ a.fbSignIn span, button.fbSignIn span
 {
     background: #AAF0D3;
     color: #40A37A;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bolder;
     padding: 10px;
 }
 
 .user-statement
 {
-    font-size: large;
+    font-size: 11px;
     font-weight: bold;
     padding-top: 10px;
 }
@@ -754,7 +753,7 @@ a.fbSignIn span, button.fbSignIn span
 .paystream-wrapper
 {
     display: block;
-    height: 120px;
+    height: 80px;
 }
 
 .paystream-status-dialog
@@ -781,7 +780,7 @@ p
 .speech-bubble-border
 {
     position: relative;
-    padding: 15px;
+    padding: 15px 15px 15px 15px;
     margin: 1em 0 3em;
     border: 3px solid #B8B8B8;
     color: #636363;
@@ -837,9 +836,9 @@ p
 
 .paystream-header-title
 {
-    padding: 22px;
+    padding: 10px;
     text-align: center;
-    font-size: 20px;
+    font-size: 13px;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
     background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
     background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
