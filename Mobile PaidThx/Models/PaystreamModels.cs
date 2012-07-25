@@ -12,7 +12,7 @@ namespace Mobile_PaidThx.Models
             public List<PaymentModel> AllReceipts { get; set; }
             public List<PaymentModel> PaymentReceipts { get; set; }
             public List<PaymentModel> RequestReceipts { get; set; }
-            public List<AlertModel> Alerts { get; set; }
+            public List<PaymentModel> Alerts { get; set; }
             public ProfileModels ProfileModel { get; set; }
         }
         public class PaymentModel
