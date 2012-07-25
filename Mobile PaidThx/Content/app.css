@@ -404,7 +404,7 @@ a.imgbtn span.ui-button-text, button.imgbtn span.ui-button-text
 a.fbSignIn img, button.fbSignIn img
 {
     border-right: 1px solid #597ea9;
-    padding: 0 15px;
+    padding: 0 5px;
 }
 a.fbSignIn span, button.fbSignIn span
 {
