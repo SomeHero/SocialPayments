@@ -6,8 +6,6 @@
 <script src="@Url.Content("~/Scripts/paymentaccount.js")" type="text/javascript"></script>
 <div id="accounts-content">
     <div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
-        <div id="logo" style="float: left">
-            <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
         <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
             Accounts
         </div>
@@ -24,8 +22,9 @@
                     <div class="bank-icon">
                         <img src="@bankAccount.BankIconURL" alt="@bankAccount.BankName" />
                     </div>
+                   
                     <div class="bank-info">
-                        <strong>@bankAccount.Nickname</strong> - @bankAccount.AccountType - @bankAccount.AccountNumber
+                        <strong>@bankAccount.Nickname</strong> -<p></p> @bankAccount.AccountType - @bankAccount.AccountNumber
                     </div>
                     </a>
                  </li>
