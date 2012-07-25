@@ -17,6 +17,16 @@ namespace Mobile_PaidThx.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private FormattingServices formattingService = new FormattingServices();
 
+        public ActionResult ChooseAmount()
+        {
+            return PartialView("PartialViews/ChooseAmount");
+        }
+
+        public ActionResult SendMoney()
+        {
+            return PartialView("PartialViews/SendMoney");
+        }
+
         public ActionResult Index(String searchString)
         {
             if (Session["UserId"] == null)

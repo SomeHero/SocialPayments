@@ -9,3 +9,15 @@ $(document).ready(function () {
         }
     });
 });
+
+$("#clickamountbtn").die('click').live('click', function () {
+    $.get(getBaseURL() + "Paystream/ChooseAmount", function (data) {
+        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+    });
+});
+
+$("#gobtn").die('click').live('click', function () {
+    $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
+        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+    });
+});
