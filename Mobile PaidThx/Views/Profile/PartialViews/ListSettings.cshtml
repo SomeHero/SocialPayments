@@ -5,7 +5,7 @@
     margin-bottom: 5px">
 </div>
 <!-- Edit Profile -->
-<div id="renderP">
+<a onclick="getProfileScreen()">
     <div class="tablesettings">
         <div style="float: left">
             <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-profile-40x40.png") width="40px" /></div>
@@ -14,9 +14,9 @@
         <div style="float: right; padding-right: 5px; padding-top: 6px">
             <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
     </div>
-</div>
+</a>
 <!-- Bank Account -->
-<div id="renderBanks">
+<a onclick="getBankAccountsScreen()">
     <div class="tablesettings">
         <div style="float: left">
             <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-bank-40x40.png") width="40px" /></div>
@@ -25,7 +25,7 @@
         <div style="float: right; padding-right: 5px; padding-top: 6px">
             <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
     </div>
-</div>
+</a>
 <!-- Separate Set -->
 <!-- Email Accounts -->
 <div class="tabletop">
