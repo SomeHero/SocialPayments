@@ -126,6 +126,7 @@ ul.contained.tabs-content > li
     color: #fff;
     margin-bottom: 20px;
 }
+
 #sub-nav dd a, #sub-nav dd a:active
 {
     background: none;
@@ -346,7 +347,7 @@ input:-moz-placeholder
     background: -ms-linear-gradient(top, #fd8403, #ca6431);
     background: -o-linear-gradient(top, #fd8403, #ca6431);
 }
-#signin-f-submit
+#signin-facebook-submit
 {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#667cb2), to(#758fc7));
     background: -webkit-linear-gradient(top, #758fc7, #667cb2);
