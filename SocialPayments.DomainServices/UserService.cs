@@ -599,6 +599,43 @@ namespace SocialPayments.DomainServices
             emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
         }
 
+        public void SendEmailVerificationLink(UserPayPoint userPayPoint)
+        {
+            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            DomainServices.ValidationService validateService = new ValidationService();
+
+
+            string name = formattingService.FormatUserName(userPayPoint.User);
+            Guid passwordResetGuid = Guid.NewGuid();
+            DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+            var verification = _ctx.UserPayPointVerifications.Add(
+                new UserPayPointVerification()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    UserPayPoint = userPayPoint,
+                    VerificationCode = "1234",
+                    ExpirationDate = System.DateTime.Now.AddDays(30)
+             });
+            _ctx.SaveChanges();
+
+            string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+
+            StringBuilder body = new StringBuilder();
+            body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+            body.AppendFormat("You added the paypoint {0} to your PaidThx account. ", userPayPoint.URI);
+            body.Append("To complete the process and begin accepting payments using this address, please click on the link below ");
+            body.Append("or paste it into your browser:").AppendLine().AppendLine();
+            body.AppendLine(link).AppendLine();
+            //body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+            body.AppendLine("Thank you,").AppendLine();
+            body.Append("The PaidThx Team");
+
+            emailService.SendEmail(userPayPoint.User.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], userPayPoint.URI, "Email Verification", body.ToString());
+        }
+
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
         {
             return new ArgumentException(string.Format("Argument cannot be null or empty: {0}", paramName));

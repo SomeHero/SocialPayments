@@ -306,6 +306,11 @@ namespace Mobile_PaidThx.Controllers
         {
             return View();
         }
+        public ActionResult VerifyPayPoint(string id)
+        {
+
+            return View();
+        }
         public ActionResult SignIn()
         {
             logger.Log(LogLevel.Info, String.Format("Displaying SignIn View"));

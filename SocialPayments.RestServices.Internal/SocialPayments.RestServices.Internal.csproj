@@ -211,10 +211,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ApplicationConfigurationsController.cs" />
+    <Compile Include="Controllers\BatchesController.cs" />
     <Compile Include="Controllers\BetaSignupsController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\MerchantsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
+    <Compile Include="Controllers\BatchTransactionsController.cs" />
     <Compile Include="Controllers\UserAttributesController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
     <Compile Include="Controllers\UserPayPointsController.cs" />
@@ -231,6 +233,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApplicationModels.cs" />
+    <Compile Include="Models\BatchModels.cs" />
     <Compile Include="Models\BetaSignUpModels.cs" />
     <Compile Include="Models\FileUploadResponse.cs" />
     <Compile Include="Models\MerchantModels.cs" />
@@ -238,6 +241,7 @@
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeyModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeySMSListenerModels.cs" />
+    <Compile Include="Models\TransactionModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

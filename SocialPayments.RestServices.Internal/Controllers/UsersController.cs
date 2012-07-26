@@ -27,9 +27,35 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
-        public IEnumerable<string> Get()
+        public UserModels.PagedResults Get(int take, int skip, int page, int pageSize)
         {
-            return new string[] { "value1", "value2" };
+            using (var ctx = new Context())
+            {
+                var totalRecords = ctx.Messages.Count();
+
+                var users = ctx.Users.Select(u => u)
+                    .OrderBy(m => m.CreateDate)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return new UserModels.PagedResults()
+                {
+                    TotalRecords = totalRecords,
+                    Results = users.Select(u => new UserModels.UserResponse()
+                    {
+                        createDate = (u.CreateDate != null ? u.CreateDate.Value.ToString("MM/dd/yyyy") : ""),
+                        imageUrl = u.ImageUrl,
+                        instantLimit = u.Limit,
+                        isConfirmed = u.IsConfirmed,
+                        isLockedOut = u.IsLockedOut,
+                        lastLoggedIn = (u.LastLoggedIn != null ? u.LastLoggedIn.ToString("MM/dd/yyyy") : ""),
+                        userId = u.UserId,
+                        userName = u.UserName,
+                        userStatus = u.UserStatus.ToString()
+                    })
+                };
+            }
         }
 
         // GET /api/users/5

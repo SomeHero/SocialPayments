@@ -30,6 +30,12 @@ namespace SocialPayments.RestServices.Internal
 
 
             routes.MapHttpRoute(
+               name: "BatchTransactions",
+               routeTemplate: "api/batches/{batchId}/transactions",
+               defaults: new { controller = "BatchTransactions" }
+           );
+
+            routes.MapHttpRoute(
                name: "Donate",
                routeTemplate: "api/paystreammessages/donate",
                defaults: new { controller = "PaystreamMessages", action = "Donate" }

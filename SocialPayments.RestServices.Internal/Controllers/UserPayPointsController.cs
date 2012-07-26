@@ -123,14 +123,20 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 //TODO: Validate format of the URI based on type
 
-                user.PayPoints.Add(new UserPayPoint()
+
+                var userPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
                 {
                     Id = Guid.NewGuid(),
+                    User = user,
                     CreateDate = System.DateTime.Now,
                     IsActive = true,
                     URI = request.Uri,
-                    Type = payPointType
+                    Type = payPointType,
+                    Verified = false
                 });
+
+               // if(payPointType.Name == "EmailAddress")
+                    userService.SendEmailVerificationLink(userPayPoint);
 
                 userService.UpdateUser(user);
 

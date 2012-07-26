@@ -80,6 +80,10 @@ namespace SocialPayments.Services.MessageProcessors
 
         public bool Process(Message message)
         {
+            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0} - {1}", message.RecipientUri, _defaultAvatarImage));
+            if (message.WorkflowStatus == PaystreamMessageWorkflowStatus.Complete)
+                return false;
+
             _formattingService = new FormattingServices();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _validationService = new ValidationService(_logger);
@@ -91,8 +95,7 @@ namespace SocialPayments.Services.MessageProcessors
             string fromAddress = "jrhodes2705@gmail.com";
             URIType recipientType = _messageService.GetURIType(message.RecipientUri);
 
-            _logger.Log(LogLevel.Info, String.Format("Processing Payment Message to {0} - {1}", message.RecipientUri, _defaultAvatarImage));
-
+           
             _logger.Log(LogLevel.Info, String.Format("URI Type {0}", recipientType));
             
             string smsMessage;

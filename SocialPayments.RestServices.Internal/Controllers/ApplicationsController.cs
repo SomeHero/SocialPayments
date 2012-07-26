@@ -80,7 +80,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     ApiKey = c.ApiKey.ToString(),
                     ConfigurationKey = c.ConfigurationKey,
                     ConfigurationValue = c.ConfigurationValue,
-                    ConfigurationType = c.ConfigurationType
+                    ConfigurationType = c.ConfigurationType,
+                    Id = c.Id
                 }).ToList(),
                 ProfileSections = profileSections.Select(a => new ApplicationModels.ProfileSectionResponse() {
                     Id = a.Id,

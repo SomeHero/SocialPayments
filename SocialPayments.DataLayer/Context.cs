@@ -44,6 +44,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<ProfileSection> ProfileSections { get; set; }
         public IDbSet<Merchant> Merchants { get; set; }
         public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
+        public IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }
 
 
         public Context() : base("name=DataContext") { }
