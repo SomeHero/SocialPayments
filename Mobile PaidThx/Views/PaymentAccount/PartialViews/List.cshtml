@@ -8,7 +8,7 @@
         margin-bottom: 0px">
         My Accounts</div>
     <span id="closebtn" style="float: right; padding-top: 7px; padding-right: 2px">
-        <img src="@Url.Content("~/Content/images/close-dialog.gif")" />
+       
     </span>
     <div style="height: 1px; background: #B0B0B0; margin-left: -15px; margin-right: -15px;
         margin-bottom: 5px">
@@ -22,7 +22,7 @@
             {             
                 <li class=""><a href="#" data-val="@bankAccount.PaymentAccountId" class="edit-payment-account">
                     <div class="bank-icon">
-                        <img src="@bankAccount.BankIconURL" alt="@bankAccount.BankName" />
+                        <img src="@bankAccount.BankIconURL" width="50%" height ="50%" alt="@bankAccount.BankName" />
                     </div>
                     <div class="bank-info">
                         <strong>@bankAccount.Nickname</strong> -<p>
@@ -33,11 +33,11 @@
             }
              
             <h2>Sending Account</h2>
-            @Html.DropDownList("PreferredSendAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount" });
+            @Html.DropDownList("PreferredSendAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount" })
 
             
             <h2>Receiving Account</h2>
-            @Html.DropDownList("PreferredReceiveAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount" });
+            @Html.DropDownList("PreferredReceiveAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount" })
         </ul>
 
         <p>
