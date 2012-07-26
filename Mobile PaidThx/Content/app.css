@@ -346,7 +346,7 @@ input:-moz-placeholder
     background: -ms-linear-gradient(top, #fd8403, #ca6431);
     background: -o-linear-gradient(top, #fd8403, #ca6431);
 }
-#signin-facebook-submit
+#signin-f-submit
 {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#667cb2), to(#758fc7));
     background: -webkit-linear-gradient(top, #758fc7, #667cb2);
