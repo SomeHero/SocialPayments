@@ -195,20 +195,7 @@ namespace Mobile_PaidThx.Controllers
                     if (model.AccountType.ToLower().Equals("checking"))
                         paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
                 }
-                if(model.DefaultRecieve != null)
-                {
-                    if (model.DefaultRecieve.ToLower().Equals("recieve"))
-                   {
-                       user.PreferredReceiveAccountId = paymentAccount.Id;
-                   }
-                }
-                if (model.DefaultSend != null)  
-                {
-                    if (model.DefaultSend.ToLower().Equals("sending"))
-                    {
-                        user.PreferredSendAccountId = paymentAccount.Id;
-                    }
-                }
+
                 if (paymentAccount == null)
                 {
                     ModelState.AddModelError("", "Unable to edit payment account");
