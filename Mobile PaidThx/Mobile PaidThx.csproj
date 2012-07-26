@@ -450,6 +450,10 @@
     <Content Include="Views\Profile\PartialViews\SendMoney.cshtml" />
     <Content Include="Views\Profile\PartialViews\RequestMoney.cshtml" />
     <Content Include="Views\Profile\PartialViews\ListSettings.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\ChooseAmount.cshtml" />
+    <Content Include="Views\Register\Register-ValidateMobileDevice.cshtml" />
+    <Content Include="Views\Profile\PartialViews\PayStream.cshtml" />
+    <Content Include="Views\Profile\PayStream.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
