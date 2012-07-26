@@ -416,6 +416,7 @@
     <Content Include="Views\Profile\PartialViews\SettingsNew.cshtml" />
     <Content Include="Views\Profile\PartialViews\ListSettings.cshtml" />
     <Content Include="Views\Paystream\PartialViews\ChooseAmount.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\SendMoneyCopy.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
