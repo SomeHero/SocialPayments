@@ -18,7 +18,7 @@ $(document).ready(function () {
     $("#gobtn").die('click').live('click', function () {
         amountSelected = $('#customAmount').val();
         $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-            $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+            $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
             $('#amount').text(amountSelected);
         });
     });
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 function chooseAmount() {
     $.get(getBaseURL() + "Paystream/ChooseAmount", function (data) {
-        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
 
     });
 }
@@ -34,7 +34,7 @@ function chooseAmount() {
 function oneDollar() {
     amountSelected = 1.00;
     $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
         $('#amount').text(amountSelected);
     });
 }
@@ -42,7 +42,7 @@ function oneDollar() {
 function fiveDollars() {
     amountSelected = 5.00;
     $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
         $('#amount').text(amountSelected);
     });
 }
@@ -50,7 +50,7 @@ function fiveDollars() {
 function tenDollars() {
     amountSelected = 10.00;
     $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
         $('#amount').text(amountSelected);
     });
 }
@@ -58,7 +58,7 @@ function tenDollars() {
 function twentyDollars() {
     amountSelected = 20.00;
     $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body').html(data).trigger("pagecreate").trigger("refresh");
+        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
         $('#amount').text(amountSelected);
     });
 }
