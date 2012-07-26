@@ -1056,7 +1056,7 @@ h13
     padding-left: 50px;
     padding-top: 3px;
 }
-#clickamountbtn
+.clickamountbtn
 {
     background-image: url('images/field-howmuch-255x48.png');
     background-repeat: no-repeat;
