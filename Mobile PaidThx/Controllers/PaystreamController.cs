@@ -17,6 +17,27 @@ namespace Mobile_PaidThx.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private FormattingServices formattingService = new FormattingServices();
 
+        public ActionResult ChooseAmount()
+        {
+            return PartialView("PartialViews/ChooseAmount");
+        }
+
+        public ActionResult SendMoney()
+        {
+            return PartialView("PartialViews/SendMoney");
+        }
+
+        public ActionResult SendMoney1()
+        {
+            SendMoneyModel reference = new SendMoneyModel
+            {
+                Amount = 1.00,
+                Comments = "",
+                RecipientUri = ""
+            };
+            return PartialView("PartialViews/SendMoney", reference);
+        }
+
         public ActionResult Index(String searchString)
         {
             if (Session["UserId"] == null)
