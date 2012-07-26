@@ -22,9 +22,19 @@ namespace Mobile_PaidThx.Controllers
             return PartialView("PartialViews/ChooseAmount");
         }
 
+        public ActionResult ChooseAmountRequest()
+        {
+            return PartialView("PartialViews/ChooseMoneyRequest");
+        }
+
         public ActionResult SendMoney()
         {
             return PartialView("PartialViews/SendMoneyCopy");
+        }
+
+        public ActionResult RequestMoney()
+        {
+            return PartialView("PartialViews/RequestMoneyCopy");
         }
 
         public ActionResult Index(String searchString)
