@@ -20,13 +20,26 @@ $(document).ready(function () {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
-    $("#remove-account").click(function () {
+    $("#receive-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.post(getBaseURL() + "PaymentAccount/Remove/" + paymentAccountId,
             function (data) {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
+
+    $("#ddlPreferredSendAccount").change(function () {
+        var paymentAccountId = $("#ddlPreferredSendAccount").val();
+
+        $.post(getBaseURL() + "PaymentAccount/defaultSending/" + paymentAccountId)
+    });
+
+    $("#ddlPreferredReceiveAccount").change(function () {
+        var paymentAccountId = $("#ddlPreferredReceiveAccount").val();
+
+        $.post(getBaseURL() + "PaymentAccount/defaultReceiving/" + paymentAccountId)
+    });
+
     $("#add-account").click(function () {
         $.get(getBaseURL() + "PaymentAccount/Add", function (data) {
             $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
@@ -49,4 +62,7 @@ $(document).ready(function () {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
+
+
+
 });

@@ -346,7 +346,7 @@ input:-moz-placeholder
     background: -ms-linear-gradient(top, #fd8403, #ca6431);
     background: -o-linear-gradient(top, #fd8403, #ca6431);
 }
-#signin-facebook-submit
+#signin-f-submit
 {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#667cb2), to(#758fc7));
     background: -webkit-linear-gradient(top, #758fc7, #667cb2);
@@ -1045,6 +1045,16 @@ h13
     border-right: 1px solid #5C5C5C;
     border-top: 1px solid #A8A8A8;
     position: relative;
+}
+#writeuserbtn
+{
+    background-image: url('images/field-contact-255x48.png');
+    background-repeat:no-repeat;
+    height:48px;
+    width:255px;
+    padding-left:50px;
+    padding-top:12px;
+    
 }
 #clickamountbtn
 {
