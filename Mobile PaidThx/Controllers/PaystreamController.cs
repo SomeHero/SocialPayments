@@ -24,18 +24,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult SendMoney()
         {
-            return PartialView("PartialViews/SendMoney");
-        }
-
-        public ActionResult SendMoney1()
-        {
-            SendMoneyModel reference = new SendMoneyModel
-            {
-                Amount = 1.00,
-                Comments = "",
-                RecipientUri = ""
-            };
-            return PartialView("PartialViews/SendMoney", reference);
+            return PartialView("PartialViews/SendMoneyCopy");
         }
 
         public ActionResult Index(String searchString)
