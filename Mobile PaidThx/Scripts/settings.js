@@ -5,22 +5,20 @@ var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
 }
 
-// USE BELOW
-$("#renderP").die('click').live('click', function () {
+function getProfileScreen() {
     $.get(getBaseURL() + "Profile/Settings", function (data) {
         $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
     });
-});
+}
 
-$("#closebtn").die('click').live('click', function () {
-    $.get(getBaseURL() + "Profile/ListSettings", function (data) {
-        $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
-    });
-});
-
-$("#renderBanks").die('click').live('click', function () {
+function getBankAccountsScreen() {
     $.get(getBaseURL() + "PaymentAccount/List", function (data) {
         $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
     });
-});
+}
 
+function closeScreen() {
+    $.get(getBaseURL() + "Profile/ListSettings", function (data) {
+        $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
+    });
+}
