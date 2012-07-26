@@ -3,17 +3,11 @@
     <h2>
         Send Money</h2>
     <form id="frmSendMoney" action="@Url.Content("~/Profile/SendMoney")" method="post">
-    <p>
-        <label for="txtSendTo">
-            Send To:</label>
+    <div id="writeuserbtn">
         <input type="text" id="txtSendTo" name="RecipientUri" placeholder="Name, email or phone #"
-            required />
-    </p>
-    <p>
-        <div id="clickamountbtn">
-        <span id="amount">Select amount</span>
-        </span></div>
-    </p>
+            required /></div>
+    <button id="clickamountbtn">
+        <span id="amount">Select amount</span></button>
     <p>
         <label for="txtComments" style="margin-bottom: 15px">
             Comments:</label>
