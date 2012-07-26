@@ -895,6 +895,11 @@ namespace Mobile_PaidThx.Controllers
                 return PartialView("PartialViews/Settings", model);
             }
         }
+
+        public ActionResult ListSettings()
+        {
+            return PartialView("PartialViews/ListSettings");
+        }
         private ProfileModels GetProfileModel(User user)
         {
             using (var ctx = new Context())
