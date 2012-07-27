@@ -16,42 +16,23 @@ namespace SocialPayments.Workflows.PaymentAccounts
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         private DomainServices.PaymentAccountService _paymentAccountService;
-        private DomainServices.ApplicationService _applicationService;
-        private DomainServices.TransactionBatchService _transactionBatchService;
-        private DomainServices.Interfaces.IEmailService _emailService;
-        private DomainServices.SMSLogService _smsLogService;
-        private DomainServices.SMSService _smsService;
-
-
 
         public PaymentAccountWorkflow()
         {
             _ctx = new Context();
-            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
-            _emailService = new DomainServices.EmailService(_ctx);
-            _applicationService= new ApplicationService(_ctx);
-            _smsLogService = new SMSLogService(_ctx);
-            _smsService = new DomainServices.SMSService(_applicationService, _smsLogService, _ctx, _logger);
+            _paymentAccountService = new PaymentAccountService(_ctx);
         }
         public PaymentAccountWorkflow(IDbContext context)
         {
             _ctx = context;
-            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
-            _emailService = new DomainServices.EmailService(_ctx);
-            _applicationService = new ApplicationService(_ctx);
-            _smsLogService = new SMSLogService(_ctx);
-            _smsService = new DomainServices.SMSService(_applicationService, _smsLogService, _ctx, _logger);
+            _paymentAccountService = new PaymentAccountService(_ctx);
         }
         public PaymentAccountWorkflow(DomainServices.ApplicationService applicationServices, DomainServices.Interfaces.IEmailService emailService,
             DomainServices.TransactionBatchService transactionBatchService, DomainServices.SMSLogService smsLogService,
             DomainServices.SMSService smsService)
         {
             _ctx = new Context();
-            _transactionBatchService = transactionBatchService;
-            _emailService = emailService;
-            _applicationService = applicationServices;
-            _smsLogService = smsLogService;
-            _smsService = smsService;
+            _paymentAccountService = new PaymentAccountService(_ctx);
         }
 
         public void Execute(string id)
@@ -63,7 +44,7 @@ namespace SocialPayments.Workflows.PaymentAccounts
             {
                 case Domain.AccountStatusType.Submitted:
 
-                    SubmittedPaymentAccountProcessor processor = new SubmittedPaymentAccountProcessor(_ctx, _emailService);
+                    SubmittedPaymentAccountProcessor processor = new SubmittedPaymentAccountProcessor();
 
                     processor.Process(paymentAccount);
 

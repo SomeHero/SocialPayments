@@ -17,6 +17,7 @@ using SocialPayments.DataLayer.Interfaces;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DomainServices.CustomExceptions;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -25,6 +26,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/paystreammessage
+        public MessageModels.PagedResults Get(int take, int skip, int page, int pageSize)
+        {
+            using (var ctx = new Context())
+            {
+                var totalRecords = ctx.Messages.Count();
+
+                var messages = ctx.Messages.Select(m => m)
+                    .OrderByDescending(m => m.CreateDate)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return new MessageModels.PagedResults()
+                {
+                    TotalRecords = totalRecords,
+                    Results = messages.Select(m => new MessageModels.MessageResponse()
+                    {
+                        amount = m.Amount,
+                        comments = m.Comments,
+                        createDate = m.CreateDate.ToString("MM/dd/yyyy"),
+                        Id = m.Id,
+                        lastUpdatedDate = (m.LastUpdatedDate != null ? m.LastUpdatedDate.Value.ToString("MM/dd/yyyy") : ""),
+                        latitude = m.Latitude,
+                        longitutde = m.Longitude,
+                        messageStatus = m.Status.ToString(),
+                        messageType = m.MessageType.ToString(),
+                        recipientUri = m.RecipientUri,
+                        senderUri = m.SenderUri
+                    })
+                };
+            }
+        }
         public HttpResponseMessage<MessageModels.MessageResponse> Get(string id)
         {
              _logger.Log(LogLevel.Info, String.Format("Getting Message {0} Started", id));

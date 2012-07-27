@@ -1,73 +1,102 @@
 ﻿@model Mobile_PaidThx.Models.ProfileModels
 <script src="@Url.Content("~/Scripts/complete-profile.js")" type="text/javascript"></script>
-<div id="profile-content">
-<div id="header-wrapper" class="clearfix" style="position: relative; vertical-align: text-bottom">
-    <div id="logo" style="float: left">
-        <img src="@Url.Content("~/Content/images/paidthx-alpha-transparent.png")" alt="PaidThx Logo" width="140" /></div>
-    <div id="page-title" style="position: absolute; bottom: 4px; right: 0;">
-        Profile
-    </div>
+<div class="paystream-header-title" style="margin-top: -5px; margin-left: -5px; margin-right: -5px;
+    margin-bottom: 0px">
+    My Profile</div>
+<div style="height: 1px; background: #B0B0B0; margin-left: -15px; margin-right: -15px;
+    margin-bottom: 15px">
 </div>
 <div id="main-body" class="panel">
- @Html.ValidationSummary()
-
-    <h2>Your PaidThx Profile</h2>
+    <button onclick="closeScreen()">
+        <span id="closebtn" style="float: right; top: 20px; right: 2px">
+            <img src="@Url.Content("~/Content/images/close-dialog.gif")" />
+        </span>
+    </button>
+    @Html.ValidationSummary()
+    <h2>
+        Your PaidThx Profile</h2>
     <div id="profile-wrapper" class="clearfix:after">
-    <span class="member-image">
-        <img src="@Url.Content("~/Content/images/member-default-icon.gif")" />
-    </span>
-    <dl>
-        @if(!String.IsNullOrEmpty(Model.FirstName) && !String.IsNullOrEmpty(Model.LastName)) {
-            <text>
-                <dd><span class="member-name">@Model.FirstName @Model.LastName</span></dd>
-            </text>
-            } else {
-             <text>
-                <dd><span class="member-name">@Model.MobileNumber</span></dd>
-            </text>   
-            }   
-        <dd><b>Account Type:</b> Personal</dd>
-        @if (!String.IsNullOrEmpty(Model.FirstName) && !String.IsNullOrEmpty(Model.LastName) && !String.IsNullOrEmpty(Model.MobileNumber))
-        {
-            <text>
-                <dd><b>Phone:</b> @Model.MobileNumber</dd>
-            </text>
-        }
-        @if (!String.IsNullOrEmpty(Model.EmailAddress))
-        {
-            <text>
-                <dd><b>Email:</b> @Model.EmailAddress</dd>
-            </text>
-        }
-    </dl>
+        <span class="member-image">
+            <img src="@Url.Content("~/Content/images/member-default-icon.gif")" />
+        </span>
+        <dl>
+            @if (!String.IsNullOrEmpty(Model.FirstName) && !String.IsNullOrEmpty(Model.LastName))
+            {
+                <text>
+                <dd>
+                    <span class="member-name">@Model.FirstName @Model.LastName</span></dd>
+                </text>
+            }
+            else
+            {
+                <text>
+                <dd>
+                    <span class="member-name">@Model.MobileNumber</span></dd>
+                </text>   
+            }
+            <dd>
+                <b>Account Type:</b> Personal</dd>
+            @if (!String.IsNullOrEmpty(Model.FirstName) && !String.IsNullOrEmpty(Model.LastName) && !String.IsNullOrEmpty(Model.MobileNumber))
+            {
+                <text>
+                <dd>
+                    <b>Phone:</b> @Model.MobileNumber</dd>
+                </text>
+            }
+            @if (!String.IsNullOrEmpty(Model.EmailAddress))
+            {
+                <text>
+                <dd>
+                    <b>Email:</b> @Model.EmailAddress</dd>
+                </text>
+            }
+        </dl>
     </div>
     <span class="clear">&nbsp;</span>
-    <p><b>Change/Update:</b> <a href="">Email</a> | <a href="">Password</a> | <a href="">PINSwipe</a></p>
     <p>
-        Your profile is 50% complete.  Completing your profile makes it easier for you and your network to use PaidThx together.
+        <b>Change/Update:</b> <a href="">Email</a> | <a href="">Password</a> | <a href="">PINSwipe</a></p>
+    <p>
+        Your profile is 50% complete. Completing your profile makes it easier for you and
+        your network to use PaidThx together.
     </p>
-    <h2>Your Personal Info</h2>
+    <h2>
+        Your Personal Info</h2>
     <form id="frmCompleteProfile" action="@Url.Content("~/Profile/Index")" method="post">
-    <p><input id="txtFirstName" type="text" name="FirstName" placeholder="First Name" value="@Model.FirstName" /></p>
-    <p><input id="txtLastName" type="text" name="LastName" placeholder="Last Name" value="@Model.LastName" /></p>
-    <p><input id="txtAddress" type="text" name="Address" placeholder="Address" value="@Model.Address" /></p>
-    <p><input id="txtCity" type="text" name="City" placeholder="City" value="@Model.City" style="width: 54%; display: inline;" />
-    <input id="txtState" type="text" name="State" placeholder="State" value="@Model.State" style="width: 12%; display: inline;"  />
-    <input id="txtZip" type="text" name="Zip" placeholder="Zip" value="@Model.Zip" style="width: 22%; display: inline;"  /></p>
-    <h2>Your Sender Name</h2>
-    <p><input type="text" id="txtSenderName" name="SenderName" placeholder="Create a PaidThx Sender Name" value="@Model.SenderName" required /></p>
-    <p class="notes">Your Sender Name will appear when you transfer money to others via PaidThx.  If you don’t enter one, we will use your first and last name, or phone.</p>
-    <h2>Link your Social Accounts</h2>
+    <p>
+        <input id="txtFirstName" type="text" name="FirstName" placeholder="First Name" value="@Model.FirstName" /></p>
+    <p>
+        <input id="txtLastName" type="text" name="LastName" placeholder="Last Name" value="@Model.LastName" /></p>
+    <p>
+        <input id="txtAddress" type="text" name="Address" placeholder="Address" value="@Model.Address" /></p>
+    <p>
+        <input id="txtCity" type="text" name="City" placeholder="City" value="@Model.City" style="width: 54%; display: inline;" />
+        <input id="txtState" type="text" name="State" placeholder="State" value="@Model.State" style="width: 12%; display: inline;"  />
+        <input id="txtZip" type="text" name="Zip" placeholder="Zip" value="@Model.Zip" style="width: 22%; display: inline;"  /></p>
+    <h2>
+        Your Sender Name</h2>
+    <p>
+        <input type="text" id="txtSenderName" name="SenderName" placeholder="Create a PaidThx Sender Name" value="@Model.SenderName" required /></p>
+    <p class="notes">
+        Your Sender Name will appear when you transfer money to others via PaidThx. If you
+        don’t enter one, we will use your first and last name, or phone.</p>
+    <h2>
+        Link your Social Accounts</h2>
     <div id="socialNetworkIcons" class="clearfix:after" style="height: 58px;">
-    <dl>
-        <dd style="float: left;"><img src="@Url.Content("~/Content/images/facebook_icon.gif")" /></dd>
-        <dd style="float: left;"><img src="@Url.Content("~/Content/images/twitter_icon.gif")" /></dd>
-        <dd style="float: left;"><img src="@Url.Content("~/Content/images/plus_icon.gif")" /></dd>
-        <dd style="float: left;"><img src="@Url.Content("~/Content/images/s_icon.gif")" /></dd>
-    </dl>
+        <dl>
+            <dd style="float: left;">
+                <img src="@Url.Content("~/Content/images/facebook_icon.gif")" /></dd>
+            <dd style="float: left;">
+                <img src="@Url.Content("~/Content/images/twitter_icon.gif")" /></dd>
+            <dd style="float: left;">
+                <img src="@Url.Content("~/Content/images/plus_icon.gif")" /></dd>
+            <dd style="float: left;">
+                <img src="@Url.Content("~/Content/images/s_icon.gif")" /></dd>
+        </dl>
     </div>
     <p class="clearfix:before" style="margin-top: 28px;">
-        <button type="submit" id="btnUpdateProfile" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update Profile</span></button>
+        <button type="submit" id="btnUpdateProfile" class="imgbtn">
+            <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
+                Profile</span></button>
     </p>
     </form>
 </div>

@@ -8,7 +8,7 @@ namespace SocialPayments.Domain
     public enum UserStatus
     {
         Submitted = 0,
-        Registered = 1,
+        Registered = 1,  
         Active = 2,
         InActive = 3,
         Verified = 4,

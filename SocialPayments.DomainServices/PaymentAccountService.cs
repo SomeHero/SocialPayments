@@ -7,6 +7,8 @@ using SocialPayments.DataLayer.Interfaces;
 using NLog;
 using SocialPayments.DataLayer;
 using System.Configuration;
+using System.Threading.Tasks;
+using SocialPayments.DomainServices.PaymentAccountProcessing;
 
 namespace SocialPayments.DomainServices
 {
@@ -16,17 +18,18 @@ namespace SocialPayments.DomainServices
         private Logger _logger;
         private SecurityService _securityServices;
 
-        public PaymentAccountService() { 
+        public PaymentAccountService()
+        {
             _ctx = new Context();
             _logger = LogManager.GetCurrentClassLogger();
-           _securityServices = new SecurityService();
+            _securityServices = new SecurityService();
         }
 
         public PaymentAccountService(IDbContext context)
         {
-             _ctx = context;
+            _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
-           _securityServices = new SecurityService();
+            _securityServices = new SecurityService();
 
         }
         public PaymentAccount GetPaymentAccount(string paymentAccountId)
@@ -38,80 +41,87 @@ namespace SocialPayments.DomainServices
             if (paymentAccountIdGuid == null)
                 throw new ArgumentException("Payment Account Specified is Invalid", paymentAccountId);
 
+            return GetPaymentAccount(paymentAccountIdGuid);
+        }
+        public PaymentAccount GetPaymentAccount(Guid paymentAccountId)
+        {
             var paymentAccount = _ctx.PaymentAccounts
-                .FirstOrDefault(p => p.Id.Equals(paymentAccountIdGuid));
+                .FirstOrDefault(p => p.Id.Equals(paymentAccountId));
 
             return paymentAccount;
         }
-        public PaymentAccount AddPaymentAccount(string userId, string nameOnAccount, string routingNumber, string accountNumber, string accountType)
+        public PaymentAccount AddPaymentAccount(User user, string nickName, string nameOnAccount, string routingNumber,
+            string accountNumber, string accountType)
+        {
+            return AddPaymentAccount(user, nickName, nameOnAccount, routingNumber, accountNumber, accountType, "", null, "");
+        }
+        public PaymentAccount AddPaymentAccount(User user, string nickName, string nameOnAccount, string routingNumber, 
+            string accountNumber, string accountType, string securityPin, int? securityQuestionId, string securityQuestionAnswer)
         {
             if (!(accountType.ToUpper().Equals("SAVINGS") || accountType.ToUpper().Equals("CHECKING")))
                 throw new ArgumentException("Invalid Account Type Specifieid", "accountType");
 
             Domain.PaymentAccount paymentAccount = null;
+
             try
             {
-                using (var ctx = new Context())
+                var paymentAccountType = PaymentAccountType.Checking;
+
+                if (accountType.ToUpper().Equals("SAVINGS"))
+                    paymentAccountType = PaymentAccountType.Checking;
+
+                paymentAccount = _ctx.PaymentAccounts.Add(new PaymentAccount()
                 {
-                    var userService = new UserService(ctx);
-                    var amazonNotificationService = new AmazonNotificationService();
+                    Id = Guid.NewGuid(),
+                    UserId = user.UserId,
+                    NameOnAccount = _securityServices.Encrypt(nameOnAccount),
+                    RoutingNumber = _securityServices.Encrypt(routingNumber),
+                    AccountNumber = _securityServices.Encrypt(accountNumber),
+                    AccountStatus = AccountStatusType.Submitted,
+                    AccountType = paymentAccountType,
+                    CreateDate = System.DateTime.Now,
+                    BankName = "",
+                    BankIconURL = "",
+                    Nickname = nickName,
+                });
 
-                    var user = userService.GetUserById(userId);
+                if (user.PreferredReceiveAccount == null)
+                    user.PreferredReceiveAccount = paymentAccount;
+                if (user.PreferredSendAccount == null)
+                    user.PreferredSendAccount = paymentAccount;
 
-                    if (user == null)
-                    {
-                        throw new Exception(String.Format("User {0} Not Found", userId));
-                    }
+                if(!String.IsNullOrEmpty(securityPin))
+                    user.SecurityPin = _securityServices.Encrypt(securityPin);
 
-                    var paymentAccountType = PaymentAccountType.Checking;
-
-                    if (accountType.ToUpper().Equals("SAVINGS"))
-                        paymentAccountType = PaymentAccountType.Checking;
-
-                    paymentAccount = ctx.PaymentAccounts.Add(new PaymentAccount()
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = user.UserId,
-                        NameOnAccount = _securityServices.Encrypt(nameOnAccount),
-                        RoutingNumber = _securityServices.Encrypt(routingNumber),
-                        AccountNumber = _securityServices.Encrypt(accountNumber),
-                        AccountStatus = AccountStatusType.Submitted,
-                        AccountType = paymentAccountType,
-                        CreateDate = System.DateTime.Now,
-                        BankName = "",
-                        BankIconURL = "",
-                        Nickname = ""
-                    });
-
-                    if (user.PreferredReceiveAccount == null)
-                        user.PreferredReceiveAccount = paymentAccount;
-                    if (user.PreferredSendAccount == null)
-                        user.PreferredSendAccount = paymentAccount;
-
-                    ctx.SaveChanges();
-
-                    if (user.UserStatus == UserStatus.Registered)
-                    {
-                        try
-                        {
-                            amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "Payment Account Added for user {0}", user.UserId.ToString());
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Log(LogLevel.Error, string.Format("AmazonPNS failed when registering user {0}. Exception {1}.", user.UserId, ex.Message));
-                        }
-                    }
-
+                if(securityQuestionId != null && !String.IsNullOrEmpty(securityQuestionAnswer))
+                {
+                    user.SecurityQuestionID = securityQuestionId.Value;
+                    user.SecurityQuestionAnswer = _securityServices.Encrypt(securityQuestionAnswer);
                 }
+
+                _ctx.SaveChanges();
+
+                Task.Factory.StartNew(() =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Started Summitted Payment Account Task. {0} to {1}", user.UserName, paymentAccount.Id));
+
+                    SubmittedPaymentAccountTask task = new SubmittedPaymentAccountTask();
+                    task.Excecute(paymentAccount.Id);
+
+                }).ContinueWith(task =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Completed Summitted Payment AccountTask. {0} to {1}", user.UserName, paymentAccount.Id));
+                });
+
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Fatal, String.Format("Unhandled Exception Adding Payment Account. {0}", ex.Message));
-                throw ex; ; 
+                throw ex; ;
             }
 
             return paymentAccount;
-               
+
         }
 
         public void UpdatePaymentAccount(PaymentAccount paymentAccount)
@@ -124,12 +134,12 @@ namespace SocialPayments.DomainServices
 
             Guid.TryParse(id, out paymentAccountGuid);
 
-            if(paymentAccountGuid == null)
+            if (paymentAccountGuid == null)
                 throw new ArgumentException("Payment Account Specified is Invalid", id);
 
             var paymentAccount = _ctx.PaymentAccounts.FirstOrDefault(p => p.Id.Equals(paymentAccountGuid));
 
-            if(paymentAccount == null)
+            if (paymentAccount == null)
                 throw new ArgumentException("Payment Account Not Found", id);
 
             paymentAccount.AccountStatus = AccountStatusType.Deleted;

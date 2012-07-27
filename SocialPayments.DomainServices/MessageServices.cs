@@ -11,6 +11,10 @@ using System.Configuration;
 using Amazon.SimpleNotificationService.Model;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DomainServices.CustomExceptions;
+using System.Threading.Tasks;
+using System.Threading;
+using MoonAPNS;
+using SocialPayments.DomainServices.MessageProcessing;
 
 namespace SocialPayments.DomainServices
 {
@@ -265,13 +269,23 @@ namespace SocialPayments.DomainServices
                 throw new Exception(message);
             }
 
-            _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", messageItem.Id.ToString());
+            //_amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", messageItem.Id.ToString());
+
+            Task.Factory.StartNew(() =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted Message Task. {0} to {1}", recipientUri, senderUri));
+                
+                SubmittedPaymentMessageTask task = new SubmittedPaymentMessageTask();
+                task.Execute(messageItem.Id);   
+
+            }).ContinueWith(task => {
+                _logger.Log(LogLevel.Info, String.Format("Completed Summitted Message Task. {0} to {1}", recipientUri, senderUri));
+            });
 
             _logger.Log(LogLevel.Info, String.Format("Completed Adding a Message. {0} to {1}", recipientUri, senderUri));
 
             return messageItem;
         }
-
         public void CancelMessage(string id)
         {
             Guid messageId;
@@ -469,6 +483,10 @@ namespace SocialPayments.DomainServices
             if (messageId == null)
                 throw new Exception("Invalid Message Id");
 
+            return GetMessage(messageId);
+        }
+        public Domain.Message GetMessage(Guid messageId)
+        {
             var message = _context.Messages
                 .FirstOrDefault(m => m.Id == messageId);
 

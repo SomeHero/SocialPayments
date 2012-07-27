@@ -102,6 +102,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="assets\contact-icon.gif" />
+    <Content Include="assets\field-contact-255x48.png" />
+    <Content Include="assets\field-howmuch-255x48.png" />
     <Content Include="assets\noavatar.png" />
     <Content Include="bankicons\bank.png" />
   </ItemGroup>
@@ -113,7 +115,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>6320</DevelopmentServerPort>
+          <DevelopmentServerPort>23883</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

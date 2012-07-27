@@ -17,6 +17,8 @@ namespace Mobile_PaidThx.Models
         }
 
         public List<BankAccountModel> PaymentAccounts { get; set; }
+        public string PreferredSendAccountId { get; set; }
+        public string PreferredReceiveAccountId { get; set; }
     }
     public class AddPaymentAccountModel
     {

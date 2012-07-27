@@ -29,7 +29,7 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class ApplicationConfigurationResponse
         {
-            public string Id { get; set; }
+            public Guid Id { get; set; }
             public string ApiKey { get; set; }
             public string ConfigurationKey { get; set; }
             public string ConfigurationValue { get; set; }

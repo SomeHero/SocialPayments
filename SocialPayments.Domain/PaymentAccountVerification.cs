@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace SocialPayments.Domain
 {
@@ -17,5 +18,8 @@ namespace SocialPayments.Domain
         public DateTime? VerificationDate { get; set; }
         public PaymentAccountVerificationStatus Status { get; set; }
         public int NumberOfFailures { get; set; }
+
+        [ForeignKey("PaymentAccountId")]
+        public PaymentAccount PaymentAccount { get; set; }
     }
 }

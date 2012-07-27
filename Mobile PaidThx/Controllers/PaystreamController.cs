@@ -17,6 +17,26 @@ namespace Mobile_PaidThx.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private FormattingServices formattingService = new FormattingServices();
 
+        public ActionResult ChooseAmount()
+        {
+            return PartialView("PartialViews/ChooseAmount");
+        }
+
+        public ActionResult ChooseAmountRequest()
+        {
+            return PartialView("PartialViews/ChooseMoneyRequest");
+        }
+
+        public ActionResult SendMoney()
+        {
+            return PartialView("PartialViews/SendMoneyCopy");
+        }
+
+        public ActionResult RequestMoney()
+        {
+            return PartialView("PartialViews/RequestMoneyCopy");
+        }
+
         public ActionResult Index(String searchString)
         {
             if (Session["UserId"] == null)
@@ -104,7 +124,9 @@ namespace Mobile_PaidThx.Controllers
                         SenderName = user.SenderName,
                         PaymentAccountsList = new ListPaymentAccountModel()
                         {
-                            PaymentAccounts = bankAccounts
+                            PaymentAccounts = bankAccounts,
+                            PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString(),
+                            PreferredSendAccountId = user.PreferredSendAccountId.ToString()
                         }
                     }
                 };

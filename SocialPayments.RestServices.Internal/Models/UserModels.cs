@@ -7,6 +7,11 @@ namespace SocialPayments.RestServices.Internal.Models
 {
     public class UserModels
     {
+        public class PagedResults
+        {
+            public int TotalRecords { get; set; }
+            public IEnumerable<UserResponse> Results { get; set; }
+        }
         public class UserResponse
         {
             public Guid userId { get; set; }
@@ -201,6 +206,16 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string Key { get; set; }
             public string Value { get; set; }
+        }
+        public class ResendVerificationCodeRequest
+        {
+            public string UserPayPointId { get; set; }
+        }
+        public class SendEmailRequest
+        {
+            public string Subject { get; set; }
+            public string TemplateName { get; set; }
+            public List<KeyValuePair<string, string>> ReplacementElements { get; set; }
         }
     }
 }

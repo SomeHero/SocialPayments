@@ -813,7 +813,9 @@ namespace Mobile_PaidThx.Controllers
                         SenderName = user.SenderName,
                         PaymentAccountsList = new ListPaymentAccountModel()
                         {
-                            PaymentAccounts = bankAccounts
+                            PaymentAccounts = bankAccounts,
+                            PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString(),
+                            PreferredSendAccountId = user.PreferredSendAccountId.ToString()
                         }
                     }
                 };
@@ -894,6 +896,11 @@ namespace Mobile_PaidThx.Controllers
 
                 return PartialView("PartialViews/Settings", model);
             }
+        }
+
+        public ActionResult ListSettings()
+        {
+            return PartialView("PartialViews/ListSettings");
         }
         private ProfileModels GetProfileModel(User user)
         {

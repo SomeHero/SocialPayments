@@ -3,53 +3,28 @@
     ViewBag.Title = "Paystream";
 }
 <script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
-<div id="container">
-    <div id="header">
-    <dl id="main-tabs" class="tabs contained" data-role="listview">
-        <dd>
-            <a href="#simpleContained0"id="tabHome">Home</a></dd>
-        <dd>
-            <a href="#simpleContained1"id="tabSend">Send $</a></dd>
-        <dd>
-            <a href="#simpleContained2"id="tabRequest">Request $</a></dd>
-        <dd>
-            <a href="#simpleContained3" class="active"id="tabPaystream">Paystream</a></dd>
-        <dd>
-            <a href="#simpleContained4" class="tab-settings"></a></dd>
-    </dl>
-    </div>
-    <div id="content-container">
-        <ul class="tabs-content contained">
-            <li id="simpleContained1Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("PartialViews/SendMoney");}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained0Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("../Home/PartialViews/HomePartial");}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained2Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("PartialViews/RequestMoney");}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li  class="active" id="simpleContained3Tab">
-                <div id="main-container3">
-                    @{Html.RenderPartial("PartialViews/SubNav", Model);}                    
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained4Tab">
-                <div id="main-container">
-                     @{Html.RenderPartial("../Profile/PartialViews/SubNav", Model.ProfileModel, new ViewDataDictionary());}                    
-                     @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-        </ul>
+    <div role="main" data-role="page">
+        <div data-role="header" data-position="fixed" class="">
+			<h1>Stream</h1>
+			<a href="Preferences" data-icon="gear" class="ui-btn-right"></a>
+		</div>
+        <div data-role="header" class="nav-pdthx" data-theme="c">
+            <div data-role="navbar" class="nav-pdthx" data-grid="d">
+                <ul>
+                    <li><a href="./Home" id="home" data-icon="custom">Home</a></li>
+                    <li><a href="./Request" id="request" data-icon="custom">Request $</a></li>
+                    <li><a href="./Send" id="send" data-icon="custom">Send $</a></li>
+                    <li><a href="./Paystream" id="paystream" data-icon="custom">Paystream</a></li>
+                    <li><a href="./DoGood" id="profile" data-icon="custom">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+        <div id="container">
+            <div id="content-container">
+                @{Html.RenderPartial("PartialViews/SubNav", Model);}                    
+                @{Html.RenderPartial("_footer");}
+            </div>
+        </div>
     </div>
 </div>

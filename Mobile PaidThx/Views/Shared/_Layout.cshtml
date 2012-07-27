@@ -34,8 +34,268 @@
     <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/home.js")"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"
         type="text/javascript"></script>
+    <style type="text/css" media="screen">
+        /*.nav-pdthx .ui-btn .ui-btn-inner { padding-top: 40px !important; }*//*  */.nav-pdthx .ui-icon
+        {
+            width: 30px !important;
+            height: 30px !important;
+            margin-left: -15px !important;
+            box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -webkit-border-radius: 0 !important;
+            border-radius: 0 !important;
+        }
+        #home .ui-icon
+        {
+            background: url(pdthx-icons/homeIcon.png) 50% 50% no-repeat;
+        }
+        #paystream .ui-icon
+        {
+            background: url(pdthx-icons/paystreamIcon.png) 50% 50% no-repeat;
+        }
+        #send .ui-icon
+        {
+            background: url(pdthx-icons/sendIcon.png) 50% 50% no-repeat;
+        }
+        #request .ui-icon
+        {
+            background: url(pdthx-icons/requestIcon.png) 50% 50% no-repeat;
+        }
+        #profile .ui-icon
+        {
+            background: url(pdthx-icons/profileIcon.png) 50% 50% no-repeat;
+        }
+        .ui-btn-main
+        {
+            position: absolute;
+            height: 70px;
+            width: 20%;
+            bottom: -55px;
+            z-index: 11;
+            border-top: gray 2px;
+            -webkit-border-top-right-radius: 6px;
+            -moz-border-top-right-radius: 6px;
+            border-top-right-radius: 6px;
+            -webkit-border-top-left-radius: 6px;
+            -moz-border-top-left-radius: 6px;
+            border-top-left-radius: 6px;
+            -webkit-box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+            box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+        }
+        .ui-mobile .ui-page .ui-footer .ui-navbar, .ui-mobile .ui-page .ui-footer .ui-navbar ul
+        {
+            overflow: visible;
+        }
+        ​ .ui-btn-active
+        {
+            background-image: none !important;
+            background-color: gray;
+        }
+        .thumb
+        {
+            float: left;
+            padding: 5px;
+            margin-right: 5px;
+            border: solid 1px #d2d2d2;
+            background-color: white;
+        }
+        .ui-li-r
+        {
+            float: right;
+            color: green;
+        }
+        .sideindicator
+        {
+            border-left: 2px solid green;
+        }
+        .ui-btn-main-active
+        {
+            background: -moz-linear-gradient(top, rgba(229,229,229,1) 0%, rgba(241,241,241,1) 67%, rgba(247,247,247,0) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(229,229,229,1)), color-stop(67%,rgba(241,241,241,1)), color-stop(100%,rgba(247,247,247,0))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(229,229,229,1) 0%,rgba(241,241,241,1) 67%,rgba(247,247,247,0) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(229,229,229,1) 0%,rgba(241,241,241,1) 67%,rgba(247,247,247,0) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(229,229,229,1) 0%,rgba(241,241,241,1) 67%,rgba(247,247,247,0) 100%); /* IE10+ */
+            background: linear-gradient(to bottom, rgba(229,229,229,1) 0%,rgba(241,241,241,1) 67%,rgba(247,247,247,0) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#00f7f7f7',GradientType=0 ); /* IE6-9 */
+        }
+        ul
+        {
+            margin: 0;
+            padding: 0;
+        }
+        li.paystream-item
+        {
+            list-style: none;
+            border-bottom: 1px solid #b7b7b7;
+        }
+        a.paystreamer
+        {
+            display: block;
+            position: relative;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+            height: 80px;
+            width: 100%;
+            min-width: 375px;
+            cursor: pointer;
+        }
+        a.paystreamer:hover
+        {
+            display: block;
+            position: relative;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+            height: 80px;
+            width: 100%;
+            min-width: 375px;
+            cursor: pointer;
+            background-color: #eeeeee;
+        }
+        a.paystreamer span
+        {
+            display: block;
+            position: absolute;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+        }
+        .stream-new
+        {
+            width: 4px;
+            height: 80px;
+            left: 0;
+            top: 0;
+            background-color: #269bb8;
+            border-right: 1px solid #a5a5a5;
+        }
+        .stream-pic
+        {
+            width: 45px;
+            height: 45px;
+            margin-left: 15px;
+            top: 8.75%;
+            background-color: #aaaaaa;
+            border-radius: 7px;
+            border: 1px solid #cccccc;
+        }
+        .stream-contact
+        {
+            margin-left: 70px;
+            width: 56%;
+            height: 40%; /*left:17.5%;*/
+            float: left;
+            top: 13%;
+            background-color: transparent;
+            color: #34363d;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .stream-event
+        {
+            display: inline;
+            position: static;
+            color: #269bb8;
+            font-weight: normal;
+            font-size: 60%;
+        }
+        .stream-message
+        {
+            margin-left: 70px;
+            width: 56%;
+            height: 30%; /*left:17.5%;*/
+            float: left;
+            top: 70%;
+            background-color: transparent;
+            color: #34363d;
+            font-weight: bold;
+            color: #999999;
+            font-weight: normal;
+            font-size: 60%;
+            font-style: italic;
+        }
+        .stream-timing
+        {
+            width: 24%;
+            height: 30%;
+            right: 5%;
+            top: 13%;
+            background-color: transparent;
+            color: #999999;
+            font-weight: normal;
+            font-size: 60%;
+            font-style: italic;
+            text-align: right;
+        }
+        .stream-amount
+        {
+            width: 150px;
+            height: 33%;
+            right: 5%;
+            top: 33%;
+            background-color: transparent;
+            font-weight: bold;
+            color: #269bb8;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: right;
+            z-index: 200;
+        }
+        .stream-status
+        {
+            width: 24%;
+            height: 30%;
+            right: 5%;
+            top: 70%;
+            background-color: transparent;
+            color: #999999;
+            font-weight: bold;
+            font-size: 60%;
+            text-align: right;
+        }
+        li.paystream-item.even
+        {
+            background-color: #f8f9f9;
+        }
+        li.paystream-item.sent.payment a.paystreamer span.stream-new
+        {
+            background-color: #269bb8;
+        }
+        li.paystream-item.sent.request a.paystreamer span.stream-new
+        {
+            background-color: #648e6f;
+        }
+        li.paystream-item.received.payment a.paystreamer span.stream-new
+        {
+            background-color: #38a059;
+        }
+        li.paystream-item.received.request a.paystreamer span.stream-new
+        {
+            background-color: #688891;
+        }
+        li.paystream-item.sent.payment .stream-event, .sent.payment .stream-amount
+        {
+            color: #269bb8;
+        }
+        li.paystream-item.sent.request .stream-event, .sent.request .stream-amount
+        {
+            color: #648e6f;
+        }
+        li.paystream-item.received.payment .stream-event, .received.payment .stream-amount
+        {
+            color: #38a059;
+        }
+        li.paystream-item.received.request .stream-event, .received.request .stream-amount
+        {
+            color: #688891;
+        }
+        .personal
+        {
+            float: left;
+        }
+    </style>
     <script id="transactionTemplate" type="text/html">
         <li class="receive pending ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c" data-theme="c">
             <div class="ui-btn-inner ui-li">
@@ -146,12 +406,11 @@
 </head>
 <body class="ui-mobile-viewport">
     <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-    <div role="main" data-role="page">
         @RenderBody()
+        <!-- Included JS Files -->
+        <script src="@Url.Content("~/Scripts/modernizr.foundation.js")"></script>
+        <script src="@Url.Content("~/Scripts/foundation.js")"></script>
+        <script src="@Url.Content("~/Scripts/app.js")"></script>
     </div>
-    <!-- Included JS Files -->
-    <script src="@Url.Content("~/Scripts/modernizr.foundation.js")"></script>
-    <script src="@Url.Content("~/Scripts/foundation.js")"></script>
-    <script src="@Url.Content("~/Scripts/app.js")"></script>
 </body>
 </html>

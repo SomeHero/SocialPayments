@@ -34,6 +34,9 @@ namespace Mobile_PaidThx.Controllers
                 // return RedirectToAction("SignIn", "Account", null);
 
                 var model = new ListPaymentAccountModel();
+                model.PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString();
+                model.PreferredSendAccountId = user.PreferredSendAccountId.ToString();
+
                 foreach (var paymentAccount in user.PaymentAccounts)
                 {
                     if (paymentAccount.IsActive == true)
@@ -192,20 +195,7 @@ namespace Mobile_PaidThx.Controllers
                     if (model.AccountType.ToLower().Equals("checking"))
                         paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
                 }
-                if(model.DefaultRecieve != null)
-                {
-                    if (model.DefaultRecieve.ToLower().Equals("recieve"))
-                   {
-                       user.PreferredReceiveAccountId = paymentAccount.Id;
-                   }
-                }
-                if (model.DefaultSend != null)  
-                {
-                    if (model.DefaultSend.ToLower().Equals("sending"))
-                    {
-                        user.PreferredSendAccountId = paymentAccount.Id;
-                    }
-                }
+
                 if (paymentAccount == null)
                 {
                     ModelState.AddModelError("", "Unable to edit payment account");
@@ -237,7 +227,50 @@ namespace Mobile_PaidThx.Controllers
         {
             return PartialView();
         }
+        [HttpPost]
+        public ActionResult defaultReceiving(string Id)
+        {
+            using (var ctx = new Context())
+            {
+                var userId = (Guid)Session["UserId"];
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
 
+                user.PreferredReceiveAccountId = paymentAccount.Id;
+                try
+                {
+                    ctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Editing Payment Account. {0}", ex.Message));
+                }
+            }
+
+            return RedirectToAction("List");
+        }
+        [HttpPost]
+        public ActionResult defaultSending(string Id, EditPaymentAccountModel model)
+        {
+            using (var ctx = new Context())
+            {
+                var userId = (Guid)Session["UserId"];
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
+
+                user.PreferredSendAccountId = paymentAccount.Id;
+                try
+                {
+                    ctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Editing Payment Account. {0}", ex.Message));
+                }
+            }
+
+            return RedirectToAction("List");
+        }
         [HttpPost]
         public ActionResult Remove(string Id, EditPaymentAccountModel model)
         {

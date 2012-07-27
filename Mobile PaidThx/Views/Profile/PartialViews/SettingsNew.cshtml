@@ -1,0 +1,139 @@
+﻿@model Mobile_PaidThx.Models.ProfileModels
+<script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
+<div class="globalbg" id="globalbg">
+    <div class="paystream-header-title" style="margin-top: -5px; margin-left: -5px; margin-right: -5px;
+        margin-bottom: 0px">
+        Settings</div>
+    <div style="height: 1px; background: #B0B0B0; margin-left: -15px; margin-right: -15px;
+        margin-bottom: 15px">
+    </div>
+    <!-- Edit Profile -->
+    <a onclick="getProfileScreen()" data-role="button" data-transition="slideup">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-profile-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Edit Profile</div>
+        <div style="float: right; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </a>
+    <!-- Bank Account -->
+    <a onclick="getBankAccountsScreen()" data-role="button" data-transition="slideup">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-bank-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Bank Accounts</div>
+        <div style="float: right; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </a>
+    <!-- Separate Set -->
+    <!-- Email Accounts -->
+    <div class="tabletop">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-email-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Email Accounts</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Social Networks -->
+    <div class="tablemiddle">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-social-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Social Networks</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Phones -->
+    <div class="tablemiddle">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-phones-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Phones</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!--ME Codes -->
+    <div class="tablebottom">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-mecode-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            ME Codes</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Separate Set -->
+    <!-- Notifications -->
+    <div class="tabletop">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-preferences-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Notifications</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Sharing -->
+    <div class="tablemiddle">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-sharing-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Sharing</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Security and Privacy -->
+    <div class="tablebottom">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-security-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Security & Privacy</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Separate Set -->
+    <!-- Help -->
+    <div class="tabletop">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-help-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Help</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Feedback -->
+    <div class="tablebottom">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-feedback-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Feedback</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!--Rate PaidThx ( won't be used this version )-->
+    <!-- Separate Set -->
+    <!-- User Agreement -->
+    <div class="tabletop">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-legal-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            User Agreement</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- Sign Out -->
+    <div class="tablemiddle">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-signout-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Sign Out</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+    <!-- About -->
+    <div class="tablebottom">
+        <div style="float: left; padding-left: 50px; padding-top: 10px">
+            About</div>
+        <div style="float: right; padding-right: 5px; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+    </div>
+</div>
