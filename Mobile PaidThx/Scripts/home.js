@@ -8,4 +8,7 @@ $(document).ready(function () {
     $.get(getBaseURL() + "mobile/Home/GetMobileNumberModal", function (data) {
         $('#modal').html(data).trigger("pagecreate").trigger("refresh");
     });
+    $("#home").click(function () {
+        $.mobile.changePage("home/about");
+    });
 });
