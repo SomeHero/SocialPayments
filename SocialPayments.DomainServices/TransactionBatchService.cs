@@ -59,6 +59,30 @@ namespace SocialPayments.DomainServices
                                        Transactions = new Collection<Transaction>()
                                    });
         }
+        public TransactionBatch CloseOpenBatch()
+        {
+            var batch = _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false);
+
+            batch.IsClosed = true;
+            batch.LastDateUpdated = System.DateTime.Now;
+            batch.ClosedDate = System.DateTime.Now;
+
+            _ctx.TransactionBatches.Add(new TransactionBatch()
+                {
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    IsClosed = false,
+                    TotalDepositAmount = 0,
+                    TotalNumberOfDeposits = 0,
+                    TotalWithdrawalAmount = 0,
+                    TotalNumberOfWithdrawals = 0,
+                    Transactions = new Collection<Transaction>()
+                });
+
+            _ctx.SaveChanges();
+
+            return batch;
+        }
         public void AddTransactionsToBatch(Collection<Transaction> transactions)
         {
             var transactionBatch = GetOpenBatch();
@@ -67,7 +91,19 @@ namespace SocialPayments.DomainServices
 
             foreach (var transaction in transactions)
             {
-                transactionBatch.Transactions.Add(transaction);
+                transactionBatch.Transactions.Add(new Transaction()
+                {
+                    ACHTransactionId = "",
+                    Amount = transaction.Amount,
+                    RoutingNumber = transaction.RoutingNumber,
+                    AccountNumber = transaction.AccountNumber,
+                    NameOnAccount = transaction.NameOnAccount,
+                    AccountType = Domain.AccountType.Checking,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Status = TransactionStatus.Pending
+                });
 
                 if (transaction.Type == TransactionType.Deposit)
                 {
@@ -99,8 +135,8 @@ namespace SocialPayments.DomainServices
             {
                 try
                 {
-                    transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
-                    transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                    //transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
+                    //transaction.Payment.PaymentStatus = PaymentStatus.Complete;
                     transaction.Status = TransactionStatus.Complete;
                 }
                 catch (Exception ex)

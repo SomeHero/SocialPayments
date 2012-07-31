@@ -83,16 +83,16 @@ namespace SocialPayments.Services.UserProcessors
                         transactionsList.Add(_ctx.Transactions.Add(new Domain.Transaction()
                         {
                             Amount = message.Amount,
-                            Category = TransactionCategory.Payment,
                             CreateDate = System.DateTime.Now,
-                            FromAccount = user.PreferredReceiveAccount,
+                            AccountNumber = user.PreferredReceiveAccount.AccountNumber,
+                            RoutingNumber = user.PreferredReceiveAccount.RoutingNumber,
+                            NameOnAccount = user.PreferredReceiveAccount.NameOnAccount,
+                            AccountType = Domain.AccountType.Checking,
                             Id = Guid.NewGuid(),
-                            Payment = message.Payment,
                             PaymentChannelType = PaymentChannelType.Single,
                             StandardEntryClass = StandardEntryClass.Web,
                             Status = TransactionStatus.Pending,
-                            Type = TransactionType.Deposit,
-                            User = user
+                            Type = TransactionType.Deposit
                         }));
 
                     }

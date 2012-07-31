@@ -33,7 +33,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return new HttpResponseMessage<List<ApplicationModels.ApplicationConfigurationResponse>>(application.ConfigurationValues.Select(u => new ApplicationModels.ApplicationConfigurationResponse()
                 {
-                    Id = u.Id.ToString(),
+                    Id = u.Id,
                     ApiKey = u.ApiKey.ToString(),
                     ConfigurationKey = u.ConfigurationKey,
                     ConfigurationValue = u.ConfigurationValue,
@@ -72,7 +72,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(new ApplicationModels.ApplicationConfigurationResponse()
                 {
-                    Id = configItem.Id.ToString(),
+                    Id = configItem.Id,
                     ApiKey = configItem.ApiKey.ToString(),
                     ConfigurationKey = configItem.ConfigurationKey,
                     ConfigurationValue = configItem.ConfigurationValue,

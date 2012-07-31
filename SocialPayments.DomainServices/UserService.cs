@@ -74,6 +74,28 @@ namespace SocialPayments.DomainServices
                 DeviceToken = (!String.IsNullOrEmpty(deviceToken) ? deviceToken : null)
             });
 
+            var emailAddressPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+            {
+                CreateDate = System.DateTime.Now,
+                Id = Guid.NewGuid(),
+                PayPointTypeId = 1,
+                URI = userName,
+                User = user
+            });
+
+            UserPayPoint mobileNumberPayPoint = null;
+
+            if (!String.IsNullOrEmpty(mobileNumber))
+            {
+                mobileNumberPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                {
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    PayPointTypeId = 2,
+                    URI = userName,
+                    User = user
+                });
+            }
             var messages = _ctx.Messages
                 .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
                     && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
@@ -85,6 +107,11 @@ namespace SocialPayments.DomainServices
             }
 
             _ctx.SaveChanges();
+
+            SendEmailVerificationLink(emailAddressPayPoint);
+
+            if (mobileNumberPayPoint != null)
+                SendMobileVerificationCode(mobileNumberPayPoint);
 
             return user;
         }
@@ -393,8 +420,13 @@ namespace SocialPayments.DomainServices
             if (userIdGuid == null)
                 throw new ArgumentException(String.Format("UserId {0} Not Valid.", userId));
 
+            return GetUserById(userIdGuid);
+
+        }
+        public User GetUserById(Guid userId)
+        {
             var user = _ctx.Users
-                .FirstOrDefault(u => u.UserId.Equals(userIdGuid));
+                .FirstOrDefault(u => u.UserId.Equals(userId));
 
             return user;
         }
@@ -597,6 +629,74 @@ namespace SocialPayments.DomainServices
             body.Append("The PaidThx Team");
 
             emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
+        }
+        public void SendMobileVerificationCode(UserPayPoint userPayPoint)
+        {
+            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            DomainServices.ValidationService validateService = new ValidationService();
+            DomainServices.SMSService smsService = new DomainServices.SMSService(_ctx);
+
+            string name = formattingService.FormatUserName(userPayPoint.User);
+            Guid passwordResetGuid = Guid.NewGuid();
+            DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+            var random = new Random();
+            int first = random.Next(10);
+            int second = random.Next(10);
+            int third = random.Next(10);
+            int forth = random.Next(10);
+
+            string verificationCode = String.Format("{0}{1}{2}{3}", first, second, third, forth);
+
+            var verification = _ctx.UserPayPointVerifications.Add(
+                new UserPayPointVerification()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    UserPayPoint = userPayPoint,
+                    VerificationCode = verificationCode,
+                    ExpirationDate = System.DateTime.Now.AddDays(30)
+                });
+            _ctx.SaveChanges();
+
+            smsService.SendSMS(userPayPoint.User.ApiKey, "8043879693", String.Format("Your verification code is {0}", verificationCode));
+
+        }
+        public void SendEmailVerificationLink(UserPayPoint userPayPoint)
+        {
+            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            DomainServices.ValidationService validateService = new ValidationService();
+
+
+            string name = formattingService.FormatUserName(userPayPoint.User);
+            DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+            var verification = _ctx.UserPayPointVerifications.Add(
+                new UserPayPointVerification()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    UserPayPoint = userPayPoint,
+                    VerificationCode = "",
+                    ExpirationDate = System.DateTime.Now.AddDays(30)
+             });
+            _ctx.SaveChanges();
+
+            string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
+
+            StringBuilder body = new StringBuilder();
+            body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
+            body.AppendFormat("You added the paypoint {0} to your PaidThx account. ", userPayPoint.URI);
+            body.Append("To complete the process and begin accepting payments using this address, please click on the link below ");
+            body.Append("or paste it into your browser:").AppendLine().AppendLine();
+            body.AppendLine(link).AppendLine();
+            //body.AppendLine("This link will be active for 3 hours only.").AppendLine();
+            body.AppendLine("Thank you,").AppendLine();
+            body.Append("The PaidThx Team");
+
+            emailService.SendEmail(userPayPoint.User.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], userPayPoint.URI, "Email Verification", body.ToString());
         }
 
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)

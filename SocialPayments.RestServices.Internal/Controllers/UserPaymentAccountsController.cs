@@ -12,6 +12,7 @@ using System.Configuration;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -25,7 +26,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             using (var _ctx = new Context())
             {
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
                 DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
 
                 var user = _userService.GetUserById(userId);
@@ -49,7 +49,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Nickname = a.Nickname,
                     Id = a.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(a.RoutingNumber),
-                    UserId = a.UserId.ToString()
+                    UserId = a.UserId.ToString(),
+                    Status = a.AccountStatus.ToString()
                 }).ToList<AccountModels.AccountResponse>();
 
                 
@@ -59,11 +60,47 @@ namespace SocialPayments.RestServices.Internal.Controllers
          }
 
         // GET /api/{userId}/paymentaccounts/{id}
-        //public HttpResponseMessage<AccountModels.AccountResponse> Get(string userId, string id)
-        //{
-        //    return new HttpResponseMessage<AccountModels.AccountResponse>(
+        public HttpResponseMessage<AccountModels.AccountResponse> Get(string userId, string id)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
 
-        //}
+                var user = _userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    var message = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.NotFound);
+
+                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
+                    return message;
+                }
+
+                Guid paymentAccountId;
+
+                Guid.TryParse(id, out paymentAccountId);
+
+                var account = _ctx.PaymentAccounts
+                    .FirstOrDefault(a => a.Id == paymentAccountId && a.UserId == user.UserId && a.IsActive);
+
+                var accountResponse = new AccountModels.AccountResponse()
+                {
+                    AccountNumber = GetLastFour(_securityService.Decrypt(account.AccountNumber)),
+                    AccountType = account.AccountType.ToString(),
+                    NameOnAccount = _securityService.Decrypt(account.NameOnAccount),
+                    Nickname = account.Nickname,
+                    Id = account.Id.ToString(),
+                    RoutingNumber = _securityService.Decrypt(account.RoutingNumber),
+                    UserId = account.UserId.ToString(),
+                    Status = account.AccountStatus.ToString()
+                };
+
+
+                return new HttpResponseMessage<AccountModels.AccountResponse>(accountResponse, HttpStatusCode.OK);
+            }
+
+        }
 
         // POST /api/{userid}/paymentaccounts/set_preferred_send_account
         public HttpResponseMessage SetPreferredSendAccount(string userId, AccountModels.ChangePreferredAccountRequest request)
@@ -140,13 +177,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/{userId}/paymentaccounts
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> Post(string userId, AccountModels.SubmitAccountRequest request)
         {
-            using (var _ctx = new Context())
+            using (var ctx = new Context())
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                var securityService = new DomainServices.SecurityService();
+                var userService = new DomainServices.UserService(ctx);
+                var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
 
-                var user = _userService.GetUserById(userId);
+                var user = userService.GetUserById(userId);
 
                 if (user == null)
                 {
@@ -177,30 +214,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 try
                 {
-                    account = _ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
-                    {
-                        Id = Guid.NewGuid(),
-                        Nickname = request.Nickname,
-                        AccountNumber = _securityService.Encrypt(request.AccountNumber),
-                        RoutingNumber = _securityService.Encrypt(request.RoutingNumber),
-                        NameOnAccount = _securityService.Encrypt(request.NameOnAccount),
-                        AccountType = accountType,
-                        UserId = user.UserId,
-                        IsActive = true,
-                        CreateDate = System.DateTime.Now
-                    });
-
-                    _ctx.SaveChanges();
-
-                    user.PreferredReceiveAccount = account;
-                    user.PreferredSendAccount = account;
-
-                    user.SecurityPin = _securityService.Encrypt(request.SecurityPin);
-
-                    user.SecurityQuestionID = request.SecurityQuestionID;
-                    user.SecurityQuestionAnswer = _securityService.Encrypt(request.SecurityQuestionAnswer);
-
-                    _userService.UpdateUser(user);
+                    account = paymentAccountService.AddPaymentAccount(user, request.Nickname, request.NameOnAccount, request.RoutingNumber, 
+                        request.AccountNumber, request.AccountType, request.SecurityPin, request.SecurityQuestionID,
+                        request.SecurityQuestionAnswer);
                 }
                 catch (Exception ex)
                 {
@@ -209,8 +225,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return message;
                 }
-
-                _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["PaymentAccountPostedTopicARN"], "New ACH Account Submitted", account.Id.ToString());
 
                 var response = new AccountModels.SubmitAccountResponse()
                 {
@@ -226,13 +240,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/{userId}/paymentaccounts/add_account
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> AddAccount(string userId, AccountModels.AddAccountRequest request)
         {
-            using (var _ctx = new Context())
+            using (var ctx = new Context())
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                var securityService = new DomainServices.SecurityService();
+                var userService = new DomainServices.UserService(ctx);
+                var emailService = new DomainServices.EmailService(ctx);
+                var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
 
-                var user = _userService.GetUserById(userId);
+                var user = userService.GetUserById(userId);
 
                 if (user == null)
                 {
@@ -258,26 +273,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return message;
                 }
 
-
                 PaymentAccount account;
 
                 try
                 {
-                    account = _ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
-                    {
-                        Id = Guid.NewGuid(),
-                        Nickname = request.Nickname,
-                        AccountNumber = _securityService.Encrypt(request.AccountNumber),
-                        RoutingNumber = _securityService.Encrypt(request.RoutingNumber),
-                        NameOnAccount = _securityService.Encrypt(request.NameOnAccount),
-                        AccountType = accountType,
-                        UserId = user.UserId,
-                        IsActive = true,
-                        CreateDate = System.DateTime.Now
-                    });
-
-                    _ctx.SaveChanges();
-
+                    account = paymentAccountService.AddPaymentAccount(user, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountNumber,
+                        request.AccountType);
                 }
                 catch (Exception ex)
                 {
@@ -286,9 +287,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return message;
                 }
-
-                _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["PaymentAccountPostedTopicARN"], "New ACH Account Submitted", account.Id.ToString());
-
+        
                 var response = new AccountModels.SubmitAccountResponse()
                 {
                     paymentAccountId = account.Id.ToString()
@@ -341,8 +340,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
                 IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
                 DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-                DomainServices.PaymentAccountVerificationService verificationService =
-                    new DomainServices.PaymentAccountVerificationService(_ctx, _logger);
+                DomainServices.PaymentAccountService verificationService =
+                    new DomainServices.PaymentAccountService(_ctx);
 
                 double depositAmount1 = 0;
                 double depositAmount2 = 0;
@@ -358,7 +357,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                var result = verificationService.VerifyAccount(userId, id, depositAmount1, depositAmount2);
+                var result = false; ///// verificationService.VerifyAccount(userId, id, depositAmount1, depositAmount2);
 
                 if (!result)
                 {

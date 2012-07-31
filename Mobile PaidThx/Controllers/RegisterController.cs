@@ -437,9 +437,11 @@ namespace Mobile_PaidThx.Controllers
 
                 PaymentAccount paymentAccount = null;
 
+                var nickName = String.Format("{0} {1}", model.AccountType, model.AccountNumber.Substring(model.AccountNumber.Length - 5, 4));
+ 
                 try
                 {
-                    paymentAccount = paymentAccountService.AddPaymentAccount(user.UserId.ToString(), model.NameOnAccount,
+                    paymentAccount = paymentAccountService.AddPaymentAccount(user, nickName, model.NameOnAccount,
                         model.RoutingNumber, model.AccountNumber, model.AccountType);
 
                 }

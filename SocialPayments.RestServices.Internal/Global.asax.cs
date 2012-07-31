@@ -27,6 +27,14 @@ namespace SocialPayments.RestServices.Internal
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+
+            routes.MapHttpRoute(
+               name: "BatchTransactions",
+               routeTemplate: "api/batches/{batchId}/transactions",
+               defaults: new { controller = "BatchTransactions" }
+           );
+
             routes.MapHttpRoute(
                name: "Donate",
                routeTemplate: "api/paystreammessages/donate",
@@ -75,6 +83,12 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "PaystreamMessages", action = "DetermineRecipient" }
             );
 
+           // /api/Users/{0}/attributes
+            routes.MapHttpRoute(
+                name: "UserAttribute",
+                routeTemplate: "api/users/{id}/attributes",
+                defaults: new { controller = "UserAttributes" }
+            );
             //api/user/{id}/personalize_user
             routes.MapHttpRoute(
                 name: "PersonalizeUser",
@@ -110,18 +124,26 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/validate_user",
                 defaults: new { controller = "Users", action = "ValidateUser" }
             );
-
             routes.MapHttpRoute(
-name: "UserPayPoints",
-routeTemplate: "api/users/{userId}/PayPoints/{id}",
-defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
-);
+                name: "ResendMobileVerificationCode",
+                routeTemplate: "api/users/{userId}/PayPoints/resend_mobile_verification_code",
+                defaults: new { controller = "UserPayPoint", action = "ResendVerificationCode" }
+            );
+            routes.MapHttpRoute(
+                name: "ResendEmailVerificationLink",
+                routeTemplate: "api/users/{userId}/PayPoints/resend_email_verification_link",
+                defaults: new { controller = "UserPayPoint", action = "ResendEmailVerificationLink" }
+            );
+            routes.MapHttpRoute(
+                name: "UserPayPoints",
+                routeTemplate: "api/users/{userId}/PayPoints/{id}",
+                defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+            );
             routes.MapHttpRoute(
     name: "UserPayPointsWithType",
     routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
     defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type = RouteParameter.Optional }
 );
-
             routes.MapHttpRoute(
                 name: "UserMECodes",
                 routeTemplate: "api/users/{userId}/mecodes/{id}",
@@ -142,6 +164,12 @@ defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
                 name: "ResetPasswordEmail",
                 routeTemplate: "api/users/reset_password",
                 defaults: new { controller = "Users", action = "ResetPassword" }
+            );
+
+            routes.MapHttpRoute(
+                name: "SendEmail",
+                routeTemplate: "api/users/{id}/send_email",
+                defaults: new { controller = "Users", action = "SendEmail" }
             );
 
             routes.MapHttpRoute(
@@ -171,6 +199,12 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
                 name: "SetPreferredReceiveAccount",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/set_preferred_receive_account",
                 defaults: new { controller = "UserPaymentAccounts", action = "SetPreferredReceiveAccount" }
+            );
+
+            routes.MapHttpRoute(
+                name: "AddPaymentAccountVerification",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/{id}/add_verification",
+                defaults: new { controller = "UserPaymentAccounts", action = "AddVerification" }
             );
 
             routes.MapHttpRoute(

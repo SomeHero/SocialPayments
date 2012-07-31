@@ -16,6 +16,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string RoutingNumber { get; set; }
             public string AccountNumber { get; set; }
             public string AccountType { get; set; }
+            public string Status { get; set; }
         }
         public class AddAccountRequest
         {
@@ -45,12 +46,11 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class UpdateAccountRequest
         {
-            public string ApiKey { get; set; }
             public string Nickname { get; set; }
             public string NameOnAccount { get; set; }
             public string RoutingNumber { get; set; }
-            public string AccountNumber { get; set; }
             public string AccountType { get; set; }
+            public string Status { get; set; }
         }
         public class ChangePreferredAccountRequest
         {

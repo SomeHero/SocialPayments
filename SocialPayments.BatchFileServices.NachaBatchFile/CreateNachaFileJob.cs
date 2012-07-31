@@ -35,12 +35,21 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             try
             {
-                transactionBatch = transactionBatchService.BatchTransactions();
+                transactionBatch = transactionBatchService.CloseOpenBatch();
             }
             catch (Exception ex)
             {
                 logger.Log(LogLevel.Info, String.Format("Batching Transactions Exception {0}", ex.Message));
-                
+
+                Exception innerException = ex.InnerException;
+
+                while (innerException != null)
+                {
+                    logger.Log(LogLevel.Info, String.Format("Inner Exception {0}", innerException.Message));
+
+                    innerException = innerException.InnerException;
+                }
+
                 throw ex;
             }
 
@@ -61,6 +70,15 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             try
             {
                 results = fileGeneratorService.ProcessFile(transactionBatch.Transactions);
+
+                foreach (var transaction in transactionBatch.Transactions)
+                {
+                    transaction.Status = TransactionStatus.Complete;
+                    transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                    transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
+                }
+
+                _ctx.SaveChanges();
 
                 logger.Log(LogLevel.Info, String.Format("Creating batch file for batch {0}", transactionBatch.Id));
 

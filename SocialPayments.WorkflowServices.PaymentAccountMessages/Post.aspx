@@ -1,7 +1,4 @@
 ﻿<%@ Page Language="C#" ValidateRequest="false" %>
-<%@ Import Namespace="SocialPayments.DataLayer" %>
-<%@ Import Namespace="SocialPayments.DataLayer.Interfaces" %>
-<%@ Import Namespace="SocialPayments.DomainServices" %>
 <%@ Import Namespace="NLog" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,7 +20,7 @@
         int EmailSmtpPort = 587;
         Boolean EmailSmtpEnableSsl = true;
         String EmailSmtpUserName = "jrhodes2705@gmail.com";
-        String EmailSmtpPassword = "Sebast1an10";
+        String EmailSmtpPassword = "Sebast1an10s";
 
         Boolean ValidateSignature = true;
         Boolean IsSignatureValid = false;
@@ -175,10 +172,10 @@
             }
             else if (MyObjectDictionary["Type"].ToString() == "Notification")
             {
-                var paymentAcountId = MyObjectDictionary["Message"].ToString();
-                    
+                var paymentAccountId = MyObjectDictionary["Message"].ToString();
+
                 logger.Log(LogLevel.Info, String.Format("Posted to Payment Account Workflow {0}", paymentAccountId.ToString()));
-                
+               
                 if (ValidateSignature == true)
                 {
                     
@@ -224,24 +221,23 @@
 
                 if (IsSignatureValid == true)
                 {
-                    logger.Log(LogLevel.Info, String.Format("Processing Paystream Message Workflow {0}", paymentId.ToString()));
-
-                    SocialPayments.DataLayer.Interfaces.IDbContext ctx = new Context();
-                    var messageWorkFlow = new SocialPayments.Workflows.PaymentAccounts.PaymentAccountWorkflow(ctx);
+                    logger.Log(LogLevel.Info, String.Format("Processing Paystream Message Workflow {0}", paymentAccountId.ToString()));
 
                     try
                     {
+                        var messageWorkFlow = new SocialPayments.Workflows.PaymentAccounts.PaymentAccountWorkflow();
+
                         messageWorkFlow.Execute(paymentAccountId);
                     }
                     catch (Exception ex)
                     {
-                        logger.Log(LogLevel.Fatal, String.Format("Exception processing message {0}. {1}", paymentId.ToString(), ex.Message));
+                        logger.Log(LogLevel.Fatal, String.Format("Exception processing message {0}. {1}", paymentAccountId.ToString(), ex.Message));
 
                         var innerException = ex.InnerException;
                         
                         while(innerException != null)
                         {
-                            logger.Log(LogLevel.Fatal, String.Format("Inner Exception processing message {0}. {1}", paymentId.ToString(), innerException.Message));
+                            logger.Log(LogLevel.Fatal, String.Format("Inner Exception processing message {0}. {1}", paymentAccountId.ToString(), innerException.Message));
                             innerException = innerException.InnerException;
                         }
                     }

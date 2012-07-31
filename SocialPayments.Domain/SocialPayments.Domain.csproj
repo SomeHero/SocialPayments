@@ -139,6 +139,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Apis.Urlshortener.v1">
+      <HintPath>..\Libraries\Google.Apis.Urlshortener.v1.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -185,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatusType.cs" />
+    <Compile Include="AccountType.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationConfiguration.cs" />
     <Compile Include="BatchFile.cs" />
@@ -193,6 +197,8 @@
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />
+    <Compile Include="PaymentTransaction.cs" />
+    <Compile Include="UserPayPointVerification.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantType.cs" />
     <Compile Include="NotificationType.cs" />
