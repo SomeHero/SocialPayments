@@ -1,20 +1,18 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-    <div role="main" data-role="page">
-    <div data-role="header" data-position="fixed" class="">
+    <div id="request-page" data-role="page">
+        <div data-role="header" data-position="fixed"  data-theme="c">
 			<h1>Request $</h1>
 			<a href="Preferences" data-icon="gear" class="ui-btn-right"></a>
-		</div>
-        <div data-role="header" class="nav-pdthx" data-theme="c">
             <div data-role="navbar" class="nav-pdthx" data-grid="d">
-                <ul>
-                    <li><a href="Home" id="home" data-icon="custom">Home</a></li>
-                    <li><a href="Request" id="request" data-icon="custom">Request $</a></li>
-                    <li><a href="Send" id="send" data-icon="custom">Send $</a></li>
-                    <li><a href="Paystream" id="paystream" data-icon="custom">Paystream</a></li>
-                    <li><a href="DoGood" id="profile" data-icon="custom">Profile</a></li>
-                </ul>
+               <ul>
+                <li><a href="./Home" id="home" data-icon="custom"  data-transition="none" data-prefetch>Home</a></li>
+                <li><a href="./Request" id="request" data-icon="custom"  data-transition="none" data-prefetch>Request $</a></li>
+                <li><a href="./Send" id="send" data-icon="custom"  data-transition="none" data-prefetch>Send $</a></li>
+                <li><a href="./Paystream" id="paystream" data-icon="custom"  data-transition="none" data-prefetch>Paystream</a></li>
+                <li><a href="./DoGood" id="profile" data-icon="custom"  data-transition="none" data-prefetch>Profile</a></li>
+            </ul>
             </div>
         </div>
         <div data-role="content">

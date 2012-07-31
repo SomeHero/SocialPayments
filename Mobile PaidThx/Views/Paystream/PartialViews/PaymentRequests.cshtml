@@ -1,7 +1,5 @@
 ﻿﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
-<div id="main-body" style="padding: 0px 0px 0px 0px; margin: -39px -10px -10px -10px;
-    background: #FFFFFF">
-    </div>
+<div id="main-body" style="background: #FFFFFF">
     <input style="margin: 0px; width: 99%" type="text" id="txtSearchPaystreamRequests"
         name="txtSearchPaystream" placeholder="Search Paystream" />
     @{
@@ -80,7 +78,9 @@
                     </div>
                 </div>
                 <span class="trans-amount">
-                    <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(transaction.TransactionDate)</div>
+                    <div class="gray-above">
+                    @Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(transaction.TransactionDate)
+                    </div>
                     @switch (transaction.MessageType)
                     {
                         case Mobile_PaidThx.Models.MessageType.Payment:
