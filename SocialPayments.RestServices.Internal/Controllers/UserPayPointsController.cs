@@ -61,7 +61,8 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                         Id = p.Id.ToString(),
                         UserId = p.UserId.ToString(),
                         Type = p.Type.Name,
-                        Uri = p.URI
+                        Uri = p.URI,
+                        Verified = p.Verified
                     }).ToList(), HttpStatusCode.OK);
 
             }
@@ -135,15 +136,94 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                     Verified = false
                 });
 
-               // if(payPointType.Name == "EmailAddress")
+                if(payPointType.Name == "EmailAddress")
                     userService.SendEmailVerificationLink(userPayPoint);
+                else if(payPointType.Name == "Phone")
+                    userService.SendMobileVerificationCode(userPayPoint);
 
                 userService.UpdateUser(user);
 
                 return new HttpResponseMessage(HttpStatusCode.Created);
             }
         }
+        // POST /api/users/{userId}/PayPoints/resend_verification_code
+        public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
+        {
+            using (var ctx = new Context())
+            {
+                UserService userService = new UserService(ctx);
 
+                Guid userPayPointId;
+
+                Guid.TryParse(model.UserPayPointId, out userPayPointId);
+
+                if(userPayPointId == null)
+                {
+                    var response = 
+                        new HttpResponseMessage(HttpStatusCode.NotFound);
+                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
+
+                    return response;
+                }
+
+                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
+
+                try
+                {
+                    userService.SendMobileVerificationCode(userPayPoint);
+                }
+                catch (Exception ex)
+                {
+                    var response =
+                                            new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    response.ReasonPhrase = "Error occcurred resending verification code";
+
+                    return response;
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+
+            }
+        }
+        // POST /api/users/{userId}/PayPoints/resend_email_verification_link
+        public HttpResponseMessage ResendEmailVerificationLink(string userId, UserModels.ResendVerificationCodeRequest model)
+        {
+            using (var ctx = new Context())
+            {
+                UserService userService = new UserService(ctx);
+
+                Guid userPayPointId;
+
+                Guid.TryParse(model.UserPayPointId, out userPayPointId);
+
+                if (userPayPointId == null)
+                {
+                    var response =
+                        new HttpResponseMessage(HttpStatusCode.NotFound);
+                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
+
+                    return response;
+                }
+
+                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
+
+                try
+                {
+                    userService.SendEmailVerificationLink(userPayPoint);
+                }
+                catch (Exception ex)
+                {
+                    var response =  new HttpResponseMessage(HttpStatusCode.InternalServerError);
+
+                    response.ReasonPhrase = "Error occcurred resending verification code";
+
+                    return response;
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+
+            }
+        }
         // PUT /api/users/{userId}/PayPoints/{id}
         public HttpResponseMessage Put(string userId)
         {
@@ -151,11 +231,35 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         }
 
         // DELETE /api/users/{userId}/PayPoints/{id}
-        public HttpResponseMessage Delete(string userId, int id)
+        public HttpResponseMessage Delete(string userId, string id)
         {
             using (var _ctx = new Context())
             {
                 UserService userService = new UserService(_ctx);
+
+                Guid userIdGuid;
+                Guid.TryParse(userId, out userIdGuid);
+
+                if (userIdGuid == null)
+                {
+                    var response =
+                        Request.CreateResponse(HttpStatusCode.BadRequest);
+                    response.ReasonPhrase = String.Format("User Id {0} is invalid", userId);
+
+                    return response;
+                }
+
+                Guid payPointId;
+                Guid.TryParse(id, out payPointId);
+
+                if (payPointId == null)
+                {
+                    var response =
+                        Request.CreateResponse(HttpStatusCode.BadRequest);
+                    response.ReasonPhrase = String.Format("PayPoint Id {0} is invalid", payPointId);
+
+                    return response;
+                }
 
                 var user = userService.GetUserById(userId);
 
@@ -169,7 +273,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                 }
 
                 var payPoint = _ctx.UserPayPoints
-                    .FirstOrDefault(p => p.UserId == user.UserId);
+                    .FirstOrDefault(p => p.Id == payPointId  && p.UserId == userIdGuid);
 
                 if(payPoint == null)
                 {
@@ -180,6 +284,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                     return response;
                 }
 
+                payPoint.IsActive = false;
                 _ctx.SaveChanges();
 
                 return new HttpResponseMessage(HttpStatusCode.OK);

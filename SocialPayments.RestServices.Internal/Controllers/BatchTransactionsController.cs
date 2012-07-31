@@ -24,26 +24,22 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 Guid.TryParse(batchId, out id);
 
                 var batch = ctx.TransactionBatches
-                    .Include("Transactions")
-                    .Include("Transactions.FromAccount")
+                    .Include("Transactions") 
                     .FirstOrDefault(b => b.Id.Equals(id));
 
                 return batch.Transactions.Select(t => new TransactionModels.TransactionResponse()
                 {
                     ACHTransactionId = t.ACHTransactionId,
                     Amount = t.Amount,
-                    Category = t.Category.ToString(),
                     CreateDate = formattingService.FormatDateTimeForJSON(t.CreateDate),
                     Id = t.Id,
                     LastUpdatedDate = formattingService.FormatDateTimeForJSON(t.LastUpdatedDate),
                     PaymentAccount = new AccountModels.AccountResponse()
                     {
-                        AccountNumber = securityService.Decrypt(t.FromAccount.AccountNumber),
-                        AccountType = t.FromAccount.AccountType.ToString(),
-                        Id = t.FromAccount.Id.ToString(),
-                        NameOnAccount = securityService.Decrypt(t.FromAccount.NameOnAccount),
-                        Nickname = t.FromAccount.Nickname,
-                        RoutingNumber = securityService.Decrypt(t.FromAccount.RoutingNumber)//,
+                        AccountNumber = securityService.Decrypt(t.AccountNumber),
+                        AccountType = t.AccountType.ToString(),
+                        NameOnAccount = securityService.Decrypt(t.NameOnAccount),
+                        RoutingNumber = securityService.Decrypt(t.RoutingNumber)//,
                         // UserId = t.FromAccount.UserId.ToString()
                     },
                     PaymentChannelType = t.PaymentChannelType.ToString(),
@@ -73,6 +69,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // DELETE /api/transactions/5
         public void Delete(int id)
         {
+            
         }
     }
 }

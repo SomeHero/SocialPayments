@@ -129,6 +129,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="MoonAPNS">
+      <HintPath>..\Libraries\MoonAPNS.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
@@ -160,6 +163,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -217,6 +221,7 @@
     <Compile Include="Controllers\MerchantsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\BatchTransactionsController.cs" />
+    <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\UserAttributesController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
     <Compile Include="Controllers\UserPayPointsController.cs" />

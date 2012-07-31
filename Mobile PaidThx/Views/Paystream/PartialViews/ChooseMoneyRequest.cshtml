@@ -1,0 +1,107 @@
+﻿<div id="chooseamountbody" style="margin-top: -35px; margin-left: -22px; margin-right: -26px;
+    margin-bottom: -40px">
+    <div class="fieldamount" style="height: 50px; margin-left: -8px" id="amount-body">
+        <div id="custom-amount-field" style="float: left; padding-left: 47px; padding-top: 5px">
+            <input type="text" id="customAmount" style="width: 195px; margin-right: -19px; float: left" />
+        </div>
+        <button id="gobtn" style="position: absolute; left: 270px; padding-top: 8px; color: #FFFFFF">
+            Go
+        </button>
+    </div>
+    <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
+        QUICK SEND AMOUNTS</div>
+    <div class="quicksend" style="width: 100%; margin: -5px">
+        <a onclick="oneDollarRequest()" id="onedollarbtn" style="color: #4A4A4A;">
+            <img alt="onedollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
+            <h10>$1</h10>
+        </a><a onclick="fiveDollarsRequest()" id="fivedollarbtn" style="color: #4A4A4A;">
+            <img alt="fivedollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
+            <h11>$5</h11>
+        </a><a onclick="tenDollarsRequest()" id="tendollarbtn" style="color: #4A4A4A;">
+            <img alt="tendollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
+            <h12>$10</h12>
+        </a><a onclick="twentyDollarsRequest()" id="twentydollarbtn" style="color: #4A4A4A;">
+            <img alt="twentydollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
+            <h13>$20</h13>
+        </a>
+    </div>
+    <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
+        AVAILABLE TO SEND TODAY</div>
+    <div class="availableamt">
+        $40.00</div>
+    <div style="background: #000000; height: 1px">
+    </div>
+    <div id="onetothree" style="background: #D4D4D4; height: 76px">
+        <div class="boxnumber" id="pressedbtnone" style="float: left">
+            <span style="font-size: 25px">1</span></div>
+        <div class="boxnumber" id="pressedbtntwo" style="float: left">
+            <span style="font-size: 25px">2</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                A B C
+            </div>
+        </div>
+        <div class="boxnumber" id="pressedbtnthree" style="float: left">
+            <span style="font-size: 25px">3</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                D E F
+            </div>
+        </div>
+    </div>
+    <div id="fourtosix" style="background: #D4D4D4; height: 76px">
+        <div class="boxnumber" id="pressedbtnfour" style="float: left">
+            <span style="font-size: 25px">4</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                G H I
+            </div>
+        </div>
+        <div class="boxnumber" id="pressedbtnfive" style="float: left">
+            <span style="font-size: 25px">5</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                J K L
+            </div>
+        </div>
+        <div class="boxnumber" id="pressedbtnsix" style="float: left">
+            <span style="font-size: 25px">6</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                M N O
+            </div>
+        </div>
+    </div>
+    <div id="seventonine" style="background: #D4D4D4; height: 76px">
+        <div class="boxnumber" id="pressedbtnseven" style="float: left">
+            <span style="font-size: 25px">7</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 34%">
+                P Q R S
+            </div>
+        </div>
+        <div class="boxnumber" id="pressedbtneight" style="float: left">
+            <span style="font-size: 25px">8</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 38%">
+                T U V
+            </div>
+        </div>
+        <div class="boxnumber" id="pressedbtnnine" style="float: left">
+            <span style="font-size: 25px">9</span>
+            <div style="font-size: 12px; font-weight: lighter; position: absolute; top: 35px;
+                left: 34%">
+                W X Y Z
+            </div>
+        </div>
+    </div>
+    <div id="zeroaccept" style="background: #D4D4D4; height: 76px">
+        <div class="boxgray" style="float: left">
+        </div>
+        <div class="boxnumber" id="pressedbtnzero" style="float: left">
+            <span style="font-size: 25px">0</span>
+        </div>
+        <div class="boxgray" style="float: left">
+        </div>
+    </div>
+</div>

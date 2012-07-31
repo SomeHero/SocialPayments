@@ -12,7 +12,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class MobileNumberSignUpKeySMSListenerController : ApiController
     {
-        private Context _ctx = new Context();
         private Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
@@ -33,30 +32,33 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Received request for Registration SignUp Key"));
 
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-
-            var signUpKey = request.inboundSMSMessageNotification.inboundSMSMessage.message;
-            var mobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress);
-
-            _logger.Log(LogLevel.Info, String.Format("Request details Mobile Number {0}; SignUp Key {1}", mobileNumber, signUpKey));
-
-            Domain.User user;
-
-            try
+            using (var ctx = new Context())
             {
-                user = userService.GetUserById(signUpKey);
+                DomainServices.UserService userService = new DomainServices.UserService(ctx);
+
+                var signUpKey = request.inboundSMSMessageNotification.inboundSMSMessage.message;
+                var mobileNumber = _formattingServices.RemoveFormattingFromMobileNumber(request.inboundSMSMessageNotification.inboundSMSMessage.senderAddress);
+
+                _logger.Log(LogLevel.Info, String.Format("Request details Mobile Number {0}; SignUp Key {1}", mobileNumber, signUpKey));
+
+                Domain.User user;
+
+                try
+                {
+                    user = userService.GetUserById(signUpKey);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Warn, String.Format("Exception Process Registration SMS Signup for user {0}. {1}", signUpKey, ex.Message));
+
+                    return HttpStatusCode.BadRequest;
+                }
+
+                user.MobileNumber = mobileNumber;
+                userService.UpdateUser(user);
+
+                return HttpStatusCode.OK;
             }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Warn, String.Format("Exception Process Registration SMS Signup for user {0}. {1}", signUpKey, ex.Message));
-
-                return HttpStatusCode.BadRequest;
-            }
-
-            user.MobileNumber = mobileNumber;
-            userService.UpdateUser(user);
-
-            return HttpStatusCode.OK;
         }
 
         // PUT /api/mobilenumbersignupkeysmslistener/5

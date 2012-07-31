@@ -207,5 +207,15 @@ namespace SocialPayments.RestServices.Internal.Models
             public string Key { get; set; }
             public string Value { get; set; }
         }
+        public class ResendVerificationCodeRequest
+        {
+            public string UserPayPointId { get; set; }
+        }
+        public class SendEmailRequest
+        {
+            public string Subject { get; set; }
+            public string TemplateName { get; set; }
+            public List<KeyValuePair<string, string>> ReplacementElements { get; set; }
+        }
     }
 }

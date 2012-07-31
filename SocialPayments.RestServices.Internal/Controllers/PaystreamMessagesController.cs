@@ -17,6 +17,7 @@ using SocialPayments.DataLayer.Interfaces;
 using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DomainServices.CustomExceptions;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {

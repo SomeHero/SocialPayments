@@ -1,31 +1,29 @@
-﻿<div id="chooseamountbody" style="margin-top: -12px; margin-left: -22px; margin-right: -26px;
+﻿<div id="chooseamountbody" style="margin-top: -35px; margin-left: -22px; margin-right: -26px;
     margin-bottom: -40px">
-    <div class="paystream-header-title">
-        Your Paystream</div>
-    <div style="height: 1px; background: #B0B0B0">
-    </div>
-    <div class="fieldamount" style="height:50px; margin-left:-8px" id="amount-body"> 
-        <div id="custom-amount-field" style="float:left; padding-left:50px; padding-top:3px">
-            <input type="text" id="customAmount" style="width:195px; margin-right:-19px; float:left" />
+    <div class="fieldamount" style="height: 50px; margin-left: -8px" id="amount-body">
+        <div id="custom-amount-field" style="float: left; padding-left: 47px; padding-top: 5px">
+            <input type="text" id="customAmount" style="width: 195px; margin-right: -19px; float: left" />
         </div>
-        <div id="gobtn" style="position: absolute; left: 270px; padding-top:8px; color:#FFFFFF">Go</div>
+        <button id="gobtn" style="position: absolute; left: 270px; padding-top: 8px; color: #FFFFFF">
+            Go
+        </button>
     </div>
     <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
         QUICK SEND AMOUNTS</div>
-    <div class="quicksend" style="width:100%; margin:-5px">
-        <span id="onedollarbtn">
+    <div class="quicksend" style="width: 100%; margin: -5px">
+        <a onclick="oneDollar()" id="onedollarbtn" style="color: #4A4A4A;">
             <img alt="onedollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
             <h10>$1</h10>
-        </span><span id="fivedollarbtn">
+        </a><a onclick="fiveDollars()" id="fivedollarbtn" style="color: #4A4A4A;">
             <img alt="fivedollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
             <h11>$5</h11>
-        </span><span id="tendollarbtn">
+        </a><a onclick="tenDollars()" id="tendollarbtn" style="color: #4A4A4A;">
             <img alt="tendollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
             <h12>$10</h12>
-        </span><span id="twentydollarbtn">
+        </a><a onclick="twentyDollars()" id="twentydollarbtn" style="color: #4A4A4A;">
             <img alt="twentydollar" src=@Url.Content("~/Content/images/btn-quickadd.png") style="padding-right:4px; height:48px; width:22%"/>
             <h13>$20</h13>
-        </span>
+        </a>
     </div>
     <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
         AVAILABLE TO SEND TODAY</div>

@@ -84,6 +84,13 @@ namespace SocialPayments.Services.MessageProcessors
             if (message.WorkflowStatus == PaystreamMessageWorkflowStatus.Complete)
                 return false;
 
+            //create a withdrawal transaction
+            //see if there is a recipient
+            //if there is a recipient and the hold day = 0; create deposit
+            //else do nothing
+            //send communication to sender
+            //send communitication to recipient
+
             _formattingService = new FormattingServices();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _validationService = new ValidationService(_logger);

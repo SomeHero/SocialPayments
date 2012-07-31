@@ -52,13 +52,18 @@ namespace SocialPayments.DomainServices
             string elasticEmailPost = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
 
             StringBuilder mergeFields = new StringBuilder();
-            foreach(var item in replacementElements) {
-                if (item.Key != null && item.Value != null)
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Merge Fields {0} = {1}", item.Key.ToUpper(), item.Value));
 
-                    mergeFields.Append("&");
-                    mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+            if (replacementElements != null)
+            {
+                foreach (var item in replacementElements)
+                {
+                    if (item.Key != null && item.Value != null)
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Merge Fields {0} = {1}", item.Key.ToUpper(), item.Value));
+
+                        mergeFields.Append("&");
+                        mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+                    }
                 }
             }
             

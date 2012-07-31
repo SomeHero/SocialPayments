@@ -11,6 +11,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class BatchesController : ApiController
     {
+
         // GET /api/batch
         public IEnumerable<BatchModels.BatchResponse> Get()
         {
@@ -45,7 +46,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 var formattingService = new DomainServices.FormattingServices();
                 var batch = ctx.TransactionBatches
                     .Include("Transactions")
-                    .Include("Transactions.FromAccount")
                     .OrderByDescending(b => b.CreateDate)
                     .FirstOrDefault();
 
@@ -64,9 +64,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // POST /api/batch
+        // POST /api/batches
+        // addes transactions to the current open batch
         public void Post(string value)
         {
+
         }
 
         // PUT /api/batch/5

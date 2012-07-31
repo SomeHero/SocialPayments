@@ -877,45 +877,12 @@ namespace SocialPayments.DataLayer
                     PaymentStatus = PaymentStatus.Pending,
                     RecipientAccount = james.PaymentAccounts[0],
                     SenderAccount = sentMessage.Sender.PaymentAccounts[0],
-                    Transactions = new Collection<Transaction>(),
                     HoldDays = 0,
                     ScheduledProcessingDate = System.DateTime.Now,
                     //PaymentVerificationLevel = PaymentVerificationLevel.Verified
                 };
 
-            sentPayment.Transactions.Add(new Transaction()
-            {
-                ACHTransactionId = "",
-                Amount = sentPayment.Amount,
-                Category = TransactionCategory.Payment,
-                CreateDate = System.DateTime.Now,
-                FromAccount = sentPayment.SenderAccount,
-                Id = Guid.NewGuid(),
-                PaymentChannelType = PaymentChannelType.Single,
-                StandardEntryClass = StandardEntryClass.Web,
-                TransactionBatch = transactionBatch,
-                Type = TransactionType.Withdrawal,
-                User = sentMessage.Sender,
-                Payment = sentPayment,
-                Status = TransactionStatus.Pending,
-            });
-
-            sentPayment.Transactions.Add(new Transaction()
-            {
-                ACHTransactionId = "",
-                Amount = sentPayment.Amount,
-                Category = TransactionCategory.Payment,
-                CreateDate = System.DateTime.Now,
-                FromAccount = sentPayment.RecipientAccount,
-                Id = Guid.NewGuid(),
-                PaymentChannelType = PaymentChannelType.Single,
-                StandardEntryClass = StandardEntryClass.Web,
-                TransactionBatch = transactionBatch,
-                Type = TransactionType.Deposit,
-                User = sentMessage.Recipient,
-                Payment = sentPayment,
-                Status = TransactionStatus.Pending,
-            });
+            
 
 
             var acceptRequest = context.Messages.Add(new Message()
@@ -981,45 +948,10 @@ namespace SocialPayments.DataLayer
                 PaymentStatus = PaymentStatus.Pending,
                 RecipientAccount = james.PaymentAccounts[0],
                 SenderAccount = receivedMessage.Sender.PaymentAccounts[0],
-                Transactions = new Collection<Transaction>(),
                 HoldDays = 0,
                 ScheduledProcessingDate = System.DateTime.Now,
                 //PaymentVerificationLevel = PaymentVerificationLevel.Verified
             };
-
-            receivedPayment.Transactions.Add(new Transaction()
-            {
-                ACHTransactionId = "",
-                Amount = receivedPayment.Amount,
-                Category = TransactionCategory.Payment,
-                CreateDate = System.DateTime.Now,
-                FromAccount = receivedPayment.SenderAccount,
-                Id = Guid.NewGuid(),
-                PaymentChannelType = PaymentChannelType.Single,
-                StandardEntryClass = StandardEntryClass.Web,
-                TransactionBatch = transactionBatch,
-                Type = TransactionType.Withdrawal,
-                User = receivedMessage.Sender,
-                Payment = receivedPayment,
-                Status = TransactionStatus.Pending,
-            });
-
-            receivedPayment.Transactions.Add(new Transaction()
-            {
-                ACHTransactionId = "",
-                Amount = receivedPayment.Amount,
-                Category = TransactionCategory.Payment,
-                CreateDate = System.DateTime.Now,
-                FromAccount = receivedPayment.RecipientAccount,
-                Id = Guid.NewGuid(),
-                PaymentChannelType = PaymentChannelType.Single,
-                StandardEntryClass = StandardEntryClass.Web,
-                TransactionBatch = transactionBatch,
-                Type = TransactionType.Deposit,
-                User = receivedMessage.Recipient,
-                Payment = receivedPayment,
-                Status = TransactionStatus.Pending,
-            });
 
             context.SaveChanges();
 
@@ -1070,21 +1002,6 @@ namespace SocialPayments.DataLayer
                         Id = Guid.NewGuid(),
                         PaymentStatus = PaymentStatus.Pending,
                         SenderAccount = james.PaymentAccounts[0],
-                        Transactions = new Collection<Transaction>()
-                        {
-                            new Transaction() {
-                                Amount = amount,
-                                Category = TransactionCategory.Payment,
-                                CreateDate = System.DateTime.Now,
-                                FromAccount = james.PaymentAccounts[0],
-                                Id = Guid.NewGuid(),
-                                PaymentChannelType = PaymentChannelType.Single,
-                                StandardEntryClass = StandardEntryClass.Web,
-                                Status = TransactionStatus.Complete,
-                                Type = TransactionType.Withdrawal,
-                                User =james
-                            }
-                        },
                         HoldDays = 0,
                         ScheduledProcessingDate = System.DateTime.Now,
                        // PaymentVerificationLevel = PaymentVerificationLevel.Verified
@@ -1124,21 +1041,6 @@ namespace SocialPayments.DataLayer
                         Id = Guid.NewGuid(),
                         PaymentStatus = PaymentStatus.Pending,
                         SenderAccount = james.PaymentAccounts[0],
-                        Transactions = new Collection<Transaction>()
-                        {
-                            new Transaction() {
-                                Amount = amount,
-                                Category = TransactionCategory.Payment,
-                                CreateDate = System.DateTime.Now,
-                                FromAccount = james.PaymentAccounts[0],
-                                Id = Guid.NewGuid(),
-                                PaymentChannelType = PaymentChannelType.Single,
-                                StandardEntryClass = StandardEntryClass.Web,
-                                Status = TransactionStatus.Complete,
-                                Type = TransactionType.Withdrawal,
-                                User =james
-                            }
-                        },
                         HoldDays = 0,
                         ScheduledProcessingDate = System.DateTime.Now,
                        // PaymentVerificationLevel = PaymentVerificationLevel.Verified

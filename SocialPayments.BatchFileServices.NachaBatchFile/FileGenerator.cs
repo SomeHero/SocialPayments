@@ -170,7 +170,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             {
                 try
                 {
-                    string routingNumber = securityService.Decrypt(transaction.FromAccount.RoutingNumber);
+                    string routingNumber = securityService.Decrypt(transaction.RoutingNumber);
                     if (routingNumber.Length > 8)
                         routingNumber = routingNumber.Substring(0, 8);
 
@@ -237,28 +237,28 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             sb.Append("6".PadLeft(1, ' '));     //Record Type Code
             if (transaction.Type == TransactionType.Deposit)
             {
-                if (transaction.FromAccount.AccountType == PaymentAccountType.Checking)
+                if (transaction.AccountType == AccountType.Checking)
                     sb.Append("22".PadLeft(2, ' ')); //Transaction Code Deposit "Checking" account
                 else
                     sb.Append("32".PadLeft(2, ' ')); //Transaction Code Deposit "Savings" account
             }
             else
             {
-                if (transaction.FromAccount.AccountType == PaymentAccountType.Checking)
+                if (transaction.AccountType == AccountType.Checking)
                     sb.Append("27".PadLeft(2, ' ')); //Transaction Code Debit "Checking" account
                 else
                     sb.Append("37".PadLeft(2, ' ')); //Transaction Code Debit "Savings" account
             }
 
-            string routingNumber = securityService.Decrypt(transaction.FromAccount.RoutingNumber);
+            string routingNumber = securityService.Decrypt(transaction.RoutingNumber);
             sb.Append(routingNumber.Truncate(9).PadLeft(9, ' '));  //Receiving DFI Identification
 
-            string accountNumber = securityService.Decrypt(transaction.FromAccount.AccountNumber);
+            string accountNumber = securityService.Decrypt(transaction.AccountNumber);
             sb.Append(accountNumber.Truncate(17).PadRight(17, ' '));  //DFI Account Number
             sb.Append((transaction.Amount * 100).ToString().Truncate(10).PadLeft(10, '0'));  //Amount
-            sb.Append(formattingService.FormatUserName(transaction.FromAccount.User).Truncate(15).PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
+            sb.Append(transaction.IndividualIdentifier.Truncate(15).PadRight(15, ' '));  //Individual Identification --Consumer Account Number should be ACH Company name
 
-            string nameOnAccount = securityService.Decrypt(transaction.FromAccount.NameOnAccount);
+            string nameOnAccount = securityService.Decrypt(transaction.NameOnAccount);
             sb.Append(nameOnAccount.Truncate(22).PadRight(22, ' '));   //Individual Name
             // if (transaction.StandardEntryClass == StandardEntryClass.Web)  //Discretionary Data - Required if Web
             // {

@@ -104,15 +104,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (receivedPayments.Count() > 0)
                 receivedTotal = receivedPayments.Sum(m => m.Amount);
-
-            string preferredPaymentAccountId = "";
-            string preferredReceiveAccountId = "";
-
-            if (user.PaymentAccounts != null && user.PaymentAccounts.Count > 0)
-            {
-                preferredPaymentAccountId = user.PaymentAccounts[0].Id.ToString();
-                preferredReceiveAccountId = user.PaymentAccounts[0].Id.ToString();
-            }
             
             _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
             _logger.Log(LogLevel.Info, String.Format("# of paypoints {0}", user.PayPoints.Count));
@@ -160,8 +151,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     instantLimit = _userService.GetUserInstantLimit(user),
                     totalMoneyReceived = receivedTotal,
                     totalMoneySent = sentTotal,
-                    preferredPaymentAccountId = preferredPaymentAccountId,
-                    preferredReceiveAccountId = preferredReceiveAccountId,
+                    preferredPaymentAccountId = user.PreferredSendAccountId.ToString(),
+                    preferredReceiveAccountId = user.PreferredReceiveAccountId.ToString(),
                     setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true),
                     securityQuestion = (user.SecurityQuestion != null ? user.SecurityQuestion.Question : ""),
                     securityQuestionId = user.SecurityQuestionID,
@@ -182,7 +173,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         senderUri = m.SenderUri,
                        transactionImageUri = m.TransactionImageUrl
                     }).ToList(),
-                    userPayPoints = (user.PayPoints != null ? user.PayPoints.Select(p => new UserModels.UserPayPointResponse() {
+                    userPayPoints = (user.PayPoints != null ? user.PayPoints
+                    .Where(a => a.IsActive)
+                    .Select(p => new UserModels.UserPayPointResponse() {
                         Id = p.Id.ToString(),
                         Type = p.Type.Name,
                         Uri = p.URI,
@@ -198,7 +191,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
                         Nickname = a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
-                        UserId = a.UserId.ToString()
+                        UserId = a.UserId.ToString(),
+                        Status = a.AccountStatus.ToString()
                     }).ToList() : null),
                     userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
                         new UserModels.UserConfigurationResponse() {
@@ -296,15 +290,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 message.ReasonPhrase = String.Format("Unable to register user. {0}", ex.Message);
 
                 return message;
-            }
-
-            try
-            {
-                _amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["UserPostedTopicARN"], "New User Account Created", user.UserId.ToString());
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, string.Format("AmazonPNS failed when registering user {0}. Exception {1}.", request.emailAddress, ex.Message));
             }
 
             var responseMessage = new UserModels.SubmitUserResponse()
@@ -570,7 +555,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
+        public HttpResponseMessage SendEmail(string id, string apiKey, UserModels.SendEmailRequest request)
+        {
+            using (var ctx = new Context())
+            {
+                var emailService = new DomainServices.EmailService(ctx);
+                var userService = new DomainServices.UserService(ctx);
 
+                var user = userService.GetUserById(id);
+
+                emailService.SendEmail(user.EmailAddress, request.Subject, request.TemplateName, request.ReplacementElements);
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+         }
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {

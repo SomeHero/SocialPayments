@@ -308,8 +308,57 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult VerifyPayPoint(string id)
         {
+            using(var ctx = new Context())
+            {
+                Guid payPointVerificationID;
 
-            return View();
+                Guid.TryParse(id, out payPointVerificationID);
+
+                if (payPointVerificationID == null)
+                {
+                    ViewBag.Message = "Sorry, we are unable to complete verification";
+
+                    return View();
+                }
+
+                var payPointVerification = ctx.UserPayPointVerifications
+                    .FirstOrDefault(p => p.Id == payPointVerificationID);
+
+                if (payPointVerification == null)
+                {
+                    ViewBag.Message = "Sorry, we are unable to complete verification";
+
+                    return View();
+                }
+
+                if (payPointVerification.Confirmed)
+                {
+                    ViewBag.Message = String.Format("Sorry, we are unable to continue verifying this pay point.  {0} is already verified.",
+                        payPointVerification.UserPayPoint.URI);
+
+                    return View();
+                }
+
+                if (payPointVerification.ExpirationDate < System.DateTime.Now)
+                {
+                    ViewBag.Message = String.Format("Sorry, we are unable to continue verifying the PayPoint {0}.  The verification link has expired.",
+                        payPointVerification.UserPayPoint.URI);
+
+                    return View();
+                }
+
+                payPointVerification.Confirmed = true;
+                payPointVerification.ConfirmedDate = System.DateTime.Now;
+                payPointVerification.UserPayPoint.Verified = true;
+                payPointVerification.UserPayPoint.VerifiedDate = System.DateTime.Now;
+                
+                ctx.SaveChanges();
+
+                ViewBag.Message = String.Format("Thanks. You have completed verification of {0}.  You can now begin to accept payment to this PayPoint.",
+                        payPointVerification.UserPayPoint.URI);
+
+                return View();
+            }
         }
         public ActionResult SignIn()
         {
