@@ -2,15 +2,20 @@
 @{
     ViewBag.Title = "About";
 }
+    <div role="main" data-role="page">
+        <div data-role="header" class="nav-pdthx" data-theme="c">
+            <div data-role="navbar" class="nav-pdthx" data-grid="d">
+                <ul>
+                    <li><a href="#" id="home" data-icon="custom">Home</a></li>
+                    <li><a href="#" id="request" data-icon="custom">Request $</a></li>
+                    <li><a href="#" id="send" data-icon="custom">Send $</a></li>
+                    <li><a href="./home/contactus" id="paystream" data-icon="custom">Paystream</a></li>
+                    <li><a href="./home/about" id="profile" data-icon="custom">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
 <div id="container">
-    <dl id="main-tabs" class="tabs contained">
-        <dd>
-            <a href="#simpleContained1" class="active">What is PaidThx?</a></dd>
-        <dd>
-            <a href="#simpleContained2">Contact Us</a></dd>
-        <dd>
-            <a href="#simpleContained3">Privacy</a></dd>
-    </dl>
     <div id="content-container">
         <ul class="tabs-content contained">
             <li class="active" id="simpleContained1Tab">
@@ -27,4 +32,6 @@
             </li>
         </ul>
     </div>
+</div>
+</div>
 </div>
