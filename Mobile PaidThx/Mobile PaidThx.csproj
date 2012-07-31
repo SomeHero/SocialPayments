@@ -255,6 +255,16 @@
     <Content Include="Content\images\sub-nav-requests-icon-active.gif" />
     <Content Include="Content\images\sub-nav-requests-icon.gif" />
     <Content Include="Content\images\subnav-active-background.gif" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Content\images\tab_background.gif" />
     <Content Include="Content\images\tab_background_active.gif" />
     <Content Include="Content\images\tab_background_inactive.gif" />
@@ -490,6 +500,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\App_LocalResources\" />
     <Folder Include="Models\logs\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
   </ItemGroup>

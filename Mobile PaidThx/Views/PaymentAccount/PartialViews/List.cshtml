@@ -11,6 +11,11 @@
         margin-bottom: 15px">
     </div>
     <div id="accounts-list" class="panel main-body">
+        <button onclick="closeScreen()">
+            <span id="closebtn" style="float: right; padding-top: 20px; padding-right: 2px">
+                <img src="@Url.Content("~/Content/images/close-dialog.gif")" />
+            </span>
+        </button>
         @Html.ValidationSummary()
         <h2>
             Your Linked Accounts</h2>
@@ -28,18 +33,15 @@
                     </div>
                 </a></li>
             }
-             
-            <h2>Sending Account</h2>
+            <h2>
+                Sending Account</h2>
             @Html.DropDownList("PreferredSendAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount" })
-
-            
-            <h2>Receiving Account</h2>
+            <h2>
+                Receiving Account</h2>
             @Html.DropDownList("PreferredReceiveAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount" })
         </ul>
-
         <p>
-      <button type="submit" id="add-account" class="imgbtn">
-            <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add
-                an Account</span></button></p>
+            <button type="submit" id="add-account" class="imgbtn">
+                <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add an Account</span></button></p>
     </div>
 </div>
