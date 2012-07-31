@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "VerifyPayPoint";
+}
+
+<div id="container">
+    <dl id="main-tabs" class="tabs contained">
+        <dd>
+            <a href="#simpleContained1" class="active">Sign In</a></dd>
+        <dd>
+            <a href="#simpleContained2">What is PaidThx?</a></dd>
+    </dl>
+    <div id="content-container">
+        <ul class="tabs-content contained">
+            <li class="active" id="simpleContained1Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/VerifyPayPoint");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained2Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("../Home/PartialViews/About");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

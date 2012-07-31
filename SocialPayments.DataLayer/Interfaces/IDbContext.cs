@@ -38,6 +38,7 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<ProfileSection> ProfileSections { get; set; }
         IDbSet<Merchant> Merchants { get; set; }
         IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
+        IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }
 
         void SaveChanges();
     }
