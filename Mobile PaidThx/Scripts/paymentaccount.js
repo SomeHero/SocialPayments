@@ -20,7 +20,7 @@ $(document).ready(function () {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
-    $("#receive-account").click(function () {
+    $("#remove-account").click(function () {
         var paymentAccountId = $(this).attr('data-val');
         $.post(getBaseURL() + "PaymentAccount/Remove/" + paymentAccountId,
             function (data) {
@@ -62,7 +62,6 @@ $(document).ready(function () {
                 $('#accounts-content').html(data).trigger("pagecreate").trigger("refresh");
             });
     });
+    });
 
-
-
-});
+ 

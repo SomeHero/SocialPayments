@@ -321,7 +321,8 @@ $.extend($.validator, {
 		$.extend( $.validator.defaults, settings );
 	},
 
-	messages: {
+messages: {
+        remove:"Cannot remove this account.  It is set as one of your preferred sending and receiving accounts",
 		required: "This field is required.",
 		remote: "Please fix this field.",
 		email: "Please enter a valid email address.",
