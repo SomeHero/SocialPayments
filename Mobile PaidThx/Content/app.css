@@ -455,6 +455,46 @@ a.imgbtn span, button.imgbtn span
     border-left: 1px solid #7bb57f;
 }
 
+button.field-btn
+{
+ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eceff2), to(#f9fafb));
+    background: -webkit-linear-gradient(top, #f9fafb, #eceff2);
+    background: -moz-linear-gradient(top, #f9fafb, #eceff2);
+    background: -ms-linear-gradient(top, #f9fafb, #eceff2);
+    background: -o-linear-gradient(top, #f9fafb, #eceff2);   
+    padding:0 !important;
+    border:1px solid #c0c9d1 !important;
+}
+
+button.field-btn span, button.imgbtn.field-btn span
+{
+ color:#6d6e71;   
+ border:none;
+    border-width:0;
+    text-shadow: 1px 1px #fff;
+    padding-left:16px;
+}
+button.field-btn img
+{
+    margin-top:10px;
+    border:none;
+    border-width:0;
+}
+button.field-btn span.imgbg
+{
+    background-color:#e9e9ea;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width:41px;
+    height:46px;
+    display:block;
+    float:left;
+    border:none;
+    border-width:0;
+    padding-left:4px;
+    
+}
 a.imgbtn span.ui-button-text, button.imgbtn span.ui-button-text
 {
     border: 0;
@@ -518,6 +558,12 @@ a.fbSignIn span, button.fbSignIn span
 {
     color: #31879d !important;
     text-shadow: 1px 1px #fff;
+}
+
+
+input.ui-input-text, textarea.ui-input-text
+{
+ width:100%;   
 }
 
 /* ---------- [ Paystream Transactions ] ---------- */
