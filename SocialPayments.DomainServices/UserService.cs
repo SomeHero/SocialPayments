@@ -98,7 +98,7 @@ namespace SocialPayments.DomainServices
             }
             var messages = _ctx.Messages
                 .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
-                    && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)))
                     .ToList();
 
             foreach (var message in messages)

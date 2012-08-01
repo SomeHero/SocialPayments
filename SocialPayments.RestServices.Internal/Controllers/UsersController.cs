@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Amazon.S3.Model;
 using System.IO;
 using System.Text;
+using SocialPayments.Domain.ExtensionMethods;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -184,7 +185,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         VerifiedDate = "",
                         CreateDate = p.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy")
                     }).ToList() : null),
-                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
+                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts
+                    .Where(b => b.IsActive)
+                    .Select(a => new AccountModels.AccountResponse() {
                         AccountNumber = securityService.Decrypt(a.AccountNumber),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
@@ -192,7 +195,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Nickname = a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
                         UserId = a.UserId.ToString(),
-                        Status = a.AccountStatus.ToString()
+                        Status = a.AccountStatus.GetDescription()
                     }).ToList() : null),
                     userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
                         new UserModels.UserConfigurationResponse() {

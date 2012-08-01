@@ -114,6 +114,7 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                     TransactionBatch = transactionBatch
                 });
 
+                paymentAccount.AccountStatus = AccountStatusType.PendingActivation;
 
                 ctx.SaveChanges();
 
