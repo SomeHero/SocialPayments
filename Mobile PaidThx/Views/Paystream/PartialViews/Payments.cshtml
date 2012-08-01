@@ -1,9 +1,6 @@
 ﻿﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
-<div id="main-body" style="padding: 0px 0px 0px 0px; margin: -39px -10px -10px -10px;
-    background: #FFFFFF">
-    </div>
-    <input style="margin: 0px; width: 99%" type="text" id="txtSearchPaystreamPayments"
-        name="txtSearchPaystream" placeholder="Search Paystream" />
+<div id="main-body">
+    <input style="width: 99%;" type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
     @{
         int i = 1;
         String prevHeader = "";
@@ -23,19 +20,9 @@
             }
             <li class="@Html.GetTransactionCssClass(transaction, i)"><a onclick="openOffersDialog('@transaction.Id');">
                 <span class="trans-type">
-                    @switch (transaction.Direction)
-                    {
-                        case "Out":
-                        <text>
-                        <img src="@Url.Content("http://images.paidthx.com/assets/noavatar.png")" alt="Sending Funds" />
-                        </text>
-                             break;
-                        case "In":
-                        <text>
-                        <img src="@Url.Content("http://images.paidthx.com/assets/noavatar.png")" alt="Receiving Funds" />
-                        </text>
-                             break;
-                    }
+                    <text>
+                    <img src="http://images.paidthx.com/assets/noavatar.png" alt="Sending Funds" />
+         </text>
                 </span>
                 <div class="trans-title">
                     @switch (transaction.Direction)
@@ -67,6 +54,8 @@
                                     break;
                             }
                             break;
+
+
                         case Mobile_PaidThx.Models.MessageType.PaymentRequest:
                             switch (transaction.Direction)
                             {
@@ -83,6 +72,7 @@
                                     break;
                             }
                             break;
+
                     }
                     <div class="trans-comment">
                         <text>"@transaction.Comments"</text>
@@ -153,10 +143,10 @@
     <div id="content" class="paystream-dialog-inner-display">
         <div id="wrapper" style="display: block; height: 120px">
             <div id="user1pic" class="paystream-user">
-                <img src="@Url.Content("~/Content/images/noavatar.png")" alt="user" />
+                <img src="http://images.paidthx.com/assets/noavatar.png" alt="user" />
             </div>
             <div id="user2pic" class="paystream-user-next">
-                <img src="@Url.Content("~/Content/images/noavatar.png")" alt="user2pic" /></div>
+                <img src="http://images.paidthx.com/assets/noavatar.png" alt="user2pic" /></div>
             <div id="user1" style="font-size: large; font-weight: bold; padding-top: 10px">
                 User1</div>
             <div id="status" class="paystream-users-status">
