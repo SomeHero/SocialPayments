@@ -8,6 +8,7 @@ using SocialPayments.DataLayer;
 using NLog;
 using System.Net;
 using SocialPayments.Domain;
+using SocialPayments.Domain.ExtensionMethods;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -38,7 +39,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 userServices.UpdateUser(user);
 
                 var messages = messageServices.GetMessages(user.UserId);
-                
+
                 var messageResponse = messages.Select(m => new MessageModels.MessageResponse() 
                 {
                         amount = m.Amount,
@@ -46,7 +47,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         createDate = m.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                         Id = m.Id,
                         //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
-                        messageStatus =  m.Status.ToString(),
+                        messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() :   m.Status.GetSenderMessageStatus()),
                         messageType = m.MessageType.ToString(),
                         recipientUri = m.RecipientUri,
                         senderUri = m.SenderUri,

@@ -15,51 +15,57 @@ $(document).ready(function () {
         }
     });
 
-    $("#gobtn").die('click').live('click', function () {
+    $("#gobtn-send").die('click').live('click', function () {
         amountSelected = $('#customAmount').val();
-        $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-            $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-            $('#amount').text(amountSelected);
-        });
+        $('#amount-send').text(amountSelected);
+        closeSendAmountDialog('amountbody-send');
+    }
+
+     $("#btnSelectAmountSend").die('click').live('click', function () {
+        openSendAmountDialog();
+    });
+
+    $("#onedollarbtnsend").die('click').live('click', function () {
+        amountSelected = "1.00";
+        $('#amount-send').text(amountSelected);
+        closeSendAmountDialog('amountbody-send');
+    });
+
+    $("#fivedollarbtnsend").die('click').live('click', function () {
+        amountSelected = "5.00";
+        $('#amount-send').text(amountSelected);
+        closeSendAmountDialog('amountbody-send');
+    });
+
+    $("#tendollarbtnsend").die('click').live('click', function () {
+        amountSelected = "10.00";
+        $('#amount-send').text(amountSelected);
+        closeSendAmountDialog('amountbody-send');
+    });
+
+    $("#twentydollarbtnsend").die('click').live('click', function () {
+        amountSelected = "20.00";
+        $('#amount-send').text(amountSelected);
+        closeSendAmountDialog('amountbody-send');
     });
 });
 
-function chooseAmount() {
-    $.get(getBaseURL() + "Paystream/ChooseAmount", function (data) {
-        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-
+function openSendAmountDialog() {
+    $('#chooseAmountSendOverlay').fadeIn('fast', function () {
+        $('#amountbody-send').css('display', 'block');
+        $('#amountbody-send').animate({ 'left': '5%' }, 500);
     });
 }
 
-function oneDollar() {
-    amountSelected = 1.00;
-    $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount').text(amountSelected);
+function closeSendAmountDialog(prospectElementID) {
+    $(function ($) {
+        $(document).ready(function () {
+            $('#' + prospectElementID).css('position', 'absolute');
+            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
+                $('#' + prospectElementID).css('position', 'fixed');
+                $('#' + prospectElementID).css('left', '100%');
+                $('#chooseAmountSendOverlay').fadeOut('fast');
+            });
+        });
     });
 }
-
-function fiveDollars() {
-    amountSelected = 5.00;
-    $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount').text(amountSelected);
-    });
-}
-
-function tenDollars() {
-    amountSelected = 10.00;
-    $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount').text(amountSelected);
-    });
-}
-
-function twentyDollars() {
-    amountSelected = 20.00;
-    $.get(getBaseURL() + "Paystream/SendMoney", function (data) {
-        $('#main-body-send').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount').text(amountSelected);
-    });
-}
-

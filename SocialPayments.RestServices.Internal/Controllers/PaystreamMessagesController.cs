@@ -569,7 +569,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Cancelled;
+                message.Status = PaystreamMessageStatus.CancelledRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 //Create Update Message 
@@ -653,7 +653,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Accepted;
+                message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 try
@@ -667,7 +667,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = Guid.NewGuid(),
                         Latitude = 0,
                         Longitude = 0,
-                        Status = PaystreamMessageStatus.Processing,
+                        Status = PaystreamMessageStatus.ProcessingPayment,
                         MessageType = MessageType.Payment,
                         Recipient = message.Sender,
                         recipientFirstName = message.senderFirstName,
@@ -731,7 +731,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Rejected;
+                message.Status = PaystreamMessageStatus.RejectedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 try

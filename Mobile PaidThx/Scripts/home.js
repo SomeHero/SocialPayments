@@ -11,4 +11,12 @@ $(document).ready(function () {
     $("#home").click(function () {
         $.mobile.changePage("home/about");
     });
+
+    $("#btnSelectAmount").click(function () {
+        $("#chooseAmountOverlay").show();
+    });
+
+
+
+
 });

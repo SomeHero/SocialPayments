@@ -69,6 +69,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     _logger.Log(LogLevel.Debug, String.Format("Recipient Found"));
 
+                    message.Status = PaystreamMessageStatus.PendingRequest;
+
                     //if the recipient has a mobile #; send SMS
                     if (!String.IsNullOrEmpty(recipient.MobileNumber))
                     {
@@ -119,7 +121,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
                             //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
                             //      Opening the application is sufficient
-                            var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
+                            var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedRequest));
 
                             _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
 
@@ -177,6 +179,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
                 else
                 {
+                    message.Status = PaystreamMessageStatus.NotifiedRequest;
+
                     //if recipient Uri Type is Mobile Number, Send SMS
                     if (recipientType == URIType.MobileNumber)
                     {
@@ -266,7 +270,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 //Update Payment Status
                 _logger.Log(LogLevel.Info, String.Format("Updating Payment Request"));
 
-                message.Status = PaystreamMessageStatus.Processing;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 ctx.SaveChanges();
