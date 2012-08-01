@@ -13,14 +13,12 @@
             if (!header.Equals(prevHeader))
             {
                 prevHeader = header;
-            <div class="paystream-header">
-                @header
-            </div>
+
             }
-            <li class="@Html.GetTransactionCssClass(transaction, i)"><a onclick="openOffersDialog('@transaction.Id');">
+            <li class="@Html.GetTransactionCssClass(transaction, i)">
                 <span class="trans-type">
                     <text>
-                    <img src="http://images.paidthx.com/assets/noavatar.png")" alt="Sending Funds" />
+                    <img src="http://images.paidthx.com/assets/noavatar.png" alt="Sending Funds" />
                     </text>
                 </span>
                 <div class="trans-title">
@@ -114,7 +112,7 @@
                     <div class="gray-out">
                         <text>@transaction.TransactionStatus</text>
                     </div>
-                </span></a></li>
+                </span></li>
  
                     i += 1;
 

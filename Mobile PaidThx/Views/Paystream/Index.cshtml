@@ -3,28 +3,20 @@
     ViewBag.Title = "Paystream";
 }
 <div data-role="page" id="paystream-page">
-    <div data-role="header" data-position="fixed" data-theme="c">
-        <h1>
-            Paystream</h1>
-        <a href="Preferences" id="preferences" data-prefetch data-icon="gear" class="ui-btn-right">
-        </a>
+        <div data-role="header" data-position="fixed" data-theme="c">
+			<h1>Paystream</h1>
+			<a href="Preferences" id="preferences" data-prefetch data-icon="gear" class="ui-btn-right"></a>
         <div data-role="navbar" class="nav-pdthx" data-grid="d">
             <ul>
-                <li><a href="./Home" id="home" data-icon="custom" data-transition="none" data-prefetch>
-                    Home</a></li>
-                <li><a href="./Request" id="request" data-icon="custom" data-transition="none" data-prefetch>
-                    Request $</a></li>
-                <li><a href="./Send" id="send" data-icon="custom" data-transition="none" data-prefetch>
-                    Send $</a></li>
-                <li><a href="./Paystream" id="paystream" data-icon="custom" data-transition="none"
-                    data-prefetch>Paystream</a></li>
-                <li><a href="./DoGood" id="profile" data-icon="custom" data-transition="none" data-prefetch>
-                    Profile</a></li>
+                <li><a href="./Home" id="home" data-icon="custom" data-transition="none" data-prefetch>Home</a></li>
+                <li><a href="./Request" id="request" data-icon="custom"  data-transition="none" data-prefetch>Request $</a></li>
+                <li><a href="./Send" id="send" data-icon="custom"  data-transition="none" data-prefetch>Send $</a></li>
+                <li><a href="./Paystream" id="paystream" data-icon="custom"  data-transition="none" data-prefetch>Paystream</a></li>
+                <li><a href="./DoGood" id="profile" data-icon="custom"  data-transition="none" data-prefetch>Profile</a></li>
             </ul>
         </div>
     </div>
-    <div data-role="content">
-        @{Html.RenderPartial("PartialViews/SubNav");}
-        @{Html.RenderPartial("_footer");}
+    <div data-role="content">       
+     @{Html.RenderPartial("PartialViews/SubNav");}
     </div>
 </div>

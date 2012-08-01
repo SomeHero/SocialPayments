@@ -21,7 +21,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 var message = messageService.GetMessage(messageId);
 
                 message.LastUpdatedDate = System.DateTime.Now;
-                message.Status = Domain.PaystreamMessageStatus.Processing;
+                message.Status = Domain.PaystreamMessageStatus.AcceptedRequest;
 
                 ctx.SaveChanges();
             }

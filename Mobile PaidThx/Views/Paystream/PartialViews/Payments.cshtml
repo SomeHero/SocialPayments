@@ -7,7 +7,7 @@
         String prevHeader = "";
         int size = Model.PaymentReceipts.Count();
     }
-    <ul id="transactionsListPayments" data-role="listview" class="transactions">
+    <ul id="transactionsListPayments" class="transactions">
         @foreach (var transaction in Model.PaymentReceipts)
         {
             String header = Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.FormatDate(transaction.TransactionDate);

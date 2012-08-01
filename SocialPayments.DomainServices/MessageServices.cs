@@ -103,12 +103,19 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
 
             MessageType type = MessageType.Payment;
+            PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPayment;
 
             if (messageType.ToUpper() == "PAYMENT")
+            {
                 type = MessageType.Payment;
+                status = PaystreamMessageStatus.SubmittedPayment;
+            }
 
             if (messageType.ToUpper() == "PAYMENTREQUEST")
+            {
                 type = MessageType.PaymentRequest;
+                status = PaystreamMessageStatus.SubmittedRequest;
+            }
 
             try
             {
@@ -241,7 +248,7 @@ namespace SocialPayments.DomainServices
                     Comments = comments,
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
-                    Status = PaystreamMessageStatus.Processing,
+                    Status = status,
                     WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
                     MessageType = type,
                     MessageTypeValue = (int)type,
@@ -275,8 +282,20 @@ namespace SocialPayments.DomainServices
             {
                 _logger.Log(LogLevel.Info, String.Format("Started Summitted Message Task. {0} to {1}", recipientUri, senderUri));
                 
-                SubmittedPaymentMessageTask task = new SubmittedPaymentMessageTask();
-                task.Execute(messageItem.Id);   
+                switch(messageItem.Status)
+                {
+                    case PaystreamMessageStatus.SubmittedPayment:
+                        SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
+                        paymentTask.Execute(messageItem.Id); 
+ 
+                        break;
+
+                    case PaystreamMessageStatus.SubmittedRequest:
+                        SubmittedRequestMessageTask requestTask = new SubmittedRequestMessageTask();
+                        requestTask.Execute(messageItem.Id);
+
+                        break;
+                }
 
             }).ContinueWith(task => {
                 _logger.Log(LogLevel.Info, String.Format("Completed Summitted Message Task. {0} to {1}", recipientUri, senderUri));
@@ -301,7 +320,11 @@ namespace SocialPayments.DomainServices
             try
             {
                 message.LastUpdatedDate = System.DateTime.Now;
-                message.Status = PaystreamMessageStatus.Cancelled;
+                if(message.MessageType == MessageType.Payment)
+                    message.Status = PaystreamMessageStatus.CancelledPayment;
+                else
+                    message.Status = PaystreamMessageStatus.CancelledRequest;
+                
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Pending;
 
                 _context.SaveChanges();
@@ -326,12 +349,12 @@ namespace SocialPayments.DomainServices
             if (message == null)
                 throw new ArgumentException("Invalid Message Id.", "Id");
 
-            if (!(message.Status == PaystreamMessageStatus.Processing))
+            if (!(message.Status == PaystreamMessageStatus.NotifiedRequest))
                 throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
 
             try
             {
-                message.Status = PaystreamMessageStatus.Accepted;
+                message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 _context.SaveChanges();
@@ -356,12 +379,12 @@ namespace SocialPayments.DomainServices
             if (message == null)
                 throw new ArgumentException("Invalid Message Id.", "Id");
 
-            if (!(message.Status == PaystreamMessageStatus.Processing))
+            if (!(message.Status == PaystreamMessageStatus.PendingRequest))
                 throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
 
             try
             {
-                message.Status = PaystreamMessageStatus.Rejected;
+                message.Status = PaystreamMessageStatus.RejectedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 _context.SaveChanges();
@@ -401,7 +424,8 @@ namespace SocialPayments.DomainServices
             var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = _context.Messages
-                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress)  && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress)  && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)
+                    || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment)))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
             foreach (var message in messages)
@@ -522,7 +546,7 @@ namespace SocialPayments.DomainServices
 
                 int pendingRequests = _context.Messages
                     .Where(m => ((m.RecipientId == user.UserId) && ((m.MessageTypeValue.Equals((int)MessageType.Payment) && (m.CreateDate >= lastViewedPaystreamDate))
-                    || (m.MessageTypeValue.Equals((int)MessageType.PaymentRequest) && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing)))))
+                    || (m.MessageTypeValue.Equals((int)MessageType.PaymentRequest) && m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)))))
                     .Select(m => m.Id)
                     .Count();
 
