@@ -1182,6 +1182,9 @@ h13
 			#send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
 			#request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
 			#profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
+			#welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
+		    #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
+		    #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
 			.ui-mobile .ui-page .ui-footer .ui-navbar,
 			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
 			    overflow : visible; 
@@ -1263,3 +1266,11 @@ h13
             background-repeat: no-repeat;
             background-position: top center;
             padding-left: 0px;}
+            .ui-btn-active{
+		    background-image:none;
+		    background-color:#ddd;
+		    text-shadow: none;}
+            .preNav{
+            margin-bottom:0px;
+		    line-height:25px;
+		    height:55px;}

@@ -196,6 +196,7 @@
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\helpIcon.png" />
     <Content Include="Content\images\home.png" />
     <Content Include="Content\images\field-contact-255x48.png" />
     <Content Include="Content\images\field-howmuch-255x48.png" />
@@ -224,6 +225,7 @@
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
     <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\skip-step-button-icon.png" />
     <Content Include="Content\images\request-money-button-icon.png" />
     <Content Include="Content\images\send-money-button-icon.png" />
