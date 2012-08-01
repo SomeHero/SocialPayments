@@ -12,7 +12,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#gobtn").die('click').live('click', function () {
+    $("#gobtn-request").die('click').live('click', function () {
         amountSelected = $('#customAmount').val();
         $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
             $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
