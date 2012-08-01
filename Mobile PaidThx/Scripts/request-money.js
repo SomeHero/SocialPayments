@@ -12,50 +12,57 @@ $(document).ready(function () {
         }
     });
 
-    $("#gobtn").die('click').live('click', function () {
+    $("#gobtn-request").die('click').live('click', function () {
         amountSelected = $('#customAmount').val();
-        $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
-            $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-            $('#amount-request').text(amountSelected);
-        });
+        $('#amount-request').text(amountSelected);
+        closeAmountDialog('amountbody-request');
+    });
+
+    $("#btnSelectAmount").die('click').live('click', function () {
+        openAmountDialog();
+    });
+
+    $("#onedollarbtn").die('click').live('click', function () {
+        amountSelected = "1.00";
+        $('#amount-request').text(amountSelected);
+        closeAmountDialog('amountbody-request');
+    });
+
+    $("#fivedollarbtn").die('click').live('click', function () {
+        amountSelected = "5.00";
+        $('#amount-request').text(amountSelected);
+        closeAmountDialog('amountbody-request');
+    });
+
+    $("#tendollarbtn").die('click').live('click', function () {
+        amountSelected = "10.00";
+        $('#amount-request').text(amountSelected);
+        closeAmountDialog('amountbody-request');
+    });
+
+    $("#twentydollarbtn").die('click').live('click', function () {
+        amountSelected = "20.00";
+        $('#amount-request').text(amountSelected);
+        closeAmountDialog('amountbody-request');
     });
 });
 
-function chooseAmountRequest() {
-    $.get(getBaseURL() + "Paystream/ChooseAmountRequest", function (data) {
-        $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-
+function openAmountDialog() {
+    $('#chooseRequestOverlay').fadeIn('fast', function () {
+        $('#amountbody-request').css('display', 'block');
+        $('#amountbody-request').animate({ 'left': '5%' }, 500);
     });
 }
 
-function oneDollarRequest() {
-    amountSelected = 1.00;
-    $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
-        $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount-request').text(amountSelected);
-    });
-}
-
-function fiveDollarsRequest() {
-    amountSelected = 5.00;
-    $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
-        $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount-request').text(amountSelected);
-    });
-}
-
-function tenDollarsRequest() {
-    amountSelected = 10.00;
-    $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
-        $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount-request').text(amountSelected);
-    });
-}
-
-function twentyDollarsRequest() {
-    amountSelected = 20.00;
-    $.get(getBaseURL() + "Paystream/RequestMoney", function (data) {
-        $('#main-body-request').html(data).trigger("pagecreate").trigger("refresh");
-        $('#amount-request').text(amountSelected);
+function closeAmountDialog(prospectElementID) {
+    $(function ($) {
+        $(document).ready(function () {
+            $('#' + prospectElementID).css('position', 'absolute');
+            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
+                $('#' + prospectElementID).css('position', 'fixed');
+                $('#' + prospectElementID).css('left', '100%');
+                $('#chooseRequestOverlay').fadeOut('fast');
+            });
+        });
     });
 }
