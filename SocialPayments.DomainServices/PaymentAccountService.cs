@@ -83,6 +83,7 @@ namespace SocialPayments.DomainServices
                     BankName = "",
                     BankIconURL = "",
                     Nickname = nickName,
+                    IsActive = true
                 });
 
                 if (user.PreferredReceiveAccount == null)

@@ -1,6 +1,12 @@
 ﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+<<<<<<< HEAD
+<div id="main-body" style="background: #FFFFFF">
+    <input style="margin:0px; width: 99%" type="text" id="txtSearchPaystreamAll" name="txtSearchPaystream" placeholder="Search Paystream" />
+=======
 <div id="main-body">
     <input style="width: 99%" type="text" id="txtSearchPaystreamAll" name="txtSearchPaystream"
+        placeholder="Search Paystream" />
+>>>>>>> upstream/development
     @{
         int i = 1;
         String prevHeader = "";
@@ -13,16 +19,24 @@
             if (!header.Equals(prevHeader))
             {
                 prevHeader = header;
+<<<<<<< HEAD
+
+=======
             
             <div class="paystream-header">
                 @header
             </div>
+>>>>>>> upstream/development
             }
-            <li class="@Html.GetTransactionCssClass(transaction, i)"><a onclick="openOffersDialog('@transaction.Id');">
+            <li class="@Html.GetTransactionCssClass(transaction, i)">
                 <span class="trans-type">
                     <text>
                     <img src="http://images.paidthx.com/assets/noavatar.png" alt="Sending Funds" />
+<<<<<<< HEAD
+                    </text>
+=======
          </text>
+>>>>>>> upstream/development
                 </span>
                 <div class="trans-title">
                     @switch (transaction.Direction)
@@ -118,7 +132,7 @@
                     <div class="gray-out">
                         <text>@transaction.TransactionStatus</text>
                     </div>
-                </span></a></li>
+                </span></li>
  
                     i += 1;
 

@@ -29,7 +29,7 @@ namespace SocialPayments.DomainServices.UserProcessing
                         user.UserStatus = UserStatus.Active;
 
                         var messages = ctx.Messages
-                            .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber) && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                            .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber) && m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment))
                             .ToList();
 
                         var transactionBatch = transactionBatchService.GetOpenBatch();
@@ -55,6 +55,8 @@ namespace SocialPayments.DomainServices.UserProcessing
                                 Type = TransactionType.Deposit,
                                 TransactionBatch = transactionBatch
                             });
+
+                            //Batch the transaction
 
                         }
 
