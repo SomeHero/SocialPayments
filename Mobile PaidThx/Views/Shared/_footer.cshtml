@@ -1,6 +1,13 @@
 ﻿<div id="footer">
         <p id="footer-menu">
-            <a href="@Url.Content("~/Profile")" data-ajax="false">Home</a> | <a href="@Url.Content("~/Home/About")" data-ajax="false">How It Works</a> | <a href="@Url.Content("~/Home/PrivacyPolicy")" data-ajax="false">Privacy Policy</a> | <a href="@Url.Content("~/Home/ContactUs")" data-ajax="false">Contact Us</a> | 
+            <a href="@Url.Content("~/Profile")" data-ajax="false">Home</a> @if (Session["UserId"] != null)
+            {
+              
+            }
+            else
+            {
+                <text>| <a href="@Url.Content("~/Home/About")" data-ajax="false">How It Works</a> </text>
+            }| <a href="@Url.Content("~/Home/PrivacyPolicy")" data-ajax="false">Privacy</a> | <a href="@Url.Content("~/Home/ContactUs")" data-ajax="false">Contact</a> | 
             @if (Session["UserId"] != null)
             {
                 <text><a href="@Url.Content("~/Account/SignOut")" data-ajax="false">Sign Out</a></text>
