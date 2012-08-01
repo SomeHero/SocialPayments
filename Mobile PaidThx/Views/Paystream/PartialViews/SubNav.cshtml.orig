@@ -1,4 +1,7 @@
 ﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+<<<<<<< HEAD
+
+=======
 <dl id="sub-nav" class="tabs">
   <dd><a href="#subNav1" class="active"><span id="all">All</span></a></dd>
   <dd><a href="#subNav2"><span id="payments">Sent $</span></a></dd>
@@ -8,16 +11,5 @@
 <div id="content-sub-nav">
     <ul class="tabs-content">
         <li id="subNav1Tab" class="active">
+>>>>>>> upstream/development
               @{Html.RenderPartial("../Paystream/PartialViews/All", Model);}
-        </li>
-        <li id="subNav2Tab">
-            @{Html.RenderPartial("../Paystream/PartialViews/Payments", Model);}
-        </li>
-        <li id="subNav3Tab">
-            @{Html.RenderPartial("../Paystream/PartialViews/PaymentRequests", Model);}
-        </li>
-        <li id="subNav4Tab">
-            @{Html.RenderPartial("../Paystream/PartialViews/Alerts", Model);}
-        </li>
-    </ul>
-</div>

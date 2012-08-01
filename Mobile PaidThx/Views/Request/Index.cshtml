@@ -2,19 +2,20 @@
     ViewBag.Title = "Index";
 }
 <div id="request-page" data-role="page">
-    <div data-role="header" data-position="fixed"  data-theme="c">
-		<h1>Request $</h1>
-		<a href="Preferences" data-icon="gear" class="ui-btn-right"></a>
-        <div data-role="navbar" class="nav-pdthx" data-grid="d">
-            <ul>
-            <li><a href="./Home" id="home" data-icon="custom"  data-transition="none" data-prefetch>Home</a></li>
-            <li><a href="./Request" id="request" data-icon="custom"  data-transition="none" data-prefetch>Request $</a></li>
-            <li><a href="./Send" id="send" data-icon="custom"  data-transition="none" data-prefetch>Send $</a></li>
-            <li><a href="./Paystream" id="paystream" data-icon="custom"  data-transition="none" data-prefetch>Paystream</a></li>
-            <li><a href="./DoGood" id="profile" data-icon="custom"  data-transition="none" data-prefetch>Profile</a></li>
-        </ul>
-        </div>
-    </div>
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+			<h1>Request $</h1>
+			<a href="./Preferences" data-icon="gear" class="ui-btn-right"></a>
+             <div data-role="navbar" class="nav-pdthx" data-grid="d">
+                <ul>
+                    <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                    <li><a href="./Request" class="nav-item active ui-btn-active" id="request" data-icon="custom">Req. $</a></li>
+                    <li><a href="./Send" class="nav-item" id="send" data-icon="custom">Send $</a></li>
+                    <li><a href="./DoGood" class="nav-item active" id="dogood" data-icon="custom">Do Good</a></li>
+                    <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
+                    
+                </ul>
+            </div>
+		</div>
     <div data-role="content">
         <ul class="tabs-content contained">
             <li class="active" id="simpleContained1Tab">

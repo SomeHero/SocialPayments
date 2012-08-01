@@ -196,8 +196,10 @@
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\favicon.png" />
     <Content Include="Content\images\field-contact-255x48.png" />
     <Content Include="Content\images\field-howmuch-255x48.png" />
+    <Content Include="Content\images\field-money-icon.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40-active.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40.png" />
     <Content Include="Content\images\icon-settings-bank-40x40.png" />
@@ -223,6 +225,8 @@
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
     <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\icons\dogoodIcon.png" />
+    <Content Include="Content\images\pattern.png" />
     <Content Include="Content\images\skip-step-button-icon.png" />
     <Content Include="Content\images\request-money-button-icon.png" />
     <Content Include="Content\images\send-money-button-icon.png" />
@@ -259,6 +263,16 @@
     <Content Include="Content\images\sub-nav-requests-icon-active.gif" />
     <Content Include="Content\images\sub-nav-requests-icon.gif" />
     <Content Include="Content\images\subnav-active-background.gif" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Content\images\tab_background.gif" />
     <Content Include="Content\images\tab_background_active.gif" />
     <Content Include="Content\images\tab_background_inactive.gif" />
@@ -267,12 +281,12 @@
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
     <Content Include="navTest.html" />
-    <Content Include="pdthx-icons\homeIcon.png" />
-    <Content Include="pdthx-icons\paystreamIcon.png" />
-    <Content Include="pdthx-icons\preferencesIcon.png" />
-    <Content Include="pdthx-icons\profileIcon.png" />
-    <Content Include="pdthx-icons\requestIcon.png" />
-    <Content Include="pdthx-icons\sendIcon.png" />
+    <Content Include="Content\images\icons\homeIcon.png" />
+    <Content Include="Content\images\icons\paystreamIcon.png" />
+    <Content Include="Content\images\icons\preferencesIcon.png" />
+    <Content Include="Content\images\icons\profileIcon.png" />
+    <Content Include="Content\images\icons\requestIcon.png" />
+    <Content Include="Content\images\icons\sendIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
     <Content Include="Scripts\home.js" />
@@ -506,6 +520,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\App_LocalResources\" />
     <Folder Include="Models\logs\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
   </ItemGroup>

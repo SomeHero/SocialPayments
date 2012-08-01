@@ -8,26 +8,22 @@
         margin-bottom: 15px">
     </div>
     <!-- Edit Profile -->
-    <a onclick="getProfileScreen()">
-        <div class="tablesettings">
-            <div style="float: left">
-                <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-profile-40x40.png") width="40px" /></div>
-            <div style="float: left; padding-left: 10px; padding-top: 10px">
-                Edit Profile</div>
-            <div style="float: right; padding-right: 5px; padding-top: 6px">
-                <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
-        </div>
+    <a onclick="getProfileScreen()" data-role="button" data-transition="slideup">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-profile-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Edit Profile</div>
+        <div style="float: right; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
     </a>
     <!-- Bank Account -->
-    <a onclick="getBankAccountsScreen()">
-        <div class="tablesettings">
-            <div style="float: left">
-                <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-bank-40x40.png") width="40px" /></div>
-            <div style="float: left; padding-left: 10px; padding-top: 10px">
-                Bank Accounts</div>
-            <div style="float: right; padding-right: 5px; padding-top: 6px">
-                <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
-        </div>
+    <a onclick="getBankAccountsScreen()" data-role="button" data-transition="slideup">
+        <div style="float: left">
+            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-bank-40x40.png") width="40px" /></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px">
+            Bank Accounts</div>
+        <div style="float: right; padding-top: 6px">
+            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
     </a>
     <!-- Separate Set -->
     <!-- Email Accounts -->
