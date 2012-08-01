@@ -755,11 +755,11 @@ input.ui-input-text, textarea.ui-input-text
 {
     display: none;
     width: 95%;
-    height: 100%;
+    height: 80%;
     background: #FFFFFF;
     position: fixed;
     right: 0%;
-    top: 0%;
+    top: 20%;
     z-index: 101;
     border-left: 1px solid #888;
     border-top: 1px solid #888;
@@ -1055,38 +1055,6 @@ h9 span
     color: #FFFFFF;
 }
 
-h10
-{
-    position: absolute;
-    top: 20px;
-    left: 9%;
-    font-size: 20px;
-}
-
-h11
-{
-    position: absolute;
-    top: 20px;
-    left: 33%;
-    font-size: 20px;
-}
-
-h12
-{
-    position: absolute;
-    top: 20px;
-    left: 54%;
-    font-size: 20px;
-}
-
-h13
-{
-    position: absolute;
-    top: 20px;
-    left: 78%;
-    font-size: 20px;
-}
-
 .availableamt
 {
     background: #FFFFFF;
@@ -1170,6 +1138,19 @@ h13
     font-size: 14px;
     padding-left: 50px;
     padding-top: 14px;
+}
+.quickaddbtn-style
+{
+    background-image:url('images/btn-quickadd.png');
+    height: 36px;
+    width: 68px;
+    font-size:18px;
+    font-weight:bold;
+    padding:5px;
+    font-color:#000000;
+    background-repeat:no-repeat;
+    background-color: transparent;
+    text-align:center;
 }
 #gobtn
 {
