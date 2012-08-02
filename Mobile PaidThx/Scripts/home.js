@@ -9,14 +9,10 @@ $(document).ready(function () {
         $('#modal').html(data).trigger("pagecreate").trigger("refresh");
     });
     $("#home").click(function () {
-        $.mobile.changePage("home/about");
+        $.mobile.changePage("home/Index");
     });
 
     $("#btnSelectAmount").click(function () {
         $("#chooseAmountOverlay").show();
     });
-
-
-
-
 });
