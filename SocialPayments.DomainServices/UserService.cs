@@ -537,6 +537,75 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User LinkFacebook(Guid apiKey, string userId, string accountId, string oAuthToken, DateTime tokenExpiration)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: and token {1}", accountId, oAuthToken));
+
+            User user = null;
+
+            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+
+            try
+            {
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+
+                if (user == null)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Linking Facebook account.", accountId));
+
+                    user = GetUserById(userId);
+
+                    if (user != null)
+                    {
+                        _logger.Log(LogLevel.Info, "Found a cooresponding user for this userId.");
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                            // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                        user.UserName = "fb_" + accountId;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+                    }
+
+                }
+                else
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Stopping Link.", accountId));
+
+                    throw new ArgumentException("We already have a user linked to this facebook account.", "accountId");
+                }
+
+                _ctx.SaveChanges();
+
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage));
+                    }
+                }
+
+                throw dbEx;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Linking with Facebook. {0}", ex.Message));
+
+                throw ex;
+            }
+
+            return user;
+        }
+
         public User ResetPassword(string userId, string newPassword)
         {
             var user = GetUserById(userId);

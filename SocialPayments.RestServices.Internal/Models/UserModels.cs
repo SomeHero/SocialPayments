@@ -125,6 +125,14 @@ namespace SocialPayments.RestServices.Internal.Models
             public string oAuthToken { get; set; }
             //public DateTime tokenExpiration { get; set; }
         }
+
+        public class LinkFacebookRequest
+        {
+            public string apiKey { get; set; }
+            public string accountId { get; set; }
+            public string oAuthToken { get; set; }
+        }
+
         public class FacebookSignInResponse
         {
             public bool hasSecurityPin { get; set; }
