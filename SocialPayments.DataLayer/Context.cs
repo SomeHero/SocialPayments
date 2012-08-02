@@ -331,7 +331,16 @@ namespace SocialPayments.DataLayer
                 ApplicationName = "MyApp",
                 IsActive = true,
                 Url = "myurl.com",
-                CreateDate = System.DateTime.Now
+                CreateDate = System.DateTime.Now,
+                ConfigurationValues = new Collection<ApplicationConfiguration>()
+                {
+                    new ApplicationConfiguration {
+                        Id = Guid.NewGuid(),
+                        ConfigurationKey = "UpperLimit",
+                        ConfigurationType = "1",
+                        ConfigurationValue = "5000"
+                    }
+                }
             });
             context.SocialNetworks.Add(new SocialNetwork()
             {
