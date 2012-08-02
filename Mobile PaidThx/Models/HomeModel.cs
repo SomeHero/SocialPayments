@@ -18,6 +18,15 @@ namespace Mobile_PaidThx.Models
     {
         public ContactUsModel ContactUsModel { get; set; }
     }
+
+    public class HomeScreenModel
+    {
+        public string Name { get; set; }
+        public string MobileNumber { get; set; }
+        public string EmailAddress { get; set; }
+        public string Score { get; set; }
+    }
+
     public class ContactUsModel
     {
         [Required]

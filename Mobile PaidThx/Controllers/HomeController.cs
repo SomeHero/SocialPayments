@@ -26,7 +26,7 @@ namespace Mobile_PaidThx.Controllers
             logger.Log(LogLevel.Info, String.Format("Displaying Register View"));
             logger.Log(LogLevel.Info, String.Format("Retreiving Payment {0}.", messageId));
 
-            if (String.IsNullOrEmpty(messageId))
+            if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32 )
                 return View("Index");
 
             using (var ctx = new Context())
@@ -86,6 +86,7 @@ namespace Mobile_PaidThx.Controllers
                 return View("Register", model);
             }
         }
+
         public void ClaimPayment(string id)
         {
             logger.Info(String.Format("The id is {0}", id));

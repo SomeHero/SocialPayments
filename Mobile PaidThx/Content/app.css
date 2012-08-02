@@ -1201,6 +1201,175 @@ h9 span
     }
 }
 
+<<<<<<< HEAD
+/*-------HOME SCREEN ELEMENTS---MH-------*/
+#wrapper{
+			background-image:url(img/bg-pattern.png);
+			height:600px;
+		}
+	
+	#profiletop{
+		margin-top:-8px;
+	}
+		.stream-pic{
+		width:45px;
+		height:45px;
+		margin-left:15px;
+		background-color:#aaaaaa;
+		border-radius:7px;
+		border:1px solid #cccccc;
+		}
+		.personal{
+			float:left;
+		}
+		.bottomCorners{
+		height: 55px;
+		width:160px;
+		-webkit-border-radius-bottomright: 10px;
+		-webkit-border-radius-bottomleft: 10px;
+		-moz-border-radius-bottomright: 10px;
+		-moz-border-radius-bottomleft: 10px;
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+		}
+		.element{
+			background-color:white;
+			border: 1px solid gray;
+			padding:10px;
+			margin:0;
+		}
+		#profileTips{
+			display:block; margin-left:auto; margin-right:auto;
+			width:90%;
+		}
+		#profileDesc{
+			margin-left:80px;
+		}
+		#profilePic{
+			margin-top:-7px;
+		}
+		.textCenter{
+			margin-top:-20px;
+		}
+		.verticalMiddle{
+			padding-left:50%; 
+			margin-left:-122px;
+			margin-top:20px;
+			align:center;
+			
+		}
+		.block{
+			display:block;
+			margin-left:15%;
+		}
+		.quickpay{
+			width:80px;
+		}
+		#paystreambtn{
+			font: 2em "Helvetica",sans-serif;
+		}
+		.pactions{
+			text-decoration:none;
+		}
+		.nav-pdthx .ui-icon  { width: 30px!important; height:30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
+			ui-icon-homeIcon { background: url("/images/home.png")50% 50% no-repeat ;}
+			#paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
+			#send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
+			#request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
+			#profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
+			#welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
+		    #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
+		    #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+			.ui-mobile .ui-page .ui-footer .ui-navbar,
+			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
+			    overflow : visible; 
+			}?
+			
+			.mainButton{
+			    position:absolute;
+			    height:70px;
+				width:20%;
+			    bottom:-55px;
+			    z-index:11;
+				border-top:gray 2px;
+
+			        -webkit-border-top-right-radius : 6px;
+			       -moz-border-top-right-radius : 6px;
+			            border-top-right-radius : 6px;
+			    -webkit-border-top-left-radius  : 6px;
+			       -moz-border-top-left-radius  : 6px;
+			            border-top-left-radius  : 6px;
+
+				-webkit-box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+				box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+			}
+			#score {width:110px;
+			height:20px;
+			margin-left:-25px;
+			margin-bottom:-12px;
+			padding: 3px 3px 0px 20px;
+			background-color:#cccccc;
+			border-radius:10px;
+			color:white;
+			text-shadow:none}
+			#increaseScore {width:170px;
+			height:20px;
+			margin-left:-30px;
+			margin-bottom:-12px;
+			padding: 3px 3px 0px 20px;
+			background-color:#cccccc;
+			border-radius:10px;
+			color:white;
+			text-shadow:none}      
+            #main-tabs a #tabHome {
+            background-image: url('images/tab-home-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabHome{
+            background-image: url('images/tab-home-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabPaystream {
+            background-image: url('images/tab-paystream-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabPaystream{
+            background-image: url('images/tab-paystream-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabSend {
+            background-image: url('images/tab-send-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabSend{
+            background-image: url('images/tab-send-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabRequest {
+            background-image: url('images/tab-request-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabRequest{
+            background-image: url('images/tab-request-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            .ui-btn-active{
+		    background-image:none;
+		    background-color:#ddd;
+		    text-shadow: none;}
+            .preNav{
+            margin-bottom:0px;
+		    line-height:25px;
+		    height:55px;}
+=======
 
 
 /*  SEEMS LIKE MATTS STUFF  */
@@ -1568,8 +1737,12 @@ box-shadow: 0px 0px 0px #ffffff;
 -moz-box-shadow: 0px 0px 0px #ffffff;
 margin: 0 0 20px 0;
 }
+<<<<<<< HEAD
+>>>>>>> upstream/development
+=======
 
 div#footer
 {
  margin-top:40px;   
 }
+>>>>>>> upstream/development
