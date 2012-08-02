@@ -1,11 +1,11 @@
 ﻿@{
     ViewBag.Title = "AmountToSendView";
 }
-
+<script src="@Url.Content("~/Scripts/request-money.js")"></script>
 <div data-role="page" id="send-page">
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-            Send $</h1>
+            Request $</h1>
         <a href="./Preferences" data-icon="gear" class="ui-btn-right"></a>
         <div data-role="navbar" class="nav-pdthx" data-grid="d">
             <ul>
@@ -25,10 +25,10 @@
         </div>
         <div class="fieldamount" style="height: 50px;" id="amount-body">
             <div id="custom-amount-field" style="float: left; padding-left: 47px; ">
-                <input type="text" id="customAmountSend" style="width: 195px; margin-right: -19px;
+                <input type="text" id="customAmountRequest" style="width: 195px; margin-right: -19px;
                     float: left" />
             </div>
-            <button id="gobtn-send" style="position: absolute; left: 270px; padding-top: 8px;
+            <button id="gobtn-request" style="position: absolute; left: 270px; padding-top: 8px;
                 color: #FFFFFF">
                 Go
             </button>
@@ -36,13 +36,13 @@
         <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
             QUICK SEND AMOUNTS</div>
         <div class="quicksend" style="width: 100%; margin: -5px">
-            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="onedollarbtnrequest" type="button" class="quickaddbtn-style">
                 $1</button>
-            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="fivedollarbtnrequest" type="button" class="quickaddbtn-style">
                 $5</button>
-            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="tendollarbtnrequest" type="button" class="quickaddbtn-style">
                 $10</button>
-            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="twentydollarbtnrequest" type="button" class="quickaddbtn-style">
                 $20</button>
         </div>
         <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">

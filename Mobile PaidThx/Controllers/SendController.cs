@@ -13,7 +13,30 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            Mobile_PaidThx.Models.SendMoneyModel model = new Models.SendMoneyModel
+            {
+                Amount = 0,
+                Comments = null,
+                RecipientUri = null
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Index(String index)
+        {
+            Mobile_PaidThx.Models.SendMoneyModel model = new Models.SendMoneyModel();
+            if (index != null && index.Length > 0)
+            {
+                model.Amount = Double.Parse(index);
+            }
+            else
+            {
+                model.Amount = 0;
+            }
+            model.Comments = null;
+            model.RecipientUri = null;
+            return View(model);
         }
 
         //
