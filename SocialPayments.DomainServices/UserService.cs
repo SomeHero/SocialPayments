@@ -537,6 +537,88 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
+        public User LinkFacebook(Guid apiKey, string userId, string accountId, string emailAddress, string firstName, string lastName,
+            string deviceToken, string oAuthToken, DateTime tokenExpiration)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
+
+            User user = null;
+
+            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+
+            try
+            {
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+
+                if (user == null)
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Linking Facebook account.", accountId, emailAddress));
+
+                    user = GetUserById(userId);
+
+                    if (user != null)
+                    {
+                        _logger.Log(LogLevel.Info, "Found a cooresponding user for this userId.");
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                            // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                        user.UserName = "fb_" + accountId;
+                    }
+
+                }
+                else
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Email Address {1}.  Overwriting.", accountId, emailAddress));
+
+                    user.DeviceToken = deviceToken;
+                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
+                    if (user.FacebookUser != null)
+                    {
+                        user.FacebookUser.OAuthToken = oAuthToken;
+                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                    }
+                    else
+                    {
+                        user.FacebookUser = new FBUser()
+                        {
+                            FBUserID = accountId,
+                            Id = Guid.NewGuid(),
+                            // TokenExpiration = tokenExpiration,
+                            OAuthToken = oAuthToken
+                        };
+                    }
+                }
+
+                _ctx.SaveChanges();
+
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage));
+                    }
+                }
+
+                throw dbEx;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Fatal, String.Format("Exception Linking with Facebook. {0}", ex.Message));
+
+                throw ex;
+            }
+
+            return user;
+        }
+
         public User ResetPassword(string userId, string newPassword)
         {
             var user = GetUserById(userId);
