@@ -745,7 +745,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage LinkFacebook(string id, UserModels.FacebookSignInRequest request)
+        public HttpResponseMessage LinkFacebook(string id, UserModels.LinkFacebookRequest request)
         {
             using (var ctx = new Context())
             {
@@ -755,7 +755,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 try
                 {
-                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.emailAddress, request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30));
+                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.oAuthToken, System.DateTime.Now.AddDays(30));
                 }
                 catch (ArgumentException aEx)
                 {

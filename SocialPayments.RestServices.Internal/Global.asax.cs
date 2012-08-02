@@ -83,7 +83,7 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "PaystreamMessages", action = "DetermineRecipient" }
             );
 
-           // /api/Users/{0}/attributes
+            // /api/Users/{0}/attributes
             routes.MapHttpRoute(
                 name: "UserAttribute",
                 routeTemplate: "api/users/{id}/attributes",
@@ -117,6 +117,12 @@ namespace SocialPayments.RestServices.Internal
                 name: "SignInWithFacebook",
                 routeTemplate: "api/users/signin_withfacebook",
                 defaults: new { controller = "Users", action = "SignInWithFacebook" }
+            );
+
+            routes.MapHttpRoute(
+                name: "LinkFacebook",
+                routeTemplate: "api/users/{id}/link_facebook",
+                defaults: new { controller = "Users", action = "LinkFacebook" }
             );
 
             routes.MapHttpRoute(

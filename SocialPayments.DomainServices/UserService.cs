@@ -537,9 +537,9 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User LinkFacebook(Guid apiKey, string userId, string accountId, string emailAddress, string deviceToken, string oAuthToken, DateTime tokenExpiration)
+        public User LinkFacebook(Guid apiKey, string userId, string accountId, string oAuthToken, DateTime tokenExpiration)
         {
-            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
+            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: and token {1}", accountId, oAuthToken));
 
             User user = null;
 
@@ -552,7 +552,7 @@ namespace SocialPayments.DomainServices
 
                 if (user == null)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Linking Facebook account.", accountId, emailAddress));
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Linking Facebook account.", accountId));
 
                     user = GetUserById(userId);
 
@@ -576,7 +576,7 @@ namespace SocialPayments.DomainServices
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Email Address {1}. Stopping Link.", accountId, emailAddress));
+                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Stopping Link.", accountId));
 
                     throw new ArgumentException("We already have a user linked to this facebook account.", "accountId");
                 }
