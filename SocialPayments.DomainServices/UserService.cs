@@ -537,8 +537,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User LinkFacebook(Guid apiKey, string userId, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, string oAuthToken, DateTime tokenExpiration)
+        public User LinkFacebook(Guid apiKey, string userId, string accountId, string emailAddress, string deviceToken, string oAuthToken, DateTime tokenExpiration)
         {
             _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
@@ -569,29 +568,17 @@ namespace SocialPayments.DomainServices
                         };
                         user.UserName = "fb_" + accountId;
                     }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+                    }
 
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Email Address {1}.  Overwriting.", accountId, emailAddress));
+                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Email Address {1}. Stopping Link.", accountId, emailAddress));
 
-                    user.DeviceToken = deviceToken;
-                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
-                    if (user.FacebookUser != null)
-                    {
-                        user.FacebookUser.OAuthToken = oAuthToken;
-                        //user.FacebookUser.TokenExpiration = tokenExpiration;
-                    }
-                    else
-                    {
-                        user.FacebookUser = new FBUser()
-                        {
-                            FBUserID = accountId,
-                            Id = Guid.NewGuid(),
-                            // TokenExpiration = tokenExpiration,
-                            OAuthToken = oAuthToken
-                        };
-                    }
+                    throw new ArgumentException("We already have a user linked to this facebook account.", "accountId");
                 }
 
                 _ctx.SaveChanges();

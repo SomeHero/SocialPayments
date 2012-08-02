@@ -742,6 +742,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
         }
 
+        public HttpResponseMessage LinkFacebook(string id, UserModels.FacebookSignInRequest request)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.UserService _userService = new DomainServices.UserService(ctx);
+
+                Domain.User user = null;
+
+                try
+                {
+                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.emailAddress, request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30));
+                }
+                catch (ArgumentException aEx)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = aEx.Message;
+                    return message;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    message.ReasonPhrase = ex.Message;
+                    return message;
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
         // DELETE /api/user/5
         public void Delete(int id)
         {
