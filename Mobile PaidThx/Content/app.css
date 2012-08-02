@@ -457,13 +457,54 @@ a.imgbtn span, button.imgbtn span
 
 button.field-btn
 {
- background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eceff2), to(#f9fafb));
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eceff2), to(#f9fafb));
     background: -webkit-linear-gradient(top, #f9fafb, #eceff2);
     background: -moz-linear-gradient(top, #f9fafb, #eceff2);
     background: -ms-linear-gradient(top, #f9fafb, #eceff2);
     background: -o-linear-gradient(top, #f9fafb, #eceff2);   
     padding:0 !important;
     border:1px solid #c0c9d1 !important;
+}
+
+button.setting-btn
+{
+    width:95%;
+    margin:15px;
+    background: #FFFFFF;
+    padding:0 !important;
+    border:1px solid #c0c9d1 !important;
+}
+
+button.setting-btn span, button.imgbtn.setting-btn span
+{
+ color:#3B3B3B;   
+ border:none;
+    border-width:0;
+    text-shadow: 1px 1px #fff;
+    padding-left:18px;
+    font-size:16px;
+}
+
+button.setting-btn img
+{
+    margin-top:0px;
+    border:none;
+    border-width:0;
+}
+button.setting-btn span.imgbg
+{
+    background-color:#e9e9ea;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width:41px;
+    height:46px;
+    display:block;
+    float:left;
+    border:none;
+    border-width:0;
+    padding-left:0px;
+    
 }
 
 button.field-btn span, button.imgbtn.field-btn span
@@ -766,6 +807,18 @@ input.ui-input-text, textarea.ui-input-text
     border-top-left-radius: 4em;
     -moz-border-radius-topleft: 4em;
     -webkit-border-top-left-radius: 4em;
+}
+.choosemoney-dialog
+{
+    display: none;
+    width: 100%;
+    height: 80%;
+    background: #FFFFFF;
+    position: fixed;
+    border: 1px solid #888;
+    right: 0%;
+    top: 20%;
+    z-index: 101;
 }
 .overlay
 {

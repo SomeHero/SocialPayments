@@ -1,10 +1,11 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.ListPaymentAccountModel
+@{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="preferences-page">
+<div data-role="page" id="bankaccount-page">
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-            Preferences</h1>
+            Bank Accounts</h1>
         <a href="./Preferences" data-icon="gear" class="ui-btn-right"></a>
         <div data-role="navbar" class="nav-pdthx" data-grid="d">
             <ul>
@@ -18,6 +19,6 @@
         </div>
     </div>
     <div data-role="content">
-        @{Html.RenderPartial("PartialViews/ListSettings");}
+        @{Html.RenderPartial("PartialViews/List", Model);}
     </div>
 </div>

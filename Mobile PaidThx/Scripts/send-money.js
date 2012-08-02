@@ -17,12 +17,11 @@ $(document).ready(function () {
 
     $("#gobtn-send").die('click').live('click', function () {
         amountSelected = $('#customAmount').val();
-        $('#amount-send').text(amountSelected);
-        closeSendAmountDialog('amountbody-send');
-    }
-
-     $("#btnSelectAmountSend").die('click').live('click', function () {
-        openSendAmountDialog();
+        var serviceUrl = getBaseURL() + 'Send/AmountToSend';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: "20"
+        });
     });
 
     $("#onedollarbtnsend").die('click').live('click', function () {
@@ -49,23 +48,3 @@ $(document).ready(function () {
         closeSendAmountDialog('amountbody-send');
     });
 });
-
-function openSendAmountDialog() {
-    $('#chooseAmountSendOverlay').fadeIn('fast', function () {
-        $('#amountbody-send').css('display', 'block');
-        $('#amountbody-send').animate({ 'left': '5%' }, 500);
-    });
-}
-
-function closeSendAmountDialog(prospectElementID) {
-    $(function ($) {
-        $(document).ready(function () {
-            $('#' + prospectElementID).css('position', 'absolute');
-            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
-                $('#' + prospectElementID).css('position', 'fixed');
-                $('#' + prospectElementID).css('left', '100%');
-                $('#chooseAmountSendOverlay').fadeOut('fast');
-            });
-        });
-    });
-}
