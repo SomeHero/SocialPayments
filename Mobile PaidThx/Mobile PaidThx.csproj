@@ -202,6 +202,7 @@
     <Content Include="Content\images\field-contact-255x48.png" />
     <Content Include="Content\images\field-howmuch-255x48.png" />
     <Content Include="Content\images\field-money-icon.png" />
+    <Content Include="Content\images\icon-person.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40-active.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40.png" />
     <Content Include="Content\images\icon-settings-bank-40x40.png" />

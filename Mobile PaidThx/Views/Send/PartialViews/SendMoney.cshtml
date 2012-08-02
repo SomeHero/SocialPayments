@@ -4,15 +4,20 @@
     <p>
         <label for="txtSendTo">
             Send To:</label>
-        <input type="text" id="txtSendTo" name="RecipientUri" placeholder="Name, email or phone #"
-            required />
+        <a href="" data-prefetch>
+            <button type="button" class="imgbtn field-btn">
+                <span class="imgbg" style="padding-left:0px; width:50px; margin-left:-2px">
+                    <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
+                        id="person-send">Choose a recipient</span>
+            </button>
+        </a>
     </p>
     <p>
         <label for="txtAmount">
             Amount to Send:</label>
         <a href="./Send/AmountToSend" data-prefetch>
             <button type="button" class="imgbtn field-btn">
-                <span class="imgbg">
+                <span class="imgbg" style="margin-left:-2px">
                     <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
                         id="amount-send">@if (Model.Amount > 0)
                                          {
