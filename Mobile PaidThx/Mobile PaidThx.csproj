@@ -196,6 +196,8 @@
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\helpIcon.png" />
+    <Content Include="Content\images\home.png" />
     <Content Include="Content\images\favicon.png" />
     <Content Include="Content\images\field-contact-255x48.png" />
     <Content Include="Content\images\field-howmuch-255x48.png" />
@@ -225,6 +227,7 @@
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
     <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\icons\settingsIcon.png" />
     <Content Include="Content\images\icons\dogoodIcon-active.png" />
     <Content Include="Content\images\icons\homeIcon-active.png" />
@@ -396,11 +399,22 @@
     <Content Include="Scripts\script.js" />
     <Content Include="Scripts\setupACHAccount.js" />
     <Content Include="Scripts\verify-mobiledevice.js" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -568,6 +582,7 @@
     </Content>
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Paystream\Index.cshtml" />
     <Content Include="Views\Request\PartialViews\RequestMoney.cshtml" />
