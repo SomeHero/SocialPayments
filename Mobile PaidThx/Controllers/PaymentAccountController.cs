@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
         {
             return View();
         }
-        public PartialViewResult List()
+        public ActionResult List()
         {
             using (var ctx = new Context())
             {
@@ -62,7 +62,7 @@ namespace Mobile_PaidThx.Controllers
                     }
                 }
 
-                return PartialView("PartialViews/List", model);
+                return View("Index", model);
             }
         }
         public PartialViewResult Add()

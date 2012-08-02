@@ -1,5 +1,4 @@
 ﻿@model Mobile_PaidThx.Models.ProfileModels
-<script src="@Url.Content("~/Scripts/send-money.js")" type="text/javascript"></script>
 <div id="main-body" class="panel">
     <form id="frmSendMoney" action="@Url.Content("~/Profile/SendMoney")" method="post">
     <p>
@@ -11,10 +10,14 @@
     <p>
         <label for="txtAmount">
             Amount to Send:</label>
-        <button type="button" id="btnSelectAmountSend" class="imgbtn field-btn">
-            <span class="imgbg">
+        <a href="./Send/AmountToSend" data-prefetch>
+           <button type="button" class="imgbtn field-btn" >
+        <span class="imgbg">
                 <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
-                    id="amount-send">Select Amount</span></button>
+                    id="amount-send">Select Amount</span>
+                 
+                    
+                    </button></a>   
     </p>
     <p>
         <label for="txtComments" style="margin-bottom: 15px">

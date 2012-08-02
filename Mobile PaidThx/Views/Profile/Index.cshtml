@@ -1,45 +1,23 @@
-﻿@model Mobile_PaidThx.Models.ProfileModels
-<div id="container">
-    <div id="header">
-    <dl id="main-tabs" class="tabs contained" data-role="listview">
-        <dd>
-            <a href="#simpleContained1" class="first">Send $</a></dd>
-        <dd>
-            <a href="#simpleContained2">Request $</a></dd>
-        <dd>
-            <a href="#simpleContained3">Paystream</a></dd>
-        <dd>
-            <a href="#simpleContained4" class="active tab-settings"></a></dd>
-    </dl>
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="profile-page">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            My Profile</h1>
+        <a href="./Preferences" data-icon="gear" class="ui-btn-right"></a>
+        <div data-role="navbar" class="nav-pdthx" data-grid="d">
+            <ul>
+                <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
+                <li><a href="./Send" class="nav-item" id="send" data-icon="custom">
+                    Send $</a></li>
+                <li><a href="./DoGood" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
+                <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
+            </ul>
+        </div>
     </div>
-    <div id="content-container">
-        <ul class="tabs-content contained" data-role="listview">
-            <li id="simpleContained1Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("PartialViews/SendMoney", Model);}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained2Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("PartialViews/RequestMoney", Model);}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained3Tab">
-                <div id="main-container">
-                     @{Html.RenderPartial("PartialViews/PayStream", Model);}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li class="active" id="simpleContained4Tab">
-                <div id="main-container">
-                     @{Html.RenderPartial("PartialViews/Settings", Model);}
-                     @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-        </ul>
+    <div data-role="content">
+        @{Html.RenderPartial("PartialViews/Settings");}
     </div>
 </div>
-        
-

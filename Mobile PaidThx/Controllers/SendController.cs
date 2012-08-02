@@ -49,7 +49,16 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
         }
+        public ActionResult AmountToSend()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult AmountToSend(String id)
+        {
+            return View("Index");
+        }
         //
         // GET: /Send/Edit/5
 
