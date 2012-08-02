@@ -331,7 +331,16 @@ namespace SocialPayments.DataLayer
                 ApplicationName = "MyApp",
                 IsActive = true,
                 Url = "myurl.com",
-                CreateDate = System.DateTime.Now
+                CreateDate = System.DateTime.Now,
+                ConfigurationValues = new Collection<ApplicationConfiguration>()
+                {
+                    new ApplicationConfiguration {
+                        Id = Guid.NewGuid(),
+                        ConfigurationKey = "UpperLimit",
+                        ConfigurationType = "1",
+                        ConfigurationValue = "5000"
+                    }
+                }
             });
             context.SocialNetworks.Add(new SocialNetwork()
             {
@@ -854,7 +863,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.ProcessingPayment,
                 MessageType = MessageType.Payment,
                 MessageTypeValue = (int)MessageType.Payment,
                 Recipient = sender,
@@ -891,7 +900,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.PendingRequest,
                 MessageType = MessageType.PaymentRequest,
                 Recipient = james,
                 RecipientUri = james.MobileNumber,
@@ -908,7 +917,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.PendingRequest,
                 MessageType = MessageType.PaymentRequest,
                 Recipient = sender,
                 RecipientUri = sender.MobileNumber,
@@ -925,7 +934,7 @@ namespace SocialPayments.DataLayer
                 Amount = 12.00,
                 ApiKey = application.ApiKey,
                 Comments = "thanks for the cheeseburger",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.ProcessingPayment,
                 MessageType = MessageType.Payment,
                 MessageTypeValue = (int)MessageType.Payment,
                 Recipient = james,
@@ -984,7 +993,7 @@ namespace SocialPayments.DataLayer
                     Amount = amount,
                     ApiKey = application.ApiKey,
                     Comments = comments,
-                    Status = PaystreamMessageStatus.Processing,
+                    Status = PaystreamMessageStatus.NotifiedPayment,
                     MessageType = MessageType.Payment,
                     MessageTypeValue = (int)MessageType.Payment,
                     RecipientUri = "804355000" + i,
@@ -1023,7 +1032,7 @@ namespace SocialPayments.DataLayer
                     Amount = amount,
                     ApiKey = application.ApiKey,
                     Comments = comments,
-                    Status = PaystreamMessageStatus.Processing,
+                    Status = PaystreamMessageStatus.NotifiedPayment,
                     MessageType = MessageType.Payment,
                     MessageTypeValue = (int)MessageType.Payment,
                     RecipientUri = String.Format("james{0}@paidthx.com", i),

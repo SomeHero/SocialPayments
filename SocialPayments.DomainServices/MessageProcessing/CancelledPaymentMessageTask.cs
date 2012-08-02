@@ -21,6 +21,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 var message = messageService.GetMessage(messageId);
 
+                message.Status = PaystreamMessageStatus.CancelledPayment;
+
                 if (message.Payment != null)
                 {
                     //_logger.Log(LogLevel.Debug, String.Format("Removing {0} item(s) from batch", message.Payment.Transactions.Count));
@@ -36,9 +38,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     //message.Payment.PaymentStatus = PaymentStatus.Cancelled;
                     //message.LastUpdatedDate = System.DateTime.Now;
 
-                    //ctx.SaveChanges();
-
+                    
                 }
+
+                ctx.SaveChanges();
+
             }
         }
     }
