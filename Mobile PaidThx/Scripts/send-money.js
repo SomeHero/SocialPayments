@@ -4,6 +4,9 @@ var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
 }
 
+function formatAmount(amount) {
+    return "$" + amount.toFixed(2);
+}
 
 $(document).ready(function () {
     var amountSelected = 0.0;
@@ -16,35 +19,47 @@ $(document).ready(function () {
     });
 
     $("#gobtn-send").die('click').live('click', function () {
-        amountSelected = $('#customAmount').val();
-        var serviceUrl = getBaseURL() + 'Send/AmountToSend';
+        amountSelected = $('#customAmountSend').val();
+        var serviceUrl = getBaseURL() + 'Send';
         $.mobile.changePage(serviceUrl, {
             type: "post",
-            data: "20"
+            data: {index: amountSelected}
         });
     });
 
     $("#onedollarbtnsend").die('click').live('click', function () {
         amountSelected = "1.00";
-        $('#amount-send').text(amountSelected);
-        closeSendAmountDialog('amountbody-send');
+        var serviceUrl = getBaseURL() + 'Send';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
     $("#fivedollarbtnsend").die('click').live('click', function () {
         amountSelected = "5.00";
-        $('#amount-send').text(amountSelected);
-        closeSendAmountDialog('amountbody-send');
+        var serviceUrl = getBaseURL() + 'Send';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
     $("#tendollarbtnsend").die('click').live('click', function () {
         amountSelected = "10.00";
-        $('#amount-send').text(amountSelected);
-        closeSendAmountDialog('amountbody-send');
+        var serviceUrl = getBaseURL() + 'Send';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
     $("#twentydollarbtnsend").die('click').live('click', function () {
         amountSelected = "20.00";
-        $('#amount-send').text(amountSelected);
-        closeSendAmountDialog('amountbody-send');
+        var serviceUrl = getBaseURL() + 'Send';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 });

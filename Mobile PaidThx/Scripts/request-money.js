@@ -4,6 +4,10 @@ var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
 }
 
+function formatAmount(amount) {
+    return "$" + amount.toFixed(2);
+}
+
 $(document).ready(function () {
     var amountSelected = 0.0;
     $("#frmRequestMoney").validate({
@@ -13,56 +17,48 @@ $(document).ready(function () {
     });
 
     $("#gobtn-request").die('click').live('click', function () {
-        amountSelected = $('#customAmount').val();
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        amountSelected = $('#customAmountRequest').val();
+        var serviceUrl = getBaseURL() + 'Request';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
-    $("#btnSelectAmount").die('click').live('click', function () {
-        openAmountDialog();
-    });
-
-    $("#onedollarbtn").die('click').live('click', function () {
+    $("#onedollarbtnrequest").die('click').live('click', function () {
         amountSelected = "1.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var serviceUrl = getBaseURL() + 'Request';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
-    $("#fivedollarbtn").die('click').live('click', function () {
+    $("#fivedollarbtnrequest").die('click').live('click', function () {
         amountSelected = "5.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var serviceUrl = getBaseURL() + 'Request';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
-    $("#tendollarbtn").die('click').live('click', function () {
+    $("#tendollarbtnrequest").die('click').live('click', function () {
         amountSelected = "10.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var serviceUrl = getBaseURL() + 'Request';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 
-    $("#twentydollarbtn").die('click').live('click', function () {
+    $("#twentydollarbtnrequest").die('click').live('click', function () {
         amountSelected = "20.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var serviceUrl = getBaseURL() + 'Request';
+        $.mobile.changePage(serviceUrl, {
+            type: "post",
+            data: { index: amountSelected }
+        });
     });
 });
 
-function openAmountDialog() {
-    $('#chooseRequestOverlay').fadeIn('fast', function () {
-        $('#amountbody-request').css('display', 'block');
-        $('#amountbody-request').animate({ 'left': '5%' }, 500);
-    });
-}
-
-function closeAmountDialog(prospectElementID) {
-    $(function ($) {
-        $(document).ready(function () {
-            $('#' + prospectElementID).css('position', 'absolute');
-            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
-                $('#' + prospectElementID).css('position', 'fixed');
-                $('#' + prospectElementID).css('left', '100%');
-                $('#chooseRequestOverlay').fadeOut('fast');
-            });
-        });
-    });
-}
