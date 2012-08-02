@@ -1,10 +1,12 @@
 ﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
-<dl id="sub-nav" class="tabs">
-  <dd><a href="#subNav1" class="active"><span id="all">All</span></a></dd>
-  <dd><a href="#subNav2"><span id="payments">Sent $</span></a></dd>
-  <dd><a href="#subNav3"><span  id="requests">Received $</span></a></dd>
-  <dd><a href="#subNav4"><span id="alerts">Requests</span></a></dd>
-</dl>
+  <div class="ui-body-c ui-body">
+     <div id="subTabs"data-role="controlgroup" data-type="horizontal" data-mini="true">
+        <a href="#"id="all"data-role="button">All</a>
+        <a href="#"id="sent"data-role="button">Sent $</a>
+        <a href="#"id="request"data-role="button">Request</a>
+        <a href="#"id="received"data-role="button">Received</a>
+      </div>
+  </div>
 <div id="content-sub-nav">
     <ul class="tabs-content">
         <li id="subNav1Tab" class="active">

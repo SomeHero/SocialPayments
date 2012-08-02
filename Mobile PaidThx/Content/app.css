@@ -1737,12 +1737,15 @@ box-shadow: 0px 0px 0px #ffffff;
 -moz-box-shadow: 0px 0px 0px #ffffff;
 margin: 0 0 20px 0;
 }
-<<<<<<< HEAD
->>>>>>> upstream/development
-=======
 
 div#footer
 {
  margin-top:40px;   
 }
->>>>>>> upstream/development
+ .ui-navbar a{
+                font:bold 25px Helvetica, sans-serif;
+        }
+  #subTabs{
+       margin:0 auto;
+       text-align:center;
+        }
