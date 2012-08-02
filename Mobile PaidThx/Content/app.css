@@ -1268,6 +1268,67 @@ border-radius: 14px 14px 0px 0px;
         {
             background: url(images/icons/dogoodIcon.png) 50% 50% no-repeat;
         }
+        #home.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
+        }
+        #paystream.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/paystreamIcon-active.png) 50% 50% no-repeat;
+        }
+        #send.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/sendIcon-active.png) 50% 50% no-repeat;
+        }
+        #request.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/requestIcon-active.png) 50% 50% no-repeat;
+        }
+        #profile.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/profileIcon-active.png) 50% 50% no-repeat;
+        }
+        #dogood.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
+        }
+      .ui-btn-active{  
+        border: 1px solid #2a7e43 /*{global-active-border}*/;
+background: #eeeeee /*{global-active-background-color}*/;
+font-weight: bold;
+color: #2a7e43 /*{global-active-color}*/;
+cursor: pointer;
+text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #3373A5 /*{global-active-shadow-color}*/;
+text-decoration: none;
+background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff /*{global-active-background-start}*/), to( #fefefe /*{global-active-background-end}*/));
+background-image: -webkit-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+background-image: -moz-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+background-image: -ms-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+background-image: -o-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+background-image: linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+font-family: Helvetica, Arial, sans-serif /*{global-font-family}*/;
+      }
+      
+      .ui-btn-active span.ui-btn-text{  
+color: #2a7e43 /*{global-active-color}*/;
+cursor: pointer;
+text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
+      }
+        
+        #btn-settings
+        {
+            background: url(images/icons/settingsIcon.png) 50% 50% no-repeat;
+            width:35px;
+            height:30px;
+            position:absolute;
+            right:20px;
+            border:0px;
+            background-color:transparent;
+            border-radius:0px;
+            -moz-border-radius: 0;
+-webkit-border-radius: 0;
+margin-top:2px;
+        }
         .ui-btn-main
         {
             position: absolute;
@@ -1506,4 +1567,9 @@ box-shadow: 0px 0px 0px #ffffff;
 -webkit-box-shadow: 0px 0px 0px #ffffff;
 -moz-box-shadow: 0px 0px 0px #ffffff;
 margin: 0 0 20px 0;
+}
+
+div#footer
+{
+ margin-top:40px;   
 }
