@@ -351,13 +351,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     if (user != null)
                     {
+
+                        string firstName = user.FirstName;
+                        string lastName = user.LastName;
+
+                        if (firstName == null && lastName == null)
+                        {
+                            firstName = "PaidThx";
+                            lastName = "User";
+                        }
+                        else if (firstName == null)
+                        {
+                            firstName = "";
+                        }
+                        else if (lastName == null)
+                        {
+                            lastName = "";
+                        }
+
                         if (!matchedUsers.ContainsKey(user.UserId))
                         {
                             list.Add(new MessageModels.MultipleURIResponse()
                             {
                                 userUri = uri,
-                                firstName = user.FirstName != null ? user.FirstName : "PaidThx",
-                                lastName = user.LastName != null ? user.LastName : "User"
+                                firstName = firstName,
+                                lastName = lastName
                             });
 
                             matchedUsers.Add(user.UserId, user);
