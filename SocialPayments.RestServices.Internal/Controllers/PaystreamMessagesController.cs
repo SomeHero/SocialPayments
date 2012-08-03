@@ -356,8 +356,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             list.Add(new MessageModels.MultipleURIResponse()
                             {
                                 userUri = uri,
-                                firstName = user.FirstName,
-                                lastName = user.LastName
+                                firstName = user.FirstName != null ? user.FirstName : "PaidThx",
+                                lastName = user.LastName != null ? user.LastName : "User"
                             });
 
                             matchedUsers.Add(user.UserId, user);
@@ -367,7 +367,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 if (list.Count == 0)
                 {
-                    //Send to primary.
+                    //Ask user how they want to invite this user to PaidThx.
                     return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
                 }
                 else
