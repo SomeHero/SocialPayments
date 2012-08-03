@@ -43,7 +43,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 var accountResponse = accounts.Select(a => new AccountModels.AccountResponse()
                 {
-                    AccountNumber = GetLastFour(_securityService.Decrypt(a.AccountNumber)),
+                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(a.AccountNumber)),
                     AccountType = a.AccountType.ToString(),
                     NameOnAccount = _securityService.Decrypt(a.NameOnAccount),
                     Nickname = a.Nickname,
@@ -86,7 +86,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 var accountResponse = new AccountModels.AccountResponse()
                 {
-                    AccountNumber = GetLastFour(_securityService.Decrypt(account.AccountNumber)),
+                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(account.AccountNumber)),
                     AccountType = account.AccountType.ToString(),
                     NameOnAccount = _securityService.Decrypt(account.NameOnAccount),
                     Nickname = account.Nickname,
@@ -467,14 +467,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-        }
-        private string GetLastFour(string p)
-        {
-            if (p.Length <= 4)
-                return p;
-            else
-                return p.Substring(0, 4);
-
         }
     }
 }

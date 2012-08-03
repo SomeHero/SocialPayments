@@ -188,7 +188,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts
                     .Where(b => b.IsActive)
                     .Select(a => new AccountModels.AccountResponse() {
-                        AccountNumber = securityService.Decrypt(a.AccountNumber),
+                        AccountNumber = securityService.GetLastFour(securityService.Decrypt(a.AccountNumber)),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
