@@ -65,6 +65,18 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
+                PayPoints = new Collection<UserPayPoint>()
+                        {
+                            new UserPayPoint() {
+                                CreateDate = System.DateTime.Now,
+                                IsActive = true,
+                                Verified = false,
+                                VerifiedDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 1,
+                                URI = emailAddress
+                            }
+                        },
                 SetupPassword = true,
                 SetupSecurityPin = false,
                 Roles = new Collection<Role>()
@@ -450,6 +462,9 @@ namespace SocialPayments.DomainServices
 
                     isNewUser = true;
 
+                    var emailAttribute = _ctx.UserAttributes
+                         .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
+
                     user = _ctx.Users.Add(new Domain.User()
                     {
                         UserId = Guid.NewGuid(),
@@ -486,6 +501,25 @@ namespace SocialPayments.DomainServices
                             OAuthToken = oAuthToken
                         },
                         ImageUrl = String.Format(_fbImageUrlFormat, accountId),
+                        PayPoints = new Collection<UserPayPoint>()
+                        {
+                            new UserPayPoint() {
+                                CreateDate = System.DateTime.Now,
+                                IsActive = true,
+                                Verified = true,
+                                VerifiedDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 1,
+                                URI = emailAddress
+                            }
+                        },
+                        UserAttributes = new Collection<UserAttributeValue>() {
+                            new UserAttributeValue() {
+                                id = Guid.NewGuid(),
+                                UserAttributeId = emailAttribute.Id,
+                                AttributeValue = emailAddress
+                            }
+                        }
                     });
 
                 }

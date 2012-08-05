@@ -200,6 +200,7 @@
     <Compile Include="CustomAttributes\MessageStatusAttribute.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionManager.cs" />
     <Compile Include="PaymentTransaction.cs" />
+    <Compile Include="UserPayPointHistory.cs" />
     <Compile Include="UserPayPointVerification.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantType.cs" />
