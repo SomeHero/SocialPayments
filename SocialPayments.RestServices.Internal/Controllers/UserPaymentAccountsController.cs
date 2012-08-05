@@ -13,6 +13,7 @@ using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using SocialPayments.Domain.ExtensionMethods;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -50,7 +51,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Id = a.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(a.RoutingNumber),
                     UserId = a.UserId.ToString(),
-                    Status = a.AccountStatus.ToString()
+                    Status = a.AccountStatus.GetDescription()
                 }).ToList<AccountModels.AccountResponse>();
 
                 
@@ -93,7 +94,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Id = account.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(account.RoutingNumber),
                     UserId = account.UserId.ToString(),
-                    Status = account.AccountStatus.ToString()
+                    Status = account.AccountStatus.GetDescription()
                 };
 
 
@@ -366,7 +367,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return responseMessage;
                 }
-
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
