@@ -86,8 +86,8 @@ namespace SocialPayments.RestServices.Internal
             // /api/Users/{0}/attributes
             routes.MapHttpRoute(
                 name: "UserAttribute",
-                routeTemplate: "api/users/{id}/attributes",
-                defaults: new { controller = "UserAttributes" }
+                routeTemplate: "api/users/{userId}/attributes/{id}",
+                defaults: new { controller = "UserAttributes", id = RouteParameter.Optional }
             );
             //api/user/{id}/personalize_user
             routes.MapHttpRoute(
