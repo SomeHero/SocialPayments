@@ -351,13 +351,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     if (user != null)
                     {
+
+                        string firstName = user.FirstName;
+                        string lastName = user.LastName;
+
+                        if (firstName == null && lastName == null)
+                        {
+                            firstName = "PaidThx";
+                            lastName = "User";
+                        }
+                        else if (firstName == null)
+                        {
+                            firstName = "";
+                        }
+                        else if (lastName == null)
+                        {
+                            lastName = "";
+                        }
+
                         if (!matchedUsers.ContainsKey(user.UserId))
                         {
                             list.Add(new MessageModels.MultipleURIResponse()
                             {
                                 userUri = uri,
-                                firstName = user.FirstName,
-                                lastName = user.LastName
+                                firstName = firstName,
+                                lastName = lastName
                             });
 
                             matchedUsers.Add(user.UserId, user);
@@ -367,7 +385,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 if (list.Count == 0)
                 {
-                    //Send to primary.
+                    //Ask user how they want to invite this user to PaidThx.
                     return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
                 }
                 else
