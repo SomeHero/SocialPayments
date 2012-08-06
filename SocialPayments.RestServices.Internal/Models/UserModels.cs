@@ -225,5 +225,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public string TemplateName { get; set; }
             public List<KeyValuePair<string, string>> ReplacementElements { get; set; }
         }
+        public class UpdateUserAttributeRequest
+        {
+            public string AttributeValue { get; set; }
+        }
     }
 }

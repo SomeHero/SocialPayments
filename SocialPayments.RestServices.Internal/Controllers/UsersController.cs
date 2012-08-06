@@ -146,7 +146,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     {
                         AttributeId = a.UserAttributeId,
                         AttributeName = a.UserAttribute.AttributeName,
-                        AttributeValue = a.AttributeValue
+                        AttributeValue = (a.AttributeValue != null ? a.AttributeValue : "")
                     }).ToList(),
                     upperLimit = user.Limit,
                     instantLimit = _userService.GetUserInstantLimit(user),
