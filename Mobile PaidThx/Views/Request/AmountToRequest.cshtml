@@ -1,18 +1,17 @@
 ﻿@{
     ViewBag.Title = "AmountToSendView";
 }
-<script src="@Url.Content("~/Scripts/request-money.js")"></script>
-<div data-role="page" id="send-page">
+<div data-role="page" id="request-page">
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Request $</h1>
-        <a href="./Preferences" data-icon="gear" class="ui-btn-right"></a>
+        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
         <div data-role="navbar" class="nav-pdthx" data-grid="d">
             <ul>
                 <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
-                <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
-                <li><a href="./Send" class="nav-item active ui-btn-active" id="send" data-icon="custom">
-                    Send $</a></li>
+                <li><a href="./Request" class="nav-item active ui-btn-active" id="request" data-icon="custom">
+                    Req. $</a></li>
+                <li><a href="./Send" class="nav-item" id="send" data-icon="custom">Send $</a></li>
                 <li><a href="./DoGood" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
                 <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
             </ul>
@@ -24,7 +23,7 @@
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
         <div class="fieldamount" style="height: 50px;" id="amount-body">
-            <div id="custom-amount-field" style="float: left; padding-left: 47px; ">
+            <div id="custom-amount-field" style="float: left; padding-left: 47px;">
                 <input type="text" id="customAmountRequest" style="width: 195px; margin-right: -19px;
                     float: left" />
             </div>

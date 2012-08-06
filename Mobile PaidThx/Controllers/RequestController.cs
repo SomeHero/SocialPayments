@@ -8,38 +8,48 @@ namespace Mobile_PaidThx.Controllers
 {
     public class RequestController : Controller
     {
+        Mobile_PaidThx.Models.RequestMoneyModel savedData = new Models.RequestMoneyModel();
         //
         // GET: /Request/
 
         public ActionResult Index()
         {
-            Mobile_PaidThx.Models.RequestMoneyModel model = new Models.RequestMoneyModel
-            {
-                Amount = 0,
-                RecipientUri = null,
-                Comments = null
-            };
-            return View(model);
+            return View(savedData);
         }
 
         [HttpPost]
         public ActionResult Index(String index)
         {
-            Mobile_PaidThx.Models.RequestMoneyModel model = new Models.RequestMoneyModel();
             if (index != null && index.Length > 0)
             {
-                model.Amount = Double.Parse(index);
+                savedData.Amount = Double.Parse(index);
             }
             else
             {
-                model.Amount = 0;
+                savedData.Amount = 0;
             }
-            model.Comments = null;
-            model.RecipientUri = null;
+
+            return View(savedData);
+        }
+
+        [HttpPut]
+        public ActionResult Index(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult RequestData(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
+            return Json(model);
+        }
+
         public ActionResult AmountToRequest()
+        {
+            return View();
+        }
+
+        public ActionResult AddContactRequest()
         {
             return View();
         }
