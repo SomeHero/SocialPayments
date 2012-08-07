@@ -14,6 +14,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string MerchantImageUrl { get; set; }
             public string PreferredReceiveAccountId { get; set; }
             public string PreferredSendAccountId { get; set; }
+            public List<MerchantListingResponse> Listings { get; set; }
         }
         public class MerchantDetailResponse
         {
@@ -25,6 +26,18 @@ namespace SocialPayments.RestServices.Internal.Models
             public string MerchantTagLine { get; set; }
             public string MerchantDescription { get; set; }
             public decimal SuggestedAmount { get; set; }
+        }
+        public class MerchantListingResponse
+        {
+            public Guid Id { get; set; }
+            public string TagLine { get; set; }
+            public string Description { get; set; }
+            public List<MerchantOfferResponse> Offers { get; set; }
+        }
+        public class MerchantOfferResponse
+        {
+            public Guid Id { get; set; }
+            public double Amount { get; set; }
         }
     }
 }

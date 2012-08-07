@@ -199,7 +199,10 @@
     <Compile Include="CalendarType.cs" />
     <Compile Include="CustomAttributes\MessageStatusAttribute.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionManager.cs" />
+    <Compile Include="MerchantListing.cs" />
+    <Compile Include="MerchantOffer.cs" />
     <Compile Include="PaymentTransaction.cs" />
+    <Compile Include="ProfileItemSelectOption.cs" />
     <Compile Include="UserPayPointHistory.cs" />
     <Compile Include="UserPayPointVerification.cs" />
     <Compile Include="Merchant.cs" />
