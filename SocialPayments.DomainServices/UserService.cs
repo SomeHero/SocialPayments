@@ -600,7 +600,7 @@ namespace SocialPayments.DomainServices
                             // TokenExpiration = tokenExpiration,
                             OAuthToken = oAuthToken
                         };
-                        user.UserName = "fb_" + accountId;
+                        //user.UserName = "fb_" + accountId;
                     }
                     else
                     {
@@ -633,6 +633,14 @@ namespace SocialPayments.DomainServices
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Fatal, String.Format("Exception Linking with Facebook. {0}", ex.Message));
+                var innerException = ex.InnerException;
+
+                while (innerException != null)
+                {
+                    _logger.Log(LogLevel.Fatal, innerException.Message);
+
+                    innerException = innerException.InnerException;
+                }
 
                 throw ex;
             }
