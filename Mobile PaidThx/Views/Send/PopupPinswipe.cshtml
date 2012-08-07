@@ -1,18 +1,17 @@
 ﻿<link href="@Url.Content("~/Content/patternlock.css")" rel="stylesheet" />
-<script type="text/javascript" src="@Url.Content("~/Scripts/patternlock.js")"></script>
-<script type="text/javascript">
+<script>
     function submitform() {
-        alert("You entered " + document.getElementById("password").value);
+        alert("You entered " + document.getElementById("patternlock").value);
         return true;
     }
 </script>
-<div>
-    <form method="post" onsubmit="return submitform()">
-    <h2>
-        Please login</h2>
-    <div>
-        <input type="password" class="patternlock" id="password" name="patternlock" />
-        <input type="submit" value="login" />
-    </div>
-    </form>
+<div data-role="page" id="send-page">
+    <body onload="generatePincode();">
+        <form method="post" onsubmit="return submitform()" action="">
+        <div>
+            <input type="password" id="patternlock" name="patternlock" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        </form>
+    </body>
 </div>
