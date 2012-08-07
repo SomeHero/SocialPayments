@@ -52,6 +52,11 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult PopupPinswipe()
+        {
+            return View();
+        }
+
         [HttpPut]
         public ActionResult Index(Mobile_PaidThx.Models.SendMoneyModel model)
         {
