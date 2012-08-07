@@ -22,3 +22,35 @@ function closeScreen() {
         $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
     });
 }
+
+function returnHome() {
+    var homeUrl = getBaseURL() + 'Home';
+    $.mobile.changePage(homeUrl);
+}
+
+function returnSend() {
+    var sendUrl = getBaseURL() + 'Send';
+    $.mobile.changePage(sendUrl);
+}
+
+function returnRequest() {
+    var requestUrl = getBaseURL() + 'Request';
+    $.mobile.changePage(requestUrl);
+}
+
+
+function returnDoGood() {
+    var doGoodUrl = getBaseURL() + 'DoGood';
+    $.mobile.changePage(goGoodUrl);
+}
+
+function returnPaystream() {
+    var paystreamUrl = getBaseURL() + 'Paystream';
+    $.mobile.changePage(paystreamUrl);
+}
+
+function returnPref() {
+    var prefUrl = getBaseURL() + 'Preferences';
+    $.mobile.changePage(prefUrl);
+}
+
