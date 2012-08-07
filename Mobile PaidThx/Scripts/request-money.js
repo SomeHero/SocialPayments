@@ -4,8 +4,15 @@ var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
 }
 
+function formatAmount(amount) {
+    return "$" + amount.toFixed(2);
+}
+
 $(document).ready(function () {
     var amountSelected = 0.0;
+    var recipient = "";
+    var ref1 = null;
+    var ref2 = null;
     $("#frmRequestMoney").validate({
         submitHandler: function (form) {
             form.submit();
@@ -13,56 +20,207 @@ $(document).ready(function () {
     });
 
     $("#gobtn-request").die('click').live('click', function () {
-        amountSelected = $('#customAmount').val();
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        amountSelected = $('#customAmountRequest').val();
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 
-    $("#btnSelectAmount").die('click').live('click', function () {
-        openAmountDialog();
+    $("#submitContactRequest").die('click').live('click', function () {
+        ref1 = $("#email").val();
+        ref2 = $("#phonenumber").val();
+
+        if (ref2.length > 0) {
+            recipient = ref2;
+        }
+        else if (ref1.length > 0) {
+            recipient = ref1;
+        }
+        else {
+            recipient = "";
+        }
+
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 
-    $("#onedollarbtn").die('click').live('click', function () {
+    $("#onedollarbtnrequest").die('click').live('click', function () {
         amountSelected = "1.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 
-    $("#fivedollarbtn").die('click').live('click', function () {
+    $("#fivedollarbtnrequest").die('click').live('click', function () {
         amountSelected = "5.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 
-    $("#tendollarbtn").die('click').live('click', function () {
+    $("#tendollarbtnrequest").die('click').live('click', function () {
         amountSelected = "10.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 
-    $("#twentydollarbtn").die('click').live('click', function () {
+    $("#twentydollarbtnrequest").die('click').live('click', function () {
         amountSelected = "20.00";
-        $('#amount-request').text(amountSelected);
-        closeAmountDialog('amountbody-request');
+        var requestModel = {
+            RecipientUri: recipient,
+            Amount: amountSelected,
+            Comments: null
+        };
+
+        var jsonData = $.toJSON(requestModel);
+        var serviceUrl = getBaseURL() + 'Request';
+        var testUrl = getBaseURL() + 'Request/RequestData';
+
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
     });
 });
 
-function openAmountDialog() {
-    $('#chooseRequestOverlay').fadeIn('fast', function () {
-        $('#amountbody-request').css('display', 'block');
-        $('#amountbody-request').animate({ 'left': '5%' }, 500);
-    });
-}
-
-function closeAmountDialog(prospectElementID) {
-    $(function ($) {
-        $(document).ready(function () {
-            $('#' + prospectElementID).css('position', 'absolute');
-            $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
-                $('#' + prospectElementID).css('position', 'fixed');
-                $('#' + prospectElementID).css('left', '100%');
-                $('#chooseRequestOverlay').fadeOut('fast');
-            });
-        });
-    });
-}

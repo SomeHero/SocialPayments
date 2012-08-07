@@ -13,6 +13,7 @@ using SocialPayments.DomainServices.Interfaces;
 using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using SocialPayments.Domain.ExtensionMethods;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -43,14 +44,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 var accountResponse = accounts.Select(a => new AccountModels.AccountResponse()
                 {
-                    AccountNumber = GetLastFour(_securityService.Decrypt(a.AccountNumber)),
+                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(a.AccountNumber)),
                     AccountType = a.AccountType.ToString(),
                     NameOnAccount = _securityService.Decrypt(a.NameOnAccount),
                     Nickname = a.Nickname,
                     Id = a.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(a.RoutingNumber),
                     UserId = a.UserId.ToString(),
-                    Status = a.AccountStatus.ToString()
+                    Status = a.AccountStatus.GetDescription()
                 }).ToList<AccountModels.AccountResponse>();
 
                 
@@ -86,14 +87,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 var accountResponse = new AccountModels.AccountResponse()
                 {
-                    AccountNumber = GetLastFour(_securityService.Decrypt(account.AccountNumber)),
+                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(account.AccountNumber)),
                     AccountType = account.AccountType.ToString(),
                     NameOnAccount = _securityService.Decrypt(account.NameOnAccount),
                     Nickname = account.Nickname,
                     Id = account.Id.ToString(),
                     RoutingNumber = _securityService.Decrypt(account.RoutingNumber),
                     UserId = account.UserId.ToString(),
-                    Status = account.AccountStatus.ToString()
+                    Status = account.AccountStatus.GetDescription()
                 };
 
 
@@ -366,7 +367,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     return responseMessage;
                 }
-
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
@@ -467,14 +467,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-        }
-        private string GetLastFour(string p)
-        {
-            if (p.Length <= 4)
-                return p;
-            else
-                return p.Substring(0, 4);
-
         }
     }
 }

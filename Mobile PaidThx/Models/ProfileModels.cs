@@ -28,7 +28,7 @@ namespace Mobile_PaidThx.Models
         public PaymentModel Payment { get; set; }
         public List<PaystreamModels.PaymentModel> TransactionReceipts { get; set; }
         public ListPaymentAccountModel PaymentAccountsList { get; set; }
-   
+
     }
     public class BankAccountModel
     {
@@ -70,6 +70,13 @@ namespace Mobile_PaidThx.Models
         public Double Amount { get; set; }
         public String Comments { get; set; }
     }
+
+    public class AddContactModel
+    {
+        public String reference1 { get; set; }
+        public String reference2 { get; set; }
+    }
+
     public enum TransactionType
     {
         Deposit = 1,
