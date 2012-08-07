@@ -1,15 +1,22 @@
 ﻿@model Mobile_PaidThx.Models.RequestMoneyModel
-<script src="@Url.Content("~/Scripts/request-money.js")" type="text/javascript"></script>
+
 <div id="main-body-request" class="panel" style="margin-left: -11px; margin-right: -11px">
     <form id="frmRequestMoney" action="@Url.Content("~/Profile/RequestMoney")" method="post">
     <p>
-        <label for="txtSendTo">
+        <label for="txtSendTo" style="font-size: 16px">
             Request To:</label>
-        <a href="" data-prefetch>
+        <a href="./Request/AddContactRequest" data-prefetch>
             <button type="button" class="imgbtn field-btn">
                 <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                     <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
-                        id="person-send">Choose a recipient</span>
+                        id="person-send">@if (Model.RecipientUri != null && !Model.RecipientUri.Equals("null"))
+                                         {
+                            <text>@Model.RecipientUri</text>
+                                         }
+                                         else
+                                         {
+                            <text>Choose a recipient</text>
+                                         }</span>
             </button>
         </a>
     </p>

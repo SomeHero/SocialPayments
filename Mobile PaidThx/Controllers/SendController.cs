@@ -47,6 +47,28 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult AddContactSend()
+        {
+            return View();
+        }
+
+        public ActionResult PopupPinswipe()
+        {
+            return View();
+        }
+
+        [HttpPut]
+        public ActionResult Index(Mobile_PaidThx.Models.SendMoneyModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult SendData(Mobile_PaidThx.Models.SendMoneyModel model)
+        {
+            return Json(model);
+        }
+
         //
         // GET: /Send/Create
 

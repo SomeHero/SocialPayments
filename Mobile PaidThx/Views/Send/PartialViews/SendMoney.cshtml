@@ -1,31 +1,37 @@
 ﻿@model Mobile_PaidThx.Models.SendMoneyModel
 <div id="main-body" class="panel">
-    <form id="frmSendMoney" action="@Url.Content("~/Profile/SendMoney")" method="post">
     <p>
-        <label for="txtSendTo">
+        <label for="txtSendTo" style="font-size: 16px">
             Send To:</label>
-        <a href="" data-prefetch>
+        <a href="./Send/AddContactSend" data-prefetch>
             <button type="button" class="imgbtn field-btn">
-                <span class="imgbg" style="padding-left:0px; width:50px; margin-left:-2px">
+                <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                     <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
-                        id="person-send">Choose a recipient</span>
+                        id="person-sendmoney">@if (Model.RecipientUri != null && !Model.RecipientUri.Equals("null"))
+                                              {
+                            <text>@Model.RecipientUri</text>
+                                              }
+                                              else
+                                              {
+                            <text>Choose a recipient</text>
+                                              }</span>
             </button>
         </a>
     </p>
     <p>
-        <label for="txtAmount">
+        <label for="txtAmount" style="font-size: 16px">
             Amount to Send:</label>
         <a href="./Send/AmountToSend" data-prefetch>
             <button type="button" class="imgbtn field-btn">
-                <span class="imgbg" style="margin-left:-2px">
+                <span class="imgbg" style="margin-left: -2px">
                     <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
                         id="amount-send">@if (Model.Amount > 0)
                                          {
-                                             <text>@string.Format("{0:C}", Model.Amount)</text>
+                            <text>@string.Format("{0:C}", Model.Amount)</text>
                                          }
                                          else
                                          {
-                                            <text>Choose Amount</text>
+                            <text>Choose Amount</text>
                                          }</span>
             </button>
         </a>
@@ -37,7 +43,7 @@
             required></textarea>
     </p>
     <p>
-        <input type="image" id="btnSendMoney" src="@Url.Content("~/Content/images/send_money_button.gif")" />
+        <a href="./Send/PopupPinswipe">
+            <input id="btnSendMoney" type="image" src="@Url.Content("~/Content/images/send_money_button.gif")" /></a>
     </p>
-    </form>
 </div>
