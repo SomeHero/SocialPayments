@@ -8,6 +8,40 @@ function formatAmount(amount) {
     return "$" + amount.toFixed(2);
 }
 
+function getPincodeRequest() {
+    var theAmount = $("#theAmountToSend-Request").val();
+    var theRecipient = $("#modelRecipient-Request").text();
+    var theComments = $("#txtComments-Request").val();
+
+    var requestModel = {
+        RecipientUri: theRecipient,
+        Amount: theAmount,
+        Comments: theComments
+    };
+
+    var jsonData = $.toJSON(requestModel);
+    var testUrl = getBaseURL() + 'Request/RequestData';
+    var serviceUrl = getBaseURL() + 'Request/RequestPinswipe';
+    $.ajax({
+        type: 'POST',
+        url: testUrl,
+        data: jsonData,
+        contentType: "application/json",
+        dataType: "json",
+        processData: false,
+        success: function (data) {
+            $.mobile.changePage(serviceUrl, {
+                type: "post",
+                data: data
+            });
+        },
+        error: function (objRequest, next, errorThrown) {
+            alert(next);
+            $("#error-block").appendTo(next);
+        }
+    });
+}
+
 $(document).ready(function () {
     var amountSelected = 0.0;
     var recipient = "";

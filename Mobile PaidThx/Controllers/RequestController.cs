@@ -54,6 +54,17 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult RequestPinswipe()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RequestPinswipe(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
+            return View(model);
+        }
+
         //
         // GET: /Request/Details/5
 
