@@ -228,9 +228,8 @@ var patternlock = {
             patternlock.isdrawing = false;
             if (this.autoSubmit) {
                 var dosubmit = true;
-                if (document.forms[0].onsubmit) { dosubmit = document.forms[0].onsubmit() }
                 if (dosubmit) {
-                    document.forms[0].submit();
+                    document.getElementById("pinSwipeForm").submit();
                 }
             }
         }
