@@ -56,6 +56,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public int SortOrder { get; set; }
             public string ItemType { get; set; }
             public int Points { get; set; }
+            public string SelectOptionHeader { get; set; }
+            public string SelectOptionDescription { get; set; }
+            public List<string> SelectOptions { get; set; }
         }
     }
 }

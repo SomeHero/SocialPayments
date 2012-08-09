@@ -22,5 +22,6 @@ namespace SocialPayments.Domain
         public DateTime? LastUpdatedDate { get; set; }
 
         public virtual User User { get; set; }
+        public virtual List<MerchantListing> MerchantListings { get; set; }
     }
 }

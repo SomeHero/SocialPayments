@@ -169,6 +169,7 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="AndroidNotificationService.cs" />
+    <Compile Include="CommunicationService.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="CustomExceptions\AccountLockedPinCodeFailures.cs" />
     <Compile Include="CustomExceptions\InvalidSecurityPin.cs" />
