@@ -14,7 +14,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index()
         {
             return View();
-        }
+        }   
 
         //
         // GET: /DoGood/Details/5
@@ -24,14 +24,47 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult AddOrg()
+        {
+            return View();
+        }
+
+        public ActionResult AddToSend()
+        {
+            return View();
+        }
+
+        public ActionResult AmountToDonate()
+        {
+            return View();
+        }
+
         public ActionResult Donate()
         {
             return View();
         }
 
+        [HttpPut]
+        public ActionResult Donate(Mobile_PaidThx.Models.DonateMoneyModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult DonateData(Mobile_PaidThx.Models.DonateMoneyModel model)
+        {
+            return View(model);
+        }
+
         public ActionResult Pledge()
         {
             return View();
+        }
+
+        [HttpPut]
+        public ActionResult Pledge(Mobile_PaidThx.Models.DonateMoneyModel model)
+        {
+            return View(model);
         }
 
         //
