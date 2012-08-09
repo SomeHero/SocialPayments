@@ -72,7 +72,7 @@ namespace SocialPayments.DomainServices
         {
             var organization = _userServices.GetUserById(organizationId);
 
-            if(organization == null)
+            if (organization == null)
                 throw new Exception(String.Format("Unable to find organization {0}", organizationId));
 
             return AddMessage(apiKey, senderId, organization.UserId.ToString(), organization.Merchant.Name, senderAccountId, amount, comments, "Payment");
@@ -160,7 +160,8 @@ namespace SocialPayments.DomainServices
                     throw new Exception(message);
                 }
             }
-            else {
+            else
+            {
                 URIType recipientUriType = GetURIType(recipientUri);
 
                 if (recipientUriType == URIType.MobileNumber)
@@ -281,13 +282,13 @@ namespace SocialPayments.DomainServices
             Task.Factory.StartNew(() =>
             {
                 _logger.Log(LogLevel.Info, String.Format("Started Summitted Message Task. {0} to {1}", recipientUri, senderUri));
-                
-                switch(messageItem.Status)
+
+                switch (messageItem.Status)
                 {
                     case PaystreamMessageStatus.SubmittedPayment:
                         SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
-                        paymentTask.Execute(messageItem.Id); 
- 
+                        paymentTask.Execute(messageItem.Id);
+
                         break;
 
                     case PaystreamMessageStatus.SubmittedRequest:
@@ -297,7 +298,8 @@ namespace SocialPayments.DomainServices
                         break;
                 }
 
-            }).ContinueWith(task => {
+            }).ContinueWith(task =>
+            {
                 _logger.Log(LogLevel.Info, String.Format("Completed Summitted Message Task. {0} to {1}", recipientUri, senderUri));
             });
 
@@ -320,11 +322,11 @@ namespace SocialPayments.DomainServices
             try
             {
                 message.LastUpdatedDate = System.DateTime.Now;
-                if(message.MessageType == MessageType.Payment)
+                if (message.MessageType == MessageType.Payment)
                     message.Status = PaystreamMessageStatus.CancelledPayment;
                 else
                     message.Status = PaystreamMessageStatus.CancelledRequest;
-                
+
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Pending;
 
                 _context.SaveChanges();
@@ -424,7 +426,7 @@ namespace SocialPayments.DomainServices
             var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = _context.Messages
-                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress)  && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)
+                .Where(m => (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress) && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)
                     || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment)))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
@@ -541,7 +543,7 @@ namespace SocialPayments.DomainServices
                 var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
                 var lastViewedPaystreamDate = System.DateTime.MinValue;
-                if(user.LastViewedPaystream != null)
+                if (user.LastViewedPaystream != null)
                     lastViewedPaystreamDate = user.LastViewedPaystream.Value;
 
                 int pendingRequests = _context.Messages
@@ -550,9 +552,89 @@ namespace SocialPayments.DomainServices
                     .Select(m => m.Id)
                     .Count();
 
-
                 return pendingRequests;
             }
+        }
+
+        public List<Domain.Message> GetNewMessages(User user)
+        {
+            var formattingService = new DomainServices.FormattingServices();
+            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+            List<Domain.Message> messages = null;
+
+            if (user.PaymentAccounts.Count > 0)
+            {
+                // "New" message cases, WITH A PAYMENT ACCOUNT SETUP
+                // 1 -> Requests received with no action taken on them (status -> SubmittedRequest/Pending?)
+                // 2 -> Payments/Requests that are "unseen". Any status applies.
+
+                messages = _context.Messages
+                    .Where
+                    (m => (
+                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        (
+                                (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                            || (m.recipientHasSeen == false)
+                        )
+                    ))
+                    .OrderByDescending(m => m.CreateDate).ToList();
+            }
+            else
+            {
+                // No Bank Account
+                // "New" message cases, **WITHOUT** A PAYMENT ACCOUNT SETUP
+                // All cases above, PLUS:
+                //      -> Payments seen/unseen (doesnt matter) that are waiting for the user to setup a bank account.
+                messages = _context.Messages
+                    .Where
+                    (m => (
+                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        (
+                                (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                            || (m.recipientHasSeen == false)
+                            || (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment))
+                        )
+                    ))
+                    .OrderByDescending(m => m.CreateDate).ToList();
+            }
+
+            foreach (var message in messages)
+            {
+                message.SenderName = formattingService.FormatUserName(user);
+            }
+
+            return messages;
+        }
+
+        public List<Domain.Message> GetPendingMessages(User user)
+        {
+            var formattingService = new DomainServices.FormattingServices();
+            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+            List<Domain.Message> messages = null;
+
+            // "Pending" messages are:
+            // Messages that you are involved in that are waiting for the recipient to take action.
+            // Cases that apply:
+            //  1 -> 
+
+            messages = _context.Messages
+                .Where
+                (m => (
+                    ( m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                    || ( m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.SubmittedPayment))
+                    || ( m.SenderId == user.UserId && ! m.senderHasSeen )
+                    || ( m.RecipientId == user.UserId && ! m.recipientHasSeen )
+                ))
+                .OrderByDescending(m => m.CreateDate).ToList();
+
+            foreach (var message in messages)
+            {
+                message.SenderName = formattingService.FormatUserName(user);
+            }
+
+            return messages;
         }
     }
 }

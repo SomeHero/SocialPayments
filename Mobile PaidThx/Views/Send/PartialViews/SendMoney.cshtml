@@ -9,7 +9,7 @@
                     <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
                         id="person-sendmoney">@if (Model.RecipientUri != null && !Model.RecipientUri.Equals("null"))
                                               {
-                            <text>@Model.RecipientUri</text>
+                            <span id="modelRecipient">@Model.RecipientUri</span>
                                               }
                                               else
                                               {
@@ -19,6 +19,7 @@
         </a>
     </p>
     <p>
+        <input type="hidden" id="theAmountToSend" value="@Model.Amount" />
         <label for="txtAmount" style="font-size: 16px">
             Amount to Send:</label>
         <a href="./Send/AmountToSend" data-prefetch>
@@ -39,11 +40,11 @@
     <p>
         <label for="txtComments" style="margin-bottom: 15px">
             Comments:</label>
-        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+        <textarea id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
             required></textarea>
     </p>
     <p>
-        <a href="./Send/PopupPinswipe">
-            <input id="btnSendMoney" type="image" src="@Url.Content("~/Content/images/send_money_button.gif")" /></a>
+        <a onclick="getPincode()">
+            <img id="btnSendMoney" src="@Url.Content("~/Content/images/send_money_button.gif")" /></a>
     </p>
 </div>

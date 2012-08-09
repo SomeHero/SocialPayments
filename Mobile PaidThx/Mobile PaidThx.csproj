@@ -309,7 +309,9 @@
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
     <Content Include="Scripts\home.js" />
+    <Content Include="Scripts\jquery.livequery.js" />
     <Content Include="Scripts\patternlock.js" />
+    <Content Include="Scripts\popuppinswipe.js" />
     <Content Include="Scripts\settings.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\paymentaccount.js" />
@@ -525,6 +527,10 @@
     <Content Include="Views\Send\PopupPinswipe.cshtml" />
     <Content Include="Views\Preferences\UserAgreement.cshtml" />
     <Content Include="Views\Preferences\Help.cshtml" />
+    <Content Include="Views\Request\RequestPinswipe.cshtml" />
+    <Content Include="Views\DoGood\Donate.cshtml" />
+    <Content Include="Views\DoGood\Pledge.cshtml" />
+    <Content Include="Views\DoGood\AddOrg.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

@@ -1,7 +1,5 @@
 ﻿@model Mobile_PaidThx.Models.RequestMoneyModel
-
 <div id="main-body-request" class="panel" style="margin-left: -11px; margin-right: -11px">
-    <form id="frmRequestMoney" action="@Url.Content("~/Profile/RequestMoney")" method="post">
     <p>
         <label for="txtSendTo" style="font-size: 16px">
             Request To:</label>
@@ -11,7 +9,7 @@
                     <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
                         id="person-send">@if (Model.RecipientUri != null && !Model.RecipientUri.Equals("null"))
                                          {
-                            <text>@Model.RecipientUri</text>
+                            <span id="modelRecipient-Request">@Model.RecipientUri</span>
                                          }
                                          else
                                          {
@@ -21,6 +19,7 @@
         </a>
     </p>
     <p>
+        <input type="hidden" id="theAmountToSend-Request" value="@Model.Amount" />
         <label for="clickamountbtn" style="font-size: 16px">
             Request Amount:</label>
         <a href="./Request/AmountToRequest" data-prefetch>
@@ -41,13 +40,11 @@
     <p>
         <label for="txtComments" style="margin-bottom: 15px">
             Notes/Messages:</label>
-        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+        <textarea id="txtComments-Request" rows="10" cols="100" placeholder="Enter notes, comments, etc"
             required></textarea>
     </p>
     <p>
-        <button type="submit" id="btnRequestMoney" class="imgbtn">
-            <img src="@Url.Content("~/Content/images/request-money-button-icon.png")" alt="" /><span>Request
-                Money Now</span></button>
+        <a onclick="getPincodeRequest()">
+            <img id="btnRequestMoney" src="@Url.Content("~/Content/images/request_money_button.gif")" alt="" /></a>
     </p>
-    </form>
 </div>

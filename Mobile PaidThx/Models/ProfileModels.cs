@@ -63,12 +63,14 @@ namespace Mobile_PaidThx.Models
         public String RecipientUri { get; set; }
         public Double Amount { get; set; }
         public String Comments { get; set; }
+        public String Pincode { get; set; }
     }
     public class RequestMoneyModel
     {
         public String RecipientUri { get; set; }
         public Double Amount { get; set; }
         public String Comments { get; set; }
+        public String Pincode { get; set; }
     }
 
     public class AddContactModel

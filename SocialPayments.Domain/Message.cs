@@ -67,5 +67,7 @@ namespace SocialPayments.Domain
         [NotMapped]
         public string TransactionImageUrl { get; set; }
 
+        public bool recipientHasSeen { get; set; }
+        public bool senderHasSeen { get; set; }
     }
 }
