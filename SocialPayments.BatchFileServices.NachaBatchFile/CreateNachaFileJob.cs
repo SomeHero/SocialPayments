@@ -74,8 +74,8 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 foreach (var transaction in transactionBatch.Transactions)
                 {
                     transaction.Status = TransactionStatus.Complete;
-                    transaction.Payment.PaymentStatus = PaymentStatus.Complete;
-                    transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
+                    //transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                    //transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
                 }
 
                 _ctx.SaveChanges();
