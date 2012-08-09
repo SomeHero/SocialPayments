@@ -115,6 +115,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
+            var newCount = messageServices.GetNewMessages(user);
+            var pendingCount = messageServices.GetPendingMessages(user);
+
             try
             {
                 userResponse = new UserModels.UserResponse()
@@ -205,7 +208,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
                         }).ToList() : null), 
-                    numberOfPaystreamUpdates = numberOfPayStreamUpdates
+                    numberOfPaystreamUpdates = numberOfPayStreamUpdates,
+                    newMessageCount = 1,
+                    pendingMessageCount = 1
                 };
             } 
             catch(Exception ex)
