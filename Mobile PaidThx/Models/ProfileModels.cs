@@ -65,6 +65,12 @@ namespace Mobile_PaidThx.Models
         public String Comments { get; set; }
         public String Pincode { get; set; }
     }
+    public class DonateMoneyModel
+    {
+        public String Organization { get; set; }
+        public String Amount { get; set; }
+        public String PledgerUri {get; set;}
+    }
     public class RequestMoneyModel
     {
         public String RecipientUri { get; set; }
