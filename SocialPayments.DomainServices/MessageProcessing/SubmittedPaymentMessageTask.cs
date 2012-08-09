@@ -44,6 +44,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
         private string _fromEmailAddress = ConfigurationManager.AppSettings["FromEmailAddress"];
 
+
+
         public void Execute(Guid messageId)
         {
             using (var ctx = new Context())
@@ -54,6 +56,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 var emailService = new DomainServices.EmailService(ctx);
                 var urlShortnerService = new DomainServices.GoogleURLShortener();
                 var transactionBatchService = new DomainServices.TransactionBatchService(ctx, _logger);
+                var communicationService = new DomainServices.CommunicationService(ctx);
 
                 var message = ctx.Messages
                     .FirstOrDefault(m => m.Id == messageId);
@@ -89,6 +92,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 var transactionBatch = transactionBatchService.GetOpenBatch();
 
+                //Create Withdrawal Transaction
                 transactionBatch.TotalNumberOfWithdrawals += 1;
                 transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
 
@@ -122,7 +126,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 ctx.SaveChanges();
 
                 var senderName = userService.GetSenderName(message.Sender);
-                //send out communication
 
                 if (message.Recipient != null)
                 {
@@ -304,29 +307,37 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     // var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
                     URIType recipientType = messageService.GetURIType(message.RecipientUri);
 
-                    //Send out SMS message to sender
-                    if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
+                    //Send out CoSMS message to sender
+                    //if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
+                    //{
+                    //    _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
-                        smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber, String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl));
-                    }
-                    if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
-                    {
-                        //Send confirmation email to sender
-                        _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
+                    //    smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber, String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl));
+                    //}
+                    //if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
+                    //{
+                    //    //Send confirmation email to sender
+                    //    _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
 
-                        emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
-                            String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri),
-                            String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri));
-                    }
+                    //    emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
+                    //        String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri),
+                    //        String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri));
+                    //}
+
+                    //Look at the recipient uri and determine what type of communication to send
                     if (recipientType == URIType.MobileNumber)
                     {
+
+                        var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_SMS");
+
                         //Send out SMS message to recipient
                         _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient (Recipient is not an registered user)."));
 
+                        var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
+
                         smsService.SendSMS(message.ApiKey, message.RecipientUri,
-                            String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, message.shortUrl));
+                            String.Format(communicationTemplate.Template, senderName, message.Amount, 
+                            comment, message.shortUrl));
                     }
 
                     //Payment Registered Recipient
@@ -344,9 +355,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         //Send confirmation email to recipient
                         _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient (Recipient is not an registered user)."));
 
+                        var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_Email");
+
                         emailService.SendEmail(message.RecipientUri,
                             String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount)
-                            , _paymentReceivedRecipientNotRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                            , communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("first_name", ""),
                                 new KeyValuePair<string, string>("last_name", ""),
@@ -363,6 +376,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         try
                         {
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_Facebook");
+                            
                             var client = new Facebook.FacebookClient(message.Sender.FacebookUser.OAuthToken);
                             var args = new Dictionary<string, object>();
 
@@ -373,7 +388,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             if (!(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
                                 formattedComments = String.Format("{0}.", formattedComments);
 
-                            args["message"] = String.Format(_facebookFriendWallPostMessageTemplate, message.Amount, formattedComments, message.shortUrl);
+                            args["message"] = String.Format(communicationTemplate.Template, message.Amount, formattedComments, message.shortUrl);
                             args["link"] = message.shortUrl;
 
                             args["name"] = _facebookFriendWallPostLinkTitleTemplate;

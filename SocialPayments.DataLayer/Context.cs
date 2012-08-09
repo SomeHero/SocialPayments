@@ -45,7 +45,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<Merchant> Merchants { get; set; }
         public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         public IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }
-
+        public IDbSet<Communication> Communications { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -2255,7 +2255,33 @@ namespace SocialPayments.DataLayer
             merchant24.User.PreferredSendAccount = merchant24.User.PaymentAccounts[0];
 
             context.SaveChanges();
-            
+
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "{0} sent you {1:C} using PaidThx{2}. To pick it up go here: {3}"
+            });
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.ElasticTemplate,
+                Template = "Payment_NotRegistered"
+            });
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_Facebook",
+                Method = CommunicationMethod.FacebookWallPost,
+                Type = CommunicationType.FacebookTemplate,
+                Template = "I sent you {0:C} using the free social payment service PaidThx: \"{1}\". To pick it up go here: {2}"
+            });
+
+            context.SaveChanges();
 
             base.Seed(context);
         }

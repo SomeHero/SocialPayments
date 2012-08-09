@@ -30,7 +30,7 @@ namespace SocialPayments.Domain
         ReturnedPayment = 9,
         [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Request Sent")]
         NotifiedRequest = 10,
-        [MessageStatusAttribute(RecipientDescription = "Request Sent", SenderDescription = "Awaiting Response")]
+        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Awaiting Response")]
         PendingRequest = 11,
         [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted")]
         AcceptedRequest = 12,

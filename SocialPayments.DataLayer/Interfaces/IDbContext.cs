@@ -39,7 +39,7 @@ namespace SocialPayments.DataLayer.Interfaces
         IDbSet<Merchant> Merchants { get; set; }
         IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }
-
+        IDbSet<Communication> Communications { get; set; }
         void SaveChanges();
     }
 

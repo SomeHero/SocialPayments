@@ -197,6 +197,9 @@
     <Compile Include="Calendar.cs" />
     <Compile Include="CalendarDate.cs" />
     <Compile Include="CalendarType.cs" />
+    <Compile Include="Communication.cs" />
+    <Compile Include="CommunicationMethod.cs" />
+    <Compile Include="CommunicationType.cs" />
     <Compile Include="CustomAttributes\MessageStatusAttribute.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionManager.cs" />
     <Compile Include="MerchantListing.cs" />
