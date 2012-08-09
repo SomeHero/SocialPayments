@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="dogood-page">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Do Good</h1>
+        <a onclick="returnPref()" id="btn-settings" class="top-button ui-btn-right"></a>
+        <div data-role="navbar" class="nav-pdthx" data-grid="d">
+            <ul>
+                <li><a onclick="returnHome()" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                <li><a onclick="returnRequest()" class="nav-item" id="request" data-icon="custom">Req.
+                    $</a></li>
+                <li><a onclick="returnSend()" class="nav-item" id="send" data-icon="custom">Send $</a></li>
+                <li><a onclick="returnDoGood()" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
+                <li><a onclick="returnPaystream()" class="nav-item" id="paystream" data-icon="custom">
+                    Stream</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Pledge $</div>
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
+        <div style="margin: 10px">
+            <a href="" data-prefetch>
+                <button type="button" class="imgbtn field-btn">
+                    <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
+                        <img style="margin-left:-8px; margin-top:-3px" src="@Url.Content("~/Content/images/icon-settings-orgs-40x40.png")" alt="" /></span><span
+                            id="organization-name">Your Cause's Name </span>
+                </button>
+            </a>
+            
+            <a href="" data-prefetch>
+                <button type="button" class="imgbtn field-btn">
+                    <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
+                        <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
+                            id="person-send">Select a Donor</span>
+                </button>
+            </a>
+            
+            <a href="" data-prefetch>
+                <button type="button" class="imgbtn field-btn">
+                    <span class="imgbg" style="margin-left: -2px">
+                        <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
+                            id="amount-request">How much?</span></button></a>
+        </div>
+        <div style="margin-left: 10px; margin-right: 10px; margin-top: 20px">
+            <label for="txtComments" style="margin-bottom: 15px; font-size: 18px">
+                Dedicate to Someone?</label>
+            <textarea id="txtComments-Request" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+                required></textarea>
+        </div>
+        <div style="margin-top: 20px; margin-left: 10px; margin-right: 10px">
+            <a href="" data-prefetch>
+                <button type="button" class="imgbtn field-btn">
+                    <span id="amount-request">Send Pledge</span></button></a>
+        </div>
+    </div>
+</div>
