@@ -50,6 +50,8 @@ namespace SocialPayments.RestServices.Internal.Models
 
             public bool setupSecurityPin { get; set; }
             public int numberOfPaystreamUpdates { get; set; }
+            public int newMessageCount { get; set; }
+            public int pendingMessageCount { get; set; }
 
             public List<UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
