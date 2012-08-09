@@ -24,6 +24,16 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult Donate()
+        {
+            return View();
+        }
+
+        public ActionResult Pledge()
+        {
+            return View();
+        }
+
         //
         // GET: /DoGood/Create
 
