@@ -15,6 +15,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         private string _mobileWebSiteUrl = ConfigurationManager.AppSettings["MobileWebSetURL"];
+        private string _mobileWebSiteEngageURl = ConfigurationManager.AppSettings["MobileWebSetURL"];
 
         private string _recipientSMSMessage = "{1} just sent you {0:C} using PaidThx.  The payment has been submitted for processing. Go to {2}.";
         private string _senderSMSMessage = "Your payment in the amount {0:C} was delivered to {1}.  The payment has been submitted for processing. Go to {2}";
@@ -75,6 +76,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     verificationLevel = PaymentVerificationLevel.UnVerified;
                 }
 
+                var transactionBatch = transactionBatchService.GetOpenBatch();
+
                 //Create Payment
                 message.Payment = new Payment()
                 {
@@ -87,34 +90,32 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     SenderAccount = message.SenderAccount,
                     HoldDays = holdDays,
                     ScheduledProcessingDate = scheduledProcessingDate,
-                    PaymentVerificationLevel = verificationLevel
+                    PaymentVerificationLevel = verificationLevel,
+                    Transactions = new List<Transaction>()  
                 };
 
-                var transactionBatch = transactionBatchService.GetOpenBatch();
+                //Add the withdrawal transaction
+                message.Payment.Transactions.Add(new Domain.Transaction() {
+                    AccountNumber = message.SenderAccount.AccountNumber,
+                    Amount = message.Payment.Amount,
+                    AccountType = Domain.AccountType.Checking,
+                    ACHTransactionId = "",
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    IndividualIdentifier = message.RecipientUri,
+                    NameOnAccount = message.SenderAccount.NameOnAccount,
+                    PaymentChannelType = PaymentChannelType.Single,
+                    RoutingNumber = message.SenderAccount.RoutingNumber,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Status = TransactionStatus.Pending,
+                    Type = TransactionType.Withdrawal,
+                    TransactionBatch = transactionBatch,
+                    Payment = message.Payment
+                });
 
                 //Create Withdrawal Transaction
                 transactionBatch.TotalNumberOfWithdrawals += 1;
                 transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
-
-                ctx.Transactions.Add(
-                   new Domain.Transaction()
-                   {
-
-                       AccountNumber = message.SenderAccount.AccountNumber,
-                       Amount = message.Payment.Amount,
-                       AccountType = Domain.AccountType.Checking,
-                       ACHTransactionId = "",
-                       CreateDate = System.DateTime.Now,
-                       Id = Guid.NewGuid(),
-                       IndividualIdentifier = message.RecipientUri,
-                       NameOnAccount = message.SenderAccount.NameOnAccount,
-                       PaymentChannelType = PaymentChannelType.Single,
-                       RoutingNumber = message.SenderAccount.RoutingNumber,
-                       StandardEntryClass = StandardEntryClass.Web,
-                       Status = TransactionStatus.Pending,
-                       Type = TransactionType.Deposit,
-                       TransactionBatch = transactionBatch
-                   });
 
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
                 message.LastUpdatedDate = System.DateTime.Now;
@@ -123,20 +124,27 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 //_transactionBatchService.AddTransactionsToBatch(transactionsList);
 
-                ctx.SaveChanges();
-
                 var senderName = userService.GetSenderName(message.Sender);
+
+                message.Recipient = userService.GetUser(message.RecipientUri);
 
                 if (message.Recipient != null)
                 {
+                    bool isRecipientEngaged = true;
+
+                    if (message.Recipient.PaymentAccounts.Where(a => a.IsActive).Count() == 0)
+                        isRecipientEngaged = false;
+
                     //create deposit transaction for recipient if they have an account that is verified
                     //and the payment is not being held
-                    if (message.Recipient.PaymentAccounts != null && message.Recipient.PaymentAccounts.Count > 0 && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
+                    if (isRecipientEngaged && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
                     {
+                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+
                         transactionBatch.TotalNumberOfDeposits += 1;
                         transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
 
-                        ctx.Transactions.Add(new Transaction()
+                        message.Payment.Transactions.Add(new Transaction()
                         {
                             AccountNumber = message.Recipient.PaymentAccounts[0].AccountNumber,
                             RoutingNumber = message.Recipient.PaymentAccounts[0].RoutingNumber,
@@ -146,11 +154,12 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             CreateDate = System.DateTime.Now,
                             Id = Guid.NewGuid(),
                             PaymentChannelType = PaymentChannelType.Single,
-                            SentDate = System.DateTime.Now,
                             StandardEntryClass = StandardEntryClass.Web,
                             Status = TransactionStatus.Pending,
                             TransactionBatch = transactionBatch,
-                            Type = TransactionType.Deposit
+                            Type = TransactionType.Deposit,
+                            Payment = message.Payment,
+                            IndividualIdentifier = senderName,
 
                         });
                     }
@@ -161,143 +170,182 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var recipientName = userService.GetSenderName(message.Recipient);
 
-                    //Send SMS Message to recipient
-                    if (!String.IsNullOrEmpty(message.Recipient.MobileNumber))
+                    //Send SMS Message to recipient - not engaged
+                    if(!isRecipientEngaged)
                     {
-                        _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
-
-                        smsService.SendSMS(message.ApiKey, message.Recipient.MobileNumber,
-                              String.Format(_recipientSMSMessage, message.Amount, senderName, message.shortUrl));
-                    }
-                    //Send SMS Message to sender
-                    if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender"));
-
-                        smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber,
-                             String.Format(_senderSMSMessage, message.Amount, recipientName, message.shortUrl));
-
-                    }
-                    //Send confirmation email to sender
-                    if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Sender"));
-
-                        emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
-                            String.Format(_senderConfirmationEmailSubject, recipientName),
-                            String.Format(_senderConfirmationEmailBody, recipientName, message.Amount, message.shortUrl));
-                    }
-                    //Send confirmation email to recipient
-                    if (!String.IsNullOrEmpty(message.Recipient.EmailAddress))
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
-
-                        //Payment Registered Recipient
-                        try
+                        if (!String.IsNullOrEmpty(message.Recipient.MobileNumber))
                         {
-                            emailService.SendEmail(message.Recipient.EmailAddress, String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount),
-                                _paymentReceivedRecipientRegisteredTemplate, new List<KeyValuePair<string, string>>()
-                            {
-                                new KeyValuePair<string, string>("first_name", message.Recipient.FirstName),
-                                new KeyValuePair<string, string>("last_name", message.Recipient.LastName),
-                                new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
-                                new KeyValuePair<string, string>("rec_sender", senderName),
-                                new KeyValuePair<string, string>("rec_sender_photo_url", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
-                                new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                                new KeyValuePair<string, string>("link_registration", message.shortUrl),
-                                new KeyValuePair<string, string>("app_user", "false")
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
-                        }
-                    }
+                            _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient - Not Engaged"));
 
-                    //PUsh Notification Stuff
-                    if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
-                    {
-                        if (!String.IsNullOrEmpty(message.Recipient.RegistrationId))
-                        {
-                            _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
-                            //Fix this.
-                            try
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotEngaged_SMS");
+
+                            if (communicationTemplate != null)
                             {
-                                string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
-                                AndroidNotificationService.sendAndroidPushNotification(
-                                    auth_token, message.Recipient.UserId.ToString(), message.Recipient.RegistrationId, senderName, message);
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                                smsService.SendSMS(message.ApiKey, message.Recipient.MobileNumber,
+                                      String.Format(communicationTemplate.Template, senderName, message.Amount, _mobileWebSiteUrl));
                             }
                         }
-                        else
+                        if (!String.IsNullOrEmpty(message.Recipient.EmailAddress))
                         {
+                            _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
 
-                            _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
-
-
-                            // We need to know the number of pending requests that the user must take action on for the application badge #
-                            // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
-                            //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
-                            //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
-                            //      Opening the application is sufficient
-                            var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedRequest));
-
-                            _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
-
-                            NotificationPayload payload = null;
-                            String notification;
-
-                            // Send a mobile push notification
-                            if (message.MessageType == Domain.MessageType.Payment)
-                            {
-                                notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
-                                payload = new NotificationPayload(message.Recipient.DeviceToken, notification, numPending.Count() + 1);
-                                payload.AddCustom("nType", "recPCNF");
-                            }
-
-                            /*
-                             *  Payment Notification Types:
-                             *      Payment Request [recPRQ]
-                             *          - Recipient receives notification that takes them to the
-                             *                 paystream detail view about that payment request
-                             *      Payment Confirmation [recPCNF]
-                             *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
-                             */
-
-                            payload.AddCustom("tID", message.Id);
-                            var notificationList = new List<NotificationPayload>() { payload };
-
-                            List<string> result;
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotEngaged_Email");
 
                             try
                             {
-                                var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
-                                result = push.SendToApple(notificationList); // You are done!
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
-                                var exception = ex.InnerException;
+                                var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
+                                var subject = String.Format("{0} sent you {1:C} using PaidThx{2}", senderName, message.Amount, comment);
 
-                                while (exception != null)
+                                emailService.SendEmail(message.Recipient.EmailAddress, String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount),
+                                                    communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                                 {
-                                    _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+                                    new KeyValuePair<string, string>("REC_SENDER", senderName),
+                                    new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
+                                    new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                    new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                    new KeyValuePair<string, string>("LINK_ENGAGE",  _mobileWebSiteEngageURl),
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
+                            }
+                        }
 
+                    }
+                    else
+                    {
+                        //Send SMS Message to recipient
+                        if (!String.IsNullOrEmpty(message.Recipient.MobileNumber))
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient"));
+
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_Receipt_SMS");
+
+                            if (communicationTemplate != null)
+                            {
+                                smsService.SendSMS(message.ApiKey, message.Recipient.MobileNumber,
+                                      String.Format(communicationTemplate.Template, senderName, message.Amount, message.Comments, _mobileWebSiteUrl));
+                            }
+                        }
+                        //Send confirmation email to recipient
+                        if (!String.IsNullOrEmpty(message.Recipient.EmailAddress))
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Sending Email Confirmation to Recipient"));
+
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_Receipt_Email");
+
+                            if (communicationTemplate != null)
+                            {
+                                //Payment Registered Recipient
+                                try
+                                {
+                                    emailService.SendEmail(message.Recipient.EmailAddress, String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount),
+                                        communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                                    {
+                                        new KeyValuePair<string, string>("first_name", message.Recipient.FirstName),
+                                        new KeyValuePair<string, string>("last_name", message.Recipient.LastName),
+                                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
+                                        new KeyValuePair<string, string>("rec_sender", senderName),
+                                        new KeyValuePair<string, string>("rec_sender_photo_url", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                        new KeyValuePair<string, string>("link_registration", message.shortUrl),
+                                        new KeyValuePair<string, string>("app_user", "false")
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
                                 }
                             }
                         }
 
-                    }
-                    if (message.Recipient.FacebookUser != null)
-                    {
-                        //Send Facebook Message
-                        // I don't think we can do this through the server. Nice try though.
-                        // We should, however, publish something to the user's page that says sender sent payment
+                        //PUsh Notification Stuff
+                        if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
+                        {
+                            if (!String.IsNullOrEmpty(message.Recipient.RegistrationId))
+                            {
+                                _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
+                                //Fix this.
+                                try
+                                {
+                                    string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                                    AndroidNotificationService.sendAndroidPushNotification(
+                                        auth_token, message.Recipient.UserId.ToString(), message.Recipient.RegistrationId, senderName, message);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                                }
+                            }
+                            else
+                            {
 
+                                _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
+
+
+                                // We need to know the number of pending requests that the user must take action on for the application badge #
+                                // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                                //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                                //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                                //      Opening the application is sufficient
+                                var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedRequest));
+
+                                _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+
+                                NotificationPayload payload = null;
+                                String notification;
+
+                                // Send a mobile push notification
+                                if (message.MessageType == Domain.MessageType.Payment)
+                                {
+                                    notification = String.Format(_recipientWasPaidNotification, senderName, message.Amount);
+                                    payload = new NotificationPayload(message.Recipient.DeviceToken, notification, numPending.Count() + 1);
+                                    payload.AddCustom("nType", "recPCNF");
+                                }
+
+                                /*
+                                 *  Payment Notification Types:
+                                 *      Payment Request [recPRQ]
+                                 *          - Recipient receives notification that takes them to the
+                                 *                 paystream detail view about that payment request
+                                 *      Payment Confirmation [recPCNF]
+                                 *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                                 */
+
+                                payload.AddCustom("tID", message.Id);
+                                var notificationList = new List<NotificationPayload>() { payload };
+
+                                List<string> result;
+
+                                try
+                                {
+                                    var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                                    result = push.SendToApple(notificationList); // You are done!
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                                    var exception = ex.InnerException;
+
+                                    while (exception != null)
+                                    {
+                                        _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+
+                                    }
+                                }
+                            }
+
+                        }
+                        if (message.Recipient.FacebookUser != null)
+                        {
+                            //Send Facebook Message
+                            // I don't think we can do this through the server. Nice try though.
+                            // We should, however, publish something to the user's page that says sender sent payment
+
+                        }
                     }
                 }
                 else
@@ -341,36 +389,26 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     }
 
                     //Payment Registered Recipient
-                    //first_name
-                    //last_name
-                    //rec_amount
-                    //rec_sender
-                    //rec_sender_photo_url
-                    //rec_datetime formatted DayOfWeek, MM dd(rd) at hh:mm:tt
-                    //rec_comments
-                    //app_user
-                    //link_registration - empty
                     if (recipientType == URIType.EmailAddress)
                     {
                         //Send confirmation email to recipient
                         _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient (Recipient is not an registered user)."));
 
                         var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_Email");
+                        
+                        var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
+                        var subject = String.Format("{0} sent you {1:C} using PaidThx{2}", senderName, message.Amount, comment);
 
-                        emailService.SendEmail(message.RecipientUri,
-                            String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount)
-                            , communicationTemplate.Template, new List<KeyValuePair<string, string>>()
-                            {
-                                new KeyValuePair<string, string>("first_name", ""),
-                                new KeyValuePair<string, string>("last_name", ""),
-                                new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
-                                new KeyValuePair<string, string>("rec_sender", senderName),
-                                new KeyValuePair<string, string>("rec_sender_photo_url", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
-                                new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
-                                new KeyValuePair<string, string>("link_registration", message.shortUrl),
-                                new KeyValuePair<string, string>("app_user", "false")
-                            });
+                       emailService.SendEmail(message.Recipient.EmailAddress, String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount),
+                                        communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                                    {
+                                        new KeyValuePair<string, string>("REC_SENDER", senderName),
+                                        new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
+                                        new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                        new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
+                                    });
                     }
                     if (recipientType == URIType.FacebookAccount)
                     {
@@ -381,14 +419,9 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             var client = new Facebook.FacebookClient(message.Sender.FacebookUser.OAuthToken);
                             var args = new Dictionary<string, object>();
 
-                            // All this next line is doing is ending it with a period if it does not end in a period or !
-                            // I'm sure this can be done better, but for now it looks good.
-                            var formattedComments = message.Comments.Trim();
+                            var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                            if (!(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
-                                formattedComments = String.Format("{0}.", formattedComments);
-
-                            args["message"] = String.Format(communicationTemplate.Template, message.Amount, formattedComments, message.shortUrl);
+                            args["message"] = String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl);
                             args["link"] = message.shortUrl;
 
                             args["name"] = _facebookFriendWallPostLinkTitleTemplate;
@@ -404,6 +437,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         }
                     }
                 }
+                ctx.SaveChanges();
+
             }
         }
     }

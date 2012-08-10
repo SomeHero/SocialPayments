@@ -674,32 +674,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
+                Domain.Message paymentMessage = null;
+
                 try
                 {
-                    _ctx.Messages.Add(new Message()
-                    {
-                        Amount = message.Amount,
-                        ApiKey = message.ApiKey,
-                        Comments = String.Format("Re: {0}", message.Comments),
-                        CreateDate = System.DateTime.Now,
-                        Id = Guid.NewGuid(),
-                        Latitude = 0,
-                        Longitude = 0,
-                        Status = PaystreamMessageStatus.ProcessingPayment,
-                        MessageType = MessageType.Payment,
-                        Recipient = message.Sender,
-                        recipientFirstName = message.senderFirstName,
-                        recipientLastName = message.senderLastName,
-                        recipientImageUri = message.senderImageUri,
-                        RecipientUri = message.SenderUri,
-                        Sender = message.Recipient,
-                        senderFirstName = message.recipientFirstName,
-                        senderLastName = message.recipientLastName,
-                        senderImageUri = message.recipientImageUri,
-                        SenderAccount = paymentAccount,
-                        SenderUri = message.RecipientUri,
-                        WorkflowStatus = PaystreamMessageWorkflowStatus.Pending
-                    });
+                    paymentMessage = _messageServices.AddMessage(message.ApiKey.ToString(), request.userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
+                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.SenderUri);
+
 
                     _ctx.SaveChanges();
                 }

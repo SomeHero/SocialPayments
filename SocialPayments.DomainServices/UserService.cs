@@ -65,18 +65,6 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                PayPoints = new Collection<UserPayPoint>()
-                        {
-                            new UserPayPoint() {
-                                CreateDate = System.DateTime.Now,
-                                IsActive = true,
-                                Verified = false,
-                                VerifiedDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 1,
-                                URI = emailAddress
-                            }
-                        },
                 SetupPassword = true,
                 SetupSecurityPin = false,
                 Roles = new Collection<Role>()

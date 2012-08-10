@@ -294,6 +294,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Error, string.Format("Exception registering user {0}. Exception {1}.", request.emailAddress, ex.Message));
 
+                var innerException = ex.InnerException;
+
+                while (innerException != null)
+                {
+                    _logger.Log(LogLevel.Error, string.Format("Inner Exception: {0}.", innerException.Message));
+
+                    innerException = innerException.InnerException;
+                }
                 var message = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.InternalServerError);
                 message.ReasonPhrase = String.Format("Unable to register user. {0}", ex.Message);
 

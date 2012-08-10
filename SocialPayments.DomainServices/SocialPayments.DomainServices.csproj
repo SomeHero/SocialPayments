@@ -175,6 +175,7 @@
     <Compile Include="CustomExceptions\InvalidSecurityPin.cs" />
     <Compile Include="EmailLogService.cs" />
     <Compile Include="EmailService.cs" />
+    <Compile Include="FacebookServices.cs" />
     <Compile Include="FormattingServices.cs" />
     <Compile Include="GoogleURLShortener.cs" />
     <Compile Include="Interfaces\IAmazonNotificationService.cs" />
