@@ -30,6 +30,21 @@ namespace Mobile_PaidThx.Models
         public ListPaymentAccountModel PaymentAccountsList { get; set; }
 
     }
+    public class OrganizationModels
+    {
+        public class Organizations
+        {
+            public List<OrganizationModel> NonProfits { get; set; }
+            public List<OrganizationModel> PublicDirectories { get; set; }
+        }
+        public class OrganizationModel
+        {
+            public String Name { get; set; }
+            public String Slogan { get; set; }
+            public Boolean HasInfo { get; set; }
+            public String ImageUri { get; set; }
+        }
+    }
     public class BankAccountModel
     {
         public string BankName { get; set; }
@@ -69,7 +84,7 @@ namespace Mobile_PaidThx.Models
     {
         public String Organization { get; set; }
         public String Amount { get; set; }
-        public String PledgerUri {get; set;}
+        public String PledgerUri { get; set; }
     }
     public class RequestMoneyModel
     {
