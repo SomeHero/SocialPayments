@@ -56,7 +56,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         longitutde = m.Longitude,
                         senderName = m.SenderName,
                         transactionImageUri = m.TransactionImageUrl,
-                        recipientName = (m.Recipient != null ? _formattingServices.FormatUserName(m.Recipient) : m.RecipientName)
+                        recipientName = (m.Recipient != null ? _formattingServices.FormatUserName(m.Recipient) : m.RecipientName),
+                        senderSeen = m.senderHasSeen,
+                        recipientSeen = m.recipientHasSeen
                     }).ToList();
 
                 return new HttpResponseMessage<List<MessageModels.MessageResponse>>(messageResponse, HttpStatusCode.OK);
