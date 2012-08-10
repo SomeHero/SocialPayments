@@ -351,13 +351,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     if (user != null)
                     {
+
+                        string firstName = user.FirstName;
+                        string lastName = user.LastName;
+
+                        if (firstName == null && lastName == null)
+                        {
+                            firstName = "PaidThx";
+                            lastName = "User";
+                        }
+                        else if (firstName == null)
+                        {
+                            firstName = "";
+                        }
+                        else if (lastName == null)
+                        {
+                            lastName = "";
+                        }
+
                         if (!matchedUsers.ContainsKey(user.UserId))
                         {
                             list.Add(new MessageModels.MultipleURIResponse()
                             {
                                 userUri = uri,
-                                firstName = user.FirstName,
-                                lastName = user.LastName
+                                firstName = firstName,
+                                lastName = lastName
                             });
 
                             matchedUsers.Add(user.UserId, user);
@@ -367,7 +385,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 if (list.Count == 0)
                 {
-                    //Send to primary.
+                    //Ask user how they want to invite this user to PaidThx.
                     return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
                 }
                 else
@@ -569,7 +587,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Cancelled;
+                message.Status = PaystreamMessageStatus.CancelledRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 //Create Update Message 
@@ -653,7 +671,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Accepted;
+                message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 try
@@ -667,7 +685,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Id = Guid.NewGuid(),
                         Latitude = 0,
                         Longitude = 0,
-                        Status = PaystreamMessageStatus.Processing,
+                        Status = PaystreamMessageStatus.ProcessingPayment,
                         MessageType = MessageType.Payment,
                         Recipient = message.Sender,
                         recipientFirstName = message.senderFirstName,
@@ -731,7 +749,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return responseMessage;
                 }
 
-                message.Status = PaystreamMessageStatus.Rejected;
+                message.Status = PaystreamMessageStatus.RejectedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 try

@@ -20,6 +20,16 @@ namespace Mobile_PaidThx.Controllers
         {
             return View();
         }
+
+        public ActionResult Help()
+        {
+            return View();
+        }
+
+        public ActionResult UserAgreement()
+        {
+            return View();
+        }
         //
         // GET: /Preferences/Details/5
 

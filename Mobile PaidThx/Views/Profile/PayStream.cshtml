@@ -8,11 +8,12 @@
         <dd>
             <a href="#simpleContained3" class="active">Paystream</a></dd>
         <dd>
-            <a href="#simpleContained4" class="tab-settings"></a></dd>
+            <a href="#simpleContained4" class="tab-settings"></a>
+        </dd>
     </dl>
     <div id="content-container">
         <ul class="tabs-content contained">
- <li id="simpleContained1Tab">
+            <li id="simpleContained1Tab">
                 <div id="main-container">
                     @{Html.RenderPartial("PartialViews/SendMoney", Model);}
                     @{Html.RenderPartial("_footer");}
@@ -24,16 +25,16 @@
                     @{Html.RenderPartial("_footer");}
                 </div>
             </li>
-            <li  class="active" id="simpleContained3Tab">
+            <li class="active" id="simpleContained3Tab">
                 <div id="main-container">
-                     @{Html.RenderPartial("PartialViews/PayStream", Model);}
+                    @{Html.RenderPartial("PartialViews/PayStream", Model);}
                     @{Html.RenderPartial("_footer");}
                 </div>
             </li>
             <li id="simpleContained4Tab">
                 <div id="main-container">
-                     @{Html.RenderPartial("PartialViews/Settings", Model);}
-                     @{Html.RenderPartial("_footer");}
+                    @{Html.RenderPartial("PartialViews/Settings", Model);}
+                    @{Html.RenderPartial("_footer");}
                 </div>
             </li>
         </ul>

@@ -45,7 +45,7 @@ namespace SocialPayments.DataLayer
         public IDbSet<Merchant> Merchants { get; set; }
         public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         public IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }
-
+        public IDbSet<Communication> Communications { get; set; }
 
         public Context() : base("name=DataContext") { }
 
@@ -331,7 +331,16 @@ namespace SocialPayments.DataLayer
                 ApplicationName = "MyApp",
                 IsActive = true,
                 Url = "myurl.com",
-                CreateDate = System.DateTime.Now
+                CreateDate = System.DateTime.Now,
+                ConfigurationValues = new Collection<ApplicationConfiguration>()
+                {
+                    new ApplicationConfiguration {
+                        Id = Guid.NewGuid(),
+                        ConfigurationKey = "UpperLimit",
+                        ConfigurationType = "1",
+                        ConfigurationValue = "5000"
+                    }
+                }
             });
             context.SocialNetworks.Add(new SocialNetwork()
             {
@@ -465,13 +474,53 @@ namespace SocialPayments.DataLayer
                         Label = "Income",
                         SortOrder = 8,
                         UserAttribute = incomeUserAttribute,
-                        ProfileItemType = ProfileItemType.Picker
+                        ProfileItemType = ProfileItemType.Picker,
+                        SelectOptionDescription = "Select your estimated household income from the list below.",
+                        SelectOptionHeader = "Your Household Income",
+                        SelectOptions = new List<ProfileItemSelectOption>() {
+                            new ProfileItemSelectOption() {
+                                OptionValue = "< $25,000",
+                                SortOrder = 1
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "$25,001 - $45,000",
+                                SortOrder = 2
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "$45,001 - $85,000",
+                                SortOrder = 3
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "$85,001+",
+                                SortOrder = 4
+                            },
+                        },
                     },
                     new ProfileItem() {
                         Label = "Credit Score",
                         SortOrder = 9,
                         UserAttribute = creditScoreUserAttribute,
-                        ProfileItemType = ProfileItemType.Picker
+                        ProfileItemType = ProfileItemType.Picker,
+                        SelectOptionDescription = "Select your credit score from the list below.",
+                        SelectOptionHeader = "Your Credit Score",
+                        SelectOptions = new List<ProfileItemSelectOption>() {
+                            new ProfileItemSelectOption() {
+                                OptionValue = "< 400",
+                                SortOrder = 1
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "400 - 550",
+                                SortOrder = 2
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "550 - 600",
+                                SortOrder = 3
+                            },
+                            new ProfileItemSelectOption() {
+                                OptionValue = "700 -800",
+                                SortOrder = 4
+                            },
+                        },
                     },
                 }
             });
@@ -854,7 +903,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.ProcessingPayment,
                 MessageType = MessageType.Payment,
                 MessageTypeValue = (int)MessageType.Payment,
                 Recipient = sender,
@@ -891,7 +940,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.PendingRequest,
                 MessageType = MessageType.PaymentRequest,
                 Recipient = james,
                 RecipientUri = james.MobileNumber,
@@ -908,7 +957,7 @@ namespace SocialPayments.DataLayer
                 Amount = 1.00,
                 ApiKey = application.ApiKey,
                 Comments = "Test Payment Message",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.PendingRequest,
                 MessageType = MessageType.PaymentRequest,
                 Recipient = sender,
                 RecipientUri = sender.MobileNumber,
@@ -925,7 +974,7 @@ namespace SocialPayments.DataLayer
                 Amount = 12.00,
                 ApiKey = application.ApiKey,
                 Comments = "thanks for the cheeseburger",
-                Status = PaystreamMessageStatus.Processing,
+                Status = PaystreamMessageStatus.ProcessingPayment,
                 MessageType = MessageType.Payment,
                 MessageTypeValue = (int)MessageType.Payment,
                 Recipient = james,
@@ -984,7 +1033,7 @@ namespace SocialPayments.DataLayer
                     Amount = amount,
                     ApiKey = application.ApiKey,
                     Comments = comments,
-                    Status = PaystreamMessageStatus.Processing,
+                    Status = PaystreamMessageStatus.NotifiedPayment,
                     MessageType = MessageType.Payment,
                     MessageTypeValue = (int)MessageType.Payment,
                     RecipientUri = "804355000" + i,
@@ -1023,7 +1072,7 @@ namespace SocialPayments.DataLayer
                     Amount = amount,
                     ApiKey = application.ApiKey,
                     Comments = comments,
-                    Status = PaystreamMessageStatus.Processing,
+                    Status = PaystreamMessageStatus.NotifiedPayment,
                     MessageType = MessageType.Payment,
                     MessageTypeValue = (int)MessageType.Payment,
                     RecipientUri = String.Format("james{0}@paidthx.com", i),
@@ -1101,7 +1150,7 @@ namespace SocialPayments.DataLayer
             var merchant2 = context.Merchants.Add(new Merchant() {
                 Id = Guid.NewGuid(),
                 CreateDate = System.DateTime.Now,
-                Name = "Richmond Sports League",
+                Name = "Richmond City Sports & Social Club",
                 User = new User()
                 {
                     ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"),
@@ -1136,6 +1185,20 @@ namespace SocialPayments.DataLayer
                             IsActive = true,
                              BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
                             BankName = "Wells Fargo"
+                        }
+                    }
+                },
+                MerchantListings = new List<MerchantListing>() {
+                    new MerchantListing() {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        Description = "Welcome to River City Sports & Social Club. The RCSSC prides itself in being the only sports club in the Richmond/Metropolitan area that offers the opportunity to meet several hundred new people in a single afternoon.\n\nThe RCSSC creates year-round opportunities for individuals to play a variety of team sports in a social atmosphere that continues into happy hours at the local sponsors' bars and lasts long after the games are over. It's the perfect cocktail of sports and socializing. The RCSSC social calendar is filled every season with a kickoff happy hour for each sport, Strawberry Hill Race Tailgate parties, and an End of the Year Member Appreciation Party that showcases and supports Toys for Tots.",
+                        TagLine = "A Tall Order of Socializing with A Splash of Sports",
+                        MerchantOffers = new List<MerchantOffer>() {
+                            new MerchantOffer() {
+                                Id = Guid.NewGuid(),
+                                Amount = 20.00
+                            }
                         }
                     }
                 },
@@ -1964,6 +2027,20 @@ namespace SocialPayments.DataLayer
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_uturn.png",
                 },
+                MerchantListings = new List<MerchantListing>() {
+                    new MerchantListing() {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        Description = "No matter your skill level, U-TURN has the sports training you need. Not only will our coaches help make you stronger, faster, more agile and more able, they will share the gospel of Jesus Christ with you in a manner that will help enrich your life and help take your game to the next level. In all sports there must be a balance between brains and brawn, between skill and talent, between heart and ability. At U-TURN, we not only provide sports skills, but we give you the balance between spirituality and realism that will help propel you in life regardless the path you choose!/n/nU-Turn...Training youth for lives of Christian love, purpose and service.",
+                        TagLine = "Training Champions for Life",
+                        MerchantOffers = new List<MerchantOffer>() {
+                            new MerchantOffer() {
+                                Id = Guid.NewGuid(),
+                                Amount = 40.00
+                            }
+                        }
+                    }
+                },
                 MerchantType = MerchantType.NonProfit,
 
             });
@@ -2178,7 +2255,33 @@ namespace SocialPayments.DataLayer
             merchant24.User.PreferredSendAccount = merchant24.User.PaymentAccounts[0];
 
             context.SaveChanges();
-            
+
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "{0} sent you {1:C} using PaidThx{2}. To pick it up go here: {3}"
+            });
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.ElasticTemplate,
+                Template = "Payment_NotRegistered"
+            });
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Payment_NotRegistered_Facebook",
+                Method = CommunicationMethod.FacebookWallPost,
+                Type = CommunicationType.FacebookTemplate,
+                Template = "I sent you {0:C} using the free social payment service PaidThx: \"{1}\". To pick it up go here: {2}"
+            });
+
+            context.SaveChanges();
 
             base.Seed(context);
         }

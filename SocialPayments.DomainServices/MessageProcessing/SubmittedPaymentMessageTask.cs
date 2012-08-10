@@ -44,6 +44,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"].ToString();
         private string _fromEmailAddress = ConfigurationManager.AppSettings["FromEmailAddress"];
 
+
+
         public void Execute(Guid messageId)
         {
             using (var ctx = new Context())
@@ -54,6 +56,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 var emailService = new DomainServices.EmailService(ctx);
                 var urlShortnerService = new DomainServices.GoogleURLShortener();
                 var transactionBatchService = new DomainServices.TransactionBatchService(ctx, _logger);
+                var communicationService = new DomainServices.CommunicationService(ctx);
 
                 var message = ctx.Messages
                     .FirstOrDefault(m => m.Id == messageId);
@@ -89,6 +92,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 var transactionBatch = transactionBatchService.GetOpenBatch();
 
+                //Create Withdrawal Transaction
                 transactionBatch.TotalNumberOfWithdrawals += 1;
                 transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
 
@@ -112,30 +116,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                        TransactionBatch = transactionBatch
                    });
 
-                if (message.Recipient != null && message.Recipient.PaymentAccounts != null && message.Recipient.PaymentAccounts.Count > 0 && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
-                {
-                    transactionBatch.TotalNumberOfDeposits += 1;
-                    transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
-
-                    ctx.Transactions.Add(new Transaction()
-                    {
-                        AccountNumber = message.Recipient.PaymentAccounts[0].AccountNumber,
-                        RoutingNumber = message.Recipient.PaymentAccounts[0].RoutingNumber,
-                        NameOnAccount = message.Recipient.PaymentAccounts[0].NameOnAccount,
-                        AccountType = Domain.AccountType.Checking,
-                        Amount = message.Payment.Amount,
-                        CreateDate = System.DateTime.Now,
-                        Id = Guid.NewGuid(),
-                        PaymentChannelType = PaymentChannelType.Single,
-                        SentDate = System.DateTime.Now,
-                        StandardEntryClass = StandardEntryClass.Web,
-                        Status = TransactionStatus.Pending,
-                        TransactionBatch = transactionBatch,
-                        Type = TransactionType.Deposit
-
-                    });
-                }
-
                 message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
                 message.LastUpdatedDate = System.DateTime.Now;
 
@@ -146,10 +126,39 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 ctx.SaveChanges();
 
                 var senderName = userService.GetSenderName(message.Sender);
-                //send out communication
 
                 if (message.Recipient != null)
                 {
+                    //create deposit transaction for recipient if they have an account that is verified
+                    //and the payment is not being held
+                    if (message.Recipient.PaymentAccounts != null && message.Recipient.PaymentAccounts.Count > 0 && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
+                    {
+                        transactionBatch.TotalNumberOfDeposits += 1;
+                        transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
+
+                        ctx.Transactions.Add(new Transaction()
+                        {
+                            AccountNumber = message.Recipient.PaymentAccounts[0].AccountNumber,
+                            RoutingNumber = message.Recipient.PaymentAccounts[0].RoutingNumber,
+                            NameOnAccount = message.Recipient.PaymentAccounts[0].NameOnAccount,
+                            AccountType = Domain.AccountType.Checking,
+                            Amount = message.Payment.Amount,
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            PaymentChannelType = PaymentChannelType.Single,
+                            SentDate = System.DateTime.Now,
+                            StandardEntryClass = StandardEntryClass.Web,
+                            Status = TransactionStatus.Pending,
+                            TransactionBatch = transactionBatch,
+                            Type = TransactionType.Deposit
+
+                        });
+                    }
+                    if (holdDays > 0)
+                        message.Status = PaystreamMessageStatus.HoldPayment;
+                    else
+                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+
                     var recipientName = userService.GetSenderName(message.Recipient);
 
                     //Send SMS Message to recipient
@@ -235,7 +244,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
                             //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
                             //      Opening the application is sufficient
-                            var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
+                            var numPending = ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedRequest));
 
                             _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
 
@@ -293,32 +302,42 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
                 else
                 {
+                    message.Status = PaystreamMessageStatus.NotifiedPayment;
+
                     // var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
                     URIType recipientType = messageService.GetURIType(message.RecipientUri);
 
-                    //Send out SMS message to sender
-                    if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
+                    //Send out CoSMS message to sender
+                    //if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
+                    //{
+                    //    _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
 
-                        smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber, String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl));
-                    }
-                    if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
-                    {
-                        //Send confirmation email to sender
-                        _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
+                    //    smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber, String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl));
+                    //}
+                    //if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
+                    //{
+                    //    //Send confirmation email to sender
+                    //    _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
 
-                        emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
-                            String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri),
-                            String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri));
-                    }
+                    //    emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
+                    //        String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri),
+                    //        String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri));
+                    //}
+
+                    //Look at the recipient uri and determine what type of communication to send
                     if (recipientType == URIType.MobileNumber)
                     {
+
+                        var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_SMS");
+
                         //Send out SMS message to recipient
                         _logger.Log(LogLevel.Info, String.Format("Send SMS to Recipient (Recipient is not an registered user)."));
 
+                        var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
+
                         smsService.SendSMS(message.ApiKey, message.RecipientUri,
-                            String.Format(_recipientSMSMessageRecipientNotRegistered, senderName, message.Amount, message.shortUrl));
+                            String.Format(communicationTemplate.Template, senderName, message.Amount, 
+                            comment, message.shortUrl));
                     }
 
                     //Payment Registered Recipient
@@ -336,9 +355,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         //Send confirmation email to recipient
                         _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient (Recipient is not an registered user)."));
 
+                        var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_Email");
+
                         emailService.SendEmail(message.RecipientUri,
                             String.Format(_recipientConfirmationEmailSubject, senderName, message.Amount)
-                            , _paymentReceivedRecipientNotRegisteredTemplate, new List<KeyValuePair<string, string>>()
+                            , communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("first_name", ""),
                                 new KeyValuePair<string, string>("last_name", ""),
@@ -355,6 +376,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         try
                         {
+                            var communicationTemplate = communicationService.GetCommunicationTemplate("Payment_NotRegistered_Facebook");
+                            
                             var client = new Facebook.FacebookClient(message.Sender.FacebookUser.OAuthToken);
                             var args = new Dictionary<string, object>();
 
@@ -365,7 +388,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             if (!(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
                                 formattedComments = String.Format("{0}.", formattedComments);
 
-                            args["message"] = String.Format(_facebookFriendWallPostMessageTemplate, message.Amount, formattedComments, message.shortUrl);
+                            args["message"] = String.Format(communicationTemplate.Template, message.Amount, formattedComments, message.shortUrl);
                             args["link"] = message.shortUrl;
 
                             args["name"] = _facebookFriendWallPostLinkTitleTemplate;

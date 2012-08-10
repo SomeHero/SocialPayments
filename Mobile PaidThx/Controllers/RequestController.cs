@@ -8,12 +8,61 @@ namespace Mobile_PaidThx.Controllers
 {
     public class RequestController : Controller
     {
+        Mobile_PaidThx.Models.RequestMoneyModel savedData = new Models.RequestMoneyModel();
         //
         // GET: /Request/
 
         public ActionResult Index()
         {
+            return View(savedData);
+        }
+
+        [HttpPost]
+        public ActionResult Index(String index)
+        {
+            if (index != null && index.Length > 0)
+            {
+                savedData.Amount = Double.Parse(index);
+            }
+            else
+            {
+                savedData.Amount = 0;
+            }
+
+            return View(savedData);
+        }
+
+        [HttpPut]
+        public ActionResult Index(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult RequestData(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
+            return Json(model);
+        }
+
+        public ActionResult AmountToRequest()
+        {
             return View();
+        }
+
+        public ActionResult AddContactRequest()
+        {
+            return View();
+        }
+
+        public ActionResult RequestPinswipe()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RequestPinswipe(Mobile_PaidThx.Models.RequestMoneyModel model)
+        {
+            return View(model);
         }
 
         //

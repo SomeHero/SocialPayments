@@ -50,6 +50,8 @@ namespace SocialPayments.RestServices.Internal.Models
 
             public bool setupSecurityPin { get; set; }
             public int numberOfPaystreamUpdates { get; set; }
+            public int newMessageCount { get; set; }
+            public int pendingMessageCount { get; set; }
 
             public List<UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
@@ -125,6 +127,14 @@ namespace SocialPayments.RestServices.Internal.Models
             public string oAuthToken { get; set; }
             //public DateTime tokenExpiration { get; set; }
         }
+
+        public class LinkFacebookRequest
+        {
+            public string apiKey { get; set; }
+            public string accountId { get; set; }
+            public string oAuthToken { get; set; }
+        }
+
         public class FacebookSignInResponse
         {
             public bool hasSecurityPin { get; set; }
@@ -216,6 +226,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string Subject { get; set; }
             public string TemplateName { get; set; }
             public List<KeyValuePair<string, string>> ReplacementElements { get; set; }
+        }
+        public class UpdateUserAttributeRequest
+        {
+            public string AttributeValue { get; set; }
         }
     }
 }

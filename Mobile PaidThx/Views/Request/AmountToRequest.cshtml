@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "AmountToRequestView";
+}
+<div data-role="page" id="request-page">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Request $</h1>
+        <a onclick="returnPref()" id="btn-settings" class="top-button ui-btn-right"></a>
+        <div data-role="navbar" class="nav-pdthx" data-grid="d">
+            <ul>
+                <li><a onclick="returnHome()" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                <li><a onclick="returnRequest()" class="nav-item ui-btn-active" id="request" data-icon="custom">Req.
+                    $</a></li>
+                <li><a onclick="returnSend()" class="nav-item" id="send" data-icon="custom">Send $</a></li>
+                <li><a onclick="returnDoGood()" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
+                <li><a onclick="returnPaystream()" class="nav-item" id="paystream" data-icon="custom">
+                    Stream</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Choose Amount</div>
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
+        <div class="fieldamount" style="height: 50px;" id="amount-body">
+            <div id="custom-amount-field" style="float: left; padding-left: 47px;">
+                <input type="text" id="customAmountRequest" style="width: 195px; margin-right: -19px;
+                    float: left" />
+            </div>
+            <button id="gobtn-request" style="position: absolute; left: 270px; padding-top: 8px;
+                color: #FFFFFF">
+                Go
+            </button>
+        </div>
+        <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
+            QUICK SEND AMOUNTS</div>
+        <div class="quicksend" style="width: 100%; margin: -5px">
+            <button id="onedollarbtnrequest" type="button" class="quickaddbtn-style">
+                $1</button>
+            <button id="fivedollarbtnrequest" type="button" class="quickaddbtn-style">
+                $5</button>
+            <button id="tendollarbtnrequest" type="button" class="quickaddbtn-style">
+                $10</button>
+            <button id="twentydollarbtnrequest" type="button" class="quickaddbtn-style">
+                $20</button>
+        </div>
+        <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
+            AVAILABLE TO SEND TODAY</div>
+        <div class="availableamt">
+            $40.00</div>
+        <div style="background: #000000; height: 1px; margin-bottom: 10px">
+        </div>
+    </div>
+</div>

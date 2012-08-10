@@ -192,12 +192,23 @@
     <Content Include="apple-touch-icon.png" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\bank.png" />
+    <Content Include="Content\images\bg-pattern.png" />
     <Content Include="Content\images\btn-go-active-50x48.png" />
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
     <Content Include="Content\images\btn-quickadd.png" />
+    <Content Include="Content\images\btn_info_active.png" />
+    <Content Include="Content\images\btn_info_inactive.png" />
+    <Content Include="Content\images\button.png" />
+    <Content Include="Content\images\button_active.png" />
+    <Content Include="Content\images\button_active2.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\helpIcon.png" />
+    <Content Include="Content\images\home.png" />
+    <Content Include="Content\images\favicon.png" />
     <Content Include="Content\images\field-contact-255x48.png" />
     <Content Include="Content\images\field-howmuch-255x48.png" />
+    <Content Include="Content\images\field-money-icon.png" />
+    <Content Include="Content\images\icon-person.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40-active.png" />
     <Content Include="Content\images\icon-settings-accounts-40x40.png" />
     <Content Include="Content\images\icon-settings-bank-40x40.png" />
@@ -223,6 +234,43 @@
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
     <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\line_diagonal1.png" />
+    <Content Include="Content\images\line_diagonal2.png" />
+    <Content Include="Content\images\line_hor.png" />
+    <Content Include="Content\images\line_ver.png" />
+    <Content Include="Content\images\org_acs.png" />
+    <Content Include="Content\images\org_americandiabetes.png" />
+    <Content Include="Content\images\org_americanheart.png" />
+    <Content Include="Content\images\org_beta.png" />
+    <Content Include="Content\images\org_bsa.png" />
+    <Content Include="Content\images\org_childsavers.png" />
+    <Content Include="Content\images\org_cvsa.png" />
+    <Content Include="Content\images\org_goodwill.png" />
+    <Content Include="Content\images\org_hostelling.png" />
+    <Content Include="Content\images\org_marchofdimes.png" />
+    <Content Include="Content\images\org_mda.png" />
+    <Content Include="Content\images\org_natureconserv.png" />
+    <Content Include="Content\images\org_obxparish.png" />
+    <Content Include="Content\images\org_rivercitysports.png" />
+    <Content Include="Content\images\org_rotary.png" />
+    <Content Include="Content\images\org_specialolympics.png" />
+    <Content Include="Content\images\org_teach4amer.png" />
+    <Content Include="Content\images\org_uturn.png" />
+    <Content Include="Content\images\org_worldvision.png" />
+    <Content Include="Content\images\org_wwf.png" />
+    <Content Include="Content\images\org_zta.png" />
+    <Content Include="Content\images\signinIcon.png" />
+    <Content Include="Content\images\icons\settingsIcon.png" />
+    <Content Include="Content\images\icons\dogoodIcon-active.png" />
+    <Content Include="Content\images\icons\homeIcon-active.png" />
+    <Content Include="Content\images\icons\paystreamIcon-active.png" />
+    <Content Include="Content\images\icons\requestIcon-active.png" />
+    <Content Include="Content\images\icons\sendIcon-active.png" />
+    <Content Include="Content\images\icons\dogoodIcon.png" />
+    <Content Include="Content\images\icons\paystreamIcon.png" />
+    <Content Include="Content\images\icons\requestIcon.png" />
+    <Content Include="Content\images\icons\sendIcon.png" />
+    <Content Include="Content\images\pattern.png" />
     <Content Include="Content\images\skip-step-button-icon.png" />
     <Content Include="Content\images\request-money-button-icon.png" />
     <Content Include="Content\images\send-money-button-icon.png" />
@@ -276,16 +324,18 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\patternlock.css" />
     <Content Include="navTest.html" />
-    <Content Include="pdthx-icons\homeIcon.png" />
-    <Content Include="pdthx-icons\paystreamIcon.png" />
-    <Content Include="pdthx-icons\preferencesIcon.png" />
-    <Content Include="pdthx-icons\profileIcon.png" />
-    <Content Include="pdthx-icons\requestIcon.png" />
-    <Content Include="pdthx-icons\sendIcon.png" />
+    <Content Include="Content\images\icons\homeIcon.png" />
+    <Content Include="Content\images\icons\preferencesIcon.png" />
+    <Content Include="Content\images\icons\profileIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
     <Content Include="Scripts\home.js" />
+    <Content Include="Scripts\jquery.livequery.js" />
+    <Content Include="Scripts\dogood.js" />
+    <Content Include="Scripts\patternlock.js" />
+    <Content Include="Scripts\popuppinswipe.js" />
     <Content Include="Scripts\settings.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\paymentaccount.js" />
@@ -386,11 +436,22 @@
     <Content Include="Scripts\script.js" />
     <Content Include="Scripts\setupACHAccount.js" />
     <Content Include="Scripts\verify-mobiledevice.js" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -481,7 +542,21 @@
     <Content Include="Views\Send\Index.cshtml" />
     <Content Include="Views\DoGood\Index.cshtml" />
     <Content Include="Views\Preferences\Index.cshtml" />
-    <Content Include="Views\Preferences\BankAccounts.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\ChooseMoneyRequest.cshtml" />
+    <Content Include="Views\PaymentAccount\Index.cshtml" />
+    <Content Include="Views\Send\AmountToSend.cshtml" />
+    <Content Include="Views\Request\AmountToRequest.cshtml" />
+    <Content Include="Views\Request\AddContactRequest.cshtml" />
+    <Content Include="Views\Send\AddContactSend.cshtml" />
+    <Content Include="Views\Send\PopupPinswipe.cshtml" />
+    <Content Include="Views\Preferences\UserAgreement.cshtml" />
+    <Content Include="Views\Preferences\Help.cshtml" />
+    <Content Include="Views\Request\RequestPinswipe.cshtml" />
+    <Content Include="Views\DoGood\Donate.cshtml" />
+    <Content Include="Views\DoGood\Pledge.cshtml" />
+    <Content Include="Views\DoGood\AddOrg.cshtml" />
+    <Content Include="Views\DoGood\AddToSend.cshtml" />
+    <Content Include="Views\DoGood\AmountToDonate.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
@@ -557,6 +632,7 @@
     </Content>
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Paystream\Index.cshtml" />
     <Content Include="Views\Request\PartialViews\RequestMoney.cshtml" />

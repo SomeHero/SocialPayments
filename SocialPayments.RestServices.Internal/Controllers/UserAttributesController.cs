@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Web.Http;
 using NLog;
 using SocialPayments.RestServices.Internal.Models;
+using SocialPayments.DataLayer;
+using System.Net;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -30,9 +32,58 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Number of user Attributes {0}", userAttributes.Count()));
         }
 
-        // PUT /api/userattribute/5
-        public void Put(int id, string value)
+        // PUT /api/Users/{0}/userattributes/{1}
+        public HttpResponseMessage Put(string userId, string id, UserModels.UpdateUserAttributeRequest request)
         {
+            using (var ctx = new Context())
+            {
+                var userService = new DomainServices.UserService(ctx);
+
+                var user = userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    var message = String.Format("User Id {0} is not valid", userId);
+
+                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+                    return responseMessage;
+                }
+
+                Guid userAttributeId;
+
+                Guid.TryParse(id, out userAttributeId);
+
+                if(userAttributeId == null)
+                {
+                    var message = String.Format("Attribute Id {0} is not valid", id);
+
+                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+                    return responseMessage;
+                }
+                var userAttribute = user.UserAttributes.FirstOrDefault(a => a.UserAttributeId.Equals(userAttributeId));
+
+                if(userAttribute == null)
+                {
+                    user.UserAttributes.Add(new Domain.UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        AttributeValue = request.AttributeValue,
+                        UserAttributeId = userAttributeId
+                    });
+
+                    ctx.SaveChanges();
+
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+
+                userAttribute.AttributeValue = request.AttributeValue;
+
+                ctx.SaveChanges();
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
         }
 
         // DELETE /api/userattribute/5

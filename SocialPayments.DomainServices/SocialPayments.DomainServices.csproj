@@ -157,6 +157,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -168,6 +169,7 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="AndroidNotificationService.cs" />
+    <Compile Include="CommunicationService.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="CustomExceptions\AccountLockedPinCodeFailures.cs" />
     <Compile Include="CustomExceptions\InvalidSecurityPin.cs" />
@@ -211,6 +213,10 @@
     <ProjectReference Include="..\SocialPayments.Domain\SocialPayments.Domain.csproj">
       <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
       <Name>SocialPayments.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialPayments.ThirdPartyServices.FedACHService\SocialPayments.ThirdPartyServices.FedACHService.csproj">
+      <Project>{77F37AEC-FB67-41D3-9627-FA647BBD550F}</Project>
+      <Name>SocialPayments.ThirdPartyServices.FedACHService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

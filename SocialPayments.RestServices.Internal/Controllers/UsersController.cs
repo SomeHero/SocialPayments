@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Amazon.S3.Model;
 using System.IO;
 using System.Text;
+using SocialPayments.Domain.ExtensionMethods;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -114,6 +115,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
 
+            var newCount = messageServices.GetNewMessages(user);
+            var pendingCount = messageServices.GetPendingMessages(user);
+
             try
             {
                 userResponse = new UserModels.UserResponse()
@@ -145,7 +149,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     {
                         AttributeId = a.UserAttributeId,
                         AttributeName = a.UserAttribute.AttributeName,
-                        AttributeValue = a.AttributeValue
+                        AttributeValue = (a.AttributeValue != null ? a.AttributeValue : "")
                     }).ToList(),
                     upperLimit = user.Limit,
                     instantLimit = _userService.GetUserInstantLimit(user),
@@ -184,15 +188,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         VerifiedDate = "",
                         CreateDate = p.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy")
                     }).ToList() : null),
-                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts.Select(a => new AccountModels.AccountResponse() {
-                        AccountNumber = securityService.Decrypt(a.AccountNumber),
+                    bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts
+                    .Where(b => b.IsActive)
+                    .Select(a => new AccountModels.AccountResponse() {
+                        AccountNumber = securityService.GetLastFour(securityService.Decrypt(a.AccountNumber)),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
                         Nickname = a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
                         UserId = a.UserId.ToString(),
-                        Status = a.AccountStatus.ToString()
+                        Status = a.AccountStatus.GetDescription()
                     }).ToList() : null),
                     userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
                         new UserModels.UserConfigurationResponse() {
@@ -202,7 +208,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType 
                         }).ToList() : null), 
-                    numberOfPaystreamUpdates = numberOfPayStreamUpdates
+                    numberOfPaystreamUpdates = numberOfPayStreamUpdates,
+                    newMessageCount = 1,
+                    pendingMessageCount = 1
                 };
             } 
             catch(Exception ex)
@@ -292,6 +300,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return message;
             }
 
+            _userService.SendEmailVerificationLink(user.PayPoints[0]);
+
             var responseMessage = new UserModels.SubmitUserResponse()
             {
                 userId = user.UserId.ToString()
@@ -316,6 +326,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.ImageUrl = request.ImageUrl;
+
+            var firstNameAttribute = _ctx.UserAttributes
+                .FirstOrDefault(a => a.AttributeName == "FirstName");
+
+            if(firstNameAttribute != null)
+            {
+                user.UserAttributes.Add(new UserAttributeValue() {
+                    id = Guid.NewGuid(),
+                    UserAttributeId = firstNameAttribute.Id,
+                    AttributeValue = request.FirstName
+                });
+            }
+            var lastNameAttribute = _ctx.UserAttributes
+                .FirstOrDefault(a => a.AttributeName == "LastName");
+
+            if (firstNameAttribute != null)
+            {
+                user.UserAttributes.Add(new UserAttributeValue()
+                {
+                    id = Guid.NewGuid(),
+                    UserAttributeId = lastNameAttribute.Id,
+                    AttributeValue = request.LastName
+                });
+            }
+
 
             try
             {
@@ -740,6 +775,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.Created);
             else
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
+        }
+
+        public HttpResponseMessage LinkFacebook(string id, UserModels.LinkFacebookRequest request)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.UserService _userService = new DomainServices.UserService(ctx);
+
+                Domain.User user = null;
+
+                try
+                {
+                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.oAuthToken, System.DateTime.Now.AddDays(30));
+                }
+                catch (ArgumentException aEx)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = aEx.Message;
+                    return message;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    message.ReasonPhrase = ex.Message;
+                    return message;
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
         }
 
         // DELETE /api/user/5

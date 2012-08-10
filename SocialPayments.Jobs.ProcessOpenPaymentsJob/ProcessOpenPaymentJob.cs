@@ -28,7 +28,7 @@ namespace SocialPayments.Jobs.ProcessOpenPaymentsJob
         
         public void Execute(JobExecutionContext context)
         {
-            var payments = _ctx.Messages.Where(p => p.Status == Domain.PaystreamMessageStatus.Processing);
+            var payments = _ctx.Messages.Where(p => p.Status == Domain.PaystreamMessageStatus.NotifiedPayment);
             int numberOfDaysOpenThreshold = 10;
             foreach (var payment in payments)
             {

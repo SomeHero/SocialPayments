@@ -100,7 +100,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
             using (var _ctx = new Context())
             {
                 UserService userService = new UserService(_ctx);
-
+               
                 var user = userService.GetUserById(userId);
 
                 if (user == null)
@@ -123,7 +123,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                 }
 
                 //TODO: Validate format of the URI based on type
-
 
                 var userPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
                 {

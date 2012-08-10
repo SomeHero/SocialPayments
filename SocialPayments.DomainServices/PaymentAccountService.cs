@@ -9,6 +9,7 @@ using SocialPayments.DataLayer;
 using System.Configuration;
 using System.Threading.Tasks;
 using SocialPayments.DomainServices.PaymentAccountProcessing;
+using SocialPayments.ThirdPartyServices.FedACHService;
 
 namespace SocialPayments.DomainServices
 {
@@ -62,6 +63,15 @@ namespace SocialPayments.DomainServices
                 throw new ArgumentException("Invalid Account Type Specifieid", "accountType");
 
             Domain.PaymentAccount paymentAccount = null;
+            FedACHService fedACHService = new FedACHService();
+
+            FedACHList fedACHList = null;
+            var result = fedACHService.getACHByRoutingNumber(routingNumber, out fedACHList);
+
+            if (!result)
+            {
+                throw new Exception("Invalid Routing Number");
+            }
 
             try
             {
@@ -83,6 +93,7 @@ namespace SocialPayments.DomainServices
                     BankName = "",
                     BankIconURL = "",
                     Nickname = nickName,
+                    IsActive = true
                 });
 
                 if (user.PreferredReceiveAccount == null)

@@ -1,0 +1,40 @@
+﻿@model Mobile_PaidThx.Models.RequestMoneyModel
+<script>
+    function submitform() {
+        alert("You entered " + document.getElementById("patternlock").value);
+        return true;
+    }
+</script>
+<div data-role="page" id="pinswipe-page">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Request $</h1>
+        <a onclick="returnPref()" id="btn-settings" class="top-button ui-btn-right"></a>
+        <div data-role="navbar" class="nav-pdthx" data-grid="d">
+            <ul>
+                <li><a onclick="returnHome()" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                <li><a onclick="returnRequest()" class="nav-item ui-btn-active" id="request" data-icon="custom">
+                    Req. $</a></li>
+                <li><a onclick="returnSend()" class="nav-item" id="send" data-icon="custom">Send $</a></li>
+                <li><a onclick="returnDoGood()" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
+                <li><a onclick="returnPaystream()" class="nav-item" id="paystream" data-icon="custom">
+                    Stream</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Enter Pinswipe</div>
+        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
+        </div>
+        <form id="pinSwipeForm" action="@Url.Content("~/Profile/RequestMoney")" method="post">
+        <div>
+            <input type="hidden" name="RecipientUri" id="sendUri-Request" value="@Model.RecipientUri" />
+            <input type="hidden" name="Amount" id="amountUri-Request" value="@Model.Amount" />
+            <input type="hidden" name="Comments" id="commentsUri-Request" value="@Model.Comments" />
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        </form>
+    </div>
+</div>

@@ -1,5 +1,4 @@
 ﻿@model Mobile_PaidThx.Models.ProfileModels
-<script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
 <div class="globalbg" id="globalbg">
     <div class="paystream-header-title" style="margin-top: -5px; margin-left: -5px; margin-right: -5px;
         margin-bottom: 0px">
@@ -92,14 +91,16 @@
     </div>
     <!-- Separate Set -->
     <!-- Help -->
-    <div class="tabletop">
-        <div style="float: left">
-            <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-help-40x40.png") width="40px" /></div>
-        <div style="float: left; padding-left: 10px; padding-top: 10px">
-            Help</div>
-        <div style="float: right; padding-right: 5px; padding-top: 6px">
-            <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
-    </div>
+    <a onclick="getHelpScreen()" data-role="button" data-transition="slideup">
+        <div class="tabletop">
+            <div style="float: left">
+                <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-help-40x40.png") width="40px" /></div>
+            <div style="float: left; padding-left: 10px; padding-top: 10px">
+                Help</div>
+            <div style="float: right; padding-right: 5px; padding-top: 6px">
+                <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
+        </div>
+    </a>
     <!-- Feedback -->
     <div class="tablebottom">
         <div style="float: left">
@@ -112,14 +113,14 @@
     <!--Rate PaidThx ( won't be used this version )-->
     <!-- Separate Set -->
     <!-- User Agreement -->
-    <div class="tabletop">
+    <a onclick="getUAScreen()" class="tabletop">
         <div style="float: left">
             <img alt="profileimg" src=@Url.Content("~/Content/images/icon-settings-legal-40x40.png") width="40px" /></div>
         <div style="float: left; padding-left: 10px; padding-top: 10px">
             User Agreement</div>
         <div style="float: right; padding-right: 5px; padding-top: 6px">
             <img alt="arrowpng" src=@Url.Content("~/Content/images/arrow.png") /></div>
-    </div>
+    </a>
     <!-- Sign Out -->
     <div class="tablemiddle">
         <div style="float: left">

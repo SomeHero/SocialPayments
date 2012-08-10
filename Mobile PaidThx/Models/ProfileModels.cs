@@ -28,7 +28,22 @@ namespace Mobile_PaidThx.Models
         public PaymentModel Payment { get; set; }
         public List<PaystreamModels.PaymentModel> TransactionReceipts { get; set; }
         public ListPaymentAccountModel PaymentAccountsList { get; set; }
-   
+
+    }
+    public class OrganizationModels
+    {
+        public class Organizations
+        {
+            public List<OrganizationModel> NonProfits { get; set; }
+            public List<OrganizationModel> PublicDirectories { get; set; }
+        }
+        public class OrganizationModel
+        {
+            public String Name { get; set; }
+            public String Slogan { get; set; }
+            public Boolean HasInfo { get; set; }
+            public String ImageUri { get; set; }
+        }
     }
     public class BankAccountModel
     {
@@ -63,13 +78,28 @@ namespace Mobile_PaidThx.Models
         public String RecipientUri { get; set; }
         public Double Amount { get; set; }
         public String Comments { get; set; }
+        public String Pincode { get; set; }
+    }
+    public class DonateMoneyModel
+    {
+        public String Organization { get; set; }
+        public String Amount { get; set; }
+        public String PledgerUri { get; set; }
     }
     public class RequestMoneyModel
     {
         public String RecipientUri { get; set; }
         public Double Amount { get; set; }
         public String Comments { get; set; }
+        public String Pincode { get; set; }
     }
+
+    public class AddContactModel
+    {
+        public String reference1 { get; set; }
+        public String reference2 { get; set; }
+    }
+
     public enum TransactionType
     {
         Deposit = 1,

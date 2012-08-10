@@ -65,6 +65,18 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
+                PayPoints = new Collection<UserPayPoint>()
+                        {
+                            new UserPayPoint() {
+                                CreateDate = System.DateTime.Now,
+                                IsActive = true,
+                                Verified = false,
+                                VerifiedDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 1,
+                                URI = emailAddress
+                            }
+                        },
                 SetupPassword = true,
                 SetupSecurityPin = false,
                 Roles = new Collection<Role>()
@@ -98,7 +110,7 @@ namespace SocialPayments.DomainServices
             }
             var messages = _ctx.Messages
                 .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
-                    && m.StatusValue.Equals((int)PaystreamMessageStatus.Processing))
+                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)))
                     .ToList();
 
             foreach (var message in messages)
@@ -450,6 +462,9 @@ namespace SocialPayments.DomainServices
 
                     isNewUser = true;
 
+                    var emailAttribute = _ctx.UserAttributes
+                         .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
+
                     user = _ctx.Users.Add(new Domain.User()
                     {
                         UserId = Guid.NewGuid(),
@@ -486,6 +501,25 @@ namespace SocialPayments.DomainServices
                             OAuthToken = oAuthToken
                         },
                         ImageUrl = String.Format(_fbImageUrlFormat, accountId),
+                        PayPoints = new Collection<UserPayPoint>()
+                        {
+                            new UserPayPoint() {
+                                CreateDate = System.DateTime.Now,
+                                IsActive = true,
+                                Verified = true,
+                                VerifiedDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 1,
+                                URI = emailAddress
+                            }
+                        },
+                        UserAttributes = new Collection<UserAttributeValue>() {
+                            new UserAttributeValue() {
+                                id = Guid.NewGuid(),
+                                UserAttributeId = emailAttribute.Id,
+                                AttributeValue = emailAddress
+                            }
+                        }
                     });
 
                 }
@@ -537,10 +571,9 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User LinkFacebook(Guid apiKey, string userId, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, string oAuthToken, DateTime tokenExpiration)
+        public User LinkFacebook(Guid apiKey, string userId, string accountId, string oAuthToken, DateTime tokenExpiration)
         {
-            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
+            _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: and token {1}", accountId, oAuthToken));
 
             User user = null;
 
@@ -553,7 +586,7 @@ namespace SocialPayments.DomainServices
 
                 if (user == null)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Linking Facebook account.", accountId, emailAddress));
+                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Linking Facebook account.", accountId));
 
                     user = GetUserById(userId);
 
@@ -567,31 +600,19 @@ namespace SocialPayments.DomainServices
                             // TokenExpiration = tokenExpiration,
                             OAuthToken = oAuthToken
                         };
-                        user.UserName = "fb_" + accountId;
+                        //user.UserName = "fb_" + accountId;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
                     }
 
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Email Address {1}.  Overwriting.", accountId, emailAddress));
+                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Stopping Link.", accountId));
 
-                    user.DeviceToken = deviceToken;
-                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
-                    if (user.FacebookUser != null)
-                    {
-                        user.FacebookUser.OAuthToken = oAuthToken;
-                        //user.FacebookUser.TokenExpiration = tokenExpiration;
-                    }
-                    else
-                    {
-                        user.FacebookUser = new FBUser()
-                        {
-                            FBUserID = accountId,
-                            Id = Guid.NewGuid(),
-                            // TokenExpiration = tokenExpiration,
-                            OAuthToken = oAuthToken
-                        };
-                    }
+                    throw new ArgumentException("We already have a user linked to this facebook account.", "accountId");
                 }
 
                 _ctx.SaveChanges();
@@ -612,6 +633,14 @@ namespace SocialPayments.DomainServices
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Fatal, String.Format("Exception Linking with Facebook. {0}", ex.Message));
+                var innerException = ex.InnerException;
+
+                while (innerException != null)
+                {
+                    _logger.Log(LogLevel.Fatal, innerException.Message);
+
+                    innerException = innerException.InnerException;
+                }
 
                 throw ex;
             }
