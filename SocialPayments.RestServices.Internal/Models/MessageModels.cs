@@ -12,7 +12,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public int TotalRecords { get; set; }
             public IEnumerable<MessageResponse> Results { get; set; }
         }
-        public class MessageResponse {
+        public class MessageResponse 
+        {
             public Guid Id { get; set; }
             public string senderUri { get; set; }
             public UserModels.UserResponse sender { get; set; }
@@ -31,6 +32,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string recipientName { get; set; }
             public double latitude { get; set; }
             public double longitutde { get; set; }
+            public bool senderSeen { get; set; }
+            public bool recipientSeen { get; set; }
         }
 
         public class MultipleURIRequest
