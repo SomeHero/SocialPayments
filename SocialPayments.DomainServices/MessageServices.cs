@@ -264,7 +264,9 @@ namespace SocialPayments.DomainServices
                     Longitude = longitude,
                     recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
                     recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
-                    recipientImageUri = recipientImageUri
+                    recipientImageUri = recipientImageUri,
+                    recipientHasSeen = false,
+                    senderHasSeen = true
                 });
 
                 _context.SaveChanges();
