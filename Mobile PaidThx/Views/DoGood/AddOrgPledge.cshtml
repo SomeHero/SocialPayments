@@ -1,0 +1,132 @@
+﻿@model Mobile_PaidThx.Models.OrganizationModels.Organizations
+<div data-role="page" id="dogood-page">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Do Good</h1>
+        <a onclick="returnPref()" id="btn-settings" class="top-button ui-btn-right"></a>
+        <div data-role="navbar" class="nav-pdthx" data-grid="d">
+            <ul>
+                <li><a onclick="returnHome()" class="nav-item" id="home" data-icon="custom">Home</a></li>
+                <li><a onclick="returnRequest()" class="nav-item" id="request" data-icon="custom">Req.
+                    $</a></li>
+                <li><a onclick="returnSend()" class="nav-item" id="send" data-icon="custom">Send $</a></li>
+                <li><a onclick="returnDoGood()" class="nav-item ui-btn-active" id="dogood" data-icon="custom">
+                    Do Good</a></li>
+                <li><a onclick="returnPaystream()" class="nav-item" id="paystream" data-icon="custom">
+                    Stream</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Add Organization</div>
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
+        <div data-role="fieldcontain" style="margin-left: 10px">
+            <div style="font-size: 16px; margin-bottom: 10px">
+                Enter your organization's name:</div>
+            <label for="organization">
+                <span style="font-weight: bold">Organization:</span></label>
+            <input type="text" name="organization" id="organization" />
+        </div>
+        <p>
+            <button id="submitOrgDonate" type="button" style="padding: 10px; font-size: 18px;
+                margin: 15px">
+                Submit Organization</button>
+        </p>
+        <p>
+            <span style="font-size: 16px; font-weight: bold; margin-left: 15px">OR</span>
+        </p>
+        <label for="listoforgs">
+            <span style="font-weight: bold; margin-left: 5px; font-size: 14px">Choose from the list:</span></label>
+        <div id="listoforgs" style="padding: 8px; background-color: #000000; color: #FFFFFF;
+            font-size: 14px;">
+            NON-PROFITS
+        </div>
+        <!--American Cancer Society-->
+        @foreach (var nonprofit in Model.NonProfits)
+        {
+            <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                <img style="float:left; padding-right:10px" src="@Url.Content(@nonprofit.ImageUri)" />
+                @if (nonprofit.HasInfo)
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                }
+                else
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
+                }
+                <div style="margin-top: 8px">
+                    @if (nonprofit.Name != null && nonprofit.Name.Length > 0)
+                    {
+                        if (nonprofit.Name.Length > 25)
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name.Substring(0, 24)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name"</span>
+                        }
+                    }<br />
+                    @if (nonprofit.Slogan != null && nonprofit.Slogan.Length > 0)
+                    {
+                        if (nonprofit.Slogan.Length > 35)
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan.Substring(0, 36)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
+                        }
+                    }
+                </div>
+            </div>
+            <div style="height: 1px; background-color: #BFBFBF; width: 100%">
+            </div>
+        }
+        <div id="listoforgs" style="padding: 8px; background-color: #000000; color: #FFFFFF;
+            font-size: 14px;">
+            PUBLIC DIRECTORY
+        </div>
+        @foreach (var pub in Model.PublicDirectories)
+        {
+            <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                <img style="float:left; padding-right:10px" src="@Url.Content(@pub.ImageUri)" />
+                @if (pub.HasInfo)
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                }
+                else
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
+                }
+                <div style="margin-top: 8px">
+                    @if (pub.Name != null && pub.Name.Length > 0)
+                    {
+                        if (pub.Name.Length > 25)
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@pub.Name.Substring(0, 24)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@pub.Name"</span>
+                        }
+                    }<br />
+                    @if (pub.Slogan != null && pub.Slogan.Length > 0)
+                    {
+                        if (pub.Slogan.Length > 35)
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@pub.Slogan.Substring(0, 36)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@pub.Slogan"</span>
+                        }
+                    }
+                </div>
+            </div>
+            <div style="height: 1px; background-color: #BFBFBF; width: 100%">
+            </div>
+        }
+    </div>
+</div>

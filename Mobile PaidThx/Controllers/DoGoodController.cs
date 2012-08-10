@@ -217,6 +217,11 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        public ActionResult AmountToPledge()
+        {
+            return View();
+        }
+
         public ActionResult Donate()
         {
             Mobile_PaidThx.Models.DonateMoneyModel nullmodel = new Models.DonateMoneyModel();
@@ -237,7 +242,8 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Pledge()
         {
-            return View();
+            Mobile_PaidThx.Models.DonateMoneyModel nullmodel = new Models.DonateMoneyModel();
+            return View(nullmodel);
         }
 
         [HttpPut]
