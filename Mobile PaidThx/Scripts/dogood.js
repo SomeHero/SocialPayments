@@ -89,7 +89,7 @@ $(document).ready(function () {
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(requestModel);
+        var jsonData = $.toJSON(donateModel);
 
         $.ajax({
             type: 'POST',
@@ -119,7 +119,7 @@ $(document).ready(function () {
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(requestModel);
+        var jsonData = $.toJSON(donateModel);
 
         $.ajax({
             type: 'POST',
@@ -149,7 +149,7 @@ $(document).ready(function () {
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(requestModel);
+        var jsonData = $.toJSON(donateModel);
 
         $.ajax({
             type: 'POST',
@@ -179,7 +179,7 @@ $(document).ready(function () {
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(requestModel);
+        var jsonData = $.toJSON(donateModel);
 
         $.ajax({
             type: 'POST',
@@ -209,7 +209,7 @@ $(document).ready(function () {
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(requestModel);
+        var jsonData = $.toJSON(donateModel);
 
         $.ajax({
             type: 'POST',
