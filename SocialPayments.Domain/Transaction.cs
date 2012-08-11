@@ -54,5 +54,9 @@ namespace SocialPayments.Domain
         [ForeignKey("TransactionBatchId")]
         public virtual TransactionBatch TransactionBatch { get; set; }
 
+        public Guid? PaymentId { get; set; }
+        [ForeignKey("PaymentId")]
+        public virtual Payment Payment {get; set; }
+
     }
 }
