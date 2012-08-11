@@ -5,6 +5,7 @@ using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
 using NLog;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices.PaymentAccountProcessing
 {
@@ -14,13 +15,16 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
         
         private string _emailSubject = "You've added a new bank account";
         private string _templateName = "ACH Account Verification";
+        private string _paymentAccountVerificationBaseUrl = ConfigurationManager.AppSettings["PaymentAccountVerificationBaseUrl"];
 
         public void Excecute(Guid paymentAccountId)
         {
             using (var ctx = new Context())
             {
                 var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
+                var communicationService = new DomainServices.CommunicationService(ctx);
                 var emailService = new DomainServices.EmailService(ctx);
+                var userService = new DomainServices.UserService(ctx);
 
                 var paymentAccount = paymentAccountService.GetPaymentAccount(paymentAccountId);
 
@@ -118,8 +122,28 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
 
                 ctx.SaveChanges();
 
-                emailService.SendEmail(paymentAccount.User.EmailAddress, _emailSubject, _templateName,
-                    new List<KeyValuePair<string, string>>());
+                try
+                {
+                    var communicationTemplate = communicationService.GetCommunicationTemplate("New_Bank_Account_Email");
+                    var link = String.Format(_paymentAccountVerificationBaseUrl, paymentAccountVerification.Id);
+
+                    //FIRST_NAME, LAST_NAME, BANK_NAME, BANK_ACCOUNT_NAME, BANK_ACCOUNT_STATUS, LINK_VERIFY, LINK_VERIFY_INSTANT
+                    emailService.SendEmail(paymentAccount.User.EmailAddress, "Your bank account has been added", communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                    {
+                            new KeyValuePair<string, string>("FIRST_NAME", userService.GetSenderName(paymentAccount.User)),
+                            new KeyValuePair<string, string>("LAST_NAME", ""),
+                            new KeyValuePair<string, string>("BANK_NAME", paymentAccount.BankName),
+                            new KeyValuePair<string, string>("BANK_ICON_URL", paymentAccount.BankIconURL),
+                            new KeyValuePair<string, string>("BANK_ACCOUNT_NAME",  paymentAccount.Nickname),
+                            new KeyValuePair<string, string>("BANK_ACCOUNT_STATUS",  paymentAccount.AccountStatus.ToString()),
+                            new KeyValuePair<string, string>("LINK_VERIFY",  link),           
+                            new KeyValuePair<string, string>("LINK_VERIFY_INSTANT",  ""),      
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Exception Sending Bank Account Verification Link to {0}. {1}", paymentAccount.User.EmailAddress, ex.Message));
+                }
             }
         }
     }

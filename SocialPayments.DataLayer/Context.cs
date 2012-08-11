@@ -2306,10 +2306,10 @@ namespace SocialPayments.DataLayer
             context.Communications.Add(new Communication()
             {
                 Id = Guid.NewGuid(),
-                Key = "Payment_NotEngaged_Email",
+                Key = "Payment_NotEngaged_Facebook",
                 Method = CommunicationMethod.FacebookWallPost,
                 Type = CommunicationType.FacebookTemplate,
-                Template = "I sent you {0} using the free social payment service PaidThx{1}. {2} and finish your account set up to receive your payment."
+                Template = "I sent you {0:C} using the free social payment service PaidThx{1}. Visit {2} and finish your account set up to receive your payment."
             });
 
             //Payment_Reminder_SMS
@@ -2365,7 +2365,7 @@ namespace SocialPayments.DataLayer
                 Key = "Payment_Receipt_Facebook",
                 Method = CommunicationMethod.FacebookWallPost,
                 Type = CommunicationType.FacebookTemplate,
-                Template = "I requested {0:C} from you using the free social payment service PaidThx{1}. To complete the transaction, simply connect your facebook account here: {2}"
+                Template = "I sent you {0:C} using PaidThx{1}. You can view the details in your Paystream at {2}"
             });
             //Request_NotRegistered_SMS
             context.Communications.Add(new Communication()
@@ -2420,7 +2420,7 @@ namespace SocialPayments.DataLayer
                 Key = "Request_NotEngaged_Facebook",
                 Method = CommunicationMethod.FacebookWallPost,
                 Type = CommunicationType.FacebookTemplate,
-                Template = "I just requested money from you using the free social payment service PaidThx. To complete the transaction, simply connect your facebook account here: {0}"
+                Template = "I requested {0:C} from you using the free social payment service PaidThx{1}. Visit {2} and finish your account set up to receive your payment. "
             });
 
             //Request_Reminder_SMS
@@ -2454,16 +2454,16 @@ namespace SocialPayments.DataLayer
             context.Communications.Add(new Communication()
             {
                 Id = Guid.NewGuid(),
-                Key = "Request_Recipient_SMS",
+                Key = "Request_Receipt_SMS",
                 Method = CommunicationMethod.SMS,
                 Type = CommunicationType.SMSTemplate,
-                Template = "{0} requested {1:C} using PaidThx {2}. To accept or reject this request, open the PaidThx app or visit {3}."
+                Template = "{0} requested {1:C} using PaidThx{2}. To accept or reject this request, open the PaidThx app or visit {3}."
             });
             //Request_Recipient_Email
             context.Communications.Add(new Communication()
             {
                 Id = Guid.NewGuid(),
-                Key = "Request_Recipient_Email",
+                Key = "Request_Receipt_Email",
                 Method = CommunicationMethod.Email,
                 Type = CommunicationType.EmailTemplate,
                 Template = "Request Recipient Email"
@@ -2472,27 +2472,130 @@ namespace SocialPayments.DataLayer
             context.Communications.Add(new Communication()
             {
                 Id = Guid.NewGuid(),
-                Key = "Request_Recipient_Facebook",
+                Key = "Request_Receipt_Facebook",
                 Method = CommunicationMethod.FacebookWallPost,
                 Type = CommunicationType.FacebookTemplate,
                 Template = "I requested {0:C} from you using PaidThx{1}. You can view and accept or reject the request in your Paystream at {2}."
             });
-            
-//Pledge_NotRegistered_SMS
-//Pledge_NotRegistered_Email
-//Pledge_NotRegistered_Facebook
+            //Pledge_NotRegistered_SMS
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotRegistered_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "Thank you for your generous gift of {0:C} to {1}! To complete your donation, visit {2}. -{3}"
+            });
+            //Pledge_NotRegistered_Email
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotRegistered_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.EmailTemplate,
+                Template = "Pledge_NotRegistered"
+            });
+            //Pledge_NotRegistered_Facebook
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotRegistered_Facebook",
+                Method = CommunicationMethod.FacebookWallPost,
+                Type = CommunicationType.FacebookTemplate,
+                Template = "Thank you for your generous donation of {0:C} to {1}! To complete your donation using the free social giving service PaidThx, visit {2}."
+            });
+            //Pledge_NotEngaged_SMS
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotEngaged_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "Thank you for your generous gift of {0:C} to {1}! To complete your donation, visit {2}. -{3}"
+            });
+            //Pledge_NotEngaged_Email
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotEngaged_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.EmailTemplate,
+                Template = "Pledge_NotEngaged"
+            });
+            //Pledge_NotEngaged_Facebook
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_NotEngaged_Facebook",
+                Method = CommunicationMethod.FacebookWallPost,
+                Type = CommunicationType.FacebookTemplate,
+                Template = "Thank you for your generous gift of {0:C} to {1}! Visit {2} and finish your account set up to complete your donation."
+            });
 
-//Pledge_NotEngaged_SMS
-//Pledge_NotEngaged_Email
-//Pledge_NotEngaged_Facebook
+            //Pledge_Receipt_SMS
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_Receipt_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "Thank you for your generous gift of {0:C} to {1}! To complete your donation, open the PaidThx app or visit {2} and confirm. -{3} "
+            });
+            //Pledge_Receipt_SMS
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_Receipt_SMS",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.EmailTemplate,
+                Template = "Pledge_NotEngaged"
+            });
+            //Pledge_Recipient_Facebook
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Pledge_Receipt_Facebook",
+                Method = CommunicationMethod.FacebookWallPost,
+                Type = CommunicationType.FacebookTemplate,
+                Template = "Thank you for your generous gift of {0:C} to {1}! Visit {2} and finish your account set up to complete your donation."
+            });
 
-//Pledge_Receipt_SMS
-//Pledge_Recipient_Email
-//Pledge_Recipient_Facebook
-
-//Pledge_Receipt_SMS
-//Pledge_Recipient_Email
-//Pledge_Recipient_Facebook
+            //New_Bank_Account_Email
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "New_Bank_Account_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.ElasticTemplate,
+                Template = "New_Bank_Account"
+            });
+            //Bank_Verify_Reminder_Email
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Bank_Verify_Reminder_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.ElasticTemplate,
+                Template = "Bank_Verify_Reminder"
+            });
+            //Email_Added_Email
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Email_Added_Email",
+                Method = CommunicationMethod.Email,
+                Type = CommunicationType.ElasticTemplate,
+                Template = "Email_Added"
+            });
+            //Phone_Added_SMS
+            context.Communications.Add(new Communication()
+            {
+                Id = Guid.NewGuid(),
+                Key = "Phone_Added_SMS",
+                Method = CommunicationMethod.SMS,
+                Type = CommunicationType.SMSTemplate,
+                Template = "PaidThx: To add this phone number to your PaidThx profile, please click here: {0} and enter verification code: {1}."
+            });
 
             context.SaveChanges();
 

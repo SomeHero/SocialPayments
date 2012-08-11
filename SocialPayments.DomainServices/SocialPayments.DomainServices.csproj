@@ -193,6 +193,7 @@
     <Compile Include="MessageProcessing\SubmittedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\SubmittedPaymentMessageTask.cs" />
     <Compile Include="MessageServices.cs" />
+    <Compile Include="IOSNotificationServices.cs" />
     <Compile Include="Mother.cs" />
     <Compile Include="PaymentAccountProcessing\SubmittedPaymentAccountTask.cs" />
     <Compile Include="PaymentAccountService.cs" />

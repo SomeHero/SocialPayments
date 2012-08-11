@@ -28,9 +28,11 @@ namespace SocialPayments.DomainServices
         int defaultNumPasswordFailures = 3;
         int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
         private string _fbImageUrlFormat = "http://graph.facebook.com/{0}/picture";
+        private string _mobileVerificationBaseUrl = ConfigurationManager.AppSettings["MobileNumberVerificationBaseUrl"];
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UserService() { }
+        public UserService(): this(new Context()) { }
 
         public UserService(IDbContext context)
         {
@@ -735,6 +737,7 @@ namespace SocialPayments.DomainServices
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.ValidationService validateService = new ValidationService();
             DomainServices.SMSService smsService = new DomainServices.SMSService(_ctx);
+            DomainServices.CommunicationService communicationServices = new DomainServices.CommunicationService(_ctx);
 
             string name = formattingService.FormatUserName(userPayPoint.User);
             Guid passwordResetGuid = Guid.NewGuid();
@@ -759,15 +762,29 @@ namespace SocialPayments.DomainServices
                 });
             _ctx.SaveChanges();
 
-            smsService.SendSMS(userPayPoint.User.ApiKey, "8043879693", String.Format("Your verification code is {0}", verificationCode));
+            try
+            {
+                var communicationTemplate = communicationServices.GetCommunicationTemplate("Phone_Added_SMS");
+                var link = String.Format(_mobileVerificationBaseUrl, verification.Id);
+
+               //{0} - Link to verification screen
+                //{1} - Phone verification code
+                smsService.SendSMS(verification.UserPayPoint.User.ApiKey, verification.UserPayPoint.URI, String.Format(communicationTemplate.Template,
+                    link, verificationCode));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+            }
 
         }
         public void SendEmailVerificationLink(UserPayPoint userPayPoint)
         {
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
             DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.ValidationService validateService = new ValidationService();
-
+            DomainServices.CommunicationService communicationService = new CommunicationService();
 
             string name = formattingService.FormatUserName(userPayPoint.User);
             DateTime expiresDate = System.DateTime.Now.AddHours(3);
@@ -785,17 +802,23 @@ namespace SocialPayments.DomainServices
 
             string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
 
-            StringBuilder body = new StringBuilder();
-            body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
-            body.AppendFormat("You added the paypoint {0} to your PaidThx account. ", userPayPoint.URI);
-            body.Append("To complete the process and begin accepting payments using this address, please click on the link below ");
-            body.Append("or paste it into your browser:").AppendLine().AppendLine();
-            body.AppendLine(link).AppendLine();
-            //body.AppendLine("This link will be active for 3 hours only.").AppendLine();
-            body.AppendLine("Thank you,").AppendLine();
-            body.Append("The PaidThx Team");
+            try
+            {
+                var communicationTemplate = communicationService.GetCommunicationTemplate("Email_Added_Email");
 
-            emailService.SendEmail(userPayPoint.User.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], userPayPoint.URI, "Email Verification", body.ToString());
+                //FIRST_NAME, LAST_NAME, EMAIL_ADDED, LINK_EMAIL_VERIFY
+                emailService.SendEmail(userPayPoint.URI, "Your email has been added", communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                {
+                        new KeyValuePair<string, string>("FIRST_NAME", userService.GetSenderName(userPayPoint.User)),
+                        new KeyValuePair<string, string>("LAST_NAME", ""),
+                        new KeyValuePair<string, string>("EMAIL_ADDED",  userPayPoint.URI),
+                        new KeyValuePair<string, string>("LINK_EMAIL_VERIFY",  link)                            
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+            }
         }
 
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
