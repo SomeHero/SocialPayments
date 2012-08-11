@@ -76,7 +76,11 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/paystreammessages/{id}/ignore_request",
                 defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
             );
-
+            routes.MapHttpRoute(
+                name: "UpdateMessagesSeen",
+                routeTemplate: "api/paystreammessages/update_messages_seen",
+                defaults: new { controller = "PaystreamMessages", action = "UpdateMessagesSeen" }
+            );
             routes.MapHttpRoute(
                 name: "MultipleURIRequest",
                 routeTemplate: "api/paystreammessages/multiple_uris",

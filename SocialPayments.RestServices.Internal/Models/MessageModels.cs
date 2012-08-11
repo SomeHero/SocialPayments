@@ -35,7 +35,12 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
         }
-
+        public class MessageSeenUpdateRequest
+        {
+            public string userId { get; set; }
+            public string apiKey { get; set; }
+            public List<string> messageIds { get; set; }
+        }
         public class MultipleURIRequest
         {
             public List<string> recipientUris { get; set; }
