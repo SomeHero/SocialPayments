@@ -65,6 +65,51 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
+        //POST /api/{userId}/PayStreamMessages/update_messages_viewed
+        public HttpResponseMessage UpdateMessagesSeen (string userId, MessageModels.MessageSeenUpdateRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                DomainServices.MessageServices _messageService = new DomainServices.MessageServices(_ctx);
+
+                User user;
+
+                // Validate that it finds a user
+                user = _userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    errorMessage.ReasonPhrase = String.Format("The user's account cannot be found for user {0}", id);
+
+                    return errorMessage;
+                }
+
+                Message messageSeen = null;
+
+                foreach (string messageId in request.messageIds)
+                {
+                    try
+                    {
+                        messageSeen = _messageService.GetMessage(messageId);
+
+                        if (messageSeen.Recipient == user)
+                            messageSeen.recipientHasSeen = true;
+                        else if (messageSeen.Sender == user)
+                            messageSeen.senderHasSeen = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, "Something wen't wrong updating paystream message for {0}", request.userId);
+                    }
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
         private User GetUser(string id)
         {
             Context _ctx = new Context();
