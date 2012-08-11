@@ -12,7 +12,7 @@ namespace SocialPayments.DomainServices
     {
         private IDbContext _ctx;
 
-        public CommunicationService() { }
+        public CommunicationService() : this(new Context()) { }
 
         public CommunicationService(IDbContext context)
         {
