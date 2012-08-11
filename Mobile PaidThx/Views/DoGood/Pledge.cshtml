@@ -1,6 +1,4 @@
-﻿@{
-    ViewBag.Title = "Index";
-}
+﻿@model Mobile_PaidThx.Models.DonateMoneyModel
 <div data-role="page" id="dogood-page">
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -35,13 +33,27 @@
                 <button type="button" class="imgbtn field-btn">
                     <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                         <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
-                            id="person-send">Select a Donor</span>
+                            id="person-send">@if (Model.PledgerUri != null && !Model.PledgerUri.Equals("null"))
+                                             {
+                                <span id="amountOrg">@Model.PledgerUri</span>
+                                             }
+                                             else
+                                             {
+                                <text>Select A Donor</text>
+                                             }</span>
                 </button>
-            </a><a onclick="toDonateAmountScreen()" data-prefetch>
+            </a><a onclick="toPledgeAmountScreen()" data-prefetch>
                 <button type="button" class="imgbtn field-btn">
                     <span class="imgbg" style="margin-left: -2px">
                         <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
-                            id="amount-request">How much?</span></button></a>
+                            id="amount-request">@if (Model.Amount != null && !Model.Amount.Equals("null"))
+                                                {
+                                <span id="amountOrg">@Model.Amount</span>
+                                                }
+                                                else
+                                                {
+                                <text>How much?</text>
+                                                }</span></button></a>
         </div>
         <div style="margin-left: 10px; margin-right: 10px; margin-top: 20px">
             <label for="txtComments" style="margin-bottom: 15px; font-size: 18px">
