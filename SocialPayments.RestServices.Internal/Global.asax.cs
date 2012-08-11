@@ -78,7 +78,7 @@ namespace SocialPayments.RestServices.Internal
             );
             routes.MapHttpRoute(
                 name: "UpdateMessagesSeen",
-                routeTemplate: "api/paystreammessages/{id}/update_messages_seen",
+                routeTemplate: "api/paystreammessages/update_messages_seen",
                 defaults: new { controller = "PaystreamMessages", action = "UpdateMessagesSeen" }
             );
             routes.MapHttpRoute(
