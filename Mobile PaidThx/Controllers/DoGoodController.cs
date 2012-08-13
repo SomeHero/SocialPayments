@@ -8,6 +8,7 @@ using NLog;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 using System.Web.Routing;
+using System.Web.Script.Serialization;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -59,7 +60,7 @@ namespace Mobile_PaidThx.Controllers
 
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    var response = paystreamMessageServices.SendDonation(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, model.Organization, model.Pincode, model.Amount, model.Comments, "Payment", "0", "0", "", "", "");
+                    var response = paystreamMessageServices.SendDonation(_apiKey, userId, model.OrganizationId, user.preferredPaymentAccountId, model.Pincode, model.Amount, model.Comments, "0", "0", "", "", "");
                     //ctx.PaymentRequests.Add(new PaymentRequest()
                     //{
                     //    Amount = model.Amount,
@@ -92,105 +93,21 @@ namespace Mobile_PaidThx.Controllers
             orgs.PublicDirectories = new List<Models.OrganizationModels.OrganizationModel>();
             // add to non-profts
             // pre-created list for testing
+            var merchantServices = new MerchantServices();
+            var jsonResult = merchantServices.GetMerchants("Organizations");
 
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
-            // NON-PROFITS
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel acs = new Models.OrganizationModels.OrganizationModel()
+            List<MerchantModels.MerchantResponseModel> merchants = js.Deserialize<List<MerchantModels.MerchantResponseModel>>(jsonResult);
+
+            orgs.NonProfits = merchants.Select(m => new OrganizationModels.OrganizationModel()
             {
-                Id = "1",
-                Name = "American Cancer Society",
-                Slogan = "The official sponsor of birthdays",
-                ImageUri = "~/Content/images/org_acs.png",
-                HasInfo = true
-            };
-            orgs.NonProfits.Add(acs);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel ad = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "2",
-                Name = "American Diabetes Association",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_americandiabetes.png",
-                HasInfo = false
-            };
-
-            orgs.NonProfits.Add(ad);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel aheart = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "3",
-                Name = "American Heart Association",
-                Slogan = "Learn and Live",
-                ImageUri = "~/Content/images/org_americanheart.png",
-                HasInfo = false
-            };
-
-            orgs.NonProfits.Add(aheart);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel cs = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "4",
-                Name = "Child Savers",
-                Slogan = "Helping Greater Richmond's Children since 1924",
-                ImageUri = "~/Content/images/org_childsavers.png",
-                HasInfo = true
-            };
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel gw = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "5",
-                Name = "Goodwill",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_goodwill.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(cs);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel md = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "6",
-                Name = "March of Dimes",
-                Slogan = "Working together for stronger, healther babies",
-                ImageUri = "~/Content/images/org_marchofdimes.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(md);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel mda = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "7",
-                Name = "Muscle Dystrophy Association",
-                Slogan = "Fighting muscle disease",
-                ImageUri = "~/Content/images/org_mda.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(mda);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel nc = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "8",
-                Name = "Nature Conservancy",
-                Slogan = "Protecting Nature. Perserving Life",
-                ImageUri = "~/Content/images/org_natureconserv.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(nc);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel wwf = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "9",
-                Name = "World Wildlife Foundation",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_wwf.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(wwf);
-
+                HasInfo = (m.Listings.Count > 0 ? true : false),
+                Id = m.Id.ToString(),
+                ImageUri = m.MerchantImageUrl,
+                Name = m.Name,
+                Slogan = "Slogan goes here"
+            }).ToList();
 
             // PUBLIC DIRECTORIES
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel beta = new Models.OrganizationModels.OrganizationModel()
@@ -291,102 +208,21 @@ namespace Mobile_PaidThx.Controllers
 
 
             // NON-PROFITS
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel acs = new Models.OrganizationModels.OrganizationModel()
+            var merchantServices = new MerchantServices();
+            var jsonResult = merchantServices.GetMerchants("Organizations");
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            List<MerchantModels.MerchantResponseModel> merchants = js.Deserialize<List<MerchantModels.MerchantResponseModel>>(jsonResult);
+
+            orgs.NonProfits = merchants.Select(m => new OrganizationModels.OrganizationModel()
             {
-                Id = "1",
-                Name = "American Cancer Society",
-                Slogan = "The official sponsor of birthdays",
-                ImageUri = "~/Content/images/org_acs.png",
-                HasInfo = true
-            };
-            orgs.NonProfits.Add(acs);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel ad = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "2",
-                Name = "American Diabetes Association",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_americandiabetes.png",
-                HasInfo = false
-            };
-
-            orgs.NonProfits.Add(ad);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel aheart = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "3",
-                Name = "American Heart Association",
-                Slogan = "Learn and Live",
-                ImageUri = "~/Content/images/org_americanheart.png",
-                HasInfo = false
-            };
-
-            orgs.NonProfits.Add(aheart);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel cs = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "4",
-                Name = "Child Savers",
-                Slogan = "Helping Greater Richmond's Children since 1924",
-                ImageUri = "~/Content/images/org_childsavers.png",
-                HasInfo = true
-            };
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel gw = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "5",
-                Name = "Goodwill",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_goodwill.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(cs);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel md = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "6",
-                Name = "March of Dimes",
-                Slogan = "Working together for stronger, healther babies",
-                ImageUri = "~/Content/images/org_marchofdimes.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(md);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel mda = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "7",
-                Name = "Muscle Dystrophy Association",
-                Slogan = "Fighting muscle disease",
-                ImageUri = "~/Content/images/org_mda.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(mda);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel nc = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "8",
-                Name = "Nature Conservancy",
-                Slogan = "Protecting Nature. Perserving Life",
-                ImageUri = "~/Content/images/org_natureconserv.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(nc);
-
-            Mobile_PaidThx.Models.OrganizationModels.OrganizationModel wwf = new Models.OrganizationModels.OrganizationModel()
-            {
-                Id = "9",
-                Name = "World Wildlife Foundation",
-                Slogan = "",
-                ImageUri = "~/Content/images/org_wwf.png",
-                HasInfo = true
-            };
-
-            orgs.NonProfits.Add(wwf);
-
+                HasInfo = (m.Listings.Count > 0 ? true : false),
+                Id = m.Id.ToString(),
+                ImageUri = m.MerchantImageUrl,
+                Name = m.Name,
+                Slogan = "Slogan goes here"
+            }).ToList();
 
             // PUBLIC DIRECTORIES
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel beta = new Models.OrganizationModels.OrganizationModel()
