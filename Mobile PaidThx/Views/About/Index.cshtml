@@ -1,0 +1,9 @@
+﻿   @{
+    ViewBag.Title = "Index";
+}
+    <div data-role="page">
+       @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
+        <div data-role="content">
+            
+        </div>
+    </div>

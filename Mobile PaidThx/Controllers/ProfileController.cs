@@ -580,6 +580,7 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
+            var 
             using (var ctx = new Context())
             {
                 var applicationService = new SocialPayments.DomainServices.ApplicationService();

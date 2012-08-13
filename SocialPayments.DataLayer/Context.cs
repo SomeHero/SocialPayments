@@ -1075,7 +1075,7 @@ namespace SocialPayments.DataLayer
                     Status = PaystreamMessageStatus.NotifiedPayment,
                     MessageType = MessageType.Payment,
                     MessageTypeValue = (int)MessageType.Payment,
-                    RecipientUri = String.Format("james{0}@paidthx.com", i),
+                    RecipientUri = String.Format("james+{0}@paidthx.com", i),
                     Sender = james,
                     SenderUri = james.MobileNumber,
                     SenderAccount = james.PaymentAccounts[0],

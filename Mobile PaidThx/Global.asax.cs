@@ -74,6 +74,11 @@ namespace Mobile_PaidThx
                 new { controller = "SignIn", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
+                "Join", // Route name
+                "Join", // URL with parameters
+                new { controller = "Join", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
 "Preferences", // Route name
 "Preferences/{action}", // URL with parameters
 new { controller = "Preferences", action = "Index" } // Parameter defaults
@@ -118,7 +123,7 @@ new { controller = "DoGood", action = "Index" } // Parameter defaults
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters
-                new { controller = "Account", action = "SignIn" } // Parameter defaults
+                new { controller = "Home", action = "Index" } // Parameter defaults
             );
 
         }

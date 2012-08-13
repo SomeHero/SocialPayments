@@ -1,7 +1,7 @@
 body
 {
      /*background-image: url('images/pattern.png');*/
-     background-color:#eeeeee;
+     background-color:#FFFFFF !important;
      background-image: -webkit-gradient(linear, left top, left bottom, from( #f2f2f3 /*{a-bar-background-start}*/), to( #eeeeee /*{a-bar-background-end}*/));
 background-image: -webkit-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #eeeeee /*{a-bar-background-end}*/);
 background-image: -moz-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #eeeeee /*{a-bar-background-end}*/);
@@ -44,9 +44,10 @@ div.viewporter div.ui-content
 div.ui-content
 {
  background:#ffffff;
- border-radius:0 0 14px 14px;
+ border-radius: 0px 0px 0px 0px;
+ margin: 0px;
  overflow:hidden;
- padding:0 !important;
+ padding: 0px !important;
 }
 .ui-header h1.ui-title
 {
@@ -1456,7 +1457,7 @@ background-image: -moz-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5
 background-image: -ms-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
 background-image: -o-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
 background-image: linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-border-radius: 14px 14px 0px 0px;
+border-radius: 0px 0px 0px 0px;
 }
   .nav-pdthx .ui-icon
         {
