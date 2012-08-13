@@ -11,7 +11,7 @@ namespace Mobile_PaidThx.Services
     {
         private string _paystreamMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages";
         private string _donateMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/donate";
-
+        private string _pledgeMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/accept_pledge";
         //public string apiKey { get; set; }
         //public string senderId { get; set; }
         //public string recipientId { get; set; }
@@ -41,11 +41,29 @@ namespace Mobile_PaidThx.Services
         {
             return SendDonationMessage(apiKey, senderId, recipientId, senderAccountId, securityPin, amount, comments, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
         }
-        public string AcceptPledge()
+        public string AcceptPledge(string apiKey, string senderId, string onBehalfOfId, string recipientUri, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
-            //SendMessage();
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
-            return "";
+            var json = js.Serialize(new
+            {
+                apiKey = apiKey,
+                senderId = senderId, 
+                onBehalfOfId = onBehalfOfId,
+                recipientUri = recipientUri, 
+                amount = amount, 
+                comments = comments, 
+                latitude = latitude,
+                longitude = longitude, 
+                recipientFirstName = recipientFirstName,
+                recipientLastName = recipientLastName,
+                recipientImageUri = recipientImageUri, 
+                securityPin = securityPin
+            });
+
+            string jsonResponse = Post(_pledgeMessageUrl, json);
+
+            return jsonResponse;
         }
         private string SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
