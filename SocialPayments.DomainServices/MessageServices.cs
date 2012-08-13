@@ -565,11 +565,11 @@ namespace SocialPayments.DomainServices
 
             messages = _context.Messages
                 .Where
-                (m => m.Recipient == user).Distinct(new SameRecipientComparer()).Take(6)
+                (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
             // Not sure what distinct does, but maybe it's unique entries?
-            return messages;
+            return messages.Distinct(new SameRecipientComparer()).Take(6).ToList();
         }
 
         public List<Domain.Message> GetNewMessages(User user)

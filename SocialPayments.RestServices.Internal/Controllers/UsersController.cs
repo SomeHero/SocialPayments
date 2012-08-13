@@ -690,11 +690,34 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 foreach (Message msg in recentPayments)
                 {
+                    string recipName;
+                    int recipientType = -1;
+                    var recipient = _userService.GetUser(msg.RecipientUri);
+                    if (recipient == null)
+                    {
+                        recipName = msg.RecipientUri;
+
+                        recipientType = 0;
+                    }
+                    else
+                    {
+                        recipName = _userService.GetSenderName(recipient);
+                        recipientType = recipient.UserTypeId;
+
+                        if (recipient.Merchant.MerchantTypeValue == 2)
+                            recipientType = 2;
+                        else if (recipient.Merchant.MerchantTypeValue == 1)
+                            recipientType = 1;
+                        else if (recipient.Merchant == null)
+                            recipientType = 0;
+                    }
+
                     quickSends.Add(new UserModels.QuickSendUserReponse()
                     {
-                        userId = msg.RecipientId.ToString(),
-                        name = msg.RecipientName,
-                        userImage = msg.recipientImageUri
+                        userUri = msg.RecipientUri,
+                        userName = recipName,
+                        userImage = msg.recipientImageUri,
+                        userType = recipientType
                     });
                 }
 
@@ -710,7 +733,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}", id));
+                _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
+
+                while (ex.InnerException != null)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Inner exception: {0}", ex.InnerException.Message));
+                    ex = ex.InnerException;
+                }
+
                 return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
             }
         }
