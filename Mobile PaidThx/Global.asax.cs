@@ -70,12 +70,12 @@ namespace Mobile_PaidThx
             );
             routes.MapRoute(
                 "SignIn", // Route name
-                "SignIn", // URL with parameters
+                "SignIn/{action}", // URL with parameters
                 new { controller = "SignIn", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
                 "Join", // Route name
-                "Join", // URL with parameters
+                "Join/{action}", // URL with parameters
                 new { controller = "Join", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(

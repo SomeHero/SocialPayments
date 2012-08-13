@@ -13,9 +13,9 @@ namespace Mobile_PaidThx.Services
 
         public string GetMerchants(string type)
         {
-            var jsonResponse = Get(String.Format(_merchantServicesBaseUrl, type));
+            var response = Get(String.Format(_merchantServicesBaseUrl, type));
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
     }
 }

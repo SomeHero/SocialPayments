@@ -5,12 +5,13 @@ using System.Web;
 using System.Net;
 using System.Text;
 using System.IO;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Services
 {
     public class ServicesBase
     {
-        protected string Get(string serviceUrl)
+        protected ServiceResponse Get(string serviceUrl)
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
             req.Method = "GET";
@@ -49,9 +50,14 @@ namespace Mobile_PaidThx.Services
                 throw new Exception(statusReason);
             }
 
-            return jsonResponse;
+            return new ServiceResponse()
+            {
+                StatusCode = statusCode,
+                Description = statusReason,
+                JsonResponse = jsonResponse
+            };
         }
-        protected string Post(string serviceUrl, string json)
+        protected ServiceResponse Post(string serviceUrl, string json)
         {
             // Create new HTTP request.
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
@@ -97,7 +103,12 @@ namespace Mobile_PaidThx.Services
                 throw new Exception(statusReason);
             }
 
-            return jsonResponse;
+            return new ServiceResponse()
+            {
+                StatusCode = statusCode,
+                Description = statusReason,
+                JsonResponse = jsonResponse
+            };
         }
     }
 }
