@@ -39,6 +39,56 @@ namespace Mobile_PaidThx.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult PinswipePledge(Mobile_PaidThx.Models.DonateMoneyModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult PledgeMoney(DonateMoneyModel model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
+
+            var applicationService = new SocialPayments.DomainServices.ApplicationService();
+            var userId = Session["UserId"].ToString();
+
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+                    var paystreamMessageServices = new PaystreamMessageServices();
+                    var response = paystreamMessageServices.AcceptPledge(_apiKey, userId, model.OrganizationId, model.PledgerUri, model.Amount, model.Comments, "0", "0", "", "", "", model.Pincode);
+                    //ctx.PaymentRequests.Add(new PaymentRequest()
+                    //{
+                    //    Amount = model.Amount,
+                    //    ApiKey = application.ApiKey,
+                    //    Comments = model.Comments,
+                    //    CreateDate = System.DateTime.Now,
+                    //    PaymentRequestId = Guid.NewGuid(),
+                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
+                    //    RecipientUri = model.RecipientUri,
+                    //    RequestorId = user.UserId
+                    //});
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+
+                    return View(model);
+                }
+            }
+            else
+                return View(model);
+
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+        }
 
         [HttpPost]
         public ActionResult DonateMoney(DonateMoneyModel model)

@@ -478,10 +478,6 @@ $(document).ready(function () {
     });
 
     $("#donateMoneyBtn").die('click').live('click', function () {
-        getPincodeDonate();
-    });
-
-    function getPincodeDonate() {
         var theAmount = $("#amountToDonate").val();
         var theRecipient = $("#org-name-donate").text();
         var theComments = $("#txtComments-Donate").val();
@@ -514,5 +510,41 @@ $(document).ready(function () {
                 $("#error-block").appendTo(next);
             }
         });
-    }
+    });
+    $("#pledgeMoneyBtn").die('click').live('click', function () {
+        var theAmount = $("#amountToPledge").val();
+        var theOrganization = $("#org-name-pledge").text();
+        var theComments = $("#txtComments-Pledge").val();
+        var thePledger = $("#onBehalfOf").text();
+        var theOrgId = $("#theOrgId-Pledge").val();
+
+        var donateModel = {
+            Organization: theOrganization,
+            OrganizationId: theOrgId,
+            Amount: theAmount,
+            PledgerUri: thePledger,
+            Comments: theComments
+        };
+
+        var jsonData = $.toJSON(donateModel);
+        var pinswipeUrl = getBaseURL() + "DoGood/PinswipePledge";
+        $.ajax({
+            type: 'POST',
+            url: testUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(pinswipeUrl, {
+                    type: "post",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
 });
