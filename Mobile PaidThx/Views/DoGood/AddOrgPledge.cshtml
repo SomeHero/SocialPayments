@@ -30,7 +30,7 @@
         <!--American Cancer Society-->
         @foreach (var nonprofit in Model.NonProfits)
         {
-            <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+            <a onclick="returnOrgName(nonprofit.Name)"><div style="height: 60px; padding: 5px; display: block; overflow: hidden">
                 <img style="float:left; padding-right:10px" src="@Url.Content(@nonprofit.ImageUri)" />
                 @if (nonprofit.HasInfo)
                 {
@@ -64,7 +64,7 @@
                         }
                     }
                 </div>
-            </div>
+            </div></a>
             <div style="height: 1px; background-color: #BFBFBF; width: 100%">
             </div>
         }
