@@ -88,9 +88,9 @@ namespace Mobile_PaidThx.Services
                 recipientImageUri = recipientImageUri
             });
 
-            string jsonResponse = Post(_paystreamMessageUrl, json);
+            var response = Post(_paystreamMessageUrl, json);
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
 
         private string SendDonationMessage(string apiKey, string senderId, string recipientId, string senderAccountId, string securityPin, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
@@ -113,9 +113,9 @@ namespace Mobile_PaidThx.Services
                 recipientImageUri = recipientImageUri
             });
 
-            string jsonResponse = Post(_donateMessageUrl, json);
+            var response = Post(_donateMessageUrl, json);
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
     }
 }

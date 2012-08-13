@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page">
+    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
+<<<<<<< HEAD
+    <div data-role="content">
+        @Html.ValidationSummary()
+        <h5>Connect with Facebook</h5>
+        <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
+            <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign
+                Up With Facebook </span>
+        </button>
+        <h5>or user your Email Address</h5>
+        <div id="registration-form">
+        @using(Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
+        {
+            <input type="text" id="email" class="required email" placeholder="Enter Your Email Address"
+                name="Email" />
+            <input type="password" id="password" class="required" placeholder="Create a Password"
+                name="Password" />
+            <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
+                name="ConfirmPassword" />
+            <button type="submit" id="register-submit" class="imgbtn">
+                <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Create
+                    My Account</span></button>
+        }
+        </div>
+        <div id="main-body-sub-links">
+            <p style="text-align: center">
+                Already a member of PaidThx? <a href="@Url.Content("~/SignIn")" data-ajax="false">
+                    Sign In</a></p>
+=======
+    <div data-role="content" style="background-color: #3E7D48">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            @Html.ValidationSummary()
+            <h5 style="margin-top:10px">
+                Connect with Facebook</h5>
+            <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "RegisterWithFacebook/&scope=email&state=pickle")'">
+                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign
+                    Up With Facebook </span>
+            </button>
+            <h5 style="margin-top:25px">
+                Or Use your Email Address</h5>
+            <div id="registration-form">
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+                {
+                    <input type="text" id="email" class="required email" placeholder="Enter Your Email Address"
+                        name="Email" style="margin-bottom:15px" />
+                    <input type="password" id="password" class="required" placeholder="Create a Password"
+                        name="Password" style="margin-bottom:15px"  />
+                    <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
+                        name="ConfirmPassword" style="margin-bottom:15px"  />
+                    <button type="submit" id="register-submit" class="imgbtn">
+                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Create
+                            My Account</span></button>
+                }
+            </div>
+            <div id="main-body-sub-links">
+                <p style="text-align: center">
+                    Already a member of PaidThx? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
+                        In</a></p>
+            </div>
+>>>>>>> upstream/development
+        </div>
+    </div>
+</div>

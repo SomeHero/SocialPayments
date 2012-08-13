@@ -36,9 +36,9 @@ namespace Mobile_PaidThx.Services
                 SecurityQuestionAnswer = securityQuestionAnswer
             });
 
-            string jsonResponse = Post(serviceUrl, json);
+            var response = Post(serviceUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(jsonResponse);
+            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
             return jsonObject["paymentAccountId"];
         }
