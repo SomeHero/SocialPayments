@@ -1,0 +1,33 @@
+﻿   @{
+    ViewBag.Title = "Index";
+}
+    <div data-role="page">
+       @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Sign In" }); }
+        <div data-role="content">
+            @Html.ValidationSummary()
+            <h5>Sign in with Facebook:</h5>
+            <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignInWithFacebook/&scope=email&state=pickle")'">
+                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign
+                    In With Facebook </span>
+            </button>
+            <h5>Sign in with Email or Phone #</h5>
+            <div id="registration-form">
+                 @using (Html.BeginForm())
+                 {       
+                    <input type="text" id="username" class="required" placeholder="Email Address or Phone #" name="Email" />
+
+                    <input type="password" id="password" class="required" placeholder="Password" name="Password" />
+                    <button type="submit" id="signin-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Sign In to PaidThx</span></button>
+
+                 }
+            </div>
+            <div id="main-body-sub-links">
+                <p style="text-align: center">
+                    <a href="@Url.Content("~/Account/ForgotPassword")" data-ajax="false">Forgot password</a></p>
+                <p style="text-align: center">
+                    New to PaidThx? <a href="@Url.Content("~/Register/Index")" data-ajax="false">Join
+                        Now</a>, It's Free!
+                </p>
+    </div>
+        </div>
+    </div>

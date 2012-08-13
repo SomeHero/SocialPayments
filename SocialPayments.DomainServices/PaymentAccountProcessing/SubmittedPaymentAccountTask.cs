@@ -21,10 +21,12 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
         {
             using (var ctx = new Context())
             {
+                var messageService = new DomainServices.MessageServices(ctx);
                 var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
                 var communicationService = new DomainServices.CommunicationService(ctx);
                 var emailService = new DomainServices.EmailService(ctx);
                 var userService = new DomainServices.UserService(ctx);
+                var transactionBatchServices = new DomainServices.TransactionBatchService(ctx, _logger);
 
                 var paymentAccount = paymentAccountService.GetPaymentAccount(paymentAccountId);
 
@@ -44,9 +46,7 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                 var sentDate = System.DateTime.Now;
                 var estimatedSettlementDate = System.DateTime.Now.AddDays(5);
 
-                var transactionBatchService = new TransactionBatchService(ctx, _logger);
-
-                var transactionBatch = transactionBatchService.GetOpenBatch();
+                var transactionBatch = transactionBatchServices.GetOpenBatch();
 
                 //validate that user is owned by paymentAccount
                 var paymentAccountVerification = ctx.PaymentAccountVerifications.Add(new PaymentAccountVerification()
@@ -144,6 +144,50 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                 {
                     _logger.Log(LogLevel.Error, String.Format("Exception Sending Bank Account Verification Link to {0}. {1}", paymentAccount.User.EmailAddress, ex.Message));
                 }
+
+                var messages = messageService.GetMessages(paymentAccount.User.UserId);
+
+                _logger.Log(LogLevel.Info, String.Format("Processing {0} notified payment(s) from user {1}.",messages.Count, paymentAccount.User.UserName));
+
+                foreach (var message in messages)
+                {
+                    if (message.Status == PaystreamMessageStatus.NotifiedPayment)
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Batch Deposit Transaction for Message {0} into PaymentAccount {1}.", message.Id, paymentAccount.Id));
+
+                        try
+                        {
+                            message.Status = PaystreamMessageStatus.ProcessingPayment;
+                            //Add the withdrawal transaction
+                            message.Payment.Transactions.Add(new Domain.Transaction()
+                            {
+                                AccountNumber = paymentAccount.AccountNumber,
+                                Amount = message.Payment.Amount,
+                                AccountType = Domain.AccountType.Checking,
+                                ACHTransactionId = "",
+                                CreateDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                IndividualIdentifier = userService.GetSenderName(message.Sender),
+                                NameOnAccount = paymentAccount.NameOnAccount,
+                                PaymentChannelType = PaymentChannelType.Single,
+                                RoutingNumber = paymentAccount.RoutingNumber,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Pending,
+                                Type = TransactionType.Withdrawal,
+                                TransactionBatch = transactionBatch,
+                                Payment = message.Payment
+                            });
+
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Error, String.Format("Exception Batching Deposit Transaction for Message {0} into PaymentAccount {1}. Exception: {2}", message.Id, paymentAccount.Id, ex.Message));
+                        }
+                    }
+                }
+
+                ctx.SaveChanges();
+
             }
         }
     }

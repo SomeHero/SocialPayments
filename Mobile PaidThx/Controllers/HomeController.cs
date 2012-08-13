@@ -25,6 +25,8 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Info, String.Format("Displaying Register View"));
             logger.Log(LogLevel.Info, String.Format("Retreiving Payment {0}.", messageId));
+            
+            return View("Index");
 
             if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32 )
                 return View("Index");
