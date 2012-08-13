@@ -19,6 +19,8 @@ using Newtonsoft.Json;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using Mobile_PaidThx.Services;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -32,6 +34,10 @@ namespace Mobile_PaidThx.Controllers
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
+
+        private string _userServiceUrl = "http://23.21.203.171/api/internal/api/Users";
+        private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
+
         public ActionResult Index()
         {
             ModelState.Clear();
@@ -41,99 +47,140 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(RegisterModel model)
         {
-            using (var ctx = new Context())
+            logger.Log(LogLevel.Info, String.Format("Register User {0}", model.Email));
+
+            string userId = String.Empty;
+
+            try
             {
-                var userService = new SocialPayments.DomainServices.UserService(ctx);
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-                logger.Error(String.Format("Registrer User {0}", model.Email));
-
-                Role memberRole = null;
-
-                try
-                {
-                    memberRole = ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Fatal, String.Format("Exception Getting Member Role. {0}", ex.Message));
-                    ModelState.AddModelError("", "There was an error registering your account.  Please try again.");
-
-                    return View(model);
-                }
-
-                User user = null;
-                string mobileNumber = "";
-
-                try
-                {
-                     user = userService.AddUser(Guid.Parse(_apiKey), model.Email, model.Password, model.Email,
-                    "", model.MobileNumber);
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1}", model.Email, ex.Message));
-
-                }
-
-                if (user == null)
-                {
-                    ModelState.AddModelError("", "There was an error registering your account.  Please try again.");
-
-                    return View(model);
-                }
-
-                try
-                {
-                    logger.Log(LogLevel.Info, string.Format("Calling Amazon SNS."));
-
-                    AmazonSimpleNotificationServiceClient client = new AmazonSimpleNotificationServiceClient();
-
-                    client.Publish(new PublishRequest()
-                    {
-                        Message = user.UserId.ToString(),
-                        TopicArn = System.Configuration.ConfigurationManager.AppSettings["UserPostedTopicARN"],
-                        Subject = "New User Registration"
-                    });
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Info, string.Format("Call Amazon SNS. Exception {1}.", ex.Message));
-                }
-
-                logger.Log(LogLevel.Info, String.Format("Adding new user {0}", user.UserName));
-
-
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Info, String.Format("Exception Adding User {0}. {1}", user.UserName, ex.Message));
-
-                    var innerException = ex.InnerException;
-
-                    while (innerException != null)
-                    {
-                        logger.Log(LogLevel.Info, String.Format("Unhandled Exception {0}", innerException.Message));
-                        innerException = innerException.InnerException;
-                    }
-                    foreach (var validationError in ctx.GetValidationErrors())
-                    {
-                        foreach (var error in validationError.ValidationErrors)
-                        {
-                            logger.Log(LogLevel.Info, String.Format("{0}:{1}", error.PropertyName, error.ErrorMessage));
-                        }
-                    }
-                    ModelState.AddModelError("", "There was an error registering your account.  Please try again.");
-
-                    return View(model);
-                }
-
-                Session["UserId"] = user.UserId;
-
-                return RedirectToAction("ValidateMobileDevice");
+                var userServices = new Services.UserServices();
+                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "");
             }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1}", model.Email, ex.Message));
+
+                ModelState.AddModelError("", "Error Registering User");
+
+                return View("Index");
+            }
+
+            Session["UserId"] = userId;
+
+            return RedirectToAction("Personalize");
+        }
+        public ActionResult Personalize()
+        {
+            var model = new PersonalizeModel()
+            {
+                FirstName = "",
+                LastName = "",
+                ImageUrl = ""
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Personalize(PersonalizeModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userServices = new UserServices();
+                var jsonResponse = userServices.PersonalizeUser(Session["UserId"].ToString(), new UserModels.PersonalizeUserRequest()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    ImageUrl = ""
+                });
+
+                return RedirectToAction("SetupACHAccount");
+            }
+
+            return View(model);
+        }
+        public ActionResult SetupACHAccount()
+        {
+            logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
+
+            PaymentModel paymentModel = null;
+            if (Session["Payment"] != null)
+                paymentModel = (PaymentModel)Session["Payment"];
+
+            TempData["DataUrl"] = "data-url=\"/Register/SetupACHAccount\"";
+
+            return View("SetupACHAccount", new SetupACHAccountModel()
+            {
+                Payment = paymentModel
+            });
+        }
+        [HttpPost]
+        public ActionResult SetupACHAccount(SetupACHAccountModel model)
+        {
+            logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
+
+            Session["ACHAccountModel"] = model;
+
+            return RedirectToAction("SetupPinSwipe");
+        }
+
+        public ActionResult SetupPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
+        {
+            return RedirectToAction("ConfirmPinSwipe");
+        }
+        public ActionResult ConfirmPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ConfirmPinSwipe(ConfirmPinSwipeModel model)
+        {
+            Session["PinCode"] = model.PinCode;
+
+            return RedirectToAction("SecurityQuestion");
+        }
+        public ActionResult SecurityQuestion()
+        {
+            var model = new SecurityQuestionModel()
+            {
+                SecurityQuestionAnswer = "",
+                SecurityQuestionId = 1,
+                SecurityQuestions = new List<SecurityQuestionModels.SecurityQuestionModel>() {
+                    new SecurityQuestionModels.SecurityQuestionModel {
+                        Id = 1,
+                        Question = "Who is Sebastian?"
+                    },
+                    new SecurityQuestionModels.SecurityQuestionModel {
+                        Id = 2,
+                        Question = "What is your first name?"
+                    }
+                }
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult SecurityQuestion(SecurityQuestionModel model)
+        {
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn");
+
+            var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
+            var pinCode = (string)Session["PinCode"];
+
+            var userPaymentAccountService = new Services.UserPaymentAccountServices();
+
+            var userId = Session["UserId"].ToString();
+            var nickName = String.Format("{0} {1}", achAccountModel.AccountType, achAccountModel.AccountNumber.Substring(achAccountModel.AccountNumber.Length - 5, 4));
+
+            string paymentAccountId = userPaymentAccountService.SetupACHAccount(String.Format(_setupACHAccountServiceUrl, userId), _apiKey, achAccountModel.NameOnAccount, nickName,
+                achAccountModel.RoutingNumber, achAccountModel.AccountNumber, achAccountModel.AccountType, pinCode, model.SecurityQuestionId, model.SecurityQuestionAnswer);
+
+            return RedirectToAction("Index", "Paystream");
         }
         public ActionResult RegisterWithFacebook(string state, string code)
         {
@@ -369,108 +416,6 @@ namespace Mobile_PaidThx.Controllers
                 }
 
                 return RedirectToAction("SetupACHAccount");
-            }
-        }
-        public ActionResult SetupACHAccount()
-        {
-            logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
-
-            PaymentModel paymentModel = null;
-            if (Session["Payment"] != null)
-                paymentModel = (PaymentModel)Session["Payment"];
-
-            return View(new SetupACHAccountModel()
-            {
-                Payment = paymentModel
-            });
-        }
-        [HttpPost]
-        public ActionResult SetupACHAccount(SetupACHAccountModel model)
-        {
-            using (var ctx = new Context())
-            {
-                var paymentAccountService = new SocialPayments.DomainServices.PaymentAccountService(ctx);
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-                logger.Error(String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
-
-                if (Session["UserId"] == null)
-                    return RedirectToAction("SignIn");
-
-                Guid userId = (Guid)Session["UserId"];
-
-                User user = null;
-
-                try
-                {
-                    user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unable to find specified user {0}", userId));
-                    ModelState.AddModelError("", "There was a problem setting up your bank account.  Please try again.");
-
-                    return View(model);
-                }
-
-                //FedACHService fedACHService = new FedACHService();
-                //FedACHList fedACHList;
-
-                //bool isRoutingNumberValid = false;
-
-                //try
-                //{
-                //    isRoutingNumberValid = fedACHService.getACHByRoutingNumber(model.RoutingNumber, out fedACHList);
-                //}
-                //catch (Exception ex)
-                //{
-                //    logger.Log(LogLevel.Error, string.Format("Exception Validating Routing Number. {0}", ex.Message));
-                //}
-
-                //if(!isRoutingNumberValid)
-                //{j
-                //    logger.Log(LogLevel.Error, String.Format("Invalid Routing Number {0}.  Setting up payment account for {1}.", model.RoutingNumber, userId));
-                //    ModelState.AddModelError("", "The routing number you provided is invalid.  Please try again.");
-
-                //    return View(model);
-                //}   
-
-
-                PaymentAccount paymentAccount = null;
-
-                var nickName = String.Format("{0} {1}", model.AccountType, model.AccountNumber.Substring(model.AccountNumber.Length - 5, 4));
- 
-                try
-                {
-                    paymentAccount = paymentAccountService.AddPaymentAccount(user, nickName, model.NameOnAccount,
-                        model.RoutingNumber, model.AccountNumber, model.AccountType);
-
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Exception adding payment account for {0}. {1}", userId, ex.Message));
-                    ModelState.AddModelError("", "There was a problem setting up your bank account.  Please try again.");
-
-                    return View(model);
-                }
-                user.UserStatus = UserStatus.Registered;
-
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Exception saving changes for {0}. {1}", userId, ex.Message));
-                    ModelState.AddModelError("", "There was a problem setting up your bank account.  Please try again.");
-
-                    return View(model);
-                }
-
-                FormsAuthentication.SetAuthCookie(user.EmailAddress, false);
-                Session["User"] = user;
-                Session["UserId"] = user.UserId;
-
-                return RedirectToAction("Index", "Paystream");
             }
         }
 

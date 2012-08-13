@@ -75,12 +75,12 @@ namespace SocialPayments.DomainServices
             if (!String.IsNullOrEmpty(emailSubject))
             {
                 requestBody = String.Format(elasticEmailPostWithSubject, elasticEmailUserName, elasticEmailApiKey,
-                toEmailAddress, emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+                HttpUtility.UrlEncode(toEmailAddress), emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
             }
             else
             {
                 requestBody = String.Format(elasticEmailPostWithoutSubject, elasticEmailUserName, elasticEmailApiKey,
-                    toEmailAddress, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+                     HttpUtility.UrlEncode(toEmailAddress), HttpUtility.UrlEncode(templateName), mergeFields.ToString());
             }
 
             // Create new HTTP request.
