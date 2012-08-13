@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Mobile_PaidThx.Models;
+using NLog;
+using System.Web.Routing;
+using SocialPayments.DomainServices;
+using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class RequestController : Controller
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         Mobile_PaidThx.Models.RequestMoneyModel savedData = new Models.RequestMoneyModel();
         //
         // GET: /Request/
@@ -36,6 +44,52 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index(Mobile_PaidThx.Models.RequestMoneyModel model)
         {
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult RequestMoney(RequestMoneyModel model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
+
+            var applicationService = new SocialPayments.DomainServices.ApplicationService();
+            var userId = Session["UserId"].ToString();
+
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+                    var paystreamMessageServices = new PaystreamMessageServices();
+                    var response = paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredReceiveAccountId, model.RecipientUri, model.Pincode, model.Amount, model.Comments, "PaymentRequest", "0", "0", "", "", "");
+                    //ctx.PaymentRequests.Add(new PaymentRequest()
+                    //{
+                    //    Amount = model.Amount,
+                    //    ApiKey = application.ApiKey,
+                    //    Comments = model.Comments,
+                    //    CreateDate = System.DateTime.Now,
+                    //    PaymentRequestId = Guid.NewGuid(),
+                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
+                    //    RecipientUri = model.RecipientUri,
+                    //    RequestorId = user.UserId
+                    //});
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+
+                    return View(model);
+                }
+            }
+            else
+                return View(model);
+
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
 
         [HttpPost]

@@ -43,6 +43,8 @@ namespace Mobile_PaidThx.Controllers
 
                 FormsAuthentication.SetAuthCookie(model.Email, false);
                 Session["UserId"] = userResponse.userId;
+                var user = userService.GetUser(userResponse.userId);
+                Session["User"] = user;
 
                 if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                     && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))

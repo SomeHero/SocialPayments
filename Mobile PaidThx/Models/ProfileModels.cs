@@ -43,6 +43,7 @@ namespace Mobile_PaidThx.Models
             public String Slogan { get; set; }
             public Boolean HasInfo { get; set; }
             public String ImageUri { get; set; }
+            public String Id { get; set; }
         }
     }
     public class BankAccountModel
@@ -83,8 +84,11 @@ namespace Mobile_PaidThx.Models
     public class DonateMoneyModel
     {
         public String Organization { get; set; }
-        public String Amount { get; set; }
+        public String OrganizationId { get; set; }
+        public Double Amount { get; set; }
         public String PledgerUri { get; set; }
+        public String Comments { get; set; }
+        public String Pincode { get; set; }
     }
     public class RequestMoneyModel
     {
