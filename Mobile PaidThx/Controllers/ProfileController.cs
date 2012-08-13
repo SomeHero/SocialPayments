@@ -15,6 +15,7 @@ using System.Configuration;
 using System.Web.Helpers;
 using System.Web.Script.Serialization;
 using System.Web.Routing;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -580,7 +581,7 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
-            var 
+            
             using (var ctx = new Context())
             {
                 var applicationService = new SocialPayments.DomainServices.ApplicationService();
@@ -602,6 +603,9 @@ namespace Mobile_PaidThx.Controllers
                     return RedirectToAction("SignIn", "Account", null);
                 }
 
+                var paystreamMessageServices = new PaystreamMessageServices();
+                paystreamMessageServices.SendMoney(_apiKey, Session["UserId"].ToString(), "", "", user.PaymentAccounts[0].Id.ToString())
+            
                 var paymentAccount = user.PaymentAccounts[0];
                 var mobileNumber = user.MobileNumber;
                 logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
