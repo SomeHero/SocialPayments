@@ -5,6 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using NLog;
 using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services;
+using System.Web.Script.Serialization;
+using Mobile_PaidThx.Services.ResponseModels;
+using System.Web.Routing;
+using System.Configuration;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -17,6 +22,8 @@ namespace Mobile_PaidThx.Controllers
 
         private string _userServiceUrl = "http://23.21.203.171/api/internal/api/Users";
         private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
+
+        private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public ActionResult Index()
         {
@@ -47,90 +54,32 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("Personalize", "Register");
         }
-        //
-        // GET: /Join/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult SignInWithFacebook(string state, string code)
         {
-            return View();
-        }
+            var faceBookServices = new FacebookServices();
+            var userServices = new UserServices();
 
-        //
-        // GET: /Join/Create
+            var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
 
-        public ActionResult Create()
-        {
-            return View();
-        }
+            var fbAccount = faceBookServices.FBauth(state, code, redirect);
+            var jsonResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
 
-        //
-        // POST: /Join/Create
+            //validate fbAccount.Id is associated with active user
+            //if (user == null)
+            //{
+            //    ModelState.AddModelError("", "Error. Try again..");
 
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+            //    return View("SignIn");
+            //}
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
-        //
-        // GET: /Join/Edit/5
+            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(jsonResponse);
 
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            Session["UserId"] = facebookSignInResponse.userId;
 
-        //
-        // POST: /Join/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Join/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Join/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
         }
     }
 }

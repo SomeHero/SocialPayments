@@ -21,21 +21,19 @@ namespace Mobile_PaidThx.Services
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
-        public FacebookUserModels.FBuser FBauth(string state, string code)
+        public FacebookUserModels.FBuser FBauth(string state, string code, string redirect_uri)
         {
             string response = null;
             string token = null;
             string tokenExp = null;
             FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
-            var redirect = String.Format(fbTokenRedirectURL, System.Web.HttpContext.Current.Request.Url.Host, System.Web.HttpContext.Current.Request.Url.Port == 80
-                ? string.Empty : ":" + System.Web.HttpContext.Current.Request.Url.Port);
 
             if (state == fbState)
             {
                 //Exchange FB Code for FB Token
                 string requestToken = "https://graph.facebook.com/oauth/access_token?" +
                     "client_id=" + fbAppID +
-                    "&redirect_uri=" + redirect +
+                    "&redirect_uri=" + redirect_uri +
                     "&client_secret=" + fbAppSecret +
                     "&code=" + code;
 

@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Security;
 using System.Web.Routing;
+using System.Configuration;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -19,6 +20,8 @@ namespace Mobile_PaidThx.Controllers
         // GET: /SignIn/
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
+
+        private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public ActionResult Index()
         {
@@ -71,7 +74,9 @@ namespace Mobile_PaidThx.Controllers
             var faceBookServices = new FacebookServices();
             var userServices = new UserServices();
 
-            var fbAccount = faceBookServices.FBauth(state, code);
+            var redirect = String.Format(fbTokenRedirectURL, "SignIn/SignInWithFacebook/");
+
+            var fbAccount = faceBookServices.FBauth(state, code, redirect);
             var jsonResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
 
             //validate fbAccount.Id is associated with active user
@@ -84,9 +89,9 @@ namespace Mobile_PaidThx.Controllers
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
+            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(jsonResponse);
 
-            Session["UserId"] = userResponse.userId;
+            Session["UserId"] = facebookSignInResponse.userId;
 
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
