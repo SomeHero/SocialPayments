@@ -12,6 +12,19 @@ namespace SocialPayments.RestServices.Internal.Models
             public int TotalRecords { get; set; }
             public IEnumerable<UserResponse> Results { get; set; }
         }
+        public class HomepageRefreshReponse
+        {
+            public string userId { get; set; }
+            public int numberOfIncomingNotifications { get; set; }
+            public int numberOfOutgoingNotifications { get; set; }
+            public List<UserModels.QuickSendUserReponse> quickSendContacts { get; set; } // Maximum 6 contacts
+        }
+        public class QuickSendUserReponse
+        {
+            public string userId { get; set; }
+            public string name { get; set; }
+            public string userImage { get; set; }
+        }
         public class UserResponse
         {
             public Guid userId { get; set; }

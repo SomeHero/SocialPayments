@@ -62,7 +62,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/users/5
         public HttpResponseMessage<UserModels.UserResponse> Get(string id)
         {
-             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
+            _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
 
             Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
@@ -71,16 +71,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
             DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx); ;
 
-             User user = null;
+            User user = null;
 
-             try
-             {
-                 user = _userService.GetUserById(id);
-             }
-             catch (Exception ex)
-             {
-                 _logger.Log(LogLevel.Info, String.Format("Unable to find user by id {0}. {1}", id, ex.Message));
-             }
+            try
+            {
+                user = _userService.GetUserById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Info, String.Format("Unable to find user by id {0}. {1}", id, ex.Message));
+            }
 
             if (user == null)
             {
@@ -105,7 +105,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (receivedPayments.Count() > 0)
                 receivedTotal = receivedPayments.Sum(m => m.Amount);
-            
+
             _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
             _logger.Log(LogLevel.Info, String.Format("# of paypoints {0}", user.PayPoints.Count));
 
@@ -160,7 +160,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     setupSecurityPin = (String.IsNullOrEmpty(user.SecurityPin) ? false : true),
                     securityQuestion = (user.SecurityQuestion != null ? user.SecurityQuestion.Question : ""),
                     securityQuestionId = user.SecurityQuestionID,
-                    pendingMessages = outstandingMessages.Select(m => new MessageModels.MessageResponse() {
+                    pendingMessages = outstandingMessages.Select(m => new MessageModels.MessageResponse()
+                    {
                         amount = m.Amount,
                         comments = m.Comments,
                         createDate = formattingService.FormatDateTimeForJSON(m.CreateDate),
@@ -175,11 +176,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         recipientUri = m.RecipientUri,
                         senderName = m.SenderName,
                         senderUri = m.SenderUri,
-                       transactionImageUri = m.TransactionImageUrl
+                        transactionImageUri = m.TransactionImageUrl
                     }).ToList(),
                     userPayPoints = (user.PayPoints != null ? user.PayPoints
                     .Where(a => a.IsActive)
-                    .Select(p => new UserModels.UserPayPointResponse() {
+                    .Select(p => new UserModels.UserPayPointResponse()
+                    {
                         Id = p.Id.ToString(),
                         Type = p.Type.Name,
                         Uri = p.URI,
@@ -190,7 +192,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     }).ToList() : null),
                     bankAccounts = (user.PaymentAccounts != null ? user.PaymentAccounts
                     .Where(b => b.IsActive)
-                    .Select(a => new AccountModels.AccountResponse() {
+                    .Select(a => new AccountModels.AccountResponse()
+                    {
                         AccountNumber = securityService.GetLastFour(securityService.Decrypt(a.AccountNumber)),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
@@ -201,19 +204,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         Status = a.AccountStatus.GetDescription()
                     }).ToList() : null),
                     userConfigurationVariables = (user.UserConfigurations != null ? user.UserConfigurations.Select(c =>
-                        new UserModels.UserConfigurationResponse() {
+                        new UserModels.UserConfigurationResponse()
+                        {
                             Id = c.Id.ToString(),
                             UserId = c.UserId.ToString(),
                             ConfigurationKey = c.ConfigurationKey,
                             ConfigurationValue = c.ConfigurationValue,
-                            ConfigurationType = c.ConfigurationType 
-                        }).ToList() : null), 
+                            ConfigurationType = c.ConfigurationType
+                        }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
                     pendingMessageCount = 1
                 };
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 string errorMessage = ex.Message;
 
@@ -317,7 +321,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
         }
-                
+
         // POST /api/user/{id}/personalize_user
         public HttpResponseMessage PersonalizeUser(string id, UserModels.PersonalizeUserRequest request)
         {
@@ -328,7 +332,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-            
+
             var user = _userService.GetUserById(id);
 
             user.FirstName = request.FirstName;
@@ -338,9 +342,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var firstNameAttribute = _ctx.UserAttributes
                 .FirstOrDefault(a => a.AttributeName == "FirstName");
 
-            if(firstNameAttribute != null)
+            if (firstNameAttribute != null)
             {
-                user.UserAttributes.Add(new UserAttributeValue() {
+                user.UserAttributes.Add(new UserAttributeValue()
+                {
                     id = Guid.NewGuid(),
                     UserAttributeId = firstNameAttribute.Id,
                     AttributeValue = request.FirstName
@@ -367,7 +372,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Info, String.Format("Unhandled Expression Updating User {0}. {1}", id, ex.Message));
-                
+
                 var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 responseMessage.ReasonPhrase = "Unable to update user";
 
@@ -392,7 +397,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             // Read the form data and return an async task.
             var task = Request.Content.ReadAsMultipartAsync(provider).
-                ContinueWith < HttpResponseMessage<FileUploadResponse>>(readTask =>
+                ContinueWith<HttpResponseMessage<FileUploadResponse>>(readTask =>
                 {
                     if (readTask.IsFaulted || readTask.IsCanceled)
                     {
@@ -411,7 +416,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     string bucketName = ConfigurationManager.AppSettings["MemberImagesBucketName"];
 
-                   // _logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
+                    // _logger.Log(LogLevel.Info, String.Format("Uploading Batch File for batch {0} to bucket {1}", transactionBatch.Id, bucketName));
 
                     if (String.IsNullOrEmpty(bucketName))
                         throw new Exception("S3 bucket name for MemberImages not configured");
@@ -435,7 +440,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     }
 
                     return new HttpResponseMessage<FileUploadResponse>(
-                        new FileUploadResponse() {
+                        new FileUploadResponse()
+                        {
                             ImageUrl = String.Format("http://memberimages.paidthx.com/{0}/image1.png", id)
                         }, HttpStatusCode.Created);
                 });
@@ -516,7 +522,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                userService.SetupSecurityQuestion(id, request.questionId,request.questionAnswer);
+                userService.SetupSecurityQuestion(id, request.questionId, request.questionAnswer);
             }
             catch (Exception ex)
             {
@@ -541,7 +547,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             Context _ctx = new Context();
             DomainServices.UserService userService = new DomainServices.UserService(_ctx);
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-            
+
             var user = userService.GetUserById(id);
 
             if (!securityService.Decrypt(user.Password).Equals(request.currentPassword))
@@ -611,7 +617,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-         }
+        }
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {
@@ -654,6 +660,62 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
+        // POST /api/users/{userId}/refresh_homepage
+        public HttpResponseMessage<UserModels.HomepageRefreshReponse> RefreshHomepageInformation(string id)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
+
+            Context _ctx = new Context();
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.MessageServices _messageService = new DomainServices.MessageServices(_ctx);
+
+            User user = null;
+            try
+            {
+                user = _userService.GetUserById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unable to find user [RefreshHomepage] by [{0}]", id));
+                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+            }
+
+
+            try
+            {
+                List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
+                List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
+
+                foreach (Message msg in recentPayments)
+                {
+                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    {
+                        userId = msg.RecipientId.ToString(),
+                        name = msg.RecipientName,
+                        userImage = msg.recipientImageUri
+                    });
+                }
+
+                var response = new UserModels.HomepageRefreshReponse()
+                {
+                    userId = user.UserId.ToString(),
+                    numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
+                    numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                    quickSendContacts = quickSends
+                };
+
+                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}", id));
+                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+            }
+        }
+
+
         //POST /api/users/{userId}/setup_securitypin
         public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)
         {
@@ -666,13 +728,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
             DomainServices.UserService userService = new DomainServices.UserService(_ctx);
 
-            if(request.securityPin.Length < 4)
+            if (request.securityPin.Length < 4)
             {
                 var error = @"Invalid Security Pin";
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
 
-                var message =  new HttpResponseMessage(HttpStatusCode.BadRequest);
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 message.ReasonPhrase = error;
 
                 return message;
@@ -723,7 +785,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     upperLimit = Convert.ToInt32(user.Limit),
                     hasACHAccount = hasACHAccount,
                     hasSecurityPin = user.SetupSecurityPin,
-                    setupSecurityQuestion = ( user.SecurityQuestionID >= 0 ? true : false ), // If SecurityQuestion setup (value not null > -1 ), return true.
+                    setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false), // If SecurityQuestion setup (value not null > -1 ), return true.
                     isLockedOut = user.IsLockedOut
                 };
 
@@ -768,7 +830,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
                 hasACHAccount = true;
 
-            var response = new UserModels.FacebookSignInResponse() {
+            var response = new UserModels.FacebookSignInResponse()
+            {
                 hasACHAccount = hasACHAccount,
                 hasSecurityPin = user.SetupSecurityPin,
                 userId = user.UserId.ToString(),
@@ -778,8 +841,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false),  // If SecurityQuestion setup (value not null > -1 ), return true.
                 isLockedOut = user.IsLockedOut
             };
-            
-            if(isNewUser)
+
+            if (isNewUser)
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.Created);
             else
                 return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
