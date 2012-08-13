@@ -4,6 +4,36 @@ var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
 }
 
+function returnOrgName(name) {
+    organization = name;
+    var donateModel = {
+        Organization: organization,
+        Amount: amountSelected,
+        PledgerUri: recipient
+    };
+
+    var jsonData = $.toJSON(donateModel);
+
+    $.ajax({
+        type: 'POST',
+        url: testUrl,
+        data: jsonData,
+        contentType: "application/json",
+        dataType: "json",
+        processData: false,
+        success: function (data) {
+            $.mobile.changePage(pledgeUrl, {
+                type: "put",
+                data: data
+            });
+        },
+        error: function (objRequest, next, errorThrown) {
+            alert(next);
+            $("#error-block").appendTo(next);
+        }
+    });
+}
+
 function toDonateScreen() {
     var homeUrl = getBaseURL() + 'DoGood/Donate';
     $.mobile.changePage(homeUrl);
@@ -397,36 +427,4 @@ $(document).ready(function () {
             }
         });
     });
-
-
-
-    function returnOrgName(name) {
-        organization = name;
-        var donateModel = {
-            Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
-        };
-
-        var jsonData = $.toJSON(donateModel);
-
-        $.ajax({
-            type: 'POST',
-            url: testUrl,
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            processData: false,
-            success: function (data) {
-                $.mobile.changePage(pledgeUrl, {
-                    type: "put",
-                    data: data
-                });
-            },
-            error: function (objRequest, next, errorThrown) {
-                alert(next);
-                $("#error-block").appendTo(next);
-            }
-        });
-    }
 });
