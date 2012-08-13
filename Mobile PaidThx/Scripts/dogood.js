@@ -40,7 +40,6 @@ function toWhomPledgeScreen() {
 }
 
 $(document).ready(function () {
-
     var amountSelected = 0.0;
     var recipient = "";
     var organization = "";
@@ -133,8 +132,8 @@ $(document).ready(function () {
         amountSelected = $('#customAmountDonate').val();
         var donateModel = {
             Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
+            OrganizationId: organizationid,
+            Amount: amountSelected
         };
 
         var jsonData = $.toJSON(donateModel);
@@ -174,6 +173,7 @@ $(document).ready(function () {
         }
         var donateModel = {
             Organization: organization,
+            OrganizationId: orgnizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -204,8 +204,8 @@ $(document).ready(function () {
         amountSelected = 1.00;
         var donateModel = {
             Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
+            OrganizationId: organizationid,
+            Amount: amountSelected
         };
 
         var jsonData = $.toJSON(donateModel);
@@ -234,8 +234,8 @@ $(document).ready(function () {
         amountSelected = 5.00;
         var donateModel = {
             Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
+            OrganizationId: organizationid,
+            Amount: amountSelected
         };
 
         var jsonData = $.toJSON(donateModel);
@@ -264,8 +264,8 @@ $(document).ready(function () {
         amountSelected = 10.00;
         var donateModel = {
             Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
+            OrganizationId: organizationid,
+            Amount: amountSelected
         };
 
         var jsonData = $.toJSON(donateModel);
@@ -294,8 +294,8 @@ $(document).ready(function () {
         amountSelected = 20.00;
         var donateModel = {
             Organization: organization,
-            Amount: amountSelected,
-            PledgerUri: recipient
+            OrganizationId: organizationid,
+            Amount: amountSelected
         };
 
         var jsonData = $.toJSON(donateModel);
@@ -326,6 +326,7 @@ $(document).ready(function () {
         amountSelected = $('#customAmountPledge').val();
         var donateModel = {
             Organization: organization,
+            OrganizationId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -356,6 +357,7 @@ $(document).ready(function () {
         amountSelected = 1.00;
         var donateModel = {
             Organization: organization,
+            OrganizationId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -386,6 +388,7 @@ $(document).ready(function () {
         amountSelected = 5.00;
         var donateModel = {
             Organization: organization,
+            OrganizationId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -416,6 +419,7 @@ $(document).ready(function () {
         amountSelected = 10.00;
         var donateModel = {
             Organization: organization,
+            OrganizationId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -446,6 +450,7 @@ $(document).ready(function () {
         amountSelected = 20.00;
         var donateModel = {
             Organization: organization,
+            OrganizationId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
@@ -479,12 +484,13 @@ $(document).ready(function () {
     function getPincodeDonate() {
         var theAmount = $("#amountToDonate").val();
         var theRecipient = $("#org-name-donate").text();
-        var theComments = $("#txtComments").val();
+        var theComments = $("#txtComments-Donate").val();
+        var theOrgId = $("#theOrgId").val();
 
         var donateModel = {
-            Organization: organization,
-            OrganizationId: orgnizationid,
-            Amount: amountSelected,
+            Organization: theRecipient,
+            OrganizationId: theOrgId,
+            Amount: theAmount,
             Comments: theComments
         };
 

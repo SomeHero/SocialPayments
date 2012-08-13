@@ -1,16 +1,27 @@
-﻿   @{
+﻿@{
     ViewBag.Title = "Index";
 }
-    <div data-role="page">
-       @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
-        <div data-role="content">
-            <h4>Welcome to PaidThx!</h4>
-
-            <h6>The fastest, easiest, safest way to exchange money with friends, family, and your favorite organizations.</h6>
-            
-
-            <p>Join or Sign in Below:</p>
-            <button type="button" id="signin-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I'm new to PaidThx</span></button>
-             <button type="button" id="signin-submit" class="imgbtn"><img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I already use PaidThx</span></button>
+<div data-role="page">
+    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
+    <div data-role="content" style="background-color: #3E7D48">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            <h4 style="font-size: 26px; text-align: center; margin-bottom: 15px">
+                Welcome to PaidThx!</h4>
+            <h6 style="text-align: center; width: 60%; margin-left: 20%">
+                The fastest, easiest, safest way to exchange money with friends, family, and your
+                favorite organizations.</h6>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 15px; margin-bottom: 15px">
+                Join or Sign in Below:</div>
+            <a href="./Join">
+                <button type="button" id="signin-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I'm
+                        new to PaidThx</span></button></a>
+            <div style="margin-bottom: 15px">
+            </div>
+            <a href="./SignIn">
+                <button type="button" id="signin-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I
+                        already use PaidThx</span></button></a>
         </div>
     </div>
+</div>

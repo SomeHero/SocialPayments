@@ -22,6 +22,7 @@
                 </button>
             </a>
             <input type="hidden" id="amountToDonate" value="@Model.Amount" />
+            <input type="hidden" id="theOrgId" value="@Model.OrganizationId" />
             <a onclick="toDonateAmountScreen()" data-prefetch>
                 <button type="button" class="imgbtn field-btn">
                     <span class="imgbg" style="margin-left: -2px">
@@ -36,9 +37,9 @@
                                                 }</span></span></button></a>
         </div>
         <div style="margin-left: 10px; margin-right: 10px; margin-top: 20px">
-            <label for="txtComments" style="margin-bottom: 15px; font-size: 18px">
+            <label for="txtComments-Donate" style="margin-bottom: 15px; font-size: 18px">
                 Dedicate to Someone?</label>
-            <textarea id="txtComments-Request" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+            <textarea id="txtComments-Donate" rows="10" cols="100" placeholder="Enter notes, comments, etc"
                 required></textarea>
         </div>
         <div style="margin-top: 20px; margin-left: 10px; margin-right: 10px">
