@@ -10,6 +10,7 @@ namespace Mobile_PaidThx.Services
     public class PaystreamMessageServices : ServicesBase
     {
         private string _paystreamMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages";
+        private string _donateMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/donate";
 
         //public string apiKey { get; set; }
         //public string senderId { get; set; }
@@ -36,9 +37,9 @@ namespace Mobile_PaidThx.Services
             return SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
 
         }
-        public string SendDonation(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        public string SendDonation(string apiKey, string senderId, string recipientId, string senderAccountId, string securityPin, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            return SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
+            return SendDonationMessage(apiKey, senderId, recipientId, senderAccountId, securityPin, amount, comments, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
         }
         public string AcceptPledge()
         {
@@ -70,6 +71,31 @@ namespace Mobile_PaidThx.Services
             });
 
             string jsonResponse = Post(_paystreamMessageUrl, json);
+
+            return jsonResponse;
+        }
+
+        private string SendDonationMessage(string apiKey, string senderId, string recipientId, string senderAccountId, string securityPin, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                apiKey = apiKey,
+                senderId = senderId,
+                organizationId = recipientId,
+                senderAccountId = senderAccountId,
+                securityPin = securityPin,
+                amount = amount,
+                comments = comments,
+                latitude = latitude,
+                longitude = longitude,
+                recipientFirstName = recipientFirstName,
+                recipientLastName = recipientLastName,
+                recipientImageUri = recipientImageUri
+            });
+
+            string jsonResponse = Post(_donateMessageUrl, json);
 
             return jsonResponse;
         }
