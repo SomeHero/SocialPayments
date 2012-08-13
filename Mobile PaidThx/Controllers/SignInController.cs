@@ -63,89 +63,31 @@ namespace Mobile_PaidThx.Controllers
             return View(model);
         }
         //
-        // GET: /SignIn/Details/5
-
-        public ActionResult Details(int id)
+        // GET: /Account/FBauth
+        public ActionResult SignInWithFacebook(string state, string code)
         {
-            return View();
+            var faceBookServices = new FacebookServices();
+            var userServices = new UserServices();
+
+            var fbAccount = faceBookServices.FBauth(state, code);
+            var jsonResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
+
+            //validate fbAccount.Id is associated with active user
+            //if (user == null)
+            //{
+            //    ModelState.AddModelError("", "Error. Try again..");
+
+            //    return View("SignIn");
+            //}
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
+
+            Session["UserId"] = userResponse.userId;
+
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
-
-        //
-        // GET: /SignIn/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /SignIn/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /SignIn/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /SignIn/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /SignIn/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /SignIn/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }

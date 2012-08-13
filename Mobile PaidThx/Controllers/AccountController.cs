@@ -566,15 +566,6 @@ namespace Mobile_PaidThx.Controllers
             return View(model);
         }
 
-        private static HttpWebRequest GetWebRequest(string formattedUri)
-        {
-            // Create the request’s URI.
-            Uri serviceUri = new Uri(formattedUri, UriKind.Absolute);
-
-            // Return the HttpWebRequest.
-            return (HttpWebRequest)WebRequest.Create(serviceUri);
-        }
-
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
