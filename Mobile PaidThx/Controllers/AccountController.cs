@@ -17,6 +17,9 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using System.Configuration;
+using Mobile_PaidThx.Services;
+using System.Web.Script.Serialization;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -84,28 +87,26 @@ namespace Mobile_PaidThx.Controllers
         // GET: /Account/FBauth
         public ActionResult SignInWithFacebook(string state, string code)
         {
-            using (var ctx = new Context())
-            {
-                var fbAccount = FBauth(state, code);
+            var fbAccount = FBauth(state, code);
+            var userServices = new UserServices();
 
-                var userService = new UserService(ctx);
+            var jsonResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
 
-                bool isNewUser = false;
-                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30), out isNewUser);
+            //validate fbAccount.Id is associated with active user
+            //if (user == null)
+            //{
+            //    ModelState.AddModelError("", "Error. Try again..");
 
-                //validate fbAccount.Id is associated with active user
-                if (user == null)
-                {
-                    ModelState.AddModelError("", "Error. Try again..");
+            //    return View("SignIn");
+            //}
 
-                    return View("SignIn");
-                }
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
-                Session["User"] = user;
-                Session["UserId"] = user.UserId;
+            var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
 
-                return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-            }
+            Session["UserId"] = userResponse.userId;
+
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
         public ActionResult RegisterWithFacebook(string state, string code)
         {
@@ -371,39 +372,37 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Info, String.Format("Attempting to signin user {0}", model.Email));
 
-            using(var ctx = new Context())
+            var userService = new UserServices();
+
+            if (ModelState.IsValid)
             {
-                UserService userService = new UserService(ctx);
+                var jsonResponse = userService.ValidateUser(model.Email, model.Password);
 
-                if (ModelState.IsValid)
+                JavaScriptSerializer js = new JavaScriptSerializer();
+            
+                var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
+
+
+                FormsAuthentication.SetAuthCookie(model.Email, false);
+                Session["UserId"] = userResponse.userId;
+
+                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                 {
-                    SocialPayments.Domain.User user;
-                    if (userService.ValidateUser(model.Email, model.Password, out user))
-                    {
-
-                        FormsAuthentication.SetAuthCookie(model.Email, false);
-                        Session["User"] = user;
-                        Session["UserId"] = user.UserId;
-
-                        if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                            && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                    }
+                    return Redirect(returnUrl);
                 }
-
-                // If we got this far, something failed, redisplay form
-                return View(model);
+                else
+                {
+                    return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+                }
             }
+            else
+            {
+                ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
         public ActionResult ForgotPassword()
         {

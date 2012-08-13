@@ -1,0 +1,13 @@
+﻿@model Mobile_PaidThx.Models.MenuModel
+<div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+	<h1>@Model.HeaderText</h1>
+        <div data-role="navbar" class="nav-welcome-menu" data-grid="c">
+        <ul>
+            <li><a href="@Url.Content("~/")" class="nav-item" id="home" data-icon="custom">Welcome</a></li>
+            <li><a href="@Url.Content("~/SignIn")" class="nav-item" id="request" data-icon="custom">Sign In</a></li>
+            <li><a href="@Url.Content("~/Join")" class="nav-item ui-btn-active" id="send" data-icon="custom">Join</a></li>
+            <li><a href="@Url.Content("~/About")" class="nav-item" id="dogood" data-icon="custom">About</a></li>
+                    
+        </ul>
+    </div>
+</div>
