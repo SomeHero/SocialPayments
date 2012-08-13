@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Mobile_PaidThx.Models;
+using NLog;
+using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.Services;
+using System.Web.Routing;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class DoGoodController : Controller
     {
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /DoGood/
 
@@ -24,6 +32,59 @@ namespace Mobile_PaidThx.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult PinswipeDonate(Mobile_PaidThx.Models.DonateMoneyModel model)
+        {
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult DonateMoney(DonateMoneyModel model)
+        {
+            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
+
+            var applicationService = new SocialPayments.DomainServices.ApplicationService();
+            var userId = Session["UserId"].ToString();
+
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+                    var paystreamMessageServices = new PaystreamMessageServices();
+                    var response = paystreamMessageServices.SendDonation(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, model.Organization, model.Pincode, model.Amount, model.Comments, "Payment", "0", "0", "", "", "");
+                    //ctx.PaymentRequests.Add(new PaymentRequest()
+                    //{
+                    //    Amount = model.Amount,
+                    //    ApiKey = application.ApiKey,
+                    //    Comments = model.Comments,
+                    //    CreateDate = System.DateTime.Now,
+                    //    PaymentRequestId = Guid.NewGuid(),
+                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
+                    //    RecipientUri = model.RecipientUri,
+                    //    RequestorId = user.UserId
+                    //});
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+
+                    return View(model);
+                }
+            }
+            else
+                return View(model);
+
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+        }
+
         public ActionResult AddOrg()
         {
             Mobile_PaidThx.Models.OrganizationModels.Organizations orgs = new Models.OrganizationModels.Organizations();
@@ -36,6 +97,7 @@ namespace Mobile_PaidThx.Controllers
             // NON-PROFITS
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel acs = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "1",
                 Name = "American Cancer Society",
                 Slogan = "The official sponsor of birthdays",
                 ImageUri = "~/Content/images/org_acs.png",
@@ -45,6 +107,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel ad = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "2",
                 Name = "American Diabetes Association",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_americandiabetes.png",
@@ -55,6 +118,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel aheart = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "3",
                 Name = "American Heart Association",
                 Slogan = "Learn and Live",
                 ImageUri = "~/Content/images/org_americanheart.png",
@@ -65,6 +129,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel cs = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "4",
                 Name = "Child Savers",
                 Slogan = "Helping Greater Richmond's Children since 1924",
                 ImageUri = "~/Content/images/org_childsavers.png",
@@ -73,6 +138,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel gw = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "5",
                 Name = "Goodwill",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_goodwill.png",
@@ -83,6 +149,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel md = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "6",
                 Name = "March of Dimes",
                 Slogan = "Working together for stronger, healther babies",
                 ImageUri = "~/Content/images/org_marchofdimes.png",
@@ -93,6 +160,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel mda = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "7",
                 Name = "Muscle Dystrophy Association",
                 Slogan = "Fighting muscle disease",
                 ImageUri = "~/Content/images/org_mda.png",
@@ -103,6 +171,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel nc = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "8",
                 Name = "Nature Conservancy",
                 Slogan = "Protecting Nature. Perserving Life",
                 ImageUri = "~/Content/images/org_natureconserv.png",
@@ -113,7 +182,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel wwf = new Models.OrganizationModels.OrganizationModel()
             {
-
+                Id = "9",
                 Name = "World Wildlife Foundation",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_wwf.png",
@@ -224,6 +293,7 @@ namespace Mobile_PaidThx.Controllers
             // NON-PROFITS
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel acs = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "1",
                 Name = "American Cancer Society",
                 Slogan = "The official sponsor of birthdays",
                 ImageUri = "~/Content/images/org_acs.png",
@@ -233,6 +303,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel ad = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "2",
                 Name = "American Diabetes Association",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_americandiabetes.png",
@@ -243,6 +314,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel aheart = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "3",
                 Name = "American Heart Association",
                 Slogan = "Learn and Live",
                 ImageUri = "~/Content/images/org_americanheart.png",
@@ -253,6 +325,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel cs = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "4",
                 Name = "Child Savers",
                 Slogan = "Helping Greater Richmond's Children since 1924",
                 ImageUri = "~/Content/images/org_childsavers.png",
@@ -261,6 +334,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel gw = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "5",
                 Name = "Goodwill",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_goodwill.png",
@@ -271,6 +345,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel md = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "6",
                 Name = "March of Dimes",
                 Slogan = "Working together for stronger, healther babies",
                 ImageUri = "~/Content/images/org_marchofdimes.png",
@@ -281,6 +356,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel mda = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "7",
                 Name = "Muscle Dystrophy Association",
                 Slogan = "Fighting muscle disease",
                 ImageUri = "~/Content/images/org_mda.png",
@@ -291,6 +367,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel nc = new Models.OrganizationModels.OrganizationModel()
             {
+                Id = "8",
                 Name = "Nature Conservancy",
                 Slogan = "Protecting Nature. Perserving Life",
                 ImageUri = "~/Content/images/org_natureconserv.png",
@@ -301,7 +378,7 @@ namespace Mobile_PaidThx.Controllers
 
             Mobile_PaidThx.Models.OrganizationModels.OrganizationModel wwf = new Models.OrganizationModels.OrganizationModel()
             {
-
+                Id = "9",
                 Name = "World Wildlife Foundation",
                 Slogan = "",
                 ImageUri = "~/Content/images/org_wwf.png",
