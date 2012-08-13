@@ -26,21 +26,47 @@ namespace Mobile_PaidThx.Services
         //public string recipientFirstName { get; set; }
         //public string recipientLastName { get; set; }
         //public string recipientImageUri { get; set; }
-        public string SendMoney(string apiKey, string senderId, string recipientId, string senderUri)
+        public string SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId)
+        {
+            SendMessage();
+
+            return "";
+        }
+        public string RequestMoney()
+        {
+            SendMessage();
+
+            return "";
+        }
+        public string SendDonation()
+        {
+            SendMessage();
+
+            return "";
+        }
+        public string AcceptPledge()
+        {
+            SendMessage();
+
+            return "";
+        }
+        private string SendMessage()
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var json = js.Serialize(new
-            {
-                apiKey = apiKey,
-                senderId = senderId,
-                recipientId = recipientId,
-                senderUri = senderUri
-            });
+            //var json = js.Serialize(new
+            //{
+            //    apiKey = apiKey,
+            //    senderId = senderId,
+            //    recipientId = recipientId,
+            //    senderUri = senderUri
+            //});
 
-            string jsonResponse = Post(_paystreamMessageUrl, json);
+            //string jsonResponse = Post(_paystreamMessageUrl, json);
 
-            return jsonResponse;
+            //return jsonResponse;
+
+            return "";
         }
     }
 }
