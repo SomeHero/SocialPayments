@@ -1,6 +1,6 @@
 ﻿@model Mobile_PaidThx.Models.OrganizationModels.Organizations
 <div data-role="page" id="dogood-page">
-@{ Html.RenderPartial("LoggedInMenu"); }
+    @{ Html.RenderPartial("LoggedInMenu"); }
     <div data-role="content">
         <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
             Add Organization</div>
@@ -27,44 +27,45 @@
             font-size: 14px;">
             NON-PROFITS
         </div>
-        <!--American Cancer Society-->
         @foreach (var nonprofit in Model.NonProfits)
         {
-            <a onclick="returnOrgName('@nonprofit.Name');"><div style="height: 60px; padding: 5px; display: block; overflow: hidden">
-                <img style="float:left; padding-right:10px" src="@Url.Content(@nonprofit.ImageUri)" />
-                @if (nonprofit.HasInfo)
-                {
-                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
-                }
-                else
-                {
-                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
-                }
-                <div style="margin-top: 8px">
-                    @if (nonprofit.Name != null && nonprofit.Name.Length > 0)
+            <a class="organization" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
+                <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                    <img style="float:left; padding-right:10px" src="@Url.Content(@nonprofit.ImageUri)" />
+                    @if (nonprofit.HasInfo)
                     {
-                        if (nonprofit.Name.Length > 25)
-                        {
-                        <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name.Substring(0, 24)..."</span>
-                        }
-                        else
-                        {
-                        <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name"</span>
-                        }
-                    }<br />
-                    @if (nonprofit.Slogan != null && nonprofit.Slogan.Length > 0)
-                    {
-                        if (nonprofit.Slogan.Length > 35)
-                        {
-                        <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan.Substring(0, 36)..."</span>
-                        }
-                        else
-                        {
-                        <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
-                        }
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
                     }
+                    else
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
+                    }
+                    <div style="margin-top: 8px">
+                        @if (nonprofit.Name != null && nonprofit.Name.Length > 0)
+                        {
+                            if (nonprofit.Name.Length > 25)
+                            {
+                            <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name.Substring(0, 24)..."</span>
+                            }
+                            else
+                            {
+                            <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name"</span>
+                            }
+                        }<br />
+                        @if (nonprofit.Slogan != null && nonprofit.Slogan.Length > 0)
+                        {
+                            if (nonprofit.Slogan.Length > 35)
+                            {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan.Substring(0, 36)..."</span>
+                            }
+                            else
+                            {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
+                            }
+                        }
+                    </div>
                 </div>
-            </div></a>
+            </a>   
             <div style="height: 1px; background-color: #BFBFBF; width: 100%">
             </div>
         }

@@ -12,13 +12,13 @@
                     <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
                         <img style="margin-left:-8px; margin-top:-3px" src="@Url.Content("~/Content/images/icon-settings-orgs-40x40.png")" alt="" /></span><span
                             id="organization-name">@if (Model.Organization != null && !Model.Organization.Equals("null"))
-                                             {
+                                                   {
                                 <span id="org-name">@Model.Organization</span>
-                                             }
-                                             else
-                                             {
+                                                   }
+                                                   else
+                                                   {
                                 <text>Your Cause's Name</text>
-                                             }</span>
+                                                   }</span>
                 </button>
             </a><a onclick="toWhomPledgeScreen()" data-prefetch>
                 <button type="button" class="imgbtn field-btn">
@@ -37,9 +37,9 @@
                 <button type="button" class="imgbtn field-btn">
                     <span class="imgbg" style="margin-left: -2px">
                         <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
-                            id="amount-request">@if (Model.Amount != null && !Model.Amount.Equals("null"))
+                            id="amount-request">@if (Model.Amount > 0)
                                                 {
-                                <span id="amountpledged">@Model.Amount</span>
+                                <text>@string.Format("{0:C}", Model.Amount)</text>
                                                 }
                                                 else
                                                 {
