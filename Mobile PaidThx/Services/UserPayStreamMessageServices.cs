@@ -15,11 +15,11 @@ namespace Mobile_PaidThx.Services
 
         public List<MessageModels.MessageResponse> GetMessages(string userId)
         {
-            var jsonResponse = Get(String.Format(_userPayStreamServiceGetUrl, userId));
+            var response = Get(String.Format(_userPayStreamServiceGetUrl, userId));
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var paystream = js.Deserialize<List<MessageModels.MessageResponse>>(jsonResponse);
+            var paystream = js.Deserialize<List<MessageModels.MessageResponse>>(response.JsonResponse);
 
             return paystream;
         }

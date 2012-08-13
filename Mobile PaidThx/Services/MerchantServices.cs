@@ -9,13 +9,13 @@ namespace Mobile_PaidThx.Services
 {
     public class MerchantServices : ServicesBase
     {
-        private string _merchantServicesBaseUrl = "/api/merchants?type={0}";
+        private string _merchantServicesBaseUrl = "http://23.21.203.171/api/internal/api/merchants?type={0}";
 
-        public string GetMessages(string type)
+        public string GetMerchants(string type)
         {
-            var jsonResponse = Get(String.Format(_merchantServicesBaseUrl, type));
+            var response = Get(String.Format(_merchantServicesBaseUrl, type));
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
     }
 }

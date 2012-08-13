@@ -63,7 +63,7 @@ namespace Mobile_PaidThx.Controllers
             var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
 
             var fbAccount = faceBookServices.FBauth(state, code, redirect);
-            var jsonResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
+            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
 
             //validate fbAccount.Id is associated with active user
             //if (user == null)
@@ -75,11 +75,17 @@ namespace Mobile_PaidThx.Controllers
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(jsonResponse);
+            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
 
             Session["UserId"] = facebookSignInResponse.userId;
 
-            return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
+            var user = userServices.GetUser(facebookSignInResponse.userId);
+
+            if(response.StatusCode == System.Net.HttpStatusCode.Created)
+                return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
+            else
+                return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+            
         }
     }
 }

@@ -22,11 +22,11 @@ namespace Mobile_PaidThx.Services
         {
             var serviceUrl = String.Format(_userServicesGetBaseUrl, userId);
 
-            var jsonResponse = Get(serviceUrl);
+            var response = Get(serviceUrl);
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var user = js.Deserialize<UserModels.UserResponse>(jsonResponse);
+            var user = js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
 
             return user;
         }
@@ -41,7 +41,7 @@ namespace Mobile_PaidThx.Services
         //    public string oAuthToken { get; set; }
         //    //public DateTime tokenExpiration { get; set; }
         //}
-        public string SignInWithFacebook(string apiKey, string accountId, string firstName, string lastName, string emailAddress, string deviceToken, string oAuthToken,
+        public ServiceResponse SignInWithFacebook(string apiKey, string accountId, string firstName, string lastName, string emailAddress, string deviceToken, string oAuthToken,
             DateTime tokenExpiration)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -57,9 +57,9 @@ namespace Mobile_PaidThx.Services
                 tokenExpiration = tokenExpiration
             });
 
-            string jsonResponse = Post(_userServicesSignInWithFacebookUrl, json);
+            var response = Post(_userServicesSignInWithFacebookUrl, json);
 
-            return jsonResponse;
+            return response;
 
         }
         public string RegisterUser(string serviceUrl, string apiKey, string userName, string password, string emailAddress, string registrationMethod, string deviceToken)
@@ -77,9 +77,9 @@ namespace Mobile_PaidThx.Services
                 deviceToken = deviceToken
             });
 
-            string jsonResponse = Post(serviceUrl, json);
+            var response = Post(serviceUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(jsonResponse);
+            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
             return jsonObject["userId"];
         }
@@ -96,9 +96,9 @@ namespace Mobile_PaidThx.Services
                 ImageUrl = request.ImageUrl
             });
 
-            string jsonResponse = Post(serviceUrl, json);
+            var response = Post(serviceUrl, json);
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
         public string ValidateUser(string userName, string password)
         {
@@ -110,9 +110,9 @@ namespace Mobile_PaidThx.Services
                 password = password
             });
 
-            string jsonResponse = Post(_userServiceValidateUserUrl, json);
+            var response = Post(_userServiceValidateUserUrl, json);
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
 
     }
