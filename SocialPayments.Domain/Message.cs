@@ -70,4 +70,21 @@ namespace SocialPayments.Domain
         public bool recipientHasSeen { get; set; }
         public bool senderHasSeen { get; set; }
     }
+
+    public class SameRecipientComparer : IEqualityComparer<Message>
+    {
+        public bool Equals(Message one, Message two)
+        {
+            return (one.RecipientId == two.RecipientId);
+        }
+
+        public int GetHashCode(Message msg)
+        {
+            // A hash value SHOULD be implemented here,
+            // but we only want to know if message recipients are equal.
+            // We return the hash code of the recipient Id of the messages.
+            return msg.RecipientId.GetHashCode();
+        }
+    }
+
 }

@@ -861,6 +861,7 @@ namespace SocialPayments.DomainServices
             else
                 return 0;
         }
+
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));

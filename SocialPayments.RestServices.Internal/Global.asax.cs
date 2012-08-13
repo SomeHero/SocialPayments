@@ -112,6 +112,12 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+                name: "RefreshHomePageInformation",
+                routeTemplate: "api/users/{id}/refresh_homepage",
+                defaults: new { controller = "Users", action = "RefreshHomepageInformation" }
+            );
+
+            routes.MapHttpRoute(
                 name: "ChangeSecurityPin",
                 routeTemplate: "api/users/{id}/change_securitypin",
                 defaults: new { controller = "Users", action = "ChangeSecurityPin" }
