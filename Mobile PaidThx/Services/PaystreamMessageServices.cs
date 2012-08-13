@@ -7,9 +7,9 @@ using System.Web.Script.Serialization;
 namespace Mobile_PaidThx.Services
 {
 
-    public class PaystreamMessageServices: ServicesBase
+    public class PaystreamMessageServices : ServicesBase
     {
-        private string _paystreamMessageUrl = "";
+        private string _paystreamMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages";
 
         //public string apiKey { get; set; }
         //public string senderId { get; set; }
@@ -26,47 +26,52 @@ namespace Mobile_PaidThx.Services
         //public string recipientFirstName { get; set; }
         //public string recipientLastName { get; set; }
         //public string recipientImageUri { get; set; }
-        public string SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId)
+        public string SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            SendMessage();
+            return SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
 
-            return "";
         }
-        public string RequestMoney()
+        public string RequestMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            SendMessage();
+            return SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
 
-            return "";
         }
-        public string SendDonation()
+        public string SendDonation(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
-            SendMessage();
-
-            return "";
+            return SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
         }
         public string AcceptPledge()
         {
-            SendMessage();
+            //SendMessage();
 
             return "";
         }
-        private string SendMessage()
+        private string SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            //var json = js.Serialize(new
-            //{
-            //    apiKey = apiKey,
-            //    senderId = senderId,
-            //    recipientId = recipientId,
-            //    senderUri = senderUri
-            //});
+            var json = js.Serialize(new
+            {
+                apiKey = apiKey,
+                senderId = senderId,
+                recipientId = recipientId,
+                senderUri = senderUri,
+                senderAccountId = senderAccountId,
+                recipientUri = recipientUri,
+                securityPin = securityPin,
+                amount = amount,
+                comments = comments,
+                messageType = messageType,
+                latitude = latitude,
+                longitude = longitude,
+                recipientFirstName = recipientFirstName,
+                recipientLastName = recipientLastName,
+                recipientImageUri = recipientImageUri
+            });
 
-            //string jsonResponse = Post(_paystreamMessageUrl, json);
+            string jsonResponse = Post(_paystreamMessageUrl, json);
 
-            //return jsonResponse;
-
-            return "";
+            return jsonResponse;
         }
     }
 }
