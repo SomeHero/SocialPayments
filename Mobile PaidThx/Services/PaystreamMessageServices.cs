@@ -61,9 +61,9 @@ namespace Mobile_PaidThx.Services
                 securityPin = securityPin
             });
 
-            string jsonResponse = Post(_pledgeMessageUrl, json);
+            var response = Post(_pledgeMessageUrl, json);
 
-            return jsonResponse;
+            return response.JsonResponse;
         }
         private string SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
