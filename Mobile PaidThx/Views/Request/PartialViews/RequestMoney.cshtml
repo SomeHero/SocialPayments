@@ -1,6 +1,6 @@
 ﻿@model Mobile_PaidThx.Models.RequestMoneyModel
 <div id="main-body-request" class="panel" style="margin-left: -11px; margin-right: -11px">
-    <p>
+    <p style="margin-top:0; padding-top:0;">
         <label for="txtSendTo" style="font-size: 16px">
             Request To:</label>
         <a href="./Request/AddContactRequest" data-prefetch>
@@ -39,12 +39,13 @@
     </p>
     <p>
         <label for="txtComments" style="margin-bottom: 15px">
-            Notes/Messages:</label>
+            Message:</label>
         <textarea id="txtComments-Request" rows="10" cols="100" placeholder="Enter notes, comments, etc"
             required></textarea>
     </p>
     <p>
         <a onclick="getPincodeRequest()">
-            <img id="btnRequestMoney" src="@Url.Content("~/Content/images/request_money_button.gif")" alt="" /></a>
+               <button type="button" id="sendmoney" class="btn-new btn-green">
+                   <span>Request Money</span></button></a>
     </p>
 </div>

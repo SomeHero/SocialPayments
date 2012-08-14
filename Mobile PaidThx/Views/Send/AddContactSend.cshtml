@@ -1,19 +1,15 @@
 ﻿@{
     ViewBag.Title = "AddContactSend";
 }
-<div data-role="page" id="send-page">
+<div data-role="page" id="send-page" class="modally">
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-            Paystream</h1>
-       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+            Enter Recipient</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
 
-    <div data-role="content">
-        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
-            Choose Contact</div>
-        <div style="height: 1px; width: 100%; background: #666666">
-        </div>
+    <div data-role="content" class="content">
         <div style="font-size: 16px; margin-left: 10px; margin-top: 10px">
             Enter your contact's
         </div>
@@ -34,9 +30,7 @@
             will result in sending the payment to your contact's <span style="font-weight: bold">
                 phone number</span>.
         </div>
-        <button id="submitContactSend" type="button" style="padding: 10px; font-size: 18px;
-            margin: 15px">
-            Submit Contact</button>
+         <button type="button" id="submitContactSend" class="btn-new btn-blue">
+                   <span>Confirm Contact</span></button>
     </div>
-    @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

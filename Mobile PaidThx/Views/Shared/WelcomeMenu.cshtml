@@ -1,7 +1,6 @@
 ﻿@model Mobile_PaidThx.Models.MenuModel
-<div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-    <h1>@Model.HeaderText</h1>
-    <div data-role="navbar" class="nav-welcome-menu" data-grid="c">
+<div data-role="footer" data-position="fixed" class="nav-pdthx" data-theme="c">
+       <div data-role="navbar" class="nav-welcome-menu" data-grid="c">
         <ul>
             <li><a href="@Url.Content("~/")" class="@Html.GetWelcomeTabCssClass(Model, 0)" id="home" data-icon="custom">
                 Welcome</a></li>

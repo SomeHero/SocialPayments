@@ -1,6 +1,6 @@
 ﻿<div id="main-body" class="panel">
-    <p>
-        <label for="txtSendTo" style="font-size: 16px">
+    <p style="margin-top:0; padding-top:0;">
+        <label for="txtSendTo">
             Send To:</label>
         <a href="./Send/AddContactSend" data-prefetch>
             <button type="button" class="imgbtn field-btn">
@@ -19,7 +19,7 @@
     </p>
     <p>
         <input type="hidden" id="theAmountToSend" value="@Model.Amount" />
-        <label for="txtAmount" style="font-size: 16px">
+        <label for="txtAmount">
             Amount to Send:</label>
         <a href="./Send/AmountToSend" data-prefetch>
             <button type="button" class="imgbtn field-btn">
@@ -37,13 +37,15 @@
         </a>
     </p>
     <p>
-        <label for="txtComments" style="margin-bottom: 15px">
-            Comments:</label>
-        <textarea id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+        <label for="txtComments">
+            Message:</label>
+        <textarea id="txtComments" rows="10" cols="100" placeholder="For what? Add a message..."
             required></textarea>
     </p>
     <p>
         <a onclick="getPincode()">
-            <img id="btnSendMoney" src="@Url.Content("~/Content/images/send_money_button.gif")" /></a>
+            <button type="button" id="sendmoney" class="btn-new btn-green">
+                   <span>Send Money</span></button></a>
+            </a>
     </p>
 </div>

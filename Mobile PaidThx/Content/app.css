@@ -32,6 +32,11 @@ background: -ms-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgb
 background: radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* W3C */
   
 }
+.nav-paidthx
+{
+    box-shadow: 0px -2px 1px #BEBEBE;
+}
+
 div.allcontent
 {
  box-shadow: 0px 6px 6px #888888;   
@@ -619,17 +624,18 @@ input.ui-input-text, textarea.ui-input-text
 }
 .trans-title
 {
-    width: 60%;
+    width: 50%;
     padding: 0 auto;
     float: left;
     font-size: 11px;
     text-shadow: none;
     display: inline-block;
+    margin-left:18px;
 }
 .trans-title strong
 {
     height: 30px;
-    font-size: 12px;
+    font-size: 15px;
     clear: both;
     display: block;
     font-weight: bolder;
@@ -661,28 +667,28 @@ input.ui-input-text, textarea.ui-input-text
 }
 .title-pay-in
 {
-    font-size: 10px;
+    font-size: 12px;
     font-style: normal;
     font-weight: normal;
     color: #1c8839;
 }
 .title-pay-out
 {
-    font-size: 10px;
+    font-size: 12x;
     font-style: normal;
     font-weight: normal;
     color: #269bb8;
 }
 .title-request-in
 {
-    font-size: 10px;
+    font-size: 12px;
     font-style: normal;
     font-weight: normal;
     color: #86acb5;
 }
 .title-request-out
 {
-    font-size: 10px;
+    font-size: 12px;
     font-style: normal;
     font-weight: normal;
     color: #81b28e;
@@ -715,25 +721,25 @@ input.ui-input-text, textarea.ui-input-text
 }
 .paystream-pay-in
 {
-    font-size: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: #1c8839;
 }
 .paystream-pay-out
 {
-    font-size: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: #269bb8;
 }
 .paystream-request-in
 {
-    font-size: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: #86acb5;
 }
 .paystream-request-out
 {
-    font-size: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: #81b28e;
 }
@@ -1421,7 +1427,8 @@ h9 span
             .ui-btn-active{
 		    background-image:none;
 		    background-color:#ddd;
-		    text-shadow: none;}
+		    text-shadow: none;
+		    }
             .preNav{
             margin-bottom:0px;
 		    line-height:25px;
@@ -1459,6 +1466,18 @@ background-image: -o-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8
 background-image: linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
 border-radius: 0px 0px 0px 0px;
 }
+
+.nav-pdthx.ui-footer
+{
+ box-shadow:0 -1px 1px #bebebe; 
+ moz-box-shadow:0 -1px 1px #bebebe;     
+} 
+.nav-pdthx.ui-header
+{
+ box-shadow:0 1px 1px #bebebe; 
+ moz-box-shadow:0 1px 1px #bebebe;     
+} 
+
   .nav-pdthx .ui-icon
         {
             width: 30px !important;
@@ -1553,9 +1572,12 @@ border-radius: 0px 0px 0px 0px;
             background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
         }
         
-      .ui-btn-active{  
-        border: 1px solid #2a7e43 /*{global-active-border}*/;
-background: #eeeeee /*{global-active-background-color}*/;
+      .ui-btn-active  
+      {
+          box-shadow:inset 0 0 8px #6ac36b; 
+          -moz-box-shadow:inset 0 0 8px #6ac36b; 
+        border: 1px solid #cccccc;
+background: #eeeeee;
 font-weight: bold;
 color: #2a7e43 /*{global-active-color}*/;
 cursor: pointer;
@@ -1829,12 +1851,125 @@ box-shadow: 0px 0px 0px #ffffff;
 -moz-box-shadow: 0px 0px 0px #ffffff;
 margin: 0 0 20px 0;
 }
-<<<<<<< HEAD
->>>>>>> upstream/development
-=======
 
 div#footer
 {
  margin-top:40px;   
 }
->>>>>>> upstream/development
+
+.btn-new{
+display: block;
+width: 100%;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+clear: both;
+margin-bottom: 10px;
+border: 1px solid #C0C9D1;
+cursor: pointer;
+height:60px;
+line-height:60px;
+font-size:20px;
+font-weight:bold;
+color:#ffffff;
+-webkit-box-align: center;
+text-align: center;
+box-sizing: border-box;
+
+-moz-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+-webkit-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+background: #eeeeee; /* for non-css3 browsers */
+
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ */ 
+}
+
+.btn-new.field
+{
+ color:#333;   
+ height:70px;
+ line-height:70px;
+ font-size:34px;
+ clear:none;
+ margin:10px 0;
+}
+.btn-new.field.small
+{
+ font-size:20px;
+ 
+}
+.btn-new.field.icon.money
+{
+ padding-left:  50px;
+ padding-right:  50px;
+ background-image:url(/Content/images/field-money-icon.png);
+ background-position:20px center;
+ background-repeat:no-repeat;
+}
+
+
+.btn-green
+{
+ background: #207532; /* for non-css3 browsers */
+
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#389f5a', endColorstr='#207532'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#389f5a), to(#207532)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ */
+    background: -ms-linear-gradient(top, #389f5a, #207532);
+    background: -o-linear-gradient(top, #389f5a, #207532);    
+}
+
+
+.btn-blue
+{
+  background: #4290a7; /* for non-css3 browsers */
+
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#74bccb', endColorstr='#4290a7'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#74bccb), to(#4290a7)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #74bccb,  #4290a7); /* for firefox 3.6+ */ 
+    background: -ms-linear-gradient(top, #74bccb, #4290a7);
+    background: -o-linear-gradient(top, #74bccb, #4290a7);        
+}
+
+h5, label
+{
+ font-size:11px !important;
+ font-weight:bold !important;   
+ color:#333 !important;
+}
+
+div.modally div.content, div.modally div.ui-content
+{
+margin:10px;
+}
+
+img.rounded
+{
+ border-radius:4px;
+ moz-border-raidus:4px;
+ o-border-radius:4px;   
+ margin-right:10px;
+}
+
+.ui-field-contain .ui-controlgroup-controls
+{
+ width:100%;   
+}
+
+.ui-radio
+{
+ width:50%;   
+}
+.ui-radio-on, .ui-radio-off
+{
+ width:100%;   
+}
+
+.modally .top-panel
+{
+ border-bottom:1px solid #cccccc;  
+ margin-bottom:10px; 
+ padding-bottom:8px;
+}

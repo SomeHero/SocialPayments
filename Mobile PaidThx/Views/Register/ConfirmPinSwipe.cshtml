@@ -3,16 +3,18 @@
 }
 
 
-<div data-role="page" id="confirm-pin-swipe">
+<div data-role="page" id="confirm-pin-swipe" class="modally">
      <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-	    <h1>Confirm your Pin</h1>
+	    <h1>Confirm Pin</h1>
     </div>
      <div data-role="content">
      @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
-    
+    <div class="top-panel">
+   
+    <p>Swipe your security pin again below to confirm.</p></div>
         @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
-        <div>
+        <div id="anchor">
             <input type="password" id="patternlock" name="PinCode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" />
          </div>

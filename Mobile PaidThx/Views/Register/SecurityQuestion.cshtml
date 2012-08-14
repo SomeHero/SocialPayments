@@ -11,13 +11,15 @@
     </div>
     <div data-role="content">
      @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
-    
+    <div class="top-panel">
+   
+    <p>Select and answer a security question below in case you forget your security pin.</p></div>
         @using (Html.BeginForm())
         {
             @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "pop" }})
             @Html.TextBoxFor(m => m.SecurityQuestionAnswer)
 
-            <button type="submit">Continue</button>
+            <button type="submit" class="btn-new btn-green">Complete Set Up</button>
         }
     </div>
 </div>
