@@ -16,37 +16,54 @@ body{
 	height:100%;
 	overflow:hidden;
 	text-align: center;
+	clear:both;
 }
 
-.patternlockbuttoncontainer{
-	width:90%;
+.patternlocklineshorizontalcontainer{
+width:93%;
 	margin:0 auto;
 	height:100%;
 	overflow:hidden;
 	text-align: center;
-	}
-
-.patternlocklineshorizontalcontainer{
+	clear:both;
 	position:absolute;
-	width:90%;
-	padding:7%;
+	max-height:70%;
 	display:none;
 }
 
 .patternlocklinesverticalcontainer{
+width:93%;
+	margin:0 auto;
+	height:100%;
+	overflow:hidden;
+	text-align: center;
+	clear:both;
 	position:absolute;
-	width:90%;
-	padding:7%;
+	max-height:70%;
 	display:none;
 }
 
 .patternlocklinesdiagonalcontainer{
+	width:93%;
+	margin:0 auto;
+	height:100%;
+	overflow:hidden;
+	text-align: center;
 	position:absolute;
-    width:90%;
-	padding:7%;
+	max-height:70%;
 	display:none;
 }
 
+.patternlockbuttoncontainer{
+	width:93%;
+	margin:0 auto;
+	height:100%;
+	overflow:hidden;
+	text-align: center;
+	position:absolute;
+	max-height:70%;
+	min-height:260px;
+	}
 
 .patternlockbutton{
 	background-image:url('images/btn-pinswipe.png');
@@ -54,32 +71,75 @@ body{
 	display:block;
 	width:70px;
 	height:70px;
-	float:left;
-	margin:5%;
 }
 #patternlockbutton1
 {
     margin-left:0;
+    position:absolute;
+    left:5%;
+    top:10%;
+}
+#patternlockbutton2
+{
+      margin-left:-35px;
+    position:absolute;
+    left:50%;
+    top:10%;
 }
 #patternlockbutton3
 {
-    margin-right:0px;
+      margin-left:0;
+    position:absolute;
+    right:5%;
+    top:10%;
 }
 #patternlockbutton4
 {
     margin-left:0;
+    margin-top:-35px;
+    position:absolute;
+    left:5%;
+    top:50%;
+}
+#patternlockbutton5
+{
+    margin-left:-35px;
+    margin-top:-35px;
+    position:absolute;
+    left:50%;
+    top:50%;
 }
 #patternlockbutton6
 {
-    margin-right:0px;
+    margin-left:0;
+    margin-top:-35px;
+    position:absolute;
+    right:5%;
+    top:50%;
 }
 #patternlockbutton7
 {
     margin-left:0;
+    margin-top:0;
+    position:absolute;
+    left:5%;
+    bottom:10%;
+}
+#patternlockbutton8
+{
+      margin-left:-35px;
+    margin-top:0;
+    position:absolute;
+    left:50%;
+    bottom:10%;
 }
 #patternlockbutton9
 {
-    margin-right:0px;
+    margin-left:0;
+    margin-top:0;
+    position:absolute;
+    right:5%;
+    bottom:10%;
 }
 .touched{
 	background-image:url('images/btn-pinswipe-pressed.png');
