@@ -16,7 +16,7 @@ using System.Net.Mail;
 
 namespace Mobile_PaidThx.Controllers
 {
-    public class HomeController : PaidThxBaseController
+    public class DashboardController : PaidThxBaseController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";

@@ -2,57 +2,91 @@ body{
 	background-image:#ccc;
 }
 
-.patternlockcontainer{
-	width:260px;
-	margin:auto;
-	height:260px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
+#anchor
+{
+ width:100%;
+	margin:0 auto;
+	height:100%;
 	overflow:hidden;
-	background-image: url('images/bg-pattern.png');
+	text-align: center;   
+}
+.patternlockcontainer{
+	width:100%;
+	margin:0 auto;
+	height:100%;
+	overflow:hidden;
+	text-align: center;
 }
 
 .patternlockbuttoncontainer{
-	position:absolute;
-	width:300px;
-}
+	width:90%;
+	margin:0 auto;
+	height:100%;
+	overflow:hidden;
+	text-align: center;
+	}
 
 .patternlocklineshorizontalcontainer{
 	position:absolute;
-	width:250px;
-	padding:22px;
+	width:90%;
+	padding:7%;
+	display:none;
 }
 
 .patternlocklinesverticalcontainer{
 	position:absolute;
-	width:260px;
-	padding:22px;
+	width:90%;
+	padding:7%;
+	display:none;
 }
 
 .patternlocklinesdiagonalcontainer{
 	position:absolute;
-	width:240px;
-	padding:22px;
+    width:90%;
+	padding:7%;
+	display:none;
 }
 
 
 .patternlockbutton{
-	background-image:url('images/button.png');
+	background-image:url('images/btn-pinswipe.png');
 	background-repeat:no-repeat;
 	display:block;
-	width:53px;
-	height:53px;
+	width:70px;
+	height:70px;
 	float:left;
-	margin:16px;
+	margin:5%;
 }
-
+#patternlockbutton1
+{
+    margin-left:0;
+}
+#patternlockbutton3
+{
+    margin-right:0px;
+}
+#patternlockbutton4
+{
+    margin-left:0;
+}
+#patternlockbutton6
+{
+    margin-right:0px;
+}
+#patternlockbutton7
+{
+    margin-left:0;
+}
+#patternlockbutton9
+{
+    margin-right:0px;
+}
 .touched{
-	background-image:url('images/button_active.png');
+	background-image:url('images/btn-pinswipe-pressed.png');
 }
 
 .multiple{
-	background-image:url('images/button_active2.png');
+	background-image:url('images/btn-pinswipe-selected.png');
 }
 
 .patternlocklinehorizontal{

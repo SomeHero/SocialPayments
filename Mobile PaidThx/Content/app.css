@@ -1940,7 +1940,7 @@ h5, label
  color:#333 !important;
 }
 
-div.modally div.content
+div.modally div.content, div.modally div.ui-content
 {
 margin:10px;
 }
@@ -1951,4 +1951,25 @@ img.rounded
  moz-border-raidus:4px;
  o-border-radius:4px;   
  margin-right:10px;
+}
+
+.ui-field-contain .ui-controlgroup-controls
+{
+ width:100%;   
+}
+
+.ui-radio
+{
+ width:50%;   
+}
+.ui-radio-on, .ui-radio-off
+{
+ width:100%;   
+}
+
+.modally .top-panel
+{
+ border-bottom:1px solid #cccccc;  
+ margin-bottom:10px; 
+ padding-bottom:8px;
 }
