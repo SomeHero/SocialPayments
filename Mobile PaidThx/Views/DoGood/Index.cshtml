@@ -2,17 +2,21 @@
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="dogood-page">
-    @{ Html.RenderPartial("LoggedInMenu"); }
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Do Good</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+  
     <div data-role="content">
-        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
-            Donate or Pledge To a Cause</div>
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
         <div style="margin-top: 10px; margin-right: 10px; margin-left: 10px; margin-bottom: 20px">
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Make a donation or
                 gift to a non-profit organization. As always, 100% of your generosity goes to the
                 organization.</span> <a onclick="toDonateScreen()">
-                    <button type="button" class="imgbtn field-btn" style="margin-top: 10px">
+                    <button type="button" class="btn-new btn-green" style="margin-top: 10px">
                         <span id="donate-button">Give To A Cause</span></button></a>
         </div>
         <div style="height: 1px; background-color: #C9C9C9; width: 98%; margin-left: 10px;
@@ -22,7 +26,8 @@
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Accept pledges and
                 charitable donations on behalf of your organization wherever you may be with just
                 an e-mail or phone #.</span> <a onclick="toPledgeScreen()">
-                    <button type="button" class="imgbtn field-btn" style="margin-top: 10px">
-                        <span id="donate-button">Pledge To A Cause</span></button></a></div>
+                    <button type="button" class="btn-new btn-blue" style="margin-top: 10px">
+                        <span id="donate-button">Accept A Pledge</span></button></a></div>
     </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Do Good" }); }
 </div>

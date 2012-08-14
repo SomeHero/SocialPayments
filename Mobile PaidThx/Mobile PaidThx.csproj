@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -156,6 +156,7 @@
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Base\PaidThxBaseController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DoGoodController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -208,10 +209,14 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <Content Include="Content\images\arrow.png" />
+    <Content Include="Content\images\avatar.png" />
     <Content Include="Content\images\bank.png" />
     <Content Include="Content\images\bg-pattern.png" />
     <Content Include="Content\images\btn-go-active-50x48.png" />
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
+    <Content Include="Content\images\btn-pinswipe.png" />
+    <Content Include="Content\images\btn-pinswipe-pressed.png" />
+    <Content Include="Content\images\btn-pinswipe-selected.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />
@@ -251,6 +256,12 @@
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
     <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\icons\aboutIcon-active.png" />
+    <Content Include="Content\images\icons\aboutIcon.png" />
+    <Content Include="Content\images\icons\joinIcon-active.png" />
+    <Content Include="Content\images\icons\joinIcon.png" />
+    <Content Include="Content\images\icons\signinIcon-active.png" />
+    <Content Include="Content\images\icons\signinIcon.png" />
     <Content Include="Content\images\line_diagonal1.png" />
     <Content Include="Content\images\line_diagonal2.png" />
     <Content Include="Content\images\line_hor.png" />
@@ -588,7 +599,7 @@
     <Content Include="Views\DoGood\PinswipeDonate.cshtml" />
     <Content Include="Views\DoGood\PinswipePledge.cshtml" />
     <Content Include="Views\Preferences\Emails.cshtml" />
-    <Content Include="Views\Preferences\SocialNetworks.cshtml" />
+    <Content Include="Views\Preferences\SocialNetworks.cshtml"
     <Content Include="Views\Preferences\Phones.cshtml" />
     <Content Include="Views\Preferences\MeCodes.cshtml" />
     <Content Include="Views\Preferences\Notifications.cshtml" />
@@ -597,7 +608,9 @@
     <Content Include="Views\Preferences\About.cshtml" />
     <Content Include="Views\Preferences\PaypointInfo.cshtml" />
     <Content Include="Views\Preferences\AddPaypoint.cshtml" />
-    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
+    <Content Include="Views\Shared\TitleBar.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" 
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.dll" />

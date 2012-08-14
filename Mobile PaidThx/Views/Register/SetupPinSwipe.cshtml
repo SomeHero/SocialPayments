@@ -2,13 +2,13 @@
     ViewBag.Title = "SetupPinSwipe";
 }
 
-<div data-role="page" id="setup-pin-swipe">
+<div data-role="page" id="setup-pin-swipe" class="modally">
      <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-	    <h1>Setup your Pin</h1>
+	    <h1>Create Pin</h1>
     </div>
     <div data-role="content">
         <div class="top-panel">
-    To complete setting up your account, create a security pin by connecting 4 buttons below.
+    To complete setting up your account, create a security pin by connecting at least 4 buttons below.
 </div>
         @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {

@@ -1,8 +1,17 @@
-﻿<div data-role="page">
-    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            About</h1>
+        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
     <div data-role="content" style="background-color: #3E7D48">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-        <!-- -->
+            <!-- -->
         </div>
     </div>
+    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
 </div>

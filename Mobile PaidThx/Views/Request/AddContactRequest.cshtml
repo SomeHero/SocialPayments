@@ -1,13 +1,14 @@
 ﻿@{
     ViewBag.Title = "AddContactRequest";
 }
-<div data-role="page" id="request-page">
-@{ Html.RenderPartial("LoggedInMenu"); }
-    <div data-role="content">
-        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
-            Choose Contact</div>
-        <div style="height: 1px; width: 100%; background: #666666">
-        </div>
+<div data-role="page" id="request-page" class="modally">
+  @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Enter Recipient</h1>
+      <!-- <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content" class="content">
         <div style="font-size: 16px; margin-left: 10px; margin-top: 10px">
             Enter your contact's
         </div>
@@ -32,4 +33,5 @@
             margin: 15px">
             Submit Contact</button>
     </div>
+    @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

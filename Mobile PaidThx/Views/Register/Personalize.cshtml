@@ -3,22 +3,22 @@
     ViewBag.Title = "Personalize";
 }
 
-<div data-role="page" id="personalize-page">
+<div data-role="page" id="personalize-page" class="modally">
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
 	    <h1>Personalize</h1>
     </div>
     <div data-role="content">   
      @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
-    
-    <h5>Confirm your profile information</h5>
-    <p>Keeping your profile up to date will make it easier for you to use PaidThx with others in your network.</p>
+    <div class="top-panel">
+   
+    <p>Personlize your experience by adding your first and last name below.  PaidThx works best if your use your full real name.</p></div>
         @using(Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
         {
             <div>
                 <fieldset>
 
                     <div class="editor-label">
-                        @Html.LabelFor(m => m.FirstName)
+                        <label for="FirstName">First Name</label>
                     </div>
                     <div class="editor-field">
                         @Html.TextBoxFor(m => m.FirstName)
@@ -26,10 +26,10 @@
                     </div>
 
                     <div class="editor-label">
-                        @Html.LabelFor(m => m.LastName)
+                        <label for="LastName">Last Name</label>
                     </div>
                     <div class="editor-field">
-                        @Html.PasswordFor(m => m.LastName)
+                        @Html.TextBoxFor(m => m.LastName)
                         @Html.ValidationMessageFor(m => m.LastName)
                     </div>
 
