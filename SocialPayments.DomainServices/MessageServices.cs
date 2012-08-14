@@ -564,14 +564,14 @@ namespace SocialPayments.DomainServices
 
             List<Domain.Message> messages = null;
 
-            _logger.Log(LogLevel.Info, String.Format("Inside message services, List<Domain.Message> created. Should be null {0}", messages));
+            _logger.Log(LogLevel.Info, String.Format("Inside message services, List<Domain.Message> created. Should be null with count:{0}", messages.Count()));
             
             messages = _context.Messages
                 .Where
                 (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
-            _logger.Log(LogLevel.Info, String.Format("Inside message services, GetQuickSendPayments, afterQuery, Messages: {0}", messages.ToList().ToString()));
+            _logger.Log(LogLevel.Info, String.Format("Inside message services, GetQuickSendPayments, afterQuery, with count:{0}", messages.Count() ));
             
             // Not sure what distinct does, but maybe it's unique entries?
             return messages.Distinct(new SameRecipientComparer()).Take(6).ToList();
@@ -579,7 +579,7 @@ namespace SocialPayments.DomainServices
 
         public List<Domain.Message> GetNewMessages(User user)
         {
-            _logger.Log(LogLevel.Error, String.Format("Beginning GetNewMessages"));
+            _logger.Log(LogLevel.Info, "Beginning GetNewMessages");
             var formattingService = new DomainServices.FormattingServices();
 
             List<Domain.Message> messages = null;
@@ -593,7 +593,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.Recipient == user || m.RecipientId == user.UserId) &&
+                        (m.RecipientId == user.UserId) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -610,7 +610,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.Recipient == user || m.RecipientId == user.UserId) &&
+                        ( m.RecipientId == user.UserId ) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -625,13 +625,14 @@ namespace SocialPayments.DomainServices
                 message.SenderName = formattingService.FormatUserName(user);
             }
 
-            _logger.Log(LogLevel.Error, String.Format("Returning list of messages from GetNewMessages"));
+            _logger.Log(LogLevel.Info, String.Format("Returning list of messages from GetNewMessages with count:{0}", messages.Count()));
             return messages;
         }
 
         public List<Domain.Message> GetPendingMessages(User user)
         {
-            _logger.Log(LogLevel.Error, String.Format("Beginning GetPendingMessages"));
+            _logger.Log(LogLevel.Info, "Beginning GetPendingMessages");
+
             var formattingService = new DomainServices.FormattingServices();
             var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
@@ -655,7 +656,7 @@ namespace SocialPayments.DomainServices
                 message.SenderName = formattingService.FormatUserName(user);
             }
 
-            _logger.Log(LogLevel.Error, String.Format("Returning list of messages from GetPendingMessages"));
+            _logger.Log(LogLevel.Info, String.Format("Returning list of messages from GetPendingMessages with count:{0}", messages.Count()));
             return messages;
         }
     }
