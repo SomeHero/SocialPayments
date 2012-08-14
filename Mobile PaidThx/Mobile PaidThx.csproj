@@ -156,6 +156,7 @@
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Base\PaidThxBaseController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DoGoodController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -208,6 +209,7 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <Content Include="Content\images\arrow.png" />
+    <Content Include="Content\images\avatar.png" />
     <Content Include="Content\images\bank.png" />
     <Content Include="Content\images\bg-pattern.png" />
     <Content Include="Content\images\btn-go-active-50x48.png" />
@@ -594,6 +596,7 @@
     <Content Include="Views\DoGood\PinswipeDonate.cshtml" />
     <Content Include="Views\DoGood\PinswipePledge.cshtml" />
     <Content Include="Views\Shared\TitleBar.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
