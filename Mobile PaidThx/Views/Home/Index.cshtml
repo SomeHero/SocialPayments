@@ -15,18 +15,16 @@
             <h6 style="text-align: center; width: 60%; margin-left: 20%">
                 The fastest, easiest, safest way to exchange money with friends, family, and your
                 favorite organizations.</h6>
-            <div style="font-size: 14px; font-weight: bold; margin-top: 15px; margin-bottom: 15px">
+            <div style="font-size: 14px; font-weight: bold; margin-top: 15px; text-align:center;margin-bottom: 15px">
                 Join or Sign in Below:</div>
             <a href="./Join">
-                <button type="button" id="signin-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I'm
-                        new to PaidThx</span></button></a>
+                <button type="button" id="join" class="btn-new btn-green">
+                    <span>Join (It's Free!)</span></button></a>
             <div style="margin-bottom: 15px">
             </div>
             <a href="./SignIn">
-                <button type="button" id="signin-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>I
-                        already use PaidThx</span></button></a>
+                <button type="button" id="signin" class="btn-new btn-blue">
+                   <span>Sign In</span></button></a>
         </div>
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }

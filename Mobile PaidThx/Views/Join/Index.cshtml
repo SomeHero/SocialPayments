@@ -14,11 +14,10 @@
             <h5 style="margin-top:10px">
                 Connect with Facebook</h5>
             <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
-                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign
-                    Up With Facebook </span>
+                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Join with Facebook </span>
             </button>
             <h5 style="margin-top:25px">
-                Or Use your Email Address</h5>
+                Or join with your Email Address</h5>
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
                 {
@@ -35,7 +34,7 @@
             </div>
             <div id="main-body-sub-links">
                 <p style="text-align: center">
-                    Already a member of PaidThx? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
+                    Already a member? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
                         In</a></p>
             </div>
         </div>
