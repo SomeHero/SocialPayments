@@ -120,11 +120,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // GET /api/paystreammessages/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         //POST /api/{userId}/PayStreamMessages/update_messages_seen
         public HttpResponseMessage UpdateMessagesSeen(MessageModels.MessageSeenUpdateRequest request)

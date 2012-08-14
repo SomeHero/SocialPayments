@@ -40,10 +40,10 @@ namespace SocialPayments.DomainServices
         }
         public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken)
         {
-            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "");
+            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "", "");
         }
         public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
-            string mobileNumber)
+            string mobileNumber, string messageId)
         {
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
@@ -114,6 +114,60 @@ namespace SocialPayments.DomainServices
 
             if (mobileNumberPayPoint != null)
                 SendMobileVerificationCode(mobileNumberPayPoint);
+
+            if (!String.IsNullOrEmpty(messageId))
+            {
+                Guid messageGuid;
+
+                Guid.TryParse(messageId, out messageGuid);
+
+                var message = _ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageGuid);
+
+                if (message.Recipient == null)
+                {
+                    message.Recipient = user;
+                    message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                    if (message.RecipientUri != user.EmailAddress && message.RecipientUri != user.MobileNumber)
+                    {
+                        UserPayPoint messagePayPoint;
+
+                        switch (GetURIType(message.RecipientUri))
+                        {
+                            case URIType.EmailAddress:
+                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                                {
+                                    CreateDate = System.DateTime.Now,
+                                    Id = Guid.NewGuid(),
+                                    PayPointTypeId = 1,
+                                    URI = message.RecipientUri,
+                                    User = user
+                                });
+
+                                SendEmailVerificationLink(messagePayPoint);
+
+                                break;
+                            case URIType.MobileNumber:
+                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                                {
+                                    CreateDate = System.DateTime.Now,
+                                    Id = Guid.NewGuid(),
+                                    PayPointTypeId = 2,
+                                    URI = message.RecipientUri,
+                                    User = user
+                                });
+
+                                SendMobileVerificationCode(messagePayPoint);
+
+                                break;
+                        }
+                    }
+
+                }
+
+                _ctx.SaveChanges();
+            }
 
             return user;
         }
@@ -433,7 +487,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, string oAuthToken, DateTime tokenExpiration, out bool isNewUser)
+            string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
@@ -455,62 +509,15 @@ namespace SocialPayments.DomainServices
                     var emailAttribute = _ctx.UserAttributes
                          .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
 
-                    user = _ctx.Users.Add(new Domain.User()
+                    user = AddUser(apiKey, "fb_" + accountId, "tempPassword", emailAddress, deviceToken, "", messageId);
+
+                    user.FacebookUser = new FBUser()
                     {
-                        UserId = Guid.NewGuid(),
-                        ApiKey = apiKey,
-                        CreateDate = System.DateTime.Now,
-                        PasswordChangedDate = DateTime.UtcNow,
-                        PasswordFailuresSinceLastSuccess = 3,
-                        LastPasswordFailureDate = DateTime.UtcNow,
-                        EmailAddress = emailAddress,
-                        //IsLockedOut = isLockedOut,
-                        //LastLoggedIn = System.DateTime.Now,
-                        UserName = "fb_" + accountId,
-                        UserStatus = Domain.UserStatus.Submitted,
-                        IsConfirmed = false,
-                        LastLoggedIn = System.DateTime.Now,
-                        Limit = Convert.ToDouble(ConfigurationManager.AppSettings["InitialPaymentLimit"]),
-                        RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                        Password = "tempPassword",
-                        SetupPassword = false,
-                        SetupSecurityPin = false,
-                        Roles = new Collection<Role>()
-                        {
-                            memberRole
-                        },
-                        DeviceToken = deviceToken,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        PaymentAccounts = new Collection<PaymentAccount>(),
-                        FacebookUser = new FBUser()
-                        {
-                            FBUserID = accountId,
-                            Id = Guid.NewGuid(),
-                            TokenExpiration = tokenExpiration,
-                            OAuthToken = oAuthToken
-                        },
-                        ImageUrl = String.Format(_fbImageUrlFormat, accountId),
-                        PayPoints = new Collection<UserPayPoint>()
-                        {
-                            new UserPayPoint() {
-                                CreateDate = System.DateTime.Now,
-                                IsActive = true,
-                                Verified = true,
-                                VerifiedDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 1,
-                                URI = emailAddress
-                            }
-                        },
-                        UserAttributes = new Collection<UserAttributeValue>() {
-                            new UserAttributeValue() {
-                                id = Guid.NewGuid(),
-                                UserAttributeId = emailAttribute.Id,
-                                AttributeValue = emailAddress
-                            }
-                        }
-                    });
+                        FBUserID = accountId,
+                        Id = Guid.NewGuid(),
+                        TokenExpiration = tokenExpiration,
+                        OAuthToken = oAuthToken
+                    };
 
                 }
                 else
@@ -522,7 +529,7 @@ namespace SocialPayments.DomainServices
                     if (user.FacebookUser != null)
                     {
                         user.FacebookUser.OAuthToken = oAuthToken;
-                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                        user.FacebookUser.TokenExpiration = tokenExpiration;
                     }
                     else
                     {
@@ -530,7 +537,7 @@ namespace SocialPayments.DomainServices
                         {
                             FBUserID = accountId,
                             Id = Guid.NewGuid(),
-                            // TokenExpiration = tokenExpiration,
+                            TokenExpiration = tokenExpiration,
                             OAuthToken = oAuthToken
                         };
                     }

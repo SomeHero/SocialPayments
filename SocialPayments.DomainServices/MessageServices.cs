@@ -84,7 +84,7 @@ namespace SocialPayments.DomainServices
             if (onBehalfOf.PreferredReceiveAccount == null)
                 throw new Exception("Invalid Preferred Receive Account");
 
-            return AddMessage(apiKey, onBehalfOfId, "", recipientUri, onBehalfOf.PreferredReceiveAccount.Id.ToString(), amount, comments, "PaymentRequest");
+            return AddMessage(apiKey, onBehalfOfId, "", recipientUri, onBehalfOf.PreferredReceiveAccount.Id.ToString(), amount, comments, "Pledge");
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType)
         {
@@ -99,7 +99,7 @@ namespace SocialPayments.DomainServices
             User sender = null;
             User recipient = null;
 
-            if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST"))
+            if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST" || messageType.ToUpper() == "PLEDGE"))
                 throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment or PaymentRequest"));
 
             MessageType type = MessageType.Payment;
@@ -114,6 +114,11 @@ namespace SocialPayments.DomainServices
             if (messageType.ToUpper() == "PAYMENTREQUEST")
             {
                 type = MessageType.PaymentRequest;
+                status = PaystreamMessageStatus.SubmittedRequest;
+            }
+            if (messageType.ToUpper() == "PLEDGE")
+            {
+                type = MessageType.AcceptPledge;
                 status = PaystreamMessageStatus.SubmittedRequest;
             }
 
@@ -294,6 +299,12 @@ namespace SocialPayments.DomainServices
                     case PaystreamMessageStatus.SubmittedRequest:
                         SubmittedRequestMessageTask requestTask = new SubmittedRequestMessageTask();
                         requestTask.Execute(messageItem.Id);
+
+                        break;
+
+                    case PaystreamMessageStatus.SubmittedPledge:
+                        SubmittedPledgeMessageTask pledgeTask = new SubmittedPledgeMessageTask();
+                        pledgeTask.Execute(messageItem.Id);
 
                         break;
                 }

@@ -4,20 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Mobile_PaidThx.Models;
-
-using SocialPayments.DataLayer;
-using SocialPayments.DomainServices;
 using NLog;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class PaystreamController : Controller
     {
-        private ApplicationService applicationService = new ApplicationService();
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private FormattingServices formattingService = new FormattingServices();
-
-        
+ 
         public ActionResult ChooseAmount()
         {
             return PartialView("PartialViews/ChooseAmount");
@@ -55,21 +49,21 @@ namespace Mobile_PaidThx.Controllers
                 Comments = p.comments,
                 Direction = p.direction,
                 Id = p.Id.ToString(),
-                MessageType = Models.MessageType.Payment,// p.messageType,
+                MessageType = p.messageType,
                 RecipientUri = p.recipientUri,
                 SenderUri = p.senderUri,
                 TransactionDate = System.DateTime.Now, //p.createDate,
                 TransactionImageUri = p.transactionImageUri,
-                TransactionStatus = Models.TransactionStatus.Pending, // p.messageStatus,
-                TransactionType = Models.TransactionType.Deposit // p.messageType
+                TransactionStatus = p.messageStatus,
+                TransactionType = p.messageType
             }).ToList();
 
             var model = new PaystreamModels.PaystreamModel()
             {
                 AllReceipts = payments,
-                PaymentReceipts = payments.Where(p => p.Direction == "Out" && p.MessageType == MessageType.Payment).ToList(),
-                RequestReceipts = payments.Where(p => p.Direction == "In" && p.MessageType ==  MessageType.Payment).ToList(),
-                Alerts = payments.Where(p => p.MessageType == MessageType.PaymentRequest).ToList(),
+                PaymentReceipts = payments.Where(p => p.Direction == "Out" && p.MessageType == "Payment").ToList(),
+                RequestReceipts = payments.Where(p => p.Direction == "In" && p.MessageType ==  "Payment").ToList(),
+                Alerts = payments.Where(p => p.MessageType != "Payment").ToList(),
                 ProfileModel = new ProfileModels()
                 {
                     FirstName = user.firstName,

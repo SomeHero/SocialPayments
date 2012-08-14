@@ -39,7 +39,14 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                 var userServices = new Services.UserServices();
-                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "");
+                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
+                    Session["MessageId"].ToString());
+
+                //If there is a message in session
+
+                //check the email address that the user signed up with
+
+
             }
             catch (Exception ex)
             {
@@ -63,7 +70,8 @@ namespace Mobile_PaidThx.Controllers
             var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
 
             var fbAccount = faceBookServices.FBauth(state, code, redirect);
-            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
+            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
+                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
 
             //validate fbAccount.Id is associated with active user
             //if (user == null)
@@ -73,6 +81,13 @@ namespace Mobile_PaidThx.Controllers
             //    return View("SignIn");
             //}
 
+            if(response.StatusCode != System.Net.HttpStatusCode.Created && response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                ModelState.AddModelError("", response.Description);
+
+                return View("Index");
+            }
+
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
@@ -80,6 +95,7 @@ namespace Mobile_PaidThx.Controllers
             Session["UserId"] = facebookSignInResponse.userId;
 
             var user = userServices.GetUser(facebookSignInResponse.userId);
+            Session["User"] = user;
 
             if(response.StatusCode == System.Net.HttpStatusCode.Created)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
