@@ -2,7 +2,13 @@
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="dogood-page">
-    @{ Html.RenderPartial("LoggedInMenu"); }
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Do Good</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+  
     <div data-role="content">
         <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
             Donate or Pledge To a Cause</div>
@@ -25,4 +31,5 @@
                     <button type="button" class="imgbtn field-btn" style="margin-top: 10px">
                         <span id="donate-button">Pledge To A Cause</span></button></a></div>
     </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Do Good" }); }
 </div>

@@ -2,7 +2,12 @@
     ViewBag.Title = "Help";
 }
 <div data-role="page" id="profile-page">
-    @{ Html.RenderPartial("LoggedInMenu"); }
+  @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Help</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
     <div data-role="content" style="height: 100%; width: 100%">
         <object type="text/html" style="height: 100%; width: 100%" data="http://paidthx.zendesk.com/mobile/home">
         </object>

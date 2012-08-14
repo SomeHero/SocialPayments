@@ -1486,6 +1486,7 @@ border-radius: 0px 0px 0px 0px;
         {
             background: url(images/icons/requestIcon.png) 50% 50% no-repeat;
         }
+        
         #profile .ui-icon
         {
             background: url(images/icons/profileIcon.png) 50% 50% no-repeat;
@@ -1518,6 +1519,40 @@ border-radius: 0px 0px 0px 0px;
         {
             background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
         }
+        
+         #welcome .ui-icon
+        {
+            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
+        }
+        #signin .ui-icon
+        {
+            background: url(images/icons/signinIcon.png) 50% 50% no-repeat;
+        }
+        #join .ui-icon
+        {
+            background: url(images/icons/joinIcon.png) 50% 50% no-repeat;
+        }
+        #about .ui-icon
+        {
+            background: url(images/icons/aboutIcon.png) 50% 50% no-repeat;
+        }
+         #welcome.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
+        }
+        #signin.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/signinIcon-active.png) 50% 50% no-repeat;
+        }
+        #join.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/joinIcon-active.png) 50% 50% no-repeat;
+        }
+        #about.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
+        }
+        
       .ui-btn-active{  
         border: 1px solid #2a7e43 /*{global-active-border}*/;
 background: #eeeeee /*{global-active-background-color}*/;
