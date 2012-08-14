@@ -52,7 +52,7 @@ namespace Mobile_PaidThx.Models
         public string BankIconURL { get; set; }
         public string PaymentAccountId { get; set; }
         public string Nickname { get; set; }
-        public string NameOnAccouont { get; set; }
+        public string NameOnAccount { get; set; }
         public string RoutingNumber { get; set; }
         public string AccountNumber { get; set; }
         public string AccountType { get; set; }
