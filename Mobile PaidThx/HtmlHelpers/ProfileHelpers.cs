@@ -9,9 +9,17 @@ namespace Mobile_PaidThx.HtmlHelpers
         {
             var cssClass = "";
             //nav-item ui-btn-active
-            if (menuModel.SelectedTabIndex == tabIndex)
+
+            if (menuModel != null)
             {
-                cssClass = "nav-item ui-btn-active";
+                if (menuModel.SelectedTabIndex == tabIndex)
+                {
+                    cssClass = "nav-item ui-btn-active";
+                }
+                else
+                {
+                    cssClass = "nav-item";
+                }
             }
             else
             {
