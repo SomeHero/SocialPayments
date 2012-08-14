@@ -214,6 +214,9 @@
     <Content Include="Content\images\bg-pattern.png" />
     <Content Include="Content\images\btn-go-active-50x48.png" />
     <Content Include="Content\images\btn-go-disabled-50x48.png" />
+    <Content Include="Content\images\btn-pinswipe.png" />
+    <Content Include="Content\images\btn-pinswipe-pressed.png" />
+    <Content Include="Content\images\btn-pinswipe-selected.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />
