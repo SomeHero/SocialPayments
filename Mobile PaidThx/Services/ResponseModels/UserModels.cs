@@ -81,6 +81,7 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public List<UserModels.UserConfigurationResponse> userConfigurationVariables { get; set; }
 
         }
+
         public class UserPayPointResponse
         {
             public string Id { get; set; }
@@ -104,6 +105,15 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public Guid AttributeId { get; set; }
             public string AttributeName { get; set; }
             public string AttributeValue { get; set; }
+        }
+        public class UserMeCode
+        {
+            public String Id { get; set; }
+            public String ApprovedDate { get; set; }
+            public String CreateDate { get; set; }
+            public Boolean IsActive { get; set; }
+            public Boolean IsApproved { get; set; }
+            public String MeCode { get; set; }
         }
         public class PersonalizeUserRequest
         {

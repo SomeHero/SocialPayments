@@ -1,0 +1,34 @@
+﻿@model List<Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse>
+<div data-role="page" id="email-page">
+    @{ Html.RenderPartial("LoggedInMenu"); }
+    <div data-role="content" style="margin: 15px;">
+        @{
+            int numberOfEmails = Model.Count();
+            int currentIndex = 0;
+        }
+        @foreach (var email in Model)
+        {
+            <a class="emailobj-btn" data-value="@email.Id" organization-name="@email.Uri">
+                <div class="@Html.GetTableClass(currentIndex, numberOfEmails)">
+                    <div style="float: left">
+                        <img alt="profileimg" src="@Url.Content("~/Content/images/icon-settings-email-40x40.png")" width="40px" /></div>
+                    <div style="float: left; padding-left: 10px; padding-top: 10px">
+                        @email.Uri</div>
+                    <div style="float: right; padding-right: 5px; padding-top: 6px">
+                        <img alt="arrowpng" src="@Url.Content("~/Content/images/arrow.png")" /></div>
+                </div>
+            </a>
+            currentIndex++;
+        }
+        <a class="addnew-btn" organization-name="Email">
+            <div class="tablesettings" style="margin-top: 15px">
+                <div style="float: left">
+                    <img alt="profileimg" src="@Url.Content("~/Content/images/icon-settings-email-40x40.png")" width="40px" /></div>
+                <div style="float: left; padding-left: 10px; padding-top: 10px">
+                    Add an Email Address</div>
+                <div style="float: right; padding-right: 5px; padding-top: 6px">
+                    <img alt="arrowpng" src="@Url.Content("~/Content/images/arrow.png")" /></div>
+            </div>
+        </a>
+    </div>
+</div>

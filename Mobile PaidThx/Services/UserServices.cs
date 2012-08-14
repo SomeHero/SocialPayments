@@ -17,6 +17,40 @@ namespace Mobile_PaidThx.Services
         private string _userServicesGetBaseUrl = "http://23.21.203.171/api/internal/api/Users/{0}";
         private string _userServicesSignInWithFacebookUrl = "http://23.21.203.171/api/internal/api/users/signin_withfacebook";
         private string _personalizeUrl = "http://23.21.203.171/api/internal/api/users/{0}/personalize_user";
+        private string _getMeCodesUrl = "http://23.21.203.171/api/internal/api/users/{0}/mecodes";
+        private string _deletePaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/";
+        private string _addPaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/"
+        public string AddPaypoint(String apiKey, String paypointId, String userId, String uri, String type, Boolean verified, string verifiedDate, string createDate)
+        {
+            var serviceUrl = String.Format(_addPaypointUrl, userId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                apiKey= apiKey,
+                paypointId= paypointId,
+                userId= userId, 
+                uri= uri,
+                type= type,
+                verified= verified,
+                verifiedDate= verifiedDate, 
+                createDate= createDate
+            });
+
+            var response = Post(serviceUrl, json);
+
+            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
+
+            return jsonObject["paymentAccountId"];
+        }
+
+
+        public ServiceResponse DeletePaypoint(string apiKey, string userId, string paypointId)
+        {
+            string serviceUrl = String.Format(_deletePaypointUrl, userId) + paypointId;
+            var response = Delete(serviceUrl);
+            return response;
+        }
 
         public UserModels.UserResponse GetUser(string userId)
         {

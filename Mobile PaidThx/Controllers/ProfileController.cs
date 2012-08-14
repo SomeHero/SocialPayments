@@ -16,6 +16,7 @@ using System.Web.Helpers;
 using System.Web.Script.Serialization;
 using System.Web.Routing;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -33,35 +34,28 @@ namespace Mobile_PaidThx.Controllers
 
                 if (Session["UserId"] == null)
                     return RedirectToAction("SignIn", "Account", null);
-
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                if (Session["User"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
+                UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
                 var model = new ProfileModels()
                 {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
+                    FirstName = user.firstName,
+                    LastName = user.lastName,
                     AccountType = "Personal",
-                    MobileNumber = user.MobileNumber,
-                    EmailAddress = user.EmailAddress,
-                    Address = user.Address,
-                    City = user.City,
-                    State = user.State,
-                    Zip = user.Zip,
-                    SenderName = user.SenderName
+                    MobileNumber = user.mobileNumber,
+                    EmailAddress = user.emailAddress,
+                    Address = user.address,
+                    City = user.city,
+                    State = user.state,
+                    Zip = user.zip,
+                    SenderName = user.senderName
                 };
 
-
-
-                var paymentAccountId = user.PaymentAccounts[0].Id;
+                var paymentAccountId = user.bankAccounts[0].Id;
 
                 logger.Log(LogLevel.Info, paymentAccountId);
 
                 var messages = ctx.Messages
-                    .Where(m => m.SenderId == user.UserId || m.RecipientId.Value == user.UserId)
+                    .Where(m => m.SenderId == user.userId || m.RecipientId.Value == user.userId)
                     .OrderByDescending(m => m.CreateDate)
                     .ToList<Message>();
 
@@ -485,7 +479,7 @@ namespace Mobile_PaidThx.Controllers
                     TransactionType = Models.TransactionType.Deposit,
                     TransactionImageUri = message.TransactionImageUrl
                 };
-                
+
                 return Json(reference, JsonRequestBehavior.AllowGet);
             }
         }
@@ -560,19 +554,19 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Debug, String.Format("Display SendMoney View"));
 
-                var userId = (Guid)Session["UserId"];
+            var userId = (Guid)Session["UserId"];
 
-                if (Session["UserId"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
 
-                return View();
+            return View();
         }
-        
+
         public ActionResult RequestMoney()
         {
             return View();
         }
-       
+
         public ActionResult CompleteProfile()
         {
             if (Session["UserId"] == null)
@@ -612,7 +606,7 @@ namespace Mobile_PaidThx.Controllers
                         PaymentAccountId = paymentAccount.Id.ToString(),
                         AccountNumber = paymentAccount.AccountNumber,
                         AccountType = paymentAccount.AccountType.ToString(),
-                        NameOnAccouont = paymentAccount.NameOnAccount,
+                        NameOnAccount = paymentAccount.NameOnAccount,
                         Nickname = "Nickname",
                         RoutingNumber = paymentAccount.RoutingNumber
                     });
