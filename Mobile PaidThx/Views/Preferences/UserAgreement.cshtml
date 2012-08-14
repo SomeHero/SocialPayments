@@ -2,7 +2,12 @@
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="profile-page">
-   @{ Html.RenderPartial("LoggedInMenu"); }
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Terms of Service</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
     <div data-role="content">
         <br />
         <span style="font-weight: bold">USER AGREEMENT</span>

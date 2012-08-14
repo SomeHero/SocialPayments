@@ -1,6 +1,11 @@
 ﻿@model Mobile_PaidThx.Models.OrganizationModels.Organizations
 <div data-role="page" id="dogood-page">
-    @{ Html.RenderPartial("LoggedInMenu"); }
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Add Cause</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
     <div data-role="content">
         <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
             Add Organization</div>
