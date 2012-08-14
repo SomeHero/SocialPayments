@@ -1,7 +1,7 @@
 body
 {
      /*background-image: url('images/pattern.png');*/
-     background-color:#eeeeee;
+     background-color:#FFFFFF !important;
      background-image: -webkit-gradient(linear, left top, left bottom, from( #f2f2f3 /*{a-bar-background-start}*/), to( #eeeeee /*{a-bar-background-end}*/));
 background-image: -webkit-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #eeeeee /*{a-bar-background-end}*/);
 background-image: -moz-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #eeeeee /*{a-bar-background-end}*/);
@@ -32,6 +32,11 @@ background: -ms-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgb
 background: radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* W3C */
   
 }
+.nav-paidthx
+{
+    box-shadow: 0px -2px 1px #BEBEBE;
+}
+
 div.allcontent
 {
  box-shadow: 0px 6px 6px #888888;   
@@ -44,9 +49,10 @@ div.viewporter div.ui-content
 div.ui-content
 {
  background:#ffffff;
- border-radius:0 0 14px 14px;
+ border-radius: 0px 0px 0px 0px;
+ margin: 0px;
  overflow:hidden;
- padding:0 !important;
+ padding: 0px !important;
 }
 .ui-header h1.ui-title
 {
@@ -1420,7 +1426,8 @@ h9 span
             .ui-btn-active{
 		    background-image:none;
 		    background-color:#ddd;
-		    text-shadow: none;}
+		    text-shadow: none;
+		    }
             .preNav{
             margin-bottom:0px;
 		    line-height:25px;
@@ -1456,8 +1463,20 @@ background-image: -moz-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5
 background-image: -ms-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
 background-image: -o-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
 background-image: linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-border-radius: 14px 14px 0px 0px;
+border-radius: 0px 0px 0px 0px;
 }
+
+.nav-pdthx.ui-footer
+{
+ box-shadow:0 -1px 1px #bebebe; 
+ moz-box-shadow:0 -1px 1px #bebebe;     
+} 
+.nav-pdthx.ui-header
+{
+ box-shadow:0 1px 1px #bebebe; 
+ moz-box-shadow:0 1px 1px #bebebe;     
+} 
+
   .nav-pdthx .ui-icon
         {
             width: 30px !important;
@@ -1485,6 +1504,7 @@ border-radius: 14px 14px 0px 0px;
         {
             background: url(images/icons/requestIcon.png) 50% 50% no-repeat;
         }
+        
         #profile .ui-icon
         {
             background: url(images/icons/profileIcon.png) 50% 50% no-repeat;
@@ -1517,9 +1537,46 @@ border-radius: 14px 14px 0px 0px;
         {
             background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
         }
-      .ui-btn-active{  
-        border: 1px solid #2a7e43 /*{global-active-border}*/;
-background: #eeeeee /*{global-active-background-color}*/;
+        
+         #welcome .ui-icon
+        {
+            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
+        }
+        #signin .ui-icon
+        {
+            background: url(images/icons/signinIcon.png) 50% 50% no-repeat;
+        }
+        #join .ui-icon
+        {
+            background: url(images/icons/joinIcon.png) 50% 50% no-repeat;
+        }
+        #about .ui-icon
+        {
+            background: url(images/icons/aboutIcon.png) 50% 50% no-repeat;
+        }
+         #welcome.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
+        }
+        #signin.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/signinIcon-active.png) 50% 50% no-repeat;
+        }
+        #join.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/joinIcon-active.png) 50% 50% no-repeat;
+        }
+        #about.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
+        }
+        
+      .ui-btn-active  
+      {
+          box-shadow:inset 0 0 8px #6ac36b; 
+          -moz-box-shadow:inset 0 0 8px #6ac36b; 
+        border: 1px solid #cccccc;
+background: #eeeeee;
 font-weight: bold;
 color: #2a7e43 /*{global-active-color}*/;
 cursor: pointer;

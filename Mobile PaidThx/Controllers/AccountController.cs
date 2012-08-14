@@ -17,6 +17,9 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using System.Configuration;
+using Mobile_PaidThx.Services;
+using System.Web.Script.Serialization;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -78,137 +81,6 @@ namespace Mobile_PaidThx.Controllers
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Index", "Home");
-        }
-
-        //
-        // GET: /Account/FBauth
-        public ActionResult SignInWithFacebook(string state, string code)
-        {
-            using (var ctx = new Context())
-            {
-                var fbAccount = FBauth(state, code);
-
-                var userService = new UserService(ctx);
-
-                bool isNewUser = false;
-                var user = userService.SignInWithFacebook(Guid.Parse(_apiKey), fbAccount.id, fbAccount.email, fbAccount.first_name, fbAccount.last_name, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30), out isNewUser);
-
-                //validate fbAccount.Id is associated with active user
-                if (user == null)
-                {
-                    ModelState.AddModelError("", "Error. Try again..");
-
-                    return View("SignIn");
-                }
-
-                Session["User"] = user;
-                Session["UserId"] = user.UserId;
-
-                return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-            }
-        }
-        public ActionResult RegisterWithFacebook(string state, string code)
-        {
-            using (var ctx = new Context())
-            {
-                var fbAccount = FBauth(state, code);
-
-                //validate fbAccount.Id is not already associated with active user
-                var user = ctx.Users
-                    .FirstOrDefault(u => u.FacebookUser.FBUserID == fbAccount.id);
-
-                if (user != null)
-                {
-                    ModelState.AddModelError("", "The Facebook user is already associated with a registered PaidThx account.");
-
-                    return View("SignIn");
-                }
-
-                if (fbAccount != null)
-                {
-                    ModelState.AddModelError("", "Error registering Facebook user.");
-
-                    return View("SignIn");
-                }
-
-                return RedirectToAction("ValidateMobileDevice", "ValidateMobileDevice");
-            }
-        }
-
-        public FacebookUserModels.FBuser FBauth(string state, string code)
-        {
-            string response = null;
-            string token = null;
-            string tokenExp = null;
-            FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
-            var redirect = String.Format(fbTokenRedirectURL, System.Web.HttpContext.Current.Request.Url.Host, System.Web.HttpContext.Current.Request.Url.Port == 80
-                ? string.Empty : ":" + System.Web.HttpContext.Current.Request.Url.Port);
-
-            if (state == fbState)
-            {
-                //Exchange FB Code for FB Token
-                string requestToken = "https://graph.facebook.com/oauth/access_token?" +
-                    "client_id=" + fbAppID +
-                    "&redirect_uri=" + redirect +
-                    "&client_secret=" + fbAppSecret +
-                    "&code=" + code;
-
-                logger.Log(LogLevel.Info, requestToken);
-                HttpWebRequest wr = GetWebRequest(requestToken);
-                HttpWebResponse resp = null;
-
-                try
-                {
-                    resp = (HttpWebResponse)wr.GetResponse();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Info, ex.Message);
-                }
-
-                using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    response = sr.ReadToEnd();
-
-                    
-                if (response.Length > 0)
-                    {
-                        logger.Log(LogLevel.Info, response);
-                        NameValueCollection qs = HttpUtility.ParseQueryString(response);
-       
-                        if (qs["access_token"] != null)
-                        {
-                            token = qs["access_token"];
-                            logger.Log(LogLevel.Info, token);
-                        
-                            tokenExp = qs["expires"];
-                            logger.Log(LogLevel.Info, tokenExp);
-                        
-                        }
-                    }
-                    sr.Close();
-                }
-
-                fbAccount.accessToken = token;
-                fbAccount.tokenExpires = tokenExp;
-
-                //Use Graph API to get FB UserID and email
-                string requestStuff = "https://graph.facebook.com/me?access_token=" + token;
-                wr = GetWebRequest(requestStuff);
-                resp = (HttpWebResponse)wr.GetResponse();
-
-                using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    response = sr.ReadToEnd();
-                    if (response.Length > 0)
-                    {
-                        fbAccount = JsonConvert.DeserializeObject<FacebookUserModels.FBuser>(response);
-                    }
-                    sr.Close();
-                }
-            }
-
-            return fbAccount;
         }
 
         //
@@ -371,39 +243,37 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Info, String.Format("Attempting to signin user {0}", model.Email));
 
-            using(var ctx = new Context())
+            var userService = new UserServices();
+
+            if (ModelState.IsValid)
             {
-                UserService userService = new UserService(ctx);
+                var jsonResponse = userService.ValidateUser(model.Email, model.Password);
 
-                if (ModelState.IsValid)
+                JavaScriptSerializer js = new JavaScriptSerializer();
+            
+                var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
+
+
+                FormsAuthentication.SetAuthCookie(model.Email, false);
+                Session["UserId"] = userResponse.userId;
+
+                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                 {
-                    SocialPayments.Domain.User user;
-                    if (userService.ValidateUser(model.Email, model.Password, out user))
-                    {
-
-                        FormsAuthentication.SetAuthCookie(model.Email, false);
-                        Session["User"] = user;
-                        Session["UserId"] = user.UserId;
-
-                        if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                            && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                    }
+                    return Redirect(returnUrl);
                 }
-
-                // If we got this far, something failed, redisplay form
-                return View(model);
+                else
+                {
+                    return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+                }
             }
+            else
+            {
+                ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
         public ActionResult ForgotPassword()
         {
@@ -565,15 +435,6 @@ namespace Mobile_PaidThx.Controllers
             }
 
             return View(model);
-        }
-
-        private static HttpWebRequest GetWebRequest(string formattedUri)
-        {
-            // Create the request’s URI.
-            Uri serviceUri = new Uri(formattedUri, UriKind.Absolute);
-
-            // Return the HttpWebRequest.
-            return (HttpWebRequest)WebRequest.Create(serviceUri);
         }
 
         #region Status Codes

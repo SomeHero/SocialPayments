@@ -3,20 +3,13 @@
 }
 
 <div data-role="page" id="send-page">
-     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-			<h1>Send $</h1>
-			<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
-             <div data-role="navbar" class="nav-pdthx" data-grid="d">
-                <ul>
-                    <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
-                    <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
-                    <li><a href="./Send" class="nav-item ui-btn-active" id="send" data-icon="custom">Send $</a></li>
-                    <li><a href="./DoGood" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
-                    <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
-                    
-                </ul>
-            </div>
-		</div>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Send Money</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+    
     <div data-role="content">
         <ul class="tabs-content contained">
             <li class="active" id="simpleContained1Tab">
@@ -24,4 +17,5 @@
             </li>
         </ul>
     </div>
+      @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
 </div>

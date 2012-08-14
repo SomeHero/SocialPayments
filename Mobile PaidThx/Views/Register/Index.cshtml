@@ -1,38 +1,13 @@
 ﻿@model Mobile_PaidThx.Models.RegisterModel
 <script src="@Url.Content("~/Scripts/register.js")" type="text/javascript"></script>
-<div id="container">
-    <dl id="main-tabs" class="tabs contained">
-        <dd>
-            @if (Model.Payment != null)
-            {
-                <text>
-                    <a href="#simpleContained1" class="active">You have money!</a>
-                </text>
-            }
-            else
-            {
-                 <text>
-                    <a href="#simpleContained1" class="active">Register</a>
-                </text>
-            }
-        </dd>
-        <dd>
-            <a href="#simpleContained2">What is PaidThx?</a></dd>
-    </dl>
-    <div id="content-container">
+<div data-role="page" id="send-page">
+    @{Html.RenderPartial("WelcomeMenu"); }
+    <div data-role="content">
         <ul class="tabs-content contained">
             <li class="active" id="simpleContained1Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("../Register/PartialViews/Register", Model);}
-                    @{Html.RenderPartial("_footer");}
-                </div>
-            </li>
-            <li id="simpleContained2Tab">
-                <div id="main-container">
-                    @{Html.RenderPartial("../Home/PartialViews/About");}
-                    @{Html.RenderPartial("_footer");}
-                </div>
+                 @{Html.RenderPartial("PartialViews/Register", Model);}
             </li>
         </ul>
     </div>
 </div>
+

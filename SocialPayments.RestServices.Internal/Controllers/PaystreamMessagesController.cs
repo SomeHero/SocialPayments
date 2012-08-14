@@ -125,6 +125,52 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             return "value";
         }
+
+        //POST /api/{userId}/PayStreamMessages/update_messages_seen
+        public HttpResponseMessage UpdateMessagesSeen(MessageModels.MessageSeenUpdateRequest request)
+        {
+            using (var _ctx = new Context())
+            {
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                DomainServices.MessageServices _messageService = new DomainServices.MessageServices(_ctx);
+
+                User user;
+
+                // Validate that it finds a user
+                user = _userService.GetUserById(request.userId);
+
+                if (user == null)
+                {
+                    var errorMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    errorMessage.ReasonPhrase = String.Format("The user's account cannot be found for user {0}", request.userId);
+
+                    return errorMessage;
+                }
+
+                Message messageSeen = null;
+
+                foreach (string messageId in request.messageIds)
+                {
+                    try
+                    {
+                        messageSeen = _messageService.GetMessage(messageId);
+
+                        if (messageSeen.Recipient == user)
+                            messageSeen.recipientHasSeen = true;
+                        else if (messageSeen.Sender == user)
+                            messageSeen.senderHasSeen = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(LogLevel.Error, "Something wen't wrong updating paystream message for {0}", request.userId);
+                    }
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
         // POST /api/paystreammessages/donate
         public HttpResponseMessage<MessageModels.SubmitMessageResponse> Donate(MessageModels.SubmitDonateRequest request)
         {
@@ -673,32 +719,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
+                Domain.Message paymentMessage = null;
+
                 try
                 {
-                    _ctx.Messages.Add(new Message()
-                    {
-                        Amount = message.Amount,
-                        ApiKey = message.ApiKey,
-                        Comments = String.Format("Re: {0}", message.Comments),
-                        CreateDate = System.DateTime.Now,
-                        Id = Guid.NewGuid(),
-                        Latitude = 0,
-                        Longitude = 0,
-                        Status = PaystreamMessageStatus.ProcessingPayment,
-                        MessageType = MessageType.Payment,
-                        Recipient = message.Sender,
-                        recipientFirstName = message.senderFirstName,
-                        recipientLastName = message.senderLastName,
-                        recipientImageUri = message.senderImageUri,
-                        RecipientUri = message.SenderUri,
-                        Sender = message.Recipient,
-                        senderFirstName = message.recipientFirstName,
-                        senderLastName = message.recipientLastName,
-                        senderImageUri = message.recipientImageUri,
-                        SenderAccount = paymentAccount,
-                        SenderUri = message.RecipientUri,
-                        WorkflowStatus = PaystreamMessageWorkflowStatus.Pending
-                    });
+                    paymentMessage = _messageServices.AddMessage(message.ApiKey.ToString(), request.userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
+                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.SenderUri);
+
 
                     _ctx.SaveChanges();
                 }

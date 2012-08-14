@@ -2,26 +2,22 @@
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="dogood-page">
+@{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Do Good</h1>
-        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
-        <div data-role="navbar" class="nav-pdthx" data-grid="d">
-            <ul>
-                <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
-                <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
-                <li><a href="./Send" class="nav-item" id="send" data-icon="custom">Send $</a></li>
-                <li><a href="./DoGood" class="nav-item ui-btn-active" id="dogood" data-icon="custom">
-                    Do Good</a></li>
-                <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
-            </ul>
-        </div>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
+  
     <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Donate or Pledge To a Cause</div>
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
         <div style="margin-top: 10px; margin-right: 10px; margin-left: 10px; margin-bottom: 20px">
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Make a donation or
                 gift to a non-profit organization. As always, 100% of your generosity goes to the
-                organization.</span> <a href="./DoGood/Donate">
+                organization.</span> <a onclick="toDonateScreen()">
                     <button type="button" class="imgbtn field-btn" style="margin-top: 10px">
                         <span id="donate-button">Give To A Cause</span></button></a>
         </div>
@@ -31,8 +27,9 @@
         <div style="margin-top: 20px; margin-right: 10px; margin-left: 10px; margin-bottom: 10px">
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Accept pledges and
                 charitable donations on behalf of your organization wherever you may be with just
-                an e-mail or phone #.</span> <a href="./DoGood/Pledge">
+                an e-mail or phone #.</span> <a onclick="toPledgeScreen()">
                     <button type="button" class="imgbtn field-btn" style="margin-top: 10px">
                         <span id="donate-button">Pledge To A Cause</span></button></a></div>
     </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Do Good" }); }
 </div>

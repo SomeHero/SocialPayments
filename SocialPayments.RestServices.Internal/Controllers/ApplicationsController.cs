@@ -93,7 +93,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             SortOrder = i.SortOrder,
                             UserAttributeId =  i.UserAttribute.Id,
                             Points = i.UserAttribute.Points,
-                            ItemType = i.ProfileItemType.ToString()
+                            ItemType = i.ProfileItemType.ToString(),
+                            SelectOptionHeader = (i.SelectOptionHeader != null ? i.SelectOptionHeader : ""),
+                            SelectOptionDescription = (i.SelectOptionDescription != null ? i.SelectOptionDescription : ""),
+                            SelectOptions = i.SelectOptions
+                                .OrderBy(s => s.SortOrder)
+                                .Select(s => s.OptionValue).ToList()
                         })
                         .OrderBy(i => i.SortOrder)
                         .ToList()

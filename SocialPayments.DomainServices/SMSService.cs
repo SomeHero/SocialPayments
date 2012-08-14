@@ -19,6 +19,8 @@ namespace SocialPayments.DomainServices
         private IDbContext _ctx;
         private Logger _logger;
 
+        public SMSService() : this(new Context()) { }
+
         public SMSService(IDbContext context)
         {
             _ctx = context;

@@ -18,6 +18,7 @@ namespace SocialPayments.DomainServices
         private IDbContext _ctx;
         private Logger _logger;
         private SecurityService _securityServices;
+        private string defaultBankIconUrl = ConfigurationManager.AppSettings["DefaultBankIcon"];
 
         public PaymentAccountService()
         {
@@ -91,7 +92,7 @@ namespace SocialPayments.DomainServices
                     AccountType = paymentAccountType,
                     CreateDate = System.DateTime.Now,
                     BankName = "",
-                    BankIconURL = "",
+                    BankIconURL = defaultBankIconUrl,
                     Nickname = nickName,
                     IsActive = true
                 });

@@ -558,6 +558,22 @@ namespace SocialPayments.DomainServices
             }
         }
 
+        public List<Domain.Message> GetQuickSendPayments(User user)
+        {
+            var formattingService = new DomainServices.FormattingServices();
+            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+
+            List<Domain.Message> messages = null;
+
+            messages = _context.Messages
+                .Where
+                (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                .OrderByDescending(m => m.CreateDate).ToList();
+
+            // Not sure what distinct does, but maybe it's unique entries?
+            return messages.Distinct(new SameRecipientComparer()).Take(6).ToList();
+        }
+
         public List<Domain.Message> GetNewMessages(User user)
         {
             var formattingService = new DomainServices.FormattingServices();

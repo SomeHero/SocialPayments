@@ -169,11 +169,13 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="AndroidNotificationService.cs" />
+    <Compile Include="CommunicationService.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="CustomExceptions\AccountLockedPinCodeFailures.cs" />
     <Compile Include="CustomExceptions\InvalidSecurityPin.cs" />
     <Compile Include="EmailLogService.cs" />
     <Compile Include="EmailService.cs" />
+    <Compile Include="FacebookServices.cs" />
     <Compile Include="FormattingServices.cs" />
     <Compile Include="GoogleURLShortener.cs" />
     <Compile Include="Interfaces\IAmazonNotificationService.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="MessageProcessing\SubmittedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\SubmittedPaymentMessageTask.cs" />
     <Compile Include="MessageServices.cs" />
+    <Compile Include="IOSNotificationServices.cs" />
     <Compile Include="Mother.cs" />
     <Compile Include="PaymentAccountProcessing\SubmittedPaymentAccountTask.cs" />
     <Compile Include="PaymentAccountService.cs" />

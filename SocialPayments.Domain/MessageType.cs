@@ -10,7 +10,7 @@ namespace SocialPayments.Domain
         Payment = 0,
         PaymentRequest = 1,
         Update = 2,
-        //Donation =3,
-        //AcceptPledge = 4
+        Donation =3,
+        AcceptPledge = 4
     }
 }

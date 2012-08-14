@@ -71,14 +71,6 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             {
                 results = fileGeneratorService.ProcessFile(transactionBatch.Transactions);
 
-                foreach (var transaction in transactionBatch.Transactions)
-                {
-                    transaction.Status = TransactionStatus.Complete;
-                    transaction.Payment.PaymentStatus = PaymentStatus.Complete;
-                    transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
-                }
-
-                _ctx.SaveChanges();
 
                 logger.Log(LogLevel.Info, String.Format("Creating batch file for batch {0}", transactionBatch.Id));
 
@@ -110,7 +102,23 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                     logger.Log(LogLevel.Error, String.Format("Unable to upload nacha file to S3. {0}", ex.Message));
                 }
 
-                //Move all payments to paid
+                //Move all payments where we made the deposit to Sent To Bank
+                foreach (var transaction in transactionBatch.Transactions)
+                {
+                    transaction.Status = TransactionStatus.Complete;
+                    transaction.SentDate = System.DateTime.Now;
+
+                    if (transaction.Payment == null)
+                        continue;
+
+                    if (transaction.Type == TransactionType.Deposit)
+                    {
+                        transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                        transaction.Payment.Message.Status = PaystreamMessageStatus.ProcessedPayment;
+                    }
+                }
+
+                _ctx.SaveChanges();
                 //Update Batch File
                 //Start BatchFile Workflow
             }
