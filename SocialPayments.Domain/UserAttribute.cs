@@ -11,5 +11,6 @@ namespace SocialPayments.Domain
         public string AttributeName { get; set; }
         public bool Approved { get; set; }
         public bool IsActive { get; set; }
+        public int Points { get; set; }
     }
 }

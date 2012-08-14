@@ -1,0 +1,8 @@
+﻿@model Mobile_PaidThx.Models.RegisterModel
+<script src="@Url.Content("~/Scripts/register.js")" type="text/javascript"></script>
+  <div data-role="page">
+       @{Html.RenderPartial("WelcomeMenu"); }
+        <div data-role="content">
+            @{Html.RenderPartial("../Register/PartialViews/Register", Model);}
+        </div>
+    </div>

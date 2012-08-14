@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "AddContactRequest";
+}
+<div data-role="page" id="request-page" class="modally">
+  @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Enter Recipient</h1>
+      <!-- <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content" class="content">
+        <div style="font-size: 16px; margin-left: 10px; margin-top: 10px">
+            Enter your contact's
+        </div>
+        <div data-role="fieldcontain" style="margin-left: 10px">
+            <label for="email">
+                <span style="font-weight: bold">E-mail:</span></label>
+            <input type="text" name="email" id="email" value="" />
+        </div>
+        <div style="font-style: italic; font-size: 16px; margin-left: 15px">
+            OR</div>
+        <div data-role="fieldcontain" style="margin-left: 10px">
+            <label for="phonenumber">
+                <span style="font-weight: bold">Phone #:</span></label>
+            <input type="text" name="phonenumber" id="phonenumber" value="" />
+        </div>
+        <div style="font-style: italic; font-size: 12px; margin-left: 10px">
+            <span style="font-weight: bold">Note</span>: Entering both contact's phone number/email
+            will result in sending the payment to your contact's <span style="font-weight: bold">
+                phone number</span>.
+        </div>
+        <button id="submitContactRequest" type="button" style="padding: 10px; font-size: 18px;
+            margin: 15px">
+            Submit Contact</button>
+    </div>
+    @{ Html.RenderPartial("LoggedInMenu"); }
+</div>

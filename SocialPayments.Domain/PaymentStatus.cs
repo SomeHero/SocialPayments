@@ -7,11 +7,12 @@ namespace SocialPayments.Domain
 {
     public enum PaymentStatus
     {
-        Submitted = 0,
-        Pending = 1,
-        Complete = 2,
-        ReturnedNSF = 3,
-        Cancelled = 4,
-        Refunded = 5
+        Submitted = 1,
+        Pending = 2,
+        Complete = 3,
+        Returned = 4,
+        Cancelled = 5,
+        Refunded = 6,
+        Open = 7
     }
 }

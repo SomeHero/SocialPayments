@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
+using SocialPayments.Domain;
 
 namespace SocialPayments.DomainServices
 {
@@ -60,6 +61,36 @@ namespace SocialPayments.DomainServices
             }
 
             return tempMobileNumber;
+        }
+        public string FormatUserName(User sender)
+        {
+            _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
+            if (sender.Merchant != null)
+                return sender.Merchant.Name;
+
+            if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
+                return sender.FirstName + " " + sender.LastName;
+
+            if (!String.IsNullOrEmpty(sender.SenderName))
+                return sender.SenderName;
+
+            if (!String.IsNullOrEmpty(sender.MobileNumber))
+                return FormatMobileNumber(sender.MobileNumber);
+
+            if (!String.IsNullOrEmpty(sender.EmailAddress))
+                return sender.EmailAddress;
+
+            return "PaidThx User";
+
+
+        }
+
+        public string FormatDateTimeForJSON(DateTime? input)
+        {
+            if (input == null)
+                return "";
+
+            return input.Value.ToString("ddd MMM dd HH:mm:ss zzz yyyy");
         }
     }
 }

@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A06816D-C32D-45F3-A2BB-6819730115CC}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mobile_PaidThx</RootNamespace>
+    <AssemblyName>Mobile PaidThx</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Mobile PaidThx.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Mobile PaidThx.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Remote|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Mobile PaidThx.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mobile|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK, Version=1.3.16.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\AWSSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\Libraries\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Libraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\System.Web.Http.Common.4.0.20126.16343\lib\net40\System.Web.Http.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetMvc.4.0.20126.16343\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetRazor.Core.2.0.20126.16343\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AspNetWebPages.Core.2.0.20126.16343\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Base\PaidThxBaseController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DoGoodController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JoinController.cs" />
+    <Compile Include="Controllers\PaymentAccountController.cs" />
+    <Compile Include="Controllers\PaystreamController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\PreferencesController.cs" />
+    <Compile Include="Controllers\PrivacyController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\SendController.cs" />
+    <Compile Include="Controllers\SignInController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HtmlHelpers\FacebookHelper.cs" />
+    <Compile Include="HtmlHelpers\PaystreamHelper.cs" />
+    <Compile Include="HtmlHelpers\ProfileHelpers.cs" />
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\FacebookUserModels.cs" />
+    <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\PaymentAccountModels.cs" />
+    <Compile Include="Models\PaystreamModels.cs" />
+    <Compile Include="Models\ProfileModels.cs" />
+    <Compile Include="Models\RegisterModels.cs" />
+    <Compile Include="Models\SecurityQuestionModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FacebookServices.cs" />
+    <Compile Include="Services\MerchantServices.cs" />
+    <Compile Include="Services\PaystreamMessageServices.cs" />
+    <Compile Include="Services\ResponseModels\AccountModels.cs" />
+    <Compile Include="Services\ResponseModels\MerchantModels.cs" />
+    <Compile Include="Services\ResponseModels\MessageModels.cs" />
+    <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
+    <Compile Include="Services\ServicesBase.cs" />
+    <Compile Include="Services\ResponseModels\UserModels.cs" />
+    <Compile Include="Services\UserPaymentAccountServices.cs" />
+    <Compile Include="Services\UserPayStreamMessageServices.cs" />
+    <Compile Include="Services\UserServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="404.html" />
+    <Content Include="apple-touch-icon-114x114-precomposed.png" />
+    <Content Include="apple-touch-icon-57x57-precomposed.png" />
+    <Content Include="apple-touch-icon-72x72-precomposed.png" />
+    <Content Include="apple-touch-icon-precomposed.png" />
+    <Content Include="apple-touch-icon.png" />
+    <Content Include="Content\images\arrow.png" />
+    <Content Include="Content\images\avatar.png" />
+    <Content Include="Content\images\bank.png" />
+    <Content Include="Content\images\bg-pattern.png" />
+    <Content Include="Content\images\btn-go-active-50x48.png" />
+    <Content Include="Content\images\btn-go-disabled-50x48.png" />
+    <Content Include="Content\images\btn-quickadd.png" />
+    <Content Include="Content\images\btn_info_active.png" />
+    <Content Include="Content\images\btn_info_inactive.png" />
+    <Content Include="Content\images\button.png" />
+    <Content Include="Content\images\button_active.png" />
+    <Content Include="Content\images\button_active2.png" />
+    <Content Include="Content\images\enable-payments-button-icon.png" />
+    <Content Include="Content\images\helpIcon.png" />
+    <Content Include="Content\images\home.png" />
+    <Content Include="Content\images\favicon.png" />
+    <Content Include="Content\images\field-contact-255x48.png" />
+    <Content Include="Content\images\field-howmuch-255x48.png" />
+    <Content Include="Content\images\field-money-icon.png" />
+    <Content Include="Content\images\icon-person.png" />
+    <Content Include="Content\images\icon-settings-accounts-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-accounts-40x40.png" />
+    <Content Include="Content\images\icon-settings-bank-40x40.png" />
+    <Content Include="Content\images\icon-settings-email-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-email-40x40.png" />
+    <Content Include="Content\images\icon-settings-feedback-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-feedback-40x40.png" />
+    <Content Include="Content\images\icon-settings-help-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-help-40x40.png" />
+    <Content Include="Content\images\icon-settings-legal-40x40.png" />
+    <Content Include="Content\images\icon-settings-mecode-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-mecode-40x40.png" />
+    <Content Include="Content\images\icon-settings-orgs-40x40.png" />
+    <Content Include="Content\images\icon-settings-phones-40x40.png" />
+    <Content Include="Content\images\icon-settings-preferences-40x40.png" />
+    <Content Include="Content\images\icon-settings-profile-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-profile-40x40.png" />
+    <Content Include="Content\images\icon-settings-security-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-security-40x40.png" />
+    <Content Include="Content\images\icon-settings-sharing-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-sharing-40x40.png" />
+    <Content Include="Content\images\icon-settings-signout-40x40.png" />
+    <Content Include="Content\images\icon-settings-social-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-social-40x40.png" />
+    <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\icons\aboutIcon-active.png" />
+    <Content Include="Content\images\icons\aboutIcon.png" />
+    <Content Include="Content\images\icons\joinIcon-active.png" />
+    <Content Include="Content\images\icons\joinIcon.png" />
+    <Content Include="Content\images\icons\signinIcon-active.png" />
+    <Content Include="Content\images\icons\signinIcon.png" />
+    <Content Include="Content\images\line_diagonal1.png" />
+    <Content Include="Content\images\line_diagonal2.png" />
+    <Content Include="Content\images\line_hor.png" />
+    <Content Include="Content\images\line_ver.png" />
+    <Content Include="Content\images\org_acs.png" />
+    <Content Include="Content\images\org_americandiabetes.png" />
+    <Content Include="Content\images\org_americanheart.png" />
+    <Content Include="Content\images\org_beta.png" />
+    <Content Include="Content\images\org_bsa.png" />
+    <Content Include="Content\images\org_childsavers.png" />
+    <Content Include="Content\images\org_cvsa.png" />
+    <Content Include="Content\images\org_goodwill.png" />
+    <Content Include="Content\images\org_hostelling.png" />
+    <Content Include="Content\images\org_marchofdimes.png" />
+    <Content Include="Content\images\org_mda.png" />
+    <Content Include="Content\images\org_natureconserv.png" />
+    <Content Include="Content\images\org_obxparish.png" />
+    <Content Include="Content\images\org_rivercitysports.png" />
+    <Content Include="Content\images\org_rotary.png" />
+    <Content Include="Content\images\org_specialolympics.png" />
+    <Content Include="Content\images\org_teach4amer.png" />
+    <Content Include="Content\images\org_uturn.png" />
+    <Content Include="Content\images\org_worldvision.png" />
+    <Content Include="Content\images\org_wwf.png" />
+    <Content Include="Content\images\org_zta.png" />
+    <Content Include="Content\images\signinIcon.png" />
+    <Content Include="Content\images\icons\settingsIcon.png" />
+    <Content Include="Content\images\icons\dogoodIcon-active.png" />
+    <Content Include="Content\images\icons\homeIcon-active.png" />
+    <Content Include="Content\images\icons\paystreamIcon-active.png" />
+    <Content Include="Content\images\icons\requestIcon-active.png" />
+    <Content Include="Content\images\icons\sendIcon-active.png" />
+    <Content Include="Content\images\icons\dogoodIcon.png" />
+    <Content Include="Content\images\icons\paystreamIcon.png" />
+    <Content Include="Content\images\icons\requestIcon.png" />
+    <Content Include="Content\images\icons\sendIcon.png" />
+    <Content Include="Content\images\pattern.png" />
+    <Content Include="Content\images\skip-step-button-icon.png" />
+    <Content Include="Content\images\request-money-button-icon.png" />
+    <Content Include="Content\images\send-money-button-icon.png" />
+    <Content Include="Content\images\close-dialog.gif" />
+    <Content Include="Content\images\ajax-loader.png" />
+    <Content Include="Content\images\bgnoise.gif" />
+    <Content Include="Content\images\checkmark-btn-icon.png" />
+    <Content Include="Content\images\list-status-complete-icon.png" />
+    <Content Include="Content\images\facebook-f-icon.png" />
+    <Content Include="Content\images\icons-18-black.png" />
+    <Content Include="Content\images\icons-18-white.png" />
+    <Content Include="Content\images\icons-36-black.png" />
+    <Content Include="Content\images\icons-36-white.png" />
+    <Content Include="Content\images\list-funds-receive-icon.png" />
+    <Content Include="Content\images\list-funds-sent-icon.png" />
+    <Content Include="Content\images\list-request-receive-icon.png" />
+    <Content Include="Content\images\list-request-sent-icon.png" />
+    <Content Include="Content\images\list-status-accepted-icon.png" />
+    <Content Include="Content\images\list-status-decide-icon.png" />
+    <Content Include="Content\images\list-status-fail-icon.png" />
+    <Content Include="Content\images\list-status-pending-icon.png" />
+    <Content Include="Content\images\member-default-icon.gif" />
+    <Content Include="Content\images\request_money_button.gif" />
+    <Content Include="Content\images\security_callout_left.gif" />
+    <Content Include="Content\images\security_callout_right.gif" />
+    <Content Include="Content\images\send_money_button.gif" />
+    <Content Include="Content\images\skip_step_button.gif" />
+    <Content Include="Content\images\sub-nav-alerts-icon-active.gif" />
+    <Content Include="Content\images\sub-nav-alerts-icon.gif" />
+    <Content Include="Content\images\sub-nav-all-icon-active.gif" />
+    <Content Include="Content\images\sub-nav-all-icon.gif" />
+    <Content Include="Content\images\sub-nav-payments-icon-active.gif" />
+    <Content Include="Content\images\sub-nav-payments-icon.gif" />
+    <Content Include="Content\images\sub-nav-requests-icon-active.gif" />
+    <Content Include="Content\images\sub-nav-requests-icon.gif" />
+    <Content Include="Content\images\subnav-active-background.gif" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
+    <Content Include="Content\images\tab_background.gif" />
+    <Content Include="Content\images\tab_background_active.gif" />
+    <Content Include="Content\images\tab_background_inactive.gif" />
+    <Content Include="Content\images\tab_settings.gif" />
+    <Content Include="Content\images\tab_settings_inactive.gif" />
+    <Content Include="Content\images\thought-arrow-up.png" />
+    <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\patternlock.css" />
+    <Content Include="navTest.html" />
+    <Content Include="Content\images\icons\homeIcon.png" />
+    <Content Include="Content\images\icons\preferencesIcon.png" />
+    <Content Include="Content\images\icons\profileIcon.png" />
+    <Content Include="Scripts\complete-profile-dialog.js" />
+    <Content Include="Scripts\complete-profile.js" />
+    <Content Include="Scripts\home.js" />
+    <Content Include="Scripts\jquery.livequery.js" />
+    <Content Include="Scripts\dogood.js" />
+    <Content Include="Scripts\patternlock.js" />
+    <Content Include="Scripts\popuppinswipe.js" />
+    <Content Include="Scripts\settings.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\paymentaccount.js" />
+    <Content Include="Scripts\paystream.js" />
+    <Content Include="Scripts\request-money.js" />
+    <Content Include="Scripts\send-money.js" />
+    <Content Include="Scripts\signin.js" />
+    <Content Include="Content\app.css" />
+    <Content Include="Content\foundation.css" />
+    <Content Include="Content\ie.css" />
+    <Content Include="Content\images\android_download_button.gif" />
+    <Content Include="Content\images\background.gif" />
+    <Content Include="Content\images\createaccount_icon.gif" />
+    <Content Include="Content\images\enable_payments_button.gif" />
+    <Content Include="Content\images\facebook_icon.gif" />
+    <Content Include="Content\images\facebook_signin_button.gif" />
+    <Content Include="Content\images\iphone_download_button.gif" />
+    <Content Include="Content\images\lock_icon.gif" />
+    <Content Include="Content\images\misc\button-gloss.png" />
+    <Content Include="Content\images\misc\button-overlay.png" />
+    <Content Include="Content\images\misc\custom-form-sprites.png" />
+    <Content Include="Content\images\misc\input-bg-outset.png" />
+    <Content Include="Content\images\misc\input-bg.png" />
+    <Content Include="Content\images\misc\modal-gloss.png" />
+    <Content Include="Content\images\misc\table-sorter.png" />
+    <Content Include="Content\images\misc\orbit\button-gloss.png" />
+    <Content Include="Content\images\misc\orbit\button-overlay.png" />
+    <Content Include="Content\images\misc\orbit\custom-form-sprites.png" />
+    <Content Include="Content\images\misc\orbit\input-bg-outset.png" />
+    <Content Include="Content\images\misc\orbit\input-bg.png" />
+    <Content Include="Content\images\misc\orbit\modal-gloss.png" />
+    <Content Include="Content\images\misc\orbit\table-sorter.png" />
+    <Content Include="Content\images\paidthx-alpha-transparent.png" />
+    <Content Include="Content\images\plus_icon.gif" />
+    <Content Include="Content\images\signin_button.gif" />
+    <Content Include="Content\images\s_icon.gif" />
+    <Content Include="Content\images\tab_bottom_image.gif" />
+    <Content Include="Content\images\twitter_icon.gif" />
+    <Content Include="Content\images\update_profile_button.gif" />
+    <Content Include="Content\images\verifyphone_button.gif" />
+    <Content Include="Content\images\verisign_image.gif" />
+    <Content Include="Content\jquery.mobile-1.0.1.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="crossdomain.xml" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="humans.txt" />
+    <Content Include="index.html" />
+    <Content Include="robots.txt" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\foundation.js" />
+    <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.5.1.js" />
+    <Content Include="Scripts\jquery-1.5.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
+    <Content Include="Scripts\jquery.json-2.3.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.mobile-1.0.1.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\libs\jquery-1.7.1.js" />
+    <Content Include="Scripts\libs\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\libs\modernizr-2.5.3.min.js" />
+    <Content Include="Scripts\modernizr-1.7.js" />
+    <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\modernizr.foundation.js" />
+    <Content Include="Scripts\plugins.js" />
+    <Content Include="Scripts\register.js" />
+    <Content Include="Scripts\script.js" />
+    <Content Include="Scripts\setupACHAccount.js" />
+    <Content Include="Scripts\verify-mobiledevice.js" />
+    <Content Include="Content\images\tab-dogood-30x30-active.png" />
+    <Content Include="Content\images\tab-dogood-30x30.png" />
+    <Content Include="Content\images\tab-home-30x30-active.png" />
+    <Content Include="Content\images\tab-home-30x30.png" />
+    <Content Include="Content\images\tab-paystream-30x30-active.png" />
+    <Content Include="Content\images\tab-paystream-30x30.png" />
+    <Content Include="Content\images\tab-request-30x30-active.png" />
+    <Content Include="Content\images\tab-request-30x30.png" />
+    <Content Include="Content\images\tab-send-30x30-active.png" />
+    <Content Include="Content\images\tab-send-30x30.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Shared\Register.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Register\GetMobileNumber.cshtml" />
+    <Content Include="Views\Register\PartialViews\GetMobileNumberPartial.cshtml" />
+    <Content Include="Views\Home\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Home\PartialViews\HomePartial.cshtml" />
+    <Content Include="Views\Home\FacebookWelcome.cshtml" />
+    <Content Include="Web.Remote.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Help\index.cshtml" />
+    <Content Include="Views\Privacy\Index.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\PaymentAccount\PartialViews\Dialog.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\PartialViews\ResetPassword.cshtml" />
+    <Content Include="Views\Account\PartialViews\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Mvc.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.Data.Helpers.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.Data.EntityFramework.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.Data.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Http.Common.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Net.Http.WebRequest.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Net.Http.Formatting.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Net.Http.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Json.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\WebMatrix.WebData.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\WebMatrix.WebData.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\WebMatrix.Security.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\WebMatrix.Data.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\WebMatrix.Data.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.Razor.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.Deployment.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.Deployment.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.WebPages.Administration.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Razor.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Razor.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Helpers.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\System.Web.Helpers.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\NuGet.Core.dll" />
+    <None Include="Service References\_bin_deployableAssemblies\Microsoft.Web.Infrastructure.xml" />
+    <None Include="Service References\_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="Views\Account\VerifyPayPoint.cshtml" />
+    <Content Include="Views\Profile\PartialViews\SettingsNew.cshtml" />
+    <Content Include="Views\Send\PartialViews\SendMoney.cshtml" />
+    <Content Include="Views\Profile\PartialViews\RequestMoney.cshtml" />
+    <Content Include="Views\Preferences\PartialViews\ListSettings.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\ChooseAmount.cshtml" />
+    <Content Include="Views\Register\Register-ValidateMobileDevice.cshtml" />
+    <Content Include="Views\Profile\PartialViews\PayStream.cshtml" />
+    <Content Include="Views\Profile\PayStream.cshtml" />
+    <Content Include="Views\Account\PartialViews\VerifyPayPoint.cshtml" />
+    <Content Include="Views\Request\Index.cshtml" />
+    <Content Include="Views\Send\Index.cshtml" />
+    <Content Include="Views\DoGood\Index.cshtml" />
+    <Content Include="Views\Preferences\Index.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\ChooseMoneyRequest.cshtml" />
+    <Content Include="Views\PaymentAccount\Index.cshtml" />
+    <Content Include="Views\Send\AmountToSend.cshtml" />
+    <Content Include="Views\Request\AmountToRequest.cshtml" />
+    <Content Include="Views\Request\AddContactRequest.cshtml" />
+    <Content Include="Views\Send\AddContactSend.cshtml" />
+    <Content Include="Views\Send\PopupPinswipe.cshtml" />
+    <Content Include="Views\Preferences\UserAgreement.cshtml" />
+    <Content Include="Views\Preferences\Help.cshtml" />
+    <Content Include="Views\Request\RequestPinswipe.cshtml" />
+    <Content Include="Views\DoGood\Donate.cshtml" />
+    <Content Include="Views\DoGood\Pledge.cshtml" />
+    <Content Include="Views\DoGood\AddOrg.cshtml" />
+    <Content Include="Views\DoGood\AddToSend.cshtml" />
+    <Content Include="Views\DoGood\AmountToDonate.cshtml" />
+    <Content Include="Views\DoGood\AmountToPledge.cshtml" />
+    <Content Include="Views\DoGood\AddOrgPledge.cshtml" />
+    <Content Include="Views\Register\Personalize.cshtml" />
+    <Content Include="Views\Register\ConfirmPinSwipe.cshtml" />
+    <Content Include="Views\Register\SetupPinSwipe.cshtml" />
+    <Content Include="Views\Register\SecurityQuestion.cshtml" />
+    <Content Include="Views\Shared\LoggedInMenu.cshtml" />
+    <Content Include="Views\Shared\WelcomeMenu.cshtml" />
+    <Content Include="Views\Join\Index.cshtml" />
+    <Content Include="Views\SignIn\Index.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\DoGood\PinswipeDonate.cshtml" />
+    <Content Include="Views\DoGood\PinswipePledge.cshtml" />
+    <Content Include="Views\Shared\TitleBar.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.Data.Helpers.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.Data.EntityFramework.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.Data.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Http.Common.dll" />
+    <None Include="_bin_deployableAssemblies\System.Net.Http.WebRequest.dll" />
+    <None Include="_bin_deployableAssemblies\System.Net.Http.Formatting.dll" />
+    <None Include="_bin_deployableAssemblies\System.Net.Http.dll" />
+    <None Include="_bin_deployableAssemblies\System.Json.dll" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.WebData.xml" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.WebData.dll" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.Security.dll" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.Data.xml" />
+    <None Include="_bin_deployableAssemblies\WebMatrix.Data.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Administration.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.dll" />
+    <None Include="_bin_deployableAssemblies\NuGet.Core.dll" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.xml" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\images\App_LocalResources\" />
+    <Folder Include="Models\logs\" />
+    <Folder Include="Views\Paystream\PartialViews\Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Register\PartialViews\ValidateMobileDevice.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Register\SetupACHAccount.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".htaccess" />
+    <Content Include="NLog.config" />
+    <None Include="readme.md" />
+    <Content Include="Views\Home\PartialViews\About.cshtml" />
+    <Content Include="Views\Register\PartialViews\Register.cshtml" />
+    <Content Include="Views\Register\PartialViews\SetupACHAccountForm.cshtml" />
+    <Content Include="Views\Register\ValidateMobileDevice.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\PartialViews\Settings.cshtml" />
+    <Content Include="Views\Shared\SignIn.cshtml" />
+    <Content Include="Views\Account\PartialViews\SignIn.cshtml" />
+    <Content Include="Views\ViewPage1.cshtml" />
+    <Content Include="Views\Shared\_footer.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Home\PartialViews\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Home\PartialViews\ContactUs.cshtml" />
+    <Content Include="Views\Profile\PartialViews\SubNav.cshtml" />
+    <Content Include="Views\Profile\PartialViews\CompleteProfile.cshtml" />
+    <Content Include="Views\Profile\CompleteProfile.cshtml" />
+    <Content Include="Web.Beta.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Dev.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Paystream\Index.cshtml" />
+    <Content Include="Views\Request\PartialViews\RequestMoney.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\All.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\SendMoney.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\SubNav.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\Payments.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\PaymentRequests.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\Alerts.cshtml" />
+    <Content Include="Views\PaymentAccount\PaymentAccouunt.cshtml" />
+    <Content Include="Views\PaymentAccount\PartialViews\Add.cshtml" />
+    <Content Include="Views\PaymentAccount\PartialViews\Edit.cshtml" />
+    <Content Include="Views\PaymentAccount\PartialViews\List.cshtml" />
+    <Content Include="Views\Account\FBauth.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SocialPayments\SocialPayments.DataLayer\SocialPayments.DataLayer.csproj">
+      <Project>{A06817CB-EF0F-49B3-B6ED-879EA399590A}</Project>
+      <Name>SocialPayments.DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SocialPayments\SocialPayments.DomainServices\SocialPayments.DomainServices.csproj">
+      <Project>{B8F91D46-468B-4E47-9BA3-7026ED7F9C3E}</Project>
+      <Name>SocialPayments.DomainServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SocialPayments\SocialPayments.Domain\SocialPayments.Domain.csproj">
+      <Project>{4D636F08-1EB0-4922-A74F-FC7C5EE4F3DA}</Project>
+      <Name>SocialPayments.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialPayments.ThirdPartyServices.FedACHService\SocialPayments.ThirdPartyServices.FedACHService.csproj">
+      <Project>{77F37AEC-FB67-41D3-9627-FA647BBD550F}</Project>
+      <Name>SocialPayments.ThirdPartyServices.FedACHService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

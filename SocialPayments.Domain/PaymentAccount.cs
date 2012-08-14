@@ -11,9 +11,14 @@ namespace SocialPayments.Domain
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        [MaxLength(100)]
+        public virtual string Nickname { get; set; }
+        [MaxLength(255)]
         public string NameOnAccount { get; set; }
+        [MaxLength(255)]
         public string RoutingNumber { get; set; }
-        public string AccountNumber { get; set; }
+        [MaxLength(255)]
+        public string AccountNumber { get; set; }   
         public int PaymentAccountTypeId { get; set; }
         public PaymentAccountType AccountType 
         {
@@ -22,9 +27,16 @@ namespace SocialPayments.Domain
         }
         public bool IsActive { get; set; }
        public int AccountStatusValue { get; set; }
-       [ForeignKey("AccountStatusValue")]
-       public AccountStatusType AccountStatus { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? LastUpdatedDate { get; set; }
+       public AccountStatusType AccountStatus {
+           get { return (AccountStatusType)AccountStatusValue; }
+           set { AccountStatusValue = (int)value; }
+       }
+       public DateTime CreateDate { get; set; }
+       public DateTime? LastUpdatedDate { get; set; }
+        [MaxLength (255)]
+        public string BankIconURL {get; set;}
+        [MaxLength (100)]
+        public string BankName { get; set; }
+
     }
 }

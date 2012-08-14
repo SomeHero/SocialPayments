@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div data-role="page" id="send-page">
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Send Money</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+    
+    <div data-role="content">
+        <ul class="tabs-content contained">
+            <li class="active" id="simpleContained1Tab">
+                @{Html.RenderPartial("PartialViews/SendMoney");}
+            </li>
+        </ul>
+    </div>
+      @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
+</div>

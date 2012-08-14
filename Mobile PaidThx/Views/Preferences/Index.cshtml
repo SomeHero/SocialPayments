@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="preferences-page">
+  @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Settings</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    
+    <div data-role="content">
+        @{Html.RenderPartial("PartialViews/ListSettings");}
+    </div>
+    
+</div>

@@ -1,0 +1,35 @@
+﻿<script src="@Url.Content("~/Scripts/send-money.js")" type="text/javascript"></script>
+<div class="paystream-header-title" style="margin-left:-11px; margin-right:-11px">
+        Send Money</div>
+        <div style="height:1px; background:#B0B0B0;margin-left:-11px; margin-right:-11px; margin-bottom:15px"></div> 
+<div id="main-body-send" class="panel" style="margin-left:-11px; margin-right:-11px">
+    <h2>
+        Send Money</h2>
+    <form id="frmSendMoney" action="@Url.Content("~/Profile/SendMoney")" method="post">
+    <p>
+        <label for="txtSendTo">
+            Send To:</label>
+        <div id="writeuserbtn">
+            <input type="text" id="txtSendTo" name="RecipientUri" style="width: 185px" placeholder="Name, email or phone #"
+                required /></div>
+    </p>
+    <p>
+        <label for="clickamountbtn" style="font-size: 16px">
+            Send Amount:</label>
+        <div onclick="chooseAmount()" class="clickamountbtn">
+            <span id="amount">Select amount</span></div>
+    </p>
+    <p>
+        <label for="txtComments" style="margin-bottom: 15px; margin-top: 15px">
+            Comments:</label>
+        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc"
+            required></textarea>
+    </p>
+    <p>
+        <button type="submit" id="btnSendMoney" class="imgbtn">
+            <img src="@Url.Content("~/Content/images/send-money-button-icon.png")" alt="" /><span>Send
+                Money Now</span></button>
+    </p>
+    </form>
+</div>
+ 

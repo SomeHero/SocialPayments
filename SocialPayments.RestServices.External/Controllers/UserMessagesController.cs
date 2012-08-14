@@ -39,7 +39,7 @@ namespace SocialPayments.RestServices.External.Controllers
                         createDate = m.CreateDate,
                         Id = m.Id.ToString(),
                         lastUpdatedDate = m.LastUpdatedDate,
-                        messageStatus = m.MessageStatus.ToString(),
+                        messageStatus = m.Status.ToString(),
                         messageType = m.MessageType.ToString(),
                         recipient = (m.Recipient != null ? new UserModels.UserResponse()
                         {

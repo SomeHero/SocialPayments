@@ -12,6 +12,10 @@ namespace SocialPayments.DomainServices
         private DomainServices.FormattingServices formattingServices = new FormattingServices();
         private Logger _logger;
 
+        public ValidationService()
+        {
+            _logger = LogManager.GetCurrentClassLogger();
+        }
         public ValidationService(Logger logger)
         {
             _logger = logger;
@@ -45,6 +49,13 @@ namespace SocialPayments.DomainServices
 
             return isStrictMatch;
 
+        }
+
+        public bool IsPhoneNumber(string uri)
+        {
+            string patternStrict = "[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}";
+            Regex reStrict = new Regex(patternStrict);
+            return reStrict.IsMatch(Regex.Replace(uri, "[^0-9]", ""));           
         }
         public bool IsMECode(string uri)
         {
