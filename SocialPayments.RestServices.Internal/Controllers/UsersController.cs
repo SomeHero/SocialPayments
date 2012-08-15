@@ -699,7 +699,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     recipientType = 0;
                 }
-                else
+                else if ( recipient.Merchant != null )
                 {
                     recipName = _userService.GetSenderName(recipient);
                     recipientType = recipient.UserTypeId;
@@ -708,8 +708,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         recipientType = 2;
                     else if (recipient.Merchant.MerchantTypeValue == 1)
                         recipientType = 1;
-                    else if (recipient.Merchant == null)
-                        recipientType = 0;
+                }
+                else
+                {
+                    recipName = msg.Recipient.SenderName;
+                    recipientType = 0;
                 }
 
                 quickSends.Add(new UserModels.QuickSendUserReponse()
