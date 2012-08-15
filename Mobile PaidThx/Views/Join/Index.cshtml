@@ -19,7 +19,7 @@
                 <h4>@Model.Payment.Sender sent you @String.Format("{0:C}", Model.Payment.Amount).</h4></div>
                 @if (!String.IsNullOrEmpty(Model.Payment.Comments))
                 {
-                    <div class="thought"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
+                    <div class="thought" style="clear:both;"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
                 </div>
                 }
                 <p>
