@@ -659,7 +659,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // GET /api/users/{userId}/refresh_homepage
-        [HttpGet]
         public HttpResponseMessage<UserModels.HomepageRefreshReponse> RefreshHomepageInformation(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
@@ -682,63 +681,65 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
 
 
-            try
+            //try
+            //{
+            List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
+            List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
+
+            foreach (Message msg in recentPayments)
             {
-                List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
-                List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
 
-                foreach (Message msg in recentPayments)
+                string recipName;
+                var recipient = _userService.GetUser(msg.RecipientUri);
+                int recipientType = -1;
+
+                if (recipient == null)
                 {
+                    recipName = msg.RecipientUri;
 
-                    string recipName;
-                    var recipient = _userService.GetUser(msg.RecipientUri);
-                    int recipientType = -1;
+                    recipientType = 0;
+                }
+                else
+                {
+                    recipName = _userService.GetSenderName(recipient);
+                    recipientType = recipient.UserTypeId;
 
-                    if (recipient == null)
-                    {
-                        recipName = msg.RecipientUri;
-
+                    if (recipient.Merchant.MerchantTypeValue == 2)
+                        recipientType = 2;
+                    else if (recipient.Merchant.MerchantTypeValue == 1)
+                        recipientType = 1;
+                    else if (recipient.Merchant == null)
                         recipientType = 0;
-                    }
-                    else
-                    {
-                        recipName = _userService.GetSenderName(recipient);
-                        recipientType = recipient.UserTypeId;
-
-                        if (recipient.Merchant.MerchantTypeValue == 2)
-                            recipientType = 2;
-                        else if (recipient.Merchant.MerchantTypeValue == 1)
-                            recipientType = 1;
-                        else if (recipient.Merchant == null)
-                            recipientType = 0;
-                    }
-
-                    quickSends.Add(new UserModels.QuickSendUserReponse()
-                    {
-                        userUri = msg.RecipientUri,
-                        userName = recipName,
-                        userImage = msg.recipientImageUri,
-                        userType = recipientType
-                    });
                 }
 
-                var response = new UserModels.HomepageRefreshReponse()
+                quickSends.Add(new UserModels.QuickSendUserReponse()
                 {
-                    userId = user.UserId.ToString(),
-                    numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
-                    numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
-                    quickSendContacts = quickSends
-                };
+                    userUri = msg.RecipientUri,
+                    userName = recipName,
+                    userImage = msg.recipientImageUri,
+                    userType = recipientType
+                });
+            }
 
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
-            }
-            catch (Exception ex)
+            var response = new UserModels.HomepageRefreshReponse()
             {
-                _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
-                var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
-                return message;
-            }
+                userId = user.UserId.ToString(),
+                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
+                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                quickSendContacts = quickSends
+            };
+
+            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+            /*
+        }
+        catch (Exception ex)
+        {
+            _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
+            var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+            message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
+            return message;
+        }
+             * */
         }
 
 
