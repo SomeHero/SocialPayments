@@ -70,8 +70,13 @@ namespace Mobile_PaidThx
             );
             routes.MapRoute(
                 "SignIn", // Route name
-                "SignIn", // URL with parameters
+                "SignIn/{action}", // URL with parameters
                 new { controller = "SignIn", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Join", // Route name
+                "Join/{action}", // URL with parameters
+                new { controller = "Join", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
 "Preferences", // Route name
@@ -111,14 +116,13 @@ new { controller = "DoGood", action = "Index" } // Parameter defaults
             routes.MapRoute(
                 "Receive", // Route name
                 "{messageId}", // URL with parameters
-                new { controller = "Home", action = "Index" } // Parameter defaults
+                new { controller = "Join", action = "Index" } // Parameter defaults
             );
 
-            
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters
-                new { controller = "Account", action = "SignIn" } // Parameter defaults
+                new { controller = "Home", action = "Index" } // Parameter defaults
             );
 
         }

@@ -1,56 +1,29 @@
-﻿   @{
+﻿@{
     ViewBag.Title = "Index";
 }
-    <div role="main" data-role="page">
-       <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-			<h1>Home</h1>
-<<<<<<< HEAD
-			<a href="index.html" data-icon="gear" class="ui-btn-right"></a>
-<<<<<<< HEAD
-            <div data-role="navbar" class="nav-pdthx" data-grid="d">
-=======
-		</div>
-        <div data-role="header" class="nav-pdthx" data-theme="c">
-<<<<<<< HEAD
-		    <div data-role="navbar"class="nav-pdthx" data-grid="d">
-		        <ul>
-		            <li><a href="#"id="welcome" class="preNav" data-icon="custom">Welcome</a></li>
-		            <li><a href="#"id="signin" class="preNav" data-icon="custom">Sign-in</a></li>
-		            <li><a href="#"id="about" class="preNav" data-icon="custom">About</a></li>
-		        </ul>
-		    </div>
-		</div>>
-=======
-           <!-- <div data-role="navbar" class="nav-pdthx" data-grid="d">
->>>>>>> upstream/development
-=======
-			<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
-             <div data-role="navbar" class="nav-pdthx" data-grid="d">
->>>>>>> upstream/development
-                <ul>
-                    <li><a href="./Home" class="nav-item ui-btn-active" id="home" data-icon="custom">Home</a></li>
-                    <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
-                    <li><a href="./Send" class="nav-item" id="send" data-icon="custom">Send $</a></li>
-                    <li><a href="./DoGood" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
-                    <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
-                    
-                </ul>
-<<<<<<< HEAD
-            </div>-->
-        </div>
->>>>>>> upstream/development
-=======
+<div data-role="page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+           Welcome</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content" style="background-color: #3E7D48">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+                <h4 style="font-size: 26px; text-align: center; margin-bottom: 15px">
+                    Welcome to PaidThx!</h4>
+                <h6 style="text-align: center; width: 60%; margin-left: 20%">
+                    The fastest, easiest, safest way to exchange money with friends, family, and your
+                    favorite organizations.</h6>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 15px; text-align:center;margin-bottom: 15px">
+                Join or Sign in Below:</div>
+            <a id="join" class="btn-new btn-green" href="./Join">
+                Join (It's Free!)</a>
+            <div style="margin-bottom: 15px">
             </div>
-		</div>
->>>>>>> upstream/development
-        <div data-role="content">
-            <input type="hidden" id="mobileNumber" name="MobileNumber" value="" />
-            <div id="container">
-                <ul class="tabs-content contained">
-                    <li class="active" id="simpleContained1Tab">
-                        @{Html.RenderPartial("PartialViews/HomePartial");}
-                    </li>
-                </ul>
-            </div>
+            <a id="signin" class="btn-new btn-blue" href="./SignIn">
+                Sign In</button></a>
         </div>
     </div>
+     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
+</div>

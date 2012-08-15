@@ -25,7 +25,6 @@ namespace Mobile_PaidThx.Models
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public string MobileNumber { get; set; }
             public PaymentModel Payment { get; set; }
         }
         public class MobileDeviceVerificationModel
@@ -57,11 +56,32 @@ namespace Mobile_PaidThx.Models
 
             public PaymentModel Payment { get; set; }
         }
+        public class PersonalizeModel
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string ImageUrl { get; set; }
+        }
         public class PaymentModel
         {
             public string Sender { get; set; }
             public string MobileNumber { get; set; }
             public Double Amount { get; set; }
             public string Comments { get; set; }
+            public string SenderImageUrl { get; set; }
+        }
+        public class SetupPinSwipeModel
+        {
+            public string PinCode { get; set; }
+        }
+        public class ConfirmPinSwipeModel
+        {
+            public string PinCode { get; set; }
+        }
+        public class SecurityQuestionModel
+        {
+            public int SecurityQuestionId { get; set; }
+            public string SecurityQuestionAnswer { get; set; }
+            public List<SecurityQuestionModels.SecurityQuestionModel> SecurityQuestions { get; set; }
         }
 }

@@ -1,0 +1,32 @@
+﻿@model Mobile_PaidThx.Models.RequestMoneyModel
+<script>
+    function submitform() {
+        alert("You entered " + document.getElementById("patternlock").value);
+        return true;
+    }
+</script>
+<div data-role="page" id="pinswipe-page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Confirm</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+  
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Swipe your security PIN to confirm.</div>
+        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
+        </div>
+        <form id="pinSwipeForm" action="@Url.Content("~/Request/RequestMoney")" method="post">
+        <div style="margin-top:15px">
+            <input type="hidden" name="RecipientUri" id="sendUri-Request" value="@Model.RecipientUri" />
+            <input type="hidden" name="Amount" id="amountUri-Request" value="@Model.Amount" />
+            <input type="hidden" name="Comments" id="commentsUri-Request" value="@Model.Comments" />
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        </form>
+    </div>
+      @{ Html.RenderPartial("LoggedInMenu"); }
+</div>

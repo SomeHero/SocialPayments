@@ -67,5 +67,32 @@ namespace SocialPayments.Domain
         [NotMapped]
         public string TransactionImageUrl { get; set; }
 
+        public bool recipientHasSeen { get; set; }
+        public bool senderHasSeen { get; set; }
     }
+
+    public class SameRecipientComparer : IEqualityComparer<Message>
+    {
+        public bool Equals(Message one, Message two)
+        {
+            if (one.RecipientUri == two.RecipientUri)
+                return true;
+            else if (one.Recipient != null && two.Recipient != null && one.Recipient == two.Recipient)
+                return true;
+            else
+                return false;
+        }
+
+        public int GetHashCode(Message msg)
+        {
+            // A hash value SHOULD be implemented here,
+            // but we only want to know if message recipients are equal.
+            // We return the hash code of the recipient Id of the messages.
+            if (msg.Recipient == null || msg.RecipientId == null)
+                return msg.RecipientUri.GetHashCode();
+            else
+                return msg.RecipientId.GetHashCode();
+        }
+    }
+
 }

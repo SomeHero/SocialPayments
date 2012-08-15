@@ -1,0 +1,21 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+@{
+    ViewBag.Title = "Home";
+}
+<script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
+<div data-role="page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Home</h1>
+       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+    <div data-role="content">
+        <div id="container">
+            <div id="content-container">
+                 @{Html.RenderPartial("_footer");}
+            </div>
+        </div>
+    </div>
+     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+</div>

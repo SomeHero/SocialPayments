@@ -3,108 +3,77 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using SocialPayments.DomainServices;
 using NLog;
-using SocialPayments.DataLayer;
 using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class PaymentAccountController : Controller
     {
         //
-        // GET: /PaymentAccount/
+        // GET: /PaymentAccount/ 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
 
         public ActionResult Index()
         {
-            using (var ctx = new Context())
+
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            //if (Session["User"] == null)
+            // return RedirectToAction("SignIn", "Account", null);
+
+            var model = new ListPaymentAccountModel();
+            model.PreferredReceiveAccountId = user.preferredReceiveAccountId.ToString();
+            model.PreferredSendAccountId = user.preferredPaymentAccountId.ToString();
+
+            foreach (var paymentAccount in user.bankAccounts)
             {
-                // if (Session["UserId"] == null)
-                // return RedirectToAction("SignIn", "Account", null);
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                //if (Session["User"] == null)
-                // return RedirectToAction("SignIn", "Account", null);
-
-                var model = new ListPaymentAccountModel();
-                model.PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString();
-                model.PreferredSendAccountId = user.PreferredSendAccountId.ToString();
-
-                foreach (var paymentAccount in user.PaymentAccounts)
+                model.PaymentAccounts.Add(new BankAccountModel()
                 {
-                    if (paymentAccount.IsActive == true)
-                    {
-                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-                        if (tempNumber.Length > 3)
-                        {
-                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
-                        }
-                        model.PaymentAccounts.Add(new BankAccountModel()
-                        {
-                            BankName = paymentAccount.BankName,
-                            BankIconURL = paymentAccount.BankIconURL,
-                            PaymentAccountId = paymentAccount.Id.ToString(),
-                            AccountNumber = "******" + tempNumber,
-                            AccountType = paymentAccount.AccountType.ToString(),
-                            NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                            Nickname = paymentAccount.Nickname,
-                            RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+                    // BankName = paymentAccount.BankName,
+                    // BankIconURL = paymentAccount.BankIconUrl,
+                    PaymentAccountId = paymentAccount.Id.ToString(),
+                    AccountNumber = paymentAccount.AccountNumber,
+                    AccountType = paymentAccount.AccountType.ToString(),
+                    NameOnAccount = paymentAccount.NameOnAccount,
+                    Nickname = paymentAccount.Nickname,
+                    RoutingNumber = paymentAccount.RoutingNumber
 
 
-                        });
-                    }
-                }
+                });
 
-                return View("Index", model);
             }
+
+            return View("Index", model);
+
         }
         public ActionResult List()
         {
-            using (var ctx = new Context())
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var model = new ListPaymentAccountModel();
+            model.PreferredReceiveAccountId = user.preferredReceiveAccountId.ToString();
+            model.PreferredSendAccountId = user.preferredPaymentAccountId.ToString();
+
+            foreach (var paymentAccount in user.bankAccounts)
             {
-                // if (Session["UserId"] == null)
-                // return RedirectToAction("SignIn", "Account", null);
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                //if (Session["User"] == null)
-                // return RedirectToAction("SignIn", "Account", null);
-
-                var model = new ListPaymentAccountModel();
-                model.PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString();
-                model.PreferredSendAccountId = user.PreferredSendAccountId.ToString();
-
-                foreach (var paymentAccount in user.PaymentAccounts)
+                model.PaymentAccounts.Add(new BankAccountModel()
                 {
-                    if (paymentAccount.IsActive == true)
-                    {
-                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-                        if (tempNumber.Length > 3)
-                        {
-                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
-                        }
-                        model.PaymentAccounts.Add(new BankAccountModel()
-                        {
-                            BankName = paymentAccount.BankName,
-                            BankIconURL = paymentAccount.BankIconURL,
-                            PaymentAccountId = paymentAccount.Id.ToString(),
-                            AccountNumber = "******" + tempNumber,
-                            AccountType = paymentAccount.AccountType.ToString(),
-                            NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                            Nickname = paymentAccount.Nickname,
-                            RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
+                    BankName = paymentAccount.Nickname,
+                    BankIconURL = paymentAccount.BankIconUrl,
+                    PaymentAccountId = paymentAccount.Id.ToString(),
+                    AccountNumber = paymentAccount.AccountNumber,
+                    AccountType = paymentAccount.AccountType.ToString(),
+                    NameOnAccount = paymentAccount.NameOnAccount,
+                    Nickname = paymentAccount.Nickname,
+                    RoutingNumber = paymentAccount.RoutingNumber
 
-
-                        });
-                    }
-                }
-
-                return View("Index", model);
+                });
             }
+
+            return View("Index", model);
+
         }
         public PartialViewResult Add()
         {
@@ -116,105 +85,85 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Add(AddPaymentAccountModel model)
         {
-            using (var ctx = new Context())
+            if (ModelState.IsValid)
             {
-                var securityService = new SocialPayments.DomainServices.SecurityService();
+                // if (Session["UserId"] == null)
+                // return RedirectToAction("SignIn", "Account", null);
+                UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
-                if (ModelState.IsValid)
+                //if (Session["User"] == null)
+                // return RedirectToAction("SignIn", "Account", null);
+                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;
+                if (model.AccountType.ToLower().Equals("checking"))
+                    paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
+
+
+                var paymentAccount = new SocialPayments.Domain.PaymentAccount()
                 {
-                    // if (Session["UserId"] == null)
-                    // return RedirectToAction("SignIn", "Account", null);
+                    Nickname = model.Nickname,
+                    AccountNumber = model.AccountNumber,
+                    PaymentAccountTypeId = paymentAccountTypeId,
+                    NameOnAccount = model.NameOnAccount,
+                    RoutingNumber = model.RoutingNumber,
+                    UserId = user.userId,
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    AccountStatus = SocialPayments.Domain.AccountStatusType.Submitted,
+                    IsActive = true,
+                    BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
+                    BankName = "Temp"
+                };
 
-                    var userId = (Guid)Session["UserId"];
-                    var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                    //if (Session["User"] == null)
-                    // return RedirectToAction("SignIn", "Account", null);
-                    var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;
-                    if (model.AccountType.ToLower().Equals("checking"))
-                        paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
-
-
-                    var paymentAccount = new SocialPayments.Domain.PaymentAccount()
-                    {
-                        Nickname = model.Nickname,
-                        AccountNumber = securityService.Encrypt(model.AccountNumber),
-                        PaymentAccountTypeId = paymentAccountTypeId,
-                        NameOnAccount = securityService.Encrypt(model.NameOnAccount),
-                        RoutingNumber = securityService.Encrypt(model.RoutingNumber),
-                        UserId = userId,
-                        Id = Guid.NewGuid(),
-                        CreateDate = System.DateTime.Now,
-                        AccountStatus = SocialPayments.Domain.AccountStatusType.Submitted,
-                        IsActive = true,
-                        BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
-                        BankName = "Temp"
-                    };
-
-                    if (model.DefaultRecieve != null)
-                    {
-                        if (model.DefaultRecieve.ToLower().Equals("recieve"))
-                        {
-                            user.PreferredReceiveAccountId = paymentAccount.Id;
-                        }
-                    }
-                    if (model.DefaultSend != null)
-                    {
-                        if (model.DefaultSend.ToLower().Equals("sending"))
-                        {
-                            user.PreferredSendAccountId = paymentAccount.Id;
-                        }
-                    }
-                    ctx.PaymentAccounts.Add(paymentAccount);
-
-                    try
-                    {
-                        ctx.SaveChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Account. {0}", ex.Message));
-                    }
-
-                    return RedirectToAction("List");
-                }
-                else
+                if (model.DefaultRecieve != null)
                 {
-                    return PartialView("ParitalViews/Add", model);
+                    if (model.DefaultRecieve.ToLower().Equals("recieve"))
+                    {
+                        user.preferredReceiveAccountId = paymentAccount.Id.ToString();
+                    }
                 }
+                if (model.DefaultSend != null)
+                {
+                    if (model.DefaultSend.ToLower().Equals("sending"))
+                    {
+                        user.preferredPaymentAccountId = paymentAccount.Id.ToString();
+                    }
+                }
+                UserPaymentAccountServices service = new UserPaymentAccountServices();
+                service.AddAccount(_apiKey, user.userId.ToString(), model.Nickname, model.NameOnAccount, model.RoutingNumber, model.AccountNumber, model.AccountType, "", "", "");
+                return RedirectToAction("List");
             }
+            else
+            {
+                return PartialView("ParitalViews/Add", model);
+            }
+
         }
 
         public PartialViewResult Edit(string Id)
         {
             //    if (Session["UserId"] == null)
             //    return RedirectToAction("SignIn", "Account", null);
-            using (var ctx = new Context())
+            //if (Session["User"] == null)
+            // return RedirectToAction("SignIn", "Account", null);
+
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var paymentAccount = user.bankAccounts.FirstOrDefault(a => a.Id == Id);
+
+            return PartialView("PartialViews/Edit", new EditPaymentAccountModel()
             {
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                //if (Session["User"] == null)
-                // return RedirectToAction("SignIn", "Account", null);
-
-
-                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-
-                return PartialView("PartialViews/Edit", new EditPaymentAccountModel()
-                {
-                    AccountNumber = securityService.Decrypt(paymentAccount.AccountNumber),
-                    AccountType = paymentAccount.AccountType.ToString(),
-                    NameOnAccount = securityService.Decrypt(paymentAccount.NameOnAccount),
-                    Nickname = paymentAccount.Nickname,
-                    RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber),
-                    PaymentAccountId = paymentAccount.Id.ToString(),
-                    AccountTypeOptions = new SelectListItem[] 
+                AccountNumber = paymentAccount.AccountNumber,
+                AccountType = paymentAccount.AccountType.ToString(),
+                NameOnAccount = paymentAccount.NameOnAccount,
+                Nickname = paymentAccount.Nickname,
+                RoutingNumber = paymentAccount.RoutingNumber,
+                PaymentAccountId = paymentAccount.Id.ToString(),
+                AccountTypeOptions = new SelectListItem[] 
                         {
                             new SelectListItem() { Text = "Savings", Value = "Savings" },
                             new SelectListItem() { Text = "Checking", Value= "Checking" }
                         }
-                });
-            }
+            });
+
         }
 
         [HttpPost]
@@ -223,45 +172,24 @@ namespace Mobile_PaidThx.Controllers
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
-            using (var ctx = new Context())
+
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var paymentAccount = user.bankAccounts.FirstOrDefault(a => a.Id == Id);
+
+
+            if (paymentAccount == null)
             {
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                var securityService = new SocialPayments.DomainServices.SecurityService();
-                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
-                var paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Savings;           //Payment account Id always set as Savings!  Change logic here.
+                ModelState.AddModelError("", "Unable to edit payment account");
 
-                if (model.AccountType != null)
-                {
-                    if (model.AccountType.ToLower().Equals("checking"))
-                        paymentAccountTypeId = (int)SocialPayments.Domain.PaymentAccountType.Checking;
-                }
-
-                if (paymentAccount == null)
-                {
-                    ModelState.AddModelError("", "Unable to edit payment account");
-
-                    return View(model);
-                }
-
-                paymentAccount.AccountNumber = securityService.Encrypt(model.AccountNumber);
-                paymentAccount.NameOnAccount = securityService.Encrypt(model.NameOnAccount);
-                paymentAccount.Nickname = model.Nickname;
-                paymentAccount.RoutingNumber = securityService.Encrypt(model.RoutingNumber);
-                paymentAccount.PaymentAccountTypeId = paymentAccountTypeId;
-
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Editing Payment Account. {0}", ex.Message));
-                }
-
-                return RedirectToAction("List");
-
+                return View(model);
             }
+
+            UserPaymentAccountServices service = new UserPaymentAccountServices();
+            service.EditAccount(_apiKey, user.userId.ToString(), Id, model.Nickname, model.NameOnAccount, model.RoutingNumber, model.AccountType);
+
+            return RedirectToAction("List");
+
+
 
         }
         public ActionResult Dialog()
@@ -271,75 +199,35 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult defaultReceiving(string Id)
         {
-            using (var ctx = new Context())
-            {
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var paymentAccount = user.bankAccounts.FirstOrDefault(a => a.Id == Id);
 
-                user.PreferredReceiveAccountId = paymentAccount.Id;
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Editing Payment Account. {0}", ex.Message));
-                }
-            }
+            UserPaymentAccountServices service = new UserPaymentAccountServices();
+            service.SetReceiveAccount(_apiKey, user.userId.ToString(), paymentAccount.Id, "");
 
             return RedirectToAction("List");
         }
         [HttpPost]
         public ActionResult defaultSending(string Id, EditPaymentAccountModel model)
         {
-            using (var ctx = new Context())
-            {
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var paymentAccount = user.bankAccounts.FirstOrDefault(a => a.Id == Id);
 
-                user.PreferredSendAccountId = paymentAccount.Id;
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Editing Payment Account. {0}", ex.Message));
-                }
-            }
+            UserPaymentAccountServices service = new UserPaymentAccountServices();
+            service.SetSendAccount(_apiKey, user.userId.ToString(), paymentAccount.Id, "");
 
             return RedirectToAction("List");
         }
         [HttpPost]
         public ActionResult Remove(string Id, EditPaymentAccountModel model)
         {
-            using (var ctx = new Context())
-            {
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                var paymentAccount = user.PaymentAccounts.FirstOrDefault(a => a.Id == new Guid(Id));
-                if (user.PreferredReceiveAccountId == paymentAccount.Id)
-                {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var paymentAccount = user.bankAccounts.FirstOrDefault(a => a.Id == Id);
 
-                }
-                if (user.PreferredSendAccountId == paymentAccount.Id)
-                {
-                    //  Response.Write("Cannot remove account:  This is set as a Preferred Sending Account");
-                }
-                paymentAccount.IsActive = false;
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting account. {0}", ex.Message));
-                }
-                return RedirectToAction("List");
-            }
+            UserPaymentAccountServices service = new UserPaymentAccountServices();
+            service.DeleteAccount(_apiKey, user.userId.ToString(), paymentAccount.Id);
 
+            return RedirectToAction("List");
         }
     }
 

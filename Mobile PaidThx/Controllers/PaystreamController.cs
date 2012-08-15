@@ -4,19 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Mobile_PaidThx.Models;
-
-using SocialPayments.DataLayer;
-using SocialPayments.DomainServices;
 using NLog;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class PaystreamController : Controller
     {
-        private ApplicationService applicationService = new ApplicationService();
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private FormattingServices formattingService = new FormattingServices();
-
+ 
         public ActionResult ChooseAmount()
         {
             return PartialView("PartialViews/ChooseAmount");
@@ -42,98 +37,64 @@ namespace Mobile_PaidThx.Controllers
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
-            using (var ctx = new Context())
+            var userService = new Services.UserServices();
+            var userPayStreamServices = new Services.UserPayStreamMessageServices();
+            var paystreamResponse = userPayStreamServices.GetMessages(Session["UserId"].ToString());
+
+            var user = userService.GetUser(Session["UserId"].ToString());
+
+            var payments = paystreamResponse.Select(p => new PaystreamModels.PaymentModel()
             {
-                var messageServices = new MessageServices();
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-                var securityService = new SecurityService();
-                if (Session["User"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
+                Amount = p.amount,
+                Comments = p.comments,
+                Direction = p.direction,
+                Id = p.Id.ToString(),
+                MessageType = p.messageType,
+                RecipientUri = p.recipientUri,
+                SenderUri = p.senderUri,
+                TransactionDate = System.DateTime.Now, //p.createDate,
+                TransactionImageUri = p.transactionImageUri,
+                TransactionStatus = p.messageStatus,
+                TransactionType = p.messageType
+            }).ToList();
 
-                var alerts = GetAlerts(user.UserId);
-
-                logger.Log(LogLevel.Debug, String.Format("Getting Payment Accounts"));
-
-                var messages = messageServices.GetMessages(user.UserId);
-
-                var payments = messages.Select(m => new PaystreamModels.PaymentModel()
+            var model = new PaystreamModels.PaystreamModel()
+            {
+                AllReceipts = payments,
+                PaymentReceipts = payments.Where(p => p.Direction == "Out" && p.MessageType == "Payment").ToList(),
+                RequestReceipts = payments.Where(p => p.Direction == "In" && p.MessageType ==  "Payment").ToList(),
+                Alerts = payments.Where(p => p.MessageType != "Payment").ToList(),
+                ProfileModel = new ProfileModels()
                 {
-                    Id = m.Id.ToString(),
-                    Amount = m.Amount,
-                    RecipientUri = m.RecipientUri,
-                    SenderUri = m.SenderUri,
-                    TransactionDate = m.CreateDate,
-                    TransactionStatus = TransactionStatus.Pending,
-                    TransactionType = TransactionType.Deposit,
-                    MessageType = (m.MessageType == SocialPayments.Domain.MessageType.Payment ? MessageType.Payment : MessageType.PaymentRequest),
-                    Direction = m.Direction,
-                    TransactionImageUri = m.TransactionImageUrl,
-                    Comments = m.Comments
-                }).ToList();
-
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    payments = payments.Where(p => p.RecipientUri.ToUpper().Contains(searchString.ToUpper()) || p.SenderUri.ToUpper().Contains(searchString.ToUpper())).ToList();
-                }
-
-                var bankAccounts = new List<BankAccountModel>();
-
-                foreach (var paymentAccount in user.PaymentAccounts)
-                {
-                    if (paymentAccount.IsActive)
+                    FirstName = user.firstName,
+                    LastName = user.lastName,
+                    AccountType = "Personal",
+                    MobileNumber = user.mobileNumber,
+                    EmailAddress = user.emailAddress,
+                    Address = user.address,
+                    City = user.city,
+                    State = user.state,
+                    Zip = user.zip,
+                    SenderName = user.senderName,
+                    PaymentAccountsList = new ListPaymentAccountModel()
                     {
-                        var tempNumber = securityService.Decrypt(paymentAccount.AccountNumber);
-                        if (tempNumber.Length > 3)
-                        {
-                            tempNumber = tempNumber.Substring(tempNumber.Length - 4);
-                        }
-                        bankAccounts.Add(new BankAccountModel()
-                        {
-                            BankName = paymentAccount.BankName,
-                            BankIconURL = paymentAccount.BankIconURL,
-                            PaymentAccountId = paymentAccount.Id.ToString(),
-                            AccountNumber = "******" + tempNumber,
-                            AccountType = paymentAccount.AccountType.ToString(),
-                            NameOnAccouont = securityService.Decrypt(paymentAccount.NameOnAccount),
-                            Nickname = paymentAccount.Nickname,
-                            RoutingNumber = securityService.Decrypt(paymentAccount.RoutingNumber)
-
-                        });
+                        PaymentAccounts = user.bankAccounts.Select(b => new BankAccountModel() {
+                            AccountNumber = b.AccountNumber,
+                            AccountType = b.AccountType,
+                            BankIconURL = "",
+                            BankName = "",
+                            NameOnAccount = b.NameOnAccount,
+                            Nickname = b.Nickname,
+                            RoutingNumber = b.RoutingNumber,
+                            PaymentAccountId = b.Id
+                        }).ToList(),
+                        PreferredReceiveAccountId = user.preferredReceiveAccountId,
+                        PreferredSendAccountId = user.preferredReceiveAccountId
                     }
-
                 }
+            };
 
-                var model = new PaystreamModels.PaystreamModel()
-                {
-                    AllReceipts = payments,
-                    PaymentReceipts = payments.Where(p => p.Direction == "Out" && p.MessageType == MessageType.Payment).ToList(),
-                    RequestReceipts = payments.Where(p => p.Direction == "In" && p.MessageType ==  MessageType.Payment).ToList(),
-                    Alerts = payments.Where(p => p.MessageType == MessageType.PaymentRequest).ToList(),
-                    ProfileModel = new ProfileModels()
-                    {
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        AccountType = "Personal",
-                        MobileNumber = user.MobileNumber,
-                        EmailAddress = user.EmailAddress,
-                        Address = user.Address,
-                        City = user.City,
-                        State = user.State,
-                        Zip = user.Zip,
-                        SenderName = user.SenderName,
-                        PaymentAccountsList = new ListPaymentAccountModel()
-                        {
-                            PaymentAccounts = bankAccounts,
-                            PreferredReceiveAccountId = user.PreferredReceiveAccountId.ToString(),
-                            PreferredSendAccountId = user.PreferredSendAccountId.ToString()
-                        }
-                    }
-                };
-                logger.Log(LogLevel.Debug, String.Format("Return Paystream View"));
-
-                return View(model);
-            }
+            return View(model);
         }
         private List<PaystreamModels.AlertModel> GetAlerts(Guid userId)
         {

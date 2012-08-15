@@ -9,6 +9,7 @@
 // 2011/04/11: initial version
 // 2011/04/12: small bugfix: @PiRho_be dragging outside the patternlock and releasing won't end the pattern: added document.onmouseup event
 
+
 function generatePincode() {
     patternlock.generate(document.getElementById("patternlock"));
     document.getElementById("pinswipesubmit").style.display = 'none';
@@ -228,9 +229,8 @@ var patternlock = {
             patternlock.isdrawing = false;
             if (this.autoSubmit) {
                 var dosubmit = true;
-                if (document.forms[0].onsubmit) { dosubmit = document.forms[0].onsubmit() }
                 if (dosubmit) {
-                    document.forms[0].submit();
+                    document.getElementById("pinSwipeForm").submit();
                 }
             }
         }

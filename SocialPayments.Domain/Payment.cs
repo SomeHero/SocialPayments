@@ -44,5 +44,7 @@ namespace SocialPayments.Domain
         public DateTime? LastUpdatedDate { get; set; }
 
         public virtual Message Message { get; set; }
+
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

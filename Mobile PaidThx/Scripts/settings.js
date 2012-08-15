@@ -17,6 +17,13 @@ function getBankAccountsScreen() {
     });
 }
 
+function signOut() {
+    $.get(getBaseURL() + "Preferences/SignOut", function (data) {
+        var homeUrl = getBaseURL() + 'Join';
+        $.mobile.changePage(homeUrl);
+    });
+}
+
 function closeScreen() {
     $.get(getBaseURL() + "Profile/ListSettings", function (data) {
         $('#globalbg').html(data).trigger("pagecreate").trigger("refresh");
@@ -54,3 +61,194 @@ function returnPref() {
     $.mobile.changePage(prefUrl);
 }
 
+
+$(document).ready(function () {
+
+    var dataUrl = getBaseURL() + 'Preferences/ReturnData';
+    var serviceUrl = getBaseURL() + 'Preferences/PaypointInfo';
+
+    $("#addPaypointBtn").die('click').live('click', function () {
+        var paypointUri = $("#paypointName").val();
+        var paypointType = $("#paypointType").val();
+
+        var removePaypointUrl = getBaseURL() + 'Preferences/AddPaypoint';
+        var settingsUrl = getBaseURL() + 'Preferences';
+
+        var paypointModel = {
+            Uri: paypointUri,
+            Type: paypointType
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: removePaypointUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(settingsUrl);
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+
+    $("#removePaypointBtn").die('click').live('click', function () {
+
+        var paypointId = $("#paypointIdValue").val();
+        var removePaypointUrl = getBaseURL() + 'Preferences/RemovePaypoint';
+        var settingsUrl = getBaseURL() + 'Preferences';
+
+        var paypointModel = {
+            Id: paypointId
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: removePaypointUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(settingsUrl);
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+
+    $(".mecode-btn").die('click').live('click', function () {
+        var orgId = $(this).attr('data-value');
+        var orgName = $(this).attr('organization-name');
+
+        var paypointModel = {
+            Id: orgId,
+            Uri: orgName
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: dataUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+
+    $(".phoneobj-btn").die('click').live('click', function () {
+        var orgId = $(this).attr('data-value');
+        var orgName = $(this).attr('organization-name');
+
+        var paypointModel = {
+            Id: orgId,
+            Uri: orgName
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: dataUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+
+    $(".emailobj-btn").die('click').live('click', function () {
+        var orgId = $(this).attr('data-value');
+        var orgName = $(this).attr('organization-name');
+
+        var paypointModel = {
+            Id: orgId,
+            Uri: orgName
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: dataUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(serviceUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+
+    $(".addnew-btn").die('click').live('click', function () {
+
+        var addNewUrl = getBaseURL() + 'Preferences/AddPaypoint';
+
+        var orgName = $(this).attr('organization-name');
+
+        var paypointModel = {
+            Uri: orgName
+        };
+
+        var jsonData = $.toJSON(paypointModel);
+
+        $.ajax({
+            type: 'POST',
+            url: dataUrl,
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $.mobile.changePage(addNewUrl, {
+                    type: "put",
+                    data: data
+                });
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+    });
+});

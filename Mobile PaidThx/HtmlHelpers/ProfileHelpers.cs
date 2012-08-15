@@ -5,44 +5,54 @@ namespace Mobile_PaidThx.HtmlHelpers
 {
     public static class ProfileHelperExtensions
     {
-
-        public static MvcHtmlString GetTransactionCssClass(this HtmlHelper helper, PaystreamModels.PaymentModel receipt, int rowindex)
+        public static MvcHtmlString GetTableClass(this HtmlHelper helper, int currentIndex, int totalSize)
         {
-            var cssClass = "";
-            if (receipt.TransactionType == TransactionType.Withdrawal)
-                cssClass = "receive";
-            else if (receipt.TransactionType == TransactionType.Deposit)
-                cssClass = "paid";
-
-            if (rowindex % 2 == 0)
+            if (totalSize == 1)
             {
-                cssClass += " paystream-row";
+                return new MvcHtmlString("tablesettings");
             }
             else
             {
-                cssClass += " paystream-row-alt";
+                if (currentIndex == 0)
+                {
+                    return new MvcHtmlString("tabletop");
+                }
+                else
+                {
+                    if (currentIndex != totalSize - 1)
+                    {
+                        return new MvcHtmlString("tablemiddle");
+                    }
+                    else
+                    {
+                        return new MvcHtmlString("tablebottom");
+                    }
+                }
             }
+        }
 
-            switch (receipt.TransactionStatus)
+        public static MvcHtmlString GetWelcomeTabCssClass(this HtmlHelper helper, MenuModel menuModel, int tabIndex)
+        {
+            var cssClass = "";
+            //nav-item ui-btn-active
+
+            if (menuModel != null)
             {
-                case TransactionStatus.Cancelled:
-                    cssClass += " cancelled";
-                    break;
-                case TransactionStatus.Complete:
-                    cssClass += " complete";
-                    break;
-                case TransactionStatus.Pending:
-                    cssClass += " pending";
-                    break;
-                case TransactionStatus.Returned:
-                    cssClass += " returned";
-                    break;
-                case TransactionStatus.Submitted:
-                    cssClass += " submitted";
-                    break;
+                if (menuModel.SelectedTabIndex == tabIndex)
+                {
+                    cssClass = "nav-item ui-btn-active";
+                }
+                else
+                {
+                    cssClass = "nav-item";
+                }
             }
-
+            else
+            {
+                cssClass = "nav-item";
+            }
             return new MvcHtmlString(cssClass);
         }
+
     }
 }

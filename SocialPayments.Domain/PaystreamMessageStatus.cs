@@ -30,7 +30,7 @@ namespace SocialPayments.Domain
         ReturnedPayment = 9,
         [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Request Sent")]
         NotifiedRequest = 10,
-        [MessageStatusAttribute(RecipientDescription = "Request Sent", SenderDescription = "Awaiting Response")]
+        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Awaiting Response")]
         PendingRequest = 11,
         [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted")]
         AcceptedRequest = 12,
@@ -38,5 +38,17 @@ namespace SocialPayments.Domain
         RejectedRequest = 13,
         [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled")]
         CancelledRequest = 14,
+        [MessageStatusAttribute(RecipientDescription = "Submitted", SenderDescription = "Submitted")]
+        SubmittedPledge = 15,
+        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Request Sent")]
+        NotifiedPledge = 16,
+        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Awaiting Response")]
+        PendingPledge = 17,
+        [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted")]
+        AcceptedPledge = 18,
+        [MessageStatusAttribute(RecipientDescription = "Rejected", SenderDescription = "Rejected")]
+        RejectedPledge = 19,
+        [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled")]
+        CancelledPledge = 19,
     }
 }

@@ -12,6 +12,20 @@ namespace SocialPayments.RestServices.Internal.Models
             public int TotalRecords { get; set; }
             public IEnumerable<UserResponse> Results { get; set; }
         }
+        public class HomepageRefreshReponse
+        {
+            public string userId { get; set; }
+            public int numberOfIncomingNotifications { get; set; }
+            public int numberOfOutgoingNotifications { get; set; }
+            public List<UserModels.QuickSendUserReponse> quickSendContacts { get; set; } // Maximum 6 contacts
+        }
+        public class QuickSendUserReponse
+        {
+            public string userUri { get; set; }
+            public string userName { get; set; }
+            public string userImage { get; set; }
+            public int userType { get; set; }
+        }
         public class UserResponse
         {
             public Guid userId { get; set; }
@@ -50,6 +64,8 @@ namespace SocialPayments.RestServices.Internal.Models
 
             public bool setupSecurityPin { get; set; }
             public int numberOfPaystreamUpdates { get; set; }
+            public int newMessageCount { get; set; }
+            public int pendingMessageCount { get; set; }
 
             public List<UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
@@ -65,6 +81,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string emailAddress { get; set; }
             public string registrationMethod { get; set; }
             public string deviceToken { get; set; }
+            public string messageId { get; set; }
         }
         public class SubmitUserResponse
         {
@@ -123,6 +140,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string emailAddress { get; set; }
             public string deviceToken { get; set; }
             public string oAuthToken { get; set; }
+            public string messageId { get; set; }
             //public DateTime tokenExpiration { get; set; }
         }
 

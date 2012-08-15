@@ -28,9 +28,11 @@ namespace SocialPayments.DomainServices
         int defaultNumPasswordFailures = 3;
         int defaultUpperLimit = Convert.ToInt32(ConfigurationManager.AppSettings["InitialPaymentLimit"]);
         private string _fbImageUrlFormat = "http://graph.facebook.com/{0}/picture";
+        private string _mobileVerificationBaseUrl = ConfigurationManager.AppSettings["MobileNumberVerificationBaseUrl"];
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UserService() { }
+        public UserService(): this(new Context()) { }
 
         public UserService(IDbContext context)
         {
@@ -38,10 +40,10 @@ namespace SocialPayments.DomainServices
         }
         public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken)
         {
-            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "");
+            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "", "");
         }
         public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
-            string mobileNumber)
+            string mobileNumber, string messageId)
         {
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
@@ -65,18 +67,6 @@ namespace SocialPayments.DomainServices
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                PayPoints = new Collection<UserPayPoint>()
-                        {
-                            new UserPayPoint() {
-                                CreateDate = System.DateTime.Now,
-                                IsActive = true,
-                                Verified = false,
-                                VerifiedDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 1,
-                                URI = emailAddress
-                            }
-                        },
                 SetupPassword = true,
                 SetupSecurityPin = false,
                 Roles = new Collection<Role>()
@@ -124,6 +114,60 @@ namespace SocialPayments.DomainServices
 
             if (mobileNumberPayPoint != null)
                 SendMobileVerificationCode(mobileNumberPayPoint);
+
+            if (!String.IsNullOrEmpty(messageId))
+            {
+                Guid messageGuid;
+
+                Guid.TryParse(messageId, out messageGuid);
+
+                var message = _ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageGuid);
+
+                if (message.Recipient == null)
+                {
+                    message.Recipient = user;
+                    message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                    if (message.RecipientUri != user.EmailAddress && message.RecipientUri != user.MobileNumber)
+                    {
+                        UserPayPoint messagePayPoint;
+
+                        switch (GetURIType(message.RecipientUri))
+                        {
+                            case URIType.EmailAddress:
+                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                                {
+                                    CreateDate = System.DateTime.Now,
+                                    Id = Guid.NewGuid(),
+                                    PayPointTypeId = 1,
+                                    URI = message.RecipientUri,
+                                    User = user
+                                });
+
+                                SendEmailVerificationLink(messagePayPoint);
+
+                                break;
+                            case URIType.MobileNumber:
+                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                                {
+                                    CreateDate = System.DateTime.Now,
+                                    Id = Guid.NewGuid(),
+                                    PayPointTypeId = 2,
+                                    URI = message.RecipientUri,
+                                    User = user
+                                });
+
+                                SendMobileVerificationCode(messagePayPoint);
+
+                                break;
+                        }
+                    }
+
+                }
+
+                _ctx.SaveChanges();
+            }
 
             return user;
         }
@@ -443,7 +487,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
-            string deviceToken, string oAuthToken, DateTime tokenExpiration, out bool isNewUser)
+            string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
 
@@ -465,62 +509,15 @@ namespace SocialPayments.DomainServices
                     var emailAttribute = _ctx.UserAttributes
                          .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
 
-                    user = _ctx.Users.Add(new Domain.User()
+                    user = AddUser(apiKey, "fb_" + accountId, "tempPassword", emailAddress, deviceToken, "", messageId);
+
+                    user.FacebookUser = new FBUser()
                     {
-                        UserId = Guid.NewGuid(),
-                        ApiKey = apiKey,
-                        CreateDate = System.DateTime.Now,
-                        PasswordChangedDate = DateTime.UtcNow,
-                        PasswordFailuresSinceLastSuccess = 3,
-                        LastPasswordFailureDate = DateTime.UtcNow,
-                        EmailAddress = emailAddress,
-                        //IsLockedOut = isLockedOut,
-                        //LastLoggedIn = System.DateTime.Now,
-                        UserName = "fb_" + accountId,
-                        UserStatus = Domain.UserStatus.Submitted,
-                        IsConfirmed = false,
-                        LastLoggedIn = System.DateTime.Now,
-                        Limit = Convert.ToDouble(ConfigurationManager.AppSettings["InitialPaymentLimit"]),
-                        RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
-                        Password = "tempPassword",
-                        SetupPassword = false,
-                        SetupSecurityPin = false,
-                        Roles = new Collection<Role>()
-                        {
-                            memberRole
-                        },
-                        DeviceToken = deviceToken,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        PaymentAccounts = new Collection<PaymentAccount>(),
-                        FacebookUser = new FBUser()
-                        {
-                            FBUserID = accountId,
-                            Id = Guid.NewGuid(),
-                            TokenExpiration = tokenExpiration,
-                            OAuthToken = oAuthToken
-                        },
-                        ImageUrl = String.Format(_fbImageUrlFormat, accountId),
-                        PayPoints = new Collection<UserPayPoint>()
-                        {
-                            new UserPayPoint() {
-                                CreateDate = System.DateTime.Now,
-                                IsActive = true,
-                                Verified = true,
-                                VerifiedDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 1,
-                                URI = emailAddress
-                            }
-                        },
-                        UserAttributes = new Collection<UserAttributeValue>() {
-                            new UserAttributeValue() {
-                                id = Guid.NewGuid(),
-                                UserAttributeId = emailAttribute.Id,
-                                AttributeValue = emailAddress
-                            }
-                        }
-                    });
+                        FBUserID = accountId,
+                        Id = Guid.NewGuid(),
+                        TokenExpiration = tokenExpiration,
+                        OAuthToken = oAuthToken
+                    };
 
                 }
                 else
@@ -532,7 +529,7 @@ namespace SocialPayments.DomainServices
                     if (user.FacebookUser != null)
                     {
                         user.FacebookUser.OAuthToken = oAuthToken;
-                        //user.FacebookUser.TokenExpiration = tokenExpiration;
+                        user.FacebookUser.TokenExpiration = tokenExpiration;
                     }
                     else
                     {
@@ -540,7 +537,7 @@ namespace SocialPayments.DomainServices
                         {
                             FBUserID = accountId,
                             Id = Guid.NewGuid(),
-                            // TokenExpiration = tokenExpiration,
+                            TokenExpiration = tokenExpiration,
                             OAuthToken = oAuthToken
                         };
                     }
@@ -747,6 +744,7 @@ namespace SocialPayments.DomainServices
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.ValidationService validateService = new ValidationService();
             DomainServices.SMSService smsService = new DomainServices.SMSService(_ctx);
+            DomainServices.CommunicationService communicationServices = new DomainServices.CommunicationService(_ctx);
 
             string name = formattingService.FormatUserName(userPayPoint.User);
             Guid passwordResetGuid = Guid.NewGuid();
@@ -771,15 +769,29 @@ namespace SocialPayments.DomainServices
                 });
             _ctx.SaveChanges();
 
-            smsService.SendSMS(userPayPoint.User.ApiKey, "8043879693", String.Format("Your verification code is {0}", verificationCode));
+            try
+            {
+                var communicationTemplate = communicationServices.GetCommunicationTemplate("Phone_Added_SMS");
+                var link = String.Format(_mobileVerificationBaseUrl, verification.Id);
+
+               //{0} - Link to verification screen
+                //{1} - Phone verification code
+                smsService.SendSMS(verification.UserPayPoint.User.ApiKey, verification.UserPayPoint.URI, String.Format(communicationTemplate.Template,
+                    link, verificationCode));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+            }
 
         }
         public void SendEmailVerificationLink(UserPayPoint userPayPoint)
         {
+            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
             DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.ValidationService validateService = new ValidationService();
-
+            DomainServices.CommunicationService communicationService = new CommunicationService();
 
             string name = formattingService.FormatUserName(userPayPoint.User);
             DateTime expiresDate = System.DateTime.Now.AddHours(3);
@@ -797,17 +809,23 @@ namespace SocialPayments.DomainServices
 
             string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
 
-            StringBuilder body = new StringBuilder();
-            body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
-            body.AppendFormat("You added the paypoint {0} to your PaidThx account. ", userPayPoint.URI);
-            body.Append("To complete the process and begin accepting payments using this address, please click on the link below ");
-            body.Append("or paste it into your browser:").AppendLine().AppendLine();
-            body.AppendLine(link).AppendLine();
-            //body.AppendLine("This link will be active for 3 hours only.").AppendLine();
-            body.AppendLine("Thank you,").AppendLine();
-            body.Append("The PaidThx Team");
+            try
+            {
+                var communicationTemplate = communicationService.GetCommunicationTemplate("Email_Added_Email");
 
-            emailService.SendEmail(userPayPoint.User.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], userPayPoint.URI, "Email Verification", body.ToString());
+                //FIRST_NAME, LAST_NAME, EMAIL_ADDED, LINK_EMAIL_VERIFY
+                emailService.SendEmail(userPayPoint.URI, "Your email has been added", communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                {
+                        new KeyValuePair<string, string>("FIRST_NAME", userService.GetSenderName(userPayPoint.User)),
+                        new KeyValuePair<string, string>("LAST_NAME", ""),
+                        new KeyValuePair<string, string>("EMAIL_ADDED",  userPayPoint.URI),
+                        new KeyValuePair<string, string>("LINK_EMAIL_VERIFY",  link)                            
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+            }
         }
 
         private ArgumentException CreateArgumentNullOrEmptyException(string paramName)
@@ -850,6 +868,7 @@ namespace SocialPayments.DomainServices
             else
                 return 0;
         }
+
         public string GetSenderName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));

@@ -21,6 +21,8 @@ namespace SocialPayments.DomainServices
         private ApplicationService _applicationService;
         private EmailLogService _emailLogService;
 
+        public EmailService() : this(new Context()) { } 
+
         public EmailService(IDbContext context)
         {
             _ctx = context;
@@ -49,7 +51,8 @@ namespace SocialPayments.DomainServices
             string elasticEmailUrl = @"https://api.elasticemail.com/mailer/send";
             string elasticEmailUserName = "notify@paidthx.com";
             string elasticEmailApiKey = "20a00674-374b-4190-81ee-8fb96798a69c";
-            string elasticEmailPost = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
+            string elasticEmailPostWithSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
+            string elasticEmailPostWithoutSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&template={3}{4}";
 
             StringBuilder mergeFields = new StringBuilder();
 
@@ -66,9 +69,19 @@ namespace SocialPayments.DomainServices
                     }
                 }
             }
-            
-            string requestBody = String.Format(elasticEmailPost, elasticEmailUserName, elasticEmailApiKey,
-                toEmailAddress, emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+
+            string requestBody;
+
+            if (!String.IsNullOrEmpty(emailSubject))
+            {
+                requestBody = String.Format(elasticEmailPostWithSubject, elasticEmailUserName, elasticEmailApiKey,
+                HttpUtility.UrlEncode(toEmailAddress), emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+            }
+            else
+            {
+                requestBody = String.Format(elasticEmailPostWithoutSubject, elasticEmailUserName, elasticEmailApiKey,
+                     HttpUtility.UrlEncode(toEmailAddress), HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+            }
 
             // Create new HTTP request.
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(elasticEmailUrl);
