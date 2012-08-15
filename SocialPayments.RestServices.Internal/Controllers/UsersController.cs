@@ -714,12 +714,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     recipName = msg.Recipient.SenderName;
                     recipientType = 0;
                 }
+                string imageUri = null;
+
+                if (msg.Recipient != null)
+                    imageUri = msg.Recipient.ImageUrl;
 
                 quickSends.Add(new UserModels.QuickSendUserReponse()
                 {
                     userUri = msg.RecipientUri,
                     userName = recipName,
-                    userImage = msg.recipientImageUri,
+                    userImage = imageUri,
                     userType = recipientType
                 });
             }

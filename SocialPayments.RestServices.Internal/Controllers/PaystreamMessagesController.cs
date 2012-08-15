@@ -356,7 +356,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.Message));
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.StackTrace));
 
                     var innerException = ex.InnerException;
 
