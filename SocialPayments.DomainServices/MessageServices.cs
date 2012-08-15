@@ -120,7 +120,7 @@ namespace SocialPayments.DomainServices
             if (messageType.ToUpper() == "PLEDGE")
             {
                 type = MessageType.AcceptPledge;
-                status = PaystreamMessageStatus.SubmittedRequest;
+                status = PaystreamMessageStatus.SubmittedPledge;
             }
 
             try

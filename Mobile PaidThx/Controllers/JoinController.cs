@@ -48,7 +48,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View("Index", new JoinModels.JoinModel()
             {
-                UserName = payment.recipientUri,
+                UserName = (payment.recipientUriType == "EmailAddress" ? payment.recipientUri : ""),
                 Payment = new PaymentModel()
                 {
                     Amount = payment.amount,
