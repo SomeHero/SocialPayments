@@ -1,7 +1,5 @@
-
-body{
-	background-image:#ccc;
-}
+@width:400;
+@size: @width * .9;
 
 #anchor
 {
@@ -21,42 +19,47 @@ body{
 }
 
 .patternlocklineshorizontalcontainer{
-    width:93%;
-    height:93%;
+    width:@size px;
+    height:@size px;
 	margin:0 auto;
 	overflow:hidden;
 	text-align: center;
 	clear:both;
 	position:absolute;
+    max-height:70%;
 }
 
 .patternlocklinesverticalcontainer{
 	margin:0 auto;
-	width:93%;
-    height:93%;
+	width:@size;
+    height:@size;
 	overflow:hidden;
 	text-align: center;
 	clear:both;
 	position:absolute;
+	max-height:70%;
 	
 }
 
 .patternlocklinesdiagonalcontainer{
 	margin:0 auto;
-	width:93%;
-    height:93%;
+	width:@size;
+    height:@size;
 	overflow:hidden;
 	text-align: center;
 	position:absolute;
+	max-height:70%;
 }
 
 .patternlockbuttoncontainer{
-	width:93%;
-    height:93%;
+	width:@size;
+    height:@size;
 	margin:0 auto;
 	overflow:hidden;
 	text-align: center;
 	position:absolute;
+	max-height:70%;
+	min-height:260px;
 	}
 
 .patternlockbutton{
@@ -142,21 +145,21 @@ body{
     margin-left:26px;
     margin-top:35px;
     left:5%;
-    top:8%; 
+    top:8.1%; 
 }
 
 #line25{
     margin-left:-9px;
     margin-top:35px;
     left:50%;
-    top:8%; 
+    top:8.1%; 
 }
 
 #line36{
     margin-right:26px;
     margin-top:35px;
     right:5%;
-    top:8%; 
+    top:8.1%; 
 }
 #line47
 {
@@ -223,59 +226,6 @@ body{
     bottom:8%; 
 }
 
-/*diagonals*/
-#line24{
-    margin-left:0px;
-    margin-top:0px;
-    left:29%;
-    top:8%; 
-}
-
-#line35{
-    margin-left:0px;
-    margin-top:0px;
-    left:65%;
-    top:8%; 
-}
-#line57{
-    margin-left:0px;
-    margin-top:0px;
-    left:29%;
-    top:42%; 
-}
-#line68{
-    margin-left:0px;
-    margin-top:0px;
-    left:65%;
-    top:42%; 
-}
-#line15{
-    margin-left:0px;
-    margin-top:0px;
-    left:29%;
-    top:8%; 
-}
-
-#line26{
-    margin-left:0px;
-    margin-top:0px;
-    left:65%;
-    top:8%; 
-}
-#line48{
-    margin-left:0px;
-    margin-top:0px;
-    left:29%;
-    top:42%; 
-}
-#line59{
-    margin-left:0px;
-    margin-top:0px;
-    left:65%;
-    top:42%; 
-}
-
-
 .touched{
 	background-image:url('images/btn-pinswipe-pressed.png');
 }
@@ -317,7 +267,7 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 .patternlocklinediagonalforward{
 	visibility:hidden;
 		width:18px;
-	height:53.74%; 
+	height:38%; 
 	position:absolute;
 	border-radius:30px;
 	background: #207532; /* for non-css3 browsers */
@@ -343,7 +293,7 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 -webkit-transform:rotate(315deg); /* Safari and Chrome */
 -o-transform:rotate(315deg); /* Opera */
 		width:18px;
-	height:53.74%; 
+	height:38%; 
 	position:absolute;
 	border-radius:30px;
 	background: #207532; /* for non-css3 browsers */
