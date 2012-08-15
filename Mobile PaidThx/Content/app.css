@@ -608,7 +608,12 @@ a.fbSignIn span, button.fbSignIn span
 }
 
 
-input.ui-input-text, textarea.ui-input-text
+textarea.ui-input-text
+{
+ width:100% !important;   
+}
+
+input.ui-input-text
 {
  width:100%;   
 }
@@ -635,7 +640,7 @@ input.ui-input-text, textarea.ui-input-text
 .trans-title strong
 {
     height: 30px;
-    font-size: 15px;
+    font-size: 12px;
     clear: both;
     display: block;
     font-weight: bolder;
@@ -1204,9 +1209,27 @@ h9 span
 }
 .quickaddbtn-style
 {
-    background-image:url('images/btn-quickadd.png');
-    height: 36px;
-    width: 68px;
+    display: block;
+width: 100%;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+margin-bottom: 10px;
+border: 1px solid #C0C9D1;
+cursor: pointer;
+font-weight:bold;
+-webkit-box-align: center;
+text-align: center;
+box-sizing: border-box;
+-moz-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+-webkit-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+background: #eeeeee; /* for non-css3 browsers */
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ */ 
+    width: 23%;
+    margin-right:2%;
     font-size:18px;
     font-weight:bold;
     padding:5px;
@@ -1214,6 +1237,7 @@ h9 span
     background-repeat:no-repeat;
     background-color: transparent;
     text-align:center;
+    float:left;
 }
 #gobtn
 {
@@ -1264,7 +1288,6 @@ h9 span
     }
 }
 
-<<<<<<< HEAD
 /*-------HOME SCREEN ELEMENTS---MH-------*/
 #wrapper{
 			background-image:url(img/bg-pattern.png);
@@ -1433,7 +1456,6 @@ h9 span
             margin-bottom:0px;
 		    line-height:25px;
 		    height:55px;}
-=======
 
 
 /*  SEEMS LIKE MATTS STUFF  */
@@ -1604,7 +1626,7 @@ text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px
             width:35px;
             height:30px;
             position:absolute;
-            right:20px;
+            right:14px;
             border:0px;
             background-color:transparent;
             border-radius:0px;
@@ -1867,8 +1889,8 @@ clear: both;
 margin-bottom: 10px;
 border: 1px solid #C0C9D1;
 cursor: pointer;
-height:60px;
-line-height:60px;
+height:50px;
+line-height:50px;
 font-size:20px;
 font-weight:bold;
 color:#ffffff;
@@ -1890,16 +1912,16 @@ margin-top:20px;
 .btn-new.field
 {
  color:#333;   
- height:70px;
- line-height:70px;
+ padding:10px;
  font-size:34px;
+ line-height:34px;
  clear:none;
  margin:10px 0;
 }
 .btn-new.field.small
 {
  font-size:20px;
- 
+ line-height:30px;
 }
 .btn-new.field.icon.money
 {
@@ -1973,4 +1995,10 @@ img.rounded
  border-bottom:1px solid #cccccc;  
  margin-bottom:10px; 
  padding-bottom:8px;
+}
+
+.ui-btn-corner-all {
+-moz-border-radius: 7px /*{global-radii-buttons}*/;
+-webkit-border-radius: 7px /*{global-radii-buttons}*/;
+border-radius: 7px /*{global-radii-buttons}*/;
 }

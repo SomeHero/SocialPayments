@@ -9,6 +9,7 @@
 // 2011/04/11: initial version
 // 2011/04/12: small bugfix: @PiRho_be dragging outside the patternlock and releasing won't end the pattern: added document.onmouseup event
 
+
 function generatePincode() {
     patternlock.generate(document.getElementById("patternlock"));
     document.getElementById("pinswipesubmit").style.display = 'none';

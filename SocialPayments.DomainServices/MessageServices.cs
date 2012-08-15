@@ -270,7 +270,9 @@ namespace SocialPayments.DomainServices
                     Longitude = longitude,
                     recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
                     recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
-                    recipientImageUri = recipientImageUri
+                    recipientImageUri = recipientImageUri,
+                    recipientHasSeen = false,
+                    senderHasSeen = true
                 });
 
                 _context.SaveChanges();
@@ -571,23 +573,26 @@ namespace SocialPayments.DomainServices
         public List<Domain.Message> GetQuickSendPayments(User user)
         {
             var formattingService = new DomainServices.FormattingServices();
-            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = null;
 
+            _logger.Log(LogLevel.Info, String.Format("Inside message services, List<Domain.Message> created."));
+            
             messages = _context.Messages
                 .Where
                 (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
+            _logger.Log(LogLevel.Info, String.Format("Inside message services, GetQuickSendPayments, afterQuery, with count:{0}", messages.Count() ));
+            
             // Not sure what distinct does, but maybe it's unique entries?
             return messages.Distinct(new SameRecipientComparer()).Take(6).ToList();
         }
 
         public List<Domain.Message> GetNewMessages(User user)
         {
+            _logger.Log(LogLevel.Info, "Beginning GetNewMessages");
             var formattingService = new DomainServices.FormattingServices();
-            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = null;
 
@@ -600,7 +605,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        (m.RecipientId == user.UserId) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -617,7 +622,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        ( m.RecipientId == user.UserId ) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -632,11 +637,14 @@ namespace SocialPayments.DomainServices
                 message.SenderName = formattingService.FormatUserName(user);
             }
 
+            _logger.Log(LogLevel.Info, String.Format("Returning list of messages from GetNewMessages with count:{0}", messages.Count()));
             return messages;
         }
 
         public List<Domain.Message> GetPendingMessages(User user)
         {
+            _logger.Log(LogLevel.Info, "Beginning GetPendingMessages");
+
             var formattingService = new DomainServices.FormattingServices();
             var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
@@ -644,8 +652,6 @@ namespace SocialPayments.DomainServices
 
             // "Pending" messages are:
             // Messages that you are involved in that are waiting for the recipient to take action.
-            // Cases that apply:
-            //  1 -> 
 
             messages = _context.Messages
                 .Where
@@ -662,6 +668,7 @@ namespace SocialPayments.DomainServices
                 message.SenderName = formattingService.FormatUserName(user);
             }
 
+            _logger.Log(LogLevel.Info, String.Format("Returning list of messages from GetPendingMessages with count:{0}", messages.Count()));
             return messages;
         }
     }
