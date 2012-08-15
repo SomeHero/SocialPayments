@@ -7,18 +7,20 @@
 	    <h1>Enable Payments</h1>
     </div>
     <div data-role="content">
+<div class="top-panel">
 @if (Model.Payment != null)
 {
     <text>
-    <p>
         You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> in pending payments.
         To enable sending and receiving of payments thru PaidThx, please enter your preferred
-        bank credentials.</p>
+        bank credentials below.
     </text>
-}
-<div class="top-panel">
+}else{
+    <text>
     Link a new bank account by entering the routing number and account number of the
     account below.
+    </text>
+    }
     <br />
 </div>
 <div id="setup-ach-account-form">
@@ -31,21 +33,21 @@
             @Html.LabelFor(m => m.NameOnAccount)
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(m => m.NameOnAccount)
+            @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" } })
             @Html.ValidationMessageFor(m => m.NameOnAccount)
         </div>
         <div class="editor-label">
             @Html.LabelFor(m => m.RoutingNumber)
         </div>
         <div class="editor-field">
-            @Html.PasswordFor(m => m.RoutingNumber)
+            @Html.PasswordFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" } })
             @Html.ValidationMessageFor(m => m.RoutingNumber)
         </div>
         <div class="editor-label">
             @Html.LabelFor(m => m.AccountNumber)
         </div>
         <div class="editor-field">
-            @Html.PasswordFor(m => m.AccountNumber)
+            @Html.PasswordFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" } })
             @Html.ValidationMessageFor(m => m.AccountNumber)
         </div>
         <div data-role="fieldcontain">
@@ -60,8 +62,7 @@
         </div>
         <p style="margin-top: 15px">
             <button type="submit" id="button-submit-ach" class="imgbtn">
-                <img src="@Url.Content("~/Content/images/enable-payments-button-icon.png")" alt="" /><span>Enable
-                    Payments</span></button>
+                <img src="@Url.Content("~/Content/images/enable-payments-button-icon.png")" alt="" /><span>Add Bank Account</span></button>
         </p>
     </fieldset>
     }

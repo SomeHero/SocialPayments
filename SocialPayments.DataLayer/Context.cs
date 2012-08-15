@@ -2545,10 +2545,10 @@ namespace SocialPayments.DataLayer
             context.Communications.Add(new Communication()
             {
                 Id = Guid.NewGuid(),
-                Key = "Pledge_Receipt_SMS",
+                Key = "Pledge_Receipt_Email",
                 Method = CommunicationMethod.Email,
                 Type = CommunicationType.EmailTemplate,
-                Template = "Pledge_NotEngaged"
+                Template = "Pledge_Receipt"
             });
             //Pledge_Recipient_Facebook
             context.Communications.Add(new Communication()

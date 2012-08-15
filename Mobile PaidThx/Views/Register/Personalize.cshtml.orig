@@ -21,7 +21,11 @@
                         <label for="FirstName">First Name</label>
                     </div>
                     <div class="editor-field">
+<<<<<<< HEAD
+                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() {{ "placeholder", "First Name" }})
+=======
                         @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() { { "placeholder", "First Name" } })
+>>>>>>> upstream/development
                         @Html.ValidationMessageFor(m => m.FirstName)
                     </div>
 
