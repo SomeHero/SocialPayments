@@ -18,7 +18,7 @@
                 @header
             </div>
             }
-            <li class="@Html.GetTransactionCssClass(transaction, i)"><a onclick="openOffersDialog('@transaction.Id');">
+            <li><a onclick="openOffersDialog('@transaction.Id');">
                 <span class="trans-type">
                     <text>
                     <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
@@ -38,7 +38,7 @@
                     }
                     @switch (transaction.MessageType)
                     {
-                        case Mobile_PaidThx.Models.MessageType.Payment:
+                        case "Payment":
                             switch (transaction.Direction)
                             {
                                 case "In":
@@ -56,7 +56,7 @@
                             break;
 
 
-                        case Mobile_PaidThx.Models.MessageType.PaymentRequest:
+                        case "PaymentRequest":
                             switch (transaction.Direction)
                             {
                                 case "In":
@@ -82,7 +82,7 @@
                     <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(transaction.TransactionDate)</div>
                     @switch (transaction.MessageType)
                     {
-                        case Mobile_PaidThx.Models.MessageType.Payment:
+                        case "Payment":
                             switch (transaction.Direction)
                             {
                                 case "In":
@@ -98,7 +98,7 @@
                               break;
                             }
                             break;
-                        case Mobile_PaidThx.Models.MessageType.PaymentRequest:
+                        case "PaymentRequest":
                             switch (transaction.Direction)
                             {
                                 case "In":

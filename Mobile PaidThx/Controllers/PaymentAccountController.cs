@@ -21,7 +21,6 @@ namespace Mobile_PaidThx.Controllers
         {
 
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-
             //if (Session["User"] == null)
             // return RedirectToAction("SignIn", "Account", null);
 
@@ -33,14 +32,16 @@ namespace Mobile_PaidThx.Controllers
             {
                 model.PaymentAccounts.Add(new BankAccountModel()
                 {
-                    BankName = paymentAccount.Nickname,
-                    BankIconURL = paymentAccount.BankIconUrl,
+                    // BankName = paymentAccount.BankName,
+                    // BankIconURL = paymentAccount.BankIconUrl,
                     PaymentAccountId = paymentAccount.Id.ToString(),
                     AccountNumber = paymentAccount.AccountNumber,
                     AccountType = paymentAccount.AccountType.ToString(),
                     NameOnAccount = paymentAccount.NameOnAccount,
                     Nickname = paymentAccount.Nickname,
                     RoutingNumber = paymentAccount.RoutingNumber
+
+
                 });
 
             }

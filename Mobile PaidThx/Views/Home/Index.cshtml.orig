@@ -10,13 +10,41 @@
     </div>
     <div data-role="content" style="background-color: #3E7D48">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+<<<<<<< HEAD
+            @if (Model.Payment != null)
+            {
+                <text>
+                <h2>@Model.Payment.Sender has sent you @String.Format("{0:C}", Model.Payment.Amount).</h2>
+                @if (!String.IsNullOrEmpty(Model.Payment.Comments))
+                {
+                    <div class="thought"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
+                </div>
+                }
+                <p>
+                    To accept this payment, signup for your PaidThx account. It's safe, secure and free!</p>
+                </text>
+            }
+            else
+            {
+                
                 <h4 style="font-size: 26px; text-align: center; margin-bottom: 15px">
                     Welcome to PaidThx!</h4>
                 <h6 style="text-align: center; width: 60%; margin-left: 20%">
                     The fastest, easiest, safest way to exchange money with friends, family, and your
                     favorite organizations.</h6>
+                <div style="font-size: 14px; font-weight: bold; margin-top: 15px; margin-bottom: 15px">
+                    Join or Sign in Below:</div>
+
+            }
+=======
+            <h4 style="font-size: 26px; text-align: center; margin-bottom: 15px">
+                Welcome to PaidThx!</h4>
+            <h6 style="text-align: center; width: 60%; margin-left: 20%">
+                The fastest, easiest, safest way to exchange money with friends, family, and your
+                favorite organizations.</h6>
             <div style="font-size: 14px; font-weight: bold; margin-top: 15px; text-align:center;margin-bottom: 15px">
                 Join or Sign in Below:</div>
+>>>>>>> upstream/development
             <a href="./Join">
                 <button type="button" id="join" class="btn-new btn-green">
                     <span>Join (It's Free!)</span></button></a>

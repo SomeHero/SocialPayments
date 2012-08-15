@@ -25,9 +25,40 @@ namespace Mobile_PaidThx.Controllers
 
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
-        public ActionResult Index()
+        public ActionResult Index(string messageId)
         {
-            return View();
+            if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    Payment = null
+                });
+
+            var messageServices = new MessageServices();
+            var payment = messageServices.GetMessage(messageId);
+
+            if (payment == null)
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    Payment = null
+                });
+
+            Session["MessageId"] = payment.Id;
+
+            return View("Index", new JoinModels.JoinModel()
+            {
+                UserName = payment.recipientUri,
+                Payment = new PaymentModel()
+                {
+                    Amount = payment.amount,
+                    Comments = payment.comments,
+                    MobileNumber = payment.recipientUri,
+                    Sender = payment.senderName,
+                    SenderImageUrl = payment.transactionImageUri
+                }
+            });
+
         }
         [HttpPost]
         public ActionResult Index(RegisterModel model)
@@ -39,7 +70,14 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                 var userServices = new Services.UserServices();
-                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "");
+                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
+                    (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
+
+                Session["UserId"] = userId;
+
+                var user = userServices.GetUser(userId);
+                Session["User"] = user;
+
             }
             catch (Exception ex)
             {
@@ -49,8 +87,6 @@ namespace Mobile_PaidThx.Controllers
 
                 return View("Index");
             }
-
-            Session["UserId"] = userId;
 
             return RedirectToAction("Personalize", "Register");
         }
@@ -63,7 +99,8 @@ namespace Mobile_PaidThx.Controllers
             var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
 
             var fbAccount = faceBookServices.FBauth(state, code, redirect);
-            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
+            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
+                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
 
             //validate fbAccount.Id is associated with active user
             //if (user == null)
@@ -73,6 +110,13 @@ namespace Mobile_PaidThx.Controllers
             //    return View("SignIn");
             //}
 
+            if(response.StatusCode != System.Net.HttpStatusCode.Created && response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                ModelState.AddModelError("", response.Description);
+
+                return View("Index");
+            }
+
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
@@ -80,6 +124,7 @@ namespace Mobile_PaidThx.Controllers
             Session["UserId"] = facebookSignInResponse.userId;
 
             var user = userServices.GetUser(facebookSignInResponse.userId);
+            Session["User"] = user;
 
             if(response.StatusCode == System.Net.HttpStatusCode.Created)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });

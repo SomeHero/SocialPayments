@@ -67,34 +67,5 @@ namespace Mobile_PaidThx.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        //
-        // GET: /Account/FBauth
-        public ActionResult SignInWithFacebook(string state, string code)
-        {
-            var faceBookServices = new FacebookServices();
-            var userServices = new UserServices();
-
-            var redirect = String.Format(fbTokenRedirectURL, "SignIn/SignInWithFacebook/");
-
-            var fbAccount = faceBookServices.FBauth(state, code, redirect);
-            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30));
-
-            //validate fbAccount.Id is associated with active user
-            //if (user == null)
-            //{
-            //    ModelState.AddModelError("", "Error. Try again..");
-
-            //    return View("SignIn");
-            //}
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
-
-            Session["UserId"] = facebookSignInResponse.userId;
-
-            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-        }
-        
     }
 }
