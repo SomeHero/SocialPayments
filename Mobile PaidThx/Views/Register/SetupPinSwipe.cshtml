@@ -4,7 +4,7 @@
 
 <div data-role="page" id="setup-pin-swipe" class="modally">
      <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-	    <h1>Create Pin</h1>
+	    <h1>Create Security Pin</h1>
     </div>
     <div data-role="content">
         <div class="top-panel">
@@ -20,3 +20,28 @@
         </div>
 
 </div>
+
+
+        <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.hackstyle').remove();
+        function resizePIN() {
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>
