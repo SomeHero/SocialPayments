@@ -451,7 +451,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
 
         }
-        [HttpPost]
+
         public HttpResponseMessage ChangeSecurityPin(string id, UserModels.ChangeSecurityPinRequest request)
         {
             Context _ctx = new Context();
