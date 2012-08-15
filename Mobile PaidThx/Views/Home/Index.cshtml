@@ -17,14 +17,12 @@
                     favorite organizations.</h6>
             <div style="font-size: 14px; font-weight: bold; margin-top: 15px; text-align:center;margin-bottom: 15px">
                 Join or Sign in Below:</div>
-            <a href="./Join">
-                <button type="button" id="join" class="btn-new btn-green">
-                    <span>Join (It's Free!)</span></button></a>
+            <a id="join" class="btn-new btn-green" href="./Join">
+                Join (It's Free!)</a>
             <div style="margin-bottom: 15px">
             </div>
-            <a href="./SignIn">
-                <button type="button" id="signin" class="btn-new btn-blue">
-                   <span>Sign In</span></button></a>
+            <a id="signin" class="btn-new btn-blue" href="./SignIn">
+                Sign In</button></a>
         </div>
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }

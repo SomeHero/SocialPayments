@@ -1909,6 +1909,12 @@ background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ *
 margin-top:20px;
 }
 
+.ui-body-c a.btn-new.ui-link
+{
+ color:#ffffff;   
+ text-shadow: 0 /*{c-body-shadow-x}*/ 0px /*{c-body-shadow-y}*/ 0 /*{c-body-shadow-radius}*/ white /*{c-body-shadow-color}*/;
+}
+
 .btn-new.field
 {
  color:#333;   
@@ -2001,4 +2007,29 @@ img.rounded
 -moz-border-radius: 7px /*{global-radii-buttons}*/;
 -webkit-border-radius: 7px /*{global-radii-buttons}*/;
 border-radius: 7px /*{global-radii-buttons}*/;
+}
+
+#pay-recd
+{
+  width:100%;
+  border:none;
+  margin:0;
+  padding:0;  
+}
+
+#pay-recd img
+{
+ float:left;
+ width:50px;
+ height:50px;
+ border:1px solid #cccccc;
+ -moz-border-radius: 7px;
+-webkit-border-radius: 7px;
+border-radius: 7px;
+}
+
+#pay-recd h2
+{
+ float:right;
+ padding-left:60px;   
 }
