@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Mobile_PaidThx.Models;
 using NLog;
 using System.Web.Routing;
-using SocialPayments.DomainServices;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 

@@ -291,7 +291,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 _logger.Log(LogLevel.Info, String.Format("Adding user {0}", request.userName));
 
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
-                    request.deviceToken);
+                    request.deviceToken, "", request.messageId);
 
             }
             catch (Exception ex)
@@ -311,8 +311,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return message;
             }
-
-            _userService.SendEmailVerificationLink(user.PayPoints[0]);
 
             var responseMessage = new UserModels.SubmitUserResponse()
             {
@@ -843,7 +841,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
-                    request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), out isNewUser);
+                    request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), request.messageId, out isNewUser);
             }
             catch (Exception ex)
             {
@@ -856,9 +854,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
 
             bool hasACHAccount = false;
-
-            if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
-                hasACHAccount = true;
 
             var response = new UserModels.FacebookSignInResponse()
             {

@@ -68,6 +68,7 @@ namespace Mobile_PaidThx.Models
             public string MobileNumber { get; set; }
             public Double Amount { get; set; }
             public string Comments { get; set; }
+            public string SenderImageUrl { get; set; }
         }
         public class SetupPinSwipeModel
         {

@@ -81,6 +81,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string emailAddress { get; set; }
             public string registrationMethod { get; set; }
             public string deviceToken { get; set; }
+            public string messageId { get; set; }
         }
         public class SubmitUserResponse
         {
@@ -139,6 +140,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string emailAddress { get; set; }
             public string deviceToken { get; set; }
             public string oAuthToken { get; set; }
+            public string messageId { get; set; }
             //public DateTime tokenExpiration { get; set; }
         }
 

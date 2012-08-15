@@ -190,6 +190,8 @@
     <Compile Include="MessageProcessing\RefundedPaymentMessageTask.cs" />
     <Compile Include="MessageProcessing\RejectedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\ReturnedPaymentMessageTask.cs" />
+    <Compile Include="MessageProcessing\SubmittedDonationMessageTask.cs" />
+    <Compile Include="MessageProcessing\SubmittedPledgeMessageTask.cs" />
     <Compile Include="MessageProcessing\SubmittedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\SubmittedPaymentMessageTask.cs" />
     <Compile Include="MessageServices.cs" />
