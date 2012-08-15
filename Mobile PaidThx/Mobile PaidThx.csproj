@@ -197,7 +197,9 @@
     <Compile Include="Services\ResponseModels\AccountModels.cs" />
     <Compile Include="Services\ResponseModels\MerchantModels.cs" />
     <Compile Include="Services\ResponseModels\MessageModels.cs" />
+    <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
+    <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
     <Compile Include="Services\UserPaymentAccountServices.cs" />
