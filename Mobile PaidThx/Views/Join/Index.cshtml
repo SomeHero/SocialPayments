@@ -6,7 +6,8 @@
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-            Join</h1>
+             @if (Model.Payment != null)
+            {<text>You Have Money!</text>}else{<text>Join</text>}</h1>
        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
     <div data-role="content" style="background-color: #3E7D48">
@@ -14,15 +15,15 @@
             @if (Model.Payment != null)
             {
                 <text>
-                <img src="@Model.Payment.SenderImageUrl" width="75px" />
-                <h2>@Model.Payment.Sender has sent you @String.Format("{0:C}", Model.Payment.Amount).</h2>
+                <div id="pay-recd"><img src="@Model.Payment.SenderImageUrl" width="50" />
+                <h4>@Model.Payment.Sender sent you @String.Format("{0:C}", Model.Payment.Amount).</h4></div>
                 @if (!String.IsNullOrEmpty(Model.Payment.Comments))
                 {
                     <div class="thought"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
                 </div>
                 }
                 <p>
-                    To accept this payment, signup for your PaidThx account. It's safe, secure and free!</p>
+                    To accept this payment, join PaidThx below. It's simple and free!</p>
                 </text>
             }
 
@@ -45,8 +46,7 @@
                     <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
                         name="ConfirmPassword" style="margin-bottom:15px"  />
                     <button type="submit" id="register-submit" class="imgbtn">
-                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Create
-                            My Account</span></button>
+                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Join With Email</span></button>
                 }
             </div>
             <div id="main-body-sub-links">
