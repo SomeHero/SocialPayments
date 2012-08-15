@@ -114,20 +114,19 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SecurityQuestion()
         {
-            var model = new SecurityQuestionModel()
-            {
+            var securityQuestionServices = new SecurityQuestionServices();
+            var securityQuestions = securityQuestionServices.GetSecurityQuestions();
+            var questions = securityQuestions.Select(q => new Mobile_PaidThx.Models.SecurityQuestionModels.SecurityQuestionModel
+                {
+                    Id = q.Id,
+                    Question = q.Question
+                }).ToList();
+
+            var model = new SecurityQuestionModel() {
+
                 SecurityQuestionAnswer = "",
                 SecurityQuestionId = 1,
-                SecurityQuestions = new List<SecurityQuestionModels.SecurityQuestionModel>() {
-                    new SecurityQuestionModels.SecurityQuestionModel {
-                        Id = 1,
-                        Question = "Who is Sebastian?"
-                    },
-                    new SecurityQuestionModels.SecurityQuestionModel {
-                        Id = 2,
-                        Question = "What is your first name?"
-                    }
-                }
+                SecurityQuestions = questions
             };
 
             return View(model);
