@@ -576,7 +576,7 @@ namespace SocialPayments.DomainServices
 
             List<Domain.Message> messages = null;
 
-            _logger.Log(LogLevel.Info, String.Format("Inside message services, List<Domain.Message> created. Should be null with count:{0}", messages.Count()));
+            _logger.Log(LogLevel.Info, String.Format("Inside message services, List<Domain.Message> created."));
             
             messages = _context.Messages
                 .Where

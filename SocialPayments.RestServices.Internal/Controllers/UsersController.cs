@@ -658,7 +658,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // POST /api/users/{userId}/refresh_homepage
+        // GET /api/users/{userId}/refresh_homepage
+        [HttpGet]
         public HttpResponseMessage<UserModels.HomepageRefreshReponse> RefreshHomepageInformation(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
@@ -677,7 +678,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unable to find user [RefreshHomepage] by [{0}]", id));
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.MethodNotAllowed); // 405
             }
 
 
@@ -688,9 +689,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 foreach (Message msg in recentPayments)
                 {
+
                     string recipName;
-                    int recipientType = -1;
                     var recipient = _userService.GetUser(msg.RecipientUri);
+                    int recipientType = -1;
+
                     if (recipient == null)
                     {
                         recipName = msg.RecipientUri;
@@ -732,14 +735,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
-
-                while (ex.InnerException != null)
-                {
-                    _logger.Log(LogLevel.Error, String.Format("Inner exception: {0}", ex.InnerException.Message));
-                    ex = ex.InnerException;
-                }
-
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
+                return message;
             }
         }
 

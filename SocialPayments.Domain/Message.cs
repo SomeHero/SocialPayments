@@ -75,7 +75,12 @@ namespace SocialPayments.Domain
     {
         public bool Equals(Message one, Message two)
         {
-            return (one.RecipientUri == two.RecipientUri);
+            if (one.RecipientUri == two.RecipientUri)
+                return true;
+            else if (one.Recipient != null && two.Recipient != null && one.Recipient == two.Recipient)
+                return true;
+            else
+                return false;
         }
 
         public int GetHashCode(Message msg)
@@ -83,7 +88,10 @@ namespace SocialPayments.Domain
             // A hash value SHOULD be implemented here,
             // but we only want to know if message recipients are equal.
             // We return the hash code of the recipient Id of the messages.
-            return msg.RecipientUri.GetHashCode();
+            if (msg.Recipient == null || msg.RecipientId == null)
+                return msg.RecipientUri.GetHashCode();
+            else
+                return msg.RecipientId.GetHashCode();
         }
     }
 
