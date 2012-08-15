@@ -60,7 +60,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 model.PaymentAccounts.Add(new BankAccountModel()
                 {
-                    BankName = paymentAccount.Nickname,
+                   //BankName = paymentAccount.BankName,
                     BankIconURL = paymentAccount.BankIconUrl,
                     PaymentAccountId = paymentAccount.Id.ToString(),
                     AccountNumber = paymentAccount.AccountNumber,

@@ -120,7 +120,7 @@ namespace SocialPayments.DomainServices
             if (messageType.ToUpper() == "PLEDGE")
             {
                 type = MessageType.AcceptPledge;
-                status = PaystreamMessageStatus.SubmittedRequest;
+                status = PaystreamMessageStatus.SubmittedPledge;
             }
 
             try
@@ -289,23 +289,23 @@ namespace SocialPayments.DomainServices
 
             Task.Factory.StartNew(() =>
             {
-                _logger.Log(LogLevel.Info, String.Format("Started Summitted Message Task. {0} to {1}", recipientUri, senderUri));
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted {0} Task. {1} to {2}", messageType, recipientUri, senderUri));
 
-                switch (messageItem.Status)
+                switch (messageItem.MessageType)
                 {
-                    case PaystreamMessageStatus.SubmittedPayment:
+                    case MessageType.Payment:
                         SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
                         paymentTask.Execute(messageItem.Id);
 
                         break;
 
-                    case PaystreamMessageStatus.SubmittedRequest:
+                    case MessageType.PaymentRequest:
                         SubmittedRequestMessageTask requestTask = new SubmittedRequestMessageTask();
                         requestTask.Execute(messageItem.Id);
 
                         break;
 
-                    case PaystreamMessageStatus.SubmittedPledge:
+                    case MessageType.AcceptPledge:
                         SubmittedPledgeMessageTask pledgeTask = new SubmittedPledgeMessageTask();
                         pledgeTask.Execute(messageItem.Id);
 

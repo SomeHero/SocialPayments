@@ -109,6 +109,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     messageType = message.MessageType.ToString(),
                     recipientName = (message.Recipient != null ? _formattingService.FormatUserName(message.Recipient) : "No Name"),
                     recipientUri = message.RecipientUri,
+                    recipientUriType = _userService.GetURIType(message.RecipientUri).ToString(),
                     senderName = (message.Sender != null ? _formattingService.FormatUserName(message.Sender) : "No Name"),
                     senderUri = message.SenderUri,
                     transactionImageUri = (message.Sender != null ? (!String.IsNullOrEmpty(message.Sender.ImageUrl) ? message.Sender.ImageUrl : _defaultAvatarImage) : _defaultAvatarImage)
@@ -351,7 +352,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 try
                 {
                     _messageServices.AcceptPledge(request.apiKey, user, request.onBehalfOfId, request.recipientUri, request.amount,
-                        request.comments, "PaymentRequest");
+                        request.comments, "AcceptPledge");
                 }
                 catch (Exception ex)
                 {
