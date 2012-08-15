@@ -111,11 +111,6 @@ namespace SocialPayments.RestServices.Internal
                 defaults: new { controller = "Users", action = "SetupSecurityPin" }
             );
 
-            routes.MapHttpRoute(
-                name: "RefreshHomePageInformation",
-                routeTemplate: "api/users/{id}/refresh_homepage",
-                defaults: new { controller = "Users", action = "RefreshHomepageInformation" }
-            );
 
             routes.MapHttpRoute(
                 name: "ChangeSecurityPin",
@@ -140,6 +135,13 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/validate_user",
                 defaults: new { controller = "Users", action = "ValidateUser" }
             );
+
+            routes.MapHttpRoute(
+                name: "RefreshHomePageInformation",
+                routeTemplate: "api/users/{id}/refresh_homepage",
+                defaults: new { controller = "Users", action = "RefreshHomepageInformation" }
+            );
+
             routes.MapHttpRoute(
                 name: "ResendMobileVerificationCode",
                 routeTemplate: "api/users/{userId}/PayPoints/resend_mobile_verification_code",
