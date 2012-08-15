@@ -178,17 +178,17 @@
     <Compile Include="HtmlHelpers\FacebookHelper.cs" />
     <Compile Include="HtmlHelpers\PaystreamHelper.cs" />
     <Compile Include="HtmlHelpers\ProfileHelpers.cs" />
-    <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\FacebookUserModels.cs" />
-    <Compile Include="Models\HomeModel.cs" />
-    <Compile Include="Models\HomeModels.cs" />
-    <Compile Include="Models\JoinModels.cs" />
-    <Compile Include="Models\MenuModel.cs" />
-    <Compile Include="Models\PaymentAccountModels.cs" />
-    <Compile Include="Models\PaystreamModels.cs" />
-    <Compile Include="Models\ProfileModels.cs" />
-    <Compile Include="Models\RegisterModels.cs" />
-    <Compile Include="Models\SecurityQuestionModels.cs" />
+    <Compile Include="Controllers\Models\AccountModels.cs" />
+    <Compile Include="Controllers\Models\FacebookUserModels.cs" />
+    <Compile Include="Controllers\Models\HomeModel.cs" />
+    <Compile Include="Controllers\Models\HomeModels.cs" />
+    <Compile Include="Controllers\Models\JoinModels.cs" />
+    <Compile Include="Controllers\Models\MenuModel.cs" />
+    <Compile Include="Controllers\Models\PaymentAccountModels.cs" />
+    <Compile Include="Controllers\Models\PaystreamModels.cs" />
+    <Compile Include="Controllers\Models\ProfileModels.cs" />
+    <Compile Include="Controllers\Models\RegisterModels.cs" />
+    <Compile Include="Controllers\Models\SecurityQuestionModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FacebookServices.cs" />
     <Compile Include="Services\MerchantServices.cs" />
@@ -653,7 +653,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\App_LocalResources\" />
-    <Folder Include="Models\logs\" />
+    <Folder Include="Controllers\Models\logs\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
   </ItemGroup>
   <ItemGroup>
