@@ -63,7 +63,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         _logger.Log(LogLevel.Info, String.Format("Sending Communication to Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        message.Status = PaystreamMessageStatus.PendingRequest;
 
                         SendRecipientEngagedCommunication(message);
                     }
