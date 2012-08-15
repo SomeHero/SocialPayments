@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using SocialPayments.DataLayer;
 using Mobile_PaidThx.Models;
 using NLog;
-using Domain = SocialPayments.Domain;
-using SocialPayments.DomainServices;
-using Amazon.SimpleNotificationService;
-using Amazon.SimpleNotificationService.Model;
 using Mobile_PaidThx.Controllers.Base;
 using System.Text;
 using System.Net.Mail;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -23,70 +19,10 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
-            logger.Log(LogLevel.Info, String.Format("Displaying Register View"));
-            logger.Log(LogLevel.Info, String.Format("Retreiving Payment {0}.", messageId));
-            
-            return View("Index");
-
-            if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32 )
-                return View("Index");
-
-            using (var ctx = new Context())
+            return View("Index", new HomeModels.HomeModel()
             {
-                Guid id;
-                UserService userService = new UserService(ctx);
-
-                logger.Log(LogLevel.Info, String.Format("Parsing GUID {0}.", messageId));
-                
-                if (!Guid.TryParse(messageId, out id))
-                {
-                    logger.Log(LogLevel.Info, String.Format("Invalid payment id {0}.", messageId));
-
-                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}.", messageId));
-
-                    return View("Register", new RegisterModel());
-                }
-                logger.Log(LogLevel.Info, String.Format("Parsed GUID {0}.", messageId));
-
-                logger.Log(LogLevel.Info, String.Format("Found Guid {0}", messageId));
-
-                Domain.Message payment = null;
-                try
-                {
-                    payment = ctx.Messages
-                        .FirstOrDefault(p => p.Id == id);
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Exception Occurred retreiving payment record for paymentId {0}. {1}", messageId, ex.Message));
-                }
-
-                if (payment == null)
-                {
-                    logger.Error(String.Format("Invalid payment record {0}", messageId));
-
-                    ModelState.AddModelError("", String.Format("Unable to find the transaction specified {0}.", messageId));
-
-                    return View("Register", new RegisterModel());
-                }
-
-               // if (payment.ToAccount != null && payment.ToAccount.User != null)
-                    //return View("SignIn");
-
-                var model = new RegisterModel()
-                {
-                    Payment = new PaymentModel()
-                    {
-                        Sender = userService.GetSenderName(payment.Sender),
-                        Amount = payment.Amount,
-                        Comments = payment.Comments,
-                        MobileNumber = payment.SenderUri
-                    }
-                };
-                Session["Payment"] = model.Payment;
-
-                return View("Register", model);
-            }
+                Payment = null
+            });
         }
 
         public void ClaimPayment(string id)

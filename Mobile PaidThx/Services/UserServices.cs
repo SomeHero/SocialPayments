@@ -19,7 +19,8 @@ namespace Mobile_PaidThx.Services
         private string _personalizeUrl = "http://23.21.203.171/api/internal/api/users/{0}/personalize_user";
         private string _getMeCodesUrl = "http://23.21.203.171/api/internal/api/users/{0}/mecodes";
         private string _deletePaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/";
-        private string _addPaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/"
+        private string _addPaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/";
+
         public string AddPaypoint(String apiKey, String paypointId, String userId, String uri, String type, Boolean verified, string verifiedDate, string createDate)
         {
             var serviceUrl = String.Format(_addPaypointUrl, userId);
@@ -76,7 +77,7 @@ namespace Mobile_PaidThx.Services
         //    //public DateTime tokenExpiration { get; set; }
         //}
         public ServiceResponse SignInWithFacebook(string apiKey, string accountId, string firstName, string lastName, string emailAddress, string deviceToken, string oAuthToken,
-            DateTime tokenExpiration)
+            DateTime tokenExpiration, string messageId)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -88,7 +89,8 @@ namespace Mobile_PaidThx.Services
                 lastName = lastName,
                 emailAddress = emailAddress,
                 deviceToken = deviceToken,
-                tokenExpiration = tokenExpiration
+                tokenExpiration = tokenExpiration,
+                messageId = messageId
             });
 
             var response = Post(_userServicesSignInWithFacebookUrl, json);
@@ -96,7 +98,8 @@ namespace Mobile_PaidThx.Services
             return response;
 
         }
-        public string RegisterUser(string serviceUrl, string apiKey, string userName, string password, string emailAddress, string registrationMethod, string deviceToken)
+        public string RegisterUser(string serviceUrl, string apiKey, string userName, string password, string emailAddress, string registrationMethod, string deviceToken,
+            string messageId)
         {           
 
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -108,7 +111,8 @@ namespace Mobile_PaidThx.Services
                 password = password,
                 emailAddress = emailAddress,
                 registrationMethod = registrationMethod,
-                deviceToken = deviceToken
+                deviceToken = deviceToken,
+                messageId = messageId
             });
 
             var response = Post(serviceUrl, json);

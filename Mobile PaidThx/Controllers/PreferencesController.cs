@@ -66,12 +66,6 @@ namespace Mobile_PaidThx.Controllers
             return View(model);
         }
 
-        [HttpPut]
-        public ActionResult AddPaypoint(Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse model)
-        {
-            return View(model);
-        }
-
         public ActionResult Emails()
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];

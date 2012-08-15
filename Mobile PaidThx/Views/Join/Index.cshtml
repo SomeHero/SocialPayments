@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.JoinModels.JoinModel
+@{
     ViewBag.Title = "Index";
 }
 <div data-role="page">
@@ -10,7 +11,21 @@
     </div>
     <div data-role="content" style="background-color: #3E7D48">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-            @Html.ValidationSummary()
+            @if (Model.Payment != null)
+            {
+                <text>
+                <img src="@Model.Payment.SenderImageUrl" width="75px" />
+                <h2>@Model.Payment.Sender has sent you @String.Format("{0:C}", Model.Payment.Amount).</h2>
+                @if (!String.IsNullOrEmpty(Model.Payment.Comments))
+                {
+                    <div class="thought"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
+                </div>
+                }
+                <p>
+                    To accept this payment, signup for your PaidThx account. It's safe, secure and free!</p>
+                </text>
+            }
+
             <h5 style="margin-top:10px">
                 Connect with Facebook</h5>
             <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
@@ -18,11 +33,13 @@
             </button>
             <h5 style="margin-top:25px">
                 Or join with your Email Address</h5>
+                @Html.ValidationSummary()
+             
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
                 {
                     <input type="text" id="email" class="required email" placeholder="Enter Your Email Address"
-                        name="Email" style="margin-bottom:15px" />
+                        name="Email" style="margin-bottom:15px" value="@Model.UserName" />
                     <input type="password" id="password" class="required" placeholder="Create a Password"
                         name="Password" style="margin-bottom:15px"  />
                     <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"

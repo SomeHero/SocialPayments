@@ -24,6 +24,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
     public class PaystreamMessagesController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"];
 
         // GET /api/paystreammessage
         public MessageModels.PagedResults Get(int take, int skip, int page, int pageSize)
@@ -110,7 +111,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     recipientUri = message.RecipientUri,
                     senderName = (message.Sender != null ? _formattingService.FormatUserName(message.Sender) : "No Name"),
                     senderUri = message.SenderUri,
-                    transactionImageUri = message.senderImageUri
+                    transactionImageUri = (message.Sender != null ? (!String.IsNullOrEmpty(message.Sender.ImageUrl) ? message.Sender.ImageUrl : _defaultAvatarImage) : _defaultAvatarImage)
                 },
                 HttpStatusCode.OK);
 
@@ -120,11 +121,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // GET /api/paystreammessages/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         //POST /api/{userId}/PayStreamMessages/update_messages_seen
         public HttpResponseMessage UpdateMessagesSeen(MessageModels.MessageSeenUpdateRequest request)

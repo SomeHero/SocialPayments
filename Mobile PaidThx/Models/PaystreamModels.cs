@@ -22,9 +22,9 @@ namespace Mobile_PaidThx.Models
             public string RecipientUri { get; set; }
             public Double Amount { get; set; }
             public DateTime TransactionDate { get; set; }
-            public TransactionType TransactionType { get; set; }
-            public TransactionStatus TransactionStatus { get; set; }
-            public MessageType MessageType { get; set; }
+            public string TransactionType { get; set; }
+            public string TransactionStatus { get; set; }
+            public string MessageType { get; set; }
             public string Direction { get; set; }
             public string Comments { get; set; }
             public string TransactionImageUri { get; set; }
