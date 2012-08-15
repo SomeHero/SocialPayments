@@ -270,6 +270,7 @@
     <Content Include="Content\images\line_diagonal2.png" />
     <Content Include="Content\images\line_hor.png" />
     <Content Include="Content\images\line_ver.png" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\org_acs.png" />
     <Content Include="Content\images\org_americandiabetes.png" />
     <Content Include="Content\images\org_americanheart.png" />
