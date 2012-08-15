@@ -1,0 +1,48 @@
+﻿@model Mobile_PaidThx.Models.PersonalizeModel
+@{
+    ViewBag.Title = "Personalize";
+}
+
+<div data-role="page" id="personalize-page" class="modally">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+	    <h1>Personalize</h1>
+    </div>
+    <div data-role="content">   
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    <div class="top-panel">
+   
+    <p>Personalize your experience by adding your first and last name below.  PaidThx works best if your use your real name.</p></div>
+        @using(Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
+        {
+            <div>
+                <fieldset>
+
+                    <div class="editor-label">
+                        <label for="FirstName">First Name</label>
+                    </div>
+                    <div class="editor-field">
+<<<<<<< HEAD
+                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() {{ "placeholder", "First Name" }})
+=======
+                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() { { "placeholder", "First Name" } })
+>>>>>>> upstream/development
+                        @Html.ValidationMessageFor(m => m.FirstName)
+                    </div>
+
+                    <div class="editor-label">
+                        <label for="LastName">Last Name</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object>() { { "placeholder", "Last Name" } })
+                        @Html.ValidationMessageFor(m => m.LastName)
+                    </div>
+
+                    <p>
+                         <button type="submit" id="register-submit" class="imgbtn">
+                <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Save & Continue</span></button>
+                    </p>
+                </fieldset>
+            </div>
+        }
+    </div>
+</div>
