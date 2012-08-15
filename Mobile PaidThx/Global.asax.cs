@@ -116,10 +116,9 @@ new { controller = "DoGood", action = "Index" } // Parameter defaults
             routes.MapRoute(
                 "Receive", // Route name
                 "{messageId}", // URL with parameters
-                new { controller = "Home", action = "Index" } // Parameter defaults
+                new { controller = "Join", action = "Index" } // Parameter defaults
             );
 
-            
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters

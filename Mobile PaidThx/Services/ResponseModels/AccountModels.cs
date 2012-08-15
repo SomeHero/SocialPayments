@@ -17,6 +17,7 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public string AccountNumber { get; set; }
             public string AccountType { get; set; }
             public string Status { get; set; }
+            public string BankIconUrl { get; set; }
         }
     }
 }

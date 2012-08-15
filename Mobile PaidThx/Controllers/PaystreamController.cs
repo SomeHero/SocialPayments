@@ -83,7 +83,7 @@ namespace Mobile_PaidThx.Controllers
                             AccountType = b.AccountType,
                             BankIconURL = "",
                             BankName = "",
-                            NameOnAccouont = b.NameOnAccount,
+                            NameOnAccount = b.NameOnAccount,
                             Nickname = b.Nickname,
                             RoutingNumber = b.RoutingNumber,
                             PaymentAccountId = b.Id

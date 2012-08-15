@@ -25,9 +25,40 @@ namespace Mobile_PaidThx.Controllers
 
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
-        public ActionResult Index()
+        public ActionResult Index(string messageId)
         {
-            return View();
+            if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    Payment = null
+                });
+
+            var messageServices = new MessageServices();
+            var payment = messageServices.GetMessage(messageId);
+
+            if (payment == null)
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    Payment = null
+                });
+
+            Session["MessageId"] = payment.Id;
+
+            return View("Index", new JoinModels.JoinModel()
+            {
+                UserName = payment.recipientUri,
+                Payment = new PaymentModel()
+                {
+                    Amount = payment.amount,
+                    Comments = payment.comments,
+                    MobileNumber = payment.recipientUri,
+                    Sender = payment.senderName,
+                    SenderImageUrl = payment.transactionImageUri
+                }
+            });
+
         }
         [HttpPost]
         public ActionResult Index(RegisterModel model)
@@ -40,12 +71,12 @@ namespace Mobile_PaidThx.Controllers
             {
                 var userServices = new Services.UserServices();
                 userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
-                    Session["MessageId"].ToString());
+                    (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
 
-                //If there is a message in session
+                Session["UserId"] = userId;
 
-                //check the email address that the user signed up with
-
+                var user = userServices.GetUser(userId);
+                Session["User"] = user;
 
             }
             catch (Exception ex)
@@ -56,8 +87,6 @@ namespace Mobile_PaidThx.Controllers
 
                 return View("Index");
             }
-
-            Session["UserId"] = userId;
 
             return RedirectToAction("Personalize", "Register");
         }

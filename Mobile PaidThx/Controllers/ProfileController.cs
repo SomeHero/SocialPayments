@@ -16,6 +16,7 @@ using System.Web.Helpers;
 using System.Web.Script.Serialization;
 using System.Web.Routing;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -33,25 +34,20 @@ namespace Mobile_PaidThx.Controllers
 
                 if (Session["UserId"] == null)
                     return RedirectToAction("SignIn", "Account", null);
-
-                var userId = (Guid)Session["UserId"];
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                if (Session["User"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
+                UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
                 var model = new ProfileModels()
                 {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
+                    FirstName = user.firstName,
+                    LastName = user.lastName,
                     AccountType = "Personal",
-                    MobileNumber = user.MobileNumber,
-                    EmailAddress = user.EmailAddress,
-                    Address = user.Address,
-                    City = user.City,
-                    State = user.State,
-                    Zip = user.Zip,
-                    SenderName = user.SenderName
+                    MobileNumber = user.mobileNumber,
+                    EmailAddress = user.emailAddress,
+                    Address = user.address,
+                    City = user.city,
+                    State = user.state,
+                    Zip = user.zip,
+                    SenderName = user.senderName
                 };
 
                 return View(model);
@@ -107,8 +103,6 @@ namespace Mobile_PaidThx.Controllers
             }
         }
 
-      
-        
         public ActionResult Settings()
         {
             if (Session["UserId"] == null)

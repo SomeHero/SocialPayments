@@ -19,35 +19,9 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
-            logger.Log(LogLevel.Info, String.Format("Displaying Register View"));
-            logger.Log(LogLevel.Info, String.Format("Retreiving Payment {0}.", messageId));
-
-            if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32 )
-                return View("Index", new HomeModels.HomeModel()
-                {
-                    Payment = null
-                });
-
-            var messageServices = new MessageServices();
-            var payment = messageServices.GetMessage(messageId);
-
-            if(payment == null)
-                return View("Index", new HomeModels.HomeModel()
-                {
-                    Payment = null
-                });
-
-            Session["MessageId"] = payment.Id;
-
             return View("Index", new HomeModels.HomeModel()
             {
-                Payment = new PaymentModel()
-                {
-                    Amount = payment.amount,
-                    Comments = payment.comments,
-                    MobileNumber = payment.recipientUri,
-                    Sender = payment.senderName
-                }
+                Payment = null
             });
         }
 

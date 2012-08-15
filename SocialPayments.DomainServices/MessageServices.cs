@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using MoonAPNS;
 using SocialPayments.DomainServices.MessageProcessing;
+using System.Linq;
 
 namespace SocialPayments.DomainServices
 {
