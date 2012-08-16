@@ -695,7 +695,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 if (recipient == null)
                 {
-                    recipName = msg.RecipientUri;
+                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO" );
+
+                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                    {
+                        _logger.Log(LogLevel.Error,"First: {0} Last: {1} Name: {2}",msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+                        recipName = msg.RecipientName;
+                    }
+                    else
+                    {
+                        recipName = msg.RecipientUri;
+                    }
 
                     recipientType = 0;
                 }
@@ -711,7 +721,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }
                 else
                 {
-                    recipName = msg.Recipient.SenderName;
+                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                    {
+                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+
+                        recipName = String.Format("{0} {1}", msg.recipientFirstName, msg.recipientLastName);
+                    }
+                    else
+                    {
+                        recipName = msg.Recipient.SenderName;
+                    }
+
                     recipientType = 0;
                 }
                 string imageUri = null;
