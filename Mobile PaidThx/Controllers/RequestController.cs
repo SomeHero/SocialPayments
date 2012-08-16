@@ -15,6 +15,7 @@ namespace Mobile_PaidThx.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
+
         Mobile_PaidThx.Models.RequestMoneyModel savedData = new Models.RequestMoneyModel();
         //
         // GET: /Request/

@@ -9,9 +9,9 @@ namespace Mobile_PaidThx.Services
 
     public class PaystreamMessageServices : ServicesBase
     {
-        private string _paystreamMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages";
-        private string _donateMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/donate";
-        private string _pledgeMessageUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/accept_pledge";
+        private string _paystreamMessageUrl = "{0}PaystreamMessages";
+        private string _donateMessageUrl = "{0}PaystreamMessages/donate";
+        private string _pledgeMessageUrl = "{0}/PaystreamMessages/accept_pledge";
         //public string apiKey { get; set; }
         //public string senderId { get; set; }
         //public string recipientId { get; set; }
@@ -61,7 +61,7 @@ namespace Mobile_PaidThx.Services
                 securityPin = securityPin
             });
 
-            var response = Post(_pledgeMessageUrl, json);
+            var response = Post(String.Format(_pledgeMessageUrl, _webServicesBaseUrl), json);
 
             return response.JsonResponse;
         }
@@ -88,7 +88,7 @@ namespace Mobile_PaidThx.Services
                 recipientImageUri = recipientImageUri
             });
 
-            var response = Post(_paystreamMessageUrl, json);
+            var response = Post(String.Format(_paystreamMessageUrl, _webServicesBaseUrl), json);
 
             return response.JsonResponse;
         }
@@ -113,7 +113,7 @@ namespace Mobile_PaidThx.Services
                 recipientImageUri = recipientImageUri
             });
 
-            var response = Post(_donateMessageUrl, json);
+            var response = Post(String.Format(_donateMessageUrl, _webServicesBaseUrl), json);
 
             return response.JsonResponse;
         }

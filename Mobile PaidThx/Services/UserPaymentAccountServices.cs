@@ -18,14 +18,15 @@ namespace Mobile_PaidThx.Services
     //public string SecurityQuestionAnswer { get; set; }
     public class UserPaymentAccountServices : ServicesBase
     {
-        private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
-        private string _setPreferredReceiveAccountUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts/set_preferred_received_account";
-        private string _setPreferredSendAccountUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts/set_preferred_send_account";
-        private string _deleteAccountUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts/";
+        private string _setupACHAccountServiceUrl = "{0}Users/{1}/PaymentAccounts";
+        private string _setPreferredReceiveAccountUrl = "{0}Users/{1}/PaymentAccounts/set_preferred_received_account";
+        private string _setPreferredSendAccountUrl = "{0}Users/{1}/PaymentAccounts/set_preferred_send_account";
+        private string _editACHAccountUrl = "{0}Users/{1}/PaymentAccounts/{2}";
+        private string _deleteACHAccountUrl = "{0}Users/{1}/PaymentAccounts/{2}";
 
         public ServiceResponse DeleteAccount(String apiKey, String userId, String bankId)
         {
-            string serviceUrl = String.Format(_deleteAccountUrl, userId) + bankId;
+            string serviceUrl = String.Format(_deleteACHAccountUrl, _webServicesBaseUrl, userId, bankId);
             var response = Delete(serviceUrl);
             return response;
         }
@@ -41,7 +42,7 @@ namespace Mobile_PaidThx.Services
                 SecurityPin = securityPin
             });
 
-            string serviceUrl = String.Format(_setPreferredSendAccountUrl, userId);
+            string serviceUrl = String.Format(_setPreferredSendAccountUrl, _webServicesBaseUrl, userId);
             var response = Post(serviceUrl, json);
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
@@ -60,7 +61,7 @@ namespace Mobile_PaidThx.Services
                 SecurityPin = securityPin
             });
 
-            string serviceUrl = String.Format(_setPreferredReceiveAccountUrl, userId);
+            string serviceUrl = String.Format(_setPreferredReceiveAccountUrl, _webServicesBaseUrl, userId);
             var response = Post(serviceUrl, json);
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
@@ -70,7 +71,7 @@ namespace Mobile_PaidThx.Services
 
         public string EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, String routingNumber, String accountType)
         {
-            string editUrl = String.Format(_setupACHAccountServiceUrl, userId) + "/" + bankId;
+            string editUrl = String.Format(_setupACHAccountServiceUrl, _webServicesBaseUrl, userId,  bankId);
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var json = js.Serialize(new
@@ -114,7 +115,7 @@ namespace Mobile_PaidThx.Services
             return jsonObject["paymentAccountId"];
         }
 
-        public string SetupACHAccount(string serviceUrl, string apiKey, string nameOnAccount, string nickName, string routingNumber, string accountNumber,
+        public string SetupACHAccount(string userId, string apiKey, string nameOnAccount, string nickName, string routingNumber, string accountNumber,
             string accountType, string securityPin, int securityQuestionId, string securityQuestionAnswer)
         {
 
@@ -133,7 +134,7 @@ namespace Mobile_PaidThx.Services
                 SecurityQuestionAnswer = securityQuestionAnswer
             });
 
-            var response = Post(serviceUrl, json);
+            var response = Post(String.Format(_setupACHAccountServiceUrl, _webServicesBaseUrl, userId), json);
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 

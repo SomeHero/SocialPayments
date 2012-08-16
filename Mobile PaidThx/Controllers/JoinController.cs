@@ -20,9 +20,6 @@ namespace Mobile_PaidThx.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
 
-        private string _userServiceUrl = "http://23.21.203.171/api/internal/api/Users";
-        private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
-
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public ActionResult Index(string messageId)
@@ -70,7 +67,7 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                 var userServices = new Services.UserServices();
-                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
+                userId = userServices.RegisterUser(_apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
                     (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
 
                 Session["UserId"] = userId;
@@ -81,7 +78,7 @@ namespace Mobile_PaidThx.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1}", model.Email, ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1} Stack Trace: {2}", model.Email, ex.Message, ex.StackTrace));
 
                 ModelState.AddModelError("", "Error Registering User");
 

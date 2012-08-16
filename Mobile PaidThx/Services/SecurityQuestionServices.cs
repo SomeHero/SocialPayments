@@ -9,11 +9,11 @@ namespace Mobile_PaidThx.Services
 {
     public class SecurityQuestionServices: ServicesBase
     {
-        private string _userPayStreamServiceGetUrl = "http://23.21.203.171/api/internal/api/SecurityQuestions";
+        private string _userPayStreamServiceGetUrl = "{0}SecurityQuestions";
 
         public List<SecurityQuestionModels.SecurityQuestionResponse> GetSecurityQuestions()
         {
-            var response = Get(_userPayStreamServiceGetUrl);
+            var response = Get(String.Format(_userPayStreamServiceGetUrl, _webServicesBaseUrl));
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 

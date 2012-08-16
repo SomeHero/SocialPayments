@@ -11,11 +11,11 @@ namespace Mobile_PaidThx.Services
     public class UserPayStreamMessageServices: ServicesBase
     {
 
-        private string _userPayStreamServiceGetUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaystreamMessages";
+        private string _userPayStreamServiceGetUrl = "{0}/Users/{1}/PaystreamMessages";
 
         public List<MessageModels.MessageResponse> GetMessages(string userId)
         {
-            var response = Get(String.Format(_userPayStreamServiceGetUrl, userId));
+            var response = Get(String.Format(_userPayStreamServiceGetUrl, _webServicesBaseUrl, userId));
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
