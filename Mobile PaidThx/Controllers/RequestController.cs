@@ -66,18 +66,8 @@ namespace Mobile_PaidThx.Controllers
 
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    var response = paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredReceiveAccountId, model.RecipientUri, model.Pincode, model.Amount, model.Comments, "PaymentRequest", "0", "0", "", "", "");
-                    //ctx.PaymentRequests.Add(new PaymentRequest()
-                    //{
-                    //    Amount = model.Amount,
-                    //    ApiKey = application.ApiKey,
-                    //    Comments = model.Comments,
-                    //    CreateDate = System.DateTime.Now,
-                    //    PaymentRequestId = Guid.NewGuid(),
-                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
-                    //    RecipientUri = model.RecipientUri,
-                    //    RequestorId = user.UserId
-                    //});
+                    paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredReceiveAccountId, model.RecipientUri, model.Pincode, model.Amount, model.Comments, "PaymentRequest", "0", "0", "", "", "");
+
                 }
                 catch (Exception ex)
                 {

@@ -10,27 +10,19 @@
     </div>
 
     <div data-role="content" class="content">
+           @using (Html.BeginForm("AddContactSend", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+           {
+            
         <div style="font-size: 16px; margin-left: 10px; margin-top: 10px">
             Enter your contact's
         </div>
         <div data-role="fieldcontain" style="margin-left: 10px">
             <label for="email-send">
-                <span style="font-weight: bold">E-mail:</span></label>
-            <input type="text" name="email-send" id="email-send" value="" />
+                <span style="font-weight: bold">E-mail or Mobile #:</span></label>
+            <input type="text" name="RecipientUri" id="email-send" value="" />
         </div>
-        <div style="font-style: italic; font-size: 16px; margin-left: 15px">
-            OR</div>
-        <div data-role="fieldcontain" style="margin-left: 10px">
-            <label for="phonenumber-send">
-                <span style="font-weight: bold">Phone #:</span></label>
-            <input type="text" name="phonenumber-send" id="phonenumber-send" value="" />
-        </div>
-        <div style="font-style: italic; font-size: 12px; margin-left: 10px">
-            <span style="font-weight: bold">Note</span>: Entering both contact's phone number/email
-            will result in sending the payment to your contact's <span style="font-weight: bold">
-                phone number</span>.
-        </div>
-         <button type="button" id="submitContactSend" class="btn-new btn-blue">
+         <button type="submit" id="submitContactSend2" class="btn-new btn-blue">
                    <span>Confirm Contact</span></button>
+           }
     </div>
 </div>

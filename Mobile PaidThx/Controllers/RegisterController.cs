@@ -54,7 +54,7 @@ namespace Mobile_PaidThx.Controllers
 
                 try
                 {
-                    var jsonResponse = userServices.PersonalizeUser(Session["UserId"].ToString(), new UserModels.PersonalizeUserRequest()
+                    userServices.PersonalizeUser(Session["UserId"].ToString(), new UserModels.PersonalizeUserRequest()
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
@@ -146,6 +146,7 @@ namespace Mobile_PaidThx.Controllers
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
 
+            var userServices = new Services.UserServices();
             var userPaymentAccountService = new Services.UserPaymentAccountServices();
 
             var userId = Session["UserId"].ToString();
@@ -164,6 +165,25 @@ namespace Mobile_PaidThx.Controllers
                 _logger.Log(LogLevel.Info, String.Format("Exception Setting Up New ACH Account {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
             }
+
+            UserModels.UserResponse user;
+
+            try
+            {
+                user = userServices.GetUser(userId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                return View();
+            }
+
+            Session["User"] = user;
+
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             return RedirectToAction("Index", "Paystream");
         }

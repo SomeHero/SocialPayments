@@ -17,6 +17,9 @@ namespace Mobile_PaidThx.Services
         {
             var response = Get(String.Format(_userPayStreamServiceGetUrl, _webServicesBaseUrl, userId));
 
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
+
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var paystream = js.Deserialize<List<MessageModels.MessageResponse>>(response.JsonResponse);

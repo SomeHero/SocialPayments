@@ -15,8 +15,10 @@ namespace Mobile_PaidThx.Services
         {
             var response = Get(String.Format(_userPayStreamServiceGetUrl, _webServicesBaseUrl));
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
 
+            JavaScriptSerializer js = new JavaScriptSerializer();
             var securityQuestions = js.Deserialize<List<SecurityQuestionModels.SecurityQuestionResponse>>(response.JsonResponse);
 
             return securityQuestions;

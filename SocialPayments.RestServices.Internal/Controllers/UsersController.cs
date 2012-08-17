@@ -816,20 +816,34 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
         {
             Context _ctx = new Context();
+            
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
 
-            User user;
-            var isValid = _userService.ValidateUser(request.userName, request.password, out user);
+            HttpResponseMessage<UserModels.ValidateUserResponse> responseMessage;
 
-            bool hasACHAccount = false;
-            if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
-                hasACHAccount = true;
+            User user;
+            var isValid = false;
+
+            try
+            {
+                isValid = _userService.ValidateUser(request.userName, request.password, out user);
+            }
+            catch (Exception ex)
+            {
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.InternalServerError);
+                responseMessage.ReasonPhrase = ex.Message;
+
+                return responseMessage;
+            }
 
             if (isValid)
             {
+                bool hasACHAccount = false;
+                if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
+                    hasACHAccount = true;
+
                 var message = new UserModels.ValidateUserResponse()
                 {
                     userId = user.UserId.ToString(),
@@ -843,10 +857,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     isLockedOut = user.IsLockedOut
                 };
 
-                return new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
+
+                return responseMessage;
             }
             else
-                return new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
+            {
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
+                responseMessage.ReasonPhrase = "Invalid Username and Password";
+
+                return responseMessage;
+            }
+
         }
 
         //POST /api/users/signin_withfacebook

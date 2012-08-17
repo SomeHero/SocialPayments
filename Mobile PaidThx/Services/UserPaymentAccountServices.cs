@@ -31,7 +31,7 @@ namespace Mobile_PaidThx.Services
             return response;
         }
         
-        public string SetSendAccount(String apiKey, String userId, String bankId, String securityPin)
+        public void SetSendAccount(String apiKey, String userId, String bankId, String securityPin)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -45,12 +45,11 @@ namespace Mobile_PaidThx.Services
             string serviceUrl = String.Format(_setPreferredSendAccountUrl, _webServicesBaseUrl, userId);
             var response = Post(serviceUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
-
-            return jsonObject["paymentAccountId"];
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
 
-        public string SetReceiveAccount(String apiKey, String userId, String bankId, String securityPin)
+        public void SetReceiveAccount(String apiKey, String userId, String bankId, String securityPin)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -64,12 +63,11 @@ namespace Mobile_PaidThx.Services
             string serviceUrl = String.Format(_setPreferredReceiveAccountUrl, _webServicesBaseUrl, userId);
             var response = Post(serviceUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
-
-            return jsonObject["paymentAccountId"];
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
 
-        public string EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, String routingNumber, String accountType)
+        public void EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, String routingNumber, String accountType)
         {
             string editUrl = String.Format(_setupACHAccountServiceUrl, _webServicesBaseUrl, userId,  bankId);
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -85,9 +83,8 @@ namespace Mobile_PaidThx.Services
 
             var response = Put(editUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
-
-            return jsonObject["paymentAccountId"];
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
 
         public string AddAccount(String apiKey, String id, String nickName, String nameOnAccount, String routingNumber, string accountNumber, string accountType, string securityPin, string securityQuestionId, string securityQuestionAnswer)
@@ -109,6 +106,9 @@ namespace Mobile_PaidThx.Services
             });
 
             var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                throw new Exception(response.Description);
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
@@ -135,6 +135,9 @@ namespace Mobile_PaidThx.Services
             });
 
             var response = Post(String.Format(_setupACHAccountServiceUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                throw new Exception(response.Description);
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 

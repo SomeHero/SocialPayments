@@ -21,6 +21,7 @@ namespace Mobile_PaidThx.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
 
+        private string _mobileWebSiteUrl = ConfigurationManager.AppSettings["MobileWebSiteUrl"];
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public ActionResult Index()
@@ -37,16 +38,38 @@ namespace Mobile_PaidThx.Controllers
 
             if (ModelState.IsValid)
             {
-                var jsonResponse = userService.ValidateUser(model.Email, model.Password);
+                UserModels.ValidateUserResponse validateResponse;
+                    
+                try
+                {
+                    validateResponse = userService.ValidateUser(model.Email, model.Password);
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
 
-                JavaScriptSerializer js = new JavaScriptSerializer();
+                    _logger.Log(LogLevel.Error, String.Format("Exception Signing In User. Exception: {0} StackTrace: {1}", ex.Message, ex.StackTrace));
+                
+                    return View();
+                }
 
-                var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
+                UserModels.UserResponse user;
+                  
+                try {
+                    user = userService.GetUser(validateResponse.userId);
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
 
+                    _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                    return View();
+                }
 
                 FormsAuthentication.SetAuthCookie(model.Email, false);
-                Session["UserId"] = userResponse.userId;
-                var user = userService.GetUser(userResponse.userId);
+
+                Session["UserId"] = validateResponse.userId;
                 Session["User"] = user;
 
                 if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
@@ -56,6 +79,8 @@ namespace Mobile_PaidThx.Controllers
                 }
                 else
                 {
+                    TempData["DataUrl"] = "data-url=./Paystream";
+
                     return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
                 }
             }

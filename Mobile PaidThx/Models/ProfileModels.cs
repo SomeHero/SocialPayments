@@ -74,13 +74,6 @@ namespace Mobile_PaidThx.Models
         public String SenderName { get; set; }
         public PaymentModel Payment { get; set; }
     }
-    public class SendMoneyModel
-    {
-        public String RecipientUri { get; set; }
-        public Double Amount { get; set; }
-        public String Comments { get; set; }
-        public String Pincode { get; set; }
-    }
     public class DonateMoneyModel
     {
         public String Organization { get; set; }
