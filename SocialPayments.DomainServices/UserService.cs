@@ -576,7 +576,7 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public User LinkFacebook(Guid apiKey, string userId, string accountId, string oAuthToken, DateTime tokenExpiration)
+        public bool LinkFacebook(string apiKey, string userId, string accountId, string oAuthToken, DateTime tokenExpiration)
         {
             _logger.Log(LogLevel.Info, String.Format("Linking Facebook {0}: and token {1}", accountId, oAuthToken));
 
@@ -586,71 +586,36 @@ namespace SocialPayments.DomainServices
 
             try
             {
-                user = _ctx.Users
-                    .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+                user = GetUserById(userId);
 
-                if (user == null)
+                if (user != null)
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}.  Linking Facebook account.", accountId));
-
-                    user = GetUserById(userId);
-
-                    if (user != null)
+                    user.FacebookUser = new FBUser()
                     {
-                        _logger.Log(LogLevel.Info, "Found a cooresponding user for this userId.");
-                        user.FacebookUser = new FBUser()
-                        {
-                            FBUserID = accountId,
-                            Id = Guid.NewGuid(),
-                            // TokenExpiration = tokenExpiration,
-                            OAuthToken = oAuthToken
-                        };
-                        //user.UserName = "fb_" + accountId;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
-                    }
-
+                        FBUserID = accountId,
+                        Id = Guid.NewGuid(),
+                        OAuthToken = oAuthToken,
+                        TokenExpiration = tokenExpiration
+                    };
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Found user with this Facebook account {0}: Stopping Link.", accountId));
-
-                    throw new ArgumentException("We already have a user linked to this facebook account.", "accountId");
+                    _logger.Log(LogLevel.Error, String.Format("Error linking facebook account, No user found for {0}",userId));
+                    
+                    return false;
                 }
-
-                _ctx.SaveChanges();
-
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        _logger.Log(LogLevel.Error, String.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage));
-                    }
-                }
-
-                throw dbEx;
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Fatal, String.Format("Exception Linking with Facebook. {0}", ex.Message));
-                var innerException = ex.InnerException;
+                _logger.Log(LogLevel.Error, "Error linking facebook account:");
+                _logger.Log(LogLevel.Error, ex.Message);
 
-                while (innerException != null)
-                {
-                    _logger.Log(LogLevel.Fatal, innerException.Message);
-
-                    innerException = innerException.InnerException;
-                }
-
-                throw ex;
+                return false;
             }
 
-            return user;
+            _ctx.SaveChanges();
+
+            return true;
         }
 
         public User ResetPassword(string userId, string newPassword)

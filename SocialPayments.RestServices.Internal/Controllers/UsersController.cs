@@ -292,7 +292,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken, "", request.messageId);
-
             }
             catch (Exception ex)
             {
@@ -931,22 +930,46 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 try
                 {
-                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.oAuthToken, System.DateTime.Now.AddDays(30));
+                    user = _userService.GetUserById(id);
                 }
-                catch (ArgumentException aEx)
+                catch ( Exception ex )
                 {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    string ErrorReason = String.Format("-LinkFB- Unable to find user for {0}", id);
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
                     var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = aEx.Message;
+                    message.ReasonPhrase = ErrorReason;
                     return message;
                 }
-                catch (Exception ex)
+
+                /*
+                 * Validate Facebook AccountId and Auth Token and Create ExpirationDate Token
+                 */
+                if (request.apiKey == null || request.AccountId == null || request.oAuthToken == null)
                 {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
-                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    message.ReasonPhrase = ex.Message;
+                    string ErrorReason = String.Format("Link Facebook Failed -> Invalid Input Sent.");
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
                     return message;
                 }
+                else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
+                {
+                    // Account in use... return an error.
+                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.");
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
+                    return message;
+                }
+                else
+                {
+                    _userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0));
+                }
+
+
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
