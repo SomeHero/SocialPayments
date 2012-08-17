@@ -188,6 +188,7 @@
     <Compile Include="Models\PaystreamModels.cs" />
     <Compile Include="Models\ProfileModels.cs" />
     <Compile Include="Models\RegisterModels.cs" />
+    <Compile Include="Models\RequestModels.cs" />
     <Compile Include="Models\SecurityQuestionModels.cs" />
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -567,7 +568,6 @@
     <None Include="Service References\_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
     <Content Include="Views\Account\VerifyPayPoint.cshtml" />
     <Content Include="Views\Profile\PartialViews\SettingsNew.cshtml" />
-    <Content Include="Views\Send\PartialViews\SendMoney.cshtml" />
     <Content Include="Views\Profile\PartialViews\RequestMoney.cshtml" />
     <Content Include="Views\Preferences\PartialViews\ListSettings.cshtml" />
     <Content Include="Views\Paystream\PartialViews\ChooseAmount.cshtml" />
@@ -588,7 +588,7 @@
     <Content Include="Views\Send\PopupPinswipe.cshtml" />
     <Content Include="Views\Preferences\UserAgreement.cshtml" />
     <Content Include="Views\Preferences\Help.cshtml" />
-    <Content Include="Views\Request\RequestPinswipe.cshtml" />
+    <Content Include="Views\Request\PopupPinswipe.cshtml" />
     <Content Include="Views\DoGood\Donate.cshtml" />
     <Content Include="Views\DoGood\Pledge.cshtml" />
     <Content Include="Views\DoGood\AddOrg.cshtml" />
@@ -697,7 +697,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Paystream\Index.cshtml" />
-    <Content Include="Views\Request\PartialViews\RequestMoney.cshtml" />
     <Content Include="Views\Paystream\PartialViews\All.cshtml" />
     <Content Include="Views\Paystream\PartialViews\SendMoney.cshtml" />
     <Content Include="Views\Paystream\PartialViews\SubNav.cshtml" />

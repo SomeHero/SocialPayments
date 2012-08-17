@@ -22,56 +22,90 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View(savedData);
+            TempData["DataUrl"] = "data-url=.Request";
+
+            return View(new RequestModels.RequestMoneyModel()
+            {
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+            });
+        }
+        [HttpPost]
+        public ActionResult Index(RequestModels.RequestMoneyModel model)
+        {
+            return RedirectToAction("PopupPinSwipe");
+        }
+        public ActionResult AddContactRequest()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddContactrequest(RequestModels.AddContactRequestModel model)
+        {
+            Session["RecipientUri"] = model.RecipientUri;
+
+            TempData["DataUrl"] = "data-url=./";
+
+            return View("Index", new RequestModels.RequestMoneyModel()
+            {
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = ""
+            });
+        }
+        public ActionResult AmountToRequest()
+        {
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Index(String index)
+        public ActionResult AmountToRequest(RequestModels.AmountToSendModel model)
         {
-            if (index != null && index.Length > 0)
-            {
-                savedData.Amount = Double.Parse(index);
-            }
-            else
-            {
-                savedData.Amount = 0;
-            }
+            Session["Amount"] = model.Amount;
 
-            return View(savedData);
+            TempData["DataUrl"] = "data-url=./";
+
+            return View("Index", new RequestModels.RequestMoneyModel()
+            {
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = ""
+            });
         }
-
-        [HttpPut]
-        public ActionResult Index(Mobile_PaidThx.Models.RequestMoneyModel model)
+        public ActionResult PopupPinswipe()
         {
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public ActionResult RequestMoney(RequestMoneyModel model)
+        public ActionResult PopupPinswipe(Mobile_PaidThx.Models.RequestModels.PinSwipeModel model)
         {
-            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
-
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
-            var userId = Session["UserId"].ToString();
+            //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
-            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+            var userId = Session["UserId"].ToString();
+
+            string recipientUri = Session["RecipientUri"].ToString();
+            double amount = Convert.ToDouble(Session["Amount"]);
+            string comment = "";
 
             if (ModelState.IsValid)
             {
                 try
                 {
-
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredReceiveAccountId, model.RecipientUri, model.Pincode, model.Amount, model.Comments, "PaymentRequest", "0", "0", "", "", "");
-
+                    paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, recipientUri, model.Pincode,
+                        amount, comment, "PaymentRequest", "0", "0", "", "", "");
                 }
                 catch (Exception ex)
                 {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment. {0}", ex.Message));
+
+                    ModelState.AddModelError("", ex.Message);
 
                     return View(model);
                 }
@@ -79,120 +113,13 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
+            TempData["DataUrl"] = "data-url=.Paystream";
+
+            Session["RecipientUri"] = null;
+            Session["Amount"] = null;
+            Session["Comments"] = null;
+
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-        }
-
-        [HttpPost]
-        public ActionResult RequestData(Mobile_PaidThx.Models.RequestMoneyModel model)
-        {
-            return Json(model);
-        }
-
-        public ActionResult AmountToRequest()
-        {
-            return View();
-        }
-
-        public ActionResult AddContactRequest()
-        {
-            return View();
-        }
-
-        public ActionResult RequestPinswipe()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult RequestPinswipe(Mobile_PaidThx.Models.RequestMoneyModel model)
-        {
-            return View(model);
-        }
-
-        //
-        // GET: /Request/Details/5
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        //
-        // GET: /Request/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Request/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Request/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Request/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Request/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Request/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
