@@ -20,7 +20,7 @@
             <h5>
                 Sign in with Email or Phone</h5>
             <div id="registration-form">
-                @using (Html.BeginForm())
+                @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide-up" }} ))
                 {       
                     <input type="text" id="username" class="required" placeholder="Email Address or Phone #"
                         name="Email" style="margin-bottom:15px" />

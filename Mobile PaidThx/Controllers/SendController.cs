@@ -20,146 +20,39 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            Mobile_PaidThx.Models.SendMoneyModel model = new Models.SendMoneyModel
+            TempData["DataUrl"] = "data-url=./Send";
+
+            return View(new SendModels.SendMoneyModel()
             {
-                Amount = 0,
-                Comments = null,
-                RecipientUri = null
-            };
-            return View(model);
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+            });
         }
 
         [HttpPost]
-        public ActionResult SendMoney(SendMoneyModel model)
+        public ActionResult Index(SendModels.SendMoneyModel model)
         {
-            logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
-
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
-            var messageService = new SocialPayments.DomainServices.MessageServices();
-            var userId = Session["UserId"].ToString();
-
-            if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
-
-            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-                    var paystreamMessageServices = new PaystreamMessageServices();
-                    var response = paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, model.RecipientUri, model.Pincode, model.Amount, model.Comments, "Payment", "0", "0", "", "", "");
-                    //messageService.AddMessage(_apiKey, user.UserId.ToString(), "", model.RecipientUri, user.PaymentAccounts[0].Id.ToString(), model.Amount, model.Comments, @"Payment");
-                    //ctx.Payments.Add(new Payment()
-                    //{
-                    //    Id = Guid.NewGuid(),
-                    //    ApiKey = new Guid(ConfigurationManager.AppSettings["APIKey"]),
-                    //    Comments = model.Comments,
-                    //    CreateDate = System.DateTime.Now,
-                    //    FromAccountId = paymentAccount.Id,
-                    //    FromMobileNumber = mobileNumber,
-                    //    PaymentAmount = model.Amount,
-                    //    PaymentChannelType = PaymentChannelType.Single,
-                    //    PaymentDate = System.DateTime.Now,
-                    //    PaymentStatus = PaymentStatus.Submitted,
-                    //    StandardEntryClass = StandardEntryClass.Web,
-                    //    ToMobileNumber = model.RecipientUri
-                    //});
-                }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment. {0}", ex.Message));
-
-                    return View(model);
-                }
-            }
-            else
-                return View(model);
-
-
-
-            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-
+            return RedirectToAction("PopupPinSwipe");
         }
-
-        [HttpPost]
-        public ActionResult Index(String index)
-        {
-            Mobile_PaidThx.Models.SendMoneyModel model = new Models.SendMoneyModel();
-            if (index != null && index.Length > 0)
-            {
-                model.Amount = Double.Parse(index);
-            }
-            else
-            {
-                model.Amount = 0;
-            }
-            model.Comments = null;
-            model.RecipientUri = null;
-            return View(model);
-        }
-
-        //
-        // GET: /Send/Details/5
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+      
         public ActionResult AddContactSend()
         {
             return View();
         }
-
-        public ActionResult PopupPinswipe()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public ActionResult PopupPinswipe(Mobile_PaidThx.Models.SendMoneyModel model)
+        public ActionResult AddContactSend(SendModels.AddContactSendModel model)
         {
-            return View(model);
-        }
+            Session["RecipientUri"] = model.RecipientUri;
 
-        [HttpPut]
-        public ActionResult Index(Mobile_PaidThx.Models.SendMoneyModel model)
-        {
-            return View(model);
-        }
+            TempData["DataUrl"] = "data-url=./";
 
-        [HttpPost]
-        public ActionResult SendData(Mobile_PaidThx.Models.SendMoneyModel model)
-        {
-            return Json(model);
-        }
-
-        //
-        // GET: /Send/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Send/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
+            return View("Index", new SendModels.SendMoneyModel()
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = ""
+            });
         }
         public ActionResult AmountToSend()
         {
@@ -167,60 +60,62 @@ namespace Mobile_PaidThx.Controllers
         }
 
         [HttpPost]
-        public ActionResult AmountToSend(String id)
+        public ActionResult AmountToSend(SendModels.AmountToSendModel model)
         {
-            return View("Index");
-        }
-        //
-        // GET: /Send/Edit/5
+            Session["Amount"] = model.Amount;
 
-        public ActionResult Edit(int id)
+            TempData["DataUrl"] = "data-url=./";
+
+            return View("Index", new SendModels.SendMoneyModel()
+            {
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = ""
+            });
+        }
+        public ActionResult PopupPinswipe()
         {
             return View();
         }
 
-        //
-        // POST: /Send/Edit/5
-
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult PopupPinswipe(Mobile_PaidThx.Models.SendModels.PinSwipModel model)
         {
-            try
+            //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
+
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            var userId = Session["UserId"].ToString();
+
+            string recipientUri = Session["RecipientUri"].ToString();
+            double amount = Convert.ToDouble(Session["Amount"]);
+            string comment = "";
+
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                try
+                {
+                    UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+                    var paystreamMessageServices = new PaystreamMessageServices();
+                    paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, recipientUri, model.Pincode,
+                        amount, comment, "Payment", "0", "0", "", "", "");
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment. {0}", ex.Message));
 
-                return RedirectToAction("Index");
+                    ModelState.AddModelError("", ex.Message);
+
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
-        }
+            else
+                return View(model);
 
-        //
-        // GET: /Send/Delete/5
+            TempData["DataUrl"] = "data-url=.Paystream";
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Send/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
     }
 }

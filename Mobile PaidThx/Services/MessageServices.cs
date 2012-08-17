@@ -9,19 +9,20 @@ namespace Mobile_PaidThx.Services
 {
     public class MessageServices: ServicesBase
     {
-        private string _messageServicesBaseUrl = "http://23.21.203.171/api/internal/api/PaystreamMessages/{0}";
+        private string _messageServicesBaseUrl = "{0}PaystreamMessages/{1}";
 
         public MessageModels.MessageResponse GetMessage(string messageId)
         {
-            var serviceUrl = String.Format(_messageServicesBaseUrl, messageId);
+            var serviceUrl = String.Format(_messageServicesBaseUrl, _webServicesBaseUrl, messageId);
 
             var response = Get(serviceUrl);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.JsonResponse);
 
-            var message = js.Deserialize<MessageModels.MessageResponse>(response.JsonResponse);
+            var js = new JavaScriptSerializer();
 
-            return message;
+            return js.Deserialize<MessageModels.MessageResponse>(response.JsonResponse);
         }
     }
 }

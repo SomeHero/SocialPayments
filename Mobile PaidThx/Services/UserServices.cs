@@ -7,23 +7,24 @@ using System.Net;
 using System.Text;
 using System.IO;
 using Mobile_PaidThx.Services.ResponseModels;
+using NLog;
 
 namespace Mobile_PaidThx.Services
 {
     public class UserServices: ServicesBase
     {
-        private string _userServiceBaseUrl = "http://23.21.203.171/api/internal/api/Users";
-        private string _userServiceValidateUserUrl = "http://23.21.203.171/api/internal/api/Users/validate_user";
-        private string _userServicesGetBaseUrl = "http://23.21.203.171/api/internal/api/Users/{0}";
-        private string _userServicesSignInWithFacebookUrl = "http://23.21.203.171/api/internal/api/users/signin_withfacebook";
-        private string _personalizeUrl = "http://23.21.203.171/api/internal/api/users/{0}/personalize_user";
-        private string _getMeCodesUrl = "http://23.21.203.171/api/internal/api/users/{0}/mecodes";
-        private string _deletePaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/";
-        private string _addPaypointUrl = "http://23.21.203.171/api/internal/api/users/{0}/paypoints/";
+        private string _userServiceBaseUrl = "{0}Users";
+        private string _userServiceValidateUserUrl = "{0}Users/validate_user";
+        private string _userServicesGetBaseUrl = "{0}Users/{1}";
+        private string _userServicesSignInWithFacebookUrl = "{0}users/signin_withfacebook";
+        private string _personalizeUrl = "{0}Users/{1}/personalize_user";
+        private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
+        private string _deletePaypointUrl = "{0}{1}/paypoints/{2}";
+        private string _addPaypointUrl = "{0}{1}/paypoints/";
 
-        public string AddPaypoint(String apiKey, String paypointId, String userId, String uri, String type, Boolean verified, string verifiedDate, string createDate)
+        public void AddPaypoint(String apiKey, String paypointId, String userId, String uri, String type, Boolean verified, string verifiedDate, string createDate)
         {
-            var serviceUrl = String.Format(_addPaypointUrl, userId);
+            var serviceUrl = String.Format(String.Format(_addPaypointUrl, _webServicesBaseUrl, userId));
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var json = js.Serialize(new
@@ -40,44 +41,38 @@ namespace Mobile_PaidThx.Services
 
             var response = Post(serviceUrl, json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
+            if (response.StatusCode != HttpStatusCode.Created)
+                throw new Exception(response.Description);
 
-            return jsonObject["paymentAccountId"];
         }
 
 
-        public ServiceResponse DeletePaypoint(string apiKey, string userId, string paypointId)
+        public void DeletePaypoint(string apiKey, string userId, string paypointId)
         {
-            string serviceUrl = String.Format(_deletePaypointUrl, userId) + paypointId;
+            string serviceUrl = String.Format(_deletePaypointUrl, _webServicesBaseUrl, userId, paypointId);
+           
             var response = Delete(serviceUrl);
-            return response;
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
 
         public UserModels.UserResponse GetUser(string userId)
         {
-            var serviceUrl = String.Format(_userServicesGetBaseUrl, userId);
+            var js = new JavaScriptSerializer();
+            var serviceUrl = String.Format(_userServicesGetBaseUrl, _webServicesBaseUrl, userId);
 
             var response = Get(serviceUrl);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
 
-            var user = js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
+            return js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
 
-            return user;
         }
-        //        public class FacebookSignInRequest
-        //{
-        //    public string apiKey { get; set; }
-        //    public string accountId { get; set; }
-        //    public string firstName { get; set; }
-        //    public string lastName { get; set; }
-        //    public string emailAddress { get; set; }
-        //    public string deviceToken { get; set; }
-        //    public string oAuthToken { get; set; }
-        //    //public DateTime tokenExpiration { get; set; }
-        //}
-        public ServiceResponse SignInWithFacebook(string apiKey, string accountId, string firstName, string lastName, string emailAddress, string deviceToken, string oAuthToken,
-            DateTime tokenExpiration, string messageId)
+
+        public UserModels.FacebookSignInResponse SignInWithFacebook(string apiKey, string accountId, string firstName, string lastName, string emailAddress, string deviceToken, string oAuthToken,
+            DateTime tokenExpiration, string messageId, out bool isNewUser)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -93,12 +88,21 @@ namespace Mobile_PaidThx.Services
                 messageId = messageId
             });
 
-            var response = Post(_userServicesSignInWithFacebookUrl, json);
+            var response = Post(String.Format(_userServicesSignInWithFacebookUrl, _webServicesBaseUrl), json);
 
-            return response;
+
+            if (response.StatusCode != System.Net.HttpStatusCode.Created && response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
+
+            if(response.StatusCode == HttpStatusCode.Created)
+                isNewUser = true;
+            else
+                isNewUser = false;
+    
+            return js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
 
         }
-        public string RegisterUser(string serviceUrl, string apiKey, string userName, string password, string emailAddress, string registrationMethod, string deviceToken,
+        public UserModels.UserResponse RegisterUser(string apiKey, string userName, string password, string emailAddress, string registrationMethod, string deviceToken,
             string messageId)
         {           
 
@@ -115,17 +119,18 @@ namespace Mobile_PaidThx.Services
                 messageId = messageId
             });
 
-            var response = Post(serviceUrl, json);
+            ServiceResponse response = Post(String.Format(_userServiceBaseUrl, _webServicesBaseUrl), json);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
+            if (response.StatusCode != HttpStatusCode.Created)
+                throw new Exception(response.Description);
 
-            return jsonObject["userId"];
+            return js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
         }
-        public string PersonalizeUser(string userId, UserModels.PersonalizeUserRequest request)
+        public void PersonalizeUser(string userId, UserModels.PersonalizeUserRequest request)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var serviceUrl = String.Format(_personalizeUrl, userId);
+            var serviceUrl = String.Format(_personalizeUrl, _webServicesBaseUrl, userId);
 
             var json = js.Serialize(new
             {
@@ -136,9 +141,10 @@ namespace Mobile_PaidThx.Services
 
             var response = Post(serviceUrl, json);
 
-            return response.JsonResponse;
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
-        public string ValidateUser(string userName, string password)
+        public UserModels.ValidateUserResponse ValidateUser(string userName, string password)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
             
@@ -148,9 +154,12 @@ namespace Mobile_PaidThx.Services
                 password = password
             });
 
-            var response = Post(_userServiceValidateUserUrl, json);
+            var response = Post(String.Format(_userServiceValidateUserUrl, _webServicesBaseUrl), json);
 
-            return response.JsonResponse;
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+
+            return js.Deserialize<UserModels.ValidateUserResponse>(response.JsonResponse);
         }
 
     }

@@ -85,7 +85,7 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                 {
 
                     AccountNumber = paymentAccount.AccountNumber,
-                    Amount = depositAmount1,
+                    Amount = depositAmount2,
                     AccountType = Domain.AccountType.Checking,
                     ACHTransactionId = "",
                     CreateDate = System.DateTime.Now,

@@ -6,11 +6,14 @@ using System.Net;
 using System.Text;
 using System.IO;
 using Mobile_PaidThx.Services.ResponseModels;
+using System.Configuration;
 
 namespace Mobile_PaidThx.Services
 {
     public class ServicesBase
     {
+        protected string _webServicesBaseUrl = ConfigurationManager.AppSettings["WebServicesBaseUrl"];
+
         protected ServiceResponse Get(string serviceUrl)
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
