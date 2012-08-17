@@ -20,9 +20,6 @@ namespace Mobile_PaidThx.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
 
-        private string _userServiceUrl = "http://23.21.203.171/api/internal/api/Users";
-        private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
-
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public ActionResult Index(string messageId)
@@ -65,28 +62,30 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Register User {0}", model.Email));
 
-            string userId = String.Empty;
+            var userServices = new Services.UserServices();
+            UserModels.UserResponse user;
 
             try
             {
-                var userServices = new Services.UserServices();
-                userId = userServices.RegisterUser(_userServiceUrl, _apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
+                user = userServices.RegisterUser(_apiKey, model.Email, model.Password, model.Email, "MobileWeb", "",
                     (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
-
-                Session["UserId"] = userId;
-
-                var user = userServices.GetUser(userId);
-                Session["User"] = user;
-
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1}", model.Email, ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1} Stack Trace: {2}", model.Email, ex.Message, ex.StackTrace));
 
-                ModelState.AddModelError("", "Error Registering User");
+                ModelState.AddModelError("", ex.Message);
 
-                return View("Index");
+                return View("Index",  new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    Payment = null
+                });
             }
+
+
+            Session["UserId"] = user.userId;
+            Session["User"] = user;
 
             return RedirectToAction("Personalize", "Register");
         }
@@ -99,34 +98,43 @@ namespace Mobile_PaidThx.Controllers
             var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
 
             var fbAccount = faceBookServices.FBauth(state, code, redirect);
-            var response = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
-                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""));
 
-            //validate fbAccount.Id is associated with active user
-            //if (user == null)
-            //{
-            //    ModelState.AddModelError("", "Error. Try again..");
+            UserModels.FacebookSignInResponse facebookSignInResponse;
+            bool isNewUser = false;
 
-            //    return View("SignIn");
-            //}
-
-            if(response.StatusCode != System.Net.HttpStatusCode.Created && response.StatusCode != System.Net.HttpStatusCode.OK)
+            try
             {
-                ModelState.AddModelError("", response.Description);
+                facebookSignInResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
+                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""), out isNewUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Signing In with Facebook. {0} Stack Trace: {1}", ex.Message));
+
+                ModelState.AddModelError("", ex.Message);
 
                 return View("Index");
             }
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            UserModels.UserResponse userResponse;
 
-            var facebookSignInResponse = js.Deserialize<UserModels.FacebookSignInResponse>(response.JsonResponse);
+            try
+            {
+                userResponse = userServices.GetUser(facebookSignInResponse.userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. {0} Stack Trace: {1}", ex.Message));
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Index");
+            }
 
             Session["UserId"] = facebookSignInResponse.userId;
+            Session["User"] = userResponse;
 
-            var user = userServices.GetUser(facebookSignInResponse.userId);
-            Session["User"] = user;
-
-            if(response.StatusCode == System.Net.HttpStatusCode.Created)
+            if(isNewUser)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
             else
                 return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });

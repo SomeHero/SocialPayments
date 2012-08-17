@@ -14,6 +14,8 @@ using System.Collections.ObjectModel;
 using SocialPayments.DataLayer.Interfaces;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using SocialPayments.DomainServices.UserProcessing;
+using System.Threading.Tasks;
 
 namespace SocialPayments.DomainServices
 {
@@ -110,11 +112,6 @@ namespace SocialPayments.DomainServices
 
             _ctx.SaveChanges();
 
-            SendEmailVerificationLink(emailAddressPayPoint);
-
-            if (mobileNumberPayPoint != null)
-                SendMobileVerificationCode(mobileNumberPayPoint);
-
             if (!String.IsNullOrEmpty(messageId))
             {
                 Guid messageGuid;
@@ -169,6 +166,17 @@ namespace SocialPayments.DomainServices
                 _ctx.SaveChanges();
             }
 
+            Task.Factory.StartNew(() =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
+
+                SubmittedUserTask userTask = new SubmittedUserTask();
+                userTask.Execute(user.UserId);
+
+            }).ContinueWith(task =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
+            });
             return user;
         }
         public List<User> GetUsers()

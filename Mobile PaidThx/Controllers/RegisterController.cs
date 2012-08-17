@@ -24,17 +24,13 @@ namespace Mobile_PaidThx.Controllers
 {
     public class RegisterController : PaidThxBaseController
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
 
         private string fbState = "pickle"; //TODO: randomly generate this per session
         private string fbAppID = "332189543469634";
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
-
-
-        private string _userServiceUrl = "http://23.21.203.171/api/internal/api/Users";
-        private string _setupACHAccountServiceUrl = "http://23.21.203.171/api/internal/api/Users/{0}/PaymentAccounts";
 
         public ActionResult Personalize()
         {
@@ -55,12 +51,22 @@ namespace Mobile_PaidThx.Controllers
             if (ModelState.IsValid)
             {
                 var userServices = new UserServices();
-                var jsonResponse = userServices.PersonalizeUser(Session["UserId"].ToString(), new UserModels.PersonalizeUserRequest()
+
+                try
                 {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    ImageUrl = ""
-                });
+                    userServices.PersonalizeUser(Session["UserId"].ToString(), new UserModels.PersonalizeUserRequest()
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        ImageUrl = ""
+                    });
+                }
+                catch(Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception in Personalize. {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+                    return View();
+                }
 
                 return RedirectToAction("SetupACHAccount");
             }
@@ -69,7 +75,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupACHAccount()
         {
-            logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
+            _logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
 
             PaymentModel paymentModel = null;
             if (Session["Payment"] != null)
@@ -85,7 +91,7 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult SetupACHAccount(SetupACHAccountModel model)
         {
-            logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
+            _logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
 
             Session["ACHAccountModel"] = model;
 
@@ -140,13 +146,44 @@ namespace Mobile_PaidThx.Controllers
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
 
+            var userServices = new Services.UserServices();
             var userPaymentAccountService = new Services.UserPaymentAccountServices();
 
             var userId = Session["UserId"].ToString();
             var nickName = String.Format("{0} {1}", achAccountModel.AccountType, achAccountModel.AccountNumber.Substring(achAccountModel.AccountNumber.Length - 5, 4));
 
-            string paymentAccountId = userPaymentAccountService.SetupACHAccount(String.Format(_setupACHAccountServiceUrl, userId), _apiKey, achAccountModel.NameOnAccount, nickName,
+            string paymentAccountId = "";
+
+            try
+            {
+                paymentAccountId =
+                userPaymentAccountService.SetupACHAccount(userId, _apiKey, achAccountModel.NameOnAccount, nickName,
                 achAccountModel.RoutingNumber, achAccountModel.AccountNumber, achAccountModel.AccountType, pinCode, model.SecurityQuestionId, model.SecurityQuestionAnswer);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Info, String.Format("Exception Setting Up New ACH Account {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+            }
+
+            UserModels.UserResponse user;
+
+            try
+            {
+                user = userServices.GetUser(userId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                return View();
+            }
+
+            Session["User"] = user;
+
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             return RedirectToAction("Index", "Paystream");
         }

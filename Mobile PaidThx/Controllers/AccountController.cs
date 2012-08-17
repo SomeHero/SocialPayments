@@ -232,49 +232,8 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
         }
-        public ActionResult SignIn()
-        {
-            logger.Log(LogLevel.Info, String.Format("Displaying SignIn View"));
 
-            return View();
-        }
-        [HttpPost]
-        public ActionResult SignIn(LogOnModel model, string returnUrl)
-        {
-            logger.Log(LogLevel.Info, String.Format("Attempting to signin user {0}", model.Email));
-
-            var userService = new UserServices();
-
-            if (ModelState.IsValid)
-            {
-                var jsonResponse = userService.ValidateUser(model.Email, model.Password);
-
-                JavaScriptSerializer js = new JavaScriptSerializer();
-            
-                var userResponse = js.Deserialize<UserModels.ValidateUserResponse>(jsonResponse);
-
-
-                FormsAuthentication.SetAuthCookie(model.Email, false);
-                Session["UserId"] = userResponse.userId;
-
-                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                {
-                    return Redirect(returnUrl);
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "The user name or password provided is incorrect.");
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        
         public ActionResult ForgotPassword()
         {
             var model = new ForgotPasswordModel();

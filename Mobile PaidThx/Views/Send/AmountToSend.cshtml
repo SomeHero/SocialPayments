@@ -10,9 +10,11 @@
     </div>
 
     <div data-role="content" class="content">
-
-             <input type="text" id="customAmountSend" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
-             <button id="gobtn-send" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
+    @using (Html.BeginForm("AmountToSend", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    {
+            
+             <input type="text" id="customAmountSend2" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
+             <button id="gobtn-send2" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
                 Go
             </button>
             <div style="clear:both;"><br /></div>
@@ -31,6 +33,6 @@
        
         <div style="background: #000000; height: 1px; margin-bottom: 10px">
         </div>
+    }
     </div>
-        @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

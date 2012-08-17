@@ -5,6 +5,7 @@ using System.Text;
 using NLog;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices.UserProcessing
 {
@@ -15,7 +16,7 @@ namespace SocialPayments.DomainServices.UserProcessing
         private string _mobileValidationMessage = "Welcome to PdThx.   Your verfication codes are {0} and {1}.";
         private string _templateName = "Welcome/Registration";
         private string _welcomeEmailSubject = "Welcome to PaidThx";
-        private string _activationUrl = "http://www.paidthx.com/mobile/confirmation?{0}";
+        private string _mobileWebSiteUrl = ConfigurationManager.AppSettings["MobileWebSetURL"];
 
         public void Execute(Guid userId)
         {
@@ -28,6 +29,13 @@ namespace SocialPayments.DomainServices.UserProcessing
                 var emailService = new EmailService(ctx);
 
                 var user = userService.GetUserById(userId);
+
+
+                //SendEmailVerificationLink(emailAddressPayPoint);
+
+                //if (mobileNumberPayPoint != null)
+                    //SendMobileVerificationCode(mobileNumberPayPoint);
+
                 if (!String.IsNullOrEmpty(user.MobileNumber))
                 {
                     _logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}. Sending Verification Codes.", user.UserId));
@@ -44,17 +52,18 @@ namespace SocialPayments.DomainServices.UserProcessing
 
                     //sms mobile verification codes
                     smsService.SendSMS(user.ApiKey, user.MobileNumber, message);
+                  }
 
-                    //send registration email
-                    string emailSubject = _welcomeEmailSubject;
+                //send registration email
+                string emailSubject = _welcomeEmailSubject;
 
-                    var replacementElements = new List<KeyValuePair<string, string>>();
-                    replacementElements.Add(new KeyValuePair<string, string>("EMAILADDRESS", user.EmailAddress));
-                    replacementElements.Add(new KeyValuePair<string, string>("LINK_ACTIVATION", String.Format(_activationUrl, user.ConfirmationToken)));
+                var replacementElements = new List<KeyValuePair<string, string>>();
+                replacementElements.Add(new KeyValuePair<string, string>("EMAILADDRESS", user.EmailAddress));
+                replacementElements.Add(new KeyValuePair<string, string>("LINK_ACTIVATION", String.Format("{0}confirmation/{1}", _mobileWebSiteUrl, user.ConfirmationToken)));
 
-                    emailService.SendEmail(user.EmailAddress, emailSubject, _templateName, replacementElements);
+                emailService.SendEmail(user.EmailAddress, emailSubject, _templateName, replacementElements);
 
-                }
+               
 
                 _logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}. Finished.", user.UserId));
             }
