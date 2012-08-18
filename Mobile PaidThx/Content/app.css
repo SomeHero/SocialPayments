@@ -1991,6 +1991,10 @@ img.rounded
 {
  width:50%;   
 }
+#payment-type-group .ui-radio
+{
+ width:25%;   
+}
 .ui-radio-on, .ui-radio-off
 {
  width:100%;   

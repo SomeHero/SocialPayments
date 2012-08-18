@@ -1,12 +1,11 @@
 ﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
-<div id="main-body">
-   <input style="width: 99%;" type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
+ <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
     @{
         int i = 1;
         String prevHeader = "";
         int size = Model.AllReceipts.Count();
     }
-    <ul id="transactionsListAll" data-role="listview" class="transactions">
+    <ul id="transactionsListAll" data-role="listview"  data-filter="true" data-filter-placeholder="Search Paystream">
         @foreach (var transaction in Model.AllReceipts)
         {
             String header = Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.FormatDate(transaction.TransactionDate);

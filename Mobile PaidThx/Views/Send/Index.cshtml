@@ -10,6 +10,8 @@
         <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content">
+    
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
         @Html.ValidationSummary()
        @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
        {
@@ -59,6 +61,7 @@
                     <span>Send Money</span></button>
             </p>
         }
+    </div>
     </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
 </div>
