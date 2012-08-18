@@ -1,17 +1,16 @@
 ﻿@{
-    ViewBag.Title = "AmountToRequestView";
+    ViewBag.Title = "AmountToSendView";
 }
-<div data-role="page" class="modally" id="request-page">
-@{ Html.RenderPartial("TitleBar"); }
+<div data-role="page" id="send-page" class="modally">
+ @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             How Much?</h1>
-       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
 
-    <div data-role="content">
-
-        @using (Html.BeginForm("AmountToRequest", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    <div data-role="content" class="content">
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
     {
             
              <input type="text" id="customAmountSend2" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
@@ -36,5 +35,4 @@
         </div>
     }
     </div>
-    @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

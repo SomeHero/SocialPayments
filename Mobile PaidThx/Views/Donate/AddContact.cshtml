@@ -1,0 +1,41 @@
+﻿@model Mobile_PaidThx.Models.DonateModels.AddContactModel
+@{
+    ViewBag.Title = "AddContactDonate";
+}
+<div data-role="page" id="donate-add-contact">
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Select Non Profit</h1>
+        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+    <div data-role="content">
+      
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+
+        @foreach (var nonprofit in Model.NonProfits)
+        {
+            <li>
+            <a class="organization-donate" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
+                <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                    <img style="float:left; padding-right:10px; width:50px; height:50px" src="@nonprofit.ImageUri" />
+                    @if (nonprofit.HasInfo)
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                    }
+                    <div style="margin-top: 8px">
+                            <span style="float: left; font-size: 12px; font-weight: bold;">@nonprofit.Name</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(nonprofit.Slogan))
+                        {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
+                        }
+                    </div>
+                </div>
+            </a>
+            </li>
+        }
+        </ul>
+        </div>
+</div>

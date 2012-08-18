@@ -115,6 +115,10 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=.Paystream";
 
+            Session["RecipientUri"] = null;
+            Session["Amount"] = null;
+            Session["Comments"] = null;
+
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
     }

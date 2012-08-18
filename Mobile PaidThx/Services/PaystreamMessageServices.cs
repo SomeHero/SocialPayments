@@ -49,7 +49,7 @@ namespace Mobile_PaidThx.Services
 
             var response = Post(String.Format(_pledgeMessageUrl, _webServicesBaseUrl), json);
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.Created)
                 throw new Exception(response.Description);
         }
         private void SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
@@ -103,7 +103,7 @@ namespace Mobile_PaidThx.Services
 
             var response = Post(String.Format(_donateMessageUrl, _webServicesBaseUrl), json);
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK  && response.StatusCode != System.Net.HttpStatusCode.Created)
                 throw new Exception(response.Description);
         }
     }
