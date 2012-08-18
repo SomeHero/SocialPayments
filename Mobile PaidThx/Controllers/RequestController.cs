@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=.Request";
+            TempData["DataUrl"] = "data-url=./Request";
 
             return View(new RequestModels.RequestMoneyModel()
             {

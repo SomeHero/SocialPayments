@@ -2,15 +2,60 @@
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="preferences-page">
-  @{ Html.RenderPartial("TitleBar"); }
+    @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Settings</h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
-    
     <div data-role="content">
-        @{Html.RenderPartial("PartialViews/ListSettings");}
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            <!-- Edit Profile -->
+            <ul data-role="listview" data-inset="true">
+                <li><a href="./Profile" data-prefetch>Edit Profile </a></li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!-- Bank Account -->
+                    <a href="./PaymentAccount" data-prefetch>Bank Accounts </a></li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!-- Separate Set -->
+                    <!-- Email Accounts -->
+                    <a href="./Preferences/Emails" data-prefetch>Email Accounts </a></li>
+                <li>
+                    <!-- Social Networks -->
+                    <a href="./Preferences/SocialNetworks" data-prefetch>Social Networks </a></li>
+                <li>
+                    <!-- Phones -->
+                    <a href="./Preferences/Phones" data-prefetch>Phones </a></li>
+                <!--ME Codes -->
+                <li><a href="./Preferences/MeCodes" data-prefetch>Me Codes </a></li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li>Notifications </li>
+                <li>Sharing </li>
+                <li>Security & Privacy </li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!-- Separate Set -->
+                    <!-- Help -->
+                    <a href="./Preferences/Help" data-prefetch>Help </a></li>
+                <!-- Feedback -->
+                <li>Feedback </li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!--Rate PaidThx ( won't be used this version )-->
+                    <!-- Separate Set -->
+                    <!-- User Agreement -->
+                    <a href="./Preferences/UserAgreement" data-prefetch>User Agreement </a></li>
+                <li>
+                    <!-- Sign Out -->
+                    <a onclick="signOut()">Sign Out </a></li>
+            </ul>
+        </div>
     </div>
-    
 </div>

@@ -1,0 +1,30 @@
+﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
+<script>
+    function submitform() {
+        alert("You entered " + document.getElementById("patternlock").value);
+        return true;
+    }
+</script>
+<div data-role="page" id="pinswipe-page">
+        @Html.ValidationSummary()
+       @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Confirm</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+  
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Swipe your security PIN to confirm.</div>
+        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
+        </div>
+        @using (Html.BeginForm("PopupPinswipe", "Donate", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div style="margin-top:15px">
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        }
+    </div>
+</div>

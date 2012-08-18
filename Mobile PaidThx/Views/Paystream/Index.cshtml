@@ -3,7 +3,7 @@
     ViewBag.Title = "Paystream";
 }
 <script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
-<div data-role="page" @TempData["DataUrl"]>
+<div data-role="page" id="paystream-index" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -11,11 +11,17 @@
        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content">
-        <div id="container">
-            <div id="content-container">
-                @{Html.RenderPartial("PartialViews/SubNav", Model);}
-            </div>
-        </div>
+        <fieldset id="payment-type-group" data-role="controlgroup" data-type="horizontal" data-grid="c">
+            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked" style="width: 25%" />
+            <label for="paystream-all">All</label>
+            <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
+            <label for="paystream-sent">Sent</label>
+            <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
+            <label for="paystream-received">Received</label>
+            <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
+            <label for="paystream-other">Other</label>
+        </fieldset>
+        @{Html.RenderPartial("PartialViews/All", Model);}
     </div>
      @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
 </div>
