@@ -147,7 +147,6 @@ namespace SocialPayments.RestServices.Internal.Models
         public class LinkFacebookRequest
         {
             public string apiKey { get; set; }
-            public string currentPassword { get; set; }
             public string AccountId { get; set; }
             public string oAuthToken { get; set; }
         }

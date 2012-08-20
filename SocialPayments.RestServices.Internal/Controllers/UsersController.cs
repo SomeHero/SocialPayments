@@ -927,7 +927,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             using (var ctx = new Context())
             {
                 DomainServices.UserService _userService = new DomainServices.UserService(ctx);
-
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();  
+    
                 Domain.User user = null;
 
                 try
