@@ -11,12 +11,30 @@
     </div>
     <div data-role="content" id="home-screen">
         <div id="profile-new">
-        <div id="myprofile"></div>
-        <div id="incoming"></div>
-        <div id="outgoing"></div>
+        <div id="myprofile">
+        <div id="profileImage">
+        <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
+        </div>
+        <div id="profileInfo">
+        <h2 id="hd-username" class="heading">Thomas Eide</h2>
+        <h4 id="sb-editProfile" class="subheading">Edit Profile</h4>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div id="incoming">
+         <h2 id="hd-incoming" class="heading">Incoming</h2>
+         <h4 id="sb-incoming" class="subheading">New Payments and Requests Received</h4>
+        </div>
+        <div id="outgoing">
+         <h2 id="hd-incoming" class="heading">Outgoing</h2>
+         <h4 id="sb-incoming" class="subheading">Pending Payments and Requests Sent</h4>
+        </div>
         </div>
         <div id="quicksend">
-        
+        <div class="qs"> <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></div>
+        <div class="qs"> <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></div>
+        <div class="qs"> <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></div>
+
         </div>
     </div>
      @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }

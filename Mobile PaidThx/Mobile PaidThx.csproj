@@ -225,6 +225,7 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <None Include="Content\patternlock.less" />
+    <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\avatar.png" />
     <Content Include="Content\images\bank.png" />
@@ -370,6 +371,8 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\PaidThx-v1.css" />
+    <Content Include="Content\PaidThx-v1.min.css" />
     <Content Include="Content\patternlock.css" />
     <Content Include="navTest.html" />
     <Content Include="Content\images\icons\homeIcon.png" />
@@ -647,6 +650,7 @@
     <Content Include="Views\MeCodes\Details.cshtml" />
     <Content Include="Views\Emails\Details.cshtml" />
     <Content Include="Views\Phones\Details.cshtml" />
+    <Content Include="Views\Shared\AmountSelector.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

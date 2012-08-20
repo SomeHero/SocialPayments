@@ -1,19 +1,4 @@
-﻿@{
-    ViewBag.Title = "AmountToSendView";
-}
-<div data-role="page" id="send-page" class="modally">
- @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
-        <h1>
-            How Much?</h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
-    </div>
-
-    <div data-role="content" class="content">
-    @using (Html.BeginForm("AmountToSend", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
-    {
-            
-             <input type="text" id="customAmountSend2" placeholder="0.00" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
+﻿   <input type="text" id="customAmountSend2" name="Amount" placeholder="0.00" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
              <button id="gobtn-send2" data-role="none" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
                 Go
             </button>
@@ -33,6 +18,3 @@
        
         <div style="background: #000000; height: 1px; margin-bottom: 10px">
         </div>
-    }
-    </div>
-</div>
