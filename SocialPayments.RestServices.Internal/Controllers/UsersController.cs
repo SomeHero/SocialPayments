@@ -118,6 +118,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var newCount = messageServices.GetNewMessages(user);
             var pendingCount = messageServices.GetPendingMessages(user);
 
+            var fbId = (user.FacebookUser == null ? @"" : user.FacebookUser.FBUserID);
+
             try
             {
                 userResponse = new UserModels.UserResponse()
@@ -216,7 +218,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
-                    pendingMessageCount = 1
+                    pendingMessageCount = 1,
+                    facebookId = fbId
                 };
             }
             catch (Exception ex)

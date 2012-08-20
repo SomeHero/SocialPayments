@@ -59,6 +59,8 @@ namespace SocialPayments.RestServices.Internal.Models
             public string preferredReceiveAccountId { get; set; }
             public string registrationId { get; set; }
 
+            public string facebookId { get; set; }
+
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
 
