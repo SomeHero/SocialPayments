@@ -36,9 +36,21 @@ namespace Mobile_PaidThx.Models
             public string DefaultSend { get; set; }
             public SelectListItem[] AccountTypeOptions { get; set; }
         }
+        public class DeletePaymentAccountModel
+        {
+            public string PaymentAccountId { get; set; }
+        }
         public class PinSwipeModel
         {
             public string PinCode { get; set; }
+        }
+        public class SetPreferredSendAccountModel
+        {
+            public string PaymentAccountId { get; set; }
+        }
+        public class SetPreferredReceiveAccountModel
+        {
+            public string PaymentAccountId { get; set; }
         }
     }
 }

@@ -31,16 +31,21 @@
             }
             <li>
                 <a href="@Url.Content("~/BankAccounts/Add")">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" />
+                    <img src="@Url.Content("~/Content/images/img-plus-40x40.png")" alt="Add an Account" />
                     Add an Account
                 </a>
             </li>
             </ul>
             <h5>Sending Account</h5>
-            @Html.DropDownList("PreferredSendAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount" })
+            @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            {     
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount" })
+            }
             <h5>Receiving Account</h5>
-            @Html.DropDownList("PreferredReceiveAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount" })
-  
+            @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            { 
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
+            }
     </div>
     </div>
 </div>
