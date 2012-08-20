@@ -1,0 +1,22 @@
+﻿@model Mobile_PaidThx.Models.EmailsModels.AddEmailAddressModel
+<div data-role="page" id="add-email-paypoint-page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Add Email</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         @using (Html.BeginForm("Add", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                <input type="text" id="txtEmailAddress" name="EmailAddress" placeholder="Email Address"
+                required /></p>
+            <p>
+             <button type="submit" id="add-email-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add Email Address</span></button></p>
+         }
+        </div>
+    </div>
+</div>

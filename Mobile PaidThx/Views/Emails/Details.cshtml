@@ -1,0 +1,27 @@
+﻿@model Mobile_PaidThx.Models.EmailsModels.DetailsEmailModel
+<div data-role="page" id="add-email-paypoint-page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            MeCode Details</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         
+            @Html.ValidationSummary()
+            <p>
+                You have completed setup of the pay point and can now receive funds to this Email Address.  You can remove this pay point from your account by clicking
+                "Remove this PayPoint".  However, you will no longer be able to receive funds sent to this Email Address until you re-linkd re-verify this pay point 
+                to your account.
+            </p>
+            <p>
+            @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            {
+                <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
+                <button type="submit" id="remove-mecode-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Remove this PayPoint</span></button>
+            }
+            </p>
+        </div>
+    </div>
+</div>

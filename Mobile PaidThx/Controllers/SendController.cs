@@ -38,7 +38,13 @@ namespace Mobile_PaidThx.Controllers
       
         public ActionResult AddContactSend()
         {
-            return View();
+            if (Session["Friends"] == null)
+                Session["Friends"] = new List<FacebookModels.Friend>();
+
+            return View(new SendModels.AddContactSendModel()
+            {
+                Friends = (List<FacebookModels.Friend>)Session["Friends"]
+            });
         }
         [HttpPost]
         public ActionResult AddContactSend(SendModels.AddContactSendModel model)

@@ -1,0 +1,34 @@
+﻿@model Mobile_PaidThx.Models.EmailsModels.EmailsModel
+
+<div data-role="page" id="email-page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Email Accounts</h1>
+    </div>
+    <div data-role="content" style="margin: 15px;">
+        <ul data-role="listview" data-inset="true">
+            @foreach (var payPoint in Model.PayPoints)
+            { 
+            <li >
+                <a href="@Url.Content("~/Emails/Details/" + payPoint.Id)">
+                   <img src="@Url.Content("~/content/images/icon-settings-email-40x40.png")" />
+                    @payPoint.Uri
+                    <br />
+                    @if (payPoint.Verified)
+                    {
+                        <text>Verified</text>
+                    }
+                    else
+                    {
+                        <text>Not Verified</text>
+                    }
+                </a>
+            </li>
+            }
+        </ul>
+        <ul data-role="listview" data-inset="true">
+            <li><a href="@Url.Content("~/Emails/Add")">Add Email Address</a></li>
+        </ul>
+    </div>
+</div>

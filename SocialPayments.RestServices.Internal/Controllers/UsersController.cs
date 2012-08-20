@@ -197,6 +197,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         AccountNumber = securityService.GetLastFour(securityService.Decrypt(a.AccountNumber)),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
+                        BankName = a.BankName,
+                        BankIconUrl = a.BankIconURL,
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
                         Nickname = a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),

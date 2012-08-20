@@ -116,6 +116,22 @@ namespace Mobile_PaidThx.Controllers
                 return View("Index");
             }
 
+            List<FacebookModels.Friend> friends;
+
+            try
+            {
+                _logger.Log(LogLevel.Error, String.Format("Getting Facebook Friends. Access Token {0}", fbAccount.accessToken));
+            
+                friends = faceBookServices.GetFriendsList(fbAccount.accessToken);
+            }
+            catch (Exception ex)
+            {
+                friends = new List<FacebookModels.Friend>();
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Facebook Friends. Access Token {0}. Exception: {1}", fbAccount.accessToken, ex.Message));
+            }
+
+
             UserModels.UserResponse userResponse;
 
             try
@@ -133,6 +149,7 @@ namespace Mobile_PaidThx.Controllers
 
             Session["UserId"] = facebookSignInResponse.userId;
             Session["User"] = userResponse;
+            Session["Friends"] = friends;
 
             if(isNewUser)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });

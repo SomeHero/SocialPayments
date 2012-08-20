@@ -50,7 +50,6 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
 
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
@@ -84,7 +83,6 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
 
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
