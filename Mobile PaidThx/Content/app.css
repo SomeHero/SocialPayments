@@ -171,7 +171,7 @@ ul.contained.tabs-content > li
 {
     color: #757575;
     font-size: 13px;
-    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
+    font-family: Helvetica, Arial, Sans-Serif;
     text-shadow: none;
 }
 #main-tabs dd a.active
@@ -201,7 +201,7 @@ ul.contained.tabs-content > li
     line-height: 50px;
     font-weight: normal;
     font-size: 12px;
-    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
+    font-family: Helvetica, Arial, Sans-Serif;
     text-shadow: none;
 }
 #sub-nav dd a.active
@@ -333,7 +333,6 @@ label.error
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    margin-bottom: 10px;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#f5f6f5));
     background: -webkit-linear-gradient(top, #f5f6f5, #e6e6e6);
     background: -moz-linear-gradient(top, #f5f6f5, #e6e6e6);
@@ -361,40 +360,8 @@ label.error
     background-repeat: no-repeat;
 }
 
-input.ui-input-text, textarea.ui-input-text
-{
-    font-size: 12px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-shadow: none;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
-    background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-    background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-    background: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-    background: -o-linear-gradient(top, #ffffff, #e6e6e6);
-}
-input::-webkit-input-placeholder
-{
-    font-style: italic;
-    color: #6d6e71;
-    text-shadow: none;
-    font-size: 12px;
-}
-input:-moz-placeholder
-{
-    font-style: italic;
-    color: #6d6e71;
-    text-shadow: none;
-    font-size: 12px;
-}
-#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach, #reset-password-submit, #btn-forgot-password-submit
-{
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1d8639), to(#71b26d));
-    background: -webkit-linear-gradient(top, #71b26d, #1d8639);
-    background: -moz-linear-gradient(top, #71b26d, #1d8639);
-    background: -ms-linear-gradient(top, #71b26d, #1d8639);
-    background: -o-linear-gradient(top, #71b26d, #1d8639);
-}
+/* BUTTONS */
+
 #add-account, #add-account-submit, #btnSkipStep
 {
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a6bb), to(#6ac9e1));
@@ -450,7 +417,7 @@ a.imgbtn span, button.imgbtn span
     display: block;
     float: left;
     color: #fff;
-    font-family: "Trebuchet MS" , Arial, Helvetica, Sans-Serif;
+    font-family: Helvetica, Arial, Sans-Serif;
     font-weight: bold;
     font-size: 18px;
     padding-left: 10px;
@@ -556,6 +523,149 @@ a.fbSignIn span, button.fbSignIn span
 {
     border-left: 1px solid #7b97d1;
 }
+
+.quickaddbtn-style
+{
+    display: block;
+width: 100%;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+margin-bottom: 10px;
+border: 1px solid #C0C9D1;
+cursor: pointer;
+font-weight:bold;
+-webkit-box-align: center;
+text-align: center;
+box-sizing: border-box;
+-moz-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+-webkit-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+background: #eeeeee; /* for non-css3 browsers */
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ */ 
+    width: 23%;
+    margin-right:2%;
+    font-size:18px;
+    font-weight:bold;
+    padding:5px;
+    font-color:#000000;
+    background-repeat:no-repeat;
+    background-color: transparent;
+    text-align:center;
+    float:left;
+}
+#gobtn
+{
+    background-image: url('images/btn-go-active-50x48.png');
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 48px;
+    text-align: center;
+    font-size: 20px;
+}
+#gobtn-request
+{
+  background-image: url('images/btn-go-active-50x48.png');
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 48px;
+    text-align: center;
+    font-size: 20px;
+}
+#custom-amount-field
+{
+    background-image: url('images/field-howmuch-255x48.png');
+    background-repeat: no-repeat;
+    width: 255px;
+    height: 48px;
+}
+#customAmount
+{
+    background: transparent;
+    border: none;
+    border-width: 0px;
+}
+@media screen and (orientation: portrait)
+{
+    label.error
+    {
+        margin-left: 0;
+        display: block;
+    }
+}
+
+@media screen and (orientation: landscape)
+{
+    label.error
+    {
+        display: inline-block;
+        margin-left: 22%;
+    }
+}
+
+#signin-submit, #update-account, #register-submit, #verify-submit, #btnUpdateProfile, #btnSendMoney, #btnRequestMoney, #button-submit-ach, #reset-password-submit, #btn-forgot-password-submit
+{
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1d8639), to(#71b26d));
+    background: -webkit-linear-gradient(top, #71b26d, #1d8639);
+    background: -moz-linear-gradient(top, #71b26d, #1d8639);
+    background: -ms-linear-gradient(top, #71b26d, #1d8639);
+    background: -o-linear-gradient(top, #71b26d, #1d8639);
+}
+
+/* INPUT FIELDS */
+
+
+input.btn-new.field.icon.money::-webkit-input-placeholder {
+    color:    #999;
+    font-size:34px;
+    line-height:34px;
+    font-style:normal;
+}
+input.btn-new.field.icon.money:-moz-placeholder {
+    color:    #999;
+    font-size:34px;
+    line-height:34px;
+    font-style:normal;
+}
+input.btn-new.field.icon.money:-ms-input-placeholder {
+    color:    #999;
+    font-size:34px;
+    line-height:34px;
+    font-style:normal;
+}
+
+input.ui-input-text, textarea.ui-input-text
+{
+    font-size: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: none;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#ffffff));
+    background: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background: -o-linear-gradient(top, #ffffff, #e6e6e6);
+}
+input::-webkit-input-placeholder
+{
+    color: #b7b7b7;
+    text-shadow: none;
+    font-size: 12px;
+}
+input:-moz-placeholder
+{
+    color: #b7b7b7;
+    text-shadow: none;
+    font-size: 12px;
+}
+input.ui-input-text
+{
+ padding-left:14px;
+ padding-right:14px;   
+}
+
 
 .cbListPaystream
 {
@@ -1207,86 +1317,7 @@ h9 span
     padding-left: 50px;
     padding-top: 14px;
 }
-.quickaddbtn-style
-{
-    display: block;
-width: 100%;
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
-margin-bottom: 10px;
-border: 1px solid #C0C9D1;
-cursor: pointer;
-font-weight:bold;
--webkit-box-align: center;
-text-align: center;
-box-sizing: border-box;
--moz-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
--webkit-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
-box-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
-background: #eeeeee; /* for non-css3 browsers */
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ */ 
-    width: 23%;
-    margin-right:2%;
-    font-size:18px;
-    font-weight:bold;
-    padding:5px;
-    font-color:#000000;
-    background-repeat:no-repeat;
-    background-color: transparent;
-    text-align:center;
-    float:left;
-}
-#gobtn
-{
-    background-image: url('images/btn-go-active-50x48.png');
-    background-repeat: no-repeat;
-    width: 50px;
-    height: 48px;
-    text-align: center;
-    font-size: 20px;
-}
-#gobtn-request
-{
-  background-image: url('images/btn-go-active-50x48.png');
-    background-repeat: no-repeat;
-    width: 50px;
-    height: 48px;
-    text-align: center;
-    font-size: 20px;
-}
-#custom-amount-field
-{
-    background-image: url('images/field-howmuch-255x48.png');
-    background-repeat: no-repeat;
-    width: 255px;
-    height: 48px;
-}
-#customAmount
-{
-    background: transparent;
-    border: none;
-    border-width: 0px;
-}
-@media screen and (orientation: portrait)
-{
-    label.error
-    {
-        margin-left: 0;
-        display: block;
-    }
-}
 
-@media screen and (orientation: landscape)
-{
-    label.error
-    {
-        display: inline-block;
-        margin-left: 22%;
-    }
-}
 
 /*-------HOME SCREEN ELEMENTS---MH-------*/
 #wrapper{
@@ -1358,18 +1389,18 @@ background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ *
 			text-decoration:none;
 		}
 		.nav-pdthx .ui-icon  { width: 30px!important; height:30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
-			ui-icon-homeIcon { background: url("/images/home.png")50% 50% no-repeat ;}
-			#paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
-			#send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
-			#request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
-			#profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
-			#welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
-		    #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
-		    #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+			.nav-pdthx #home .ui-icon { background: url("/images/home.png")50% 50% no-repeat ;}
+			.nav-pdthx #paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
+		    .nav-pdthx #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
+		    .nav-pdthx #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
 			.ui-mobile .ui-page .ui-footer .ui-navbar,
 			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
 			    overflow : visible; 
-			}?
+			}
 			
 			.mainButton{
 			    position:absolute;
@@ -1476,16 +1507,16 @@ background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ *
   {
       
 border: 1px solid #b8b8b8 /*{a-bar-border}*/;
-background: #b6b8c0 /*{a-bar-background-color}*/;
+background: #eeeeee /*{a-bar-background-color}*/;
 color: #34363d !important; /*{a-bar-color}*/;
 font-weight: bold;
 text-shadow: 0 /*{a-bar-shadow-x}*/ -1px /*{a-bar-shadow-y}*/ 1px /*{a-bar-shadow-radius}*/ white /*{a-bar-shadow-color}*/;
-background-image: -webkit-gradient(linear, left top, left bottom, from( #b5b8bf /*{a-bar-background-start}*/), to( #f2f2f3 /*{a-bar-background-end}*/));
-background-image: -webkit-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-background-image: -moz-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-background-image: -ms-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-background-image: -o-linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
-background-image: linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #b5b8bf /*{a-bar-background-end}*/);
+background-image: -webkit-gradient(linear, left top, left bottom, from( #dddddd /*{a-bar-background-start}*/), to( #f0f0f0 /*{a-bar-background-end}*/));
+background-image: -webkit-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
+background-image: -moz-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
+background-image: -ms-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
+background-image: -o-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
+background-image: linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
 border-radius: 0px 0px 0px 0px;
 }
 
@@ -1511,85 +1542,85 @@ border-radius: 0px 0px 0px 0px;
             -webkit-border-radius: 0 !important;
             border-radius: 0 !important;
         }
-        #home .ui-icon
+        .nav-pdthx #home .ui-icon
         {
             background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
         }
-        #paystream .ui-icon
+        .nav-pdthx #paystream .ui-icon
         {
             background: url(images/icons/paystreamIcon.png) 50% 50% no-repeat;
         }
-        #send .ui-icon
+        .nav-pdthx #send .ui-icon
         {
             background: url(images/icons/sendIcon.png) 50% 50% no-repeat;
         }
-        #request .ui-icon
+        .nav-pdthx #request .ui-icon
         {
             background: url(images/icons/requestIcon.png) 50% 50% no-repeat;
         }
         
-        #profile .ui-icon
+        .nav-pdthx #profile .ui-icon
         {
             background: url(images/icons/profileIcon.png) 50% 50% no-repeat;
         }
-        #dogood .ui-icon
+        .nav-pdthx #dogood .ui-icon
         {
             background: url(images/icons/dogoodIcon.png) 50% 50% no-repeat;
         }
-        #home.ui-btn-active .ui-icon
+        .nav-pdthx #home.ui-btn-active .ui-icon
         {
             background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
         }
-        #paystream.ui-btn-active .ui-icon
+        .nav-pdthx #paystream.ui-btn-active .ui-icon
         {
             background: url(images/icons/paystreamIcon-active.png) 50% 50% no-repeat;
         }
-        #send.ui-btn-active .ui-icon
+        .nav-pdthx #send.ui-btn-active .ui-icon
         {
             background: url(images/icons/sendIcon-active.png) 50% 50% no-repeat;
         }
-        #request.ui-btn-active .ui-icon
+        .nav-pdthx #request.ui-btn-active .ui-icon
         {
             background: url(images/icons/requestIcon-active.png) 50% 50% no-repeat;
         }
-        #profile.ui-btn-active .ui-icon
+        .nav-pdthx #profile.ui-btn-active .ui-icon
         {
             background: url(images/icons/profileIcon-active.png) 50% 50% no-repeat;
         }
-        #dogood.ui-btn-active .ui-icon
+        .nav-pdthx #dogood.ui-btn-active .ui-icon
         {
             background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
         }
         
-         #welcome .ui-icon
+         .nav-pdthx #welcome .ui-icon
         {
             background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
         }
-        #signin .ui-icon
+        .nav-pdthx #signin .ui-icon
         {
             background: url(images/icons/signinIcon.png) 50% 50% no-repeat;
         }
-        #join .ui-icon
+        .nav-pdthx #join .ui-icon
         {
             background: url(images/icons/joinIcon.png) 50% 50% no-repeat;
         }
-        #about .ui-icon
+        .nav-pdthx #about .ui-icon
         {
             background: url(images/icons/aboutIcon.png) 50% 50% no-repeat;
         }
-         #welcome.ui-btn-active .ui-icon
+         .nav-pdthx #welcome.ui-btn-active .ui-icon
         {
             background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
         }
-        #signin.ui-btn-active .ui-icon
+        .nav-pdthx #signin.ui-btn-active .ui-icon
         {
             background: url(images/icons/signinIcon-active.png) 50% 50% no-repeat;
         }
-        #join.ui-btn-active .ui-icon
+        .nav-pdthx #join.ui-btn-active .ui-icon
         {
             background: url(images/icons/joinIcon-active.png) 50% 50% no-repeat;
         }
-        #about.ui-btn-active .ui-icon
+        .nav-pdthx #about.ui-btn-active .ui-icon
         {
             background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
         }
@@ -2037,3 +2068,133 @@ border-radius: 7px;
  float:right;
  padding-left:60px;   
 }
+
+.ui-btn-hidden
+{
+ opacity:0;   
+}
+
+.hidden
+{
+ display:none;   
+}
+
+.fullwidth, .fullwidth .ui-controlgroup-controls 
+{
+ width:100% !important;   
+}
+
+.clear
+{
+ clear:both;   
+}
+
+/*  PAGE SPECIFIC */
+
+/* -----------------------------HOMEPAGE----------------------------------- */
+
+#profile-new
+{
+ margin-top:10px;   
+}
+.heading
+{
+ font-size:15pt;
+ font-weight:bold;   
+ margin-bottom:0px;
+ margin-top:6px;
+}
+
+.subheading
+{
+ font-size:12px;
+ font-weight:normal;   
+ color:#8f8f8f;
+ margin-top:0px;
+ margin-bottom:2px;
+}
+
+#myprofile #profileImage
+{
+ float:left;
+ margin-right:10px;   
+ margin:0;
+}
+
+#myprofile #profileInfo
+{
+    float:left;
+    margin:0;
+}
+
+
+
+/* -----------------------------SETTINGS----------------------------------- */
+
+li.settings
+{
+ background-repeat:no-repeat;
+ background-position:10px 50%;   
+ padding-left:46px;
+}
+
+li.settings a
+{
+padding-top:5px;
+padding-bottom:5px;
+}
+
+ li.settings#profile
+        {
+            background-image: url(images/icon-settings-profile-40x40.png);
+        }
+ li.settings#banks
+        {
+            background-image: url(images/icon-settings-bank-40x40.png);
+        }
+ li.settings#emails
+        {
+            background-image: url(images/icon-settings-email-40x40.png);
+        }
+
+ li.settings#socials
+        {
+            background-image: url(images/icon-settings-social-40x40.png);
+        }
+ li.settings#phones
+        {
+            background-image: url(images/icon-settings-phones-40x40.png);
+        }
+ li.settings#mecodes
+        {
+            background-image: url(images/icon-settings-mecode-40x40.png);
+        }
+ li.settings#notifications
+        {
+            background-image: url(images/icon-settings-preferences-40x40.png);
+        }
+ li.settings#sharing
+        {
+            background-image: url(images/icon-settings-sharing-40x40.png);
+        }
+ li.settings#security
+        {
+            background-image: url(images/icon-settings-security-40x40.png);
+        }
+         li.settings#feedback
+        {
+            background-image: url(images/icon-settings-feedback-40x40.png);
+        }
+        li.settings#help
+        {
+            background-image: url(images/icon-settings-help-40x40.png);
+        }
+
+ li.settings#useragreement
+        {
+            background-image: url(images/icon-settings-legal-40x40.png);
+        }
+ li.settings#signout
+        {
+            background-image: url(images/icon-settings-signout-40x40.png);
+        }
