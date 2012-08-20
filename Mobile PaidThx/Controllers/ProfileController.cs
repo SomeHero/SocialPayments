@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using SocialPayments.DataLayer;
 using Mobile_PaidThx.Models;
 using NLog;
-using SocialPayments.Domain;
-using SocialPayments.DomainServices;
-using Amazon.SimpleNotificationService;
-using Amazon.SimpleNotificationService.Model;
 using Mobile_PaidThx.Controllers.Base;
 using System.Configuration;
 using System.Web.Helpers;
@@ -29,125 +24,57 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Info, String.Format("Displaying Profile View"));
 
-            using (var ctx = new Context())
-            {
-
-                if (Session["UserId"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
-                UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-
-                var model = new ProfileModels()
-                {
-                    FirstName = user.firstName,
-                    LastName = user.lastName,
-                    AccountType = "Personal",
-                    MobileNumber = user.mobileNumber,
-                    EmailAddress = user.emailAddress,
-                    Address = user.address,
-                    City = user.city,
-                    State = user.state,
-                    Zip = user.zip,
-                    SenderName = user.senderName
-                };
-
-                return View(model);
-            }
+            return View();
         }
         [HttpPost]
         public ActionResult Index(UpdateProfileModel model)
         {
             logger.Log(LogLevel.Info, String.Format("Updating Profile"));
 
-            using (var ctx = new Context())
-            {
-                var userId = (Guid)Session["UserId"];
+            return View();
+            //using (var ctx = new Context())
+            //{
+            //    var userId = (Guid)Session["UserId"];
 
-                if (Session["UserId"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
+            //    if (Session["UserId"] == null)
+            //        return RedirectToAction("SignIn", "Account", null);
 
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+            //    var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
 
-                if (Session["User"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
-
-
-                if (user == null)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Invalid User."));
-
-                    return RedirectToAction("SignIn", "Account", null);
-                }
-
-                var editUser = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                if (editUser == null)
-                {
-                    logger.Log(LogLevel.Error, String.Format("Invalid User."));
-
-                    return RedirectToAction("SignIn", "Account", null);
-                }
-
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.SenderName = model.SenderName;
-                user.Address = model.Address;
-                user.City = model.City;
-                user.State = model.State;
-                user.Zip = model.Zip;
-
-                ctx.SaveChanges();
-
-                Session["User"] = editUser;
-
-                return RedirectToAction("Index");
-            }
-        }
-
-        public ActionResult Settings()
-        {
-            if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
-
-            var userId = (Guid)Session["UserId"];
-            using (var ctx = new Context())
-            {
-                var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-                if (Session["User"] == null)
-                    return RedirectToAction("SignIn", "Account", null);
-
-                var model = GetProfileModel(user);
-
-                return PartialView("PartialViews/Settings", model);
-            }
-        }
-
-        public ActionResult ListSettings()
-        {
-            return PartialView("PartialViews/ListSettings");
-        }
-        private ProfileModels GetProfileModel(User user)
-        {
-            using (var ctx = new Context())
-            {
-
-                var model = new ProfileModels()
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    AccountType = "Personal",
-                    MobileNumber = user.MobileNumber,
-                    EmailAddress = user.EmailAddress,
-                    Address = user.Address,
-                    City = user.City,
-                    State = user.State,
-                    Zip = user.Zip,
-                    SenderName = user.SenderName
-                };
+            //    if (Session["User"] == null)
+            //        return RedirectToAction("SignIn", "Account", null);
 
 
-                return model;
-            }
+            //    if (user == null)
+            //    {
+            //        logger.Log(LogLevel.Error, String.Format("Invalid User."));
+
+            //        return RedirectToAction("SignIn", "Account", null);
+            //    }
+
+            //    var editUser = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+            //    if (editUser == null)
+            //    {
+            //        logger.Log(LogLevel.Error, String.Format("Invalid User."));
+
+            //        return RedirectToAction("SignIn", "Account", null);
+            //    }
+
+            //    user.FirstName = model.FirstName;
+            //    user.LastName = model.LastName;
+            //    user.SenderName = model.SenderName;
+            //    user.Address = model.Address;
+            //    user.City = model.City;
+            //    user.State = model.State;
+            //    user.Zip = model.Zip;
+
+            //    ctx.SaveChanges();
+
+            //    Session["User"] = editUser;
+
+            //    return RedirectToAction("Index");
+            //}
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Net;
 using System.IO;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
+using Mobile_PaidThx.Services.ResponseModels;
+using System.Web.Script.Serialization;
 
 namespace Mobile_PaidThx.Services
 {
@@ -16,7 +18,7 @@ namespace Mobile_PaidThx.Services
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         
-        private string fbState = "pickle"; //TODO: randomly generate this per session
+        private string fbState = "pickle"; 
         private string fbAppID = "332189543469634";
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
@@ -72,6 +74,8 @@ namespace Mobile_PaidThx.Services
                 fbAccount.accessToken = token;
                 fbAccount.tokenExpires = tokenExp;
 
+                _logger.Log(LogLevel.Info, String.Format("Facebook token {0}", token));
+
                 //Use Graph API to get FB UserID and email
                 string requestStuff = "https://graph.facebook.com/me?access_token=" + token;
                 wr = GetWebRequest(requestStuff);
@@ -80,15 +84,46 @@ namespace Mobile_PaidThx.Services
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
                     response = sr.ReadToEnd();
+
+                    _logger.Log(LogLevel.Info, String.Format("Facebook response {0}", response));
+
                     if (response.Length > 0)
                     {
                         fbAccount = JsonConvert.DeserializeObject<FacebookUserModels.FBuser>(response);
+                        fbAccount.accessToken = token;
+                        fbAccount.tokenExpires = tokenExp;
+
                     }
                     sr.Close();
                 }
             }
 
             return fbAccount;
+        }
+        public List<FacebookModels.Friend> GetFriendsList(string token)
+        {
+            //Use Graph API to get FB UserID and email
+            string requestStuff = "https://graph.facebook.com/me/friends?access_token=" + token;
+            string response = null;
+            HttpWebRequest wr = null;
+            HttpWebResponse resp = null;
+            Dictionary<String, List<FacebookModels.Friend>> friends = null;
+            var jsonSerializer = new JavaScriptSerializer();
+
+            wr = GetWebRequest(requestStuff);
+            resp = (HttpWebResponse)wr.GetResponse();
+
+            using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
+            {
+                response = sr.ReadToEnd();
+                if (response.Length > 0)
+                {
+                    friends = jsonSerializer.Deserialize<Dictionary<String, List<FacebookModels.Friend>>>(response);
+                }
+                sr.Close();
+            }
+
+            return friends["data"];
         }
 
         private HttpWebRequest GetWebRequest(string formattedUri)

@@ -7,8 +7,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Mobile_PaidThx.Models;
-using SocialPayments.DataLayer;
-using SocialPayments.DomainServices;
 using NLog;
 using Mobile_PaidThx.Controllers.Base;
 using System.Net;
@@ -94,34 +92,6 @@ namespace Mobile_PaidThx.Controllers
         //
         // POST: /Account/Register
 
-        [HttpPost]
-        public ActionResult Register(RegisterModel model)
-        {
-            using (var ctx = new Context())
-            {
-                if (ModelState.IsValid)
-                {
-                    // Attempt to register the user
-                    MembershipCreateStatus createStatus;
-
-                    Membership.CreateUser(model.Email, model.Password, model.Email, null, null, true, null, out createStatus);
-
-                    if (createStatus == MembershipCreateStatus.Success)
-                    {
-                        FormsAuthentication.SetAuthCookie(model.Email, false /* createPersistentCookie */);
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                    }
-                }
-
-                // If we got this far, something failed, redisplay form
-                return View(model);
-            }
-        }
-
         //
         // GET: /Account/ChangePassword
 
@@ -138,37 +108,38 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            using (var ctx = new Context())
-            {
-                if (ModelState.IsValid)
-                {
+            //using (var ctx = new Context())
+            //{
+            //    if (ModelState.IsValid)
+            //    {
 
-                    // ChangePassword will throw an exception rather
-                    // than return false in certain failure scenarios.
-                    bool changePasswordSucceeded;
-                    try
-                    {
-                        MembershipUser currentUser = Membership.GetUser(User.Identity.Name, true /* userIsOnline */);
-                        changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
-                    }
-                    catch (Exception)
-                    {
-                        changePasswordSucceeded = false;
-                    }
+            //        // ChangePassword will throw an exception rather
+            //        // than return false in certain failure scenarios.
+            //        bool changePasswordSucceeded;
+            //        try
+            //        {
+            //            MembershipUser currentUser = Membership.GetUser(User.Identity.Name, true /* userIsOnline */);
+            //            changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
+            //        }
+            //        catch (Exception)
+            //        {
+            //            changePasswordSucceeded = false;
+            //        }
 
-                    if (changePasswordSucceeded)
-                    {
-                        return RedirectToAction("ChangePasswordSuccess");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                    }
-                }
+            //        if (changePasswordSucceeded)
+            //        {
+            //            return RedirectToAction("ChangePasswordSuccess");
+            //        }
+            //        else
+            //        {
+            //            ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
+            //        }
+            //    }
 
-                // If we got this far, something failed, redisplay form
-                return View(model);
-            }
+            //    // If we got this far, something failed, redisplay form
+            //    return View(model);
+            //}
+            return View(model);
         }
 
         //
@@ -180,57 +151,59 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult VerifyPayPoint(string id)
         {
-            using(var ctx = new Context())
-            {
-                Guid payPointVerificationID;
+            //using(var ctx = new Context())
+            //{
+            //    Guid payPointVerificationID;
 
-                Guid.TryParse(id, out payPointVerificationID);
+            //    Guid.TryParse(id, out payPointVerificationID);
 
-                if (payPointVerificationID == null)
-                {
-                    ViewBag.Message = "Sorry, we are unable to complete verification";
+            //    if (payPointVerificationID == null)
+            //    {
+            //        ViewBag.Message = "Sorry, we are unable to complete verification";
 
-                    return View();
-                }
+            //        return View();
+            //    }
 
-                var payPointVerification = ctx.UserPayPointVerifications
-                    .FirstOrDefault(p => p.Id == payPointVerificationID);
+            //    var payPointVerification = ctx.UserPayPointVerifications
+            //        .FirstOrDefault(p => p.Id == payPointVerificationID);
 
-                if (payPointVerification == null)
-                {
-                    ViewBag.Message = "Sorry, we are unable to complete verification";
+            //    if (payPointVerification == null)
+            //    {
+            //        ViewBag.Message = "Sorry, we are unable to complete verification";
 
-                    return View();
-                }
+            //        return View();
+            //    }
 
-                if (payPointVerification.Confirmed)
-                {
-                    ViewBag.Message = String.Format("Sorry, we are unable to continue verifying this pay point.  {0} is already verified.",
-                        payPointVerification.UserPayPoint.URI);
+            //    if (payPointVerification.Confirmed)
+            //    {
+            //        ViewBag.Message = String.Format("Sorry, we are unable to continue verifying this pay point.  {0} is already verified.",
+            //            payPointVerification.UserPayPoint.URI);
 
-                    return View();
-                }
+            //        return View();
+            //    }
 
-                if (payPointVerification.ExpirationDate < System.DateTime.Now)
-                {
-                    ViewBag.Message = String.Format("Sorry, we are unable to continue verifying the PayPoint {0}.  The verification link has expired.",
-                        payPointVerification.UserPayPoint.URI);
+            //    if (payPointVerification.ExpirationDate < System.DateTime.Now)
+            //    {
+            //        ViewBag.Message = String.Format("Sorry, we are unable to continue verifying the PayPoint {0}.  The verification link has expired.",
+            //            payPointVerification.UserPayPoint.URI);
 
-                    return View();
-                }
+            //        return View();
+            //    }
 
-                payPointVerification.Confirmed = true;
-                payPointVerification.ConfirmedDate = System.DateTime.Now;
-                payPointVerification.UserPayPoint.Verified = true;
-                payPointVerification.UserPayPoint.VerifiedDate = System.DateTime.Now;
+            //    payPointVerification.Confirmed = true;
+            //    payPointVerification.ConfirmedDate = System.DateTime.Now;
+            //    payPointVerification.UserPayPoint.Verified = true;
+            //    payPointVerification.UserPayPoint.VerifiedDate = System.DateTime.Now;
                 
-                ctx.SaveChanges();
+            //    ctx.SaveChanges();
 
-                ViewBag.Message = String.Format("Thanks. You have completed verification of {0}.  You can now begin to accept payment to this PayPoint.",
-                        payPointVerification.UserPayPoint.URI);
+            //    ViewBag.Message = String.Format("Thanks. You have completed verification of {0}.  You can now begin to accept payment to this PayPoint.",
+            //            payPointVerification.UserPayPoint.URI);
 
-                return View();
-            }
+            //    return View();
+            //}
+
+            return View();
         }
 
         
@@ -243,40 +216,41 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
-            using (var ctx = new Context())
-            {
-                var securityService = new SocialPayments.DomainServices.SecurityService();
+            //using (var ctx = new Context())
+            //{
+            //    var securityService = new SocialPayments.DomainServices.SecurityService();
 
-                try
-                {
-                    if (ModelState.IsValid)
-                    {
-                        var user = ctx.Users.FirstOrDefault(u => u.UserName == model.UserName || u.MobileNumber == model.UserName);
+            //    try
+            //    {
+            //        if (ModelState.IsValid)
+            //        {
+            //            var user = ctx.Users.FirstOrDefault(u => u.UserName == model.UserName || u.MobileNumber == model.UserName);
 
-                        if (user == null)
-                            throw new Exception(String.Format("Unable to find user {0}", model.UserName));
+            //            if (user == null)
+            //                throw new Exception(String.Format("Unable to find user {0}", model.UserName));
 
-                        if (user.EmailAddress.Length == 0)
-                            throw new Exception(String.Format("No email address asssociated with username {0}", model.UserName));
-                        //Send Email
-                        //SmtpClient sc = new SmtpClient();
-                        //sc.EnableSsl = true;
+            //            if (user.EmailAddress.Length == 0)
+            //                throw new Exception(String.Format("No email address asssociated with username {0}", model.UserName));
+            //            //Send Email
+            //            //SmtpClient sc = new SmtpClient();
+            //            //sc.EnableSsl = true;
 
-                        //sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
+            //            //sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
 
-                        UserService userService = new UserService(ctx);
-                        userService.SendResetPasswordLink(user);
+            //            UserService userService = new UserService(ctx);
+            //            userService.SendResetPasswordLink(user);
 
-                        model.PasswordSent = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+            //            model.PasswordSent = true;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        ModelState.AddModelError("", ex.Message);
+            //    }
 
-                return View(model);
-            }
+            //    return View(model);
+            //}
+            return View(model);
         }
         public ActionResult SignOut()
         {
@@ -290,55 +264,57 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult ResetPassword(string id)
         {
-            using(var ctx = new Context()) {
+            //using(var ctx = new Context()) {
 
-                Guid idGuid;
+            //    Guid idGuid;
 
-                Guid.TryParse(id, out idGuid);
+            //    Guid.TryParse(id, out idGuid);
 
-                if (idGuid == null)
-                {
-                    ModelState.AddModelError("", "Invalid Id");
-                }
+            //    if (idGuid == null)
+            //    {
+            //        ModelState.AddModelError("", "Invalid Id");
+            //    }
 
 
-                SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
-                    .FirstOrDefault(p => p.Id == idGuid);
+            //    SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+            //        .FirstOrDefault(p => p.Id == idGuid);
 
-                ResetPasswordModelInput model = new ResetPasswordModelInput();
+            //    ResetPasswordModelInput model = new ResetPasswordModelInput();
 
-                if (passwordResetDb == null)
-                {
-                    ModelState.AddModelError("", "Invalid Attempt");
-                    return View(model);
-                }
+            //    if (passwordResetDb == null)
+            //    {
+            //        ModelState.AddModelError("", "Invalid Attempt");
+            //        return View(model);
+            //    }
 
-                if (passwordResetDb.ExpiresDate < System.DateTime.Now)
-                {
-                    ModelState.AddModelError("", "Password reset link has expired.");
-                    passwordResetDb.Clicked = true;
-                    return View(model);
-                }
+            //    if (passwordResetDb.ExpiresDate < System.DateTime.Now)
+            //    {
+            //        ModelState.AddModelError("", "Password reset link has expired.");
+            //        passwordResetDb.Clicked = true;
+            //        return View(model);
+            //    }
 
-                if (passwordResetDb.Clicked)
-                {
-                    ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
-                    return View(model);
-                }
+            //    if (passwordResetDb.Clicked)
+            //    {
+            //        ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
+            //        return View(model);
+            //    }
 
-                if (passwordResetDb.User.SecurityQuestion == null)
-                {
-                    model.SecurityQuestion = "";
-                    model.HasSecurityQuestion = false;
+            //    if (passwordResetDb.User.SecurityQuestion == null)
+            //    {
+            //        model.SecurityQuestion = "";
+            //        model.HasSecurityQuestion = false;
 
-                    return View(model);
-                }
-                passwordResetDb.Clicked = true;
-                model.HasSecurityQuestion = true;
-                model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
+            //        return View(model);
+            //    }
+            //    passwordResetDb.Clicked = true;
+            //    model.HasSecurityQuestion = true;
+            //    model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
 
-                return View(model);
-            }
+            //    return View(model);
+            //}
+
+            return View();
         }
 
         [HttpPost]
@@ -346,47 +322,47 @@ namespace Mobile_PaidThx.Controllers
         {
             if (model.NewPassword.Equals(model.ConfirmPassword))
             {
-                using (var ctx = new Context())
-                {
-                    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
-                    UserService userService = new UserService(ctx);
+                //using (var ctx = new Context())
+                //{
+                //    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
+                //    UserService userService = new UserService(ctx);
 
-                    try
-                    {
-                        Guid idGuid;
+                //    try
+                //    {
+                //        Guid idGuid;
 
-                        Guid.TryParse(id, out idGuid);
+                //        Guid.TryParse(id, out idGuid);
 
-                        if (idGuid == null)
-                        {
-                            ModelState.AddModelError("", "Invalid Id");
-                        }
+                //        if (idGuid == null)
+                //        {
+                //            ModelState.AddModelError("", "Invalid Id");
+                //        }
 
 
-                        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
-                            .FirstOrDefault(p => p.Id == idGuid);
+                //        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
+                //            .FirstOrDefault(p => p.Id == idGuid);
 
-                        if (passwordResetDb == null)
-                        {
-                            ModelState.AddModelError("", "Invalid Attempt");
-                        }
+                //        if (passwordResetDb == null)
+                //        {
+                //            ModelState.AddModelError("", "Invalid Attempt");
+                //        }
 
-                        if (model.SecurityQuestionAnswer == null)
-                        {
-                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
-                            return View("SignIn");
-                        }
-                        else
-                        {
-                            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
-                            return View("SignIn");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", ex.Message);
-                    }
-                }
+                //        if (model.SecurityQuestionAnswer == null)
+                //        {
+                //            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
+                //            return View("SignIn");
+                //        }
+                //        else
+                //        {
+                //            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
+                //            return View("SignIn");
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        ModelState.AddModelError("", ex.Message);
+                //    }
+                //}
             }
             else
             {

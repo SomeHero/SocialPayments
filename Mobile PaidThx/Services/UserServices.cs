@@ -19,43 +19,6 @@ namespace Mobile_PaidThx.Services
         private string _userServicesSignInWithFacebookUrl = "{0}users/signin_withfacebook";
         private string _personalizeUrl = "{0}Users/{1}/personalize_user";
         private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
-        private string _deletePaypointUrl = "{0}{1}/paypoints/{2}";
-        private string _addPaypointUrl = "{0}{1}/paypoints/";
-
-        public void AddPaypoint(String apiKey, String paypointId, String userId, String uri, String type, Boolean verified, string verifiedDate, string createDate)
-        {
-            var serviceUrl = String.Format(String.Format(_addPaypointUrl, _webServicesBaseUrl, userId));
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            var json = js.Serialize(new
-            {
-                apiKey= apiKey,
-                paypointId= paypointId,
-                userId= userId, 
-                uri= uri,
-                type= type,
-                verified= verified,
-                verifiedDate= verifiedDate, 
-                createDate= createDate
-            });
-
-            var response = Post(serviceUrl, json);
-
-            if (response.StatusCode != HttpStatusCode.Created)
-                throw new Exception(response.Description);
-
-        }
-
-
-        public void DeletePaypoint(string apiKey, string userId, string paypointId)
-        {
-            string serviceUrl = String.Format(_deletePaypointUrl, _webServicesBaseUrl, userId, paypointId);
-           
-            var response = Delete(serviceUrl);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
-        }
 
         public UserModels.UserResponse GetUser(string userId)
         {
