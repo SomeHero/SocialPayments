@@ -27,11 +27,11 @@
                     @switch (transaction.Direction)
                     {
                         case "In":
-                        <text> <strong>@Html.FormatUri(transaction.SenderUri)</strong>
+                        <text> <strong>@transaction.SenderUri</strong>
                         </text>
                                   break;
                         case "Out":
-                        <text> <strong>@Html.FormatUri(transaction.RecipientUri)</strong>
+                        <text> <strong>@transaction.RecipientUri</strong>
                         </text>
                                   break;
                     }

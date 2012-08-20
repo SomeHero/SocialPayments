@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Models
 {
@@ -17,6 +18,7 @@ namespace Mobile_PaidThx.Models
         }
         public class AddContactSendModel
         {
+            public List<FacebookModels.Friend> Friends { get; set; }
             public String RecipientUri { get; set; }
         }
         public class AmountToSendModel

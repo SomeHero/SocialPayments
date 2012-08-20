@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Data.Entity;
-using SocialPayments.DataLayer;
 
 namespace Mobile_PaidThx
 {
@@ -79,14 +78,29 @@ namespace Mobile_PaidThx
                 new { controller = "Join", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
-            "Preferences", // Route name
-            "Preferences/{action}", // URL with parameters
+                "Preferences", // Route name
+                "Preferences/{action}", // URL with parameters
             new { controller = "Preferences", action = "Index" } // Parameter defaults
             );
-                        routes.MapRoute(
-            "BankAccounts", // Route name
-            "Preferences/BankAccounts", // URL with parameters
-            new { controller = "Preferences", action = "BankAccounts" } // Parameter defaults
+            routes.MapRoute(
+                "BankAccounts", // Route name
+                "BankAccounts/{action}/{id}", // URL with parameters
+                    new { controller = "BankAccounts", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Emails", // Route name
+                "Emails/{action}/{id}", // URL with parameters
+                    new { controller = "Emails", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Phones", // Route name
+                "Phones/{action}/{id}", // URL with parameters
+                    new { controller = "Phones", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
+                "MeCodes", // Route name
+                "MeCodes/{action}/{id}", // URL with parameters
+                    new { controller = "MeCodes", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
                     "Pledge", // Route name
@@ -139,7 +153,6 @@ namespace Mobile_PaidThx
 
         protected void Application_Start()
         {
-            Database.SetInitializer(new MyInitializer());
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

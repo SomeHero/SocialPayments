@@ -1,0 +1,26 @@
+﻿@model Mobile_PaidThx.Models.MeCodesModels.MeCodesModel
+<div data-role="page" id="mecodes-page">
+        @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Me Codes</h1>
+    </div>
+    <div data-role="content" style="margin: 15px;">
+        <ul data-role="listview" data-inset="true">
+            @foreach (var payPoint in Model.PayPoints)
+            { 
+            <li >
+                <a href="@Url.Content("~/MeCodes/Details/" + payPoint.Id)">
+                    <img src="@Url.Content("~/content/images/icon-settings-mecode-40x40.png")" />
+                    @payPoint.Uri
+                </a>
+            </li>
+            }
+        </ul>
+        <ul data-role="listview" data-inset="true">
+            <li>
+                <a href="@Url.Content("~/MeCodes/Add")">Add Me Code</a>
+            </li>
+        </ul>
+    </div>
+</div>

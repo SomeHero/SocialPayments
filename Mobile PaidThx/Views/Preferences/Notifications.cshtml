@@ -1,5 +1,39 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.NotificationModels.NotificationModel
+@{
     ViewBag.Title = "Notifications";
 }
-
-<h2>Notifications</h2>
+<div data-role="page" id="notifications-page" data-theme="c">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Notifications</h1>
+    </div>
+    <div data-role="content" style="margin: 15px; background-color: #ffffff;">
+    @using (Html.BeginForm("Notifications", "Preferences", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+    {
+        @Html.ValidationSummary()
+        foreach (var subject in Model.NotificationSubjects)
+        {
+            @subject.Description
+            <ul data-role="listview" data-inset="true">
+            @foreach (var item in subject.NotificationItems)
+            {
+            <li>
+            <div data-role="fieldcontain">
+                <label for="flip-1">@item.Description</label>
+                <select name="@item.Description" id="flip-1" data-role="slider" data-theme="b">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+                </div>
+                </li>
+           
+            }
+            </ul>
+        }
+         <p>
+         <button type="submit" id="update-notifications-submit" class="imgbtn">
+                        <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Save Changes</span></button></p>
+    }
+    </div>
+</div>

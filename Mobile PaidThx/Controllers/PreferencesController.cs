@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.Models;
+using System.Web.Security;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -18,10 +20,14 @@ namespace Mobile_PaidThx.Controllers
         {
             return View();
         }
-
-        public ActionResult BankAccounts()
+        public ActionResult Profile()
         {
-            return View();
+            ApplicationResponse application = (ApplicationResponse)Session["Application"];
+
+            return View(new PreferencesModels.ProfileModel()
+            {
+                ProfileSections = application.ProfileSections
+            });
         }
 
         public ActionResult Help()
@@ -35,49 +41,10 @@ namespace Mobile_PaidThx.Controllers
             return Json(model);
         }
 
-        [HttpPost]
-        public ActionResult AddPaypoint(Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse model)
-        {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            UserServices service = new UserServices();
-            service.AddPaypoint(_apiKey, Guid.NewGuid().ToString(), user.userId.ToString(), model.Uri, model.Type, false, "", System.DateTime.Now.ToString());
-
-            var newDataUser = service.GetUser(user.userId.ToString());
-            Session["User"] = newDataUser;
-            return Json(model);
-        }
-
-        [HttpPost]
-        public ActionResult RemovePaypoint(Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse model)
-        {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            UserServices service = new UserServices();
-            service.DeletePaypoint(_apiKey, user.userId.ToString(), model.Id);
-
-            var newDataUser = service.GetUser(user.userId.ToString());
-            Session["User"] = newDataUser;
-
-            return Json(model);
-        }
-
         [HttpPut]
         public ActionResult PaypointInfo(Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse model)
         {
             return View(model);
-        }
-
-        public ActionResult Emails()
-        {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            List<Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse> listOfPaypoints = user.userPayPoints.Where(p => p.Type.Equals("EmailAddress")).ToList();
-            return View(listOfPaypoints);
-        }
-
-        public ActionResult Phones()
-        {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            List<Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse> listOfPaypoints = user.userPayPoints.Where(p => p.Type.Equals("Phone")).ToList();
-            return View(listOfPaypoints);
         }
 
         public ActionResult SocialNetworks()
@@ -87,13 +54,170 @@ namespace Mobile_PaidThx.Controllers
             return View(listOfPaypoints);
         }
 
-        public ActionResult MeCodes()
+        public ActionResult Notifications()
         {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            List<Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse> listOfPaypoints = user.userPayPoints.Where(p => p.Type.Equals("MeCode")).ToList();
-            return View(listOfPaypoints);
+            return View(new NotificationModels.NotificationModel()
+            {
+                NotificationSubjects = new List<NotificationModels.NotificationSubject>()
+                {
+                    new NotificationModels.NotificationSubject() {
+                        Description = "When I Receive Money",
+                        NotificationItems = new List<NotificationModels.NotificationItem>() {
+                            new NotificationModels.NotificationItem() {
+                                Description = "Email Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Push Notification",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Text Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            }
+                        }
+                    },
+                     new NotificationModels.NotificationSubject() {
+                        Description = "When I Receive a Request",
+                        NotificationItems = new List<NotificationModels.NotificationItem>() {
+                            new NotificationModels.NotificationItem() {
+                                Description = "Email Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Push Notification",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Text Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            }
+                        }
+                    },
+                     new NotificationModels.NotificationSubject() {
+                        Description = "When I Send Money",
+                        NotificationItems = new List<NotificationModels.NotificationItem>() {
+                            new NotificationModels.NotificationItem() {
+                                Description = "Email Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Push Notification",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Text Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            }
+                        }
+                    },
+                     new NotificationModels.NotificationSubject() {
+                        Description = "When I Receive Money",
+                        NotificationItems = new List<NotificationModels.NotificationItem>() {
+                            new NotificationModels.NotificationItem() {
+                                Description = "Email Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Push Notification",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new NotificationModels.NotificationItem() {
+                                Description = "Text Message",
+                                On = false,
+                                UserConfigurationId = ""
+                            }
+                        }
+                    },
+                }
+            });
         }
 
+        public ActionResult Sharing()
+        {
+            return View(new SharingModels.SharingModel()
+            {
+                SharingSubjects = new List<SharingModels.SharingSubject>()
+                {
+                    new SharingModels.SharingSubject() {
+                        Description = "When I Receive Money",
+                        SharingItems = new List<SharingModels.SharingItem>() {
+                            new SharingModels.SharingItem() {
+                                Description = "Facebook",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new SharingModels.SharingItem() {
+                                Description = "Twitter",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                        }
+                    },
+                    new SharingModels.SharingSubject() {
+                        Description = "When I Receive a Request",
+                        SharingItems = new List<SharingModels.SharingItem>() {
+                            new SharingModels.SharingItem() {
+                                Description = "Facebook",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new SharingModels.SharingItem() {
+                                Description = "Twitter",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                        }
+                    },
+                     new SharingModels.SharingSubject() {
+                        Description = "When I Request Money",
+                        SharingItems = new List<SharingModels.SharingItem>() {
+                            new SharingModels.SharingItem() {
+                                Description = "Facebook",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new SharingModels.SharingItem() {
+                                Description = "Twitter",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                        }
+                    },
+                      new SharingModels.SharingSubject() {
+                        Description = "When I Send Money",
+                        SharingItems = new List<SharingModels.SharingItem>() {
+                            new SharingModels.SharingItem() {
+                                Description = "Facebook",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                            new SharingModels.SharingItem() {
+                                Description = "Twitter",
+                                On = false,
+                                UserConfigurationId = ""
+                            },
+                        }
+                    }
+                }
+            });
+        }
+
+        public ActionResult Security()
+        {
+            return View();
+        }
         public ActionResult UserAgreement()
         {
             return View();
@@ -101,8 +225,9 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult SignOut()
         {
-            Session["UserId"] = null;
-            return View();
+            FormsAuthentication.SignOut();
+
+            return RedirectToAction("Index", "SignIn", new System.Web.Routing.RouteValueDictionary() { });
         }
 
         //
