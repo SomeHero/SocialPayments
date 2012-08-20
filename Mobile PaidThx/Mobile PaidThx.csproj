@@ -279,6 +279,7 @@
     <Content Include="Content\images\icons\joinIcon.png" />
     <Content Include="Content\images\icons\signinIcon-active.png" />
     <Content Include="Content\images\icons\signinIcon.png" />
+    <Content Include="Content\images\img-plus-40x40.png" />
     <Content Include="Content\images\line_diagonal1.png" />
     <Content Include="Content\images\line_diagonal2.png" />
     <Content Include="Content\images\line_hor.png" />
