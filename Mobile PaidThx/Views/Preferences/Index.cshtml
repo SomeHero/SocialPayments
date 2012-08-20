@@ -3,7 +3,9 @@
 }
 <div data-role="page" id="preferences-page">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <a href="#" id="btn-back" class="top-button ui-btn-left" data-rel="back" data-back-btn-text="Back">Back</a>
+       
         <h1>
             Settings</h1>
         <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
@@ -12,111 +14,96 @@
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
             <!-- Edit Profile -->
             <ul data-role="listview" data-inset="true">
-                <li><a href="@Url.Content("~/Preferences/Profile")" data-prefetch data-ajax="false" data-transition="slide">
-                <img src="@Url.Content("~/content/images/icon-settings-profile-40x40.png")" />
-                    Edit Profile
-                    <br/ />
-                    <span style="font-style: normal; font-size: 15px;">Increase your spending limit</span> </a></li>
-            </ul>
-            <ul data-role="listview" data-inset="true">
-                <li>
-                    <!-- Bank Account -->
-                   <a href="@Url.Content("~/BankAccounts")" data-prefetch data-ajax="false" data-transition="slide">
-                   <img src="@Url.Content("~/content/images/icon-settings-bank-40x40.png")" />
-                     Bank Accounts
-                     <br />
-                     <span style="font-style: normal; font-size: 15px;">Add or manage linked bank accounts</span></a></li>
-            </ul>
-            <ul data-role="listview" data-inset="true">
-                <li>
-                    <!-- Separate Set -->
-                    <!-- Email Accounts -->
-                    <a href="@Url.Content("~/Emails")" data-prefetch data-ajax="false" data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-email-40x40.png")" />
-                    Email Accounts
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Add or manage linked email Accounts</span> </a></li>
-                <li>
-                    <!-- Social Networks -->
-                    <a href="@Url.Content("~/Preferences/SocialNetworks")" data-prefetch data-ajax="false" data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-social-40x40.png")" />
-                    Social Networks 
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Add or manage linked social network accounts</span></a></li>
-                <li>
-                    <!-- Phones -->
-                    <a href="@Url.Content("~/Phones")" data-prefetch data-ajax="false" data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-phones-40x40.png")" />
-                    Phones
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Add or manage linked phone number</span></a></li>
-                <!--ME Codes -->
-                <li><a href="@Url.Content("~/MeCodes")" data-prefetch data-ajax="false" data-transition="slide">
-                <img src="@Url.Content("~/content/images/icon-settings-mecode-40x40.png")" />
-                    Me Codes
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Add or manage linked MeCodes</span> </a></li>
-            </ul>
-            <ul data-role="listview" data-inset="true">
-                <li>
-                    <a href="@Url.Content("~/Preferences/Notifications")" data-prefetch data-ajax="false" data-transition="slide">
-                        <img src="@Url.Content("~/content/images/icon-settings-emails-40x40.png")" />
-                        Notifications
-                        <br />
-                        <span style="font-style: normal; font-size: 15px;">How and when we update you</span>
-                    </a> </li>
-                <li>
-                    <a href="@Url.Content("~/Preferences/Sharing")" data-prefetch data-ajax="false" data-transition="slide">
-                        <img src="@Url.Content("~/content/images/icon-settings-sharing-40x40.png")" />
-                        Sharing
-                        <br />
-                        <span style="font-style: normal; font-size: 15px;">How and when you share activity</span>
-                    </a>
-                </li>
-                <li>
-                <a href="@Url.Content("~/Preferences/Security")" data-prefetch data-ajax="false" data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-security-40x40.png")" />
-                     Security & Privacy
-                     <br />
-                     <span style="font-style: normal; font-size: 15px;">Change your password or security options</span>
-                     </a>
-                </li>
-            </ul>
-            <ul data-role="listview" data-inset="true">
-                <li>
-                    <!-- Separate Set -->
-                    <!-- Help -->
-                    <a href="@Url.Content("~/Preferences/Help")" data-prefetch data-ajax="false"  data-transition="slide">
-                        <img src="@Url.Content("~/content/images/icon-settings-help-40x40.png")" />
-                        Help
-                        <br />
-                        <span style="font-style: normal; font-size: 15px;">Issues? Contact us or view FAQs</span> </a></li>
-                <!-- Feedback -->
-                <li>
-                    <a href="@Url.Content("~/Preferences/Feedback")" data-prefetch data-ajax="false"  data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-feedback-40x40.png")" />
-                    Feedback 
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Ideas or comments? Let us know!</span>
+                <li class="settings" id="profile"><a href="@Url.Content("~/Preferences/Profile")" data-prefetch data-ajax="false" data-transition="slide">
+                    <h2 class="heading">Edit Profile</h2>
+                    <h4 class="subheading">Update your information</h4>
                     </a>
                     </li>
             </ul>
             <ul data-role="listview" data-inset="true">
-                <li>
+                <li class="settings" id="banks">
+                    <!-- Bank Account -->
+                   <a href="@Url.Content("~/BankAccounts")" data-prefetch data-ajax="false" data-transition="slide">
+                   <h2 class="heading">
+                     Bank Accounts</h2>
+                     <h4 class="subheading">Add or manage linked bank accounts</h4>
+                     
+                     </a></li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="emails">
+                    <!-- Separate Set -->
+                    <!-- Email Accounts -->
+                    <a href="@Url.Content("~/Emails")" data-prefetch data-ajax="false" data-transition="slide">
+                                   <h2 class="heading"> Emails </h2>
+                    <h4 class="subheading">Add or manage linked email accounts</h4> </a></li>
+                <li class="settings" id="socials">
+                    <!-- Social Networks -->
+                    <a href="@Url.Content("~/Preferences/SocialNetworks")" data-prefetch data-ajax="false" data-transition="slide">
+                                   <h2 class="heading"> Social Networks </h2>
+                    <h4 class="subheading">Add or manage linked social accounts</h4></a></li>
+                <li class="settings" id="phones">
+                    <!-- Phones -->
+                    <a href="@Url.Content("~/Phones")" data-prefetch data-ajax="false" data-transition="slide">
+                           <h2 class="heading"> Phones </h2>
+                    <h4 class="subheading">Add or manage linked phone numbers</h4></a></li>
+                <!--ME Codes -->
+                <li class="settings" id="mecodes">
+                <a href="@Url.Content("~/MeCodes")" data-prefetch data-ajax="false" data-transition="slide">
+                        <h2 class="heading"> ME Codes </h2>
+                    <h4 class="subheading">Add and manage Mobile Exchange codes</h4></a></li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="notifications">
+                    <a href="@Url.Content("~/Preferences/Notifications")" data-prefetch data-ajax="false" data-transition="slide">
+                   <h2 class="heading"> Notifications </h2>
+                    <h4 class="subheading">How and when we update you</h4>
+                    </a> </li>
+                <li class="settings" id="sharing">
+                    <a href="@Url.Content("~/Preferences/Sharing")" data-prefetch data-ajax="false" data-transition="slide">
+                   <h2 class="heading"> Sharing </h2>
+                    <h4 class="subheading">How and when you share activity</h4>
+                    </a>
+                </li>
+                <li class="settings" id="security">
+                <a href="@Url.Content("~/Preferences/Security")" data-prefetch data-ajax="false" data-transition="slide">
+                   <h2 class="heading"> Security & Privacy </h2>
+                    <h4 class="subheading">Change your password or security options</h4>
+                     </a>
+                </li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="help">
+                    <!-- Separate Set -->
+                    <!-- Help -->
+                    <a href="@Url.Content("~/Preferences/Help")" data-prefetch data-ajax="false"  data-transition="slide">
+                                     <h2 class="heading"> Help </h2>
+                    <h4 class="subheading">Issues? Contact us or view FAQs</h4>
+                      </a></li>
+                <!-- Feedback -->
+                <li class="settings" id="feedback">
+                    <a href="@Url.Content("~/Preferences/Feedback")" data-prefetch data-ajax="false"  data-transition="slide">
+                      <h2 class="heading"> Feedback </h2>
+                    <h4 class="subheading">Ideas or comments? Let us know!</h4>
+                    </a>
+                    </li>
+            </ul>
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="useragreement">
                     <!--Rate PaidThx ( won't be used this version )-->
                     <!-- Separate Set -->
                     <!-- User Agreement -->
                     <a href="@Url.Content("~/Preferences/UserAgreement")" data-prefetch data-ajax="false" data-transition="slide">
-                    <img src="@Url.Content("~/content/images/icon-settings-emails-40x40.png")" />
-                    User Agreement
-                    <br />
-                    <span style="font-style: normal; font-size: 15px;">Terms or Service, Security & Privacy</span> </a></li>
-                <li>
+                                        <h2 class="heading">User Agreement</h2>
+                    <h4 class="subheading">Terms or Service, Security & Privacy</h4>
+                    </a>
+                    </li>
+                <li class="settings" id="signout">
                     <!-- Sign Out -->
-                    <a  href="@Url.Content("~/Preferences/SignOut")" data-prefetch data-ajax="false" data-transition="pop">
-                    <img src="@Url.Content("~/content/images/icon-settings-signout-40x40.png")" />
-                    Sign Out<br />
-                    <span style="font-style: normal; font-size: 15px;">Log out of PaidThx</span> </a></li>
+                    <a href="@Url.Content("~/Preferences/SignOut")" data-prefetch data-ajax="false" data-transition="pop">
+                    <h2 class="heading">Sign Out</h2>
+                    <h4 class="subheading">Log out of PaidThx</h4>
+                    </a></li>
             </ul>
         </div>
     </div>
