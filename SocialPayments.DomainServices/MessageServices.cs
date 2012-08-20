@@ -120,7 +120,7 @@ namespace SocialPayments.DomainServices
             if (messageType.ToUpper() == "PLEDGE")
             {
                 type = MessageType.AcceptPledge;
-                status = PaystreamMessageStatus.SubmittedRequest;
+                status = PaystreamMessageStatus.SubmittedPledge;
             }
 
             try
@@ -270,7 +270,9 @@ namespace SocialPayments.DomainServices
                     Longitude = longitude,
                     recipientFirstName = (recipient != null && !String.IsNullOrEmpty(recipient.FirstName) ? recipient.FirstName : recipientFirstName),
                     recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
-                    recipientImageUri = recipientImageUri
+                    recipientImageUri = recipientImageUri,
+                    recipientHasSeen = false,
+                    senderHasSeen = true
                 });
 
                 _context.SaveChanges();
@@ -287,23 +289,23 @@ namespace SocialPayments.DomainServices
 
             Task.Factory.StartNew(() =>
             {
-                _logger.Log(LogLevel.Info, String.Format("Started Summitted Message Task. {0} to {1}", recipientUri, senderUri));
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted {0} Task. {1} to {2}", messageType, recipientUri, senderUri));
 
-                switch (messageItem.Status)
+                switch (messageItem.MessageType)
                 {
-                    case PaystreamMessageStatus.SubmittedPayment:
+                    case MessageType.Payment:
                         SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
                         paymentTask.Execute(messageItem.Id);
 
                         break;
 
-                    case PaystreamMessageStatus.SubmittedRequest:
+                    case MessageType.PaymentRequest:
                         SubmittedRequestMessageTask requestTask = new SubmittedRequestMessageTask();
                         requestTask.Execute(messageItem.Id);
 
                         break;
 
-                    case PaystreamMessageStatus.SubmittedPledge:
+                    case MessageType.AcceptPledge:
                         SubmittedPledgeMessageTask pledgeTask = new SubmittedPledgeMessageTask();
                         pledgeTask.Execute(messageItem.Id);
 
@@ -571,10 +573,9 @@ namespace SocialPayments.DomainServices
         public List<Domain.Message> GetQuickSendPayments(User user)
         {
             var formattingService = new DomainServices.FormattingServices();
-            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = null;
-
+            
             messages = _context.Messages
                 .Where
                 (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
@@ -587,7 +588,6 @@ namespace SocialPayments.DomainServices
         public List<Domain.Message> GetNewMessages(User user)
         {
             var formattingService = new DomainServices.FormattingServices();
-            var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
             List<Domain.Message> messages = null;
 
@@ -600,7 +600,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        (m.RecipientId == user.UserId) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -617,7 +617,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        (m.RecipientUri == mobileNumber || m.RecipientUri == user.EmailAddress || m.RecipientId == user.UserId) &&
+                        ( m.RecipientId == user.UserId ) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -644,8 +644,6 @@ namespace SocialPayments.DomainServices
 
             // "Pending" messages are:
             // Messages that you are involved in that are waiting for the recipient to take action.
-            // Cases that apply:
-            //  1 -> 
 
             messages = _context.Messages
                 .Where

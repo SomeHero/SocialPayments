@@ -51,43 +51,37 @@ $(document).ready(function () {
     var pledgeRecipient = "";
     var pledgeOrganization = "";
 
-    var serviceUrl = getBaseURL() + 'DoGood/Donate';
+    var serviceUrl = getBaseURL() + 'Donate';
     var testUrl = getBaseURL() + 'DoGood/DonateData';
-    var pledgeUrl = getBaseURL() + 'DoGood/Pledge';
+    var pledgeUrl = getBaseURL() + 'Pledge';
 
-    $(".organization").die('click').live('click', function () {
+    $("#btn-donate-addcontact").die('click').live('click', function () {
+        $.mobile.changePage(getBaseURL() + 'Donate/AddContact',
+        {
+            transaction: 'slide'
+        });
+    });
+
+    $(".organization-pledge").die('click').live('click', function () {
 
         var orgId = $(this).attr('data-value');
         var orgName = $(this).attr('organization-name');
         organizationid = orgId;
         organization = orgName;
 
-        var donateModel = {
-            Organization: organization,
-            OrganizationId: organizationid,
+        var model = {
+            RecipientName: organization,
+            RecipientId: organizationid,
             Amount: amountSelected,
             PledgerUri: recipient
         };
 
-        var jsonData = $.toJSON(donateModel);
-
-        $.ajax({
-            type: 'POST',
-            url: testUrl,
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            processData: false,
-            success: function (data) {
-                $.mobile.changePage(pledgeUrl, {
-                    type: "put",
-                    data: data
-                });
-            },
-            error: function (objRequest, next, errorThrown) {
-                alert(next);
-                $("#error-block").appendTo(next);
-            }
+        $.mobile.changePage(getBaseURL() + 'Pledge/AddCause', {
+            data: model,
+            dataUrl: getBaseURL() + 'Pledge',
+            reverse: true,
+            transition: 'slide',
+            type: 'post'
         });
 
     });
@@ -100,30 +94,20 @@ $(document).ready(function () {
         organization = orgName;
 
         var donateModel = {
-            Organization: organization,
-            OrganizationId: organizationid,
-            Amount: amountSelected
+            RecipientName: organization,
+            RecipientId: organizationid,
+            Amount: amountSelected,
+            PledgerUri: recipient
         };
 
         var jsonData = $.toJSON(donateModel);
 
-        $.ajax({
-            type: 'POST',
-            url: testUrl,
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            processData: false,
-            success: function (data) {
-                $.mobile.changePage(serviceUrl, {
-                    type: "put",
-                    data: data
-                });
-            },
-            error: function (objRequest, next, errorThrown) {
-                alert(next);
-                $("#error-block").appendTo(next);
-            }
+        $.mobile.changePage(getBaseURL() + 'Donate/AddContact', {
+            data: donateModel,
+            dataUrl: getBaseURL() + 'Donate',
+            reverse: true,
+            transition: 'slide',
+            type: 'post'
         });
 
     });

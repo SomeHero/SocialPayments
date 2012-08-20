@@ -1,5 +1,4 @@
-﻿@model Mobile_PaidThx.Models.SendMoneyModel
-<script>
+﻿<script>
     function submitform() {
         alert("You entered " + document.getElementById("patternlock").value);
         return true;
@@ -14,19 +13,17 @@
     </div>
   
     <div data-role="content">
+        @Html.ValidationSummary()
         <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
             Enter Pinswipe</div>
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
-        <form id="pinSwipeForm" action="@Url.Content("~/Send/SendMoney")" method="post">
-        <div style="margin-top:15px">
-            <input type="hidden" name="RecipientUri" id="sendUri" value="@Model.RecipientUri" />
-            <input type="hidden" name="Amount" id="amountUri" value="@Model.Amount" />
-            <input type="hidden" name="Comments" id="commentsUri" value="@Model.Comments" />
+        @using (Html.BeginForm("PopupPinswipe", "Send", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div style="margin-top:15px">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" />
         </div>
-        </form>
+        }
     </div>
-      @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

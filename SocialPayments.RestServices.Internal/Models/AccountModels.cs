@@ -11,6 +11,8 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string Id { get; set; }
             public string UserId { get; set; }
+            public string BankName { get; set; }
+            public string BankIconUrl { get; set; }
             public string Nickname { get; set; }
             public string NameOnAccount { get; set; }
             public string RoutingNumber { get; set; }

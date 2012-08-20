@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Data.Entity;
-using SocialPayments.DataLayer;
 
 namespace Mobile_PaidThx
 {
@@ -84,30 +83,55 @@ namespace Mobile_PaidThx
                 new { controller = "Dashboard", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
-"Preferences", // Route name
-"Preferences/{action}", // URL with parameters
-new { controller = "Preferences", action = "Index" } // Parameter defaults
-);
+                "Preferences", // Route name
+                "Preferences/{action}", // URL with parameters
+            new { controller = "Preferences", action = "Index" } // Parameter defaults
+            );
             routes.MapRoute(
-"BankAccounts", // Route name
-"Preferences/BankAccounts", // URL with parameters
-new { controller = "Preferences", action = "BankAccounts" } // Parameter defaults
-);
+                "BankAccounts", // Route name
+                "BankAccounts/{action}/{id}", // URL with parameters
+                    new { controller = "BankAccounts", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
             routes.MapRoute(
-      "Send", // Route name
-      "Send/{action}", // URL with parameters
-      new { controller = "Send", action = "Index" } // Parameter defaults
-  );
+                "Emails", // Route name
+                "Emails/{action}/{id}", // URL with parameters
+                    new { controller = "Emails", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
             routes.MapRoute(
-"Request", // Route name
-"Request/{action}", // URL with parameters
-new { controller = "Request", action = "Index" } // Parameter defaults
-);
+                "Phones", // Route name
+                "Phones/{action}/{id}", // URL with parameters
+                    new { controller = "Phones", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
             routes.MapRoute(
-"DoGood", // Route name
-"DoGood/{action}", // URL with parameters
-new { controller = "DoGood", action = "Index" } // Parameter defaults
-);
+                "MeCodes", // Route name
+                "MeCodes/{action}/{id}", // URL with parameters
+                    new { controller = "MeCodes", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
+                    "Pledge", // Route name
+                    "Pledge/{action}", // URL with parameters
+                    new { controller = "Pledge", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                    "Donate", // Route name
+                    "Donate/{action}", // URL with parameters
+                    new { controller = "Donate", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                  "Send", // Route name
+                  "Send/{action}", // URL with parameters
+                  new { controller = "Send", action = "Index" } // Parameter defaults
+             );
+             routes.MapRoute(
+                "Request", // Route name
+                "Request/{action}", // URL with parameters
+                new { controller = "Request", action = "Index" } // Parameter defaults
+            );
+                        routes.MapRoute(
+            "DoGood", // Route name
+            "DoGood/{action}", // URL with parameters
+            new { controller = "DoGood", action = "Index" } // Parameter defaults
+            );
             routes.MapRoute(
                 "Paystream", // Route name
                 "Paystream/{action}", // URL with parameters
@@ -134,7 +158,6 @@ new { controller = "DoGood", action = "Index" } // Parameter defaults
 
         protected void Application_Start()
         {
-            Database.SetInitializer(new MyInitializer());
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

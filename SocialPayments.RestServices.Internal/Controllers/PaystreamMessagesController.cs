@@ -109,6 +109,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     messageType = message.MessageType.ToString(),
                     recipientName = (message.Recipient != null ? _formattingService.FormatUserName(message.Recipient) : "No Name"),
                     recipientUri = message.RecipientUri,
+                    recipientUriType = _userService.GetURIType(message.RecipientUri).ToString(),
                     senderName = (message.Sender != null ? _formattingService.FormatUserName(message.Sender) : "No Name"),
                     senderUri = message.SenderUri,
                     transactionImageUri = (message.Sender != null ? (!String.IsNullOrEmpty(message.Sender.ImageUrl) ? message.Sender.ImageUrl : _defaultAvatarImage) : _defaultAvatarImage)
@@ -351,11 +352,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 try
                 {
                     _messageServices.AcceptPledge(request.apiKey, user, request.onBehalfOfId, request.recipientUri, request.amount,
-                        request.comments, "PaymentRequest");
+                        request.comments, "AcceptPledge");
                 }
                 catch (Exception ex)
                 {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.Message));
+                    _logger.Log(LogLevel.Fatal, String.Format("Exception Adding Message {0} {1} {2}. {3}", request.apiKey, request.senderId, request.recipientUri, ex.StackTrace));
 
                     var innerException = ex.InnerException;
 
@@ -516,7 +517,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 try
                 {
-
                     message = _messageServices.AddMessage(request.apiKey, request.senderId, "", request.recipientUri, request.senderAccountId,
                         request.amount, request.comments, request.messageType, request.latitude, request.longitude,
                        request.recipientFirstName, request.recipientLastName, request.recipientImageUri);

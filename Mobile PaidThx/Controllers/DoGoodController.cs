@@ -15,7 +15,7 @@ namespace Mobile_PaidThx.Controllers
     public class DoGoodController : Controller
     {
 
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /DoGood/
@@ -48,15 +48,14 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult PledgeMoney(DonateMoneyModel model)
         {
-            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
+            _logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
 
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
-            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+            _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 
             if (ModelState.IsValid)
             {
@@ -64,22 +63,11 @@ namespace Mobile_PaidThx.Controllers
                 {
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    var response = paystreamMessageServices.AcceptPledge(_apiKey, userId, model.OrganizationId, model.PledgerUri, model.Amount, model.Comments, "0", "0", "", "", "", model.Pincode);
-                    //ctx.PaymentRequests.Add(new PaymentRequest()
-                    //{
-                    //    Amount = model.Amount,
-                    //    ApiKey = application.ApiKey,
-                    //    Comments = model.Comments,
-                    //    CreateDate = System.DateTime.Now,
-                    //    PaymentRequestId = Guid.NewGuid(),
-                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
-                    //    RecipientUri = model.RecipientUri,
-                    //    RequestorId = user.UserId
-                    //});
+                     paystreamMessageServices.AcceptPledge(_apiKey, userId, model.OrganizationId, model.PledgerUri, model.Amount, model.Comments, "0", "0", "", "", "", model.Pincode);
                 }
                 catch (Exception ex)
                 {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
 
                     return View(model);
                 }
@@ -93,15 +81,14 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult DonateMoney(DonateMoneyModel model)
         {
-            logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
+            _logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
 
-            var applicationService = new SocialPayments.DomainServices.ApplicationService();
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
-            logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
+            _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 
             if (ModelState.IsValid)
             {
@@ -110,22 +97,12 @@ namespace Mobile_PaidThx.Controllers
 
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    var response = paystreamMessageServices.SendDonation(_apiKey, userId, model.OrganizationId, user.preferredPaymentAccountId, model.Pincode, model.Amount, model.Comments, "0", "0", "", "", "");
-                    //ctx.PaymentRequests.Add(new PaymentRequest()
-                    //{
-                    //    Amount = model.Amount,
-                    //    ApiKey = application.ApiKey,
-                    //    Comments = model.Comments,
-                    //    CreateDate = System.DateTime.Now,
-                    //    PaymentRequestId = Guid.NewGuid(),
-                    //    PaymentRequestStatus = PaymentRequestStatus.Submitted,
-                    //    RecipientUri = model.RecipientUri,
-                    //    RequestorId = user.UserId
-                    //});
+                    paystreamMessageServices.SendDonation(_apiKey, userId, model.OrganizationId, user.preferredPaymentAccountId, model.Pincode, model.Amount, model.Comments, "0", "0", "", "", "");
+                    
                 }
                 catch (Exception ex)
                 {
-                    logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Request. {0}", ex.Message));
 
                     return View(model);
                 }
@@ -144,11 +121,20 @@ namespace Mobile_PaidThx.Controllers
             // add to non-profts
             // pre-created list for testing
             var merchantServices = new MerchantServices();
-            var jsonResult = merchantServices.GetMerchants("Organizations");
+            List<MerchantModels.MerchantResponseModel> merchants = null;
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            try
+            {
+                merchants = merchantServices.GetMerchants("Organizations");
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Organizations."));
 
-            List<MerchantModels.MerchantResponseModel> merchants = js.Deserialize<List<MerchantModels.MerchantResponseModel>>(jsonResult);
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Index");
+            }
 
             orgs.NonProfits = merchants.Select(m => new OrganizationModels.OrganizationModel()
             {
@@ -259,11 +245,20 @@ namespace Mobile_PaidThx.Controllers
 
             // NON-PROFITS
             var merchantServices = new MerchantServices();
-            var jsonResult = merchantServices.GetMerchants("Organizations");
+            List<MerchantModels.MerchantResponseModel> merchants = null;
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            try
+            {
+                merchants = merchantServices.GetMerchants("Organizations");
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Organizations."));
 
-            List<MerchantModels.MerchantResponseModel> merchants = js.Deserialize<List<MerchantModels.MerchantResponseModel>>(jsonResult);
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Index");
+            }
 
             orgs.NonProfits = merchants.Select(m => new OrganizationModels.OrganizationModel()
             {

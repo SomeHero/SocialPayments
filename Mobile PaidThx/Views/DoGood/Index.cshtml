@@ -15,7 +15,8 @@
         <div style="margin-top: 10px; margin-right: 10px; margin-left: 10px; margin-bottom: 20px">
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Make a donation or
                 gift to a non-profit organization. As always, 100% of your generosity goes to the
-                organization.</span> <a onclick="toDonateScreen()">
+                organization.</span> 
+                <a href="@Url.Content("~/Donate")" data-ajax="false" data-prefetch>
                     <button type="button" class="btn-new btn-green" style="margin-top: 10px">
                         <span id="donate-button">Give To A Cause</span></button></a>
         </div>
@@ -25,7 +26,7 @@
         <div style="margin-top: 20px; margin-right: 10px; margin-left: 10px; margin-bottom: 10px">
             <span style="font-size: 16px; font-weight: bold; color: #525252;">Accept pledges and
                 charitable donations on behalf of your organization wherever you may be with just
-                an e-mail or phone #.</span> <a onclick="toPledgeScreen()">
+                an e-mail or phone #.</span> <a href="@Url.Content("~/Pledge")" data-ajax="false" data-prefetch>
                     <button type="button" class="btn-new btn-blue" style="margin-top: 10px">
                         <span id="donate-button">Accept A Pledge</span></button></a></div>
     </div>

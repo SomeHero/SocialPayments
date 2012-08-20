@@ -1,5 +1,10 @@
 ﻿<div id="main-body" class="panel">
+@Html.ValidationSummary()
+
+@using(Html.BeginForm())
+{
     <p style="margin-top:0; padding-top:0;">
+        <input type="hidden" id="theRecipientUri" name="RecipientUrl" value="@Model.RecipientUri" />
         <label for="txtSendTo">
             Send To:</label>
         <a href="./Send/AddContactSend" data-prefetch>
@@ -18,7 +23,7 @@
         </a>
     </p>
     <p>
-        <input type="hidden" id="theAmountToSend" value="@Model.Amount" />
+        <input type="hidden" id="theAmountToSend" name="Amount" value="@Model.Amount" />
         <label for="txtAmount">
             Amount to Send:</label>
         <a href="./Send/AmountToSend" data-prefetch>
@@ -39,13 +44,11 @@
     <p>
         <label for="txtComments">
             Message:</label>
-        <textarea id="txtComments" rows="10" cols="100" placeholder="For what? Add a message..."
-            required></textarea>
+        <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
     </p>
     <p>
-        <a onclick="getPincode()">
-            <button type="button" id="sendmoney" class="btn-new btn-green">
-                   <span>Send Money</span></button></a>
-            </a>
+            <button type="submit" id="sendmoney2" class="btn-new btn-green">
+                   <span>Send Money</span></button>
     </p>
+}
 </div>

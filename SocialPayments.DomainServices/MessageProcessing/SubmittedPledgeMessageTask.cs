@@ -61,7 +61,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         _logger.Log(LogLevel.Info, String.Format("Sending Communication to Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        message.Status = PaystreamMessageStatus.PendingPledge;
 
                         SendRecipientEngagedCommunication(message);
                     }
@@ -69,7 +69,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         _logger.Log(LogLevel.Info, String.Format("Sending Communication to Non Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                        message.Status = PaystreamMessageStatus.PendingRequest;
+                        message.Status = PaystreamMessageStatus.PendingPledge;
 
                         SendRecipientNotEngagedCommunication(message);
                     }
@@ -78,7 +78,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     _logger.Log(LogLevel.Info, String.Format("Sending Communication to Not Registered Recipient {0} for Message {1}", message.RecipientUri, message.Id));
 
-                    message.Status = PaystreamMessageStatus.NotifiedRequest;
+                    message.Status = PaystreamMessageStatus.NotifiedPledge;
 
                     SendRecipientNotRegisteredCommunication(message);
                 }
@@ -149,6 +149,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                            new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                             new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
                             new KeyValuePair<string, string>("ORGANIZATION_PHOTO_URL", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("ORGANIZATION", message.Sender.Merchant.Name),
@@ -262,6 +263,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                    new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),      
                                     new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
                                     new KeyValuePair<string, string>("ORGANIZATION_PHOTO_URL", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("ORGANIZATION", message.Sender.Merchant.Name),
@@ -356,6 +358,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                    new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                     new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
                                     new KeyValuePair<string, string>("ORGANIZATION_PHOTO_URL", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("ORGANIZATION", message.Sender.Merchant.Name),

@@ -15,7 +15,8 @@
             @if (Model.Payment != null)
             {
                 <text>
-                <div id="pay-recd"><img src="@Model.Payment.SenderImageUrl" width="50" />
+                <div id="pay-recd">
+                <img src="@Model.Payment.SenderImageUrl" width="50" style="margin-bottom: 15px" />
                 <h4>@Model.Payment.Sender sent you @String.Format("{0:C}", Model.Payment.Amount).</h4></div>
                 @if (!String.IsNullOrEmpty(Model.Payment.Comments))
                 {

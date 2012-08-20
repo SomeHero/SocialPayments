@@ -197,6 +197,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         AccountNumber = securityService.GetLastFour(securityService.Decrypt(a.AccountNumber)),
                         AccountType = a.AccountType.ToString(),
                         Id = a.Id.ToString(),
+                        BankName = a.BankName,
+                        BankIconUrl = a.BankIconURL,
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
                         Nickname = a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
@@ -292,7 +294,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken, "", request.messageId);
-
             }
             catch (Exception ex)
             {
@@ -451,7 +452,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
 
         }
-        [HttpPost]
+
         public HttpResponseMessage ChangeSecurityPin(string id, UserModels.ChangeSecurityPinRequest request)
         {
             Context _ctx = new Context();
@@ -658,7 +659,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
         }
 
-        // POST /api/users/{userId}/refresh_homepage
+        // GET /api/users/{userId}/refresh_homepage
         public HttpResponseMessage<UserModels.HomepageRefreshReponse> RefreshHomepageInformation(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
@@ -677,70 +678,96 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unable to find user [RefreshHomepage] by [{0}]", id));
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.MethodNotAllowed); // 405
             }
 
 
-            try
+            //try
+            //{
+            List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
+            List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
+
+            foreach (Message msg in recentPayments)
             {
-                List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
-                List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
 
-                foreach (Message msg in recentPayments)
+                string recipName;
+                var recipient = _userService.GetUser(msg.RecipientUri);
+                int recipientType = -1;
+
+                if (recipient == null)
                 {
-                    string recipName;
-                    int recipientType = -1;
-                    var recipient = _userService.GetUser(msg.RecipientUri);
-                    if (recipient == null)
-                    {
-                        recipName = msg.RecipientUri;
+                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO" );
 
-                        recipientType = 0;
+                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                    {
+                        _logger.Log(LogLevel.Error,"First: {0} Last: {1} Name: {2}",msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+                        recipName = msg.RecipientName;
                     }
                     else
                     {
-                        recipName = _userService.GetSenderName(recipient);
-                        recipientType = recipient.UserTypeId;
-
-                        if (recipient.Merchant.MerchantTypeValue == 2)
-                            recipientType = 2;
-                        else if (recipient.Merchant.MerchantTypeValue == 1)
-                            recipientType = 1;
-                        else if (recipient.Merchant == null)
-                            recipientType = 0;
+                        recipName = msg.RecipientUri;
                     }
 
-                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    recipientType = 0;
+                }
+                else if ( recipient.Merchant != null )
+                {
+                    recipName = _userService.GetSenderName(recipient);
+                    recipientType = recipient.UserTypeId;
+
+                    if (recipient.Merchant.MerchantTypeValue == 2)
+                        recipientType = 2;
+                    else if (recipient.Merchant.MerchantTypeValue == 1)
+                        recipientType = 1;
+                }
+                else
+                {
+                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
                     {
-                        userUri = msg.RecipientUri,
-                        userName = recipName,
-                        userImage = msg.recipientImageUri,
-                        userType = recipientType
-                    });
+                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+
+                        recipName = String.Format("{0} {1}", msg.recipientFirstName, msg.recipientLastName);
+                    }
+                    else
+                    {
+                        recipName = msg.Recipient.SenderName;
+                    }
+
+                    recipientType = 0;
                 }
+                string imageUri = null;
 
-                var response = new UserModels.HomepageRefreshReponse()
+                if (msg.Recipient != null)
+                    imageUri = msg.Recipient.ImageUrl;
+
+                quickSends.Add(new UserModels.QuickSendUserReponse()
                 {
-                    userId = user.UserId.ToString(),
-                    numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
-                    numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
-                    quickSendContacts = quickSends
-                };
-
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+                    userUri = msg.RecipientUri,
+                    userName = recipName,
+                    userImage = imageUri,
+                    userType = recipientType
+                });
             }
-            catch (Exception ex)
+
+            var response = new UserModels.HomepageRefreshReponse()
             {
-                _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
+                userId = user.UserId.ToString(),
+                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
+                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                quickSendContacts = quickSends
+            };
 
-                while (ex.InnerException != null)
-                {
-                    _logger.Log(LogLevel.Error, String.Format("Inner exception: {0}", ex.InnerException.Message));
-                    ex = ex.InnerException;
-                }
-
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-            }
+            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+            /*
+        }
+        catch (Exception ex)
+        {
+            _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
+            var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+            message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
+            return message;
+        }
+             * */
         }
 
 
@@ -790,20 +817,34 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
         {
             Context _ctx = new Context();
+            
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
 
-            User user;
-            var isValid = _userService.ValidateUser(request.userName, request.password, out user);
+            HttpResponseMessage<UserModels.ValidateUserResponse> responseMessage;
 
-            bool hasACHAccount = false;
-            if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
-                hasACHAccount = true;
+            User user;
+            var isValid = false;
+
+            try
+            {
+                isValid = _userService.ValidateUser(request.userName, request.password, out user);
+            }
+            catch (Exception ex)
+            {
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.InternalServerError);
+                responseMessage.ReasonPhrase = ex.Message;
+
+                return responseMessage;
+            }
 
             if (isValid)
             {
+                bool hasACHAccount = false;
+                if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
+                    hasACHAccount = true;
+
                 var message = new UserModels.ValidateUserResponse()
                 {
                     userId = user.UserId.ToString(),
@@ -817,10 +858,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     isLockedOut = user.IsLockedOut
                 };
 
-                return new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
+
+                return responseMessage;
             }
             else
-                return new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
+            {
+                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
+                responseMessage.ReasonPhrase = "Invalid Username and Password";
+
+                return responseMessage;
+            }
+
         }
 
         //POST /api/users/signin_withfacebook
@@ -883,24 +932,53 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 try
                 {
-                    user = _userService.LinkFacebook(Guid.Parse(request.apiKey), id, request.accountId, request.oAuthToken, System.DateTime.Now.AddDays(30));
+                    user = _userService.GetUserById(id);
                 }
-                catch (ArgumentException aEx)
+                catch ( Exception ex )
                 {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                    string ErrorReason = String.Format("-LinkFB- Unable to find user for {0}", id);
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
                     var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = aEx.Message;
-                    return message;
-                }
-                catch (Exception ex)
-                {
-                    _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
-                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    message.ReasonPhrase = ex.Message;
+                    message.ReasonPhrase = ErrorReason;
                     return message;
                 }
 
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                /*
+                 * Validate Facebook AccountId and Auth Token and Create ExpirationDate Token
+                 */
+                if (request.apiKey == null || request.AccountId == null || request.oAuthToken == null)
+                {
+                    string ErrorReason = String.Format("Link Facebook Failed -> Invalid Input Sent.");
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
+                    return message;
+                }
+                else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
+                {
+                    // Account in use... return an error.
+                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.", id);
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
+                    return message;
+                }
+                
+                
+                if ( _userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)) )
+                    return new HttpResponseMessage(HttpStatusCode.Created);
+                else
+                {
+                    string ErrorReason = String.Format("Link Facebook Failed -> User Service to add FB User Failed.");
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
+                    return message;
+                }
             }
         }
 

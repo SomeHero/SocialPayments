@@ -18,6 +18,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string senderUri { get; set; }
             public UserModels.UserResponse sender { get; set; }
             public string recipientUri { get; set; }
+            public string recipientUriType { get; set; }
             public UserModels.UserResponse recipient { get; set; }
             public AccountModels.AccountResponse senderAccount { get; set; }
             public double amount { get; set; }

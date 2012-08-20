@@ -46,6 +46,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(a.AccountNumber)),
                     AccountType = a.AccountType.ToString(),
+                    BankName = a.BankName,
+                    BankIconUrl = a.BankIconURL,
                     NameOnAccount = _securityService.Decrypt(a.NameOnAccount),
                     Nickname = a.Nickname,
                     Id = a.Id.ToString(),
@@ -89,6 +91,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(account.AccountNumber)),
                     AccountType = account.AccountType.ToString(),
+                    BankName = account.BankName,
+                    BankIconUrl = account.BankIconURL,
                     NameOnAccount = _securityService.Decrypt(account.NameOnAccount),
                     Nickname = account.Nickname,
                     Id = account.Id.ToString(),
