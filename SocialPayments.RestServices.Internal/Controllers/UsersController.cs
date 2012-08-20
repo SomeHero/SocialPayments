@@ -959,21 +959,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
                 {
                     // Account in use... return an error.
-                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.");
+                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.", id);
                     _logger.Log(LogLevel.Error, ErrorReason);
 
                     var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
                     message.ReasonPhrase = ErrorReason;
                     return message;
                 }
+                
+                
+                if ( _userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)) )
+                    return new HttpResponseMessage(HttpStatusCode.Created);
                 else
                 {
-                    _userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0));
+                    string ErrorReason = String.Format("Link Facebook Failed -> User Service to add FB User Failed.");
+                    _logger.Log(LogLevel.Error, ErrorReason);
+
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    message.ReasonPhrase = ErrorReason;
+                    return message;
                 }
-
-
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
 
