@@ -2,20 +2,22 @@
 @{
     ViewBag.Title = "Home";
 }
-<script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
 <div data-role="page">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-            Home</h1>
+              <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
-    <div data-role="content">
-        <div id="container">
-            <div id="content-container">
-                 @{Html.RenderPartial("_footer");}
-            </div>
+    <div data-role="content" id="home-screen">
+        <div id="profile-new">
+        <div id="myprofile"></div>
+        <div id="incoming"></div>
+        <div id="outgoing"></div>
+        </div>
+        <div id="quicksend">
+        
         </div>
     </div>
-     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }
 </div>

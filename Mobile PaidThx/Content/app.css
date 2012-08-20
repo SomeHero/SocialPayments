@@ -333,7 +333,6 @@ label.error
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    margin-bottom: 10px;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e6e6e6), to(#f5f6f5));
     background: -webkit-linear-gradient(top, #f5f6f5, #e6e6e6);
     background: -moz-linear-gradient(top, #f5f6f5, #e6e6e6);
