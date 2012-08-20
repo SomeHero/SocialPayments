@@ -40,5 +40,13 @@ namespace Mobile_PaidThx.Models
         {
             public string PinCode { get; set; }
         }
+        public class SetPreferredSendAccountModel
+        {
+            public string PaymentAccountId { get; set; }
+        }
+        public class SetPreferredReceiveAccountModel
+        {
+            public string PaymentAccountId { get; set; }
+        }
     }
 }
