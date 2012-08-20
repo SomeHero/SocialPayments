@@ -35,6 +35,7 @@ namespace Mobile_PaidThx.Controllers
             _logger.Log(LogLevel.Info, String.Format("Attempting to signin user {0}", model.Email));
 
             var userService = new UserServices();
+            var applicationServices = new ApplicationServices();
 
             if (ModelState.IsValid)
             {
@@ -69,6 +70,22 @@ namespace Mobile_PaidThx.Controllers
 
                 FormsAuthentication.SetAuthCookie(model.Email, false);
 
+                ApplicationResponse application;
+
+                try
+                {
+                    application = applicationServices.GetApplication(_apiKey);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+
+                    _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
+
+                    return View();
+                }
+
+                Session["Application"] = application;
                 Session["UserId"] = validateResponse.userId;
                 Session["User"] = user;
 

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "AddContactRequest";
 }
-<div data-role="page" id="request-page" class="modally">
+<div data-role="page" id="request-page">
   @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -9,20 +9,19 @@
       <!-- <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
     <div data-role="content" class="content">
-          @using (Html.BeginForm("AddContactRequest", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
-           {
-            
-        <div style="font-size: 16px; margin-left: 10px; margin-top: 10px">
-            Enter your contact's
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        
+                 <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+                    @foreach (var friend in Model.Friends)
+                    {
+                    <li>
+                    <a class="request-friend" friend-id="@friend.id" friend-name="@friend.name">
+                        <img src="@String.Format("http://graph.facebook.com/{0}/picture?type=large", friend.id)" />
+                        @friend.name
+                    </a>
+                    </li>
+                    }
+                </ul>
+            </div>
         </div>
-        <div data-role="fieldcontain" style="margin-left: 10px">
-            <label for="email-send">
-                <span style="font-weight: bold">E-mail or Mobile #:</span></label>
-            <input type="text" name="RecipientUri" id="email-send" value="" />
-        </div>
-         <button type="submit" id="submitContactSend2" class="btn-new btn-blue">
-                   <span>Confirm Contact</span></button>
-           }
-    </div>
-    @{ Html.RenderPartial("LoggedInMenu"); }
 </div>

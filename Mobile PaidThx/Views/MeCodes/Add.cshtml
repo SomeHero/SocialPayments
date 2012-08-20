@@ -1,0 +1,22 @@
+﻿@model Mobile_PaidThx.Models.MeCodesModels.AddMeCodeModel
+<div data-role="page" id="add-email-paypoint-page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Add MeCode</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                <input type="text" id="txtMeCode" name="MeCode" placeholder="$MeCode"
+                required /></p>
+            <p>
+             <button type="submit" id="add-email-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add MeCode</span></button></p>
+         }
+        </div>
+    </div>
+</div>
