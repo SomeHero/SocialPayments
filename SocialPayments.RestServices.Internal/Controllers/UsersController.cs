@@ -959,7 +959,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
                 {
                     // Account in use... return an error.
-                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.");
+                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.", id);
                     _logger.Log(LogLevel.Error, ErrorReason);
 
                     var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
