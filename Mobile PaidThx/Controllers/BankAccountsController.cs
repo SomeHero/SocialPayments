@@ -164,6 +164,75 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public ActionResult SetPreferredSendAccount(BankAccountModels.SetPreferredSendAccountModel model)
+        {
+            Session["ChangedPreferredSendAccount"] = model.PaymentAccountId;
 
+            return RedirectToAction("SetPreferredSendAccountPinSwipe");
+        }
+        public ActionResult SetPreferredSendAccountPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SetPreferredSendAccountPinSwipe(BankAccountModels.PinSwipeModel model)
+        {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            
+            var bankAccountServices = new Services.UserPaymentAccountServices();
+
+            try
+            {
+                bankAccountServices.SetSendAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredSendAccount"].ToString(), model.PinCode);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+            }
+
+            user.preferredPaymentAccountId = Session["ChangedPreferredSendAccount"].ToString();
+
+            Session["ChangedPreferredSendAccount"] = null;
+
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult SetPreferredReceiveAccount(BankAccountModels.SetPreferredReceiveAccountModel model)
+        {
+            Session["ChangedPreferredReceiveAccount"] = model.PaymentAccountId;
+
+            return RedirectToAction("SetPreferredReceiveAccountPinSwipe");
+        }
+        public ActionResult SetPreferredReceiveAccountPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SetPreferredReceiveAccountPinSwipe(BankAccountModels.PinSwipeModel model)
+        {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+           
+            var bankAccountServices = new Services.UserPaymentAccountServices();
+
+            try
+            {
+                bankAccountServices.SetSendAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredReceiveAccount"].ToString(), model.PinCode);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+            }
+
+            user.preferredReceiveAccountId = Session["ChangedPreferredReceiveAccount"].ToString();
+
+            Session["ChangedPreferredReceiveAccount"] = null;
+
+            return RedirectToAction("Index");
+        }
     }
 }
