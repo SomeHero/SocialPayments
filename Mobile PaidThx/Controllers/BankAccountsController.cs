@@ -139,6 +139,49 @@ namespace Mobile_PaidThx.Controllers
         {
             return View();
         }
+
+        public ActionResult Delete(BankAccountModels.DeletePaymentAccountModel model)
+        {
+            try
+            {
+                Session["DeleteBankAccount"] = model.PaymentAccountId;
+
+                return RedirectToAction("DeletePopUpPinswipe");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult DeletePopupPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeletePopupPinSwipe(BankAccountModels.PinSwipeModel model)
+        {
+
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            string paymentAccountId = Session["DeleteBankAccount"].ToString();
+
+            var bankAccountServices = new Services.UserPaymentAccountServices();
+
+            try
+            {
+                bankAccountServices.DeleteAccount(_apiKey, user.userId.ToString(), paymentAccountId);
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+            }
+
+            user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
+
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         public ActionResult EditPopupPinSwipe(BankAccountModels.PinSwipeModel model)
         {

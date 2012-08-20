@@ -41,7 +41,7 @@
                         <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
                             Account</span></button></p>
             }
-            @using (Html.BeginForm("PopupPinSwipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            @using (Html.BeginForm("Delete", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <p>
                     <input type="hidden" name="PaymentAccountId" value="@Model.PaymentAccountId" />
