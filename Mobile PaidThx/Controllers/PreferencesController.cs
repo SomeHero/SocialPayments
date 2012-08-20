@@ -66,17 +66,32 @@ namespace Mobile_PaidThx.Controllers
                             new NotificationModels.NotificationItem() {
                                 Description = "Email Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Push Notification",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Text Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             }
                         }
                     },
@@ -86,17 +101,32 @@ namespace Mobile_PaidThx.Controllers
                             new NotificationModels.NotificationItem() {
                                 Description = "Email Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Push Notification",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Text Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             }
                         }
                     },
@@ -106,17 +136,32 @@ namespace Mobile_PaidThx.Controllers
                             new NotificationModels.NotificationItem() {
                                 Description = "Email Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Push Notification",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Text Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             }
                         }
                     },
@@ -126,24 +171,46 @@ namespace Mobile_PaidThx.Controllers
                             new NotificationModels.NotificationItem() {
                                 Description = "Email Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Push Notification",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                 Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             },
                             new NotificationModels.NotificationItem() {
                                 Description = "Text Message",
                                 On = false,
-                                UserConfigurationId = ""
+                                UserConfigurationId = "",
+                                Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                                SelectedValue = "0"
                             }
                         }
                     },
                 }
             });
         }
-
+        [HttpPost]
+        public void Notifications(FormCollection form)
+        {
+            foreach (var key in form.AllKeys)
+            {
+                var value = form[key];
+            }
+        }
         public ActionResult Sharing()
         {
             return View(new SharingModels.SharingModel()

@@ -196,6 +196,7 @@
     <Compile Include="Models\SecurityQuestionModels.cs" />
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Models\SharingModels.cs" />
+    <Compile Include="Models\SignInModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplicationServices.cs" />
     <Compile Include="Services\FacebookServices.cs" />
@@ -272,7 +273,7 @@
     <Content Include="Content\images\icon-settings-signout-40x40.png" />
     <Content Include="Content\images\icon-settings-social-40x40-active.png" />
     <Content Include="Content\images\icon-settings-social-40x40.png" />
-    <Content Include="Content\images\icon-settingspreferences-40x40-active.png" />
+    <Content Include="Content\images\icon-settings-preferences-40x40-active.png" />
     <Content Include="Content\images\icons\aboutIcon-active.png" />
     <Content Include="Content\images\icons\aboutIcon.png" />
     <Content Include="Content\images\icons\joinIcon-active.png" />
@@ -382,6 +383,7 @@
     <Content Include="Scripts\jquery.livequery.js" />
     <Content Include="Scripts\dogood.js" />
     <Content Include="Scripts\less-1.3.0.min.js" />
+    <Content Include="Scripts\notifications.js" />
     <Content Include="Scripts\patternlock.js" />
     <Content Include="Scripts\popuppinswipe.js" />
     <Content Include="Scripts\settings.js" />

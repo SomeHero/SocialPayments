@@ -30,7 +30,7 @@
 
             <h5 style="margin-top:10px">
                 Connect with Facebook</h5>
-            <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
+            <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
                 <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Join with Facebook </span>
             </button>
             <h5 style="margin-top:25px">

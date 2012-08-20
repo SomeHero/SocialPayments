@@ -5,13 +5,11 @@ using System.Web;
 
 namespace Mobile_PaidThx.Models
 {
-    public class JoinModels
+    public class SignInModels
     {
-        public class JoinModel
+        public class SignInModel
         {
-            public string UserName { get; set; }
             public string FBState { get; set; }
-            public PaymentModel Payment { get; set; }
         }
     }
 }

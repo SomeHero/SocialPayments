@@ -9,22 +9,16 @@
             Notifications</h1>
     </div>
     <div data-role="content" style="margin: 15px; background-color: #ffffff;">
-    @using (Html.BeginForm("Notifications", "Preferences", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
-    {
-        @Html.ValidationSummary()
-        foreach (var subject in Model.NotificationSubjects)
+        @foreach (var subject in Model.NotificationSubjects)
         {
             @subject.Description
             <ul data-role="listview" data-inset="true">
             @foreach (var item in subject.NotificationItems)
             {
             <li>
-            <div data-role="fieldcontain">
-                <label for="flip-1">@item.Description</label>
-                <select name="@item.Description" id="flip-1" data-role="slider" data-theme="b">
-                    <option value="off">Off</option>
-                    <option value="on">On</option>
-                </select>
+                <div data-role="fieldcontain">
+                <label for="@item.Description">@item.Description</label>
+                @Html.DropDownList(item.Description, new SelectList(item.Options, "Key", "Value", item.SelectedValue), new Dictionary<string, object>  { { "id", item.Description }, { "class", "notification-item" },  { "data-role", "slider" }, { "data-theme", "b" }})
                 </div>
                 </li>
            
@@ -34,6 +28,5 @@
          <p>
          <button type="submit" id="update-notifications-submit" class="imgbtn">
                         <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Save Changes</span></button></p>
-    }
     </div>
 </div>
