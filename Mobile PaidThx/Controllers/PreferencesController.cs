@@ -56,151 +56,66 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Notifications()
         {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+
+            var subjectKeys = new List<string>()
+            {
+                "ReceiveMoney",
+                "SendMoney",
+                "ReceiveRequest",
+                "SendRequest"
+            };
+
+            var configTypes = new List<string>()
+            {
+                "EmailMessage",
+                "PushNotification",
+                "TextMessage"
+            };
+
+            var configSubjects = new List<NotificationModels.NotificationSubject>();
+
+            foreach (var subject in subjectKeys)
+            {
+                var configItems = new List<NotificationModels.NotificationItem>();
+
+                foreach (var type in configTypes)
+                {
+                    var configKey = String.Format("Notification_{0}_{1}", subject, type);
+                    var configValue = "Off";
+
+                    var configItem = user.userConfigurationVariables.FirstOrDefault(c => c.ConfigurationKey == configKey);
+                    if (configItem != null)
+                    {
+                        if (Convert.ToBoolean(configItem.ConfigurationValue))
+                            configValue = "On";
+                    }
+
+                    configItems.Add(new NotificationModels.NotificationItem()
+                    {
+                        ConfigurationKey = configKey,
+                        Description = type,
+                        On = true,
+                        Options = new List<KeyValuePair<string, string>>() {
+                                    new KeyValuePair<string, string>("On", "1"),
+                                    new KeyValuePair<string, string>("Off", "0")
+                                },
+                        SelectedValue = configValue.ToString()
+                    });
+
+                }
+
+                configSubjects.Add(new NotificationModels.NotificationSubject()
+                {
+                    Description = subject,
+                    NotificationItems = configItems
+                });
+
+            }
+
             return View(new NotificationModels.NotificationModel()
             {
-                NotificationSubjects = new List<NotificationModels.NotificationSubject>()
-                {
-                    new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive a Request",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Send Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = "",
-                                 Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = "",
-                                Options = new List<KeyValuePair<string, string>>() {
-                                    new KeyValuePair<string, string>("On", "1"),
-                                    new KeyValuePair<string, string>("Off", "0")
-                                },
-                                SelectedValue = "0"
-                            }
-                        }
-                    },
-                }
+                NotificationSubjects = configSubjects
             });
         }
         [HttpPost]

@@ -18,6 +18,7 @@ namespace Mobile_PaidThx.Models
         public class NotificationItem {
             public String UserConfigurationId { get; set; }
             public String Description { get; set; }
+            public string ConfigurationKey { get; set; }
             public bool On { get; set; }
             public String SelectedValue { get; set; }
             public List<KeyValuePair<string, string>> Options { get; set; }

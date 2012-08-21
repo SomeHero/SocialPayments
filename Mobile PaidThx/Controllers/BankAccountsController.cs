@@ -116,8 +116,11 @@ namespace Mobile_PaidThx.Controllers
                 Nickname = bankAccount.Nickname,
                 PaymentAccountId = bankAccount.Id,
                 RoutingNumber = bankAccount.RoutingNumber,
+                AccountTypeOptions = new SelectList(new Dictionary<string, string>() {
+                    { "Checking", "Checking" },
+                    { "Savings", "Savings" }
+                }, "Key", "Value")
             });
-
         }
 
         [HttpPost]

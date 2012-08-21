@@ -30,14 +30,15 @@
 
             <h5 style="margin-top:10px">
                 Connect with Facebook</h5>
-            <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
-                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Join with Facebook </span>
-            </button>
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
+                Join with Facebook</button>
             <h5 style="margin-top:25px">
                 Or join with your Email Address</h5>
                 @Html.ValidationSummary()
              
-            <div id="registration-form">
+            <a data-role="button" id="join-reveal" data-theme="b" data-icon="arrow-d" data-iconpos="right">
+                Join with Email</a>
+            <div id="registration-form" class="hidden">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
                 {
                     <input type="text" id="email" class="required email" placeholder="Enter Your Email Address"
@@ -46,8 +47,9 @@
                         name="Password" style="margin-bottom:15px"  />
                     <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
                         name="ConfirmPassword" style="margin-bottom:15px"  />
-                    <button type="submit" id="register-submit" class="imgbtn">
-                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Join With Email</span></button>
+                <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
+                Join with Email</button>
+                  
                 }
             </div>
             <div id="main-body-sub-links">
@@ -59,3 +61,10 @@
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
 </div>
+<script type="text/javascript">
+/* JOIN */
+$('#join-reveal').live("click", function() {
+$('#join-reveal').hide();
+$('#registration-form').show();
+});
+</script>

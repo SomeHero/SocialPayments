@@ -1,46 +1,52 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.SignInModels.SignInModel
+@{
     ViewBag.Title = "Index";
 }
 <div data-role="page">
-    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Sign In" }); }
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Sign In</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
     <div data-role="content" style="background-color: #3E7D48">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
             @Html.ValidationSummary()
-<<<<<<< HEAD
-            <h5>Sign in with Facebook:</h5>
-            <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email&state=pickle")'">
-=======
             <h5 style="margin-top:10px">
                 Sign in with Facebook:</h5>
-            <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignInWithFacebook/&scope=email&state=pickle")'">
+<<<<<<< HEAD
+            <button type="button" id="signin-facebook-submit" class="imgbtn fbSignIn" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
+                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign in with Facebook </span>
+=======
+            <button type="button" id="signin-facebook-submit" class="btn-jq" data-theme="d" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
+                Sign in with Facebook
 >>>>>>> upstream/development
-                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Sign
-                    In With Facebook </span>
             </button>
             <div style="margin-bottom:25px"></div>
             <h5>
-                Sign in with Email or Phone #</h5>
+                Or Sign in with Email or Phone #</h5>
             <div id="registration-form">
-                @using (Html.BeginForm())
+                @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }, { "data-ajax", "false" }}))
                 {       
                     <input type="text" id="username" class="required" placeholder="Email Address or Phone #"
                         name="Email" style="margin-bottom:15px" />
 
                     <input type="password" id="password" class="required" placeholder="Password" name="Password" style="margin-bottom:15px" />
-                    <button type="submit" id="signin-submit" class="imgbtn">
-                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Sign
-                            In to PaidThx</span></button>
+                    <button type="submit" id="signin-submit" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">
+                      Sign
+                            In</button>
 
                 }
             </div>
-            <div id="main-body-sub-links">
+            <div id="main-body-sub-links" data-theme="c">
                 <p style="text-align: center">
-                    <a href="@Url.Content("~/Account/ForgotPassword")" data-ajax="false">Forgot password</a></p>
+                    <a href="@Url.Content("~/Account/ForgotPassword")" data-theme="c" data-ajax="false">Forgot password?</a></p>
                 <p style="text-align: center">
-                    New to PaidThx? <a href="@Url.Content("~/Register/Index")" data-ajax="false">Join Now</a>,
+                    New? <a href="@Url.Content("~/Register/Index")" data-theme="c" data-ajax="false">Join Now</a>,
                     It's Free!
                 </p>
             </div>
         </div>
     </div>
+     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Sign In" }); }
 </div>

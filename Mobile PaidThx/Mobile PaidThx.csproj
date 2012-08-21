@@ -226,6 +226,7 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <None Include="Content\patternlock.less" />
+    <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\avatar.png" />
     <Content Include="Content\images\bank.png" />
@@ -372,6 +373,8 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\PaidThx-v1.css" />
+    <Content Include="Content\PaidThx-v1.min.css" />
     <Content Include="Content\patternlock.css" />
     <Content Include="navTest.html" />
     <Content Include="Content\images\icons\homeIcon.png" />

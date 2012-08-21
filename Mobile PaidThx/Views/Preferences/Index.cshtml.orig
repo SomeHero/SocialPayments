@@ -56,8 +56,15 @@
             <ul data-role="listview" data-inset="true">
                 <li class="settings" id="notifications">
                     <a href="@Url.Content("~/Preferences/Notifications")" data-prefetch data-ajax="false" data-transition="slide">
+<<<<<<< HEAD
+                        <img src="@Url.Content("~/content/images/icon-settings-preferences-40x40.png")" />
+                        Notifications
+                        <br />
+                        <span style="font-style: normal; font-size: 15px;">How and when we update you</span>
+=======
                    <h2 class="heading"> Notifications </h2>
                     <h4 class="subheading">How and when we update you</h4>
+>>>>>>> upstream/development
                     </a> </li>
                 <li class="settings" id="sharing">
                     <a href="@Url.Content("~/Preferences/Sharing")" data-prefetch data-ajax="false" data-transition="slide">
@@ -94,11 +101,19 @@
                     <!-- Separate Set -->
                     <!-- User Agreement -->
                     <a href="@Url.Content("~/Preferences/UserAgreement")" data-prefetch data-ajax="false" data-transition="slide">
+<<<<<<< HEAD
+                    <img src="@Url.Content("~/content/images/icon-settings-legal-40x40.png")" />
+                    User Agreement
+                    <br />
+                    <span style="font-style: normal; font-size: 15px;">Terms or Service, Security & Privacy</span> </a></li>
+                <li>
+=======
                                         <h2 class="heading">User Agreement</h2>
                     <h4 class="subheading">Terms or Service, Security & Privacy</h4>
                     </a>
                     </li>
                 <li class="settings" id="signout">
+>>>>>>> upstream/development
                     <!-- Sign Out -->
                     <a href="@Url.Content("~/Preferences/SignOut")" data-prefetch data-ajax="false" data-transition="pop">
                     <h2 class="heading">Sign Out</h2>
