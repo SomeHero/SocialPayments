@@ -20,7 +20,7 @@
             @foreach (var bankAccount in Model.PaymentAccounts)
             {             
                 <li class=""><a href="@Url.Content("~/BankAccounts/Edit/" + bankAccount.PaymentAccountId)">
-                   <img src="@bankAccount.BankIconURL" width="50%" height ="50%" alt="@bankAccount.Nickname" />
+                   <img src="@bankAccount.BankIconURL" width="40" height ="40" alt="@bankAccount.Nickname" />
                    
                     <span class="bank-info">
                         <strong>@bankAccount.Nickname</strong> 
@@ -29,9 +29,8 @@
                     </span>
                 </a></li>
             }
-            <li>
+            <li class="settings add">
                 <a href="@Url.Content("~/BankAccounts/Add")">
-                    <img src="@Url.Content("~/Content/images/img-plus-40x40.png")" alt="Add an Account" />
                     Add an Account
                 </a>
             </li>
