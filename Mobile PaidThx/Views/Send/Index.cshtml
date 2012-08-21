@@ -11,7 +11,7 @@
     </div>
     <div data-role="content">
     
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div style="background-color: #FFFFFF">
         @Html.ValidationSummary()
        @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
        {

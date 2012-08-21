@@ -50,9 +50,13 @@ div.ui-content
 {
  background:#ffffff;
  border-radius: 0px 0px 0px 0px;
- margin: 0px;
+ margin: 10px;
  overflow:hidden;
  padding: 0px !important;
+}
+#paystream-index .ui-content
+{
+ margin:0;   
 }
 .ui-header h1.ui-title
 {
@@ -653,17 +657,21 @@ input::-webkit-input-placeholder
     color: #b7b7b7;
     text-shadow: none;
     font-size: 12px;
+        padding-left:14px;
+    padding-right:14px;
 }
 input:-moz-placeholder
 {
     color: #b7b7b7;
     text-shadow: none;
     font-size: 12px;
+    padding-left:14px;
+    padding-right:14px;
 }
 input.ui-input-text
 {
  padding-left:14px;
- padding-right:14px;   
+ padding-right:14px;  
 }
 
 
@@ -2093,6 +2101,10 @@ border-radius: 7px;
 
 /* -----------------------------HOMEPAGE----------------------------------- */
 
+.settings#incoming, .settings#outgoing
+{
+ padding-left:10px;   
+}
 #profile-new
 {
  margin-top:10px;   
@@ -2127,6 +2139,86 @@ border-radius: 7px;
     margin:0;
 }
 
+#myprofile #profileInfo
+{
+    float:left;
+    margin:0;
+}
+
+.quicksend-container
+{
+ width:100%;
+ height:100px;
+ position:fixed;  
+ text-align:center; 
+ bottom:50px;
+ margin-bottom:-4px;
+ z-index:900;
+ background-color:#ffffff;
+ border: 1px solid #CCC /*{c-bup-border}*/;
+background: #EEE /*{c-bup-background-color}*/;
+font-weight: bold;
+color: #2F3E46 /*{c-bup-color}*/;
+text-shadow: 0 /*{c-bup-shadow-x}*/ 1px /*{c-bup-shadow-y}*/ 0 /*{c-bup-shadow-radius}*/ white /*{c-bup-shadow-color}*/;
+background-image: -webkit-gradient(linear, left top, left bottom, from( white /*{c-bup-background-start}*/), to( #F1F1F1 /*{c-bup-background-end}*/));
+background-image: -webkit-linear-gradient( white /*{c-bup-background-start}*/, #F1F1F1 /*{c-bup-background-end}*/);
+background-image: -moz-linear-gradient( white /*{c-bup-background-start}*/, #F1F1F1 /*{c-bup-background-end}*/);
+background-image: -ms-linear-gradient( white /*{c-bup-background-start}*/, #F1F1F1 /*{c-bup-background-end}*/);
+background-image: -o-linear-gradient( white /*{c-bup-background-start}*/, #F1F1F1 /*{c-bup-background-end}*/);
+background-image: linear-gradient( white /*{c-bup-background-start}*/, #F1F1F1 /*{c-bup-background-end}*/);
+-moz-box-shadow:1px -2px 2px rgba(0, 0, 0, 0.5);
+-webkit-box-shadow:1px -2px 2px rgba(0, 0, 0, 0.5);
+box-shadow:1px -2px 2px rgba(0, 0, 0, 0.5);
+}
+
+#quicksends
+{
+ width:100%;
+ min-height:300px;
+ position:absolute;   
+ margin:0 auto;
+}
+
+#quicksends .qs
+{
+ position:absolute;   
+ margin:0;
+ padding:0;
+}
+#quicksends .qs img
+{
+ margin:0;
+ padding:0;
+}
+#quicksends .qs.one
+{
+ top:15px;
+ margin-top:0px;   
+}
+#quicksends .qs.two
+{
+ top:50%;
+ margin-top:-31.5px;   
+}
+#quicksends .qs.three
+{
+ bottom:15px;
+ margin-top:-63px;   
+}
+#quicksends .qs.left
+{
+left: 10%; 
+}
+#quicksends .qs.middle
+{
+left: 50%; 
+margin-left:-31.5px;
+}
+#quicksends .qs.right
+{
+right: 10%; 
+margin-left:-63px;
+}
 
 
 /* -----------------------------SETTINGS----------------------------------- */
@@ -2198,3 +2290,12 @@ padding-bottom:5px;
         {
             background-image: url(images/icon-settings-signout-40x40.png);
         }
+
+
+/* ---------------------PAYSTREAM------------------------    */
+
+
+.four-items div.ui-controlgroup-controls span.ui-btn-inner
+{
+ font-size:11px;   
+}

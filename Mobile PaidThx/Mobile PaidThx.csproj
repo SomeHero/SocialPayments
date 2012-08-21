@@ -236,6 +236,9 @@
     <Content Include="Content\images\btn-pinswipe.png" />
     <Content Include="Content\images\btn-pinswipe-pressed.png" />
     <Content Include="Content\images\btn-pinswipe-selected.png" />
+    <Content Include="Content\images\btn-qs-cause-63x63.png" />
+    <Content Include="Content\images\btn-qs-fb-63x63.png" />
+    <Content Include="Content\images\btn-qs-phone-63x63.png" />
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />
