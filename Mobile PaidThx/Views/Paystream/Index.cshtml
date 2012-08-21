@@ -11,15 +11,15 @@
        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content">
-        <fieldset id="payment-type-group" data-role="controlgroup" data-type="horizontal" data-grid="c">
+        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items" data-type="horizontal" data-grid="c">
             <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked" style="width: 25%" />
             <label for="paystream-all">All</label>
             <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
             <label for="paystream-sent">Sent</label>
             <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
-            <label for="paystream-received">Received</label>
+            <label for="paystream-received">Rec.</label>
             <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
-            <label for="paystream-other">Other</label>
+            <label for="paystream-other">Req.</label>
         </fieldset>
         @{Html.RenderPartial("PartialViews/All", Model);}
     </div>

@@ -20,7 +20,7 @@
             @foreach (var bankAccount in Model.PaymentAccounts)
             {             
                 <li class=""><a href="@Url.Content("~/BankAccounts/Edit/" + bankAccount.PaymentAccountId)">
-                   <img src="@bankAccount.BankIconURL" width="50%" height ="50%" alt="@bankAccount.Nickname" />
+                   <img src="@bankAccount.BankIconURL" width="40" height ="40" alt="@bankAccount.Nickname" />
                    
                     <span class="bank-info">
                         <strong>@bankAccount.Nickname</strong> 
@@ -29,18 +29,22 @@
                     </span>
                 </a></li>
             }
-            <li>
+            <li class="settings add">
                 <a href="@Url.Content("~/BankAccounts/Add")">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" />
                     Add an Account
                 </a>
             </li>
             </ul>
             <h5>Sending Account</h5>
-            @Html.DropDownList("PreferredSendAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount" })
+            @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            {     
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount" })
+            }
             <h5>Receiving Account</h5>
-            @Html.DropDownList("PreferredReceiveAccount", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount" })
-  
+            @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            { 
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
+            }
     </div>
     </div>
 </div>

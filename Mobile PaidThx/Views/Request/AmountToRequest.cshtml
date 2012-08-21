@@ -14,21 +14,21 @@
         @using (Html.BeginForm("AmountToRequest", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
     {
             
-             <input type="text" id="customAmountSend2" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
-             <button id="gobtn-send2" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
+             <input type="text" id="customAmountSend2" placeholder="0.00" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
+             <button data-role="none" id="gobtn-send2" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
                 Go
             </button>
             <div style="clear:both;"><br /></div>
         <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
             QUICK SEND AMOUNTS</div>
         <div class="quicksend" style="width: 100%; margin: -5px">
-            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none">
                 $1</button>
-            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none">
                 $5</button>
-            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style" data-role="none">
                 $10</button>
-            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style">
+            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none">
                 $20</button>
         </div>
        

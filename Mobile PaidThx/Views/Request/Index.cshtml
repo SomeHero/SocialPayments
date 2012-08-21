@@ -10,7 +10,7 @@
         <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div style="background-color: #FFFFFF">
             @Html.ValidationSummary()
             @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
             {
@@ -18,7 +18,7 @@
                     <label for="txtSendTo" style="font-size: 16px">
                         Request To:</label>
                     <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch>
-                        <button type="button" class="imgbtn field-btn">
+                        <button data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                                 <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
                                     id="person-send">
@@ -38,7 +38,7 @@
                     <label for="clickamountbtn" style="font-size: 16px">
                         Request Amount:</label>
                     <a href="@Url.Content("~/Request/AmountToRequest")" data-prefetch>
-                        <button type="button" class="imgbtn field-btn">
+                        <button data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg" style="margin-left: -2px">
                                 <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
                                     id="amount-request">
@@ -60,7 +60,7 @@
                         required></textarea>
                 </p>
                 <p>
-                    <button type="submit" id="request-money" class="btn-new btn-green">
+                    <button data-theme="f" type="submit" id="request-money" class="btn-new btn-green">
                         <span>Request Money</span></button>
                 </p>
             }

@@ -11,7 +11,7 @@
     </div>
     <div data-role="content">
     
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div style="background-color: #FFFFFF">
         @Html.ValidationSummary()
        @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
        {
@@ -19,7 +19,7 @@
                 <label for="txtSendTo">
                     Send To:</label>
                 <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch>
-                    <button type="button" class="imgbtn field-btn">
+                    <button data-role="none" type="button" class="imgbtn field-btn">
                         <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                             <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
                                 id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientUri))
@@ -28,7 +28,7 @@
                                                       }
                                                       else
                                                       {
-                                    <text>Choose a recipient</text>
+                                    <text>Select Recipient</text>
                                                       }</span>
                     </button>
                 </a>
@@ -37,7 +37,7 @@
                 <label for="txtAmount">
                     Amount to Send:</label>
                 <a href="@Url.Content("~/Send/AmountToSend")" data-prefetch>
-                    <button type="button" class="imgbtn field-btn">
+                    <button data-role="none" type="button" class="imgbtn field-btn">
                         <span class="imgbg" style="margin-left: -2px">
                             <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
                                 id="amount-send">@if (Model.Amount > 0)
@@ -46,7 +46,7 @@
                                                  }
                                                  else
                                                  {
-                                    <text>Choose Amount</text>
+                                    <text>Enter Amount</text>
                                                  }</span>
                     </button>
                 </a>
@@ -57,7 +57,7 @@
                 <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
             </p>
             <p>
-                <button type="submit" id="sendmoney2" class="btn-new btn-green">
+                <button type="submit" id="sendmoney2" class="btn-jq" data-theme="f">
                     <span>Send Money</span></button>
             </p>
         }
