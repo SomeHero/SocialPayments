@@ -152,10 +152,12 @@
     <Compile Include="Controllers\DoGoodController.cs" />
     <Compile Include="Controllers\DonateController.cs" />
     <Compile Include="Controllers\EmailsController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JoinController.cs" />
     <Compile Include="Controllers\MeCodesController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\PaystreamController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -166,8 +168,11 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\SendController.cs" />
+    <Compile Include="Controllers\SharingController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
+    <Compile Include="Controllers\UserAgreementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -193,6 +198,7 @@
     <Compile Include="Models\ProfileModels.cs" />
     <Compile Include="Models\RegisterModels.cs" />
     <Compile Include="Models\RequestModels.cs" />
+    <Compile Include="Models\SecurityModels.cs" />
     <Compile Include="Models\SecurityQuestionModels.cs" />
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Models\SharingModels.cs" />
@@ -387,6 +393,7 @@
     <Content Include="Content\images\icons\profileIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
+    <Content Include="Scripts\sharing.js" />
     <Content Include="Scripts\home.js" />
     <Content Include="Scripts\jquery.livequery.js" />
     <Content Include="Scripts\dogood.js" />
@@ -603,8 +610,7 @@
     <Content Include="Views\Request\AddContactRequest.cshtml" />
     <Content Include="Views\Send\AddContactSend.cshtml" />
     <Content Include="Views\Send\PopupPinswipe.cshtml" />
-    <Content Include="Views\Preferences\UserAgreement.cshtml" />
-    <Content Include="Views\Preferences\Help.cshtml" />
+    <Content Include="Views\UserAgreement\Index.cshtml" />
     <Content Include="Views\Request\PopupPinswipe.cshtml" />
     <Content Include="Views\DoGood\Donate.cshtml" />
     <Content Include="Views\DoGood\Pledge.cshtml" />
@@ -628,8 +634,6 @@
     <Content Include="Views\Preferences\SocialNetworks.cshtml" />
     <Content Include="Views\Phones\Index.cshtml" />
     <Content Include="Views\MeCodes\Index.cshtml" />
-    <Content Include="Views\Preferences\Notifications.cshtml" />
-    <Content Include="Views\Preferences\Sharing.cshtml" />
     <Content Include="Views\Preferences\Security.cshtml" />
     <Content Include="Views\Preferences\About.cshtml" />
     <Content Include="Views\Shared\TitleBar.cshtml" />
@@ -661,6 +665,10 @@
     <Content Include="Views\BankAccounts\SetPreferredSendAccountPinswipe.cshtml" />
     <Content Include="Views\BankAccounts\SetPreferredReceiveAccountPinswipe.cshtml" />
     <Content Include="Views\BankAccounts\DeletePopupPinswipe.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Sharing\Index.cshtml" />
+    <Content Include="Views\Security\Index.cshtml" />
+    <Content Include="Views\Feedback\index.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
@@ -696,7 +704,6 @@
   <ItemGroup>
     <Folder Include="Content\images\App_LocalResources\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
-    <Folder Include="Views\Preferences\BankAccounts\" />
     <Folder Include="_bin_deployableAssemblies\App_Data\" />
   </ItemGroup>
   <ItemGroup>

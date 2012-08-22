@@ -5,7 +5,7 @@
 
 $(document).ready(function () {
 
-    $(".notification-item").die('change').live('change', function () {
+    $(".sharing-item").die('change').live('change', function () {
 
         var key = $(this).attr('id');
         var value = $(this).val();
@@ -16,7 +16,7 @@ $(document).ready(function () {
         };
 
         var jsonData = $.toJSON(requestModel);
-        var serviceUrl = getBaseURL() + 'Notifications/Index';
+        var serviceUrl = getBaseURL() + 'Sharing/Index';
 
         $.ajax({
             type: 'POST',

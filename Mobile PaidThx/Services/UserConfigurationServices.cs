@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Services
                 Value = value
             });
 
-            var response = Post(String.Format(_updateUserConfigurationVariable, _webServicesBaseUrl), json);
+            var response = Put(String.Format(_updateUserConfigurationVariable, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);
