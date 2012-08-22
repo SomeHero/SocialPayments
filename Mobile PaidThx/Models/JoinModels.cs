@@ -10,6 +10,7 @@ namespace Mobile_PaidThx.Models
         public class JoinModel
         {
             public string UserName { get; set; }
+            public string FBState { get; set; }
             public PaymentModel Payment { get; set; }
         }
     }

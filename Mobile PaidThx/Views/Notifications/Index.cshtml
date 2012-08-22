@@ -1,0 +1,29 @@
+﻿@model Mobile_PaidThx.Models.NotificationModels.NotificationModel
+@{
+    ViewBag.Title = "Notifications";
+}
+<div data-role="page" id="notifications-page" data-theme="c" data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Notifications</h1>
+    </div>
+    <div data-role="content" style="margin: 15px; background-color: #ffffff;">
+        @foreach (var subject in Model.NotificationSubjects)
+        {
+            @subject.Description
+            <ul data-role="listview" data-inset="true">
+            @foreach (var item in subject.NotificationItems)
+            {
+            <li>
+                <div data-role="fieldcontain">
+                <label for="@item.ConfigurationKey">@item.Description</label>
+                @Html.DropDownList(item.ConfigurationKey, new SelectList(item.Options, "Value", "Key", item.SelectedValue), new Dictionary<string, object>  { { "id", item.ConfigurationKey }, { "class", "notification-item" },  { "data-role", "slider" }, { "data-theme", "b" }})
+                </div>
+                </li>
+           
+            }
+            </ul>
+        }
+    </div>
+</div>

@@ -1,5 +1,5 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.DonateMoneyModel
-<div data-role="page" id="dogood-page" @TempData["DataUrl"]>
+<div data-role="page" id="dogood-page" data-add-back-btn="true" @TempData["DataUrl"]>
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -14,7 +14,7 @@
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
         <div style="margin: 10px">
-                 <a href="@Url.Content("~/Donate/AddContact/")" data-ajax="false" data-transition="pop">
+                 <a href="@Url.Content("~/Donate/AddContact/")" data-prefetch data-transition="slide">
                  <button type="button" class="imgbtn field-btn" data-role="none">
                
                     <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
@@ -29,7 +29,7 @@
                                                    }</span>
                            
                           </button></a>
-                <a href="@Url.Content("~/Donate/AmountToSend")" data-ajaz="false" data-prefetch>
+                <a href="@Url.Content("~/Donate/AmountToSend")" data-prefetch data-transaction="slide">
                     <button type="button" class="imgbtn field-btn" data-role="none">
                  <span class="imgbg" style="margin-left: -2px">
                         <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
