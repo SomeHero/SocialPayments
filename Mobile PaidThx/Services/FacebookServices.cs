@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using Newtonsoft.Json;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Script.Serialization;
+using System.Text;
 
 namespace Mobile_PaidThx.Services
 {
@@ -18,13 +19,15 @@ namespace Mobile_PaidThx.Services
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         
-        private string fbState = "pickle"; 
         private string fbAppID = "332189543469634";
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
         public FacebookUserModels.FBuser FBauth(string state, string code, string redirect_uri)
         {
+            string fbState = HttpContext.Current.Session["FBState"].ToString(); ;
+            HttpContext.Current.Session["FBState"] = null;
+
             string response = null;
             string token = null;
             string tokenExp = null;
@@ -134,6 +137,7 @@ namespace Mobile_PaidThx.Services
             // Return the HttpWebRequest.
             return (HttpWebRequest)WebRequest.Create(serviceUri);
         }
+
 
     }
 }

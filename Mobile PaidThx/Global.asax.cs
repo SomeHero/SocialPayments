@@ -43,6 +43,21 @@ namespace Mobile_PaidThx
                 new { controller = "Help", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
+                "Security", // Route name
+                "Security/{action}", // URL with parameters
+                new { controller = "Security", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                "UserAgreement", // Route name
+                "UserAgreement/{action}", // URL with parameters
+                new { controller = "UserAgreement", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Feedback", // Route name
+                "Feedback/{action}", // URL with parameters
+                new { controller = "Feedback", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
                 "Privacy", // Route name
                 "Privacy", // URL with parameters
                 new { controller = "Privacy", action = "Index" } // Parameter defaults
@@ -108,6 +123,16 @@ namespace Mobile_PaidThx
                     new { controller = "MeCodes", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
+                "Notifications", // Route name
+                "Notifications/{action}", // URL with parameters
+            new { controller = "Notifications", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
+                "Sharing", // Route name
+                "Sharing/{action}", // URL with parameters
+            new { controller = "Sharing", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
                     "Pledge", // Route name
                     "Pledge/{action}", // URL with parameters
                     new { controller = "Pledge", action = "Index" } // Parameter defaults
@@ -127,9 +152,9 @@ namespace Mobile_PaidThx
                 "Request/{action}", // URL with parameters
                 new { controller = "Request", action = "Index" } // Parameter defaults
             );
-                        routes.MapRoute(
-            "DoGood", // Route name
-            "DoGood/{action}", // URL with parameters
+            routes.MapRoute(
+                "DoGood", // Route name
+                "DoGood/{action}", // URL with parameters
             new { controller = "DoGood", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(

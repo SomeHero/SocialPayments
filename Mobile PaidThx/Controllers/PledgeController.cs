@@ -13,7 +13,7 @@ namespace Mobile_PaidThx.Controllers
 {
     public class PledgeController : Controller
     {
-private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /Send/

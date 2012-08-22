@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="security-page" data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Settings</h1>
+        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!--Rate PaidThx ( won't be used this version )-->
+                    <!-- Separate Set -->
+                    <!-- User Agreement -->
+                    <a href="@Url.Content("~/Security/ChangePassword")" data-prefetch data-ajax="false" data-transition="slide">
+                    Change Password </a></li>
+                <li>
+                    <!-- Sign Out -->
+                    <a  href="@Url.Content("~/Sechurity/ChangePin")" data-prefetch data-ajax="false" data-transition="pop">
+                    Change Security Pin </a></li>
+                <li>
+                    <!-- Sign Out -->
+                    <a  href="@Url.Content("~/Security/ForgotSecurityPin")" data-prefetch data-ajax="false" data-transition="pop">
+                    Forgot Security Pin</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
