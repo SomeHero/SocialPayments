@@ -378,6 +378,7 @@
     <Content Include="Content\PaidThx-v1.css" />
     <Content Include="Content\PaidThx-v1.min.css" />
     <Content Include="Content\patternlock.css" />
+    <Content Include="Content\Dep.css" />
     <Content Include="navTest.html" />
     <Content Include="Content\images\icons\homeIcon.png" />
     <Content Include="Content\images\icons\preferencesIcon.png" />

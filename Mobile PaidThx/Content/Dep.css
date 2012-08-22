@@ -1,0 +1,347 @@
+﻿
+#sub-nav
+{
+    background-color: #51A5BA;
+    height: 50px;
+    padding: 0px 10px;
+}
+#sub-nav dd
+{
+    display: block;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+#sub-nav dd a, #sub-nav dd a:active
+{
+    background: none;
+    color: #fff;
+    border: none;
+    height: 50px;
+    line-height: 50px;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: Helvetica, Arial, Sans-Serif;
+    text-shadow: none;
+}
+#sub-nav dd a.active
+{
+    background-image: url('images/subnav-active-background.gif');
+    background-repeat: repeat-x;
+    background-position: center;
+}
+#sub-nav a #all
+{
+    background-image: url('images/sub-nav-all-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a.active #all
+{
+    background-image: url('images/sub-nav-all-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #payments
+{
+    background-image: url('images/sub-nav-payments-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a.active #payments
+{
+    background-image: url('images/sub-nav-payments-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #requests
+{
+    background-image: url('images/sub-nav-requests-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a.active #requests
+{
+    background-image: url('images/sub-nav-requests-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a #alerts
+{
+    background-image: url('images/sub-nav-alerts-icon.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+#sub-nav a.active #alerts
+{
+    background-image: url('images/sub-nav-alerts-icon-active.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 15px;
+}
+
+
+#main-tabs
+{
+    background-image: url('images/tab_background.gif');
+    background-position: bottom;
+    background-repeat: repeat-x;
+    border-bottom: solid 4px #51A5BA;
+    height: 51px;
+    padding-left: 10px;
+}
+#main-tabs dd a.active
+{
+    background-image: url('images/tab_background_active.gif');
+}
+#main-tabs dd a.active.tab-settings
+{
+    background-image: url('images/tab_settings.gif');
+    width: 67px;
+    background-repeat: no-repeat;
+    padding: 0;
+}
+#main-tabs dd a.tab-settings
+{
+    background-image: url('images/tab_settings_inactive.gif');
+    width: 67px;
+    background-repeat: no-repeat;
+    padding: 0;
+}
+#main-tabs dd a
+{
+    background-image: url('images/tab_background_inactive.gif');
+}
+#main-tabs dd a, dl.tabs dd a.active
+{
+    line-height: 51px;
+    height: 51px;
+    padding: 0 10px;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    border-left: 1px solid #c7cdcc;
+}
+#main-tabs dd a.first
+{
+    border-left: none !important;
+}
+#main-tabs dd a
+{
+    color: #757575;
+    font-size: 13px;
+    font-family: Helvetica, Arial, Sans-Serif;
+    text-shadow: none;
+}
+#main-tabs dd a.active
+{
+    color: #fff;
+}
+
+			.mainButton{
+			    position:absolute;
+			    height:70px;
+				width:20%;
+			    bottom:-55px;
+			    z-index:11;
+				border-top:gray 2px;
+
+			        -webkit-border-top-right-radius : 6px;
+			       -moz-border-top-right-radius : 6px;
+			            border-top-right-radius : 6px;
+			    -webkit-border-top-left-radius  : 6px;
+			       -moz-border-top-left-radius  : 6px;
+			            border-top-left-radius  : 6px;
+
+				-webkit-box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+				box-shadow: 0px -2px 2px 4px rgba(200, 200, 200, .5);
+			}
+			#score {width:110px;
+			height:20px;
+			margin-left:-25px;
+			margin-bottom:-12px;
+			padding: 3px 3px 0px 20px;
+			background-color:#cccccc;
+			border-radius:10px;
+			color:white;
+			text-shadow:none}
+			#increaseScore {width:170px;
+			height:20px;
+			margin-left:-30px;
+			margin-bottom:-12px;
+			padding: 3px 3px 0px 20px;
+			background-color:#cccccc;
+			border-radius:10px;
+			color:white;
+			text-shadow:none}      
+            #main-tabs a #tabHome {
+            background-image: url('images/tab-home-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabHome{
+            background-image: url('images/tab-home-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabPaystream {
+            background-image: url('images/tab-paystream-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabPaystream{
+            background-image: url('images/tab-paystream-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabSend {
+            background-image: url('images/tab-send-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabSend{
+            background-image: url('images/tab-send-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            #main-tabs a #tabRequest {
+            background-image: url('images/tab-request-30x30.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-bottom: 0px;}
+            #main-tabs a.active #tabRequest{
+            background-image: url('images/tab-request-30x30-active.png');
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding-left: 0px;}
+            
+              a.paystreamer
+        {
+            display: block;
+            position: relative;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+            height: 80px;
+            width: 100%;
+            min-width: 375px;
+            cursor: pointer;
+        }
+        a.paystreamer:hover
+        {
+            display: block;
+            position: relative;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+            height: 80px;
+            width: 100%;
+            min-width: 375px;
+            cursor: pointer;
+            background-color: #eeeeee;
+        }
+        a.paystreamer span
+        {
+            display: block;
+            position: absolute;
+            font-family: Helvetica, Arial, sans-serif;
+            z-index: 100;
+        }
+        .stream-new
+        {
+            width: 4px;
+            height: 80px;
+            left: 0;
+            top: 0;
+            background-color: #269bb8;
+            border-right: 1px solid #a5a5a5;
+        }
+        .stream-pic
+        {
+            width: 45px;
+            height: 45px;
+            margin-left: 15px;
+            top: 8.75%;
+            background-color: #aaaaaa;
+            border-radius: 7px;
+            border: 1px solid #cccccc;
+        }
+        .stream-contact
+        {
+            margin-left: 70px;
+            width: 56%;
+            height: 40%; /*left:17.5%;*/
+            float: left;
+            top: 13%;
+            background-color: transparent;
+            color: #34363d;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .stream-event
+        {
+            display: inline;
+            position: static;
+            color: #269bb8;
+            font-weight: normal;
+            font-size: 60%;
+        }
+        .stream-message
+        {
+            margin-left: 70px;
+            width: 56%;
+            height: 30%; /*left:17.5%;*/
+            float: left;
+            top: 70%;
+            background-color: transparent;
+            color: #34363d;
+            font-weight: bold;
+            color: #999999;
+            font-weight: normal;
+            font-size: 60%;
+            font-style: italic;
+        }
+        .stream-timing
+        {
+            width: 24%;
+            height: 30%;
+            right: 5%;
+            top: 13%;
+            background-color: transparent;
+            color: #999999;
+            font-weight: normal;
+            font-size: 60%;
+            font-style: italic;
+            text-align: right;
+        }
+        .stream-amount
+        {
+            width: 150px;
+            height: 33%;
+            right: 5%;
+            top: 33%;
+            background-color: transparent;
+            font-weight: bold;
+            color: #269bb8;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: right;
+            z-index: 200;
+        }
+        .stream-status
+        {
+            width: 24%;
+            height: 30%;
+            right: 5%;
+            top: 70%;
+            background-color: transparent;
+            color: #999999;
+            font-weight: bold;
+            font-size: 60%;
+            text-align: right;
+        }
