@@ -210,9 +210,11 @@
     <Compile Include="Services\ResponseModels\MessageModels.cs" />
     <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
+    <Compile Include="Services\ResponseModels\UserConfigurationModels.cs" />
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
+    <Compile Include="Services\UserConfigurationServices.cs" />
     <Compile Include="Services\UserPaymentAccountServices.cs" />
     <Compile Include="Services\UserPayPointServices.cs" />
     <Compile Include="Services\UserPayStreamMessageServices.cs" />
@@ -692,10 +694,10 @@
     <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Content\images\App_LocalResources\" />
     <Folder Include="Views\Paystream\PartialViews\Content\" />
     <Folder Include="Views\Preferences\BankAccounts\" />
+    <Folder Include="_bin_deployableAssemblies\App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

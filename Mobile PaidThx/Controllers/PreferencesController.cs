@@ -7,11 +7,13 @@ using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Models;
 using System.Web.Security;
+using NLog;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class PreferencesController : Controller
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /Preferences/
@@ -119,11 +121,19 @@ namespace Mobile_PaidThx.Controllers
             });
         }
         [HttpPost]
-        public void Notifications(FormCollection form)
+        public void Notifications(string key, string value)
         {
-            foreach (var key in form.AllKeys)
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+
+            var userConfigurationService = new UserConfigurationServices();
+
+            try
             {
-                var value = form[key];
+                userConfigurationService.UpdateConfigurationSetting(user.userId.ToString(), key, value);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Updating User Configuration Variable. Exception: {0}", ex.Message));
             }
         }
         public ActionResult Sharing()
