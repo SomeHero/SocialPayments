@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.WebPages.Html;
+using System.Web.Mvc;
 
 namespace Mobile_PaidThx.Models
 {
@@ -34,7 +35,8 @@ namespace Mobile_PaidThx.Models
             public string AccountType { get; set; }
             public string DefaultRecieve { get; set; }
             public string DefaultSend { get; set; }
-            public SelectListItem[] AccountTypeOptions { get; set; }
+            public SelectList AccountTypeOptions { get; set; }
+            public List<KeyValuePair<string, string>> Options { get; set; }
         }
         public class DeletePaymentAccountModel
         {

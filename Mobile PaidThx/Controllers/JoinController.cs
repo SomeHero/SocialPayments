@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Routing;
 using System.Configuration;
+using System.Text;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -24,10 +25,13 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
+            Session["FBState"] = RandomString(8, false);
+
             if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
                 return View("Index", new JoinModels.JoinModel()
                 {
                     UserName = "",
+                    FBState = Session["FBState"].ToString(),
                     Payment = null
                 });
 
@@ -38,6 +42,7 @@ namespace Mobile_PaidThx.Controllers
                 return View("Index", new JoinModels.JoinModel()
                 {
                     UserName = "",
+                    FBState = Session["FBState"].ToString(),
                     Payment = null
                 });
 
@@ -46,6 +51,7 @@ namespace Mobile_PaidThx.Controllers
             return View("Index", new JoinModels.JoinModel()
             {
                 UserName = (payment.recipientUriType == "EmailAddress" ? payment.recipientUri : ""),
+                FBState = Session["FBState"].ToString(),
                 Payment = new PaymentModel()
                 {
                     Amount = payment.amount,
@@ -156,6 +162,26 @@ namespace Mobile_PaidThx.Controllers
             else
                 return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
             
+        }
+        /// <summary>
+        /// Generates a random string with the given length
+        /// </summary>
+        /// <param name="size">Size of the string</param>
+        /// <param name="lowerCase">If true, generate lowercase string</param>
+        /// <returns>Random string</returns>
+        private string RandomString(int size, bool lowerCase)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
         }
     }
 }

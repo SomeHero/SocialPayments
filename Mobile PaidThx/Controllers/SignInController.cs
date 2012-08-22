@@ -11,6 +11,7 @@ using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Security;
 using System.Web.Routing;
 using System.Configuration;
+using System.Text;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -26,7 +27,12 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            Session["FBState"] = RandomString(8, false);
+
+            return View(new SignInModels.SignInModel()
+            {
+                FBState = Session["FBState"].ToString()
+            });
         }
 
         [HttpPost]
@@ -109,5 +115,26 @@ namespace Mobile_PaidThx.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        /// <summary>
+        /// Generates a random string with the given length
+        /// </summary>
+        /// <param name="size">Size of the string</param>
+        /// <param name="lowerCase">If true, generate lowercase string</param>
+        /// <returns>Random string</returns>
+        private string RandomString(int size, bool lowerCase)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
     }
+
 }

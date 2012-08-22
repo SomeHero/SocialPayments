@@ -7,11 +7,13 @@ using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Models;
 using System.Web.Security;
+using NLog;
 
 namespace Mobile_PaidThx.Controllers
 {
     public class PreferencesController : Controller
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /Preferences/
@@ -54,96 +56,7 @@ namespace Mobile_PaidThx.Controllers
             return View(listOfPaypoints);
         }
 
-        public ActionResult Notifications()
-        {
-            return View(new NotificationModels.NotificationModel()
-            {
-                NotificationSubjects = new List<NotificationModels.NotificationSubject>()
-                {
-                    new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive a Request",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Send Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            }
-                        }
-                    },
-                     new NotificationModels.NotificationSubject() {
-                        Description = "When I Receive Money",
-                        NotificationItems = new List<NotificationModels.NotificationItem>() {
-                            new NotificationModels.NotificationItem() {
-                                Description = "Email Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Push Notification",
-                                On = false,
-                                UserConfigurationId = ""
-                            },
-                            new NotificationModels.NotificationItem() {
-                                Description = "Text Message",
-                                On = false,
-                                UserConfigurationId = ""
-                            }
-                        }
-                    },
-                }
-            });
-        }
-
+       
         public ActionResult Sharing()
         {
             return View(new SharingModels.SharingModel()

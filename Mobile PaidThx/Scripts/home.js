@@ -5,13 +5,6 @@ $(document).ready(function () {
     var getBaseURL = function () {
         return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
     }
-    $.get(getBaseURL() + "mobile/Home/GetMobileNumberModal", function (data) {
-        $('#modal').html(data).trigger("pagecreate").trigger("refresh");
-    });
-    $("#home").click(function () {
-        $.mobile.changePage("home/Index");
-    });
-
     $("#btnSelectAmount").click(function () {
         $("#chooseAmountOverlay").show();
     });
