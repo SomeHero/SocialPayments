@@ -17,8 +17,8 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index()
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            //if (Session["User"] == null)
-            // return RedirectToAction("SignIn", "Account", null);
+            if (Session["User"] == null)
+             return RedirectToAction("SignIn", "Account", null);
 
             var model = new BankAccountModels.BankAccountsModel();
             model.PaymentAccounts = new List<BankAccountModel>();
