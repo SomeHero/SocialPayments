@@ -91,6 +91,7 @@ namespace SocialPayments.RestServices.Internal.Models
         public class UpdateSecurityPin
         {
             public string securityPin { get; set; }
+            public string questionAnswer { get; set; }
         }
         public class UpdateSecurityQuestion
         {

@@ -13,6 +13,10 @@ background-image: linear-gradient(#f2f2f3 /*{a-bar-background-start}*/, #eeeeee 
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+#no-results 
+{
+    display: none;
+}
 div.ui-page
 {
  background-color:transparent !important;
