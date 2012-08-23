@@ -4,7 +4,7 @@
 }
 <div id="request-page" data-role="page" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c" data-add-back-btn="true">
         <h1>
             Request Money</h1>
         <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
@@ -17,7 +17,7 @@
                 <p style="margin-top: 0; padding-top: 0;">
                     <label for="txtSendTo" style="font-size: 16px">
                         Request To:</label>
-                    <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch>
+                    <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch data-transition="slide">
                         <button data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                                 <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
@@ -37,7 +37,7 @@
                 <p>
                     <label for="clickamountbtn" style="font-size: 16px">
                         Request Amount:</label>
-                    <a href="@Url.Content("~/Request/AmountToRequest")" data-prefetch>
+                    <a href="@Url.Content("~/Request/AmountToRequest")" data-prefetch data-transition="slide">
                         <button data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg" style="margin-left: -2px">
                                 <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span

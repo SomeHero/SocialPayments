@@ -1,0 +1,29 @@
+﻿@model Mobile_PaidThx.Models.SecurityModels.ForgotSecurityPinModel
+
+@{
+    ViewBag.Title = "Forgot Security Pin";
+}
+
+<div data-role="page" id="forgotsecuritypin-page" data-add-back-btn="true">
+        @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Forgot Security Pin</h1>
+    </div>
+    <div data-role="content" style="margin: 15px;">
+     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+         {   
+        @Html.ValidationSummary()
+        <h4>My Security Question</h4>
+        <p>@Model.SecurityQuestion</p>
+        <p>
+            @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Security Question Answer" } })
+        </p>
+                 <p>
+            <button type="submit" id="register-submit" class="imgbtn">
+                <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Continue</span></button>
+
+        </p>
+         }
+    </div>
+</div>
