@@ -23,7 +23,12 @@ namespace Mobile_PaidThx.Models
         }
         public class ForgotSecurityPinModel
         {
-
+            public string SecurityQuestion { get; set; }
+            public string SecurityQuestionAnswer { get; set; }
+        }
+        public class SecurityPinModel
+        {
+            public string PinCode { get; set; }
         }
     }
 }

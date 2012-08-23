@@ -15,10 +15,13 @@ namespace Mobile_PaidThx.Services
     {
         private string _userServiceBaseUrl = "{0}Users";
         private string _userServiceValidateUserUrl = "{0}Users/validate_user";
+        private string _userServiceChangePasswordUrl = "{0}Users/{1}/change_password";
+        private string _userServiceChangeSecurityPinUrl = "{0}Users/{1}/change_securitypin";
         private string _userServicesGetBaseUrl = "{0}Users/{1}";
         private string _userServicesSignInWithFacebookUrl = "{0}users/signin_withfacebook";
         private string _personalizeUrl = "{0}Users/{1}/personalize_user";
         private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
+        private string _userServicesResetSecurityPinUrl = "{0}Users/{1}/setup_securitypin";
 
         public UserModels.UserResponse GetUser(string userId)
         {
@@ -103,6 +106,51 @@ namespace Mobile_PaidThx.Services
             });
 
             var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+        }
+        public void ChangePasssword(string userId, string currentPassword, string newPassword)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                currentPassword = currentPassword,
+                newPassword = newPassword
+            });
+
+            var response = Post(String.Format(_userServiceChangePasswordUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+        }
+        public void ChangeSecurityPin(string userId, string currentSecurityPin, string newSecurityPin)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                currentSecurityPin = currentSecurityPin,
+                newSecurityPin = newSecurityPin
+            });
+
+            var response = Post(String.Format(_userServiceChangeSecurityPinUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+        }
+        public void ResetSecurityPin(string userId, string pinCode, string securityQuestionAnswer)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                securityPin = pinCode,
+                questionAnswer = securityQuestionAnswer
+            });
+
+            var response = Post(String.Format(_userServicesResetSecurityPinUrl, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);
