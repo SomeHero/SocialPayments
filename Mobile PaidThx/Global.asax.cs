@@ -83,6 +83,11 @@ namespace Mobile_PaidThx
                 new { controller = "Register", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
+                "Home", // Route name
+                "Home/{action}", // URL with parameters
+                new { controller = "Home", action = "Index" } // Parameter defaults
+            );
+            routes.MapRoute(
                 "SignIn", // Route name
                 "SignIn/{action}", // URL with parameters
                 new { controller = "SignIn", action = "Index" } // Parameter defaults
