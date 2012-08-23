@@ -394,6 +394,7 @@
     <Content Include="Content\images\icons\profileIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
+    <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\sharing.js" />
     <Content Include="Scripts\home.js" />
     <Content Include="Scripts\jquery.livequery.js" />

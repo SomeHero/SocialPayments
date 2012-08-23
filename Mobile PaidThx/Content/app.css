@@ -1,4 +1,4 @@
-/*---------------------------------------------------------MAIN STYLES---------------------------------------------------------------   */
+﻿/*---------------------------------------------------------MAIN STYLES---------------------------------------------------------------   */
 
 .ui-header h1.ui-title
 {
@@ -234,6 +234,9 @@ label.error
     font-size: 11px;
     color: #a2a2a2;
 }
+
+
+/*--------------------------------------------THOUGHT BUBBLES-----------------------------------------------*/
 .thought
 {
     padding: 10px;
@@ -267,6 +270,60 @@ label.error
     left: 30px;
     background-image: url(images/thought-arrow-up.png);
     background-repeat: no-repeat;
+}
+
+/* Speech bubble with a shadow */
+
+.bubble {
+    background-color: #eeeeee;
+    background-image: -webkit-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+    background-image:    -moz-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+    background-image:     -ms-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+    background-image:      -o-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+    background-image:         linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+    border-radius: 7px;
+    box-shadow: inset 0 1px 1px hsla(0,0%,100%,.5),
+                3px 3px 0 hsla(0,0%,0%,.1);
+    color: #333;
+    display: inline-block;
+    font: 16px/25px sans-serif;
+    padding: 10px 25px;
+    position: relative;
+    text-shadow: 0 1px 1px hsla(0,0%,100%,.5);
+    z-index:1;
+    display:block;
+    margin-top:28px;
+}
+.bubble:after, .bubble:before {
+    border-top: 25px solid transparent;
+    border-left: 25px solid #f6f6f6;
+    
+    top: -25px;
+    content: '';
+    position: absolute;
+    left: 25px;
+    z-index:2;
+}
+.bubble:before {
+    border-left: 25px solid hsla(0,0%,0%,.1);
+    left: 28px;
+    z-index:0;
+    height:0px;
+}​
+
+.aui-message
+{
+ float:left; 
+ font-size:18px;
+ line-height:24px !important;
+}
+
+.aui .sender
+{
+ float:left;
+ border-radius: 7px;
+ margin-right:12px;
+ margin:0;
 }
 
 /*-----------------------------------------------------------------BUTTONS----------------------------------------------------   */
@@ -548,7 +605,7 @@ input.btn-new.field.icon.money:-ms-input-placeholder {
 
 input.ui-input-text, textarea.ui-input-text
 {
-    font-size: 12px;
+    font-size: 14px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-shadow: none;
@@ -562,14 +619,14 @@ input::-webkit-input-placeholder
 {
     color: #b7b7b7;
     text-shadow: none;
-    font-size: 12px;
+    font-size: 14px;
     padding-right:14px;
 }
 input:-moz-placeholder
 {
     color: #b7b7b7;
     text-shadow: none;
-    font-size: 12px;
+    font-size: 14px;
     padding-right:14px;
 }
 input.ui-input-text
@@ -589,7 +646,7 @@ input.ui-input-text
 }
 .ui-checkbox label span
 {
-    font-size: 12px;
+    font-size: 14px;
     color: #676767;
     font-weight: normal;
 }
@@ -1294,6 +1351,7 @@ h5, label
  font-size:11px !important;
  font-weight:bold !important;   
  color:#333 !important;
+ margin-top:14px;
 }
 
 div.modally div.content, div.modally div.ui-content
@@ -1435,6 +1493,9 @@ border-radius: 7px;
 
 .quicksend-container
 {
+-moz-border-radius: 7px 7px 0 0 /*{global-radii-buttons}*/;
+-webkit-border-radius: 7px 7px 0 0 /*{global-radii-buttons}*/;
+border-radius: 7px 7px 0 0  /*{global-radii-buttons}*/;
  width:100%;
  height:100px;
  position:fixed;  
@@ -1906,3 +1967,4 @@ padding-bottom:5px;
     font-weight: bold;
     padding: 15px;
 }
+
