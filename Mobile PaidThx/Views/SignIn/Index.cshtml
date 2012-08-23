@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page">
+<div data-role="page" id="page-signin">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -20,7 +20,7 @@
             <div style="margin-bottom:25px"></div>
             <h5>
                 Or Sign in with Email or Phone #</h5>
-            <div id="registration-form">
+            <div id="signin-form">
                 @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }}))
                 {       
                     <input type="text" id="username" class="required" placeholder="Email Address or Phone #"
