@@ -60,6 +60,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string registrationId { get; set; }
 
             public string facebookId { get; set; }
+            public string facebookToken { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
@@ -160,6 +161,7 @@ namespace SocialPayments.RestServices.Internal.Models
 
         public class FacebookSignInResponse
         {
+            public string facebookId { get; set; }
             public bool hasSecurityPin { get; set; }
             public bool hasACHAccount { get; set; }
             public string userId { get; set; }

@@ -119,6 +119,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var pendingCount = messageServices.GetPendingMessages(user);
 
             var fbId = (user.FacebookUser == null ? @"" : user.FacebookUser.FBUserID);
+            var fbToken = (user.FacebookUser == null ? @"" : user.FacebookUser.OAuthToken);
+
 
             try
             {
@@ -219,7 +221,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
                     pendingMessageCount = 1,
-                    facebookId = fbId
+                    facebookId = fbId,
+                    facebookToken = fbToken
                 };
             }
             catch (Exception ex)
@@ -916,7 +919,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
                 upperLimit = Convert.ToInt32(user.Limit),
                 setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false),  // If SecurityQuestion setup (value not null > -1 ), return true.
-                isLockedOut = user.IsLockedOut
+                isLockedOut = user.IsLockedOut,
+                facebookId = request.accountId
             };
 
             if (isNewUser)
