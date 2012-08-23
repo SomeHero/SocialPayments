@@ -1,7 +1,8 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.SignInModels.SignInModel
+@{
     ViewBag.Title = "Index";
 }
-<div data-role="page">
+<div data-role="page" id="page-signin">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -13,14 +14,14 @@
             @Html.ValidationSummary()
             <h5 style="margin-top:10px">
                 Sign in with Facebook:</h5>
-            <button type="button" id="signin-facebook-submit" class="btn-jq" data-theme="d" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'">
+            <button type="button" id="signin-facebook-submit" class="btn-jq" data-theme="d" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
                 Sign in with Facebook
             </button>
             <div style="margin-bottom:25px"></div>
             <h5>
                 Or Sign in with Email or Phone #</h5>
-            <div id="registration-form">
-                @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }, { "data-ajax", "false" }}))
+            <div id="signin-form">
+                @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }}))
                 {       
                     <input type="text" id="username" class="required" placeholder="Email Address or Phone #"
                         name="Email" style="margin-bottom:15px" />
@@ -36,7 +37,7 @@
                 <p style="text-align: center">
                     <a href="@Url.Content("~/Account/ForgotPassword")" data-theme="c" data-ajax="false">Forgot password?</a></p>
                 <p style="text-align: center">
-                    New? <a href="@Url.Content("~/Register/Index")" data-theme="c" data-ajax="false">Join Now</a>,
+                    New? <a href="@Url.Content("~/Join")" data-theme="c" data-ajax="false">Join Now</a>,
                     It's Free!
                 </p>
             </div>

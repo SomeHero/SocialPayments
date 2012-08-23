@@ -5,7 +5,7 @@
         return true;
     }
 </script>
-<div data-role="page" id="pinswipe-page">
+<div data-role="page" id="pinswipe-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -14,7 +14,7 @@
     </div>
   
     <div data-role="content">
-        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+        <div class="instructions" id="swipe-to-confirm">
             Swipe your security PIN to confirm.</div>
         <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
         </div>
@@ -22,9 +22,34 @@
         {       
             <div style="margin-top:15px">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
         }
     </div>
       @{ Html.RenderPartial("LoggedInMenu"); }
+      
+  <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function resizePIN() {
+
+            $(".hackstyle").remove();
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>
 </div>

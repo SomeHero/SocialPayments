@@ -27,15 +27,15 @@
                     required value="@Model.AccountNumber" /></p>
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup" data-type="horizontal">
-                        <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" />
-                        <label for="radio-choice-1">
-                            Checking</label>
-                        <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
-                        <label for="radio-choice-2">
-                            Savings</label>
-                    </fieldset>
+                    @foreach(var radioItem in Model.AccountTypeOptions)
+                    {
+                        <label for="@radioItem.Text">
+                            @radioItem.Text</label>
+                        @Html.RadioButtonFor(model => model.AccountType, radioItem.Value, new { @id = @radioItem.Text })
+                    }
+                    </fieldset>               
                 </div>
-                <p>
+                <p> 
                     <input type="hidden" name="PaymentAccountId" value="@Model.PaymentAccountId" />
                     <button type="submit" id="update-account" class="imgbtn">
                         <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Update
