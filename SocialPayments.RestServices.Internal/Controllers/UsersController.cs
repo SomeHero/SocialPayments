@@ -698,6 +698,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 string recipName;
                 var recipient = _userService.GetUser(msg.RecipientUri);
+                
                 int recipientType = -1;
 
                 if (recipient == null)
@@ -707,24 +708,36 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
                     {
                         _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
-                        recipName = msg.RecipientName;
+
+                        if (msg.RecipientName != null && msg.RecipientName.Length > 0)
+                            recipName = msg.RecipientName;
+                        else
+                            recipName = msg.recipientFirstName + msg.recipientLastName;
                     }
                     else
                     {
                         recipName = msg.RecipientUri;
                     }
 
-                    recipientType = 0;
+
+                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    {
+                        userUri = msg.RecipientUri,
+                        userName = recipName,
+                        userFirstName = msg.recipientFirstName,
+                        userLastName = msg.recipientLastName,
+                        userImage = null,
+                        userType = 0 // Normal User
+                    });
                 }
-                else if (recipient.Merchant != null)
+                else if (msg.Recipient.Merchant != null )
                 {
+                    _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
+
                     recipName = _userService.GetSenderName(recipient);
                     recipientType = recipient.UserTypeId;
 
-                    if (recipient.Merchant.MerchantTypeValue == 2)
-                        recipientType = 2;
-                    else if (recipient.Merchant.MerchantTypeValue == 1)
-                        recipientType = 1;
+                    recipientType = 1;
 
                     string imageUri = null;
 
@@ -733,13 +746,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     quickSends.Add(new UserModels.QuickSendUserReponse()
                     {
-                        userUri = msg.Recipient.UserName,
+                        userUri = msg.Recipient.Merchant.Id.ToString(),
                         userName = recipName,
                         userFirstName = msg.Recipient.FirstName,
                         userLastName = msg.Recipient.LastName,
                         userImage = imageUri,
                         userType = recipientType
                     });
+
                 }
                 else
                 {
@@ -782,16 +796,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
             };
 
             return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+
             /*
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
-            var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-            message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
-            return message;
-        }
-             * */
+                    var response = new UserModels.HomepageRefreshReponse()
+            {
+                userId = user.UserId.ToString(),
+                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
+                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                quickSendContacts = quickSends
+            };
+
+            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK); */
         }
 
 
