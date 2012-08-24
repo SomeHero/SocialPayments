@@ -1,0 +1,28 @@
+﻿@model Mobile_PaidThx.Models.BankAccountModels.VerifyAccountModel
+@{
+    ViewBag.Title = "Add Payment Account";
+}
+<div data-role="page" id="bankaccounts-add-page" data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+            Verify Account</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         @using (Html.BeginForm("VerifyAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                @Html.TextBoxFor(m => m.Amount1, new Dictionary<string, object>() { { "placeholder", "Amount 1 (ex: $0.45)" } })
+            </p>
+             <p>
+                @Html.TextBoxFor(m => m.Amount2, new Dictionary<string, object>() { { "placeholder", "Amount 2 (ex: $0.76)" } })
+            </p>
+            <p>
+                <button type="submit" id="add-account-submit" class="imgbtn">
+                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Verify Amounts</span></button></p>
+         }
+        </div>
+    </div>
+</div>

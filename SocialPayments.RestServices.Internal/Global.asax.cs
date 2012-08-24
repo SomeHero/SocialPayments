@@ -220,6 +220,11 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
             );
 
             routes.MapHttpRoute(
+                name: "VerifyACHAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/{id}/verify_account",
+                defaults: new { controller = "UserPaymentAccounts", action = "VerifyACHAccount" }
+            );            
+            routes.MapHttpRoute(
                 name: "AddPaymentAccountVerification",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/{id}/add_verification",
                 defaults: new { controller = "UserPaymentAccounts", action = "AddVerification" }
