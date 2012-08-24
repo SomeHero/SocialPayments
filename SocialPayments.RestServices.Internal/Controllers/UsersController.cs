@@ -118,6 +118,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var newCount = messageServices.GetNewMessages(user);
             var pendingCount = messageServices.GetPendingMessages(user);
 
+            var fbId = (user.FacebookUser == null ? @"" : user.FacebookUser.FBUserID);
+            var fbToken = (user.FacebookUser == null ? @"" : user.FacebookUser.OAuthToken);
+
+
             try
             {
                 userResponse = new UserModels.UserResponse()
@@ -216,7 +220,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
-                    pendingMessageCount = 1
+                    pendingMessageCount = 1,
+                    facebookId = fbId,
+                    facebookToken = fbToken
                 };
             }
             catch (Exception ex)
@@ -691,34 +697,60 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
 
                 string recipName;
-                var recipient = _userService.GetUser(msg.RecipientUri);
+                
                 int recipientType = -1;
 
-                if (recipient == null)
+                if (msg.RecipientId == null)
                 {
-                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO" );
+                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
 
                     if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
                     {
-                        _logger.Log(LogLevel.Error,"First: {0} Last: {1} Name: {2}",msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
-                        recipName = msg.RecipientName;
+                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+
+                        if (msg.RecipientName != null && msg.RecipientName.Length > 0)
+                            recipName = msg.RecipientName;
+                        else
+                            recipName = msg.recipientFirstName + msg.recipientLastName;
                     }
                     else
                     {
                         recipName = msg.RecipientUri;
                     }
 
-                    recipientType = 0;
-                }
-                else if ( recipient.Merchant != null )
-                {
-                    recipName = _userService.GetSenderName(recipient);
-                    recipientType = recipient.UserTypeId;
 
-                    if (recipient.Merchant.MerchantTypeValue == 2)
-                        recipientType = 2;
-                    else if (recipient.Merchant.MerchantTypeValue == 1)
-                        recipientType = 1;
+                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    {
+                        userUri = msg.RecipientUri,
+                        userName = recipName,
+                        userFirstName = msg.recipientFirstName,
+                        userLastName = msg.recipientLastName,
+                        userImage = msg.recipientImageUri,
+                        userType = 0 // Normal User
+                    });
+                }
+                else if (msg.Recipient.Merchant != null )
+                {
+                    _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
+
+                    recipName = msg.RecipientUri;
+
+                    recipientType = 1;
+
+                    string imageUri = null;
+
+                    if (msg.Recipient != null)
+                        imageUri = msg.Recipient.ImageUrl;
+
+                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    {
+                        userUri = msg.RecipientId.ToString(),
+                        userName = recipName,
+                        userFirstName = msg.Recipient.FirstName,
+                        userLastName = msg.Recipient.LastName,
+                        userImage = imageUri,
+                        userType = recipientType
+                    });
                 }
                 else
                 {
@@ -734,19 +766,22 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     }
 
                     recipientType = 0;
+
+                    string imageUri = null;
+
+                    if (msg.Recipient != null)
+                        imageUri = msg.Recipient.ImageUrl;
+
+                    quickSends.Add(new UserModels.QuickSendUserReponse()
+                    {
+                        userUri = msg.RecipientUri,
+                        userName = recipName,
+                        userFirstName = msg.Recipient.FirstName,
+                        userLastName = msg.Recipient.LastName,
+                        userImage = imageUri,
+                        userType = recipientType
+                    });
                 }
-                string imageUri = null;
-
-                if (msg.Recipient != null)
-                    imageUri = msg.Recipient.ImageUrl;
-
-                quickSends.Add(new UserModels.QuickSendUserReponse()
-                {
-                    userUri = msg.RecipientUri,
-                    userName = recipName,
-                    userImage = imageUri,
-                    userType = recipientType
-                });
             }
 
             var response = new UserModels.HomepageRefreshReponse()
@@ -758,16 +793,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
             };
 
             return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+
             /*
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Error, String.Format("Something went wrong getting quicksend for {0}, {1}", id, ex.Message));
-            var message = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-            message.ReasonPhrase = String.Format("Something went wrong getting quicksend for {0}", id);
-            return message;
-        }
-             * */
+                    var response = new UserModels.HomepageRefreshReponse()
+            {
+                userId = user.UserId.ToString(),
+                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
+                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                quickSendContacts = quickSends
+            };
+
+            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK); */
         }
 
 
@@ -817,7 +853,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
         {
             Context _ctx = new Context();
-            
+
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
@@ -913,7 +949,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
                 upperLimit = Convert.ToInt32(user.Limit),
                 setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false),  // If SecurityQuestion setup (value not null > -1 ), return true.
-                isLockedOut = user.IsLockedOut
+                isLockedOut = user.IsLockedOut,
+                facebookId = request.accountId
             };
 
             if (isNewUser)
@@ -927,6 +964,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             using (var ctx = new Context())
             {
                 DomainServices.UserService _userService = new DomainServices.UserService(ctx);
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
 
                 Domain.User user = null;
 
@@ -934,7 +972,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     user = _userService.GetUserById(id);
                 }
-                catch ( Exception ex )
+                catch (Exception ex)
                 {
                     string ErrorReason = String.Format("-LinkFB- Unable to find user for {0}", id);
                     _logger.Log(LogLevel.Error, ErrorReason);
@@ -966,9 +1004,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     message.ReasonPhrase = ErrorReason;
                     return message;
                 }
-                
-                
-                if ( _userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)) )
+
+
+                if (_userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)))
                     return new HttpResponseMessage(HttpStatusCode.Created);
                 else
                 {

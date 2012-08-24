@@ -22,7 +22,11 @@ namespace SocialPayments.RestServices.Internal.Models
         public class QuickSendUserReponse
         {
             public string userUri { get; set; }
+
             public string userName { get; set; }
+            public string userFirstName { get; set; }
+            public string userLastName { get; set; }
+
             public string userImage { get; set; }
             public int userType { get; set; }
         }
@@ -58,6 +62,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public string preferredPaymentAccountId { get; set; }
             public string preferredReceiveAccountId { get; set; }
             public string registrationId { get; set; }
+
+            public string facebookId { get; set; }
+            public string facebookToken { get; set; }
 
             public double totalMoneySent { get; set; }
             public double totalMoneyReceived { get; set; }
@@ -148,7 +155,6 @@ namespace SocialPayments.RestServices.Internal.Models
         public class LinkFacebookRequest
         {
             public string apiKey { get; set; }
-            public string currentPassword { get; set; }
             public string AccountId { get; set; }
             public string oAuthToken { get; set; }
         }
@@ -160,6 +166,7 @@ namespace SocialPayments.RestServices.Internal.Models
 
         public class FacebookSignInResponse
         {
+            public string facebookId { get; set; }
             public bool hasSecurityPin { get; set; }
             public bool hasACHAccount { get; set; }
             public string userId { get; set; }
