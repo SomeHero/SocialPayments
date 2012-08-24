@@ -498,6 +498,7 @@ namespace SocialPayments.DomainServices
             string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: emailAddress: {1} and token {2}", accountId, emailAddress, oAuthToken));
+            _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: firstname {1} lastname {2}", accountId, firstName, lastName));
 
             User user = null;
 
@@ -526,6 +527,10 @@ namespace SocialPayments.DomainServices
                         TokenExpiration = tokenExpiration,
                         OAuthToken = oAuthToken
                     };
+
+                    user.FirstName = firstName;
+                    user.LastName = lastName;
+                    user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
 
                 }
                 else

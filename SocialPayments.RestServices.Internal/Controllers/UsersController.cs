@@ -697,11 +697,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
 
                 string recipName;
-                var recipient = _userService.GetUser(msg.RecipientUri);
                 
                 int recipientType = -1;
 
-                if (recipient == null)
+                if (msg.RecipientId == null)
                 {
                     _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
 
@@ -726,7 +725,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         userName = recipName,
                         userFirstName = msg.recipientFirstName,
                         userLastName = msg.recipientLastName,
-                        userImage = null,
+                        userImage = msg.recipientImageUri,
                         userType = 0 // Normal User
                     });
                 }
@@ -734,8 +733,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
 
-                    recipName = _userService.GetSenderName(recipient);
-                    recipientType = recipient.UserTypeId;
+                    recipName = msg.RecipientUri;
 
                     recipientType = 1;
 
@@ -746,14 +744,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     quickSends.Add(new UserModels.QuickSendUserReponse()
                     {
-                        userUri = msg.Recipient.Merchant.Id.ToString(),
+                        userUri = msg.RecipientId.ToString(),
                         userName = recipName,
                         userFirstName = msg.Recipient.FirstName,
                         userLastName = msg.Recipient.LastName,
                         userImage = imageUri,
                         userType = recipientType
                     });
-
                 }
                 else
                 {
