@@ -22,7 +22,11 @@ namespace SocialPayments.RestServices.Internal.Models
         public class QuickSendUserReponse
         {
             public string userUri { get; set; }
+
             public string userName { get; set; }
+            public string userFirstName { get; set; }
+            public string userLastName { get; set; }
+
             public string userImage { get; set; }
             public int userType { get; set; }
         }
