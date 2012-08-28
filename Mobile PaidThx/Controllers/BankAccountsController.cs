@@ -310,6 +310,8 @@ namespace Mobile_PaidThx.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
+
+                return View(model);
             }
 
             return RedirectToAction("Index");

@@ -135,6 +135,16 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/validate_user",
                 defaults: new { controller = "Users", action = "ValidateUser" }
             );
+            routes.MapHttpRoute(
+                name: "VerifyMobilePayPoint",
+                routeTemplate: "api/users/{userId}/PayPoints/{id}/verify_mobile_paypoint",
+                defaults: new { controller = "UserPayPoint", action = "VerifyMobilePayPoint" }
+            );
+            routes.MapHttpRoute(
+                name: "VerifyPayPoint",
+                routeTemplate: "api/users/verify_paypoint",
+                defaults: new { controller = "Users", action = "VerifyPayPoint" }
+            );
 
             routes.MapHttpRoute(
                 name: "RefreshHomePageInformation",
@@ -222,7 +232,7 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
             routes.MapHttpRoute(
                 name: "VerifyACHAccount",
                 routeTemplate: "api/users/{userId}/PaymentAccounts/{id}/verify_account",
-                defaults: new { controller = "UserPaymentAccounts", action = "VerifyACHAccount" }
+                defaults: new { controller = "UserPaymentAccounts", action = "VerifyAccount" }
             );            
             routes.MapHttpRoute(
                 name: "AddPaymentAccountVerification",

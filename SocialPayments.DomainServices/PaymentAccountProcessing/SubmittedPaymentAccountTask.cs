@@ -139,6 +139,8 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                             new KeyValuePair<string, string>("LINK_VERIFY",  link),           
                             new KeyValuePair<string, string>("LINK_VERIFY_INSTANT",  ""),      
                     });
+
+                    paymentAccountVerification.Status = PaymentAccountVerificationStatus.Delivered;
                 }
                 catch (Exception ex)
                 {
