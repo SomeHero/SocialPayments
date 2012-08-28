@@ -224,6 +224,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string PayPointType { get; set; }
             public string Uri { get; set; }
         }
+        public class AddUserPayPointResponse
+        {
+            public string Id { get; set; }
+        }
         public class UserPayPointResponse
         {
             public string Id { get; set; }
@@ -260,6 +264,18 @@ namespace SocialPayments.RestServices.Internal.Models
         public class UpdateUserAttributeRequest
         {
             public string AttributeValue { get; set; }
+        }
+        public class ValidatePayPointRequest
+        {
+            public Guid PayPointVerificationId { get; set; }
+        }
+        public class VerifyMobilePayPointRequest
+        {
+            public string VerificationCode { get; set; }
+        }
+        public class VerifyMobilePayPointResponse
+        {
+            public bool Verified { get; set; }
         }
     }
 }

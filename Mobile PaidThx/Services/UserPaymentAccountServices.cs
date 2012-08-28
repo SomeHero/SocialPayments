@@ -26,6 +26,7 @@ namespace Mobile_PaidThx.Services
         private string _editACHAccountUrl = "{0}Users/{1}/PaymentAccounts/{2}";
         private string _deleteACHAccountUrl = "{0}Users/{1}/PaymentAccounts/{2}";
         private string _getACHAccountsUrl = "{0}Users/{1}/PaymentAccounts";
+        private string _verifyACHAccountUrl = "{0}Users/{1}/paymentaccounts/{2}/verify_account";
 
         public List<AccountModels.AccountResponse> GetAccounts(String apiKey, String userId)
         {
@@ -157,6 +158,21 @@ namespace Mobile_PaidThx.Services
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
             return jsonObject["paymentAccountId"];
+        }
+        public void VerifyACHAccount(string userId, string accountId, double amount1, double amount2)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                depositAmount1 = amount1,
+                depositAmount2 = amount2
+            });
+
+            var response = Post(String.Format(_verifyACHAccountUrl, _webServicesBaseUrl, userId, accountId), json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
     }
 }

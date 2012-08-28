@@ -9,6 +9,7 @@ using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DomainServices;
 using System.Net;
 using System.Data.Entity;
+using SocialPayments.RestServices.Internal.Controllers;
 
 namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 {
@@ -95,18 +96,18 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         }
 
         // POST /api/users/{userId}/PayPoints
-        public HttpResponseMessage Post(string userId, Models.UserModels.AddUserPayPointRequest request)
+        public HttpResponseMessage<UserModels.AddUserPayPointResponse> Post(string userId, Models.UserModels.AddUserPayPointRequest request)
         {
             using (var _ctx = new Context())
             {
                 UserService userService = new UserService(_ctx);
-               
+                HttpResponseMessage<UserModels.AddUserPayPointResponse> response;
+
                 var user = userService.GetUserById(userId);
 
                 if (user == null)
                 {
-                    var response = 
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
                     response.ReasonPhrase = String.Format("User {0} not found", userId);
 
                     return response;
@@ -115,9 +116,19 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 if (payPointType == null)
                 {
-                    var response =
-                       Request.CreateResponse(HttpStatusCode.BadRequest);
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
                     response.ReasonPhrase = String.Format("Pay Point Type {0} not found", request.PayPointType);
+
+                    return response;
+                }
+
+                var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == request.Uri);
+
+                if (payPoints != null)
+                {
+
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
+                    response.ReasonPhrase = String.Format("The pay point is already linked to an account.", request.PayPointType);
 
                     return response;
                 }
@@ -142,7 +153,11 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 userService.UpdateUser(user);
 
-                return new HttpResponseMessage(HttpStatusCode.Created);
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(new UserModels.AddUserPayPointResponse() {
+                    Id = userPayPoint.Id.ToString()
+                }, HttpStatusCode.Created);
+
+                return response;
             }
         }
         // POST /api/users/{userId}/PayPoints/resend_verification_code
@@ -289,5 +304,49 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
+        // api/users/{userId}/PayPoints/{id}/verify_mobile_paypoint
+        [HttpPost]
+        public HttpResponseMessage<UserModels.VerifyMobilePayPointResponse> VerifyMobilePayPoint(string userId, string id, UserModels.VerifyMobilePayPointRequest request)
+        {
+            Guid userGuid;
+            Guid userPayPointGuid;
+
+            var userService = new DomainServices.UserService();
+
+            HttpResponseMessage<UserModels.VerifyMobilePayPointResponse> response;
+
+            bool results = false;
+
+            try
+            {
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new ArgumentException("Invalid User Specified");
+                
+                Guid.TryParse(id, out userPayPointGuid);
+
+                if (userPayPointGuid == null)
+                    throw new ArgumentException("Invalid Pay Point Specified");
+
+                results = userService.VerifyMobilePayPoint(userGuid, userPayPointGuid, request.VerificationCode);
+
+            }
+            catch (Exception ex)
+            {
+                response = new HttpResponseMessage<UserModels.VerifyMobilePayPointResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<UserModels.VerifyMobilePayPointResponse>(new UserModels.VerifyMobilePayPointResponse() {
+                Verified = results
+            }, HttpStatusCode.OK);
+
+
+            return response;
+        }
+
     }
 }

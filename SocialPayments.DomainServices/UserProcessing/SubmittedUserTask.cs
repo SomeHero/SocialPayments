@@ -56,14 +56,37 @@ namespace SocialPayments.DomainServices.UserProcessing
 
                 //send registration email
                 string emailSubject = _welcomeEmailSubject;
+                string activationLink = "";
+
+                Domain.UserPayPointVerification payPointVerification;
+
+                var userPayPoint = user.PayPoints.FirstOrDefault(p => p.URI == user.EmailAddress);
+
+                if (userPayPoint != null)
+                {
+                    payPointVerification = ctx.UserPayPointVerifications.Add(
+                       new UserPayPointVerification()
+                       {
+                           Id = Guid.NewGuid(),
+                           CreateDate = System.DateTime.Now,
+                           UserPayPoint = userPayPoint,
+                           VerificationCode = "",
+                           ExpirationDate = System.DateTime.Now.AddDays(30)
+                       });
+
+                    ctx.SaveChanges();
+
+                    activationLink = String.Format("{0}verify_paypoint/{1}", _mobileWebSiteUrl, payPointVerification.Id);
+
+                }
+
 
                 var replacementElements = new List<KeyValuePair<string, string>>();
                 replacementElements.Add(new KeyValuePair<string, string>("EMAILADDRESS", user.EmailAddress));
-                replacementElements.Add(new KeyValuePair<string, string>("LINK_ACTIVATION", String.Format("{0}confirmation/{1}", _mobileWebSiteUrl, user.ConfirmationToken)));
+                replacementElements.Add(new KeyValuePair<string, string>("LINK_ACTIVATION", activationLink));
 
                 emailService.SendEmail(user.EmailAddress, emailSubject, _templateName, replacementElements);
 
-               
 
                 _logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}. Finished.", user.UserId));
             }
