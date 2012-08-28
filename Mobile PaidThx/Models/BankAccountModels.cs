@@ -54,5 +54,10 @@ namespace Mobile_PaidThx.Models
         {
             public string PaymentAccountId { get; set; }
         }
+        public class VerifyAccountModel
+        {
+            public string Amount1 { get; set; }
+            public string Amount2 { get; set; }
+        }
     }
 }

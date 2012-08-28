@@ -343,31 +343,36 @@ namespace SocialPayments.RestServices.Internal.Controllers
             using (var _ctx = new Context())
             {
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
                 DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
                 DomainServices.PaymentAccountService verificationService =
                     new DomainServices.PaymentAccountService(_ctx);
 
-                double depositAmount1 = 0;
-                double depositAmount2 = 0;
-
-                Double.TryParse(request.depositAmount1.ToString(), out depositAmount1);
-                Double.TryParse(request.depositAmount2.ToString(), out depositAmount2);
-
-                if (depositAmount1 == 0 || depositAmount2 == 0)
+                if (request.depositAmount1 == 0.0 || request.depositAmount2 == 0.0)
                 {
                     var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = "Invalid deposit amount specified";
+                    responseMessage.ReasonPhrase = String.Format("Invalid deposit amount specified {0} {1}", request.depositAmount1, request.depositAmount2);
 
                     return responseMessage;
                 }
 
-                var result = false; ///// verificationService.VerifyAccount(userId, id, depositAmount1, depositAmount2);
+                bool result = false;
+
+                try
+                {
+                    result = verificationService.VerifyPaymentAccount(userId, id, request.depositAmount1,request.depositAmount2);
+                }
+                catch (Exception ex)
+                {
+                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    responseMessage.ReasonPhrase = String.Format("Not verified. {0}", ex.Message);
+
+                    return responseMessage;
+                }
 
                 if (!result)
                 {
                     var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = "Not verified";
+                    responseMessage.ReasonPhrase = "Not verified.  Deposit Amounts Not Correct.";
 
                     return responseMessage;
                 }

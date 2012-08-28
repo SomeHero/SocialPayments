@@ -110,6 +110,7 @@ namespace SocialPayments.DomainServices
                     user.SecurityQuestionID = securityQuestionId.Value;
                     user.SecurityQuestionAnswer = _securityServices.Encrypt(securityQuestionAnswer);
                 }
+                user.SetupSecurityPin = true;
 
                 _ctx.SaveChanges();
 
@@ -158,6 +159,54 @@ namespace SocialPayments.DomainServices
             paymentAccount.LastUpdatedDate = System.DateTime.Now;
 
             _ctx.SaveChanges();
+        }
+        public bool VerifyPaymentAccount(string userId, string paymentAccountId, double depositAmount1, double depositAmount2)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Verifying Payment Account {0}:{1}", depositAmount1, depositAmount2));
+
+            Guid paymentAccountGuid;
+            Guid userGuid;
+
+            Guid.TryParse(userId, out userGuid);
+            Guid.TryParse(paymentAccountId, out paymentAccountGuid);
+
+            if (userGuid == null)
+                throw new ArgumentException(String.Format("Invalid User {0} Specified", userId));
+
+            if (paymentAccountGuid == null)
+                throw new ArgumentException(String.Format("Payment Account {0} is Invalid", paymentAccountId));
+
+            using (var ctx = new Context())
+            {
+                var paymentAccountVerification = ctx.PaymentAccountVerifications.FirstOrDefault(p => p.PaymentAccountId == paymentAccountGuid
+                    && (p.StatusValue.Equals((int)PaymentAccountVerificationStatus.Submitted) || p.StatusValue.Equals((int)PaymentAccountVerificationStatus.Delivered)));
+
+                if (paymentAccountVerification == null)
+                    throw new Exception(String.Format("Invalid Payment Account. Not Found"));
+
+                if (paymentAccountVerification.PaymentAccountId != paymentAccountGuid)
+                    throw new Exception(String.Format("Invalid Payment Account. Account Mismatch"));
+
+                if (paymentAccountVerification.PaymentAccount.UserId != userGuid)
+                    throw new Exception(String.Format("Invalid Payment Account.  User Mismatch"));
+
+                if (paymentAccountVerification.DepositAmount1 != depositAmount1 || paymentAccountVerification.DepositAmount2 != depositAmount2)
+                {
+                    paymentAccountVerification.NumberOfFailures += 1;
+
+                    ctx.SaveChanges();
+
+                    return false;
+                }
+
+                paymentAccountVerification.Status = PaymentAccountVerificationStatus.Verified;
+                paymentAccountVerification.VerificationDate = System.DateTime.UtcNow;
+                paymentAccountVerification.PaymentAccount.AccountStatus = AccountStatusType.Verified;
+
+                ctx.SaveChanges();
+
+                return true;
+            }
         }
     }
 }

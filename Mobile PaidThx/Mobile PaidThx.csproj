@@ -678,6 +678,7 @@
     <Content Include="Views\Security\ForgotSecurityPin.cshtml" />
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipe.cshtml" />
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipeConfirm.cshtml" />
+    <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

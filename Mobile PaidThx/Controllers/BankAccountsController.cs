@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Models;
 using NLog;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -277,6 +278,41 @@ namespace Mobile_PaidThx.Controllers
             user.preferredReceiveAccountId = Session["ChangedPreferredReceiveAccount"].ToString();
 
             Session["ChangedPreferredReceiveAccount"] = null;
+
+            return RedirectToAction("Index");
+        }
+        public ActionResult VerifyAccount(string id)
+        {
+
+            return View(new BankAccountModels.VerifyAccountModel()
+            {
+                Amount1 = "",
+                Amount2 = ""
+            });
+        }
+        [HttpPost]
+        public ActionResult VerifyAccount(string id, BankAccountModels.VerifyAccountModel model)
+        {
+             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+           
+            var userPaymentAccountServices = new UserPaymentAccountServices();
+
+            double amount1;
+            double amount2;
+
+            Double.TryParse(model.Amount1, out amount1);
+            Double.TryParse(model.Amount2, out amount2);
+
+            try
+            {
+                userPaymentAccountServices.VerifyACHAccount(user.userId.ToString(), id, amount1, amount2);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
+            }
 
             return RedirectToAction("Index");
         }

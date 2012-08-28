@@ -8,7 +8,6 @@ function isValidPhoneNumber(num) {
     var pattern = new RegExp(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
     return pattern.test(num);
 }
-
 var getBaseURL = function () {
     return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
 }

@@ -20,6 +20,7 @@ namespace Mobile_PaidThx.Services
         private string _userServicesGetBaseUrl = "{0}Users/{1}";
         private string _userServicesSignInWithFacebookUrl = "{0}users/signin_withfacebook";
         private string _personalizeUrl = "{0}Users/{1}/personalize_user";
+        private string _payPointVerificationUrl = "{0}Users/verify_paypoint";
         private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
         private string _userServicesResetSecurityPinUrl = "{0}Users/{1}/setup_securitypin";
 
@@ -171,6 +172,21 @@ namespace Mobile_PaidThx.Services
                 throw new Exception(response.Description);
 
             return js.Deserialize<UserModels.ValidateUserResponse>(response.JsonResponse);
+        }
+
+        public void VerifyPayPoint(string payPointVerificationId)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                PayPointVerificationId = payPointVerificationId
+            });
+
+            var response = Post(String.Format(_payPointVerificationUrl, _webServicesBaseUrl, payPointVerificationId), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
         }
 
     }

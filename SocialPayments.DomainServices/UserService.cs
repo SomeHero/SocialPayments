@@ -68,6 +68,7 @@ namespace SocialPayments.DomainServices
                 IsConfirmed = false,
                 LastLoggedIn = System.DateTime.Now,
                 Limit = Convert.ToDouble(defaultUpperLimit),
+                PayPoints = new Collection<UserPayPoint>(),
                 RegistrationMethod = Domain.UserRegistrationMethod.MobilePhone,
                 SetupPassword = true,
                 SetupSecurityPin = false,
@@ -78,26 +79,40 @@ namespace SocialPayments.DomainServices
                 DeviceToken = (!String.IsNullOrEmpty(deviceToken) ? deviceToken : null)
             });
 
-            var emailAddressPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-            {
-                CreateDate = System.DateTime.Now,
-                Id = Guid.NewGuid(),
-                PayPointTypeId = 1,
-                URI = userName,
-                User = user
-            });
+            Domain.PayPointType payPointType;
+            
+            payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"EmailAddress");
 
-            UserPayPoint mobileNumberPayPoint = null;
+            if (payPointType == null)
+                throw new Exception("Pay Point Type Email Address Not Found");
+
+            user.PayPoints.Add(new UserPayPoint()
+            {
+                Id = Guid.NewGuid(),
+                CreateDate = System.DateTime.Now,
+                IsActive = true,
+                URI = userName,
+                Type = payPointType,
+                Verified = false
+            });
 
             if (!String.IsNullOrEmpty(mobileNumber))
             {
-                mobileNumberPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+
+                payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"Phone");
+
+                if (payPointType == null)
+                    throw new Exception("Pay Point Type Phone Not Found");
+
+                user.PayPoints.Add(new UserPayPoint()
                 {
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
-                    PayPointTypeId = 2,
+                    Type = payPointType,
                     URI = userName,
-                    User = user
+                    User = user,
+                    IsActive = true,
+                    Verified = false
                 });
             }
             var messages = _ctx.Messages
@@ -411,6 +426,64 @@ namespace SocialPayments.DomainServices
             {
                 foundUser = null;
                 return false;
+            }
+        }
+        public bool VerifyMobilePayPoint(Guid userId, Guid userPayPointId,  string verificationCode)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Verify Mobile Pay Point User: {0} UserPayPoint:{1} Verification Code: {2}", userId, userPayPointId, verificationCode));
+
+            using (var ctx = new Context())
+            {
+                var payPointVerification = ctx.UserPayPointVerifications.FirstOrDefault(p => p.UserPayPointId == userPayPointId && p.UserPayPoint.UserId == userId &&
+                    p.Confirmed == false);
+
+                if (payPointVerification == null)
+                    throw new Exception("Invalid Attempt");
+
+                if (payPointVerification.VerificationCode == verificationCode)
+                {
+                    payPointVerification.Confirmed = true;
+                    payPointVerification.ConfirmedDate = System.DateTime.UtcNow;
+                    payPointVerification.UserPayPoint.Verified = true;
+                    payPointVerification.UserPayPoint.VerifiedDate = System.DateTime.UtcNow;
+
+                    ctx.SaveChanges();
+
+                    return true;
+                }
+
+                return false;
+            }
+
+        }
+        public bool VerifyPayPoint(Guid payPointVerificationId)
+        {
+            using (var ctx = new Context())
+            {
+
+                var payPointVerification = ctx.UserPayPointVerifications
+                        .FirstOrDefault(p => p.Id == payPointVerificationId);
+
+                if (payPointVerification == null)
+                    throw new Exception("Unable to find verification record.");
+
+                if (payPointVerification.Confirmed)
+                    throw new Exception(String.Format("This pay point is already verified."));
+
+                if (payPointVerification.ExpirationDate < System.DateTime.Now)
+                {
+                    throw new Exception(String.Format("Unable to verify this pay point. The verification link has expired.",
+                        payPointVerification.UserPayPoint.URI));
+                }
+
+                payPointVerification.Confirmed = true;
+                payPointVerification.ConfirmedDate = System.DateTime.UtcNow;
+                payPointVerification.UserPayPoint.Verified = true;
+                payPointVerification.UserPayPoint.VerifiedDate = System.DateTime.UtcNow;
+
+                ctx.SaveChanges();
+
+                return true;
             }
         }
         public User SetupSecurityPin(string userId, string securityPin)

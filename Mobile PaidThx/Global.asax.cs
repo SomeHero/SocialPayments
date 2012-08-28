@@ -24,7 +24,7 @@ namespace Mobile_PaidThx
 
             routes.MapRoute(
                 "VerifyPayPoint", // Route name
-                "verify_paypoint/{id}", // URL with parameters
+                "verify_paypoint", // URL with parameters
                 new { controller = "Account", action = "VerifyPayPoint" } // Parameter defaults
             );
             routes.MapRoute(
@@ -96,11 +96,6 @@ namespace Mobile_PaidThx
                 "Join", // Route name
                 "Join/{action}", // URL with parameters
                 new { controller = "Join", action = "Index" } // Parameter defaults
-            );
-            routes.MapRoute(
-                "Home", // Route name
-                "Home/{action}", // URL with parameters
-                new { controller = "Home", action = "Index" } // Parameter defaults
             );
             routes.MapRoute(
                 "Dashboard", // Route name
