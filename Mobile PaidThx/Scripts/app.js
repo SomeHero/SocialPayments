@@ -1,4 +1,4 @@
-/* Foundation v2.2 http://foundation.zurb.com */
+
 jQuery(document).ready(function ($) {
 
     /* Use this js doc for all application specific JS */
@@ -48,7 +48,7 @@ jQuery(document).ready(function ($) {
     /* TOOLTIPS ------------ */
 
     /* SCREEN - SPECIFIC */
-
+      /*
     (function () {
         // initializes touch and scroll events
         var supportTouch = $.support.touch,
@@ -57,7 +57,8 @@ jQuery(document).ready(function ($) {
                 touchStopEvent = supportTouch ? "touchend" : "mouseup",
                 touchMoveEvent = supportTouch ? "touchmove" : "mousemove";
 
-        // handles swipeup and swipedown
+
+                      // handles swipeup and swipedown
         $.event.special.swipeupdown = {
             setup: function () {
                 var thisObject = this;
@@ -149,5 +150,6 @@ jQuery(document).ready(function ($) {
             }
         });
     });
+    */
 });
 

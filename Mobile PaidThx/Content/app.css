@@ -238,7 +238,10 @@ label.error
     font-size: 11px;
     color: #a2a2a2;
 }
-
+#menu-welcome, #menu-app
+{
+ 
+}
 
 /*--------------------------------------------THOUGHT BUBBLES-----------------------------------------------*/
 .thought
