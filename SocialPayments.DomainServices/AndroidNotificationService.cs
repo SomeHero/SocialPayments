@@ -33,14 +33,14 @@ namespace SocialPayments.DomainServices
         {
             _ctx = ctx;
             _logger = logger;
-            _applicationService = new ApplicationService(ctx);
+            _applicationService = new ApplicationService();
         }
 
         public AndroidNotificationService(IDbContext ctx)
         {
             _ctx = ctx;
             _logger = LogManager.GetCurrentClassLogger();
-            _applicationService = new ApplicationService(ctx);
+            _applicationService = new ApplicationService();
         }
 
         public static string getToken(String email, String password)

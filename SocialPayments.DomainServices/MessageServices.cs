@@ -37,7 +37,7 @@ namespace SocialPayments.DomainServices
             _logger = LogManager.GetCurrentClassLogger();
             _validationService = new ValidationService(_logger);
             _formattingServices = new FormattingServices();
-            _applicationServices = new ApplicationService(_context);
+            _applicationServices = new ApplicationService();
             _securityServices = new SecurityService();
             _transactionBatchServices = new TransactionBatchService(_context, _logger);
             _userServices = new UserService(_context);
@@ -50,7 +50,7 @@ namespace SocialPayments.DomainServices
 
             _validationService = new ValidationService(_logger);
             _formattingServices = new FormattingServices();
-            _applicationServices = new ApplicationService(_context);
+            _applicationServices = new ApplicationService();
             _securityServices = new SecurityService();
             _transactionBatchServices = new TransactionBatchService(_context, _logger);
             _userServices = new UserService(_context);
@@ -63,7 +63,7 @@ namespace SocialPayments.DomainServices
 
             _validationService = new ValidationService(_logger);
             _formattingServices = new FormattingServices();
-            _applicationServices = new ApplicationService(_context);
+            _applicationServices = new ApplicationService();
             _securityServices = new SecurityService();
             _transactionBatchServices = new TransactionBatchService(_context, _logger);
             _userServices = new UserService(_context);
@@ -452,7 +452,19 @@ namespace SocialPayments.DomainServices
             return messages;
 
         }
+        public List<Domain.Message> GetPagedMessages(int take, int skip, int page, int pageSize, out int totalRecords)
+        {
+            using (var ctx = new Context())
+            {
+                totalRecords = ctx.Messages.Count();
 
+                return ctx.Messages.Select(m => m)
+                    .OrderByDescending(m => m.CreateDate)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+            }
+        }
         public List<Domain.Message> GetMessages(Guid userId)
         {
             Domain.User user;

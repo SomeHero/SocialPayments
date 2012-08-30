@@ -27,20 +27,34 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"];
 
         // GET /api/paystreammessage
-        public MessageModels.PagedResults Get(int take, int skip, int page, int pageSize)
+        public HttpResponseMessage <MessageModels.PagedResults> Get(int take, int skip, int page, int pageSize)
         {
-            using (var ctx = new Context())
+            var messageServices = new DomainServices.MessageServices();
+            List<Domain.Message> messages = null;
+            int totalRecords = 0;
+            HttpResponseMessage<MessageModels.PagedResults> response = null;
+
+            try
             {
-                var totalRecords = ctx.Messages.Count();
+                messages = messageServices.GetPagedMessages(take, skip, page, pageSize, out totalRecords);
+            }
+            catch (SocialPayments.DomainServices.CustomExceptions.NotFoundException ex)
+            {
+                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                var messages = ctx.Messages.Select(m => m)
-                    .OrderByDescending(m => m.CreateDate)
-                    .Skip(skip)
-                    .Take(take)
-                    .ToList();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
 
-                return new MessageModels.PagedResults()
-                {
+                return response;
+            }
+
+            return new HttpResponseMessage<MessageModels.PagedResults>(
+                new MessageModels.PagedResults() {
                     TotalRecords = totalRecords,
                     Results = messages.Select(m => new MessageModels.MessageResponse()
                     {
@@ -55,9 +69,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         messageType = m.MessageType.ToString(),
                         recipientUri = m.RecipientUri,
                         senderUri = m.SenderUri
-                    })
-                };
-            }
+                    }) 
+                }, HttpStatusCode.OK);
         }
         public HttpResponseMessage<MessageModels.MessageResponse> Get(string id)
         {
@@ -65,8 +78,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             using (var _ctx = new Context())
             {
-                IAmazonNotificationService amazonNotificationService = new DomainServices.AmazonNotificationService();
-                DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx, amazonNotificationService);
+                DomainServices.MessageServices _messageServices = new DomainServices.MessageServices(_ctx);
                 DomainServices.FormattingServices _formattingService = new DomainServices.FormattingServices();
                 DomainServices.TransactionBatchService _transactionBatchService =
                 new DomainServices.TransactionBatchService(_ctx, _logger);

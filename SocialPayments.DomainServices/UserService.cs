@@ -200,6 +200,21 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .Select(u => u).ToList<User>();
         }
+        public List<Domain.User> GetPagedUsers(int take, int skip, int page, int pageSize, out int totalRecords)
+        {
+            using (var ctx = new Context())
+            {
+                totalRecords = ctx.Messages.Count();
+
+                var users = ctx.Users.Select(u => u)
+                    .OrderBy(m => m.CreateDate)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return users;
+            }
+        }
         public User GetUser(Expression<Func<User, bool>> expression)
         {
             return _ctx.Users
@@ -701,15 +716,10 @@ namespace SocialPayments.DomainServices
             var user = GetUserById(userId);
 
             if (user == null)
-            {
-                var error = @"User Not Found";
-
-                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
-
-                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
-            }
+                throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
             user.Password = securityService.Encrypt(newPassword);
+
             UpdateUser(user);
 
             return user;

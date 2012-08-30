@@ -23,42 +23,22 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         // GET /api/users/{userId}/PayPoints/{type}
         public HttpResponseMessage<List<UserModels.UserPayPointResponse>> Get(string userId, string type)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new UserPayPointServices();
+            List<Domain.UserPayPoint> userPayPoints = null;
+            HttpResponseMessage<List<UserModels.UserPayPointResponse>> response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
+                userPayPoints = userPayPointServices.GetUserPayPoints(userId, type);
+            }
+            catch (Exception ex)
+            {
 
-                var user = userService.GetUserById(userId);
+            }
 
-                List<Domain.UserPayPoint> payPoints;
-
-                if (!String.IsNullOrEmpty(type))
-                {
-                    int typeId = 0;
-
-                    if (type == "EmailAddress")
-                        typeId = 1;
-                    else if (type == "Phone")
-                        typeId = 2;
-                    else if (type == "MeCode")
-                        typeId = 4;
-
-                    payPoints = _ctx.UserPayPoints
-                    .Include("Type")
-                    .Where(p => p.UserId == user.UserId && p.IsActive  && p.PayPointTypeId == typeId)
-                    .Select(p => p)
-                    .ToList<Domain.UserPayPoint>();
-                }
-                else
-                {
-                    payPoints = _ctx.UserPayPoints
-                    .Include("Type")
-                    .Where(p => p.UserId == user.UserId && p.IsActive)
-                    .Select(p => p)
-                    .ToList<Domain.UserPayPoint>();
-                }
-
-                return new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(payPoints.Select(p =>
-                    new UserModels.UserPayPointResponse() {
+            response = new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(userPayPoints.Select(p =>
+                    new UserModels.UserPayPointResponse()
+                    {
                         Id = p.Id.ToString(),
                         UserId = p.UserId.ToString(),
                         Type = p.Type.Name,
@@ -66,136 +46,93 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                         Verified = p.Verified
                     }).ToList(), HttpStatusCode.OK);
 
-            }
+            return response;
+
         }
 
         // GET /api/users/{userId}/PayPoints/{id}
-        public UserModels.UserPayPointResponse Get(string userId, string id, string type)
+        public HttpResponseMessage<UserModels.UserPayPointResponse> Get(string userId, string id, string type)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new UserPayPointServices();
+            Domain.UserPayPoint payPoint = null;
+            HttpResponseMessage<UserModels.UserPayPointResponse> response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-
-                var user = userService.GetUserById(userId);
-                Guid payPointId;
-
-                Guid.TryParse(id, out payPointId);
-
-                var payPoint = _ctx.UserPayPoints
-                    .Include("Type")
-                    .FirstOrDefault(p => p.UserId == user.UserId && p.Id == payPointId);
-
-                return new UserModels.UserPayPointResponse()
-                {
-                    Id = payPoint.Id.ToString(),
-                    UserId = payPoint.UserId.ToString(),
-                    Type = payPoint.Type.ToString(),
-                    Uri = payPoint.URI
-                };
+                payPoint = userPayPointServices.GetUserPayPoint(userId, type);
             }
+            catch (Exception ex)
+            {
+
+            }
+
+            response = new HttpResponseMessage<UserModels.UserPayPointResponse>(new UserModels.UserPayPointResponse() 
+            {
+                Id = payPoint.Id.ToString(),
+                UserId = payPoint.UserId.ToString(),
+                Type = payPoint.Type.ToString(),
+                Uri = payPoint.URI
+            }, HttpStatusCode.OK);
+
+            return response;
+
         }
 
         // POST /api/users/{userId}/PayPoints
         public HttpResponseMessage<UserModels.AddUserPayPointResponse> Post(string userId, Models.UserModels.AddUserPayPointRequest request)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new UserPayPointServices();
+            HttpResponseMessage<UserModels.AddUserPayPointResponse> response = null;
+            Domain.UserPayPoint userPayPoint = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-                HttpResponseMessage<UserModels.AddUserPayPointResponse> response;
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User {0} not found", userId);
-
-                    return response;
-                }
-                var payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == request.PayPointType);
-
-                if (payPointType == null)
-                {
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("Pay Point Type {0} not found", request.PayPointType);
-
-                    return response;
-                }
-
-                var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == request.Uri);
-
-                if (payPoints != null)
-                {
-
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("The pay point is already linked to an account.", request.PayPointType);
-
-                    return response;
-                }
-
-                //TODO: Validate format of the URI based on type
-
-                var userPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                {
-                    Id = Guid.NewGuid(),
-                    User = user,
-                    CreateDate = System.DateTime.Now,
-                    IsActive = true,
-                    URI = request.Uri,
-                    Type = payPointType,
-                    Verified = false
-                });
-
-                if(payPointType.Name == "EmailAddress")
-                    userService.SendEmailVerificationLink(userPayPoint);
-                else if(payPointType.Name == "Phone")
-                    userService.SendMobileVerificationCode(userPayPoint);
-
-                userService.UpdateUser(user);
-
-                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(new UserModels.AddUserPayPointResponse() {
-                    Id = userPayPoint.Id.ToString()
-                }, HttpStatusCode.Created);
-
-                return response;
+                userPayPoint = userPayPointServices.AddUserPayPoint(userId, request.PayPointType, request.Uri);
             }
+            catch (Exception ex)
+            {
+
+            }
+
+            //if (payPointType.Name == "EmailAddress")
+            //    userService.SendEmailVerificationLink(userPayPoint);
+            //else if (payPointType.Name == "Phone")
+            //    userService.SendMobileVerificationCode(userPayPoint);
+
+            response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(new UserModels.AddUserPayPointResponse()
+            {
+                Id = userPayPoint.Id.ToString()
+            }, HttpStatusCode.Created);
+
+            return response;
         }
         // POST /api/users/{userId}/PayPoints/resend_verification_code
         public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
         {
             using (var ctx = new Context())
             {
-                UserService userService = new UserService(ctx);
-
-                Guid userPayPointId;
-
-                Guid.TryParse(model.UserPayPointId, out userPayPointId);
-
-                if(userPayPointId == null)
-                {
-                    var response = 
-                        new HttpResponseMessage(HttpStatusCode.NotFound);
-                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
-
-                    return response;
-                }
-
-                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
+                DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
+                DomainServices.UserService userServices = new DomainServices.UserService();
+                Domain.UserPayPoint userPayPoint = null;
+                HttpResponseMessage response = null;
 
                 try
                 {
-                    userService.SendMobileVerificationCode(userPayPoint);
+                    userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
+
+                    if (userPayPoint == null)
+                        throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+                    
+                    userServices.SendMobileVerificationCode(userPayPoint);
                 }
                 catch (Exception ex)
                 {
-                    var response =
-                                            new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.ReasonPhrase = "Error occcurred resending verification code";
 
-                    return response;
                 }
 
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                return response;
 
             }
         }
@@ -204,37 +141,28 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         {
             using (var ctx = new Context())
             {
-                UserService userService = new UserService(ctx);
-
-                Guid userPayPointId;
-
-                Guid.TryParse(model.UserPayPointId, out userPayPointId);
-
-                if (userPayPointId == null)
-                {
-                    var response =
-                        new HttpResponseMessage(HttpStatusCode.NotFound);
-                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
-
-                    return response;
-                }
-
-                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
+                DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
+                DomainServices.UserService userServices = new DomainServices.UserService();
+                Domain.UserPayPoint userPayPoint = null;
+                HttpResponseMessage response = null;
 
                 try
                 {
-                    userService.SendEmailVerificationLink(userPayPoint);
+                    userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
+
+                    if (userPayPoint == null)
+                        throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+
+                    userServices.SendEmailVerificationLink(userPayPoint);
                 }
                 catch (Exception ex)
                 {
-                    var response =  new HttpResponseMessage(HttpStatusCode.InternalServerError);
 
-                    response.ReasonPhrase = "Error occcurred resending verification code";
-
-                    return response;
                 }
 
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                return response;
 
             }
         }
@@ -247,62 +175,21 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         // DELETE /api/users/{userId}/PayPoints/{id}
         public HttpResponseMessage Delete(string userId, string id)
         {
-            using (var _ctx = new Context())
+            DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
+            HttpResponseMessage response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-
-                Guid userIdGuid;
-                Guid.TryParse(userId, out userIdGuid);
-
-                if (userIdGuid == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User Id {0} is invalid", userId);
-
-                    return response;
-                }
-
-                Guid payPointId;
-                Guid.TryParse(id, out payPointId);
-
-                if (payPointId == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("PayPoint Id {0} is invalid", payPointId);
-
-                    return response;
-                }
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User {0} not found", userId);
-
-                    return response;
-                }
-
-                var payPoint = _ctx.UserPayPoints
-                    .FirstOrDefault(p => p.Id == payPointId  && p.UserId == userIdGuid);
-
-                if(payPoint == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("PayPoint {0} not found for specified user {1}", id, userId);
-
-                    return response;
-                }
-
-                payPoint.IsActive = false;
-                _ctx.SaveChanges();
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userPayPointService.DeleteUserPayPoint(userId, id);
             }
+            catch (Exception ex)
+            {
+
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
         // api/users/{userId}/PayPoints/{id}/verify_mobile_paypoint
         [HttpPost]

@@ -28,37 +28,41 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
-        public UserModels.PagedResults Get(int take, int skip, int page, int pageSize)
+        public HttpResponseMessage<UserModels.PagedResults> Get(int take, int skip, int page, int pageSize)
         {
-            using (var ctx = new Context())
+            HttpResponseMessage<UserModels.PagedResults> response = null;
+            var userServices = new DomainServices.UserService();
+            List<Domain.User> users = null;
+            int totalRecords = 0;
+
+            try
             {
-                var totalRecords = ctx.Messages.Count();
-
-                var users = ctx.Users.Select(u => u)
-                    .OrderBy(m => m.CreateDate)
-                    .Skip(skip)
-                    .Take(take)
-                    .ToList();
-
-                return new UserModels.PagedResults()
-                {
-                    TotalRecords = totalRecords,
-                    Results = users.Select(u => new UserModels.UserResponse()
-                    {
-                        createDate = (u.CreateDate != null ? u.CreateDate.Value.ToString("MM/dd/yyyy") : ""),
-                        imageUrl = u.ImageUrl,
-                        instantLimit = u.Limit,
-                        isConfirmed = u.IsConfirmed,
-                        isLockedOut = u.IsLockedOut,
-                        lastLoggedIn = (u.LastLoggedIn != null ? u.LastLoggedIn.ToString("MM/dd/yyyy") : ""),
-                        userId = u.UserId,
-                        userName = u.UserName,
-                        userStatus = u.UserStatus.ToString()
-                    })
-                };
+                users = userServices.GetPagedUsers(take, skip, page, pageSize, out totalRecords);
             }
-        }
+            catch (Exception ex)
+            {
 
+            }
+
+            response = new HttpResponseMessage<UserModels.PagedResults>(new UserModels.PagedResults()
+            {
+                TotalRecords = totalRecords,
+                Results = users.Select(u => new UserModels.UserResponse()
+                {
+                    createDate = (u.CreateDate != null ? u.CreateDate.Value.ToString("MM/dd/yyyy") : ""),
+                    imageUrl = u.ImageUrl,
+                    instantLimit = u.Limit,
+                    isConfirmed = u.IsConfirmed,
+                    isLockedOut = u.IsLockedOut,
+                    lastLoggedIn = (u.LastLoggedIn != null ? u.LastLoggedIn.ToString("MM/dd/yyyy") : ""),
+                    userId = u.UserId,
+                    userName = u.UserName,
+                    userStatus = u.UserStatus.ToString()
+                }).ToList()
+            }, HttpStatusCode.OK);
+
+            return response;
+        }
         // GET /api/users/5
         public HttpResponseMessage<UserModels.UserResponse> Get(string id)
         {
@@ -571,43 +575,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST api/users/reset_password
         public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
         {
-            using (var _ctx = new Context())
+            var userServices = new DomainServices.UserService();
+            HttpResponseMessage response = null;
+            try
             {
-                DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-                DomainServices.ValidationService validateService = new DomainServices.ValidationService();
-
-                if (String.IsNullOrEmpty(request.emailAddress) || !validateService.IsEmailAddress(request.emailAddress))
-                {
-
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = "Invalid Email Address";
-
-                    return message;
-                }
-
-                var user = userService.FindUserByEmailAddress(request.emailAddress);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = "Invalid User";
-
-                    return message;
-                }
-                else if (!validateService.IsEmailAddress(user.UserName))
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
-
-                    return message;
-                }
-                else
-                {
-                    userService.SendResetPasswordLink(user, ApiKey);
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                //userServices.ResetPassword(request.userId, request.securityQuestion, request.newPassword);
             }
+            catch (Exception ex)
+            {
+
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
         public HttpResponseMessage SendEmail(string id, string apiKey, UserModels.SendEmailRequest request)
         {
