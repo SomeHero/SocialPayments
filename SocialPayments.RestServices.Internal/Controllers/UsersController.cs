@@ -303,7 +303,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, string.Format("Exception registering user {0}. Exception {1}.", request.emailAddress, ex.Message));
+                _logger.Log(LogLevel.Error, string.Format("Exception registering user {0}. Exception: {1} Stack Trace: {2}", request.emailAddress, ex.Message, ex.StackTrace));
 
                 var innerException = ex.InnerException;
 
@@ -1023,6 +1023,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // DELETE /api/user/5
         public void Delete(int id)
         {
+        }
+        //api/users/verify_paypoint
+        public HttpResponseMessage VerifyPayPoint(UserModels.ValidatePayPointRequest request)
+        {
+            var userService = new DomainServices.UserService();
+            HttpResponseMessage responseMessage;
+
+            bool result = false;
+            try
+            {
+                result = userService.VerifyPayPoint(request.PayPointVerificationId);
+            }
+            catch (Exception ex)
+            {
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest);
+                responseMessage.ReasonPhrase = ex.Message;
+
+                return responseMessage;
+            }
+
+            responseMessage = Request.CreateResponse(HttpStatusCode.OK);
+            responseMessage.ReasonPhrase = String.Format("Thanks. You have completed verification.  You can now begin to accept payments using this pay point.");
+
+            return responseMessage;
         }
     }
 }

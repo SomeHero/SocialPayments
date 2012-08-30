@@ -7,8 +7,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class AccountVerificationRequest
     {
-        public int depositAmount1 { get; set; }
-        public int depositAmount2 { get; set; }
+        public double depositAmount1 { get; set; }
+        public double depositAmount2 { get; set; }
     }
     public class AddVerificationRequest
     {

@@ -10,8 +10,16 @@
     </div>
     <div data-role="content" class="panel main-body">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+                <p>To enable sending payment from this account, please verify it.
+                
+                <a href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
+                    <button type="button" class="imgbtn">
+                        <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Verify</span>
+                       </button>
+                </a>
+                </p>
             @Html.ValidationSummary()
-            @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }}))
             {
                 <p>
                     <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
