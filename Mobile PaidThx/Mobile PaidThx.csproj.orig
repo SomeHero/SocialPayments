@@ -394,11 +394,8 @@
     <Content Include="Content\images\icons\profileIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
-<<<<<<< HEAD
     <Content Include="Scripts\jquery.placeholder.min.js" />
-=======
     <Content Include="Scripts\send-money-2.js" />
->>>>>>> upstream/development
     <Content Include="Scripts\sharing.js" />
     <Content Include="Scripts\home.js" />
     <Content Include="Scripts\jquery.livequery.js" />
@@ -681,6 +678,11 @@
     <Content Include="Views\Security\ForgotSecurityPin.cshtml" />
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipe.cshtml" />
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipeConfirm.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Shared\TopMenu-App.cshtml" />
+=======
+    <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
+>>>>>>> upstream/development
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
