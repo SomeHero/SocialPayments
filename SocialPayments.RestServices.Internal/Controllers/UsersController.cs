@@ -834,6 +834,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             var response = new UserModels.FindMECodeResponse()
             {
+                searchTerm = searchTerm,
                 foundUsers = meCodesFound
             };
 
