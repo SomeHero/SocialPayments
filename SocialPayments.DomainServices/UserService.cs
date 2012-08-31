@@ -227,20 +227,14 @@ namespace SocialPayments.DomainServices
                         return user;
 
                     case URIType.MECode:
-                        var meCode = _ctx.MECodes
-                            .Include("User")
-                            .FirstOrDefault(m => m.MeCode.Equals(userUri));
-
-                        if (meCode == null)
-                            return null;
+                        var meCode = _ctx.UserPayPoints.FirstOrDefault(m => m.URI.Equals(userUri));
 
                         user = meCode.User;
 
                         return user;
-
                     case URIType.EmailAddress:
                         user = _ctx.Users
-                            .FirstOrDefault(u => u.EmailAddress == userUri);
+                            .FirstOrDefault(u => u.EmailAddress.Equals(userUri));
 
                         return user;
 
@@ -251,10 +245,6 @@ namespace SocialPayments.DomainServices
                             .FirstOrDefault(u => u.MobileNumber == phoneNumber);
 
                         return user;
-
-
-
-
                 }
 
             }
@@ -322,6 +312,18 @@ namespace SocialPayments.DomainServices
             logger.Log(LogLevel.Info, string.Format("Confirming User Registration with Email Token {0}. Ending.", accountConfirmationToken));
 
             return true;
+        }
+
+        public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm)
+        {
+            List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
+
+            int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
+
+            // Takes the top 20 found matches.
+            MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where( m=>m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
+
+            return MeCodesFound;
         }
 
         public void UpdateUser(User user)
