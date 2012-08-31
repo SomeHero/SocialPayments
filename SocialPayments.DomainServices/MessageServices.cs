@@ -180,6 +180,14 @@ namespace SocialPayments.DomainServices
 
                     throw new InvalidOperationException(message);
                 }
+
+                if (recipientUriType == URIType.MECode && sender.PayPoints.First(m => m.URI.Equals(recipientUri)).ToString().Count() > 0)
+                {
+                    var message = String.Format("Sender and Recipient are the same");
+                    _logger.Log(LogLevel.Debug, message);
+
+                    throw new InvalidOperationException(message);
+                }
             }
 
             PaymentAccount senderAccount = null;
@@ -321,6 +329,7 @@ namespace SocialPayments.DomainServices
 
             return messageItem;
         }
+
         public void CancelMessage(string id)
         {
             Guid messageId;
@@ -575,7 +584,7 @@ namespace SocialPayments.DomainServices
             var formattingService = new DomainServices.FormattingServices();
 
             List<Domain.Message> messages = null;
-            
+
             messages = _context.Messages
                 .Where
                 (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
@@ -617,7 +626,7 @@ namespace SocialPayments.DomainServices
                 messages = _context.Messages
                     .Where
                     (m => (
-                        ( m.RecipientId == user.UserId ) &&
+                        (m.RecipientId == user.UserId) &&
                         (
                                 (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                             || (m.recipientHasSeen == false)
@@ -648,10 +657,10 @@ namespace SocialPayments.DomainServices
             messages = _context.Messages
                 .Where
                 (m => (
-                    ( m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
-                    || ( m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.SubmittedPayment))
-                    || ( m.SenderId == user.UserId && ! m.senderHasSeen )
-                    || ( m.RecipientId == user.UserId && ! m.recipientHasSeen )
+                    (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                    || (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.SubmittedPayment))
+                    || (m.SenderId == user.UserId && !m.senderHasSeen)
+                    || (m.RecipientId == user.UserId && !m.recipientHasSeen)
                 ))
                 .OrderByDescending(m => m.CreateDate).ToList();
 
