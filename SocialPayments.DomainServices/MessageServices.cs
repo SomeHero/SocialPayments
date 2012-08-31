@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using MoonAPNS;
 using SocialPayments.DomainServices.MessageProcessing;
-using System.Linq;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
@@ -470,6 +470,7 @@ namespace SocialPayments.DomainServices
             Domain.User user;
 
             var messages = _context.Messages
+                .Include("Recipient")
                 .Where(m => m.SenderId == userId || m.RecipientId.Value == userId)
                 .OrderByDescending(m => m.CreateDate)
                 .ToList<Message>();

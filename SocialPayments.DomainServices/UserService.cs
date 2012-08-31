@@ -354,6 +354,50 @@ namespace SocialPayments.DomainServices
 
             _ctx.SaveChanges();
         }
+        public void PersonalizeUser(string userId, string firstName, string lastName, string imageUrl)
+        {
+            using (var ctx = new Context())
+            {
+                var user = ctx.Users
+                    .FirstOrDefault(u => u.UserId.Equals(userId));
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.ImageUrl = imageUrl;
+
+                var firstNameAttribute = user.UserAttributes
+                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "FirstName");
+
+                if (firstNameAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = firstNameAttribute.UserAttribute.Id,
+                        AttributeValue = firstName
+                    });
+                }
+
+                var lastNameAttribute = user.UserAttributes
+                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "LastName");
+
+                if (lastNameAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = lastNameAttribute.UserId,
+                        AttributeValue = lastName
+                    });
+                }
+
+                ctx.SaveChanges();
+            }
+
+        }
         public bool ValidateUser(string userNameOrEmail, string password, out User foundUser)
         {
             logger.Log(LogLevel.Info, "Validating User");

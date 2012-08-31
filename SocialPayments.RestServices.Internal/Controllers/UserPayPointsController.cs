@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DomainServices;
@@ -109,38 +108,33 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         // POST /api/users/{userId}/PayPoints/resend_verification_code
         public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
         {
-            using (var ctx = new Context())
+            DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
+            DomainServices.UserService userServices = new DomainServices.UserService();
+            Domain.UserPayPoint userPayPoint = null;
+            HttpResponseMessage response = null;
+
+            try
             {
-                DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
-                DomainServices.UserService userServices = new DomainServices.UserService();
-                Domain.UserPayPoint userPayPoint = null;
-                HttpResponseMessage response = null;
+                userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
 
-                try
-                {
-                    userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
-
-                    if (userPayPoint == null)
-                        throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+                if (userPayPoint == null)
+                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
                     
-                    userServices.SendMobileVerificationCode(userPayPoint);
-                }
-                catch (Exception ex)
-                {
-
-                }
-
-                response = new HttpResponseMessage(HttpStatusCode.OK);
-
-                return response;
+                userServices.SendMobileVerificationCode(userPayPoint);
+            }
+            catch (Exception ex)
+            {
 
             }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
+
         }
         // POST /api/users/{userId}/PayPoints/resend_email_verification_link
         public HttpResponseMessage ResendEmailVerificationLink(string userId, UserModels.ResendVerificationCodeRequest model)
         {
-            using (var ctx = new Context())
-            {
                 DomainServices.UserPayPointServices userPayPointService = new UserPayPointServices();
                 DomainServices.UserService userServices = new DomainServices.UserService();
                 Domain.UserPayPoint userPayPoint = null;
@@ -164,7 +158,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 return response;
 
-            }
         }
         // PUT /api/users/{userId}/PayPoints/{id}
         public HttpResponseMessage Put(string userId)

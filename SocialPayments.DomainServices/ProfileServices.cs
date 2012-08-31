@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
@@ -15,6 +16,9 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 profileSections = ctx.ProfileSections
+                    .Include("ProfileItems")
+                    .Include("ProfileItems.UserAttribute")
+                    .Include("ProfileItems.SelectOptions")
                     .Select(u => u)
                     .OrderBy(u => u.SortOrder)
                     .ToList();

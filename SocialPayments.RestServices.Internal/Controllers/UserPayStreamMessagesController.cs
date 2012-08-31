@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
-using SocialPayments.DataLayer;
 using NLog;
 using System.Net;
 using SocialPayments.Domain;

@@ -5,6 +5,7 @@ using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
 using SocialPayments.DataLayer.Interfaces;
+using System.Data.Entity;
 using System.Collections.ObjectModel;
 
 namespace SocialPayments.DomainServices
@@ -50,7 +51,9 @@ namespace SocialPayments.DomainServices
                 if (apiKeyGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Invalid Application Specified {0}.", apiKey));
 
-                return ctx.Applications.FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
+                return ctx.Applications
+                    .Include("ConfigurationValues")
+                    .FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
             }
         }
         public void AddApplication(string name, string url, string isActive)

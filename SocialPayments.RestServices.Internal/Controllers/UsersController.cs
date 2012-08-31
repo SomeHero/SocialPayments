@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
 using System.Net;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using NLog;
 using Amazon.SimpleNotificationService;
@@ -68,12 +67,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
 
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(_ctx); ;
+            DomainServices.UserService _userService = new DomainServices.UserService();
+            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(); ;
+            UserModels.UserResponse userResponse = null;
 
             User user = null;
 
@@ -98,27 +96,21 @@ namespace SocialPayments.RestServices.Internal.Controllers
             double sentTotal = 0;
             double receivedTotal = 0;
 
-            var sentPayments = _ctx.Messages
-                    .Where(m => m.SenderId.Equals(user.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment));
+            //var sentPayments = _ctx.Messages
+            //        .Where(m => m.SenderId.Equals(user.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment));
 
-            if (sentPayments.Count() > 0)
-                sentTotal = sentPayments.Sum(m => m.Amount);
+            //if (sentPayments.Count() > 0)
+            //    sentTotal = sentPayments.Sum(m => m.Amount);
 
-            var receivedPayments = _ctx.Messages
-                    .Where(m => m.RecipientId.Value.Equals(user.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment));
+            //var receivedPayments = _ctx.Messages
+            //        .Where(m => m.RecipientId.Value.Equals(user.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment));
 
-            if (receivedPayments.Count() > 0)
-                receivedTotal = receivedPayments.Sum(m => m.Amount);
-
-            _logger.Log(LogLevel.Info, String.Format("User Mobile Number {0}", user.MobileNumber));
-            _logger.Log(LogLevel.Info, String.Format("# of paypoints {0}", user.PayPoints.Count));
+            //if (receivedPayments.Count() > 0)
+            //    receivedTotal = receivedPayments.Sum(m => m.Amount);
 
             string userName = _userService.GetSenderName(user);
-            UserModels.UserResponse userResponse = null;
-
             var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
-
             var newCount = messageServices.GetNewMessages(user);
             var pendingCount = messageServices.GetPendingMessages(user);
 
@@ -246,13 +238,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.userName));
 
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-
-            var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
+            DomainServices.UserService _userService = new DomainServices.UserService();
 
             //_logger.Log(LogLevel.Error, string.Format("Formatting Mobile Number"));
 
@@ -336,59 +324,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Start Personalize User"));
 
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-
-            var user = _userService.GetUserById(id);
-
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-            user.ImageUrl = request.ImageUrl;
-
-            var firstNameAttribute = _ctx.UserAttributes
-                .FirstOrDefault(a => a.AttributeName == "FirstName");
-
-            if (firstNameAttribute != null)
-            {
-                user.UserAttributes.Add(new UserAttributeValue()
-                {
-                    id = Guid.NewGuid(),
-                    UserAttributeId = firstNameAttribute.Id,
-                    AttributeValue = request.FirstName
-                });
-            }
-            var lastNameAttribute = _ctx.UserAttributes
-                .FirstOrDefault(a => a.AttributeName == "LastName");
-
-            if (firstNameAttribute != null)
-            {
-                user.UserAttributes.Add(new UserAttributeValue()
-                {
-                    id = Guid.NewGuid(),
-                    UserAttributeId = lastNameAttribute.Id,
-                    AttributeValue = request.LastName
-                });
-            }
-
+            DomainServices.UserService _userService = new DomainServices.UserService();
 
             try
             {
-                _userService.UpdateUser(user);
+
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Info, String.Format("Unhandled Expression Updating User {0}. {1}", id, ex.Message));
 
-                var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                responseMessage.ReasonPhrase = "Unable to update user";
-
-                return responseMessage;
             }
-
-            _logger.Log(LogLevel.Info, String.Format("Completed Personalize User"));
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
@@ -465,12 +412,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         public HttpResponseMessage ChangeSecurityPin(string id, UserModels.ChangeSecurityPinRequest request)
         {
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService userService = new DomainServices.UserService();
 
             var user = userService.GetUserById(id);
 
@@ -503,8 +447,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Setting up Security Question for {0}", id));
 
-            Context _ctx = new Context();
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService userService = new DomainServices.UserService();
 
             if (request.questionId < 0)
             {
@@ -553,8 +496,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Changing password for: {0}", id));
 
-            Context _ctx = new Context();
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService userService = new DomainServices.UserService();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
 
             var user = userService.GetUserById(id);
@@ -575,7 +517,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST api/users/reset_password
         public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
         {
-            var userServices = new DomainServices.UserService();
             HttpResponseMessage response = null;
             try
             {
@@ -590,27 +531,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return response;
         }
-        public HttpResponseMessage SendEmail(string id, string apiKey, UserModels.SendEmailRequest request)
-        {
-            using (var ctx = new Context())
-            {
-                var emailService = new DomainServices.EmailService(ctx);
-                var userService = new DomainServices.UserService(ctx);
-
-                var user = userService.GetUserById(id);
-
-                emailService.SendEmail(user.EmailAddress, request.Subject, request.TemplateName, request.ReplacementElements);
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            }
-        }
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Registering push notifications for Android for: {0}", id));
 
-            Context _ctx = new Context();
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService userService = new DomainServices.UserService();
 
             var user = userService.GetUserById(id);
 
@@ -651,11 +577,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
 
-            Context _ctx = new Context();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-            DomainServices.MessageServices _messageService = new DomainServices.MessageServices(_ctx);
+            DomainServices.UserService _userService = new DomainServices.UserService();
+            DomainServices.MessageServices _messageService = new DomainServices.MessageServices();
 
             User user = null;
             try
@@ -793,12 +717,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Setting up Security Pin for {0}", id));
 
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService _userService = new DomainServices.UserService();
+            DomainServices.UserService userService = new DomainServices.UserService();
 
             if (request.securityPin.Length < 4)
             {
@@ -833,11 +755,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/users/validate_user
         public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
         {
-            Context _ctx = new Context();
-
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService _userService = new DomainServices.UserService();
 
             HttpResponseMessage<UserModels.ValidateUserResponse> responseMessage;
 
@@ -894,11 +814,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0} {1}", request.deviceToken, request.oAuthToken));
 
-            Context _ctx = new Context();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService _userService = new DomainServices.UserService();
 
             Domain.User user = null;
 
@@ -942,63 +860,65 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         public HttpResponseMessage LinkFacebook(string id, UserModels.LinkFacebookRequest request)
         {
-            using (var ctx = new Context())
-            {
-                DomainServices.UserService _userService = new DomainServices.UserService(ctx);
-                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
+            //using (var ctx = new Context())
+            //{
+            //    DomainServices.UserService _userService = new DomainServices.UserService(ctx);
+            //    DomainServices.SecurityService securityService = new DomainServices.SecurityService();
 
-                Domain.User user = null;
+            //    Domain.User user = null;
 
-                try
-                {
-                    user = _userService.GetUserById(id);
-                }
-                catch (Exception ex)
-                {
-                    string ErrorReason = String.Format("-LinkFB- Unable to find user for {0}", id);
-                    _logger.Log(LogLevel.Error, ErrorReason);
+            //    try
+            //    {
+            //        user = _userService.GetUserById(id);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        string ErrorReason = String.Format("-LinkFB- Unable to find user for {0}", id);
+            //        _logger.Log(LogLevel.Error, ErrorReason);
 
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = ErrorReason;
-                    return message;
-                }
+            //        var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //        message.ReasonPhrase = ErrorReason;
+            //        return message;
+            //    }
 
-                /*
-                 * Validate Facebook AccountId and Auth Token and Create ExpirationDate Token
-                 */
-                if (request.apiKey == null || request.AccountId == null || request.oAuthToken == null)
-                {
-                    string ErrorReason = String.Format("Link Facebook Failed -> Invalid Input Sent.");
-                    _logger.Log(LogLevel.Error, ErrorReason);
+            //    /*
+            //     * Validate Facebook AccountId and Auth Token and Create ExpirationDate Token
+            //     */
+            //    if (request.apiKey == null || request.AccountId == null || request.oAuthToken == null)
+            //    {
+            //        string ErrorReason = String.Format("Link Facebook Failed -> Invalid Input Sent.");
+            //        _logger.Log(LogLevel.Error, ErrorReason);
 
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = ErrorReason;
-                    return message;
-                }
-                else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
-                {
-                    // Account in use... return an error.
-                    string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.", id);
-                    _logger.Log(LogLevel.Error, ErrorReason);
+            //        var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //        message.ReasonPhrase = ErrorReason;
+            //        return message;
+            //    }
+            //    else if (ctx.Users.Select(u => u.FacebookUser).Where(f => f.FBUserID.Equals(request.AccountId)).Count() > 0)
+            //    {
+            //        // Account in use... return an error.
+            //        string ErrorReason = String.Format("Link Facebook Failed -> FB Account [{0}] already linked to another account.", id);
+            //        _logger.Log(LogLevel.Error, ErrorReason);
 
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = ErrorReason;
-                    return message;
-                }
+            //        var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //        message.ReasonPhrase = ErrorReason;
+            //        return message;
+            //    }
 
 
-                if (_userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)))
-                    return new HttpResponseMessage(HttpStatusCode.Created);
-                else
-                {
-                    string ErrorReason = String.Format("Link Facebook Failed -> User Service to add FB User Failed.");
-                    _logger.Log(LogLevel.Error, ErrorReason);
+            //    if (_userService.LinkFacebook(request.apiKey, id, request.AccountId, request.oAuthToken, System.DateTime.Now.AddDays(7.0)))
+            //        return new HttpResponseMessage(HttpStatusCode.Created);
+            //    else
+            //    {
+            //        string ErrorReason = String.Format("Link Facebook Failed -> User Service to add FB User Failed.");
+            //        _logger.Log(LogLevel.Error, ErrorReason);
 
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = ErrorReason;
-                    return message;
-                }
-            }
+            //        var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //        message.ReasonPhrase = ErrorReason;
+            //        return message;
+            //    }
+            //}
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         // DELETE /api/user/5
