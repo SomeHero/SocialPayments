@@ -19,6 +19,15 @@ namespace SocialPayments.RestServices.Internal.Models
             public int numberOfOutgoingNotifications { get; set; }
             public List<UserModels.QuickSendUserReponse> quickSendContacts { get; set; } // Maximum 6 contacts
         }
+        public class FindMECodeResponse
+        {
+            public List<UserModels.MeCodeListResponse> foundUsers { get; set; }
+        }
+        public class MeCodeListResponse
+        {
+            public string userId { get; set; }
+            public string meCode { get; set; }
+        }
         public class QuickSendUserReponse
         {
             public string userUri { get; set; }

@@ -534,6 +534,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                         innerException = innerException.InnerException;
                     }
+
                     responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
                     responseMessage.ReasonPhrase = ex.Message;
 
@@ -541,7 +542,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }
 
                 responseMessage = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
-                //responseMessage.Headers.C
 
                 return responseMessage;
             }

@@ -793,18 +793,53 @@ namespace SocialPayments.RestServices.Internal.Controllers
             };
 
             return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+        }
 
-            /*
-                    var response = new UserModels.HomepageRefreshReponse()
+
+        // GET /api/users/{userId}/find_mecodes
+        public HttpResponseMessage<UserModels.FindMECodeResponse> GetMatchingMECodesWithSearchTerm (string searchTerm)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));
+
+            Context _ctx = new Context();
+            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+            IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
+            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+
+            List<UserModels.MeCodeListResponse> meCodesFound = new List<UserModels.MeCodeListResponse>();
+
+            List<Domain.UserPayPoint> foundPaypoints;
+
+            try
             {
-                userId = user.UserId.ToString(),
-                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
-                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
-                quickSendContacts = quickSends
+                foundPaypoints = _userService.FindTopMatchingMeCodes(searchTerm);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Finding me codes for {0} failed. {1}",searchTerm,ex.StackTrace));
+                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.InternalServerError); // 500
+            }
+
+            foreach (Domain.UserPayPoint meCode in foundPaypoints)
+            {
+                meCodesFound.Add(new UserModels.MeCodeListResponse()
+                {
+                    userId = meCode.UserId.ToString(),
+                    meCode = meCode.URI
+                });
+            }
+
+            if ( meCodesFound.Count() == 0 )
+                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.InternalServerError); // 500
+
+            var response = new UserModels.FindMECodeResponse()
+            {
+                foundUsers = meCodesFound
             };
 
-            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK); */
+            return new HttpResponseMessage<UserModels.FindMECodeResponse>(response, HttpStatusCode.OK);
         }
+
 
 
         //POST /api/users/{userId}/setup_securitypin
