@@ -153,6 +153,12 @@ namespace SocialPayments.RestServices.Internal
             );
 
             routes.MapHttpRoute(
+                name: "GetMatchingMECodesWithSearchTerm",
+                routeTemplate: "api/users/{searchTerm}/find_mecodes",
+                defaults: new { controller = "Users", action = "GetMatchingMECodesWithSearchTerm" }
+            );
+
+            routes.MapHttpRoute(
                 name: "ResendMobileVerificationCode",
                 routeTemplate: "api/users/{userId}/PayPoints/resend_mobile_verification_code",
                 defaults: new { controller = "UserPayPoint", action = "ResendVerificationCode" }
