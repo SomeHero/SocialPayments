@@ -21,6 +21,7 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class FindMECodeResponse
         {
+            public string searchTerm { get; set; }
             public List<UserModels.MeCodeListResponse> foundUsers { get; set; }
         }
         public class MeCodeListResponse
