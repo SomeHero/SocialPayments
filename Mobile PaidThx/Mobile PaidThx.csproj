@@ -181,6 +181,7 @@
     <Compile Include="HtmlHelpers\ProfileHelpers.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BankAccountModels.cs" />
+    <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\DonateModels.cs" />
     <Compile Include="Models\EmailsModels.cs" />
     <Compile Include="Models\FacebookUserModels.cs" />

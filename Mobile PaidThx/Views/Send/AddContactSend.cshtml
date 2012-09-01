@@ -12,17 +12,20 @@
 
     <div data-role="content">
           <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-        
-                 <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
-                    @foreach (var friend in Model.Friends)
-                    {
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+                   
+        @foreach (var alphaGroup in Model.SortedContacts)
+        {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var friend in alphaGroup.Value)
+            {
                     <li>
                     <a class="send-friend" friend-id="@friend.id" friend-name="@friend.name">
                         <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
                         @friend.name
                     </a>
                     </li>
-                    }
+            }
                     <li id="no-results">
                     <a id="new-recipient-uri" class="send-recipient-uri" recipient-uri="">
                         <img src="@Url.Content("~/Content/images/avatar.png")" />
@@ -35,6 +38,7 @@
                        </span>
                    </a>
                     </li>
+        }
                 </ul>
             </div>
     </div>

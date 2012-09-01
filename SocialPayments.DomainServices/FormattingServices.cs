@@ -65,8 +65,8 @@ namespace SocialPayments.DomainServices
         public string FormatUserName(User sender)
         {
             _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
-            if (sender.Merchant != null)
-                return sender.Merchant.Name;
+            //if (sender.Merchant != null)
+            //    return sender.Merchant.Name;
 
             if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;

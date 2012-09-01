@@ -229,7 +229,6 @@
     <Compile Include="Controllers\ApplicationsController.cs" />
     <Compile Include="Controllers\MobileNumberSignUpKeySMSListenerController.cs" />
     <Compile Include="Controllers\PaystreamMessagesController.cs" />
-    <Compile Include="Controllers\UserMeCodesController.cs" />
     <Compile Include="Controllers\UserPaymentAccountsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\UserPayStreamMessagesController.cs" />

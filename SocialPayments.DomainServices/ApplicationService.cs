@@ -5,63 +5,89 @@ using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
 using SocialPayments.DataLayer.Interfaces;
+using System.Data.Entity;
 using System.Collections.ObjectModel;
 
 namespace SocialPayments.DomainServices
 {
     public class ApplicationService
     {
-        private IDbContext _ctx;
 
         public ApplicationService() { }
 
-        public ApplicationService(IDbContext context)
-        {
-            _ctx = context;
-        }
-
         public Application AddApplication(string applicationName, string url, bool isActive)
         {
-            var application =_ctx.Applications.Add(new Application()
+            using (var ctx = new Context())
             {
-                ApiKey = Guid.NewGuid(),
-                ApplicationName = applicationName,
-                IsActive = isActive,
-                Url = url
-            });
+                var application = ctx.Applications.Add(new Application()
+                {
+                    ApiKey = Guid.NewGuid(),
+                    ApplicationName = applicationName,
+                    IsActive = isActive,
+                    Url = url
+                });
 
-            _ctx.SaveChanges();
+                ctx.SaveChanges();
 
-            return application;
+                return application;
+            }
+
         }
         public List<Application> GetApplications()
         {
-            return _ctx.Applications.Select(a => a).ToList<Application>();
+            using (var ctx = new Context())
+            {
+                return ctx.Applications.Select(a => a).ToList<Application>();
+            }
         }
         public Application GetApplication(string apiKey)
         {
-            Guid apiKeyGuid;
+            using (var ctx = new Context())
+            {
+                Guid apiKeyGuid;
 
-            Guid.TryParse(apiKey, out apiKeyGuid);
+                Guid.TryParse(apiKey, out apiKeyGuid);
 
-            if (apiKeyGuid == null)
-                throw new ArgumentException("Invalid Application Specified. Not a Guid");
+                if (apiKeyGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Invalid Application Specified {0}.", apiKey));
 
-            return _ctx.Applications.FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
+                return ctx.Applications
+                    .Include("ConfigurationValues")
+                    .FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
+            }
+        }
+        public void AddApplication(string name, string url, string isActive)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService();
+                
+                applicationService.AddApplication(name, url, isActive);
+            }
         }
         public void UpdateApplication(Application application)
         {
-            application.LastUpdatedDate = System.DateTime.Now;
+            using (var ctx = new Context())
+            {
+                application.LastUpdatedDate = System.DateTime.Now;
 
-            _ctx.SaveChanges();
+                ctx.SaveChanges();
+            }
         }
-        public void DeleteApplication(Guid apiKey)
+        public void DeleteApplication(String apiKey)
         {
-            var application = GetApplication(apiKey.ToString());
+            using (var ctx = new Context())
+            {
 
-            _ctx.Applications.Remove(application);
+                var application = GetApplication(apiKey);
 
-            _ctx.SaveChanges();
+                if (application == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Invalid Application Specified {0}.", apiKey));
+
+                ctx.Applications.Remove(application);
+
+                ctx.SaveChanges();
+            }
         }
     }
 }

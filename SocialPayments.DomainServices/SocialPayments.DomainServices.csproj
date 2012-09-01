@@ -166,13 +166,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonNotificationService.cs" />
+    <Compile Include="ApplicationConfigurationServices.cs" />
     <Compile Include="ApplicationService.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="AndroidNotificationService.cs" />
     <Compile Include="CommunicationService.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="CustomExceptions\AccountLockedPinCodeFailures.cs" />
+    <Compile Include="CustomExceptions\BadRequestException.cs" />
     <Compile Include="CustomExceptions\InvalidSecurityPin.cs" />
+    <Compile Include="CustomExceptions\NotFoundException.cs" />
     <Compile Include="EmailLogService.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="FacebookServices.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="Interfaces\IAmazonNotificationService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\ISMSService.cs" />
+    <Compile Include="MerchantServices.cs" />
     <Compile Include="MessageProcessing\AcceptedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\CancelledPaymentMessageTask.cs" />
     <Compile Include="MessageProcessing\CompletedPaymentMessageTask.cs" />
@@ -199,11 +203,19 @@
     <Compile Include="Mother.cs" />
     <Compile Include="PaymentAccountProcessing\SubmittedPaymentAccountTask.cs" />
     <Compile Include="PaymentAccountService.cs" />
+    <Compile Include="ProfileServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityQuestionServices.cs" />
     <Compile Include="SecurityService.cs" />
     <Compile Include="SMSLogService.cs" />
     <Compile Include="SMSService.cs" />
     <Compile Include="TransactionBatchService.cs" />
+    <Compile Include="TransactionServices.cs" />
+    <Compile Include="UserAttributesServices.cs" />
+    <Compile Include="UserConfigurationServices.cs" />
+    <Compile Include="UserPaymentAccountServices.cs" />
+    <Compile Include="UserPayPointServices.cs" />
+    <Compile Include="UserPayStreamMessageServices.cs" />
     <Compile Include="UserProcessing\RegisteredUserTask.cs" />
     <Compile Include="UserProcessing\SubmittedUserTask.cs" />
     <Compile Include="UserService.cs" />

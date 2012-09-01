@@ -41,9 +41,25 @@ namespace Mobile_PaidThx.Controllers
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
 
+            SortedDictionary<string, List<FacebookModels.Friend>> sortedContacts = new SortedDictionary<string, List<FacebookModels.Friend>>();
+
+            foreach (var friend in (List<FacebookModels.Friend>)Session["Friends"])
+            {
+                string firstLetter = "#";
+
+                if (friend.name.Length > 0)
+                    firstLetter = friend.name[0].ToString();
+
+                if (!sortedContacts.ContainsKey(firstLetter))
+                    sortedContacts.Add(firstLetter, new List<FacebookModels.Friend>());
+
+                var tempContactList = sortedContacts[firstLetter];
+                tempContactList.Add(friend);
+
+            }
             return View(new RequestModels.AddContactRequestModel()
             {
-                Friends = (List<FacebookModels.Friend>)Session["Friends"]
+                SortedContacts = sortedContacts,
             });
         }
         [HttpPost]

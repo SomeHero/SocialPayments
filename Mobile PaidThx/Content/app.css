@@ -156,7 +156,6 @@ div.ui-content
 {
  background:#ffffff;
  border-radius: 0px 0px 0px 0px;
- margin: 10px;
  overflow:hidden;
  padding: 0px !important;
 }
@@ -173,10 +172,6 @@ div.ui-content
     height:50px;  
   }
   
-  .nav-pdthx span.ui-btn-inner{
-  padding-top: 32px !important;
-  font-size:11px;
-  }
 
 
 #footer-menu
@@ -973,15 +968,24 @@ h9 span
 
 /*-----------------------------------------------------------------MATT HOMESCREEN----------------------------------------------------   */
 
-		.nav-pdthx .ui-icon  { width: 30px!important; height:30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
-			.nav-pdthx #home .ui-icon { background: url("/images/home.png")50% 50% no-repeat ;}
-			.nav-pdthx #paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
-		    .nav-pdthx #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
-		    .nav-pdthx #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+		     .nav-pdthx #home .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background: url("/images/home.png")50% 50% no-repeat ;}
+			.nav-pdthx #home .ui-btn-text { font-size: 11px }
+			.nav-pdthx #paystream .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #paystream .ui-btn-text { font-size: 11px }
+			.nav-pdthx #send .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #send .ui-btn-text { font-size: 11px }
+			.nav-pdthx #request .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important;  background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #reqeust .ui-btn-text { font-size: 11px }
+			.nav-pdthx #profile .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #profile .ui-btn-text { font-size: 11px }
+			.nav-pdthx #welcome .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/home.png") 50% 50% no-repeat; }
+		    .nav-pdthx #welcome .ui-btn-text { font-size: 11px }
+			.nav-pdthx #join .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/joinIcon.png") 50% 50% no-repeat; }
+		    .nav-pdthx #join .ui-btn-text { font-size: 11px }
+			.nav-pdthx #signin .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
+		    .nav-pdthx #signin .ui-btn-text { font-size: 11px }
+			.nav-pdthx #about .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+			.nav-pdthx #about .ui-btn-text { font-size: 11px }
 			.ui-mobile .ui-page .ui-footer .ui-navbar,
 			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
 			    overflow : visible; 
@@ -1013,17 +1017,6 @@ h9 span
  moz-box-shadow:0 1px 1px #bebebe;     
 } 
 
-  .nav-pdthx .ui-icon
-        {
-            width: 30px !important;
-            height: 30px !important;
-            margin-left: -15px !important;
-            box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -webkit-border-radius: 0 !important;
-            border-radius: 0 !important;
-        }
         .nav-pdthx #home .ui-icon
         {
             background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
@@ -1127,12 +1120,6 @@ background-image: linear-gradient( #ffffff /*{global-active-background-start}*/,
 font-family: Helvetica, Arial, sans-serif /*{global-font-family}*/;
       }
       
-      .ui-btn-active span.ui-btn-text{  
-color: #2a7e43 /*{global-active-color}*/;
-cursor: pointer;
-text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
-      }
-        
         #btn-settings
         {
             background: url(images/icons/settingsIcon.png) 50% 50% no-repeat;
