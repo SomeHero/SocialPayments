@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
 using System.Net;
-using SocialPayments.DataLayer;
 using NLog;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -17,21 +17,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/users/{userId}/configurations
         public HttpResponseMessage<List<UserModels.UserConfigurationResponse>> Get(string userId)
         {
-            using (var ctx = new Context())
+            var userConfigurationServices = new DomainServices.UserConfigurationServices();
+            Collection<Domain.UserConfiguration> configItems = null;
+            HttpResponseMessage<List<UserModels.UserConfigurationResponse>> response = null;
+            
+            try
             {
-                var userService = new DomainServices.UserService(ctx);
+                configItems = userConfigurationServices.GetUserConfigurationItems(userId);
+            }
+            catch (Exception ex)
+            {
 
-                var user = userService.GetUserById(userId);
+            }
 
-                if (user == null)
-                {
-                    var responseMessage = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.NotFound);
-                    responseMessage.ReasonPhrase = String.Format("User {0} Not Found", userId);
-
-                    return responseMessage;
-                }
-
-                return new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(user.UserConfigurations.Select(u => new UserModels.UserConfigurationResponse()
+            response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(configItems.Select(u => new UserModels.UserConfigurationResponse()
                 {
                     Id = u.Id.ToString(),
                     UserId = u.UserId.ToString(),
@@ -39,46 +38,36 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     ConfigurationValue = u.ConfigurationValue,
                     ConfigurationType = u.ConfigurationType
                 }).ToList(), HttpStatusCode.OK);
-            }
+
+            return response;
         }
 
         // GET /api/users/{userId}/configurations/{id}
         public HttpResponseMessage<UserModels.UserConfigurationResponse> Get(string userId, string id)
         {
-            using (var ctx = new Context())
+            var userConfigurationServices = new DomainServices.UserConfigurationServices();
+            Domain.UserConfiguration configItem = null;
+            HttpResponseMessage<UserModels.UserConfigurationResponse> response = null;
+
+            try
             {
-                var userService = new DomainServices.UserService(ctx);
-
-                var user = userService.GetUserById(userId);
-
-                if(user == null)
-                {
-                    var responseMessage = new HttpResponseMessage<UserModels.UserConfigurationResponse>(HttpStatusCode.NotFound);
-                    responseMessage.ReasonPhrase = String.Format("User {0} Not Found", userId);
-
-                    return responseMessage;
-                }
-
-                var configItem = user.UserConfigurations
-                    .FirstOrDefault(u => u.ConfigurationKey == id);
-
-                if(configItem == null)
-                {
-                    var responseMessage = new HttpResponseMessage<UserModels.UserConfigurationResponse>(HttpStatusCode.NotFound);
-                    responseMessage.ReasonPhrase = String.Format("Configuration Item {0} Not Found", id);
-
-                    return responseMessage;
-                }
-
-                return new HttpResponseMessage<UserModels.UserConfigurationResponse>(new UserModels.UserConfigurationResponse()
-                {
-                    Id = configItem.Id.ToString(),
-                    UserId = configItem.UserId.ToString(),
-                    ConfigurationKey = configItem.ConfigurationKey,
-                    ConfigurationValue = configItem.ConfigurationValue,
-                    ConfigurationType =configItem.ConfigurationType
-                }, HttpStatusCode.OK);
+                configItem = userConfigurationServices.GetUserConfigurationItem(userId, id);
             }
+            catch (Exception ex)
+            {
+
+            }
+
+            response = new HttpResponseMessage<UserModels.UserConfigurationResponse>(new UserModels.UserConfigurationResponse()
+            {
+                Id = configItem.Id.ToString(),
+                UserId = configItem.UserId.ToString(),
+                ConfigurationKey = configItem.ConfigurationKey,
+                ConfigurationValue = configItem.ConfigurationValue,
+                ConfigurationType = configItem.ConfigurationType
+            }, HttpStatusCode.OK);
+
+            return response;
         }
 
         // POST /api/users/{userId}/configurations
@@ -90,34 +79,21 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // PUT /api/users/{userId}/configurations/
         public HttpResponseMessage Put(string userId, UserModels.UpdateUserConfigurationRequest request)
         {
-            using(var ctx = new Context())
+            var userConfigurationServices = new DomainServices.UserConfigurationServices();
+            HttpResponseMessage response = null;
+
+            try
             {
-                var userService = new DomainServices.UserService(ctx);
-
-                var user = userService.GetUserById(userId);
- 
-                    var itemToUpdate = user.UserConfigurations
-                        .FirstOrDefault(u => u.ConfigurationKey == request.Key);
-
-                    if (itemToUpdate == null)
-                    {
-                        itemToUpdate = new Domain.UserConfiguration()
-                        {
-                            Id = Guid.NewGuid(),
-                            UserId = user.UserId,
-                            ConfigurationKey = request.Key,
-                            ConfigurationValue = request.Value
-                        };
-                        user.UserConfigurations.Add(itemToUpdate);
-                    }
-                    else
-                    {
-                        itemToUpdate.ConfigurationValue = request.Value;
-                    }
-
-                ctx.SaveChanges();
+                userConfigurationServices.UpdateConfigurationItem(userId, request.Key, request.Value);
             }
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            catch (Exception ex)
+            {
+
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
 
         // DELETE /api/users/{userId}/configurations/{id}

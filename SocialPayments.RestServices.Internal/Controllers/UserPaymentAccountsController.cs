@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
 using System.Net;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using NLog;
 using System.Configuration;
@@ -14,295 +13,302 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using SocialPayments.Domain.ExtensionMethods;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class UserPaymentAccountsController : ApiController
     {
         private Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         // GET /api/{userId}/paymentaccounts
         public HttpResponseMessage<List<AccountModels.AccountResponse>> Get(string userId)
         {
-            using (var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+            var securityServices = new DomainServices.SecurityService();
+            HttpResponseMessage<List<AccountModels.AccountResponse>> response = null;
+            List<Domain.PaymentAccount> paymentAccounts = null;
+
+            try
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+                paymentAccounts = userPaymentAccountServices.GetPaymentAccounts(userId);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Payment Accounts for User {0}.  Exception {1}.", userId, ex.Message));
 
-                var user = _userService.GetUserById(userId);
+                response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                if (user == null)
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Payment Accounts for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Payment Accounts for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(paymentAccounts.Select(a => new AccountModels.AccountResponse()
                 {
-                    var message = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                var accounts = _ctx.PaymentAccounts
-                    .Where(a => a.UserId == user.UserId  && a.IsActive).ToList();
-
-                var accountResponse = accounts.Select(a => new AccountModels.AccountResponse()
-                {
-                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(a.AccountNumber)),
+                    AccountNumber = securityServices.GetLastFour(securityServices.Decrypt(a.AccountNumber)),
                     AccountType = a.AccountType.ToString(),
                     BankName = a.BankName,
                     BankIconUrl = a.BankIconURL,
-                    NameOnAccount = _securityService.Decrypt(a.NameOnAccount),
+                    NameOnAccount = securityServices.Decrypt(a.NameOnAccount),
                     Nickname = a.Nickname,
                     Id = a.Id.ToString(),
-                    RoutingNumber = _securityService.Decrypt(a.RoutingNumber),
+                    RoutingNumber = securityServices.Decrypt(a.RoutingNumber),
                     UserId = a.UserId.ToString(),
                     Status = a.AccountStatus.GetDescription()
-                }).ToList<AccountModels.AccountResponse>();
+                }).ToList<AccountModels.AccountResponse>(), HttpStatusCode.OK);
 
-                
-
-                return new HttpResponseMessage<List<AccountModels.AccountResponse>>(accountResponse, HttpStatusCode.OK);
-            }
-         }
+            return response;
+        }
 
         // GET /api/{userId}/paymentaccounts/{id}
         public HttpResponseMessage<AccountModels.AccountResponse> Get(string userId, string id)
         {
-            using (var _ctx = new Context())
+            DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
+            DomainServices.UserPaymentAccountServices userPaymentAccountServices
+                    = new DomainServices.UserPaymentAccountServices();
+            Domain.PaymentAccount paymentAccount = null;
+            HttpResponseMessage<AccountModels.AccountResponse> response = null;
+
+            try
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-
-                var user = _userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                Guid paymentAccountId;
-
-                Guid.TryParse(id, out paymentAccountId);
-
-                var account = _ctx.PaymentAccounts
-                    .FirstOrDefault(a => a.Id == paymentAccountId && a.UserId == user.UserId && a.IsActive);
-
-                var accountResponse = new AccountModels.AccountResponse()
-                {
-                    AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(account.AccountNumber)),
-                    AccountType = account.AccountType.ToString(),
-                    BankName = account.BankName,
-                    BankIconUrl = account.BankIconURL,
-                    NameOnAccount = _securityService.Decrypt(account.NameOnAccount),
-                    Nickname = account.Nickname,
-                    Id = account.Id.ToString(),
-                    RoutingNumber = _securityService.Decrypt(account.RoutingNumber),
-                    UserId = account.UserId.ToString(),
-                    Status = account.AccountStatus.GetDescription()
-                };
-
-
-                return new HttpResponseMessage<AccountModels.AccountResponse>(accountResponse, HttpStatusCode.OK);
+                paymentAccount = userPaymentAccountServices.GetPaymentAccount(userId, id);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            var accountResponse = new AccountModels.AccountResponse()
+            {
+                AccountNumber = _securityService.GetLastFour(_securityService.Decrypt(paymentAccount.AccountNumber)),
+                AccountType = paymentAccount.AccountType.ToString(),
+                BankName = paymentAccount.BankName,
+                BankIconUrl = paymentAccount.BankIconURL,
+                NameOnAccount = _securityService.Decrypt(paymentAccount.NameOnAccount),
+                Nickname = paymentAccount.Nickname,
+                Id = paymentAccount.Id.ToString(),
+                RoutingNumber = _securityService.Decrypt(paymentAccount.RoutingNumber),
+                UserId = paymentAccount.UserId.ToString(),
+                Status = paymentAccount.AccountStatus.GetDescription()
+            };
+
+            return new HttpResponseMessage<AccountModels.AccountResponse>(accountResponse, HttpStatusCode.OK);
 
         }
 
         // POST /api/{userid}/paymentaccounts/set_preferred_send_account
         public HttpResponseMessage SetPreferredSendAccount(string userId, AccountModels.ChangePreferredAccountRequest request)
         {
-            using (var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+            HttpResponseMessage response = null;
+
+            try
             {
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-                DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
+                userPaymentAccountServices.SetPreferredSendAccount(userId, request.PaymentAccountId);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
 
-                var user = _userService.GetUserById(userId);
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
 
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
 
-                var paymentAccount = paymentAccountService.GetPaymentAccount(request.PaymentAccountId);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}. Stack Trace {3}", request.PaymentAccountId, userId, ex.Message, ex.StackTrace));
 
-                if (paymentAccount == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = String.Format("Invalid account id {0} specified in the request", request.PaymentAccountId);
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
 
-                    return message;
-                }
-                user.PreferredSendAccount = paymentAccount;
-
-                _ctx.SaveChanges();
-
+                return response;
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
 
         // POST /api/{userId}/paymentaccounts/set_preferred_receive_account
         public HttpResponseMessage SetPreferredReceiveAccount(string userId, AccountModels.ChangePreferredAccountRequest request)
         {
-            using(var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+            HttpResponseMessage response = null;
+
+            try
             {
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-                DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
-
-                var user = _userService.GetUserById(userId);
-
-                 if (user == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                var paymentAccount = paymentAccountService.GetPaymentAccount(request.PaymentAccountId);
-
-                if(paymentAccount == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = String.Format("Invalid account id {0} specified in the request", request.PaymentAccountId);
-
-                    return message;
-                }
-                user.PreferredReceiveAccount = paymentAccount;
-
-                _ctx.SaveChanges();
-
+                userPaymentAccountServices.SetPreferredReceiveAccount(userId, request.PaymentAccountId);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}. Stack Trace {3}", request.PaymentAccountId, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
 
         // POST /api/{userId}/paymentaccounts
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> Post(string userId, AccountModels.SubmitAccountRequest request)
         {
-            using (var ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+            HttpResponseMessage<AccountModels.SubmitAccountResponse> response = null;
+            Domain.PaymentAccount paymentAccount = null;
+
+            try
             {
-                var securityService = new DomainServices.SecurityService();
-                var userService = new DomainServices.UserService(ctx);
-                var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                //TODO: validate routing number
-
-                PaymentAccountType accountType = PaymentAccountType.Checking;
-
-                if (request.AccountType.ToUpper() == "CHECKING")
-                    accountType = PaymentAccountType.Checking;
-                else if (request.AccountType.ToUpper() == "SAVINGS")
-                    accountType = PaymentAccountType.Savings;
-                else
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = String.Format("Account Type specified in the request is invalid.  Valid account types are {0} or {1}", "Savings", "Checking");
-
-                    return message;
-                }
-
-
-                PaymentAccount account;
-
-                try
-                {
-                    account = paymentAccountService.AddPaymentAccount(user, request.Nickname, request.NameOnAccount, request.RoutingNumber, 
-                        request.AccountNumber, request.AccountType, request.SecurityPin, request.SecurityQuestionID,
-                        request.SecurityQuestionAnswer);
-                }
-                catch (Exception ex)
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
-                    message.ReasonPhrase = String.Format("Internal Service Error. {0}", ex.Message);
-
-                    return message;
-                }
-
-                var response = new AccountModels.SubmitAccountResponse()
-                {
-                    paymentAccountId = account.Id.ToString()
-                };
-
-                var responseMessage = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(response, HttpStatusCode.Created);
-                //TODO: add uri for created account to response header
-
-                return responseMessage;
+                paymentAccount = userPaymentAccountServices.AddPaymentAccount(userId, request.Nickname, "", request.NameOnAccount, request.RoutingNumber, request.AccountNumber, request.AccountType,
+                    request.SecurityPin, request.SecurityQuestionID, request.SecurityQuestionAnswer);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Account w/Security Settings for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Account w/Security Settings for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Account w/Security Settings for User {0}.  Exception {2}. Stack Trace {3}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.Created);
+            //response.Content
+            return response;
         }
         // POST /api/{userId}/paymentaccounts/add_account
         public HttpResponseMessage<AccountModels.SubmitAccountResponse> AddAccount(string userId, AccountModels.AddAccountRequest request)
         {
-            using (var ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+            HttpResponseMessage<AccountModels.SubmitAccountResponse> response = null;
+            Domain.PaymentAccount paymentAccount = null;
+
+            try
             {
-                var securityService = new DomainServices.SecurityService();
-                var userService = new DomainServices.UserService(ctx);
-                var emailService = new DomainServices.EmailService(ctx);
-                var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                //TODO: validate routing number
-
-                PaymentAccountType accountType = PaymentAccountType.Checking;
-
-                if (request.AccountType.ToUpper() == "CHECKING")
-                    accountType = PaymentAccountType.Checking;
-                else if (request.AccountType.ToUpper() == "SAVINGS")
-                    accountType = PaymentAccountType.Savings;
-                else
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
-                    message.ReasonPhrase = String.Format("Account Type specified in the request is invalid.  Valid account types are {0} or {1}", "Savings", "Checking");
-
-                    return message;
-                }
-
-                PaymentAccount account;
-
-                try
-                {
-                    account = paymentAccountService.AddPaymentAccount(user, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountNumber,
-                        request.AccountType);
-                }
-                catch (Exception ex)
-                {
-                    var message = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
-                    message.ReasonPhrase = String.Format("Internal Service Error. {0}", ex.Message);
-
-                    return message;
-                }
-        
-                var response = new AccountModels.SubmitAccountResponse()
-                {
-                    paymentAccountId = account.Id.ToString()
-                };
-
-                var responseMessage = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(response, HttpStatusCode.Created);
-                //TODO: add uri for created account to response header
-
-                return responseMessage;
+                paymentAccount = userPaymentAccountServices.AddPaymentAccount(userId, request.Nickname, "", request.NameOnAccount, request.RoutingNumber, request.AccountNumber, request.AccountType,
+                    request.SecurityPin);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Payment Account for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Payment Account for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Account for User {0}.  Exception {1}. Stack Trace {3}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.Created);
+            //response.Content
+            return response;
         }
 
         // POST /api/users/{id}/PaymentAccounts/upload_check_image
@@ -340,142 +346,131 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST /api/{userId}/paymentaccounts/{id}/verify_account
         public HttpResponseMessage VerifyAccount(string userId, string id, AccountVerificationRequest request)
         {
-            using (var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+
+            HttpResponseMessage response = null;
+            try
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-                DomainServices.PaymentAccountService verificationService =
-                    new DomainServices.PaymentAccountService(_ctx);
-
-                if (request.depositAmount1 == 0.0 || request.depositAmount2 == 0.0)
-                {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = String.Format("Invalid deposit amount specified {0} {1}", request.depositAmount1, request.depositAmount2);
-
-                    return responseMessage;
-                }
-
-                bool result = false;
-
-                try
-                {
-                    result = verificationService.VerifyPaymentAccount(userId, id, request.depositAmount1,request.depositAmount2);
-                }
-                catch (Exception ex)
-                {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = String.Format("Not verified. {0}", ex.Message);
-
-                    return responseMessage;
-                }
-
-                if (!result)
-                {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = "Not verified.  Deposit Amounts Not Correct.";
-
-                    return responseMessage;
-                }
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userPaymentAccountServices.VerifyAccount(userId, id, request.depositAmount1, request.depositAmount2);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Verifying Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Verifying Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Verifying Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
 
         // PUT /api/{userId}/paymentaccounts/{id}
         public HttpResponseMessage Put(string userId, string id, AccountModels.UpdateAccountRequest request)
         {
-            using (var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+
+            HttpResponseMessage response = null;
+            try
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-
-                var user = _userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                Guid accountId;
-
-                Guid.TryParse(id, out accountId);
-
-                if (accountId == null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
-
-                var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
-
-                if (userAccount == null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
-
-                PaymentAccountType accountType = PaymentAccountType.Checking;
-
-                if (request.AccountType.ToUpper() == "CHECKING")
-                    accountType = PaymentAccountType.Checking;
-                else if (request.AccountType.ToUpper() == "SAVINGS")
-                    accountType = PaymentAccountType.Savings;
-
-                userAccount.Nickname = request.Nickname;
-                userAccount.NameOnAccount = _securityService.Encrypt(request.NameOnAccount);
-                userAccount.RoutingNumber = _securityService.Encrypt(request.RoutingNumber);
-                userAccount.AccountType = accountType;
-                userAccount.LastUpdatedDate = System.DateTime.Now;
-
-                _ctx.SaveChanges();
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userPaymentAccountServices.UpdatePaymentAccount(userId, id, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountType);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
+
         }
 
         // DELETE /api/{userId}/paymentaccounts/{id}
         public HttpResponseMessage Delete(string userId, string id)
         {
-            using (var _ctx = new Context())
+            var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
+
+            HttpResponseMessage response = null;
+            try
             {
-                DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
-                IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-                DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
-
-                var user = _userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = new HttpResponseMessage(HttpStatusCode.NotFound);
-
-                    message.ReasonPhrase = String.Format("The user id {0} specified in the request is not valid", userId);
-                    return message;
-                }
-
-                Guid accountId;
-
-                Guid.TryParse(id, out accountId);
-
-                if (accountId == null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
-
-                var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == accountId);
-
-                if (userAccount == null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
-
-                userAccount.IsActive = false;
-                userAccount.LastUpdatedDate = System.DateTime.Now;
-
-                _ctx.SaveChanges();
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userPaymentAccountServices.DeletePaymentAccount(userId, id);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
     }
 }

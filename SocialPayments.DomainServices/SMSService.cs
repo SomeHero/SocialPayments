@@ -25,7 +25,7 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }
@@ -33,7 +33,7 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
             _logger = logger;
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }

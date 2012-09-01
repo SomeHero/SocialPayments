@@ -18,6 +18,7 @@ namespace Mobile_PaidThx.Models
         }
         public class AddCauseModel
         {
+            public SortedDictionary<string, List<OrganizationModels.OrganizationModel>> SortedNonProfits { get; set; }
             public List<OrganizationModels.OrganizationModel> NonProfits { get; set; }
             public String RecipientId { get; set; }
             public String RecipientName { get; set; }

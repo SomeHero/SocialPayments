@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using SocialPayments.RestServices.Internal.Models;
-using SocialPayments.DomainServices;
+using SocialPayments.DomainServices.CustomExceptions;
 using System.Net;
 using System.Data.Entity;
 using SocialPayments.RestServices.Internal.Controllers;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 {
     public class UserPayPointController : ApiController
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        
         // GET /api/users/{userId}/PayPoints/
         public HttpResponseMessage<List<UserModels.UserPayPointResponse>> Get(string userId)
         {
@@ -23,42 +25,45 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         // GET /api/users/{userId}/PayPoints/{type}
         public HttpResponseMessage<List<UserModels.UserPayPointResponse>> Get(string userId, string type)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new DomainServices.UserPayPointServices();
+            List<Domain.UserPayPoint> userPayPoints = null;
+            HttpResponseMessage<List<UserModels.UserPayPointResponse>> response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
+                userPayPoints = userPayPointServices.GetUserPayPoints(userId, type);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Pay Points for User {0}.  Exception {1}.", userId, ex.Message));
 
-                var user = userService.GetUserById(userId);
+                response = new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                List<Domain.UserPayPoint> payPoints;
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Pay Points for User {0}.  Exception {1}.", userId, ex.Message));
 
-                if (!String.IsNullOrEmpty(type))
-                {
-                    int typeId = 0;
+                response = new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
 
-                    if (type == "EmailAddress")
-                        typeId = 1;
-                    else if (type == "Phone")
-                        typeId = 2;
-                    else if (type == "MeCode")
-                        typeId = 4;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Pay Points for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                    payPoints = _ctx.UserPayPoints
-                    .Include("Type")
-                    .Where(p => p.UserId == user.UserId && p.IsActive  && p.PayPointTypeId == typeId)
-                    .Select(p => p)
-                    .ToList<Domain.UserPayPoint>();
-                }
-                else
-                {
-                    payPoints = _ctx.UserPayPoints
-                    .Include("Type")
-                    .Where(p => p.UserId == user.UserId && p.IsActive)
-                    .Select(p => p)
-                    .ToList<Domain.UserPayPoint>();
-                }
+                response = new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
 
-                return new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(payPoints.Select(p =>
-                    new UserModels.UserPayPointResponse() {
+                return response;
+            }
+
+            response = new HttpResponseMessage<List<UserModels.UserPayPointResponse>>(userPayPoints.Select(p =>
+                    new UserModels.UserPayPointResponse()
+                    {
                         Id = p.Id.ToString(),
                         UserId = p.UserId.ToString(),
                         Type = p.Type.Name,
@@ -66,177 +71,206 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                         Verified = p.Verified
                     }).ToList(), HttpStatusCode.OK);
 
-            }
+            return response;
+
         }
 
         // GET /api/users/{userId}/PayPoints/{id}
-        public UserModels.UserPayPointResponse Get(string userId, string id, string type)
+        public HttpResponseMessage<UserModels.UserPayPointResponse> Get(string userId, string id, string type)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new DomainServices.UserPayPointServices();
+            Domain.UserPayPoint payPoint = null;
+            HttpResponseMessage<UserModels.UserPayPointResponse> response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-
-                var user = userService.GetUserById(userId);
-                Guid payPointId;
-
-                Guid.TryParse(id, out payPointId);
-
-                var payPoint = _ctx.UserPayPoints
-                    .Include("Type")
-                    .FirstOrDefault(p => p.UserId == user.UserId && p.Id == payPointId);
-
-                return new UserModels.UserPayPointResponse()
-                {
-                    Id = payPoint.Id.ToString(),
-                    UserId = payPoint.UserId.ToString(),
-                    Type = payPoint.Type.ToString(),
-                    Uri = payPoint.URI
-                };
+                payPoint = userPayPointServices.GetUserPayPoint(userId, type);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.UserPayPointResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.UserPayPointResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Pay Point {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.UserPayPointResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<UserModels.UserPayPointResponse>(new UserModels.UserPayPointResponse() 
+            {
+                Id = payPoint.Id.ToString(),
+                UserId = payPoint.UserId.ToString(),
+                Type = payPoint.Type.ToString(),
+                Uri = payPoint.URI
+            }, HttpStatusCode.OK);
+
+            return response;
+
         }
 
         // POST /api/users/{userId}/PayPoints
         public HttpResponseMessage<UserModels.AddUserPayPointResponse> Post(string userId, Models.UserModels.AddUserPayPointRequest request)
         {
-            using (var _ctx = new Context())
+            var userPayPointServices = new DomainServices.UserPayPointServices();
+            HttpResponseMessage<UserModels.AddUserPayPointResponse> response = null;
+            Domain.UserPayPoint userPayPoint = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-                HttpResponseMessage<UserModels.AddUserPayPointResponse> response;
+                userPayPoint = userPayPointServices.AddUserPayPoint(userId, request.PayPointType, request.Uri);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Pay Point {0} for User {1}.  Exception {2}.", request.Uri, userId, ex.Message));
 
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User {0} not found", userId);
-
-                    return response;
-                }
-                var payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == request.PayPointType);
-
-                if (payPointType == null)
-                {
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("Pay Point Type {0} not found", request.PayPointType);
-
-                    return response;
-                }
-
-                var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == request.Uri);
-
-                if (payPoints != null)
-                {
-
-                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("The pay point is already linked to an account.", request.PayPointType);
-
-                    return response;
-                }
-
-                //TODO: Validate format of the URI based on type
-
-                var userPayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                {
-                    Id = Guid.NewGuid(),
-                    User = user,
-                    CreateDate = System.DateTime.Now,
-                    IsActive = true,
-                    URI = request.Uri,
-                    Type = payPointType,
-                    Verified = false
-                });
-
-                if(payPointType.Name == "EmailAddress")
-                    userService.SendEmailVerificationLink(userPayPoint);
-                else if(payPointType.Name == "Phone")
-                    userService.SendMobileVerificationCode(userPayPoint);
-
-                userService.UpdateUser(user);
-
-                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(new UserModels.AddUserPayPointResponse() {
-                    Id = userPayPoint.Id.ToString()
-                }, HttpStatusCode.Created);
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
                 return response;
             }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Pay Point {0} for User {1}.  Exception {2}.", request.Uri, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Pay Point {0} for User {1}.  Exception {1}. Stack Trace {2}", request.Uri, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(new UserModels.AddUserPayPointResponse()
+            {
+                Id = userPayPoint.Id.ToString()
+            }, HttpStatusCode.Created);
+
+            return response;
         }
         // POST /api/users/{userId}/PayPoints/resend_verification_code
         public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
         {
-            using (var ctx = new Context())
+            DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
+            DomainServices.UserService userServices = new DomainServices.UserService();
+            Domain.UserPayPoint userPayPoint = null;
+            HttpResponseMessage response = null;
+
+            try
             {
-                UserService userService = new UserService(ctx);
+                userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
 
-                Guid userPayPointId;
-
-                Guid.TryParse(model.UserPayPointId, out userPayPointId);
-
-                if(userPayPointId == null)
-                {
-                    var response = 
-                        new HttpResponseMessage(HttpStatusCode.NotFound);
-                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
-
-                    return response;
-                }
-
-                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
-
-                try
-                {
-                    userService.SendMobileVerificationCode(userPayPoint);
-                }
-                catch (Exception ex)
-                {
-                    var response =
-                                            new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.ReasonPhrase = "Error occcurred resending verification code";
-
-                    return response;
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
-
+                if (userPayPoint == null)
+                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+                    
+                userServices.SendMobileVerificationCode(userPayPoint);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Resending Verification Code {0} for User {1}.  Exception {2}.", model.UserPayPointId, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Resending Verification Code {0} for User {1}.  Exception {2}.", model.UserPayPointId, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Resending Verification Code {0} for User {1}.  Exception {1}. Stack Trace {2}", model.UserPayPointId, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
+
         }
         // POST /api/users/{userId}/PayPoints/resend_email_verification_link
         public HttpResponseMessage ResendEmailVerificationLink(string userId, UserModels.ResendVerificationCodeRequest model)
         {
-            using (var ctx = new Context())
-            {
-                UserService userService = new UserService(ctx);
-
-                Guid userPayPointId;
-
-                Guid.TryParse(model.UserPayPointId, out userPayPointId);
-
-                if (userPayPointId == null)
-                {
-                    var response =
-                        new HttpResponseMessage(HttpStatusCode.NotFound);
-                    response.ReasonPhrase = String.Format("User PayPoint {0} not found", model.UserPayPointId);
-
-                    return response;
-                }
-
-                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(p => p.Id == userPayPointId);
+                DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
+                DomainServices.UserService userServices = new DomainServices.UserService();
+                Domain.UserPayPoint userPayPoint = null;
+                HttpResponseMessage response = null;
 
                 try
                 {
-                    userService.SendEmailVerificationLink(userPayPoint);
+                    userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
+
+                    if (userPayPoint == null)
+                        throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+
+                    userServices.SendEmailVerificationLink(userPayPoint);
+                }
+                catch (NotFoundException ex)
+                {
+                    _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Resending Verification Link {0} for User {1}.  Exception {2}.", model.UserPayPointId, userId, ex.Message));
+
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.NotFound);
+                    response.ReasonPhrase = ex.Message;
+
+                    return response;
+                }
+                catch (BadRequestException ex)
+                {
+                    _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Resending Verification Link {0} for User {1}.  Exception {2}.", model.UserPayPointId, userId, ex.Message));
+
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
+                    response.ReasonPhrase = ex.Message;
+
+                    return response;
                 }
                 catch (Exception ex)
                 {
-                    var response =  new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Resending Verification Link {0} for User {1}.  Exception {1}. Stack Trace {2}", model.UserPayPointId, userId, ex.Message, ex.StackTrace));
 
-                    response.ReasonPhrase = "Error occcurred resending verification code";
+                    response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.InternalServerError);
+                    response.ReasonPhrase = ex.Message;
 
                     return response;
                 }
 
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            }
+                return response;
+
         }
         // PUT /api/users/{userId}/PayPoints/{id}
         public HttpResponseMessage Put(string userId)
@@ -247,93 +281,79 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         // DELETE /api/users/{userId}/PayPoints/{id}
         public HttpResponseMessage Delete(string userId, string id)
         {
-            using (var _ctx = new Context())
+            DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
+            HttpResponseMessage response = null;
+
+            try
             {
-                UserService userService = new UserService(_ctx);
-
-                Guid userIdGuid;
-                Guid.TryParse(userId, out userIdGuid);
-
-                if (userIdGuid == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User Id {0} is invalid", userId);
-
-                    return response;
-                }
-
-                Guid payPointId;
-                Guid.TryParse(id, out payPointId);
-
-                if (payPointId == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("PayPoint Id {0} is invalid", payPointId);
-
-                    return response;
-                }
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("User {0} not found", userId);
-
-                    return response;
-                }
-
-                var payPoint = _ctx.UserPayPoints
-                    .FirstOrDefault(p => p.Id == payPointId  && p.UserId == userIdGuid);
-
-                if(payPoint == null)
-                {
-                    var response =
-                        Request.CreateResponse(HttpStatusCode.BadRequest);
-                    response.ReasonPhrase = String.Format("PayPoint {0} not found for specified user {1}", id, userId);
-
-                    return response;
-                }
-
-                payPoint.IsActive = false;
-                _ctx.SaveChanges();
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userPayPointService.DeleteUserPayPoint(userId, id);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Pay Point {0} for User {1}.  Exception {1}. Stack Trace {2}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.AddUserPayPointResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
         // api/users/{userId}/PayPoints/{id}/verify_mobile_paypoint
         [HttpPost]
         public HttpResponseMessage<UserModels.VerifyMobilePayPointResponse> VerifyMobilePayPoint(string userId, string id, UserModels.VerifyMobilePayPointRequest request)
         {
-            Guid userGuid;
-            Guid userPayPointGuid;
-
             var userService = new DomainServices.UserService();
-
             HttpResponseMessage<UserModels.VerifyMobilePayPointResponse> response;
-
             bool results = false;
 
             try
             {
-                Guid.TryParse(userId, out userGuid);
+                results = userService.VerifyMobilePayPoint(userId, id, request.VerificationCode);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Verifying Mobile Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
 
-                if (userGuid == null)
-                    throw new ArgumentException("Invalid User Specified");
-                
-                Guid.TryParse(id, out userPayPointGuid);
+                response = new HttpResponseMessage<UserModels.VerifyMobilePayPointResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                if (userPayPointGuid == null)
-                    throw new ArgumentException("Invalid Pay Point Specified");
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Verifying Mobile Pay Point {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
 
-                results = userService.VerifyMobilePayPoint(userGuid, userPayPointGuid, request.VerificationCode);
+                response = new HttpResponseMessage<UserModels.VerifyMobilePayPointResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
 
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Verifying Mobile Pay Point {0} for User {1}.  Exception {1}. Stack Trace {2}", id, userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<UserModels.VerifyMobilePayPointResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 

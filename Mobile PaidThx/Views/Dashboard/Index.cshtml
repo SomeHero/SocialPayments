@@ -1,4 +1,4 @@
-﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+﻿@model Mobile_PaidThx.Models.DashboardModels.DashboardModel
 @{
     ViewBag.Title = "Home";
 }
@@ -16,7 +16,7 @@
         <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
         </div>
         <div id="profileInfo">
-        <h2 id="hd-username" class="heading">Thomas Eide</h2>
+        <h2 id="hd-username" class="heading">@Model.UserName</h2>
         <h4 id="sb-editProfile" class="subheading"><a href="#">Edit Profile</a></h4>
         </div>
         <div class="clear"></div>

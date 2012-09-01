@@ -110,7 +110,6 @@ namespace SocialPayments.DomainServices
                     user.SecurityQuestionID = securityQuestionId.Value;
                     user.SecurityQuestionAnswer = _securityServices.Encrypt(securityQuestionAnswer);
                 }
-                user.SetupSecurityPin = true;
 
                 _ctx.SaveChanges();
 

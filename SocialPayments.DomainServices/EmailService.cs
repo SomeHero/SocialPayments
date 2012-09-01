@@ -27,14 +27,14 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _emailLogService = new EmailLogService(_ctx);
         }
         public EmailService(IDbContext context, Logger logger)
         {
             _ctx = context;
             _logger = logger;
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _emailLogService = new EmailLogService(_ctx);
         }
         public EmailService(IDbContext context, Logger logger, ApplicationService applicationService, EmailLogService emailLogService)

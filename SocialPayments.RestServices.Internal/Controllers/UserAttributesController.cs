@@ -7,6 +7,7 @@ using NLog;
 using SocialPayments.RestServices.Internal.Models;
 using SocialPayments.DataLayer;
 using System.Net;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -35,55 +36,45 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // PUT /api/Users/{0}/userattributes/{1}
         public HttpResponseMessage Put(string userId, string id, UserModels.UpdateUserAttributeRequest request)
         {
-            using (var ctx = new Context())
+            var userAttributeServices = new DomainServices.UserAttributesServices();
+            HttpResponseMessage response = null;
+            try
             {
-                var userService = new DomainServices.UserService(ctx);
-
-                var user = userService.GetUserById(userId);
-
-                if (user == null)
-                {
-                    var message = String.Format("User Id {0} is not valid", userId);
-
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-
-                    return responseMessage;
-                }
-
-                Guid userAttributeId;
-
-                Guid.TryParse(id, out userAttributeId);
-
-                if(userAttributeId == null)
-                {
-                    var message = String.Format("Attribute Id {0} is not valid", id);
-
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-
-                    return responseMessage;
-                }
-                var userAttribute = user.UserAttributes.FirstOrDefault(a => a.UserAttributeId.Equals(userAttributeId));
-
-                if(userAttribute == null)
-                {
-                    user.UserAttributes.Add(new Domain.UserAttributeValue()
-                    {
-                        id = Guid.NewGuid(),
-                        AttributeValue = request.AttributeValue,
-                        UserAttributeId = userAttributeId
-                    });
-
-                    ctx.SaveChanges();
-
-                    return new HttpResponseMessage(HttpStatusCode.OK);
-                }
-
-                userAttribute.AttributeValue = request.AttributeValue;
-
-                ctx.SaveChanges();
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                userAttributeServices.UpdateUserAttribute(userId, id, request.AttributeValue);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
+
         }
 
         // DELETE /api/userattribute/5

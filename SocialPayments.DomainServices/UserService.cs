@@ -200,6 +200,21 @@ namespace SocialPayments.DomainServices
                 .Include("PaymentAccounts")
                 .Select(u => u).ToList<User>();
         }
+        public List<Domain.User> GetPagedUsers(int take, int skip, int page, int pageSize, out int totalRecords)
+        {
+            using (var ctx = new Context())
+            {
+                totalRecords = ctx.Messages.Count();
+
+                var users = ctx.Users.Select(u => u)
+                    .OrderBy(m => m.CreateDate)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return users;
+            }
+        }
         public User GetUser(Expression<Func<User, bool>> expression)
         {
             return _ctx.Users
@@ -316,14 +331,17 @@ namespace SocialPayments.DomainServices
 
         public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm)
         {
-            List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
+            using(var ctx = new Context()) 
+            {
+                List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
 
-            int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
+                int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
 
-            // Takes the top 20 found matches.
-            MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where( m=>m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
+                // Takes the top 20 found matches.
+                MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where( m=>m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
 
-            return MeCodesFound;
+                return MeCodesFound;
+            }
         }
 
         public void UpdateUser(User user)
@@ -340,6 +358,50 @@ namespace SocialPayments.DomainServices
             _ctx.Users.Remove(user);
 
             _ctx.SaveChanges();
+        }
+        public void PersonalizeUser(string userId, string firstName, string lastName, string imageUrl)
+        {
+            using (var ctx = new Context())
+            {
+                var user = ctx.Users
+                    .FirstOrDefault(u => u.UserId.Equals(userId));
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.ImageUrl = imageUrl;
+
+                var firstNameAttribute = user.UserAttributes
+                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "FirstName");
+
+                if (firstNameAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = firstNameAttribute.UserAttribute.Id,
+                        AttributeValue = firstName
+                    });
+                }
+
+                var lastNameAttribute = user.UserAttributes
+                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "LastName");
+
+                if (lastNameAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserAttributeId = lastNameAttribute.UserId,
+                        AttributeValue = lastName
+                    });
+                }
+
+                ctx.SaveChanges();
+            }
+
         }
         public bool ValidateUser(string userNameOrEmail, string password, out User foundUser)
         {
@@ -430,17 +492,29 @@ namespace SocialPayments.DomainServices
                 return false;
             }
         }
-        public bool VerifyMobilePayPoint(Guid userId, Guid userPayPointId,  string verificationCode)
+        public bool VerifyMobilePayPoint(string userId, string userPayPointId,  string verificationCode)
         {
             _logger.Log(LogLevel.Info, String.Format("Verify Mobile Pay Point User: {0} UserPayPoint:{1} Verification Code: {2}", userId, userPayPointId, verificationCode));
 
             using (var ctx = new Context())
             {
-                var payPointVerification = ctx.UserPayPointVerifications.FirstOrDefault(p => p.UserPayPointId == userPayPointId && p.UserPayPoint.UserId == userId &&
+
+                Guid userPayPointGuid;
+                Guid userGuid;
+
+                Guid.TryParse(userId, out userGuid);
+                if(userGuid ==null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                Guid.TryParse(userPayPointId, out userPayPointGuid);
+                if (userPayPointGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", userPayPointId));
+
+                var payPointVerification = ctx.UserPayPointVerifications.FirstOrDefault(p => p.UserPayPointId == userPayPointGuid && p.UserPayPoint.UserId == userGuid &&
                     p.Confirmed == false);
 
                 if (payPointVerification == null)
-                    throw new Exception("Invalid Attempt");
+                    throw new CustomExceptions.BadRequestException("Invalid Attempt");
 
                 if (payPointVerification.VerificationCode == verificationCode)
                 {
@@ -703,15 +777,10 @@ namespace SocialPayments.DomainServices
             var user = GetUserById(userId);
 
             if (user == null)
-            {
-                var error = @"User Not Found";
-
-                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
-
-                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
-            }
+                throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
             user.Password = securityService.Encrypt(newPassword);
+
             UpdateUser(user);
 
             return user;
