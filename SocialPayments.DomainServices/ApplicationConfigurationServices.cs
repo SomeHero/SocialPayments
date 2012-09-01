@@ -30,11 +30,12 @@ namespace SocialPayments.DomainServices
                 var applicationService = new DomainServices.ApplicationService();
                 var application = applicationService.GetApplication(apiKey);
 
-                if (application == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Application {0} Not Found", apiKey));
-
                 var configItem = application.ConfigurationValues
                     .FirstOrDefault(u => u.ConfigurationKey == id);
+
+                if (configItem == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Application Configuration {0} Not Found", id));
+
 
                 return configItem;
             }

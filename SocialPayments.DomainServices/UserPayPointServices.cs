@@ -45,6 +45,12 @@ namespace SocialPayments.DomainServices
 
                 _ctx.SaveChanges();
 
+                if (payPointType.Name == "EmailAddress")
+                    userService.SendEmailVerificationLink(userPayPoint);
+                else if (payPointType.Name == "Phone")
+                    userService.SendMobileVerificationCode(userPayPoint);
+
+
                 return userPayPoint;
             }
         }

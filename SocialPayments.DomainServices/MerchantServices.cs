@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
@@ -19,6 +20,9 @@ namespace SocialPayments.DomainServices
                     merchantType = MerchantType.Regular;
 
                 var merchants = ctx.Merchants
+                    .Include("User")
+                    .Include("MerchantListings")
+                    .Include("MerchantListings.MerchantOffers")
                     .Where(m => m.MerchantTypeValue.Equals((int)merchantType))
                     .ToList();
 

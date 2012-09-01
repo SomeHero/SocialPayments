@@ -8,7 +8,7 @@ using NLog;
 using System.Net;
 using SocialPayments.Domain;
 using SocialPayments.Domain.ExtensionMethods;
-using SocialPayments.DomainServices;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -20,7 +20,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {
-            var userPayStreamMessageServices = new UserPayStreamMessageServices();
+            var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
             HttpResponseMessage<List<MessageModels.MessageResponse>> response = null;
             List<Domain.Message> messages = null;
             
@@ -28,10 +28,34 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 messages = userPayStreamMessageServices.GetPayStreamMessage(userId);
             }
-            catch(Exception ex)
+            catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
 
+                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
             
             response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(messages.Select(m => new MessageModels.MessageResponse()
             {

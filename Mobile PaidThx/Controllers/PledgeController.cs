@@ -65,8 +65,23 @@ namespace Mobile_PaidThx.Controllers
                 Slogan = "Slogan goes here"
             }).ToList();
 
+            SortedDictionary<string, List<OrganizationModels.OrganizationModel>> sortedNonProfits = new SortedDictionary<string, List<OrganizationModels.OrganizationModel>>();
+
+            foreach (var nonProfit in nonProfits)
+            {
+                var firstLetter = nonProfit.Name[0].ToString();
+
+                if (!sortedNonProfits.ContainsKey(firstLetter))
+                    sortedNonProfits.Add(firstLetter, new List<OrganizationModels.OrganizationModel>());
+
+                var tempMerchantList = sortedNonProfits[firstLetter];
+                tempMerchantList.Add(nonProfit);
+
+            }
+
             var model = new PledgeModels.AddCauseModel
             {
+                SortedNonProfits = sortedNonProfits,
                 NonProfits = nonProfits,
             };
 

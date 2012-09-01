@@ -13,6 +13,7 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using SocialPayments.Domain.ExtensionMethods;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -32,8 +33,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 paymentAccounts = userPaymentAccountServices.GetPaymentAccounts(userId);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Payment Accounts for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Payment Accounts for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Payment Accounts for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<List<AccountModels.AccountResponse>>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
@@ -70,8 +91,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 paymentAccount = userPaymentAccountServices.GetPaymentAccount(userId, id);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<AccountModels.AccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
@@ -106,8 +147,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 userPaymentAccountServices.SetPreferredSendAccount(userId, request.PaymentAccountId);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Setting Preferred Send Account {0} for User {1}.  Exception {2}. Stack Trace {3}", request.PaymentAccountId, userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
@@ -129,14 +190,33 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 userPaymentAccountServices.SetPreferredReceiveAccount(userId, request.PaymentAccountId);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}. Stack Trace {3}", request.PaymentAccountId, userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
                 return response;
             }
-
             response = new HttpResponseMessage(HttpStatusCode.OK);
 
             return response;
@@ -154,8 +234,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 paymentAccount = userPaymentAccountServices.AddPaymentAccount(userId, request.Nickname, "", request.NameOnAccount, request.RoutingNumber, request.AccountNumber, request.AccountType,
                     request.SecurityPin, request.SecurityQuestionID, request.SecurityQuestionAnswer);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Account w/Security Settings for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Account w/Security Settings for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Account w/Security Settings for User {0}.  Exception {2}. Stack Trace {3}", userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
@@ -178,8 +278,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 paymentAccount = userPaymentAccountServices.AddPaymentAccount(userId, request.Nickname, "", request.NameOnAccount, request.RoutingNumber, request.AccountNumber, request.AccountType,
                     request.SecurityPin);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Payment Account for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Payment Account for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Payment Account for User {0}.  Exception {1}. Stack Trace {3}", userId, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
@@ -233,9 +353,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 userPaymentAccountServices.VerifyAccount(userId, id, request.depositAmount1, request.depositAmount2);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Verifying Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Verifying Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Verifying Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
                 return response;
@@ -256,9 +396,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 userPaymentAccountServices.UpdatePaymentAccount(userId, id, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountType);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
                 return response;
@@ -280,9 +440,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 userPaymentAccountServices.DeletePaymentAccount(userId, id);
             }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Payment Account {0} for User {1}.  Exception {2}.", id, userId, ex.Message));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Payment Account {0} for User {1}.  Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<AccountModels.SubmitAccountResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
 
                 return response;

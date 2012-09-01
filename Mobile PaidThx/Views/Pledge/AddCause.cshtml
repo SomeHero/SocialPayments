@@ -14,8 +14,11 @@
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
-        @foreach (var nonprofit in Model.NonProfits)
+        @foreach (var alphaGroup in Model.SortedNonProfits)
         {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var nonprofit in alphaGroup.Value)
+            {
             <li>
             <a class="organization-pledge" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
                 <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
@@ -35,6 +38,7 @@
                 </div>
             </a>
             </li>
+            }
         }
         </ul>
         </div>

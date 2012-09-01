@@ -51,7 +51,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             _logger.Log(LogLevel.Info, String.Format("Start Process NACHA File for {0} with {1} transactions", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
 
             results.Add(CreateFileHeaderRecord(processedDate));
-            results.Add(CreateBatchHeaderRecord(transactions, "PPD", "Test Transactions", processedDate, processedDate.AddDays(2), OriginatingTransitRoutingNumber, batchNumber));
+            results.Add(CreateBatchHeaderRecord(transactions, "PPD", "Test Transactions", processedDate, processedDate.AddDays(1), OriginatingTransitRoutingNumber, batchNumber));
             foreach (var transaction in transactions)
             {
                 results.Add(CreateBatchDetailRecord(transaction));

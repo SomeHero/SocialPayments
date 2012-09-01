@@ -210,6 +210,9 @@
     <Compile Include="SMSLogService.cs" />
     <Compile Include="SMSService.cs" />
     <Compile Include="TransactionBatchService.cs" />
+    <Compile Include="TransactionServices.cs" />
+    <Compile Include="UserAttributesServices.cs" />
+    <Compile Include="UserConfigurationServices.cs" />
     <Compile Include="UserPaymentAccountServices.cs" />
     <Compile Include="UserPayPointServices.cs" />
     <Compile Include="UserPayStreamMessageServices.cs" />

@@ -8,6 +8,7 @@ using NLog;
 using Mobile_PaidThx.Controllers.Base;
 using System.Text;
 using System.Net.Mail;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -18,10 +19,15 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
-            logger.Log(LogLevel.Info, String.Format("Displaying Register View"));
-            logger.Log(LogLevel.Info, String.Format("Retreiving Payment {0}.", messageId));
-            
-            return View("Index");
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+
+            return View("Index", new DashboardModels.DashboardModel()
+            {
+                UserName = user.senderName
+            });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
             //    return View("Index");

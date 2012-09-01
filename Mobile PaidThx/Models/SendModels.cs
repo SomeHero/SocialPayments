@@ -18,7 +18,7 @@ namespace Mobile_PaidThx.Models
         }
         public class AddContactSendModel
         {
-            public List<FacebookModels.Friend> Friends { get; set; }
+            public SortedDictionary<string, List<FacebookModels.Friend>> SortedContacts { get; set; }
             public String RecipientUri { get; set; }
         }
         public class AmountToSendModel

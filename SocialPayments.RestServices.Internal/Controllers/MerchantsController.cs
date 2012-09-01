@@ -53,8 +53,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 Id = m.UserId,
                 Name = m.Name,
                 MerchantImageUrl = (!String.IsNullOrEmpty(m.User.ImageUrl) ? m.User.ImageUrl : "http://images.paidthx.com/assets/contact-icon.gif"),
-                PreferredReceiveAccountId = (m.User.PreferredReceiveAccount != null ? m.User.PreferredReceiveAccount.Id.ToString() : ""),
-                PreferredSendAccountId = (m.User.PreferredSendAccount != null ? m.User.PreferredSendAccount.Id.ToString() : ""),
+                PreferredReceiveAccountId = (m.User.PreferredReceiveAccountId != null ? m.User.PreferredReceiveAccountId.ToString() : ""),
+                PreferredSendAccountId = (m.User.PreferredSendAccountId != null ? m.User.PreferredSendAccountId.ToString() : ""),
                 Listings = m.MerchantListings.Select(l => new MerchantModels.MerchantListingResponse()
                 {
                     Description = l.Description,

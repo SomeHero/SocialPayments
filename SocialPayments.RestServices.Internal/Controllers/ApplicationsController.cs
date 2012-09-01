@@ -44,11 +44,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
-                
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled exception getting application. Exception: {0}", ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
                 response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
@@ -104,12 +118,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
 
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Application {0}.  Exception {1}. Stack Trace {2}", request.name, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage(HttpStatusCode.Created);
@@ -137,11 +169,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
 
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage(HttpStatusCode.OK);
@@ -168,11 +219,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
 
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage(HttpStatusCode.OK);

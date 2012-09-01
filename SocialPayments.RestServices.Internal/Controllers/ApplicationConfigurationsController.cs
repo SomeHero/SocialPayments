@@ -30,12 +30,21 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Application Configuration for Application {0}. Exception {1}. Stack Trace {2}", apiKey, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Application Configuration for Application {0}. Exception {1}. Stack Trace {2}", apiKey, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Exception Get Application Configuration for {0}. Exception {1}. Stack Trace {2}", apiKey, ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Application Configuration for Application {0}. Exception {1}. Stack Trace {2}", apiKey, ex.Message, ex.StackTrace));
 
                 response = new HttpResponseMessage<List<ApplicationModels.ApplicationConfigurationResponse>>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
@@ -54,64 +63,35 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/applications/{apiKey}/{id}
         public HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse> Get(string apiKey, string id)
         {
-            var applicationServices = new DomainServices.ApplicationService();
-            
-            Domain.Application application = null;
+            var applicationConfigurationServices = new DomainServices.ApplicationConfigurationServices();
+
             Domain.ApplicationConfiguration configItem = null;
             HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse> response = null;
-            Guid configItemId;
 
             try
             {
-                 application = applicationServices.GetApplication(apiKey);
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Exception Get Application Configuration for {0}. Exception {1}. Stack Trace {2}", apiKey, ex.Message, ex.StackTrace));
-
-                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-            }
-
-            if (application == null)
-            {
-                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = String.Format("Invalid Application {0}", apiKey);
-
-                return response;
-            }
-
-            Guid.TryParse(id, out configItemId);
-
-            if (configItemId == null)
-            {
-                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = String.Format("Invalid Configuration Item {0}", id);
-
-                return response;
-            }
-
-            try
-            {
-                configItem = application.ConfigurationValues.FirstOrDefault(c => c.Id == configItemId);
+                configItem = applicationConfigurationServices.GetApplicationConfigurationSetting(apiKey, id);
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Application Configuration {0} for Application {1}. Exception {2}.", id, apiKey, ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Application Configuration {0} for Application {1}. Exception {2}.", id, apiKey, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
             }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = String.Format("Invalid Application {0}", id, apiKey);
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Application Configuration for {0} for Application {1}. Exception {2}. Stack Trace {3}", id, apiKey, ex.Message, ex.StackTrace));
 
-                return response;
-            }
-                
-            if(configItem == null)
-            {
-                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = "Invalid Configuration Id";
+                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
 
                 return response;
             }
@@ -144,12 +124,23 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Application Configuration Setting for Application {0} with Key {1} and Value {2}. Exception {3}. Stack Trace {4}",
+                    apiKey, request.Key, request.Value, ex.Message, ex.StackTrace));
+                
                 response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Application Configuration Setting for Application {0} with Key {1} and Value {2}. Exception {3}. Stack Trace {4}",
+                    apiKey, request.Key, request.Value, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("UnHandled Exception Updating Application Configuration Setting for Application {0} with Key {1} and Value {2}. Exception {3}. Stack Trace {4}",
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Application Configuration Setting for Application {0} with Key {1} and Value {2}. Exception {3}. Stack Trace {4}",
                     apiKey, request.Key, request.Value, ex.Message, ex.StackTrace));
 
                 response = new HttpResponseMessage<ApplicationModels.ApplicationConfigurationResponse>(HttpStatusCode.InternalServerError);

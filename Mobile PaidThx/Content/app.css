@@ -156,7 +156,6 @@ div.ui-content
 {
  background:#ffffff;
  border-radius: 0px 0px 0px 0px;
- margin: 10px;
  overflow:hidden;
  padding: 0px !important;
 }
@@ -173,10 +172,6 @@ div.ui-content
     height:50px;  
   }
   
-  .nav-pdthx span.ui-btn-inner{
-  padding-top: 32px !important;
-  font-size:11px;
-  }
 
 
 #footer-menu
@@ -973,8 +968,7 @@ h9 span
 
 /*-----------------------------------------------------------------MATT HOMESCREEN----------------------------------------------------   */
 
-		.nav-pdthx .ui-icon  { width: 30px!important; height:30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
-			.nav-pdthx #home .ui-icon { background: url("/images/home.png")50% 50% no-repeat ;}
+		     .nav-pdthx #home .ui-icon { background: url("/images/home.png")50% 50% no-repeat ;}
 			.nav-pdthx #paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
 			.nav-pdthx #send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
 			.nav-pdthx #request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
@@ -1013,17 +1007,6 @@ h9 span
  moz-box-shadow:0 1px 1px #bebebe;     
 } 
 
-  .nav-pdthx .ui-icon
-        {
-            width: 30px !important;
-            height: 30px !important;
-            margin-left: -15px !important;
-            box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -webkit-border-radius: 0 !important;
-            border-radius: 0 !important;
-        }
         .nav-pdthx #home .ui-icon
         {
             background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
@@ -1127,12 +1110,6 @@ background-image: linear-gradient( #ffffff /*{global-active-background-start}*/,
 font-family: Helvetica, Arial, sans-serif /*{global-font-family}*/;
       }
       
-      .ui-btn-active span.ui-btn-text{  
-color: #2a7e43 /*{global-active-color}*/;
-cursor: pointer;
-text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
-      }
-        
         #btn-settings
         {
             background: url(images/icons/settingsIcon.png) 50% 50% no-repeat;

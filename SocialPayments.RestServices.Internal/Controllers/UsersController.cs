@@ -706,10 +706,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));
 
-            Context _ctx = new Context();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             IAmazonNotificationService _amazonNotificationService = new DomainServices.AmazonNotificationService();
-            DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
+            DomainServices.UserService _userService = new DomainServices.UserService();
 
             List<UserModels.MeCodeListResponse> meCodesFound = new List<UserModels.MeCodeListResponse>();
 
