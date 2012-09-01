@@ -968,14 +968,24 @@ h9 span
 
 /*-----------------------------------------------------------------MATT HOMESCREEN----------------------------------------------------   */
 
-		     .nav-pdthx #home .ui-icon { background: url("/images/home.png")50% 50% no-repeat ;}
-			.nav-pdthx #paystream .ui-icon { background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #send .ui-icon { background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #request .ui-icon { background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #profile .ui-icon { background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
-			.nav-pdthx #welcome .ui-icon { background:  url("/images/home.png") 50% 50% no-repeat; }
-		    .nav-pdthx #signin .ui-icon { background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
-		    .nav-pdthx #about .ui-icon { background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+		     .nav-pdthx #home .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background: url("/images/home.png")50% 50% no-repeat ;}
+			.nav-pdthx #home .ui-btn-text { font-size: 11px }
+			.nav-pdthx #paystream .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #paystream .ui-btn-text { font-size: 11px }
+			.nav-pdthx #send .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/sendIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #send .ui-btn-text { font-size: 11px }
+			.nav-pdthx #request .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important;  background:  url(../pdthx-icons/requestIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #reqeust .ui-btn-text { font-size: 11px }
+			.nav-pdthx #profile .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/profileIcon.png) 50% 50% no-repeat; }
+			.nav-pdthx #profile .ui-btn-text { font-size: 11px }
+			.nav-pdthx #welcome .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/home.png") 50% 50% no-repeat; }
+		    .nav-pdthx #welcome .ui-btn-text { font-size: 11px }
+			.nav-pdthx #join .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/joinIcon.png") 50% 50% no-repeat; }
+		    .nav-pdthx #join .ui-btn-text { font-size: 11px }
+			.nav-pdthx #signin .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/signinIcon.png") 50% 50% no-repeat; }
+		    .nav-pdthx #signin .ui-btn-text { font-size: 11px }
+			.nav-pdthx #about .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url("/images/helpIcon.png") 50% 50% no-repeat; }
+			.nav-pdthx #about .ui-btn-text { font-size: 11px }
 			.ui-mobile .ui-page .ui-footer .ui-navbar,
 			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
 			    overflow : visible; 
