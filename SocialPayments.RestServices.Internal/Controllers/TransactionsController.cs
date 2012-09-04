@@ -64,6 +64,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return response;
             }
+
+
+            response = new HttpResponseMessage<Models.TransactionModels.SubmitTransactionResponse>(new Models.TransactionModels.SubmitTransactionResponse() {
+                TransactionId = transaction.Id
+            }, HttpStatusCode.OK);
+
+            return response;
         }
 
         // PUT /api/transactions/5

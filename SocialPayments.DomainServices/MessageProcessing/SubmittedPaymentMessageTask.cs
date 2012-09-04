@@ -34,7 +34,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
         {
             using (var ctx = new Context())
             {
-                _messageServices = new DomainServices.MessageServices(ctx);
+                _messageServices = new DomainServices.MessageServices();
                 _userServices = new DomainServices.UserService(ctx);
                 _smsServices = new DomainServices.SMSService(ctx);
                 _emailServices = new DomainServices.EmailService(ctx);

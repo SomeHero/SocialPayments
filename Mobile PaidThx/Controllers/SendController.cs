@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=./Send";
+            TempData["DataUrl"] = "data-url=/Send";
 
             return View(new SendModels.SendMoneyModel()
             {
@@ -38,6 +38,8 @@ namespace Mobile_PaidThx.Controllers
       
         public ActionResult AddContactSend()
         {
+            TempData["DataUrl"] = "data-url=/Send/AddContactSend";
+            
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
 
@@ -68,7 +70,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["RecipientUri"] = model.RecipientUri;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Send";
 
             return View("Index", new SendModels.SendMoneyModel()
             {
@@ -79,6 +81,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
+            TempData["DataUrl"] = "data-url=/Send/AmountToSend";
+            
             return View();
         }
 
@@ -87,7 +91,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["Amount"] = model.Amount;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Send";
 
             return View("Index", new SendModels.SendMoneyModel()
             {
@@ -136,7 +140,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=.Paystream";
+            TempData["DataUrl"] = "data-url=/Paystream";
 
             Session["RecipientUri"] = null;
             Session["Amount"] = null;

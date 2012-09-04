@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=./Request";
+            TempData["DataUrl"] = "data-url=/Request";
 
             return View(new RequestModels.RequestMoneyModel()
             {
@@ -67,7 +67,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["RecipientUri"] = model.RecipientUri;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Request";
 
             return View("Index", new RequestModels.RequestMoneyModel()
             {
@@ -86,7 +86,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["Amount"] = model.Amount;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Request";
 
             return View("Index", new RequestModels.RequestMoneyModel()
             {
@@ -135,7 +135,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=.Paystream";
+            TempData["DataUrl"] = "data-url=/Paystream";
 
             Session["RecipientUri"] = null;
             Session["Amount"] = null;

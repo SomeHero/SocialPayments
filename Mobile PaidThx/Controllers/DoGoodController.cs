@@ -22,6 +22,8 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
+            TempData["DataUrl"] = "data-url=/DoGood";
+            
             return View();
         }
 

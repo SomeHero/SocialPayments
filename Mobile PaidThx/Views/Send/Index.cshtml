@@ -2,12 +2,12 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="send-page" @TempData["DataUrl"]>
+<div data-role="page" id="send-page">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Send Money</h1>
-        <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
+        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content">
     
