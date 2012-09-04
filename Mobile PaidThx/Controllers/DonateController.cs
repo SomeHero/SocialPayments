@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=./Donate";
+            TempData["DataUrl"] = "data-url=/Donate";
 
             return View(new DonateModels.DonateMoneyModel
             {
@@ -84,7 +84,7 @@ namespace Mobile_PaidThx.Controllers
                 NonProfits = nonProfits,
             };
 
-            TempData["DataUrl"] = "data-url=./Donate/AddContact";
+            TempData["DataUrl"] = "data-url=/Donate/AddContact";
 
             return View(model);
         }
@@ -94,7 +94,7 @@ namespace Mobile_PaidThx.Controllers
             Session["RecipientId"] = model.RecipientId;
             Session["RecipientName"] = model.RecipientName;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Donate";
 
             return View("Index", new DonateModels.DonateMoneyModel()
             {
@@ -106,7 +106,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=./Donate/AmountToSend";
+            TempData["DataUrl"] = "data-url=/Donate/AmountToSend";
 
             return View();
         }
@@ -116,7 +116,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["Amount"] = model.Amount;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Donate";
             
             return View("Index", new DonateModels.DonateMoneyModel()
             {
@@ -167,7 +167,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=.Paystream";
+            TempData["DataUrl"] = "data-url=/Paystream";
 
             Session["RecipientId"] = null;
             Session["RecipientName"] = null;

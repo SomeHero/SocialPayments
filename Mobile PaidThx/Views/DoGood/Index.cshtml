@@ -6,8 +6,7 @@
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Do Good</h1>
-       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
- @*{Html.RenderPartial("TopMenu-App", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Do Good" }); }*@
+       <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
   
     <div data-role="content">

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
-using SocialPayments.DataLayer;
 using System.Net;
+using SocialPayments.DomainServices.CustomExceptions;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class BetaSignupsController : ApiController
     {
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+
         // GET /api/betasignups
         public HttpResponseMessage Get()
         {
@@ -25,58 +28,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // POST /api/betasignups
         public HttpResponseMessage Post(Models.BetaSignUpModels.BetaSignUpRequest request)
         {
-            using (var ctx = new Context())
+            var marketingServices = new DomainServices.MarketingServices();
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            try
             {
-                var emailService = new DomainServices.EmailService(ctx);
+                marketingServices.AddBetaSignUp(request.EmailAddress);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Beta SignUp. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                var signUp = ctx.BetaSignUps.FirstOrDefault(b => b.EmailAddress == request.EmailAddress);
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Beta Signup. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Beta Signup. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                if (signUp != null)
-                {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMessage.ReasonPhrase = String.Format("{0} is already signed up!", request.EmailAddress);
-
-                    return responseMessage;
-                }
-
-                var newSignUp = ctx.BetaSignUps.Add(new Domain.BetaSignup()
-
-                {
-                    Id = Guid.NewGuid(),
-
-                    EmailAddress = request.EmailAddress,
-
-                    CreateDate = System.DateTime.Now
-
-                });
-
-                try
-                {
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    responseMessage.ReasonPhrase = String.Format("Error occurred adding beta user. {0}", ex.Message);
-
-                    return responseMessage;
-                }
-
-                //Send Email
-                try
-                {
-                    emailService.SendEmail(request.EmailAddress, "Thanks for signing up to be one of the first users of PaidThx!", "Website - Confirmation Sign Up BETA", new List<KeyValuePair<string, string>>());
-                }
-                catch (Exception ex)
-                {
-                    //log
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.Created);
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
             }
 
+            response = new HttpResponseMessage(HttpStatusCode.OK);
 
+            return response;
         }
 
         // PUT /api/betasignups/5

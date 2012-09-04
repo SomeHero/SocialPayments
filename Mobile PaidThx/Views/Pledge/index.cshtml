@@ -1,5 +1,5 @@
 ﻿@model Mobile_PaidThx.Models.PledgeModels.PledgeMoneyModel
-<div data-role="page" id="pledge-page" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="pledge-page" data-add-back-btn="true">
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
@@ -14,7 +14,7 @@
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
         <div style="margin: 10px">
-                 <a href="@Url.Content("~/Pledge/AddCause")" data-ajax="false" data-transition="pop">
+                 <a href="@Url.Content("~/Pledge/AddCause")" data-prefetch data-transition="slide">
                  <button type="button" class="imgbtn field-btn" data-role="none">
                
                     <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
@@ -29,7 +29,7 @@
                                                    }</span>
                            
                           </button></a>
-                <a href="@Url.Content("~/Pledge/AddContact")" data-prefetch>
+                <a href="@Url.Content("~/Pledge/AddContact")" data-prefetch data-transition="slide">
                     <button type="button" class="imgbtn field-btn" data-role="none">
                         <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
                             <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
@@ -43,7 +43,7 @@
                                                       }</span>
                     </button>
                 </a>
-                <a href="@Url.Content("~/Pledge/AmountToSend")" data-ajaz="false" data-prefetch>
+                <a href="@Url.Content("~/Pledge/AmountToSend")" data-prefetch data-transition="slide">
                     <button type="button" class="imgbtn field-btn" data-role="none">
                  <span class="imgbg" style="margin-left: -2px">
                         <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span

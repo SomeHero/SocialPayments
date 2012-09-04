@@ -139,5 +139,40 @@ namespace SocialPayments.DomainServices
                 _ctx.SaveChanges();
             }
         }
+        public void AddMobileNumberSignUp(string signUpKey, string mobileNumber)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.UserService userService = new DomainServices.UserService(ctx);
+
+                Guid userId;
+
+                Guid.TryParse(signUpKey, out userId);
+
+                if (userId == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("User {0} Not Found", mobileNumber));
+
+                Domain.User user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (user == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Exception Process Registration SMS Signup for user {0}", signUpKey));
+
+                user.MobileNumber = mobileNumber;
+
+                user.PayPoints.Add(new Domain.UserPayPoint()
+                {
+                    CreateDate = System.DateTime.UtcNow,
+                    Id = Guid.NewGuid(),
+                    IsActive = true,
+                    PayPointTypeId = 2,
+                    URI = mobileNumber,
+                    Verified = true,
+                    VerifiedDate = System.DateTime.UtcNow
+                });
+
+                ctx.SaveChanges();
+
+            }
+        }
     }
 }

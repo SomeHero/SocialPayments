@@ -168,6 +168,8 @@
     <Compile Include="AmazonNotificationService.cs" />
     <Compile Include="ApplicationConfigurationServices.cs" />
     <Compile Include="ApplicationService.cs" />
+    <Compile Include="BatchServices.cs" />
+    <Compile Include="BatchTransactionServices.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="AndroidNotificationService.cs" />
     <Compile Include="CommunicationService.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Interfaces\IAmazonNotificationService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\ISMSService.cs" />
+    <Compile Include="MarketingServices.cs" />
     <Compile Include="MerchantServices.cs" />
     <Compile Include="MessageProcessing\AcceptedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\CancelledPaymentMessageTask.cs" />

@@ -12,7 +12,7 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
-                DomainServices.MessageServices messageServices = new DomainServices.MessageServices(ctx);
+                DomainServices.MessageServices messageServices = new DomainServices.MessageServices();
                 DomainServices.UserService userServices = new DomainServices.UserService(ctx);
 
                 var user = userServices.GetUserById(userId);

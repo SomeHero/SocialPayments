@@ -16,7 +16,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
         {
             using (Context ctx = new Context())
             {
-                var messageService = new MessageServices(ctx);
+                var messageService = new MessageServices();
                 var transactionBatchService = new TransactionBatchService(ctx, _logger);
 
                 var message = messageService.GetMessage(messageId);

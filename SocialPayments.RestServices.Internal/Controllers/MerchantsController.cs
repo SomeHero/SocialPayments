@@ -5,14 +5,16 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Net;
 using SocialPayments.RestServices.Internal.Models;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using SocialPayments.DomainServices.CustomExceptions;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class MerchantsController : ApiController
     {
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+
         // GET /api/merchants
         public HttpResponseMessage<List<MerchantModels.MerchantResponseModel>> Get(string type)
         {
@@ -32,20 +34,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 merchants = merchantServices.GetMerchants(type);
             }
-            catch (SocialPayments.DomainServices.CustomExceptions.NotFoundException ex)
+            catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                return response;
+                response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
-
-                return response;
             }
+
 
 
             var results = merchants.Select(m => new MerchantModels.MerchantResponseModel()
@@ -74,7 +84,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         // GET /api/merchants/5
         public HttpResponseMessage<MerchantModels.MerchantDetailResponse> GetDetail(string id)
         {
-            Domain.Merchant merchant;
+            Domain.Merchant merchant = null;
             HttpResponseMessage<MerchantModels.MerchantDetailResponse> response;
             var merchantServices = new DomainServices.MerchantServices();
 
@@ -85,19 +95,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 if (merchant == null)
                     throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("Merchant {0} Not Found", id));
             }
-            catch (SocialPayments.DomainServices.CustomExceptions.NotFoundException ex)
+            catch (NotFoundException ex)
             {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Merchant Detail {0}. Exception {1}.", id, ex.Message));
+
                 response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Merchant Detail {0}. Exception {1}.", id, ex.Message));
 
-                return response;
+                response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Merchant Detail {0}. Exception {1}. Stack Trace {2}", ex.Message, ex.StackTrace));
+
                 response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
-
-                return response;
             }
 
 
