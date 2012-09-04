@@ -33,7 +33,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
             {
                 _logger.Log(LogLevel.Info, String.Format("Processing Pledge to {0}", messageId));
 
-                _messageService = new DomainServices.MessageServices(ctx);
+                _messageService = new DomainServices.MessageServices();
                 _userServices = new DomainServices.UserService(ctx);
                 _smsServices = new DomainServices.SMSService(ctx);
                 _emailServices = new DomainServices.EmailService(ctx);

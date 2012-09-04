@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=./Pledge";
+            TempData["DataUrl"] = "data-url=/Pledge";
 
             return View(new PledgeModels.PledgeMoneyModel
             {
@@ -85,7 +85,7 @@ namespace Mobile_PaidThx.Controllers
                 NonProfits = nonProfits,
             };
 
-            TempData["DataUrl"] = "data-url=./Pledge/AddContact";
+            TempData["DataUrl"] = "data-url=/Pledge/AddContact";
 
             return View(model);
         }
@@ -95,7 +95,7 @@ namespace Mobile_PaidThx.Controllers
             Session["RecipientId"] = model.RecipientId;
             Session["RecipientName"] = model.RecipientName;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
@@ -108,14 +108,37 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AddContact()
         {
-            return View();
+            if (Session["Friends"] == null)
+                Session["Friends"] = new List<FacebookModels.Friend>();
+
+            SortedDictionary<string, List<FacebookModels.Friend>> sortedContacts = new SortedDictionary<string, List<FacebookModels.Friend>>();
+
+            foreach (var friend in (List<FacebookModels.Friend>)Session["Friends"])
+            {
+                string firstLetter = "#";
+
+                if (friend.name.Length > 0)
+                    firstLetter = friend.name[0].ToString();
+
+                if (!sortedContacts.ContainsKey(firstLetter))
+                    sortedContacts.Add(firstLetter, new List<FacebookModels.Friend>());
+
+                var tempContactList = sortedContacts[firstLetter];
+                tempContactList.Add(friend);
+
+            }
+
+            return View(new PledgeModels.AddContactModel()
+            {
+                SortedContacts = sortedContacts
+            });
         }
         [HttpPost]
         public ActionResult AddContact(PledgeModels.AddContactModel model)
         {
             Session["RecipientUri"] = model.RecipientUri;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
@@ -128,7 +151,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=./Pledge/AmountToSend";
+            TempData["DataUrl"] = "data-url=/Pledge/AmountToSend";
 
             return View();
         }
@@ -138,7 +161,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["Amount"] = model.Amount;
 
-            TempData["DataUrl"] = "data-url=./";
+            TempData["DataUrl"] = "data-url=/Pledge";
             
             return View("Index", new DonateModels.DonateMoneyModel()
             {
@@ -189,7 +212,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=.Paystream";
+            TempData["DataUrl"] = "data-url=/Paystream";
 
             Session["RecipientId"] = null;
             Session["RecipientName"] = null;

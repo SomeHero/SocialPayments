@@ -21,7 +21,7 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
         {
             using (var ctx = new Context())
             {
-                var messageService = new DomainServices.MessageServices(ctx);
+                var messageService = new DomainServices.MessageServices();
                 var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
                 var communicationService = new DomainServices.CommunicationService(ctx);
                 var emailService = new DomainServices.EmailService(ctx);

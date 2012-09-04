@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Net;
 using NLog;
-using SocialPayments.DataLayer;
 using SocialPayments.RestServices.Internal.Models;
 using System.Collections.ObjectModel;
 using SocialPayments.DomainServices.CustomExceptions;

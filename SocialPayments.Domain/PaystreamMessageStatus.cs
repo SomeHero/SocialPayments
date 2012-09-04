@@ -49,6 +49,9 @@ namespace SocialPayments.Domain
         [MessageStatusAttribute(RecipientDescription = "Rejected", SenderDescription = "Rejected")]
         RejectedPledge = 19,
         [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled")]
-        CancelledPledge = 19,
+        CancelledPledge = 20,
+        [MessageStatusAttribute(RecipientDescription = "Donation Submitted", SenderDescription = "Donation Submitted")]
+        SubmittedDonation = 21,
+        
     }
 }

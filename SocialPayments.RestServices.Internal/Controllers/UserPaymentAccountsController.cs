@@ -9,7 +9,6 @@ using SocialPayments.Domain;
 using NLog;
 using System.Configuration;
 using SocialPayments.DomainServices.Interfaces;
-using SocialPayments.DataLayer.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using SocialPayments.Domain.ExtensionMethods;

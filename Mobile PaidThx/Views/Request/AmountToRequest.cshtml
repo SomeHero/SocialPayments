@@ -6,7 +6,6 @@
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             How Much?</h1>
-       <a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
 
     <div data-role="content">
@@ -110,7 +109,7 @@
                      Amount: amountToSend
                  };
 
-                 $.mobile.changePage(getBaseURL() + 'Send/AmountToRequest', {
+                 $.mobile.changePage(getBaseURL() + 'Request/AmountToRequest', {
                      data: model,
                      dataUrl: getBaseURL() + 'Request/Index',
                      reverse: true,

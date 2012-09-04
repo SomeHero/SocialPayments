@@ -1,41 +1,34 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.PledgeModels.AddContactModel
+@{
     ViewBag.Title = "AddContactSend";
 }
 <div data-role="page" id="pledge-contact-select-page" data-add-back-btn="true">
- @{ Html.RenderPartial("TitleBar"); }
+    @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
             Enter Recipient</h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
-
     <div data-role="content">
-          <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-        
-                 <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
-                    @foreach (var friend in Model.Friends)
-                    {
-                    <li>
-                    <a class="send-friend" friend-id="@friend.id" friend-name="@friend.name">
-                        <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
-                        @friend.name
-                    </a>
-                    </li>
-                    }
-                    <li id="no-results">
-                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-uri="">
-                        <img src="@Url.Content("~/Content/images/avatar.png")" />
-                        <span id="results-header">
-                        No matches found 
-                        </span>
-                        <br />
-                        <span id="results-description">
-                        Continue type or check entry
-                       </span>
-                   </a>
-                    </li>
-                </ul>
-            </div>
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+        @foreach (var alphaGroup in Model.SortedContacts)
+            {
+                <li data-role="list-divider">@alphaGroup.Key</li>
+                foreach (var friend in alphaGroup.Value)
+                {
+                <li><a class="send-friend" friend-id="@friend.id" friend-name="@friend.name">
+                    <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
+                    @friend.name
+                </a></li>
+                }
+                <li id="no-results"><a id="new-recipient-uri" class="send-recipient-uri" recipient-uri="">
+                    <img src="@Url.Content("~/Content/images/avatar.png")" />
+                    <span id="results-header">No matches found </span>
+                    <br />
+                    <span id="results-description">Continue type or check entry </span></a></li>
+            }
+            </ul>
+        </div>
     </div>
     <script language="javascript">
         //wait to do event binding until the page is being initialized
@@ -95,6 +88,5 @@
 
         });
         
-</script>
+    </script>
 </div>
-
