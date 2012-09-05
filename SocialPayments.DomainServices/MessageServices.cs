@@ -48,6 +48,7 @@ namespace SocialPayments.DomainServices
 
             return AddMessage(apiKey, organizationId, "", recipientUri, organization.PreferredReceiveAccount.Id.ToString(), amount, comments, "Pledge", 0.0, 0.0,
                 "", "", "", "");
+
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
              double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
@@ -705,6 +706,12 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
 
+                if(message.Sender != null)
+                    message.SenderName = _formattingServices.FormatUserName(message.Sender);
+                if(message.Recipient != null)
+                    message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
+                message.TransactionImageUrl = message.Sender.ImageUrl;
+
                 return message;
             }
         }
@@ -743,15 +750,30 @@ namespace SocialPayments.DomainServices
             }
         }
 
-        public List<Domain.Message> GetQuickSendPayments(User user)
+        public List<Domain.Message> GetQuickSendPayments(string id)
         {
             using (var ctx = new Context())
             {
                 var formattingService = new DomainServices.FormattingServices();
 
+                Guid userGuid;
+
+                Guid.TryParse(id, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
+
+                Domain.User user = ctx.Users.FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
+
                 List<Domain.Message> messages = null;
 
+                //TODO: refactor query method
                 messages = ctx.Messages
+                    .Include("Recipient")
+                    .Include("Recipient.Merchant")
                     .Where
                     (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
                     .OrderByDescending(m => m.CreateDate).ToList();
@@ -813,7 +835,61 @@ namespace SocialPayments.DomainServices
                 return messages;
             }
         }
+        public int GetNumberOfNewMessages(string userId)
+        {
+            using (var ctx = new Context())
+            {
+                var formattingService = new DomainServices.FormattingServices();
+                Domain.User user = null;
+                int count = 0;
 
+                Guid userGuid;
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                user = ctx.Users
+                    .Include("PaymentAccounts")
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user.PaymentAccounts.Count > 0)
+                {
+                    // "New" message cases, WITH A PAYMENT ACCOUNT SETUP
+                    // 1 -> Requests received with no action taken on them (status -> SubmittedRequest/Pending?)
+                    // 2 -> Payments/Requests that are "unseen". Any status applies.
+
+                    count = ctx.Messages
+                        .Count
+                        (m => (
+                            (m.RecipientId == user.UserId) &&
+                            (
+                                    (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                                || (m.recipientHasSeen == false)
+                            )
+                        ));
+                }
+                else
+                {
+                    // No Bank Account
+                    // "New" message cases, **WITHOUT** A PAYMENT ACCOUNT SETUP
+                    // All cases above, PLUS:
+                    //      -> Payments seen/unseen (doesnt matter) that are waiting for the user to setup a bank account.
+                    count = ctx.Messages
+                        .Count
+                        (m => (
+                            (m.RecipientId == userGuid) &&
+                            (
+                                    (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest) || m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                                || (m.recipientHasSeen == false)
+                                || (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment))
+                            )
+                        ));
+                }
+
+                return count;
+            }
+        }
         public List<Domain.Message> GetPendingMessages(User user)
         {
             using (var ctx = new Context())
@@ -842,6 +918,39 @@ namespace SocialPayments.DomainServices
                 }
 
                 return messages;
+            }
+        }
+        public int GetNumberOfPendingMessages(string userId)
+        {
+            using (var ctx = new Context())
+            {
+                var formattingService = new DomainServices.FormattingServices();
+                Domain.User user = null;
+                int count = 0;
+
+                Guid userGuid;
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                user = ctx.Users
+                    .Include("PaymentAccounts")
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if(user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
+                
+                count = ctx.Messages.Count(m => (
+                        (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
+                        || (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.SubmittedPayment))
+                        || (m.SenderId == user.UserId && !m.senderHasSeen)
+                        || (m.RecipientId == user.UserId && !m.recipientHasSeen)
+                    ));
+
+                return count;
             }
         }
     }

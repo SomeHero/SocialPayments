@@ -9,7 +9,7 @@ namespace Mobile_PaidThx.Models
     {
         public class HomeModel
         {
-            public PaymentModel Payment { get; set; }
+            public MessageModel Payment { get; set; }
         }
     }
 }

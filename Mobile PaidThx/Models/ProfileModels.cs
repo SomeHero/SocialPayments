@@ -25,7 +25,7 @@ namespace Mobile_PaidThx.Models
         public string State { get; set; }
         public string Zip { get; set; }
 
-        public PaymentModel Payment { get; set; }
+        public MessageModel Payment { get; set; }
         public List<PaystreamModels.PaymentModel> TransactionReceipts { get; set; }
         public ListPaymentAccountModel PaymentAccountsList { get; set; }
 
@@ -72,7 +72,7 @@ namespace Mobile_PaidThx.Models
     public class CompleteProfileModel
     {
         public String SenderName { get; set; }
-        public PaymentModel Payment { get; set; }
+        public MessageModel Payment { get; set; }
     }
     public class DonateMoneyModel
     {
