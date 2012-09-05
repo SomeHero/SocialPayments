@@ -26,6 +26,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
                 RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
             });
@@ -93,13 +94,13 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["RecipientId"] = model.RecipientId;
             Session["RecipientName"] = model.RecipientName;
-
-            TempData["DataUrl"] = "data-url=/Donate";
+            Session["RecipientImageUrl"] = model.RecipientImageUrl;
 
             return View("Index", new DonateModels.DonateMoneyModel()
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
                 RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = ""
             });
@@ -122,13 +123,20 @@ namespace Mobile_PaidThx.Controllers
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
                 RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = ""
             });
         }
         public ActionResult PopupPinswipe()
         {
-            return View();
+            return View(new DonateModels.PinSwipeModel()
+            {
+                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+            });
         }
 
         [HttpPost]
@@ -171,6 +179,7 @@ namespace Mobile_PaidThx.Controllers
 
             Session["RecipientId"] = null;
             Session["RecipientName"] = null;
+            Session["RecipientImageUrl"] = null;
             Session["Amount"] = null;
             Session["Comments"] = null;
 

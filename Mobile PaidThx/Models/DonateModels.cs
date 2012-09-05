@@ -11,6 +11,7 @@ namespace Mobile_PaidThx.Models
         {
             public String RecipientId { get; set; }
             public String RecipientName { get; set; }
+            public String RecipientImageUrl { get; set; }
             public Double Amount { get; set; }
             public String Comments { get; set; }
             public String Pincode { get; set; }
@@ -21,6 +22,8 @@ namespace Mobile_PaidThx.Models
             public List<OrganizationModels.OrganizationModel> NonProfits { get; set; }
             public String RecipientId { get; set; }
             public String RecipientName { get; set; }
+            public String RecipientImageUrl { get; set; } 
+            public Double Amount { get; set; }
         }
         public class SelectAmountModel
         {
@@ -29,6 +32,10 @@ namespace Mobile_PaidThx.Models
         public class PinSwipeModel
         {
             public string Pincode { get; set; }
+            public String RecipientId { get; set; }
+            public String RecipientName { get; set; }
+            public String RecipientImageUrl { get; set; } 
+            public Double Amount { get; set; }
         }
     }
 }

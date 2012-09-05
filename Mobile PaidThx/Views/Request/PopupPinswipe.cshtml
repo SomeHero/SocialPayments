@@ -1,10 +1,6 @@
-﻿@model Mobile_PaidThx.Models.RequestMoneyModel
-<script>
-    function submitform() {
-        alert("You entered " + document.getElementById("patternlock").value);
-        return true;
-    }
-</script>
+﻿@model Mobile_PaidThx.Models.RequestModels.PinSwipeModel
+    ViewBag.Title = "Index";
+}
 <div data-role="page" id="pinswipe-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
@@ -14,7 +10,19 @@
   
     <div data-role="content">
         <div class="instructions" id="swipe-to-confirm">
-            Swipe your security PIN to confirm.</div>
+         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+        @if(!String.IsNullOrEmpty(Model.RecipientName))
+        {
+            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName.</text>
+        } 
+        else
+        {
+            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
+        }     
+        </div>
         <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
         </div>
         @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
@@ -25,7 +33,6 @@
         </div>
         }
     </div>
-      @{ Html.RenderPartial("LoggedInMenu"); }
       
   <div id="resizerHack">
         

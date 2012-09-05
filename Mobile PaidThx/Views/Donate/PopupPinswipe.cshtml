@@ -1,10 +1,4 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
-<script>
-    function submitform() {
-        alert("You entered " + document.getElementById("patternlock").value);
-        return true;
-    }
-</script>
 <div data-role="page" id="pinswipe-page">
         @Html.ValidationSummary()
        @{ Html.RenderPartial("TitleBar"); }
@@ -15,7 +9,12 @@
   
     <div data-role="content">
         <div class="instructions" id="swipe-to-confirm">
-            Swipe your security PIN to confirm your payment.</div>
+         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+            <text>Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName</text>
+        </div>
               </div>
         @using (Html.BeginForm("PopupPinswipe", "Donate", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
