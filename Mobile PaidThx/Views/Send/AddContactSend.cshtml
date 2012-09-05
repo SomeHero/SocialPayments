@@ -19,7 +19,7 @@
             foreach (var friend in alphaGroup.Value)
             {
                     <li>
-                    <a class="send-friend" friend-id="@friend.id" friend-name="@friend.name">
+                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
                         <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
                         @friend.name
                     </a>
@@ -27,7 +27,7 @@
             }
             }
                     <li id="no-results">
-                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-uri="">
+                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-type="new" recipient-uri="">
                         <img src="@Url.Content("~/Content/images/avatar.png")" />
                         <span id="results-header">
                         No matches found 
@@ -79,12 +79,37 @@
                     $('#no-results').fadeOut(250);
                 }
             });
+            $(".contact-recipient-uri").unbind("click").bind("click", function () {
+
+                var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-name');
+                var recipientType = $(this).attr('recipient-type');
+
+                var model = {
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
+                };
+
+                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
+                    data: model,
+                    dataUrl: getBaseURL() + 'Send/Index',
+                    reverse: true,
+                    transition: 'slide',
+                    type: 'post'
+                });
+
+            });
             $("#new-recipient-uri").unbind("click").bind("click", function () {
 
                 var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-uri');
+                var recipientType = $(this).attr('recipient-type');
 
                 var model = {
-                    RecipientUri: recipientUri
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
                 };
 
                 $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {

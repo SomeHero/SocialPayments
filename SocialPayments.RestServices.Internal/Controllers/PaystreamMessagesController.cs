@@ -198,7 +198,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             Domain.Message message = null;
             try
             {
-                message = messagesServices.Donate(request.apiKey, request.senderId, request.organizationId, "", request.senderAccountId, request.amount, request.comments, request.securityPin);
+                message = messagesServices.Donate(request.apiKey, request.senderId, request.organizationId, request.organizationId, request.senderAccountId, request.amount, request.comments, request.securityPin);
             }
             catch (NotFoundException ex)
             {

@@ -12,7 +12,7 @@
     <div data-role="content" class="content-margin">
         <div style="background-color: #FFFFFF">
             @Html.ValidationSummary()
-            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
             {
                 <p style="margin-top: 0; padding-top: 0;">
                     <label for="txtSendTo" style="font-size: 16px">
@@ -20,12 +20,20 @@
                     <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch data-transition="slide">
                         <button data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
-                                <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
+                            @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
+                        {
+                            <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="@Model.RecipientName" />
+                        }
+                            </span><span
                                     id="person-send">
-                                    @if (!String.IsNullOrEmpty(Model.RecipientUri))
-                                    {
-                                        <span id="modelRecipient-Request">@Model.RecipientUri</span>
-                                    }
+                                    @if (!String.IsNullOrEmpty(Model.RecipientName))
+                                                      {
+                                    <span id="modelRecipient">@Model.RecipientName</span>
+                                                      }
                                     else
                                     {
                                         <text>Choose a recipient</text>

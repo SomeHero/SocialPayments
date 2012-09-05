@@ -9,7 +9,7 @@
 
     <div data-role="content" class="content-margin">
            @Html.ValidationSummary()
-       @using (Html.BeginForm("Index", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+       @using (Html.BeginForm("Index", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
        {
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
@@ -18,7 +18,15 @@
                  <button type="button" class="imgbtn field-btn" data-role="none">
                
                     <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
-                        <img style="margin-left:-8px; margin-top:-3px" src="@Url.Content("~/Content/images/icon-settings-orgs-40x40.png")" alt="" /></span><span
+                        @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
+                        {
+                            <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="@Model.RecipientName" />
+                        }
+                        </span><span
                             id="organization-name">@if (!String.IsNullOrEmpty(Model.RecipientName))
                                                    {
                                 <span id="org-name-donate">@Model.RecipientName</span>
