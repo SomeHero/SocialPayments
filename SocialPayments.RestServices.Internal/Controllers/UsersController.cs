@@ -582,6 +582,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             DomainServices.MessageServices _messageService = new DomainServices.MessageServices();
 
             User user = null;
+
             try
             {
                 user = _userService.GetUserById(id);
@@ -592,15 +593,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.MethodNotAllowed); // 405
             }
 
+            _logger.Log(LogLevel.Info, String.Format("Refreshing homepage -- Got user {0}", user.UserId.ToString()));
 
-            //try
-            //{
             List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
             List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
 
+            _logger.Log(LogLevel.Info, String.Format("Refreshing homepage -- Back from getQuickSend {0}", recentPayments.Count()));
+            
             foreach (Message msg in recentPayments)
             {
-
                 string recipName;
                 
                 int recipientType = -1;
@@ -730,6 +731,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     userId = meCode.UserId.ToString(),
                     meCode = meCode.URI
+                    
                 });
             }
 
