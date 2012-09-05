@@ -18,6 +18,7 @@ using Amazon.S3.Model;
 using System.IO;
 using System.Text;
 using SocialPayments.Domain.ExtensionMethods;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -577,127 +578,212 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
 
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.UserService _userService = new DomainServices.UserService();
-            DomainServices.MessageServices _messageService = new DomainServices.MessageServices();
+            List<Domain.Message> recentPayments = null;
+            var userService = new DomainServices.UserService();
+            var messageService = new DomainServices.MessageServices();
+            HttpResponseMessage<UserModels.HomepageRefreshReponse> response = null;
+            List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
+            int numberOfIncomingNotifications = 0;
+            int numberOfOutgoingNotifications = 0;
 
             User user = null;
             try
             {
-                user = _userService.GetUserById(id);
+                recentPayments = messageService.GetQuickSendPayments(id);
+
+                foreach (Message msg in recentPayments)
+                {
+
+                    string recipName;
+
+                    int recipientType = -1;
+
+                    if (msg.RecipientId == null)
+                    {
+                        _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+
+                        if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                        {
+                            _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+
+                            if (msg.RecipientName != null && msg.RecipientName.Length > 0)
+                                recipName = msg.RecipientName;
+                            else
+                                recipName = msg.recipientFirstName + msg.recipientLastName;
+                        }
+                        else
+                        {
+                            recipName = msg.RecipientUri;
+                        }
+
+
+                        quickSends.Add(new UserModels.QuickSendUserReponse()
+                        {
+                            userUri = msg.RecipientUri,
+                            userName = recipName,
+                            userFirstName = msg.recipientFirstName,
+                            userLastName = msg.recipientLastName,
+                            userImage = msg.recipientImageUri,
+                            userType = 0 // Normal User
+                        });
+                    }
+                    else if (msg.Recipient.Merchant != null)
+                    {
+                        _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
+
+                        recipName = msg.RecipientUri;
+
+                        recipientType = 1;
+
+                        string imageUri = null;
+
+                        if (msg.Recipient != null)
+                            imageUri = msg.Recipient.ImageUrl;
+
+                        quickSends.Add(new UserModels.QuickSendUserReponse()
+                        {
+                            userUri = msg.RecipientId.ToString(),
+                            userName = recipName,
+                            userFirstName = msg.Recipient.FirstName,
+                            userLastName = msg.Recipient.LastName,
+                            userImage = imageUri,
+                            userType = recipientType
+                        });
+                    }
+                    else
+                    {
+                        if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                        {
+                            _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+
+                            recipName = String.Format("{0} {1}", msg.recipientFirstName, msg.recipientLastName);
+                        }
+                        else
+                        {
+                            recipName = msg.Recipient.SenderName;
+                        }
+
+                        recipientType = 0;
+
+                        string imageUri = null;
+
+                        if (msg.Recipient != null)
+                            imageUri = msg.Recipient.ImageUrl;
+
+                        quickSends.Add(new UserModels.QuickSendUserReponse()
+                        {
+                            userUri = msg.RecipientUri,
+                            userName = recipName,
+                            userFirstName = msg.Recipient.FirstName,
+                            userLastName = msg.Recipient.LastName,
+                            userImage = imageUri,
+                            userType = recipientType
+                        });
+                    }
+                }
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unable to find user [RefreshHomepage] by [{0}]", id));
-                return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.MethodNotAllowed); // 405
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            try
+            {
+                numberOfIncomingNotifications = messageService.GetNumberOfNewMessages(id);
+
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
-
-            //try
-            //{
-            List<Domain.Message> recentPayments = _messageService.GetQuickSendPayments(user);
-            List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
-
-            foreach (Message msg in recentPayments)
+            try
             {
+                numberOfOutgoingNotifications = messageService.GetNumberOfPendingMessages(id);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
 
-                string recipName;
-                
-                int recipientType = -1;
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
 
-                if (msg.RecipientId == null)
-                {
-                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
 
-                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
-                    {
-                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
 
-                        if (msg.RecipientName != null && msg.RecipientName.Length > 0)
-                            recipName = msg.RecipientName;
-                        else
-                            recipName = msg.recipientFirstName + msg.recipientLastName;
-                    }
-                    else
-                    {
-                        recipName = msg.RecipientUri;
-                    }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
 
-                    quickSends.Add(new UserModels.QuickSendUserReponse()
-                    {
-                        userUri = msg.RecipientUri,
-                        userName = recipName,
-                        userFirstName = msg.recipientFirstName,
-                        userLastName = msg.recipientLastName,
-                        userImage = msg.recipientImageUri,
-                        userType = 0 // Normal User
-                    });
-                }
-                else if (msg.Recipient.Merchant != null )
-                {
-                    _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
-
-                    recipName = msg.RecipientUri;
-
-                    recipientType = 1;
-
-                    string imageUri = null;
-
-                    if (msg.Recipient != null)
-                        imageUri = msg.Recipient.ImageUrl;
-
-                    quickSends.Add(new UserModels.QuickSendUserReponse()
-                    {
-                        userUri = msg.RecipientId.ToString(),
-                        userName = recipName,
-                        userFirstName = msg.Recipient.FirstName,
-                        userLastName = msg.Recipient.LastName,
-                        userImage = imageUri,
-                        userType = recipientType
-                    });
-                }
-                else
-                {
-                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
-                    {
-                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
-
-                        recipName = String.Format("{0} {1}", msg.recipientFirstName, msg.recipientLastName);
-                    }
-                    else
-                    {
-                        recipName = msg.Recipient.SenderName;
-                    }
-
-                    recipientType = 0;
-
-                    string imageUri = null;
-
-                    if (msg.Recipient != null)
-                        imageUri = msg.Recipient.ImageUrl;
-
-                    quickSends.Add(new UserModels.QuickSendUserReponse()
-                    {
-                        userUri = msg.RecipientUri,
-                        userName = recipName,
-                        userFirstName = msg.Recipient.FirstName,
-                        userLastName = msg.Recipient.LastName,
-                        userImage = imageUri,
-                        userType = recipientType
-                    });
-                }
+                return response;
             }
 
-            var response = new UserModels.HomepageRefreshReponse()
+            var results = new UserModels.HomepageRefreshReponse()
             {
-                userId = user.UserId.ToString(),
-                numberOfIncomingNotifications = _messageService.GetNewMessages(user).Count,
-                numberOfOutgoingNotifications = _messageService.GetPendingMessages(user).Count,
+                userId = id,
+                numberOfIncomingNotifications = numberOfIncomingNotifications,
+                numberOfOutgoingNotifications = numberOfOutgoingNotifications,
                 quickSendContacts = quickSends
             };
 
-            return new HttpResponseMessage<UserModels.HomepageRefreshReponse>(response, HttpStatusCode.OK);
+            response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(results, HttpStatusCode.OK);
+            return response;
         }
 
 

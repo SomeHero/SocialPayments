@@ -163,10 +163,11 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=/Pledge";
             
-            return View("Index", new DonateModels.DonateMoneyModel()
+            return View("Index", new PledgeModels.PledgeMoneyModel()
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
                 RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = ""
             });
