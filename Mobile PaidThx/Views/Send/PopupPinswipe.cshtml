@@ -1,9 +1,7 @@
-﻿<script>
-    function submitform() {
-        alert("You entered " + document.getElementById("patternlock").value);
-        return true;
-    }
-</script>
+﻿@model Mobile_PaidThx.Models.SendModels.PinSwipModel
+@{
+    ViewBag.Title = "Index";
+}
 <div data-role="page" id="pinswipe-page" data-add-back-btn="true">
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
@@ -14,7 +12,19 @@
     <div data-role="content">
         @Html.ValidationSummary()
         <div class="instructions" id="swipe-to-confirm">
-            Swipe your security PIN to confirm your payment of X to Y.</div>
+        @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+        @if(!String.IsNullOrEmpty(Model.RecipientName))
+        {
+            <text>Please swipe your security pin to confirm your payment of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName.</text>
+        } 
+        else
+        {
+            <text>Please swipe your security pin to confirm your payment of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
+        }     
+        </div>
         <div style="height: 1px; width: 100%; background: #666666">
         </div>
         @using (Html.BeginForm("PopupPinswipe", "Send", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))

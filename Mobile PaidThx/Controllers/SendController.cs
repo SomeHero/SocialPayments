@@ -25,6 +25,8 @@ namespace Mobile_PaidThx.Controllers
             return View(new SendModels.SendMoneyModel()
             {
                 RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
             });
@@ -69,12 +71,21 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult AddContactSend(SendModels.AddContactSendModel model)
         {
             Session["RecipientUri"] = model.RecipientUri;
+            Session["RecipientName"] = model.RecipientName;
 
             TempData["DataUrl"] = "data-url=/Send";
+
+            string imageUrl = "";
+            if (model.RecipientUri.Substring(0, 3) == "fb_")
+                imageUrl = String.Format("http://graph.facebook.com/{0}/picture", model.RecipientUri.Substring(3));
+
+            Session["RecipientImageUrl"] = imageUrl;
 
             return View("Index", new SendModels.SendMoneyModel()
             {
                 RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = ""
             });
@@ -96,13 +107,21 @@ namespace Mobile_PaidThx.Controllers
             return View("Index", new SendModels.SendMoneyModel()
             {
                 RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
                 Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
                 Comments = ""
             });
         }
         public ActionResult PopupPinswipe()
         {
-            return View();
+            return View(new SendModels.PinSwipModel()
+            {
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+            });
         }
 
         [HttpPost]
@@ -143,6 +162,8 @@ namespace Mobile_PaidThx.Controllers
             TempData["DataUrl"] = "data-url=/Paystream";
 
             Session["RecipientUri"] = null;
+            Session["RecipientName"] = null;
+            Session["RecipientImageUrl"] = null;
             Session["Amount"] = null;
             Session["Comments"] = null;
 

@@ -19,7 +19,7 @@
             foreach (var nonprofit in alphaGroup.Value)
             {
             <li>
-            <a class="organization-donate" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
+            <a class="contact-organization" recipient-id="@nonprofit.Id" organization-name="@nonprofit.Name" organization-image-url="@nonprofit.ImageUri" recipient-type="organization" >
                 <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
                     <img style="float:left; padding-right:10px; width:50px; height:50px" src="@nonprofit.ImageUri" />
                     @if (nonprofit.HasInfo)
@@ -40,5 +40,39 @@
             }
         }
         </ul>
-        </div>
+     </div>
+      <script language="javascript">
+          //wait to do event binding until the page is being initialized
+          $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+              //cache the list-view element for later use
+              var $listview = $(this).find('[data-role="listview"]');
+
+              $(".contact-organization").unbind("click").bind("click", function () {
+
+                  var recipientId = $(this).attr('recipient-id');
+                  var recipientName = $(this).attr('organization-name');
+                  var recipientImageUrl = $(this).attr('organization-image-url');
+                  var recipientType = $(this).attr('recipient-type');
+
+                  var model = {
+                      RecipientId: recipientId,
+                      RecipientName: recipientName,
+                      RecipientType: recipientType,
+                      RecipientImageUrl: recipientImageUrl
+                  };
+
+                  $.mobile.changePage(getBaseURL() + 'Donate/AddContact', {
+                      data: model,
+                      dataUrl: getBaseURL() + 'Donate/Index',
+                      reverse: true,
+                      transition: 'slide',
+                      type: 'post'
+                  });
+
+              });
+
+          });
+        
+</script>
 </div>
