@@ -1,7 +1,7 @@
 ﻿@model Mobile_PaidThx.Models.PhonesModels.AddPhoneModel
-<div data-role="page" id="add-email-paypoint-page">
+<div data-role="page" id="add-phone-paypoint-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Add Phone</h1>
     </div>
@@ -14,9 +14,14 @@
                 <input type="text" id="txtPhoneNumber" name="PhoneNumber" placeholder="Phone Number"
                 required /></p>
             <p>
-             <button type="submit" id="add-email-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add Phone #</span></button></p>
+              <button type="submit" id="btn-add-phone" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+                   Add Phone Number</button></p>
          }
         </div>
     </div>
+        <script type="text/javascript">
+            $(document).delegate('#add-phone-paypoint-page', 'pageinit', function () {
+                $('#txtPhoneNumber').focus();
+            });
+    </script>
 </div>

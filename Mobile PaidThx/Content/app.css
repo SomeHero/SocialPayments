@@ -971,7 +971,7 @@ h9 span
 
 
 /*-----------------------------------------------------------------MATT HOMESCREEN----------------------------------------------------   */
-
+/*
 		     .nav-pdthx #home .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background: url("/images/home.png")50% 50% no-repeat ;}
 			.nav-pdthx #home .ui-btn-text { font-size: 11px }
 			.nav-pdthx #paystream .ui-icon { width: 30px !important; height: 30px !important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; background:  url(../pdthx-icons/paystreamIcon.png) 50% 50% no-repeat; }
@@ -994,7 +994,7 @@ h9 span
 			.ui-mobile .ui-page .ui-footer .ui-navbar ul {
 			    overflow : visible; 
 			}
-			
+			*/
             .ui-btn-active{
 		    background-image:none;
 		    background-color:#ddd;
@@ -1103,7 +1103,17 @@ h9 span
         {
             background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
         }
-        
+        .nav-pdthx .ui-icon
+        {
+         width:30px;
+         height:30px;
+         font-size:11px !important;
+         margin-left: -15px !important;
+        }
+        .nav-pdthx .ui-btn-text
+        {
+         font-size:11px !important;
+        }
       .ui-btn-active  
       {
           box-shadow:inset 0 0 8px #6ac36b; 
@@ -1113,7 +1123,7 @@ background: #eeeeee;
 font-weight: bold;
 color: #2a7e43 /*{global-active-color}*/;
 cursor: pointer;
-text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #3373A5 /*{global-active-shadow-color}*/;
+text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
 text-decoration: none;
 background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff /*{global-active-background-start}*/), to( #fefefe /*{global-active-background-end}*/));
 background-image: -webkit-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
@@ -1159,10 +1169,10 @@ margin-top:2px;
         {
             overflow: visible;
         }
-        ? .ui-btn-active
-        {
-            background-image: none !important;
-            background-color: gray;
+        
+        .ui-navbar li .ui-btn-active{
+        color:#2A7E43;
+        text-shadow:none !important;
         }
         .thumb
         {
@@ -1453,7 +1463,9 @@ border-radius: 7px;
 {
  margin-top:10px;   
 }
-.heading
+
+
+.heading, li.settings h2
 {
  font-size:15pt;
  font-weight:bold;   
@@ -1461,7 +1473,7 @@ border-radius: 7px;
  margin-top:6px;
 }
 
-.subheading
+.subheading, li.settings h4
 {
  font-size:12px;
  font-weight:normal;   
@@ -1591,11 +1603,18 @@ padding-bottom:5px;
         {
             background-image: url(images/icon-settings-bank-40x40.png);
         }
+  li.settings.bank
+        {
+            background-image: url(images/icon-settings-bank-40x40.png);
+        }
  li.settings#emails
         {
             background-image: url(images/icon-settings-email-40x40.png);
         }
-
+ li.settings.email
+        {
+            background-image: url(images/icon-settings-email-40x40.png);
+        }
  li.settings#socials
         {
             background-image: url(images/icon-settings-social-40x40.png);
@@ -1604,7 +1623,15 @@ padding-bottom:5px;
         {
             background-image: url(images/icon-settings-phones-40x40.png);
         }
+         li.settings.phone
+        {
+            background-image: url(images/icon-settings-phones-40x40.png);
+        }
  li.settings#mecodes
+        {
+            background-image: url(images/icon-settings-mecode-40x40.png);
+        }
+  li.settings.mecode
         {
             background-image: url(images/icon-settings-mecode-40x40.png);
         }
@@ -1637,6 +1664,30 @@ padding-bottom:5px;
         {
             background-image: url(images/icon-settings-signout-40x40.png);
         }
+     li.settings.add
+        {
+            background-image: url(images/img-plus-40x40.png);
+        }
+
+.sliders.ui-listview .ui-slider-switch{
+ float: right;
+top: -6px;
+}
+
+.sliders  .ui-listview label
+{
+ float:left; 
+ font-size:16px !important;
+ width:50%;
+}
+
+.sliders .ui-field-contain
+{
+    border-bottom:none;
+    border-bottom-width:0;
+}
+
+
 
 
 /* -----------------------------------------------------------PAGES: PAYSTREAM-------------------------------------------------------    */
