@@ -32,7 +32,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     UserName = "",
                     FBState = Session["FBState"].ToString(),
-                    Payment = null
+                    Message = null
                 });
 
             var messageServices = new MessageServices();
@@ -43,7 +43,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     UserName = "",
                     FBState = Session["FBState"].ToString(),
-                    Payment = null
+                    Message = null
                 });
 
             Session["MessageId"] = payment.Id;
@@ -52,8 +52,9 @@ namespace Mobile_PaidThx.Controllers
             {
                 UserName = (payment.recipientUriType == "EmailAddress" ? payment.recipientUri : ""),
                 FBState = Session["FBState"].ToString(),
-                Payment = new PaymentModel()
+                Message = new MessageModel()
                 {
+                    MessageType = payment.messageType,
                     Amount = payment.amount,
                     Comments = payment.comments,
                     MobileNumber = payment.recipientUri,
@@ -85,7 +86,7 @@ namespace Mobile_PaidThx.Controllers
                 return View("Index",  new JoinModels.JoinModel()
                 {
                     UserName = "",
-                    Payment = null
+                    Message = null
                 });
             }
 
@@ -115,11 +116,15 @@ namespace Mobile_PaidThx.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Exception Signing In with Facebook. {0} Stack Trace: {1}", ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Exception Signing In with Facebook. {0} Stack Trace: {1}", ex.Message, ex.StackTrace));
 
                 ModelState.AddModelError("", ex.Message);
 
-                return View("Index");
+                return View("Index", new JoinModels.JoinModel()
+                    {
+                        UserName = "",
+                        Message = null
+                    });
             }
 
             List<FacebookModels.Friend> friends;

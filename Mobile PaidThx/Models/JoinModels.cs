@@ -11,7 +11,7 @@ namespace Mobile_PaidThx.Models
         {
             public string UserName { get; set; }
             public string FBState { get; set; }
-            public PaymentModel Payment { get; set; }
+            public MessageModel Message { get; set; }
         }
     }
 }
