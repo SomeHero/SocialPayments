@@ -964,7 +964,36 @@ namespace SocialPayments.DomainServices
                 .FirstOrDefault(u => u.MobileNumber == tempMobileNumber);
         }
 
+        public List<Domain.Message> RefreshHomeScreen(string id)
+        {
+            using (var ctx = new Context())
+            {
+                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+                DomainServices.UserService _userService = new DomainServices.UserService();
+                DomainServices.MessageServices _messageService = new DomainServices.MessageServices();
 
+                Guid userGuid;
+
+                Guid.TryParse(id, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
+
+                Domain.User user = ctx.Users.FirstOrDefault(u => u.UserId == userGuid);
+
+                if(user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
+
+                List<Domain.Message> recentPayments = ctx.Messages
+                    .Include("Recipient")
+                    .Include("Recipient.Merchant")
+                    .Where
+                    (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                    .OrderByDescending(m => m.CreateDate).ToList();
+
+                return recentPayments;
+            }
+        }
         public User FindUserByEmailAddress(string emailAddress)
         {
             return _ctx.Users

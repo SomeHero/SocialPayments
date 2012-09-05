@@ -7,7 +7,7 @@
        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
 
-    <div data-role="content">
+    <div data-role="content" class="content-margin">
            @Html.ValidationSummary()
        @using (Html.BeginForm("Index", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
        {

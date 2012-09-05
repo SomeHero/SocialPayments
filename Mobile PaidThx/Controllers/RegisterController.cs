@@ -73,9 +73,9 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
 
-            PaymentModel paymentModel = null;
+            MessageModel paymentModel = null;
             if (Session["Payment"] != null)
-                paymentModel = (PaymentModel)Session["Payment"];
+                paymentModel = (MessageModel)Session["Payment"];
 
             TempData["DataUrl"] = "data-url=\"/Register/SetupACHAccount\"";
 

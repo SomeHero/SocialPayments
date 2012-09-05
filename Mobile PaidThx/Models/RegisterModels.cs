@@ -25,7 +25,7 @@ namespace Mobile_PaidThx.Models
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public PaymentModel Payment { get; set; }
+            public MessageModel Payment { get; set; }
         }
         public class MobileDeviceVerificationModel
         {
@@ -33,7 +33,7 @@ namespace Mobile_PaidThx.Models
             [Display(Name = "Verification Code")]
             public string VerificationCode { get; set; }
 
-            public PaymentModel Payment { get; set; }
+            public MessageModel Payment { get; set; }
             public String MobileNumber { get; set; }
         }
         public class SetupACHAccountModel
@@ -54,7 +54,7 @@ namespace Mobile_PaidThx.Models
             [Display(Name = "Account Type")]
             public string AccountType { get; set; }
 
-            public PaymentModel Payment { get; set; }
+            public MessageModel Payment { get; set; }
         }
         public class PersonalizeModel
         {
@@ -62,8 +62,9 @@ namespace Mobile_PaidThx.Models
             public string LastName { get; set; }
             public string ImageUrl { get; set; }
         }
-        public class PaymentModel
+        public class MessageModel
         {
+            public string MessageType { get; set; }
             public string Sender { get; set; }
             public string MobileNumber { get; set; }
             public Double Amount { get; set; }

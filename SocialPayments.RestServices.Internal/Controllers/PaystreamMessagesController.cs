@@ -42,6 +42,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -49,6 +51,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -56,6 +60,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             return new HttpResponseMessage<MessageModels.PagedResults>(
@@ -96,6 +102,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -103,6 +111,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -110,6 +120,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage<MessageModels.MessageResponse>(new MessageModels.MessageResponse()
@@ -124,7 +136,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 messageStatus = message.Status.ToString(),
                 messageType = message.MessageType.ToString(),
                 recipientUri = message.RecipientUri,
-                senderUri = message.SenderUri
+                senderUri = message.SenderUri,
+                senderName = message.SenderName,
+                transactionImageUri = message.TransactionImageUrl
             }, HttpStatusCode.OK);
 
             return response;
@@ -147,6 +161,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -154,6 +170,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -161,6 +179,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage(HttpStatusCode.OK);
@@ -186,6 +206,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -193,6 +215,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -200,12 +224,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
             {
 
-            }, HttpStatusCode.OK);
+            }, HttpStatusCode.Created);
 
             return response;
         }
@@ -229,6 +255,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -236,6 +264,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -243,6 +273,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
@@ -276,6 +308,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -283,6 +317,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -290,6 +326,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             //TODO: fix this
@@ -381,6 +419,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -388,6 +428,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -395,6 +437,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             _logger.Log(LogLevel.Info, String.Format("Cancel Payment {0} Complete", id));
@@ -423,6 +467,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -430,6 +476,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -437,6 +485,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
 
@@ -472,6 +522,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -479,6 +531,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -486,6 +540,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             _logger.Log(LogLevel.Info, String.Format("Accept Payment Request Complete {0}", id));
@@ -512,6 +568,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -519,6 +577,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -526,6 +586,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
 

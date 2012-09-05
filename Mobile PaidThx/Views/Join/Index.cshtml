@@ -6,31 +6,68 @@
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
         <h1>
-             @if (Model.Payment != null)
+             @if (Model.Message != null)
              {<text>You Have Money!</text>}
              else
              {<text>Join</text>}</h1>
        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
-    <div data-role="content">
+    <div data-role="content" class="content-margin">
         <div>
-            @if (Model.Payment != null)
+            @if (Model.Message != null)
             {
+                if (Model.Message.MessageType == "Payment")
+                {
                 <text>
 
                  <div id="pay-in" class="aui">
-                <div class="paystream-aui">
-                <img class="sender" src="@Model.Payment.SenderImageUrl" width="50" />
-                <h4 class="aui-message"><span class="sender">@Model.Payment.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Payment.Amount).</h4>
-                <div class="clear"></div>
+                <div class="paystream-aui" style="position: relative">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <div class="clear"></div>
                 </div>
-                 @if (!String.IsNullOrEmpty(Model.Payment.Comments))
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
                  {
-                <span class="bubble">@Model.Payment.Comments - join PaidThx to claim your money.</span>​
+                <span class="bubble">@Model.Message.Comments - join PaidThx to claim your money.</span>​
                  }
                 </div>
                 </text>
                 }
+                if (Model.Message.MessageType == "PaymentRequest")
+                {
+                <text>
+
+                 <div id="pay-in" class="aui">
+                <div class="paystream-aui" style="position: relative">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>requests @String.Format("{0:C}", Model.Message.Amount) from you.</h4>
+                    <div class="clear"></div>
+                </div>
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
+                 {
+                <span class="bubble">@Model.Message.Comments - join PaidThx to send money.</span>​
+                 }
+                </div>
+                </text>
+                }
+                if (Model.Message.MessageType == "Pledge")
+                {
+                <text>
+
+                 <div id="pay-in" class="aui">
+                <div class="paystream-aui" style="position: relative">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <div class="clear"></div>
+                </div>
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
+                 {
+                <span class="bubble">@Model.Message.Comments - join PaidThx to claim your money.</span>​
+                 }
+                </div>
+                </text>
+                }
+            }
 
             <h5 style="margin-top:10px">
                 Connect with Facebook</h5>
