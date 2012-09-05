@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="page-join">
+<div data-role="page" id="page-join" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
              @if (Model.Message != null)
              {<text>You Have Money!</text>}

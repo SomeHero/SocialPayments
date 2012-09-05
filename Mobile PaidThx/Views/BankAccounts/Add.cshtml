@@ -4,7 +4,7 @@
 }
 <div data-role="page" id="bankaccounts-add-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Add Bank Account</h1>
     </div>
@@ -13,9 +13,9 @@
          @using (Html.BeginForm("Add", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
             @Html.ValidationSummary()
-            <p>
+          <!--  <p>
                 <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
-            required value="@Model.Nickname" /></p>
+            required value="@Model.Nickname" /></p>-->
             <p>
                 <input type="text" id="txtNameOnAccount" name="NameOnAccount" placeholder=" Name on the Account"
             required value="@Model.NameOnAccount" /></p>
@@ -36,9 +36,14 @@
                 </fieldset>
             </div>
             <p>
-                <button type="submit" id="add-account-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add Account</span></button></p>
+                <button type="submit" id="btn-add-account" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+                   Add Bank Account</button></p>
          }
         </div>
     </div>
+            <script type="text/javascript">
+                $(document).delegate('#bankaccounts-add-page', 'pageinit', function () {
+                    $('#txtNameOnAccount').focus();
+                });
+    </script>
 </div>

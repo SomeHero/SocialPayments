@@ -4,7 +4,7 @@
 }
 <div data-role="page" id="notifications-page" data-theme="c" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Notifications</h1>
     </div>
@@ -12,7 +12,7 @@
         @foreach (var subject in Model.NotificationSubjects)
         {
             @subject.Description
-            <ul data-role="listview" data-inset="true">
+            <ul data-role="listview" class="sliders" data-inset="true">
             @foreach (var item in subject.NotificationItems)
             {
             <li>
@@ -20,6 +20,7 @@
                 <label for="@item.ConfigurationKey">@item.Description</label>
                 @Html.DropDownList(item.ConfigurationKey, new SelectList(item.Options, "Value", "Key", item.SelectedValue), new Dictionary<string, object>  { { "id", item.ConfigurationKey }, { "class", "notification-item" },  { "data-role", "slider" }, { "data-theme", "b" }})
                 </div>
+                <div class="clear"></div>
                 </li>
            
             }
