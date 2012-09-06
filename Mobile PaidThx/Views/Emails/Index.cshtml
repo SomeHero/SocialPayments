@@ -2,7 +2,7 @@
 
 <div data-role="page" id="email-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Email Accounts</h1>
     </div>
@@ -10,11 +10,10 @@
         <ul data-role="listview" data-inset="true">
             @foreach (var payPoint in Model.PayPoints)
             { 
-            <li >
+            <li class="settings email">
                 <a href="@Url.Content("~/Emails/Details/" + payPoint.Id)">
-                   <img src="@Url.Content("~/content/images/icon-settings-email-40x40.png")" />
-                    @payPoint.Uri
-                    <br />
+                   <h2>@payPoint.Uri</h2>
+                   <h4>
                     @if (payPoint.Verified)
                     {
                         <text>Verified</text>
@@ -23,16 +22,17 @@
                     {
                         <text>Not Verified</text>
                     }
+                    </h4>
                 </a>
             </li>
             }
         </ul>
         <ul data-role="listview" data-inset="true">
-            <li>
+            <li class="settings add">
             
             
                     <a href="@Url.Content("~/Emails/Add")">
-                    <img src="@Url.Content("~/Content/images/img-plus-40x40.png")" alt="Link Email Address" />
+                   
                     Add Email Address</a></li>
         </ul>
     </div>

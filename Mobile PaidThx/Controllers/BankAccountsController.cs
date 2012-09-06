@@ -85,7 +85,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                var paymentAccountId = bankAccountServices.AddAccount(_apiKey, user.userId.ToString(), bankAccount.Nickname, bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountNumber,
+                bankAccountServices.AddAccount(_apiKey, user.userId.ToString(), bankAccount.Nickname, bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountNumber,
                      bankAccount.AccountType, model.PinCode);
 
             }
