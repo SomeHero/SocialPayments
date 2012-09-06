@@ -2017,3 +2017,4 @@ top: -6px;
     padding: 15px;
 }
 
+.ui-page { -webkit-backface-visibility: hidden; }

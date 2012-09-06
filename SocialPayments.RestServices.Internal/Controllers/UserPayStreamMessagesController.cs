@@ -73,7 +73,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 longitutde = m.Longitude,
                 senderName = m.SenderName,
                 transactionImageUri = m.TransactionImageUrl,
-                recipientName = (m.Recipient != null ? _formattingServices.FormatUserName(m.Recipient) : m.RecipientName),
+                recipientName = m.RecipientName,
                 senderSeen = m.senderHasSeen,
                 recipientSeen = m.recipientHasSeen
             }).ToList(), HttpStatusCode.OK);

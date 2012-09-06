@@ -12,7 +12,7 @@
     <div class="top-panel">
    
     <p>Personalize your experience by adding your first and last name below.  PaidThx works best if your use your real name.</p></div>
-        @using(Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
+        @using(Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }, { "data-ajax", "false"  } } ))
         {
             <div>
                 <fieldset>

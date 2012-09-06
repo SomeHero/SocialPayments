@@ -63,6 +63,15 @@ namespace Mobile_PaidThx.Controllers
         {
             try
             {
+                var routingNumberServices = new RoutingNumberServices();
+
+                if (!routingNumberServices.ValidateRoutingNumber(model.RoutingNumber))
+                {
+                    ModelState.AddModelError("RoutingNumber", "Invalid Routing Number.  Please check your Bank's Routing Number and Try Again");
+
+                    return View(model);
+                }
+
                 Session["NewBankAccount"] = model;
 
                 return RedirectToAction("AddPopUpPinswipe");
@@ -85,7 +94,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                var paymentAccountId = bankAccountServices.AddAccount(_apiKey, user.userId.ToString(), bankAccount.Nickname, bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountNumber,
+                bankAccountServices.AddAccount(_apiKey, user.userId.ToString(), bankAccount.Nickname, bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountNumber,
                      bankAccount.AccountType, model.PinCode);
 
             }

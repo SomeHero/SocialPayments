@@ -89,11 +89,29 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
 
+            var routingNumberServices = new RoutingNumberServices();
+
+            if (!routingNumberServices.ValidateRoutingNumber(model.RoutingNumber))
+            {
+                ModelState.AddModelError("RoutingNumber", "Invalid Routing Number.  Please check your Bank's Routing Number and Try Again");
+
+                return View(model);
+            }
+
             Session["ACHAccountModel"] = model;
 
             return RedirectToAction("SetupPinSwipe");
         }
+        [HttpPost]
+        public bool ValidateRoutingNumber(string routingNumber)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Validating Routing Number {0}", routingNumber));
 
+            var routingNumberServices = new RoutingNumberServices();
+
+            return routingNumberServices.ValidateRoutingNumber(routingNumber);
+
+        }
         public ActionResult SetupPinSwipe()
         {
             return View();
