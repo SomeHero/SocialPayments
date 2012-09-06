@@ -33,7 +33,7 @@
                         @Html.ValidationMessageFor(m => m.NameOnAccount)
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required" } })
+                        @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" } })
                         @Html.ValidationMessageFor(m => m.RoutingNumber)
                     </div>
                     <div class="editor-field">
@@ -68,22 +68,15 @@
         </div>
     </div>
     <script language="javascript">
+        var getBaseURL = function () {
+            return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+        }
+
         //wait to do event binding until the page is being initialized
         $(document).on("pageshow", "#setup-ach-account-page", function () {
             $.validator.addMethod("accountmatch", function (value) {
                 return value == $("#AccountNumber").val();
             }, "Confirm Account Number must match Account Number");
-            $.validator.addMethod("validaterouting", function (value, element) {
-                type: "POST",
-                url: "",
-                data: value,
-                success: function(result) {
-                    if(result.valid)
-                        return true;
-
-                    return false;
-                },
-            }, "Invalid Routing Number.  Check your Bank's Routing Number and Try Again");
             $("#frmSubmit").validate();
         });
     </script>

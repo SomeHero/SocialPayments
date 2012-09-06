@@ -23,6 +23,11 @@ namespace Mobile_PaidThx
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "ValidateRoutingNumber", // Route name
+                "Register/validate_routingnumber", // URL with parameters
+                new { controller = "Register", action = "ValidateRoutingNumber" } // Parameter defaults
+            );
+            routes.MapRoute(
                 "VerifyPayPoint", // Route name
                 "verify_paypoint", // URL with parameters
                 new { controller = "Account", action = "VerifyPayPoint" } // Parameter defaults
