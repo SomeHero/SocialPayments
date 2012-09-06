@@ -159,12 +159,13 @@ namespace Mobile_PaidThx.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.Confirmed = false;
                 ViewBag.Message = ex.Message;
 
                 return View();
             }
 
-            ViewBag.Message = "Thanks.  You have successfully verified this pay point and can now begin to receive funds using this pay point.";
+            ViewBag.Confirmed = true;
 
             return View();
         }
