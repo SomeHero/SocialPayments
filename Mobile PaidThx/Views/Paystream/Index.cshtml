@@ -8,20 +8,164 @@
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Paystream</h1>
-       <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right">
+        </a>
     </div>
     <div data-role="content">
-        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items" data-type="horizontal" data-grid="c">
-            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked" style="width: 25%" />
-            <label for="paystream-all">All</label>
+        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items"
+            data-type="horizontal" data-grid="c">
+            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked"
+                style="width: 25%" />
+            <label for="paystream-all">
+                All</label>
             <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
-            <label for="paystream-sent">Sent</label>
+            <label for="paystream-sent">
+                Sent</label>
             <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
-            <label for="paystream-received">Rec.</label>
+            <label for="paystream-received">
+                Rec.</label>
             <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
-            <label for="paystream-other">Req.</label>
+            <label for="paystream-other">
+                Req.</label>
         </fieldset>
-        @{Html.RenderPartial("PartialViews/All", Model);}
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+            @foreach (var paymentGroup in Model.SortedPayments)
+            {
+                <li data-role="list-divider">@paymentGroup.Key</li>
+                foreach (var payment in paymentGroup.Value)
+                {
+                <li><a onclick="openOffersDialog('@payment.Id');"><span class="trans-type">
+                @if(!String.IsNullOrEmpty(payment.TransactionImageUri))
+                {
+                   <text>
+                   <img width="50" height="50" class="rounded" src="@payment.TransactionImageUri" alt="Image" />
+                   </text>
+                    } else {
+                    <text>
+                    <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
+                    </text>
+                    }
+                </span>
+                    <div class="trans-title">
+                        @switch (payment.Direction)
+                        {
+                            case "In":
+                            <text> <strong>@payment.SenderName</strong>
+                            </text>
+                                      break;
+                            case "Out":
+                            <text> <strong>@payment.RecipientName</strong>
+                            </text>
+                                      break;
+                        }
+                        @switch (payment.MessageType)
+                        {
+                            case "Payment":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="title-pay-in">
+                                <text>You received money</text>
+                            </div>
+                                        break;
+
+                                    case "Out":
+                            <div class="title-pay-out">
+                                <text>You sent money</text>
+                            </div>
+                                        break;
+                                }
+                                break;
+
+
+                            case "PaymentRequest":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="title-request-in">
+                                <text>You received a request</text>
+                            </div>
+                                        break;
+
+                                    case "Out":
+                            <div class="title-request-out">
+                                <text>You sent a request</text>
+                            </div>
+                                        break;
+                                }
+                                break;
+                            case "Donation":
+                            <div class="title-request-out">
+                                <text>You donated</text>
+                            </div>
+                                        break;
+                                break;
+
+                        }
+                        <div class="trans-comment">
+                            <text>"@payment.Comments"</text>
+                        </div>
+                    </div>
+                    <span class="trans-amount">
+                        <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(payment.TransactionDate)</div>
+                        @switch (payment.MessageType)
+                        {
+                            case "Payment":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-pay-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-pay-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                            case "PaymentRequest":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-request-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-request-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                            case "Donation":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-request-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-request-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                        }
+                        <div class="gray-out">
+                            <text>@payment.TransactionStatus</text>
+                        </div>
+                    </span></a></li>
+                }
+            }
+        </ul>
     </div>
-     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
 </div>

@@ -105,7 +105,7 @@ namespace Mobile_PaidThx.Services
                 throw new Exception(response.Description);
         }
 
-        public string AddAccount(String apiKey, String userId, String nickName, String nameOnAccount, String routingNumber, string accountNumber, string accountType, string securityPin)
+        public void AddAccount(String apiKey, String userId, String nickName, String nameOnAccount, String routingNumber, string accountNumber, string accountType, string securityPin)
         {
             var serviceUrl = String.Format(_addACHAccountUrl, _webServicesBaseUrl, userId);
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -126,9 +126,9 @@ namespace Mobile_PaidThx.Services
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
                 throw new Exception(response.Description);
 
-            var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
+            //var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
-            return jsonObject["paymentAccountId"];
+            //return jsonObject["paymentAccountId"];
         }
 
         public string SetupACHAccount(string userId, string apiKey, string nameOnAccount, string nickName, string routingNumber, string accountNumber,
