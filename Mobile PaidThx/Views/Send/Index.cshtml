@@ -4,14 +4,14 @@
 }
 <div data-role="page" id="send-page">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Send Money</h1>
         <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
     <div data-role="content" class="content-margin">
         @Html.ValidationSummary()
-       @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" }} ))
+       @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
        {
             <p style="margin-top: 0; padding-top: 0;">
                 <label for="txtSendTo">
@@ -19,10 +19,17 @@
                 <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
                     <button data-role="none" type="button" class="imgbtn field-btn">
                         <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
-                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
-                                id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientUri))
+                        @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
+                        {
+                            <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="@Model.RecipientName" />
+                        }</span><span
+                                id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientName))
                                                       {
-                                    <span id="modelRecipient">@Model.RecipientUri</span>
+                                    <span id="modelRecipient">@Model.RecipientName</span>
                                                       }
                                                       else
                                                       {
@@ -58,7 +65,7 @@
                 <button type="submit" id="sendmoney2" class="btn-jq" data-theme="f">
                     <span>Send Money</span></button>
             </p>
-        }
+       }
     </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
 </div>

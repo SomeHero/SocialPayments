@@ -493,26 +493,97 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
 
+        //POST /api/users/validate_passwordreset
+        public HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse> ValidatePasswordResetAttempt(UserModels.ValidatePasswordResetAttemptRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Validating Password Reset Attempt {0}", request.ResetPasswordAttemptId));
+
+            DomainServices.UserService userService = new DomainServices.UserService();
+            Domain.PasswordResetAttempt passwordResetAttempt = null;
+            HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse> response = null;
+
+            try
+            {
+                passwordResetAttempt = userService.ValidatePasswordResetAttempt(request.ResetPasswordAttemptId);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Validating Password Reset Attempt {0}. Exception {1}", request.ResetPasswordAttemptId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Validating Password Reset Attempt {0}. Exception {1}", request.ResetPasswordAttemptId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating Password Reset Attempt {0}. Exception {1}. Stack Trace {2}", request.ResetPasswordAttemptId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(new UserModels.ValidatePasswordResetAttemptResponse() {
+              HasSecurityQuestion = !(passwordResetAttempt.User.SecurityQuestion == null),
+              SecurityQuestion = passwordResetAttempt.User.SecurityQuestion.Question,
+              UserId = passwordResetAttempt.UserId.ToString()
+            }, HttpStatusCode.OK);
+
+            return response;
+        }
         public HttpResponseMessage ChangePassword(string id, UserModels.ChangePasswordRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Changing password for: {0}", id));
 
             DomainServices.UserService userService = new DomainServices.UserService();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-
-            var user = userService.GetUserById(id);
-
-            if (!securityService.Decrypt(user.Password).Equals(request.currentPassword))
+            HttpResponseMessage response = null;
+            try
             {
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Password doesn't match";
-                return message;
+                userService.ChangePassword(id, request.currentPassword, request.newPassword);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Changing Password for User {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception  Changing Password for User  {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Changing Password for User  {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
-            user.Password = securityService.Encrypt(request.newPassword);
-            userService.UpdateUser(user);
+            response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
         }
 
         //POST api/users/reset_password
@@ -528,6 +599,52 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             }
 
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
+        }
+        //POST api/users/forgot_password
+        public HttpResponseMessage ForgotPassword(UserModels.ForgotPasswordRequest request)
+        {
+            var validateService = new DomainServices.ValidationService();
+
+            HttpResponseMessage response = null;
+            var userService = new DomainServices.UserService();
+
+            try
+            {
+                if (!validateService.IsEmailAddress(request.userName))
+                    throw new SocialPayments.DomainServices.CustomExceptions.BadRequestException("Facebook accounts cannot reset their password. Sign in with Facebook to continue");
+
+                userService.SendResetPasswordLink(request.apiKey, request.userName);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Sending Forgot Password Email to {0}. Exception {1}", request.userName, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Sending Forgot Password Email to {0}. Exception {1}", request.userName, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Sending Forgot Password Email to {0}. Exception {1}. Stack Trace {2}", request.userName, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
             response = new HttpResponseMessage(HttpStatusCode.OK);
 
             return response;

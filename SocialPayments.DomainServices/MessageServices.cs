@@ -373,7 +373,7 @@ namespace SocialPayments.DomainServices
         public Domain.Message Donate(string apiKey, string senderId, string organizationId, string organizationName, string senderAccountId, double amount,
             string comments, string securityPin)
         {
-            return AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments, "Donation", 0.0, 0.0, "", "", "", "");
+            return AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments, "Donation", 0.0, 0.0, "", "", "", securityPin);
         }
         public void AcceptPaymentRequest(string id, string recipientId, string paymentAccountId, string securityPin)
         {

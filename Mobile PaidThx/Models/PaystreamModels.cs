@@ -9,6 +9,7 @@ namespace Mobile_PaidThx.Models
     {
         public class PaystreamModel
         {
+            public Dictionary<string, List<PaymentModel>> SortedPayments { get; set; }
             public List<PaymentModel> AllReceipts { get; set; }
             public List<PaymentModel> PaymentReceipts { get; set; }
             public List<PaymentModel> RequestReceipts { get; set; }
@@ -20,6 +21,8 @@ namespace Mobile_PaidThx.Models
             public string Id { get; set; }
             public string SenderUri { get; set; }
             public string RecipientUri { get; set; }
+            public string SenderName { get; set; }
+            public string RecipientName { get; set; }
             public Double Amount { get; set; }
             public DateTime TransactionDate { get; set; }
             public string TransactionType { get; set; }

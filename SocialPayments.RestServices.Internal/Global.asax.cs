@@ -28,6 +28,11 @@ namespace SocialPayments.RestServices.Internal
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapHttpRoute(
+                name: "ValidateRoutingNumber",
+                routeTemplate: "api/routingnumber/validate",
+                defaults: new { controller = "RoutingNumber", action = "ValidateRoutingNumber" }
+            );
 
             routes.MapHttpRoute(
                name: "BatchTransactions",
@@ -193,7 +198,16 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/users/{id}/change_password",
                 defaults: new { controller = "Users", action = "ChangePassword" }
             );
-
+            routes.MapHttpRoute(
+                name: "ForgotPassword",
+                routeTemplate: "api/users/forgot_password",
+                defaults: new { controller = "Users", action = "ForgotPassword" }
+            );
+            routes.MapHttpRoute(
+                name: "ValidatePasswordReset",
+                routeTemplate: "api/users/validate_passwordreset",
+                defaults: new { controller = "Users", action = "ValidatePasswordResetAttempt" }
+            );
             routes.MapHttpRoute(
                 name: "ResetPasswordEmail",
                 routeTemplate: "api/users/reset_password",

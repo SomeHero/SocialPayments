@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="page-join">
+<div data-role="page" id="page-join" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
              @if (Model.Message != null)
              {<text>You Have Money!</text>}
@@ -21,9 +21,9 @@
                 <text>
 
                  <div id="pay-in" class="aui">
-                <div class="paystream-aui" style="position: relative">
+                <div class="paystream-aui">
                     <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
@@ -38,9 +38,9 @@
                 <text>
 
                  <div id="pay-in" class="aui">
-                <div class="paystream-aui" style="position: relative">
+                <div class="paystream-aui">
                     <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>requests @String.Format("{0:C}", Model.Message.Amount) from you.</h4>
+                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>requests @String.Format("{0:C}", Model.Message.Amount) from you.</h4>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
@@ -55,9 +55,9 @@
                 <text>
 
                  <div id="pay-in" class="aui">
-                <div class="paystream-aui" style="position: relative">
+                <div class="paystream-aui">
                     <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message" style="position: absolute; left: 60px"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
@@ -80,13 +80,13 @@
             <a data-role="button" id="join-reveal" data-theme="b" data-icon="arrow-d" data-iconpos="right">
                 Join with Email</a>
             <div id="registration-form" class="hidden">
-                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" } }))
                 {
                     <input type="email" id="email" class="required email" placeholder="Enter Your Email Address"
                         name="Email" style="margin-bottom:15px" value="@Model.UserName" required />
                     <input type="password" id="password" class="required" placeholder="Create a Password"
                         name="Password" style="margin-bottom:15px" required />
-                    <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
+                    <input type="password" id="confirmPasword" class="required passwordmatch" placeholder="Confirm Your Password"
                         name="ConfirmPassword" style="margin-bottom:15px" required />
                 <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
                 Join with Email</button>
@@ -103,7 +103,14 @@
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              <script type="text/javascript">
+                //wait to do event binding until the page is being initialized
+                 $(document).on("pageshow", "#page-join", function () {
+                    $.validator.addMethod("passwordmatch", function (value) {
+                        return value == $("#password").val();
+                    }, "Confirm Password must match Password");
 
+                    $("#frmSubmit").validate();
+                });
 
                  $(document).delegate('#page-join', 'pageinit', function () {
                      $('#join-reveal').click(function () {

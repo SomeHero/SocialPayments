@@ -6,12 +6,12 @@
 
 <div data-role="page" id="forgotsecuritypin-page" data-add-back-btn="true">
         @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Forgot Security Pin</h1>
     </div>
     <div data-role="content" style="margin: 15px;">
-     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "data-ajax", "false" }  }))
          {   
         @Html.ValidationSummary()
         <h4>My Security Question</h4>

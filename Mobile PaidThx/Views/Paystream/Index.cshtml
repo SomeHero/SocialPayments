@@ -3,25 +3,215 @@
     ViewBag.Title = "Paystream";
 }
 <script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
-<div data-role="page" id="paystream-index" @TempData["DataUrl"]>
+<div data-role="page" id="paystream-index">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Paystream</h1>
-       <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right">
+        </a>
     </div>
     <div data-role="content">
-        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items" data-type="horizontal" data-grid="c">
-            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked" style="width: 25%" />
-            <label for="paystream-all">All</label>
+        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items"
+            data-type="horizontal" data-grid="c">
+            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked"
+                style="width: 25%" />
+            <label for="paystream-all">
+                All</label>
             <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
-            <label for="paystream-sent">Sent</label>
+            <label for="paystream-sent">
+                Sent</label>
             <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
-            <label for="paystream-received">Rec.</label>
+            <label for="paystream-received">
+                Rec.</label>
             <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
-            <label for="paystream-other">Req.</label>
+            <label for="paystream-other">
+                Req.</label>
         </fieldset>
-        @{Html.RenderPartial("PartialViews/All", Model);}
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+            @foreach (var paymentGroup in Model.SortedPayments)
+            {
+                <li data-role="list-divider">@paymentGroup.Key</li>
+                foreach (var payment in paymentGroup.Value)
+                {
+                <li><a onclick="openOffersDialog('@payment.Id');"><span class="trans-type">
+                @if(!String.IsNullOrEmpty(payment.TransactionImageUri))
+                {
+                   <text>
+                   <img width="50" height="50" class="rounded" src="@payment.TransactionImageUri" alt="Image" />
+                   </text>
+                    } else {
+                    <text>
+                    <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
+                    </text>
+                    }
+                </span>
+                    <div class="trans-title">
+                        @switch (payment.Direction)
+                        {
+                            case "In":
+                            <text> <strong>@payment.SenderName</strong>
+                            </text>
+                                      break;
+                            case "Out":
+                            <text> <strong>@payment.RecipientName</strong>
+                            </text>
+                                      break;
+                        }
+                        @switch (payment.MessageType)
+                        {
+                            case "Payment":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="title-pay-in">
+                                <text>You received money</text>
+                            </div>
+                                        break;
+
+                                    case "Out":
+                            <div class="title-pay-out">
+                                <text>You sent money</text>
+                            </div>
+                                        break;
+                                }
+                                break;
+
+
+                            case "PaymentRequest":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="title-request-in">
+                                <text>You received a request</text>
+                            </div>
+                                        break;
+
+                                    case "Out":
+                            <div class="title-request-out">
+                                <text>You sent a request</text>
+                            </div>
+                                        break;
+                                }
+                                break;
+                            case "Donation":
+                            <div class="title-request-out">
+                                <text>You donated</text>
+                            </div>
+                                        break;
+                                break;
+
+                        }
+                        <div class="trans-comment">
+                            <text>"@payment.Comments"</text>
+                        </div>
+                    </div>
+                    <span class="trans-amount">
+                        <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(payment.TransactionDate)</div>
+                        @switch (payment.MessageType)
+                        {
+                            case "Payment":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-pay-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-pay-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                            case "PaymentRequest":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-request-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-request-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                            case "Donation":
+                                switch (payment.Direction)
+                                {
+                                    case "In":
+                            <div class="paystream-request-in">
+                                <text>+@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+
+                                    case "Out":
+                            <div class="paystream-request-out">
+                                <text>-@string.Format("{0:C}", payment.Amount)</text>
+                            </div>
+                                  break;
+                                }
+                                break;
+                        }
+                        <div class="gray-out">
+                            <text>@payment.TransactionStatus</text>
+                        </div>
+                    </span></a></li>
+                }
+            }
+            @if(Model.SortedPayments.Count() == 0)
+            {
+             <text><li id="no-results" style="display: block;"></text>
+            }
+            else {
+                <text><li id="no-results" style="display: none;"></text>
+            }
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No paystream items found
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Start sending or request money
+                       </span>
+   
+                    </li>
+        </ul>
     </div>
-     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
 </div>
+<script language="javascript">
+//wait to do event binding until the page is being initialized
+    $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+        //cache the list-view element for later use
+        var $listview = $(this).find('[data-role="listview"]');
+
+        //delegate event binding since the search widget is added dynamically
+        //bind to the `keyup` event so we can check the value of the input after the user types
+        $(this).delegate('input[data-type="search"]', 'keyup', function () {
+
+            var searchVal = $(this).delegate('input[data-type="search"]').val();
+
+            //check to see if there are any visible list-items that are not the `#no-results` element
+            if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                //if none are found then fadeIn the `#no-results` element
+                $('#no-results').show();
+                $('#no-results').fadeIn(500);
+
+            } else {
+
+                //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                $('#no-results').fadeOut(250);
+            }
+        });
+
+    });
+    </script>

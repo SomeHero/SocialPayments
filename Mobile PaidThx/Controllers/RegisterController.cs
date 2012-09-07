@@ -89,18 +89,39 @@ namespace Mobile_PaidThx.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
 
+            var routingNumberServices = new RoutingNumberServices();
+
+            if (!routingNumberServices.ValidateRoutingNumber(model.RoutingNumber))
+            {
+                ModelState.AddModelError("RoutingNumber", "Invalid Routing Number.  Please check your Bank's Routing Number and Try Again");
+
+                return View(model);
+            }
+
             Session["ACHAccountModel"] = model;
 
             return RedirectToAction("SetupPinSwipe");
         }
+        [HttpPost]
+        public bool ValidateRoutingNumber(string routingNumber)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Validating Routing Number {0}", routingNumber));
 
+            var routingNumberServices = new RoutingNumberServices();
+
+            return routingNumberServices.ValidateRoutingNumber(routingNumber);
+
+        }
         public ActionResult SetupPinSwipe()
         {
+            TempData["Message"] = "";
+
             return View();
         }
         [HttpPost]
         public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
         {
+            Session["PinCode"] = model.PinCode;
             return RedirectToAction("ConfirmPinSwipe");
         }
         public ActionResult ConfirmPinSwipe()
@@ -110,6 +131,15 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ConfirmPinSwipe(ConfirmPinSwipeModel model)
         {
+            string firstPinCode = Session["PinCode"].ToString();
+
+            if (firstPinCode != model.PinCode)
+            {
+                TempData["Message"] = "Confirmation Security Pin Does Not Match Your First Security Pin. Try Again.";
+
+                return View("SetupPinSwipe");
+            }
+
             Session["PinCode"] = model.PinCode;
 
             return RedirectToAction("SecurityQuestion");

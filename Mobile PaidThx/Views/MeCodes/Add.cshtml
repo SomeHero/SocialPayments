@@ -1,9 +1,9 @@
 ﻿@model Mobile_PaidThx.Models.MeCodesModels.AddMeCodeModel
-<div data-role="page" id="add-email-paypoint-page">
+<div data-role="page" id="add-mecode-paypoint-page" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Add MeCode</h1>
+            Add ME Code</h1>
     </div>
     <div data-role="content" class="panel main-body">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
@@ -11,12 +11,37 @@
          {
             @Html.ValidationSummary()
             <p>
-                <input type="text" id="txtMeCode" name="MeCode" placeholder="$MeCode"
+                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" 
                 required /></p>
             <p>
-             <button type="submit" id="add-email-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Add MeCode</span></button></p>
+             <button type="submit" id="btn-add-mecode" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+                  Add ME Code </button></p>
          }
         </div>
     </div>
+        <script type="text/javascript">
+            $(document).delegate('#add-mecode-paypoint-page', 'pageinit', function () {
+                $('#txtMeCode').focus();
+
+                var currentMeCode = "";
+                $(this).delegate('#txtMeCode', 'keydown', function () {
+
+                    if (event.keyCode == '52') {
+                        event.preventDefault();
+                        return;
+                    }
+                });
+                $(this).delegate('#txtMeCode', 'keyup', function () {
+
+                    currentMeCode = $(this).val();
+
+                    if (currentMeCode.charAt(0) != '$')
+                        currentMeCode = '$' + currentMeCode;
+
+                    $(this).val(currentMeCode);
+                    event.preventDefault();
+                });
+
+            });
+    </script>
 </div>

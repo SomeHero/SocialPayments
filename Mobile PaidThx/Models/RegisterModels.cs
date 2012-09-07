@@ -51,6 +51,10 @@ namespace Mobile_PaidThx.Models
             public string AccountNumber { get; set; }
 
             [Required]
+            [Display(Name = "Confirm Account Number")]
+            public string ConfirmAccountNumber { get; set; }
+
+            [Required]
             [Display(Name = "Account Type")]
             public string AccountType { get; set; }
 

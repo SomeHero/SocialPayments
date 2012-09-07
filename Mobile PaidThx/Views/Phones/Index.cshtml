@@ -1,7 +1,7 @@
 ﻿@model Mobile_PaidThx.Models.PhonesModels.PhonesModel
 <div data-role="page" id="phone-page" data-add-back-btn="true">
         @{ Html.RenderPartial("TitleBar"); }
-<div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+<div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Phone #'s</h1>
     </div>
@@ -9,12 +9,10 @@
         <ul data-role="listview" data-inset="true">
             @foreach (var payPoint in Model.PayPoints)
             { 
-            <li >
+            <li class="settings phone" >
                  <a href="@Url.Content("~/Phones/Details/" + payPoint.Id)">
-                        <img src="@Url.Content("~/content/images/icon-settings-phones-40x40.png")" />
-                    @payPoint.Uri
-                    <br />
-                    @if (payPoint.Verified)
+                    <h2>@payPoint.Uri</h2>
+                    <h4>@if (payPoint.Verified)
                     {
                         <text>Verified</text>
                     }
@@ -22,14 +20,14 @@
                     {
                         <text>Not Verified</text>
                     }
+                    </h4>
                 </a>
             </li>
             }
         </ul>
         <ul data-role="listview" data-inset="true">
-            <li>
+            <li class="settings add">
                 <a href="@Url.Content("~/Phones/Add")">
-                    <img src="@Url.Content("~/Content/images/img-plus-40x40.png")" alt="Link Phone Number" />
                     Add Phone Number</a>
             </li>
         </ul>

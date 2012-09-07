@@ -34,7 +34,7 @@ namespace SocialPayments.DomainServices
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UserService(): this(new Context()) { }
+        public UserService() : this(new Context()) { }
 
         public UserService(IDbContext context)
         {
@@ -80,7 +80,7 @@ namespace SocialPayments.DomainServices
             });
 
             Domain.PayPointType payPointType;
-            
+
             payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"EmailAddress");
 
             if (payPointType == null)
@@ -141,13 +141,13 @@ namespace SocialPayments.DomainServices
                     message.Recipient = user;
                     message.Status = PaystreamMessageStatus.ProcessingPayment;
 
-                    if (message.RecipientUri != user.EmailAddress && message.RecipientUri != user.MobileNumber)
-                    {
-                        UserPayPoint messagePayPoint;
+                    UserPayPoint messagePayPoint;
 
-                        switch (GetURIType(message.RecipientUri))
-                        {
-                            case URIType.EmailAddress:
+                    switch (GetURIType(message.RecipientUri))
+                    {
+                        case URIType.EmailAddress:
+                            if (message.RecipientUri != user.EmailAddress)
+                            {
                                 messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
                                 {
                                     CreateDate = System.DateTime.Now,
@@ -158,9 +158,13 @@ namespace SocialPayments.DomainServices
                                 });
 
                                 SendEmailVerificationLink(messagePayPoint);
+                            }
 
-                                break;
-                            case URIType.MobileNumber:
+                            break;
+                        case URIType.MobileNumber:
+
+                            if (message.RecipientUri != user.MobileNumber)
+                            {
                                 messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
                                 {
                                     CreateDate = System.DateTime.Now,
@@ -171,9 +175,8 @@ namespace SocialPayments.DomainServices
                                 });
 
                                 SendMobileVerificationCode(messagePayPoint);
-
-                                break;
-                        }
+                            }
+                            break;
                     }
 
                 }
@@ -193,6 +196,33 @@ namespace SocialPayments.DomainServices
                 _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
             });
             return user;
+        }
+        public void ChangePassword(string userId, string currentPassword, string newPassword)
+        {
+            using (var ctx = new Context())
+            {
+                Guid userGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                if (!securityService.Encrypt(currentPassword).Equals(user.Password))
+                    throw new CustomExceptions.BadRequestException(String.Format("Current Password Does Not Match Our Records. Try Again."));
+
+                if (securityService.Decrypt(user.Password).Equals(newPassword))
+                    throw new CustomExceptions.BadRequestException(String.Format("New Password Can't Match Your Current Password. Try Again."));
+
+                user.Password = securityService.Encrypt(newPassword);
+
+                ctx.SaveChanges();
+            }
         }
         public List<User> GetUsers()
         {
@@ -331,14 +361,14 @@ namespace SocialPayments.DomainServices
 
         public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm)
         {
-            using(var ctx = new Context()) 
+            using (var ctx = new Context())
             {
                 List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
 
                 int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
 
                 // Takes the top 20 found matches.
-                MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where( m=>m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
+                MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
 
                 return MeCodesFound;
             }
@@ -492,7 +522,7 @@ namespace SocialPayments.DomainServices
                 return false;
             }
         }
-        public bool VerifyMobilePayPoint(string userId, string userPayPointId,  string verificationCode)
+        public bool VerifyMobilePayPoint(string userId, string userPayPointId, string verificationCode)
         {
             _logger.Log(LogLevel.Info, String.Format("Verify Mobile Pay Point User: {0} UserPayPoint:{1} Verification Code: {2}", userId, userPayPointId, verificationCode));
 
@@ -503,7 +533,7 @@ namespace SocialPayments.DomainServices
                 Guid userGuid;
 
                 Guid.TryParse(userId, out userGuid);
-                if(userGuid ==null)
+                if (userGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 Guid.TryParse(userPayPointId, out userPayPointGuid);
@@ -754,8 +784,8 @@ namespace SocialPayments.DomainServices
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Error, String.Format("Error linking facebook account, No user found for {0}",userId));
-                    
+                    _logger.Log(LogLevel.Error, String.Format("Error linking facebook account, No user found for {0}", userId));
+
                     return false;
                 }
             }
@@ -785,7 +815,35 @@ namespace SocialPayments.DomainServices
 
             return user;
         }
+        public Domain.PasswordResetAttempt ValidatePasswordResetAttempt(string id)
+        {
+            using (var ctx = new Context())
+            {
+                Guid passwordResetAttemptGuid;
+                Guid.TryParse(id, out passwordResetAttemptGuid);
 
+                if (passwordResetAttemptGuid == null)
+                    throw new CustomExceptions.BadRequestException("Password reset link is invalid");
+
+                var passwordResetDb = ctx.PasswordResetAttempts
+                    .Include("User.SecurityQuestion")
+                        .FirstOrDefault(p => p.Id == passwordResetAttemptGuid);
+
+                if (passwordResetDb == null)
+                    throw new CustomExceptions.BadRequestException("Password reset link is invalid");
+
+                if (passwordResetDb.ExpiresDate < System.DateTime.Now)
+                    throw new CustomExceptions.BadRequestException("Password reset link has expired.");
+
+
+                if (passwordResetDb.Clicked)
+                    throw new CustomExceptions.BadRequestException("Password reset link is no longer valid. Please generate a new link.");
+
+                ctx.SaveChanges();
+
+                return passwordResetDb;
+            }
+        }
         public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
         {
             var user = GetUserById(userId);
@@ -814,39 +872,46 @@ namespace SocialPayments.DomainServices
             return user;
         }
 
-        public void SendResetPasswordLink(User user)
-        {
-            SendResetPasswordLink(user, new Guid("bda11d91-7ade-4da1-855d-24adfe39d174"));
-        }
-
-        public void SendResetPasswordLink(User user, Guid ApiKey)
+        public void SendResetPasswordLink(string apiKey, string userName)
         {
             DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.ValidationService validateService = new ValidationService();
 
-            if (!validateService.IsEmailAddress(user.UserName))
+            string name = "";
+            PasswordResetAttempt passwordResetDb = null;
+            Guid applicationId;
+
+            Application application = null;
+            User user = null;
+
+            using (var ctx = new Context())
             {
-                var message = "Facebook accounts cannot reset their password. Sign in with Facebook to continue";
+                Guid.TryParse(apiKey, out applicationId);
+
+                application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationId);
+
+                if(application == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} is Invalid", apiKey));
+
+                user = ctx.Users.FirstOrDefault(u => u.UserName == userName || u.MobileNumber == userName);
                 
-                throw new ArgumentException(message);
+                if(user == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("User {0} is Invalid", userName));
+
+                name = formattingService.FormatUserName(user);
+
+                passwordResetDb = ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
+                {
+                    Clicked = false,
+                    User = user,
+                    ExpiresDate = System.DateTime.Now.AddHours(3),
+                    Id = Guid.NewGuid()
+                });
+
+                ctx.SaveChanges();
             }
 
-            string name = formattingService.FormatUserName(user);
-            Guid passwordResetGuid = Guid.NewGuid();
-            DateTime expiresDate = System.DateTime.Now.AddHours(3);
-
-            PasswordResetAttempt passwordResetDb = _ctx.PasswordResetAttempts.Add(new PasswordResetAttempt()
-            {
-                Clicked = false,
-                User = user,
-                ExpiresDate = expiresDate,
-                Id = passwordResetGuid
-            });
-
-            _ctx.SaveChanges();
-
-            string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetGuid);
+            string link = String.Format("{0}reset_password/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], passwordResetDb.Id);
 
             StringBuilder body = new StringBuilder();
             body.AppendFormat("Dear {0}", name).AppendLine().AppendLine();
@@ -858,7 +923,7 @@ namespace SocialPayments.DomainServices
             body.AppendLine("Thank you,").AppendLine();
             body.Append("The PaidThx Team");
 
-            emailService.SendEmail(ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
+            emailService.SendEmail(application.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
         }
         public void SendMobileVerificationCode(UserPayPoint userPayPoint)
         {
@@ -896,7 +961,7 @@ namespace SocialPayments.DomainServices
                 var communicationTemplate = communicationServices.GetCommunicationTemplate("Phone_Added_SMS");
                 var link = String.Format(_mobileVerificationBaseUrl, verification.Id);
 
-               //{0} - Link to verification screen
+                //{0} - Link to verification screen
                 //{1} - Phone verification code
                 smsService.SendSMS(verification.UserPayPoint.User.ApiKey, verification.UserPayPoint.URI, String.Format(communicationTemplate.Template,
                     link, verificationCode));
@@ -926,7 +991,7 @@ namespace SocialPayments.DomainServices
                     UserPayPoint = userPayPoint,
                     VerificationCode = "",
                     ExpirationDate = System.DateTime.Now.AddDays(30)
-             });
+                });
             _ctx.SaveChanges();
 
             string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
@@ -981,7 +1046,7 @@ namespace SocialPayments.DomainServices
 
                 Domain.User user = ctx.Users.FirstOrDefault(u => u.UserId == userGuid);
 
-                if(user == null)
+                if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
 
                 List<Domain.Message> recentPayments = ctx.Messages
