@@ -197,6 +197,33 @@ namespace SocialPayments.DomainServices
             });
             return user;
         }
+        public void ChangePassword(string userId, string currentPassword, string newPassword)
+        {
+            using (var ctx = new Context())
+            {
+                Guid userGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                var user = ctx.Users.FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                if (!securityService.Encrypt(currentPassword).Equals(user.Password))
+                    throw new CustomExceptions.BadRequestException(String.Format("Current Password Does Not Match Our Records. Try Again."));
+
+                if (securityService.Decrypt(user.Password).Equals(newPassword))
+                    throw new CustomExceptions.BadRequestException(String.Format("New Password Can't Match Your Current Password. Try Again."));
+
+                user.Password = securityService.Encrypt(newPassword);
+
+                ctx.SaveChanges();
+            }
+        }
         public List<User> GetUsers()
         {
             return _ctx.Users

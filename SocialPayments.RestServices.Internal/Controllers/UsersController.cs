@@ -548,20 +548,42 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             DomainServices.UserService userService = new DomainServices.UserService();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-
-            var user = userService.GetUserById(id);
-
-            if (!securityService.Decrypt(user.Password).Equals(request.currentPassword))
+            HttpResponseMessage response = null;
+            try
             {
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Password doesn't match";
-                return message;
+                userService.ChangePassword(id, request.currentPassword, request.newPassword);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Changing Password for User {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception  Changing Password for User  {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Changing Password for User  {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
-            user.Password = securityService.Encrypt(request.newPassword);
-            userService.UpdateUser(user);
+            response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
         }
 
         //POST api/users/reset_password
