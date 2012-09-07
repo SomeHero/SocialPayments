@@ -181,40 +181,25 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
 
-            //using (var ctx = new Context())
-            //{
-            //    var securityService = new SocialPayments.DomainServices.SecurityService();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userServices = new UserServices();
+                    userServices.ForgotPassword(_apiKey, model.UserName);
+                }
+            }
+            catch (Exception ex)
+            {
+                model.PasswordSent = false;
 
-            //    try
-            //    {
-            //        if (ModelState.IsValid)
-            //        {
-            //            var user = ctx.Users.FirstOrDefault(u => u.UserName == model.UserName || u.MobileNumber == model.UserName);
+                ModelState.AddModelError("", ex.Message);
 
-            //            if (user == null)
-            //                throw new Exception(String.Format("Unable to find user {0}", model.UserName));
+                return View(model);
+            }
 
-            //            if (user.EmailAddress.Length == 0)
-            //                throw new Exception(String.Format("No email address asssociated with username {0}", model.UserName));
-            //            //Send Email
-            //            //SmtpClient sc = new SmtpClient();
-            //            //sc.EnableSsl = true;
+            model.PasswordSent = true;
 
-            //            //sc.Send("admin@paidthx.com", user.EmailAddress, "Your PaidThx Password", sbBody.ToString());
-
-            //            UserService userService = new UserService(ctx);
-            //            userService.SendResetPasswordLink(user);
-
-            //            model.PasswordSent = true;
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        ModelState.AddModelError("", ex.Message);
-            //    }
-
-            //    return View(model);
-            //}
             return View(model);
         }
         public ActionResult SignOut()
@@ -229,57 +214,26 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult ResetPassword(string id)
         {
-            //using(var ctx = new Context()) {
+             var userService = new UserServices();
+             ResetPasswordModelInput model = new ResetPasswordModelInput();
+             UserModels.ValidateResetPasswordAttemptResponse response = null;
 
-            //    Guid idGuid;
+            try {
+                response = userService.ValidateResetPasswordAttempt(_apiKey, id);
 
-            //    Guid.TryParse(id, out idGuid);
+                model.HasSecurityQuestion = response.HasSecurityQuestion;
+                model.SecurityQuestion = response.SecurityQuestion;
 
-            //    if (idGuid == null)
-            //    {
-            //        ModelState.AddModelError("", "Invalid Id");
-            //    }
+                Session["UserId"] = response.UserId;
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
 
+                return View(model);
+            }
 
-            //    SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
-            //        .FirstOrDefault(p => p.Id == idGuid);
-
-            //    ResetPasswordModelInput model = new ResetPasswordModelInput();
-
-            //    if (passwordResetDb == null)
-            //    {
-            //        ModelState.AddModelError("", "Invalid Attempt");
-            //        return View(model);
-            //    }
-
-            //    if (passwordResetDb.ExpiresDate < System.DateTime.Now)
-            //    {
-            //        ModelState.AddModelError("", "Password reset link has expired.");
-            //        passwordResetDb.Clicked = true;
-            //        return View(model);
-            //    }
-
-            //    if (passwordResetDb.Clicked)
-            //    {
-            //        ModelState.AddModelError("", "Password reset link has been clicked before. Please generate a new link in the app");
-            //        return View(model);
-            //    }
-
-            //    if (passwordResetDb.User.SecurityQuestion == null)
-            //    {
-            //        model.SecurityQuestion = "";
-            //        model.HasSecurityQuestion = false;
-
-            //        return View(model);
-            //    }
-            //    passwordResetDb.Clicked = true;
-            //    model.HasSecurityQuestion = true;
-            //    model.SecurityQuestion = passwordResetDb.User.SecurityQuestion.Question;
-
-            //    return View(model);
-            //}
-
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -287,47 +241,24 @@ namespace Mobile_PaidThx.Controllers
         {
             if (model.NewPassword.Equals(model.ConfirmPassword))
             {
-                //using (var ctx = new Context())
-                //{
-                //    SocialPayments.DomainServices.SecurityService securityService = new SecurityService();
-                //    UserService userService = new UserService(ctx);
+                var userServices = new UserServices();
 
-                //    try
-                //    {
-                //        Guid idGuid;
+                try
+                {
+                    string userId = Session["UserId"].ToString();
 
-                //        Guid.TryParse(id, out idGuid);
+                    userServices.ChangePasssword(userId, model.ConfirmPassword, model.NewPassword);
 
-                //        if (idGuid == null)
-                //        {
-                //            ModelState.AddModelError("", "Invalid Id");
-                //        }
+                    TempData["Message"] = "Your Password was successfully reset";
 
+                    return RedirectToAction("Index", "SignIn");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
 
-                //        SocialPayments.Domain.PasswordResetAttempt passwordResetDb = ctx.PasswordResetAttempts
-                //            .FirstOrDefault(p => p.Id == idGuid);
-
-                //        if (passwordResetDb == null)
-                //        {
-                //            ModelState.AddModelError("", "Invalid Attempt");
-                //        }
-
-                //        if (model.SecurityQuestionAnswer == null)
-                //        {
-                //            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.NewPassword);
-                //            return View("SignIn");
-                //        }
-                //        else
-                //        {
-                //            userService.ResetPassword(passwordResetDb.UserId.ToString(), model.SecurityQuestionAnswer, model.NewPassword);
-                //            return View("SignIn");
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        ModelState.AddModelError("", ex.Message);
-                //    }
-                //}
+                    return View(model);
+                }
             }
             else
             {
