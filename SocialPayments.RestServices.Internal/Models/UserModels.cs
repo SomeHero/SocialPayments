@@ -161,7 +161,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string messageId { get; set; }
             //public DateTime tokenExpiration { get; set; }
         }
-
+        public class ForgotPasswordRequest
+        {
+            public string apiKey { get; set; }
+            public string userName { get; set; }
+        }
         public class LinkFacebookRequest
         {
             public string apiKey { get; set; }
@@ -264,6 +268,16 @@ namespace SocialPayments.RestServices.Internal.Models
         public class ResendVerificationCodeRequest
         {
             public string UserPayPointId { get; set; }
+        }
+        public class ValidatePasswordResetAttemptRequest
+        {
+            public string ResetPasswordAttemptId { get; set; }
+        }
+        public class ValidatePasswordResetAttemptResponse
+        {
+            public bool HasSecurityQuestion { get; set; }
+            public string SecurityQuestion { get; set; }
+            public string UserId { get; set; }
         }
         public class SendEmailRequest
         {

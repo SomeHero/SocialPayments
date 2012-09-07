@@ -5,10 +5,19 @@
 <div data-role="page" id="page-join">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-        <h1></h1>
+        <h1>
+           <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
-    <div data-role="content">
-        @ViewBag.Message
+    <div data-role="content" class="content-margin">
+        @if (ViewBag.Confirmed)
+        {
+            <text>Thanks.  You have successfully verified this pay point and can now begin to receive funds using this pay point.</text>
+        }
+        else
+        {
+            @ViewBag.Message
+        }
     </div>
+     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "" }); }
 </div>

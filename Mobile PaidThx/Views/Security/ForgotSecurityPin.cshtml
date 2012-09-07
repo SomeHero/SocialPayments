@@ -11,7 +11,7 @@
             Forgot Security Pin</h1>
     </div>
     <div data-role="content" style="margin: 15px;">
-     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "data-ajax", "false" }  }))
          {   
         @Html.ValidationSummary()
         <h4>My Security Question</h4>
