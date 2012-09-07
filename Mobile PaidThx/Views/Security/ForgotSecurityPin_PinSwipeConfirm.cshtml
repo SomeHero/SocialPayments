@@ -4,7 +4,7 @@
     ViewBag.Title = "Change Security Pin";
 }
 
-<div data-role="page" id="changesecuritypin-page" data-add-back-btn="true">
+<div data-role="page" id="forgotsecuritypin-pinswipe-confirm-page" data-add-back-btn="true">
         @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -17,7 +17,7 @@
         {       
             <div style="margin-top:15px">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
         }
     </div>

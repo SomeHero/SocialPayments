@@ -114,11 +114,14 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupPinSwipe()
         {
+            TempData["Message"] = "";
+
             return View();
         }
         [HttpPost]
         public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
         {
+            Session["PinCode"] = model.PinCode;
             return RedirectToAction("ConfirmPinSwipe");
         }
         public ActionResult ConfirmPinSwipe()
@@ -128,6 +131,15 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ConfirmPinSwipe(ConfirmPinSwipeModel model)
         {
+            string firstPinCode = Session["PinCode"].ToString();
+
+            if (firstPinCode != model.PinCode)
+            {
+                TempData["Message"] = "Confirmation Security Pin Does Not Match Your First Security Pin. Try Again.";
+
+                return View("SetupPinSwipe");
+            }
+
             Session["PinCode"] = model.PinCode;
 
             return RedirectToAction("SecurityQuestion");
