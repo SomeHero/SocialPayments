@@ -167,8 +167,11 @@ namespace SocialPayments.DomainServices
                     if (recipientUriType == URIType.MobileNumber && validationServices.AreMobileNumbersEqual(sender.MobileNumber, recipientUri))
                         throw new CustomExceptions.BadRequestException(String.Format("Sender {0} and Recipient {1} have the same pay points. Unable to Process.", senderId, recipientUri));
 
-                    if (recipientUriType == URIType.MECode && sender.PayPoints.First(m => m.URI.Equals(recipientUri)).ToString().Count() > 0)
+                    if (recipientUriType == URIType.MECode && sender.PayPoints.FirstOrDefault(m => m.URI == recipientUri) != null )
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Found recipientUriType 'meCode' for {0}", recipientUri));
                         throw new CustomExceptions.BadRequestException(String.Format("Sender {0} and Recipient {1} have the same pay points. Unable to Process.", senderId, recipientUri));
+                    }
                 }
 
                 //VALIDATE the SENDER PAYMENT ACCOUNT

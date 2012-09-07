@@ -11,8 +11,8 @@
             Bank Accounts</h1>
         <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
-    <div data-role="content">
- <div id="accounts-list" class="panel main-body">
+    <div data-role="content" class="content panel">
+ <div id="accounts-list" class="main-body">
         @Html.ValidationSummary()
         <h5>
             Your Linked Accounts</h5>
@@ -22,7 +22,7 @@
                 <li class="settings bank"><a href="@Url.Content("~/BankAccounts/Edit/" + bankAccount.PaymentAccountId)">
                                       
                     <span class="bank-info">
-                        <h2>@{if(string.IsNullOrEmpty(bankAccount.Nickname)){
+                        <h2>@{if(!string.IsNullOrEmpty(bankAccount.Nickname)){
                                   <text>@bankAccount.Nickname</text>;
                              } else{
                                   <text>@bankAccount.AccountType - @bankAccount.AccountNumber</text>
@@ -52,5 +52,5 @@
                 @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
             }
     </div>
-    </div>
+</div>
 </div>
