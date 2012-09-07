@@ -15,6 +15,8 @@ namespace Mobile_PaidThx.Services
     {
         private string _userServiceBaseUrl = "{0}Users";
         private string _userServiceValidateUserUrl = "{0}Users/validate_user";
+        private string _userServiceForgotPasswordUrl = "{0}Users/forgot_password";
+        private string _userServiceValidateResetPasswordUrl = "{0}Users/validate_passwordreset";
         private string _userServiceChangePasswordUrl = "{0}Users/{1}/change_password";
         private string _userServiceChangeSecurityPinUrl = "{0}Users/{1}/change_securitypin";
         private string _userServicesGetBaseUrl = "{0}Users/{1}";
@@ -125,6 +127,38 @@ namespace Mobile_PaidThx.Services
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);
+        }
+        public void ForgotPassword(string apiKey, string userName)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                apiKey = apiKey,
+                userName = userName
+            });
+
+            var response = Post(String.Format(_userServiceForgotPasswordUrl, _webServicesBaseUrl), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+        }
+        public UserModels.ValidateResetPasswordAttemptResponse ValidateResetPasswordAttempt(string apiKey, string id)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                apiKey = apiKey,
+                ResetPasswordAttemptId = id
+            });
+
+            var response = Post(String.Format(_userServiceValidateResetPasswordUrl, _webServicesBaseUrl), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+
+            return js.Deserialize<UserModels.ValidateResetPasswordAttemptResponse>(response.JsonResponse);
         }
         public void ChangeSecurityPin(string userId, string currentSecurityPin, string newSecurityPin)
         {

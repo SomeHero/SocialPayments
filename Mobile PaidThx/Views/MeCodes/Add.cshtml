@@ -11,7 +11,7 @@
          {
             @Html.ValidationSummary()
             <p>
-                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" value="$"
+                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" 
                 required /></p>
             <p>
              <button type="submit" id="btn-add-mecode" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
@@ -22,6 +22,26 @@
         <script type="text/javascript">
             $(document).delegate('#add-mecode-paypoint-page', 'pageinit', function () {
                 $('#txtMeCode').focus();
+
+                var currentMeCode = "";
+                $(this).delegate('#txtMeCode', 'keydown', function () {
+
+                    if (event.keyCode == '52') {
+                        event.preventDefault();
+                        return;
+                    }
+                });
+                $(this).delegate('#txtMeCode', 'keyup', function () {
+
+                    currentMeCode = $(this).val();
+
+                    if (currentMeCode.charAt(0) != '$')
+                        currentMeCode = '$' + currentMeCode;
+
+                    $(this).val(currentMeCode);
+                    event.preventDefault();
+                });
+
             });
     </script>
 </div>

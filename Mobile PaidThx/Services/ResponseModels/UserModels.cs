@@ -121,5 +121,11 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public string LastName { get; set; }
             public string ImageUrl { get; set; }
         }
+        public class ValidateResetPasswordAttemptResponse
+        {
+            public string SecurityQuestion { get; set; }
+            public bool HasSecurityQuestion { get; set; }
+            public string UserId { get; set; }
+        }
     }
 }

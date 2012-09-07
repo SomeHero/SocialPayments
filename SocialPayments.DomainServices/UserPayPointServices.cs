@@ -14,6 +14,7 @@ namespace SocialPayments.DomainServices
             using (var _ctx = new Context())
             {
                 UserService userService = new UserService(_ctx);
+                FormattingServices formattingService = new FormattingServices();
 
                 var user = userService.GetUserById(userId);
 
@@ -23,12 +24,15 @@ namespace SocialPayments.DomainServices
                 var payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == payPointTypeName);
 
                 if (payPointType == null)
-                    throw new CustomExceptions.BadRequestException(String.Format("Pay Point Type {0} not found", payPointType));
+                    throw new CustomExceptions.BadRequestException(String.Format("Pay Point Type {0} not found", uri));
+
+                if (payPointType.Name == "Phone")
+                    uri = formattingService.RemoveFormattingFromMobileNumber(uri);
 
                 var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == uri);
 
                 if (payPoints != null)
-                    throw new CustomExceptions.BadRequestException(String.Format("The pay point {0} is already linked to an account", payPointType));
+                    throw new CustomExceptions.BadRequestException(String.Format("The pay point {0} is already linked to an account", uri));
 
                 //TODO: Validate format of the URI based on type
 
