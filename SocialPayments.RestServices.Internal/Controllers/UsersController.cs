@@ -704,6 +704,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             int numberOfOutgoingNotifications = 0;
 
             User user = null;
+
             try
             {
                 recentPayments = messageService.GetQuickSendPayments(id);
@@ -723,26 +724,36 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         {
                             _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
 
+
                             if (msg.RecipientName != null && msg.RecipientName.Length > 0)
                                 recipName = msg.RecipientName;
                             else
-                                recipName = msg.recipientFirstName + msg.recipientLastName;
+                                recipName = msg.recipientFirstName + " " + msg.recipientLastName;
+
+                            quickSends.Add(new UserModels.QuickSendUserReponse()
+                            {
+                                userUri = msg.RecipientUri,
+                                userName = recipName,
+                                userFirstName = msg.recipientFirstName,
+                                userLastName = msg.recipientLastName,
+                                userImage = String.Format("http://graph.facebook.com/{0}/picture",msg.RecipientUri.Substring(3)),
+                                userType = 0 // Normal User
+                            });
                         }
                         else
                         {
                             recipName = msg.RecipientUri;
+
+                            quickSends.Add(new UserModels.QuickSendUserReponse()
+                            {
+                                userUri = msg.RecipientUri,
+                                userName = recipName,
+                                userFirstName = msg.recipientFirstName,
+                                userLastName = msg.recipientLastName,
+                                userImage = msg.recipientImageUri,
+                                userType = 0 // Normal User
+                            });
                         }
-
-
-                        quickSends.Add(new UserModels.QuickSendUserReponse()
-                        {
-                            userUri = msg.RecipientUri,
-                            userName = recipName,
-                            userFirstName = msg.recipientFirstName,
-                            userLastName = msg.recipientLastName,
-                            userImage = msg.recipientImageUri,
-                            userType = 0 // Normal User
-                        });
                     }
                     else if (msg.Recipient.Merchant != null)
                     {
@@ -933,6 +944,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     userId = meCode.UserId.ToString(),
                     meCode = meCode.URI
+                    
                 });
             }
 
