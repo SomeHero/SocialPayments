@@ -9,7 +9,8 @@
               <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
-    <div data-role="content" id="home-screen" class="content-margin">
+    <div data-role="content" id="home-screen">
+    <div class="pad">
         <div id="profile-new">
         <div id="myprofile">
         <div id="profileImage">
@@ -48,6 +49,7 @@
          <div class="qs left three"> <a href="#"><img width="63" height="63" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></a> </div>
         <div class="qs middle three"><a href="#"> <img width="63" height="63" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></a> </div>
         <div class="qs right three"><a href="#"> <img width="63" height="63" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" /></a> </div>
+        </div>
         </div>
         </div>
      @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }

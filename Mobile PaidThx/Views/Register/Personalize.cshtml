@@ -8,10 +8,11 @@
 	    <h1>Personalize</h1>
     </div>
     <div data-role="content">   
+    <div class="pad">
      @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
     <div class="top-panel">
    
-    <p>Personalize your experience by adding your first and last name below.  PaidThx works best if your use your real name.</p></div>
+    <p>Thx for giving PaidThx a try! Let's start by setting up your account, this will only take a minute or two.  First, please provide your name below.  PaidThx works best if your use your real name.</p></div>
         @using(Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slide" } } ))
         {
             <div>
@@ -40,5 +41,6 @@
                 </fieldset>
             </div>
         }
+    </div>
     </div>
 </div>
