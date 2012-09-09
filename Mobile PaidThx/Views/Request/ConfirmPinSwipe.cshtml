@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "ConfirmPinSwipe";
+}
+
+
+<div data-role="page" id="confirm-pin-swipe" class="modally">
+     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+	    <h1>Confirm PIN</h1>
+    </div>
+     <div data-role="content">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    <div class="top-panel">
+   
+    <p>Swipe your security pin again below to confirm.</p></div>
+        @using (Html.BeginForm("ConfirmPinSwipe", "Request", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
+        {
+        <div id="anchor">
+            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+         </div>
+        }
+    </div>
+</div>
+
+        <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function resizePIN() {
+
+            $(".hackstyle").remove();
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>

@@ -172,6 +172,7 @@
     <Compile Include="Controllers\SendController.cs" />
     <Compile Include="Controllers\SharingController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
+    <Compile Include="Controllers\SocialNetworksController.cs" />
     <Compile Include="Controllers\UserAgreementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -204,6 +205,7 @@
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Models\SharingModels.cs" />
     <Compile Include="Models\SignInModels.cs" />
+    <Compile Include="Models\SocialNetworkModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplicationServices.cs" />
     <Compile Include="Services\FacebookServices.cs" />
@@ -682,6 +684,18 @@
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipeConfirm.cshtml" />
     <Content Include="Views\Shared\TopMenu-App.cshtml" />
     <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
+    <Content Include="Views\Send\SetupACHAccount.cshtml" />
+    <Content Include="Views\Send\ConfirmPinSwipe.cshtml" />
+    <Content Include="Views\Send\SetupPinSwipe.cshtml" />
+    <Content Include="Views\Send\SecurityQuestion.cshtml" />
+    <Content Include="Views\Request\SecurityQuestion.cshtml" />
+    <Content Include="Views\Request\SetupPinSwipe.cshtml" />
+    <Content Include="Views\Request\SetupACHAccount.cshtml" />
+    <Content Include="Views\Donate\SecurityQuestion.cshtml" />
+    <Content Include="Views\Donate\SetupPinSwipe.cshtml" />
+    <Content Include="Views\Donate\SetupACHAccount.cshtml" />
+    <Content Include="Views\Request\ConfirmPinSwipe.cshtml" />
+    <Content Include="Views\Donate\ConfirmPinSwipe.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

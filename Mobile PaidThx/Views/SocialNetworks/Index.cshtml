@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Social Networks";
+}
+<div data-role="page" id="preferences-page"  data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+             
+        <h1>
+            Social Networks</h1>
+    </div>
+    <div data-role="content">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            <!-- Edit Profile -->
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="emails">
+                    <!-- Separate Set -->
+                    <!-- Email Accounts -->
+                    <h2 class="heading"> Facebook </h2>
+                    <a href="https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SocialNetworks/LinkFacebookAccount/&scope=email&state=", Model.FBState)">
+                    <h4 class="subheading">Send/Request money with your facebook friends</h4> </a></li>
+                <li class="settings" id="socials">
+                    <!-- Social Networks -->
+                    <a href="@Url.Content("~/Preferences/SocialNetworks")">
+                                   <h2 class="heading">Linked In </h2>
+                    <h4 class="subheading">Send/Request money with your Linked In contacts</h4></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

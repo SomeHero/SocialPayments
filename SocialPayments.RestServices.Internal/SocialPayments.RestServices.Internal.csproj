@@ -227,6 +227,7 @@
     <Compile Include="Controllers\UserAttributesController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
     <Compile Include="Controllers\UserPayPointsController.cs" />
+    <Compile Include="Controllers\UserSocialNetworksController.cs" />
     <Compile Include="Models\AccountVerificationRequest.cs" />
     <Compile Include="Controllers\ApplicationsController.cs" />
     <Compile Include="Controllers\MobileNumberSignUpKeySMSListenerController.cs" />
@@ -364,7 +365,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>10990</DevelopmentServerPort>
+          <DevelopmentServerPort>18482</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

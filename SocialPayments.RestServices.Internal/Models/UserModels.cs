@@ -7,6 +7,15 @@ namespace SocialPayments.RestServices.Internal.Models
 {
     public class UserModels
     {
+        public class AddUserSocialNetworkRequest
+        {
+            public string SocialNetworkType { get; set; }
+            public string SocialNetworkUserId { get; set; }
+            public string SocialNetworkUserToken { get; set; }
+        }
+        public class AddUserSocialNetworkResponse
+        {
+        }
         public class PagedResults
         {
             public int TotalRecords { get; set; }

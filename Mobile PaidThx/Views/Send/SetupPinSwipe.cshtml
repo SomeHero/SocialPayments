@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "SetupPinSwipe";
+}
+
+<div data-role="page" id="setup-pin-swipe" class="modally">
+     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+	    <h1>Create Security PIN</h1>
+    </div>
+    <div data-role="content">
+        <div class="top-panel">
+        @if(!String.IsNullOrEmpty(TempData["Message"].ToString()))
+        {
+            <p>@TempData["Message"]</p>
+           }
+    To complete setting up your account, create a security pin by connecting at least 4 pins below.
+</div>
+        @using (Html.BeginForm("SetupPinSwipe", "Send", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
+        {
+         <div>
+            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
+
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+            
+         </div>
+        }
+        </div>
+  <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function resizePIN() {
+
+            $(".hackstyle").remove();
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>
+</div>
+      
