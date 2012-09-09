@@ -32,10 +32,10 @@
     }
 
     $.validator.passwordRating = function (password, username) {
-        if (!password || password.length < 6)
+        if (!password)
+            return rating(0, "nothing");
+       if (password.length < 6)
             return rating(0, "too-short");
-        if (username && password.toLowerCase().match(username.toLowerCase()))
-            return rating(0, "similar-to-username");
         if (SAME.test(password))
             return rating(1, "very-weak");
 
@@ -49,20 +49,29 @@
             $('#confirmPasword').fadeIn(500);
             return rating(4, "strong");
         }
-        if (digit && special) {
+        if ((lower || upper) && digit && special) {
             $('#confirmPasword').fadeIn(500);
             return rating(3, "good");
+        }
+        if ((lower || upper) && digit && !special) {
+            return rating(2, "need-special");
+        }
+        if ((lower || upper) && !digit && special) {
+            return rating(2, "need-number");
         }
         return rating(2, "weak");
     }
 
     $.validator.passwordRating.messages = {
-        "similar-to-username": "Too similar to username",
-        "too-short": "Too short",
+        "similar-to-username": "Too similar to email",
+        "too-short": "Too Short",
+        "nothing": "Start Typing...",
         "very-weak": "Very weak",
-        "weak": "Weak",
+        "need-special": "Needs a Special Char. (!$%&...)",
+        "need-number": "Needs a Number (0-9)",
+        "weak": "Too Weak",
         "good": "Good",
-        "strong": "Strong"
+        "strong": "Very Strong"
     }
 
     $.validator.addMethod("password", function (value, element, usernameField) {
