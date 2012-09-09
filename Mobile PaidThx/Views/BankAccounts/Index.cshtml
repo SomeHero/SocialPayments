@@ -12,6 +12,7 @@
         <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
     <div data-role="content" class="content panel">
+    <div class="pad">
  <div id="accounts-list" class="main-body">
         @Html.ValidationSummary()
         <h5>
@@ -51,6 +52,7 @@
             { 
                 @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
             }
+    </div>
     </div>
 </div>
 </div>

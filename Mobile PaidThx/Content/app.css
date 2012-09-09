@@ -1377,9 +1377,10 @@ h5, label
  margin-top:14px;
 }
 
+/*MODALS*/
 div.modally div.content, div.modally div.ui-content
 {
-margin:10px;
+
 }
 
 img.rounded
@@ -1456,9 +1457,10 @@ border-radius: 5px;
  display:none;   
 }
 
-.fullwidth, .fullwidth .ui-controlgroup-controls 
+.fullwidth .ui-controlgroup-controls 
 {
- width:100% !important;   
+ width:98% !important;   
+ margin-left:1%;
 }
 
 .clear
@@ -2055,8 +2057,13 @@ margin: 3px; padding: 5px; background-color: #FFFFFF;
 {
  font-family:Helvetica, Arial, Sans-Serif;  
  max-width:320px; 
+ font-size:12px;
+ line-height:16px;
 }
-
+.ui-tooltip-content
+{
+ padding:12px;   
+}
 
 #registration-form label.error
 {
@@ -2066,4 +2073,55 @@ margin: 3px; padding: 5px; background-color: #FFFFFF;
 #confirmPasword
 {
     display:none;
+}
+
+.validation-summary-errors {
+ border: 2px solid red;
+ color: red;
+ margin: 5px 0px;
+ padding: 8px 8px 4px;
+  text-align:center;
+  
+}
+
+.validation-summary-errors ul {
+ margin: 0;
+ padding: 0;
+ list-style: none;
+ text-align:center;
+ font-weight:bold;
+ font-size:11px;
+}
+
+.top-panel, .top-panel p
+{
+ font-size:1.2rem;   
+}
+
+.ui-content div.top-panel p:first-child, .ui-content div.top-panel h2:first-child, .ui-content h5:first-child,  .ui-content .pad p:first-child{
+margin-top:0;
+}
+
+/* WEIRD FIX FOR JQUERY MOBILE NEGATIVE MARGINS*/
+.ui-content .ui-listview {
+margin: 0px;
+}
+#preferences-page .ui-content .ui-listview
+{
+ margin-bottom:15px;   
+}
+.ui-listview-filter 
+{
+ margin:0px;   
+}
+
+#no-results img
+{
+ margin-top: 14px;
+margin-left: 10px;   
+}
+
+
+.ui-btn-active:visited, .ui-btn-active:hover, .ui-btn-active a.ui-link-inherit {
+color: #48b201 /*{global-active-color}*/;
 }
