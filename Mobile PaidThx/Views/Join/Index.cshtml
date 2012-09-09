@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="page-join" data-add-back-btn="true">
+<div data-role="page" id="page-join">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -10,10 +10,21 @@
              {<text>You Have Money!</text>}
              else
              {<text>Join</text>}</h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
-    </div>
-    <div data-role="content" class="content-margin">
-        <div>
+             </div>
+    <div data-role="content">
+        <div class="pad">
+        <!--
+         <div id="pay-in" class="aui">
+                <div class="paystream-aui">
+                    <img class="sender" src="../../Content/images/avatar.png" width="50" />
+                    <h4 class="aui-message"><span class="sender">Example Sender&nbsp;</span>sent you  $25.56</span>.</h4>
+                    <div class="clear"></div>
+                </div>
+
+                <span class="bubble">For that rousing game of charades you started last week.</span>​
+
+                </div>
+                -->
             @if (Model.Message != null)
             {
                 if (Model.Message.MessageType == "Payment")
@@ -62,7 +73,7 @@
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
                  {
-                <span class="bubble">@Model.Message.Comments - join PaidThx to claim your money.</span>​
+                <span class="bubble">@Model.Message.Comments - join PaidThx to complete your donation.</span>​
                  }
                 </div>
                 </text>
@@ -77,16 +88,25 @@
                 Or join with your Email Address</h5>
                 @Html.ValidationSummary()
              
-            <a data-role="button" id="join-reveal" data-theme="b" data-icon="arrow-d" data-iconpos="right">
-                Join with Email</a>
-            <div id="registration-form" class="hidden">
+            <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" } }))
                 {
                     <input type="email" id="email" class="required email" placeholder="Enter Your Email Address"
                         name="Email" style="margin-bottom:15px" value="@Model.UserName" required />
-                    <input type="password" id="password" class="required" placeholder="Create a Password"
+                    <input type="password" id="password" class="password required" placeholder="Create a Password"
                         name="Password" style="margin-bottom:15px" required />
-                    <input type="password" id="confirmPasword" class="required passwordmatch" placeholder="Confirm Your Password"
+                         <div id="pass" class="hidden">
+     Your PaidThx Password must be at least <b>6 characters long</b>, and include at least <b>1 number (0-9)</b>, and <b>1 special character (!%#$, etc.)</b>
+       <div class="password-meter">
+		<div class="password-meter-message">&nbsp;</div>
+		<div class="password-meter-bg">
+			<div class="password-meter-bar"></div>
+		</div>
+	</div>
+
+     </div>
+                        
+                    <input type="password" id="confirmPasword" class="required passwordmatch hidden" placeholder="Confirm Your Password"
                         name="ConfirmPassword" style="margin-bottom:15px" required />
                 <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
                 Join with Email</button>
@@ -111,18 +131,36 @@
 
                     $("#frmSubmit").validate();
                 });
+       </script>
+<script type="text/javascript">
+    $(document).delegate('#page-join', 'pageinit', function () {
+        $("#frmSubmit").validate();
+        $("#password").valid();
 
-                 $(document).delegate('#page-join', 'pageinit', function () {
-                     $('#join-reveal').click(function () {
-                         event.preventDefault();
-                         $(this).hide();
-                         $('#registration-form').removeClass('hidden');
-                         $('#registration-form').show();
-                             var scrolly = $('#form-marker').get(0).offsetTop;
-                             $.mobile.silentScroll(scrolly - 50);
-                             return false;
-                     });
+        var content = $('#pass').html();
 
-                 });
-</script>
+    $('#registration-form #password').qtip({
+        content: content,
+        //{   
+        // text: 'Password must be at least 6 characters long, and include at least 1 letter, 1 number, and 1 special character.'
+        //},
+        position: {
+            my: 'bottom center',
+            at: 'top center'
+        },
+        show: {
+            event: 'focus',
+            solo: true
+        },
+        hide: {
+            event: 'unfocus',
+            fixed: true
+        },
+        style: {
+            classes: 'ui-tooltip-shadow ui-tooltip-rounded ui-tooltip-tipped ui-tooltip-light',
+            width: "88%"
+        }
+    });
+});
+    </script>
 </div>
