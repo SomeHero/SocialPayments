@@ -1,6 +1,25 @@
 
 jQuery(document).ready(function ($) {
 
+    $('form')
+	.bind('firstinvalid', function (e) {
+	    //show the invalid alert for first invalid element and pass the custom validation message
+	    //$.webshims.validityAlert.showFor(e.target, $(e.target).prop('customValidationMessage'));
+	    //prevent browser from showing native validation message
+	    return false;
+	});
+
+$("div").on("pageinit", function(){
+    try{
+        //Any form that might need validation
+        if($("form.validateMe").length > 0){
+            $("form.validateMe").validate();
+        }
+    } catch (e){
+    
+    }
+});
+
     /* Use this js doc for all application specific JS */
 
     /* TABS --------------------------------- */

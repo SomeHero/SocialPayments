@@ -22,13 +22,12 @@
             <div id="signin-form">
                 @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }}))
                 {       
-                    <input type="text" id="username" class="required" placeholder="Email Address or Phone #"
-                        name="Email" style="margin-bottom:15px" />
+                    <span class="form-holder"><input type="text" id="username" class="required" placeholder="Email Address or Phone #"
+                        name="Email" /></span>
 
-                    <input type="password" id="password" class="required" placeholder="Password" name="Password" style="margin-bottom:15px" />
+                    <span class="form-holder"><input type="password" id="password" class="required" placeholder="Password" name="Password" /></span>
                     <button type="submit" id="signin-submit" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">
-                      Sign
-                            In</button>
+                      Sign In</button>
 
                 }
             </div>
