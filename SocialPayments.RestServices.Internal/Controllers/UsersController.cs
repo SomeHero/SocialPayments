@@ -340,6 +340,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
         // POST /api/users/{id}/upload_member_image
         public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
         {
