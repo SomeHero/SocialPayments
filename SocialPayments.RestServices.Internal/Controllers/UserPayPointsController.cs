@@ -22,6 +22,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         {
             return Get(userId, "");
         }
+
         // GET /api/users/{userId}/PayPoints/{type}
         public HttpResponseMessage<List<UserModels.UserPayPointResponse>> Get(string userId, string type)
         {

@@ -92,6 +92,10 @@ namespace SocialPayments.DomainServices
                 else if (accountTypeName.ToUpper() == "SAVINGS")
                     accountType = Domain.PaymentAccountType.Savings;
 
+                if (nickName == null || nickName == "")
+                {
+                    nickName = accountTypeName + " " + securityServices.GetLastFour(accountNumber);
+                }
 
                 paymentAccount = ctx.PaymentAccounts.Add(new Domain.PaymentAccount()
                 {
