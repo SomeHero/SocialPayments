@@ -201,7 +201,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         BankName = a.BankName,
                         BankIconUrl = a.BankIconURL,
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
-                        Nickname = a.Nickname,
+                        Nickname = a.Nickname == null ? String.Format("{0} {1}",a.AccountType,securityService.GetLastFour(securityService.Decrypt(a.AccountNumber))) : a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
                         UserId = a.UserId.ToString(),
                         Status = a.AccountStatus.GetDescription()
