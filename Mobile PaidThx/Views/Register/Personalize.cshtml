@@ -22,7 +22,7 @@
                         <label for="FirstName">First Name</label>
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() { { "placeholder", "First Name" } })
+                        <span class="form-holder"> @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() { { "placeholder", "First Name" } })</span>
                         @Html.ValidationMessageFor(m => m.FirstName)
                     </div>
 
@@ -30,7 +30,7 @@
                         <label for="LastName">Last Name</label>
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object>() { { "placeholder", "Last Name" } })
+                       <span class="form-holder"> @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object>() { { "placeholder", "Last Name" } })</span>
                         @Html.ValidationMessageFor(m => m.LastName)
                     </div>
 

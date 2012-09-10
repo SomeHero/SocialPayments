@@ -89,28 +89,25 @@
                 @Html.ValidationSummary()
              
             <div id="registration-form">
-                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" } }))
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, {"class", "validateMe"} }))
                 {
-                    <input type="email" id="email" class="required email" placeholder="Enter Your Email Address"
-                        name="Email" style="margin-bottom:15px" value="@Model.UserName" required />
-                    <input type="password" id="password" class="password required" placeholder="Create a Password"
-                        name="Password" style="margin-bottom:15px" required />
-                         <div id="pass" class="hidden">
-     Your password must be at least <b>6 characters long</b>, and include at least <b>1 number (0-9)</b> and <b>1 special character (!%#$, etc.)</b>
-       <div class="password-meter">
-		<div class="password-meter-message">&nbsp;</div>
-		<div class="password-meter-bg">
-			<div class="password-meter-bar"></div>
-		</div>
-	</div>
-
-     </div>
-                        
-                    <input type="password" id="confirmPasword" class="required passwordmatch hidden" placeholder="Confirm Your Password"
-                        name="ConfirmPassword" style="margin-bottom:15px" required />
+                    <span class="form-holder"><input type="email" id="email" placeholder="Enter Your Email Address"
+                        name="email" value="@Model.UserName" /></span>
+                    <span class="form-holder"> <input type="password" id="password" placeholder="Create a Password"
+                        name="password" /></span>
+                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" type="password" placeholder="Confirm Your Password"
+                        name="confirmPassword" /></span>
                 <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
                 Join with Email</button>
-                  
+                  <div id="pass" class="hidden">
+                  <h4>Password must meet the following requirements:</h4>
+	<ul>
+		<li id="letter" class="invalid">At least <strong>one letter</strong></li>
+		<li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+		<li id="number" class="invalid">At least <strong>one number</strong></li>
+		<li id="length" class="invalid">Be at least <strong>6 characters</strong></li>
+	</ul>
+     </div>
                 }
             </div>
             <div id="main-body-sub-links">
@@ -122,46 +119,192 @@
 
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
-             <script type="text/javascript">
-                //wait to do event binding until the page is being initialized
-                 $(document).on("pageshow", "#page-join", function () {
-                    $.validator.addMethod("passwordmatch", function (value) {
-                        return value == $("#password").val();
-                    }, "Confirm Password must match Password");
-
-                    $("#frmSubmit").validate();
-                });
-       </script>
+             
 <script type="text/javascript">
-    $(document).delegate('#page-join', 'pageinit', function () {
-        $("#frmSubmit").validate();
-        $("#password").valid();
+    //$(document).delegate('#page-join', 'pageinit', function () {
+    $(document).ready(function () {
+        $.validator.addMethod("passwrdvalidator", function (value, element) {
+            return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/.test(value);
+        });
 
-        var content = $('#pass').html();
+        $('#registration-form #password').qtip({
+            content: {
+                text: $('#pass'),
+                title: {
+                    text: 'Password Strength',
+                    button: true
+                }
+            },
+            position: {
+                my: 'bottom center',
+                at: 'top center'
+            },
+            show: {
+                event: 'focus',
+                solo: true
+            },
+            hide: {
+                event: 'blur'
+            },
+            style: {
+                classes: 'ui-tooltip qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light',
+                width: "88%"
+            }
+        });
 
-    $('#registration-form #password').qtip({
-        content: content,
-        //{   
-        // text: 'Password must be at least 6 characters long, and include at least 1 letter, 1 number, and 1 special character.'
-        //},
-        position: {
-            my: 'bottom center',
-            at: 'top center'
-        },
-        show: {
-            event: 'focus',
-            solo: true
-        },
-        hide: {
-            event: 'unfocus',
-            fixed: true
-        },
-        style: {
-            classes: 'ui-tooltip-shadow ui-tooltip-rounded ui-tooltip-tipped ui-tooltip-light',
-            width: "88%"
-        }
+        $('#registration-form #confirmPasswordHolder').hide();
+
+        $('#registration-form #password').keyup(function () {
+            var pswd = $(this).val();
+
+            //validate the length
+            if (pswd.length < 6) {
+                $('#length').removeClass('valid').addClass('invalid');
+            } else {
+                $('#length').removeClass('invalid').addClass('valid');
+            }
+
+            //validate letter
+            if (pswd.match(/[A-z]/)) {
+                $('#letter').removeClass('invalid').addClass('valid');
+            } else {
+                $('#letter').removeClass('valid').addClass('invalid');
+            }
+
+            //validate capital letter
+            if (pswd.match(/[A-Z]/)) {
+                $('#capital').removeClass('invalid').addClass('valid');
+            } else {
+                $('#capital').removeClass('valid').addClass('invalid');
+            }
+
+            //validate number
+            if (pswd.match(/\d/)) {
+                $('#number').removeClass('invalid').addClass('valid');
+            } else {
+                $('#number').removeClass('valid').addClass('invalid');
+            }
+
+            if ((pswd.match(/\d/)) && (pswd.match(/[A-Z]/)) && (pswd.match(/[A-z]/)) && (pswd.length > 5)) {
+                $('#confirmPasswordHolder').css("display", "block");
+                $('#confirmPasswordHolder').fadeIn(800);
+            } else {
+
+            }
+
+        });
+
+        $("#frmSubmit").validate({
+            submitHandler: function (form) {
+                form.submit();
+            },
+            invalidHandler: function (form, validator) {
+                //invalid                
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList.length) {
+                    var s = errorList.shift();
+                    var n = [];
+                    n.push(s);
+                    this.errorList = n;
+                }
+                this.defaultShowErrors();
+            },
+            onkeyup: false,
+            onfocusout: function (element) { $(element).valid(); },
+            errorClass: 'error',
+            validClass: 'valid',
+            rules: {
+                password: {
+                    required: true,
+                    passwrdvalidator: true,
+                    minlength: 6
+                },
+                confirmPassword: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#registration-form #password"
+                },
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                password: {
+                    required: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character.",
+                    passwrdvalidator: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character."
+                    //minlength: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character."
+                },
+                confirmPassword: {
+                    required: "Please confirm your password",
+                    minlength: "Your password must be at least 6 characters long",
+                    equalTo: "Please enter the same password as above"
+                },
+                email: {
+                    required: "Please enter your email address",
+                    email: "Please enter a valid email address"
+                }
+            },
+            errorPlacement: function (error, element) {
+                // Set positioning based on the elements position in the form
+                var elem = $(element);
+                // Check we have a valid error message
+                if (!error.is(':empty')) {
+                    // Apply the tooltip only if it isn't valid
+                    elem.filter(':not(.valid)').qtip({
+                        overwrite: true,
+                        content: error,
+                        position: {
+                            my: 'bottom center',
+                            at: 'top center'
+                        },
+                        show: {
+                            event: false,
+                            solo: true,
+                            ready: true
+                        },
+                        hide: false,
+                        style: {
+                            classes: 'ui-tooltip-red ui-tooltip qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
+                        }
+                    }).qtip({
+                        overwrite: true,
+                        content: error,
+                        position: {
+                            my: 'bottom center',
+                            at: 'top center'
+                        },
+                        show: {
+                            event: false,
+                            solo: true,
+                            ready: true
+                        },
+                        hide: false,
+                        style: {
+                            classes: 'ui-tooltip-red ui-tooltip qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
+                            width: "88%"
+
+                        }
+                    });
+                }
+
+                else {
+                    elem.qtip('destroy');
+                }
+            },
+            success: $.noop
+        });
+        //$("#password").valid();
+        $('.tip-error').bind('tooltipshow', function () {
+            $("div.tip-error:not(:first)").hide();
+            alert('trying to hide');
+        });
+        
+        //$('#registration-form span.form-holder input').blur(function () {
+         //   $.validator.validate();
+        //});
     });
-});
     </script>
 
 </div>
