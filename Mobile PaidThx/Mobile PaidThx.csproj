@@ -239,6 +239,7 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <None Include="Content\patternlock.less" />
+    <Content Include="Content\images\accept.png" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\avatar.png" />
@@ -255,9 +256,12 @@
     <Content Include="Content\images\btn-quickadd.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />
+    <Content Include="Content\images\bullet_green.png" />
+    <Content Include="Content\images\bullet_red.png" />
     <Content Include="Content\images\button.png" />
     <Content Include="Content\images\button_active.png" />
     <Content Include="Content\images\button_active2.png" />
+    <Content Include="Content\images\cross.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
     <Content Include="Content\images\helpIcon.png" />
     <Content Include="Content\images\home.png" />
