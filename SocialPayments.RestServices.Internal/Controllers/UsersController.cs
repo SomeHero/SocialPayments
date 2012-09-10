@@ -215,6 +215,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType
                         }).ToList() : null),
+                    userSocialNetworks = (user.UserSocialNetworks != null ? user.UserSocialNetworks.Select(s =>
+                        new UserModels.UserSocialNetworkResponse() {
+                            SocialNetwork = "Facebook",
+                            SocialNetworkUserId = s.UserNetworkId,
+                            SocialNetworkUserToken = s.UserAccessToken
+                        }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
                     pendingMessageCount = 1,

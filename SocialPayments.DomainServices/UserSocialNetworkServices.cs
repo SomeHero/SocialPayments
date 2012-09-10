@@ -33,8 +33,11 @@ namespace SocialPayments.DomainServices
                     EnableSharing = false,
                     SocialNetwork = socialNetwork,
                     User = user,
-                    UserNetworkId = socialNetworkUserId
+                    UserNetworkId = socialNetworkUserId,
+                    UserAccessToken = socialNetworkToken
                 });
+
+                ctx.SaveChanges();
             }
         }
     }

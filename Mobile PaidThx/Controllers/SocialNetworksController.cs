@@ -25,12 +25,33 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (Session["UserId"] == null)
+                return RedirectToAction("Index", "SignIn", null);
+            
+            var userService = new Services.UserServices();
+            
+            var user = userService.GetUser(Session["UserId"].ToString());
+
+            Session["FBState"] = "pickle";
+
+            return View(new SocialNetworksModels.Index()
+            {
+                FBState = "pickle",
+                UserSocialNetworks = user.userSocialNetworks.Select(u => new SocialNetworksModels.UserSocialNetwork() {
+                    Name = u.SocialNetwork
+                }).ToList()
+            });
         }
         public ActionResult LinkFacebookAccount(string state, string code)
         {
+              if (Session["UserId"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            var userService = new Services.UserServices();
             var faceBookServices = new FacebookServices();
-            var userServices = new UserServices();
+            var userSocialNetworkServices = new UserSocialNetworkServices();
+
+            var user = userService.GetUser(Session["UserId"].ToString());
 
             var redirect = String.Format(fbTokenRedirectURL, "SocialNetworks/LinkFacebookAccount");
 
@@ -41,20 +62,15 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                facebookSignInResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
-                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""), out isNewUser);
+                userSocialNetworkServices.AddPaypoint(user.userId.ToString(), "Facebook", fbAccount.id, fbAccount.accessToken);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Exception Signing In with Facebook. {0} Stack Trace: {1}", ex.Message, ex.StackTrace));
 
-                ModelState.AddModelError("", ex.Message);
+                TempData["Message"] = ex.Message;
 
-                return View("Index", new JoinModels.JoinModel()
-                    {
-                        UserName = "",
-                        Message = null
-                    });
+                return RedirectToAction("Index");
             }
 
             List<FacebookModels.Friend> friends;
@@ -74,7 +90,8 @@ namespace Mobile_PaidThx.Controllers
 
             Session["Friends"] = friends;
 
-            return View("Index");
+            return RedirectToAction("Index");
+            
         }
     }
 }

@@ -91,6 +91,14 @@ namespace Mobile_PaidThx.Controllers
                     return View();
                 }
 
+                var facebookServices = new FacebookServices();
+                foreach (var socialNetwork in user.userSocialNetworks)
+                {
+                    if (socialNetwork.SocialNetwork == "Facebook")
+                        Session["Friends"] = facebookServices.GetFriendsList(socialNetwork.SocialNetworkUserToken);
+
+                }
+
                 Session["Application"] = application;
                 Session["UserId"] = validateResponse.userId;
                 Session["User"] = user;

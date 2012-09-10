@@ -29,6 +29,12 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
+               name: "SocialNetworks",
+               routeTemplate: "api/users/{userId}/socialnetworks",
+               defaults: new { controller = "UserSocialNetworks" }
+            );
+
+            routes.MapHttpRoute(
                 name: "ValidateRoutingNumber",
                 routeTemplate: "api/routingnumber/validate",
                 defaults: new { controller = "RoutingNumber", action = "ValidateRoutingNumber" }
