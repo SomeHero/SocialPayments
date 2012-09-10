@@ -389,6 +389,8 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\jquery.qtip.min.css" />
+    <Content Include="Content\jquery.validate.password.css" />
     <Content Include="Content\PaidThx-v1.css" />
     <Content Include="Content\PaidThx-v1.min.css" />
     <Content Include="Content\patternlock.css" />
@@ -400,6 +402,10 @@
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
+    <Content Include="Scripts\jquery.qtip.min.js" />
+    <Content Include="Scripts\jquery.tipsy.js" />
+    <Content Include="Scripts\jquery.touchSwipe.js" />
+    <Content Include="Scripts\jquery.validate.password.js" />
     <Content Include="Scripts\send-money-2.js" />
     <Content Include="Scripts\sharing.js" />
     <Content Include="Scripts\home.js" />
