@@ -35,9 +35,150 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(SendModels.SendMoneyModel model)
         {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+
+            if (user.bankAccounts.Count == 0)
+            {
+                return RedirectToAction("SetupACHAccount");
+            }
+
             return RedirectToAction("PopupPinSwipe");
         }
-      
+        public ActionResult SetupACHAccount()
+        {
+            //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
+
+            return View("SetupACHAccount", new SetupACHAccountModel()
+            {
+                Payment = null
+            });
+        }
+        [HttpPost]
+        public ActionResult SetupACHAccount(SetupACHAccountModel model)
+        {
+            //_logger.Log(LogLevel.Info, String.Format("Setting Up New ACH Account {0}", model.NameOnAccount));
+
+            var routingNumberServices = new RoutingNumberServices();
+
+            if (!routingNumberServices.ValidateRoutingNumber(model.RoutingNumber))
+            {
+                ModelState.AddModelError("RoutingNumber", "Invalid Routing Number.  Please check your Bank's Routing Number and Try Again");
+
+                return View(model);
+            }
+
+            Session["ACHAccountModel"] = model;
+
+            return RedirectToAction("SetupPinSwipe");
+        }
+        [HttpPost]
+        public bool ValidateRoutingNumber(string routingNumber)
+        {
+            //_logger.Log(LogLevel.Info, String.Format("Validating Routing Number {0}", routingNumber));
+
+            var routingNumberServices = new RoutingNumberServices();
+
+            return routingNumberServices.ValidateRoutingNumber(routingNumber);
+
+        }
+        public ActionResult SetupPinSwipe()
+        {
+            TempData["Message"] = "";
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
+        {
+            Session["PinCode"] = model.PinCode;
+            return RedirectToAction("ConfirmPinSwipe");
+        }
+        public ActionResult ConfirmPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ConfirmPinSwipe(ConfirmPinSwipeModel model)
+        {
+            string firstPinCode = Session["PinCode"].ToString();
+
+            if (firstPinCode != model.PinCode)
+            {
+                TempData["Message"] = "Confirmation Security Pin Does Not Match Your First Security Pin. Try Again.";
+
+                return View("SetupPinSwipe");
+            }
+
+            Session["PinCode"] = model.PinCode;
+
+            return RedirectToAction("SecurityQuestion");
+        }
+        public ActionResult SecurityQuestion()
+        {
+            var securityQuestionServices = new SecurityQuestionServices();
+            var securityQuestions = securityQuestionServices.GetSecurityQuestions();
+            var questions = securityQuestions.Select(q => new Mobile_PaidThx.Models.SecurityQuestionModels.SecurityQuestionModel
+            {
+                Id = q.Id,
+                Question = q.Question
+            }).ToList();
+
+            var model = new SecurityQuestionModel()
+            {
+
+                SecurityQuestionAnswer = "",
+                SecurityQuestionId = 1,
+                SecurityQuestions = questions
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult SecurityQuestion(SecurityQuestionModel model)
+        {
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn");
+
+            var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
+            var pinCode = (string)Session["PinCode"];
+
+            var userServices = new Services.UserServices();
+            var userPaymentAccountService = new Services.UserPaymentAccountServices();
+
+            var userId = Session["UserId"].ToString();
+            var nickName = String.Format("{0} {1}", achAccountModel.AccountType, achAccountModel.AccountNumber.Substring(achAccountModel.AccountNumber.Length - 5, 4));
+
+            string paymentAccountId = "";
+
+            try
+            {
+                paymentAccountId =
+                userPaymentAccountService.SetupACHAccount(userId, _apiKey, achAccountModel.NameOnAccount, nickName,
+                achAccountModel.RoutingNumber, achAccountModel.AccountNumber, achAccountModel.AccountType, pinCode, model.SecurityQuestionId, model.SecurityQuestionAnswer);
+            }
+            catch (Exception ex)
+            {
+                //_logger.Log(LogLevel.Info, String.Format("Exception Setting Up New ACH Account {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+            }
+
+            UserModels.UserResponse user;
+
+            try
+            {
+                user = userServices.GetUser(userId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                //_logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                return View();
+            }
+            return RedirectToAction("PopupPinSwipe");
+        }
+
         public ActionResult AddContactSend()
         {
             TempData["DataUrl"] = "data-url=/Send/AddContactSend";
@@ -103,6 +244,8 @@ namespace Mobile_PaidThx.Controllers
             Session["Amount"] = model.Amount;
 
             TempData["DataUrl"] = "data-url=/Send";
+
+
 
             return View("Index", new SendModels.SendMoneyModel()
             {

@@ -29,6 +29,12 @@ namespace SocialPayments.RestServices.Internal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(
+               name: "SocialNetworks",
+               routeTemplate: "api/users/{userId}/socialnetworks",
+               defaults: new { controller = "UserSocialNetworks" }
+            );
+
+            routes.MapHttpRoute(
                 name: "ValidateRoutingNumber",
                 routeTemplate: "api/routingnumber/validate",
                 defaults: new { controller = "RoutingNumber", action = "ValidateRoutingNumber" }
@@ -159,7 +165,7 @@ namespace SocialPayments.RestServices.Internal
 
             routes.MapHttpRoute(
                 name: "GetMatchingMECodesWithSearchTerm",
-                routeTemplate: "api/users/{searchTerm}/find_mecodes",
+                routeTemplate: "api/users/searchbymecode/{searchTerm}",
                 defaults: new { controller = "Users", action = "GetMatchingMECodesWithSearchTerm" }
             );
 

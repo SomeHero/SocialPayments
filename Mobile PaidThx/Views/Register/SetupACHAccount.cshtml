@@ -26,8 +26,6 @@
         <div id="setup-ach-account-form">
             @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
             {
-                @Html.ValidationSummary()
-            
                 <fieldset>
                     <div class="editor-field">
                         <span class="form-holder"> @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })</span>

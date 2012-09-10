@@ -201,7 +201,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         BankName = a.BankName,
                         BankIconUrl = a.BankIconURL,
                         NameOnAccount = securityService.Decrypt(a.NameOnAccount),
-                        Nickname = a.Nickname,
+                        Nickname = a.Nickname == null ? String.Format("{0} {1}",a.AccountType,securityService.GetLastFour(securityService.Decrypt(a.AccountNumber))) : a.Nickname,
                         RoutingNumber = securityService.Decrypt(a.RoutingNumber),
                         UserId = a.UserId.ToString(),
                         Status = a.AccountStatus.GetDescription()
@@ -214,6 +214,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationKey = c.ConfigurationKey,
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType
+                        }).ToList() : null),
+                    userSocialNetworks = (user.UserSocialNetworks != null ? user.UserSocialNetworks.Select(s =>
+                        new UserModels.UserSocialNetworkResponse() {
+                            SocialNetwork = "Facebook",
+                            SocialNetworkUserId = s.UserNetworkId,
+                            SocialNetworkUserToken = s.UserAccessToken
                         }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
@@ -325,21 +331,43 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Start Personalize User"));
 
-            DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.UserService _userService = new DomainServices.UserService();
-
+            DomainServices.UserService userService = new DomainServices.UserService();
+            HttpResponseMessage response = null;
             try
             {
+                userService.PersonalizeUser(id, request.FirstName, request.LastName, request.ImageUrl);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Personalizing User {0}. Exception {1}", id, ex.Message));
 
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Personalizing User {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Personalizing User {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
         // POST /api/users/{id}/upload_member_image
         public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
         {
@@ -915,7 +943,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
 
-        // GET /api/users/{userId}/find_mecodes
+        // GET /api/users/searchbymecode/{searchterm}
         public HttpResponseMessage<UserModels.FindMECodeResponse> GetMatchingMECodesWithSearchTerm (string searchTerm)
         {
             _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));

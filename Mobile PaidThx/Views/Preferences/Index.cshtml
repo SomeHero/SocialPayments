@@ -10,7 +10,7 @@
         <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
     <div data-role="content">
-        <div class="pad">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
             <!-- Edit Profile -->
             <ul data-role="listview" data-inset="true">
                 <li class="settings" id="profile"><a href="@Url.Content("~/Preferences/Profile")" data-prefetch  data-transition="slide">
@@ -38,7 +38,7 @@
                     <h4 class="subheading">Add/manage email accounts</h4> </a></li>
                 <li class="settings" id="socials">
                     <!-- Social Networks -->
-                    <a href="@Url.Content("~/Preferences/SocialNetworks")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/SocialNetworks")" data-prefetch data-transition="slide">
                                    <h2 class="heading"> Social Networks </h2>
                     <h4 class="subheading">Add/manage social accounts</h4></a></li>
                 <li class="settings" id="phones">
@@ -99,7 +99,7 @@
                     </li>
                 <li class="settings" id="signout">
                     <!-- Sign Out -->
-                    <a href="@Url.Content("~/Preferences/SignOut")" data-prefetch data-transition="pop">
+                    <a href="@Url.Content("~/Preferences/SignOut")" data-transition="pop">
                     <h2 class="heading">Sign Out</h2>
                     <h4 class="subheading">Log out of PaidThx</h4>
                     </a></li>

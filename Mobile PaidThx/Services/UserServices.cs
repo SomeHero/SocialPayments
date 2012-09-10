@@ -190,6 +190,21 @@ namespace Mobile_PaidThx.Services
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);
         }
+        public void ResetPassword(string userId, string pinCode, string securityQuestionAnswer)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                securityPin = pinCode,
+                questionAnswer = securityQuestionAnswer
+            });
+
+            var response = Post(String.Format(_userServicesResetSecurityPinUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(response.Description);
+        }
         public UserModels.ValidateUserResponse ValidateUser(string userName, string password)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
