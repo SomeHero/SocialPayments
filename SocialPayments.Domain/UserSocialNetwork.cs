@@ -18,6 +18,7 @@ namespace SocialPayments.Domain
         public SocialNetwork SocialNetwork { get; set; }
         [MaxLength(100)]
         public string UserNetworkId { get; set; }
+        public string UserAccessToken { get; set; }
         public bool EnableSharing { get; set; }
     }
 }

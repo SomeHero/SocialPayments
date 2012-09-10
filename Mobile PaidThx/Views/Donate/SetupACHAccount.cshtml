@@ -6,7 +6,6 @@
             Enable Payments</h1>
     </div>
     <div data-role="content">
-    <div class="pad">
         <div class="top-panel">
             @if (Model.Payment != null)
             {
@@ -24,7 +23,7 @@
             <br />
         </div>
         <div id="setup-ach-account-form">
-            @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
+            @using (Html.BeginForm("SetupACHAccount", "Donate", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
             {
                 <fieldset>
                     <div class="editor-field">
@@ -65,7 +64,6 @@
                     </p>
             }
         </div>
-    </div>
     </div>
     <script language="javascript">
         var getBaseURL = function () {

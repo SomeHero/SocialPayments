@@ -25,6 +25,11 @@ namespace Mobile_PaidThx.Services
 
         public FacebookUserModels.FBuser FBauth(string state, string code, string redirect_uri)
         {
+            if (redirect_uri.Substring(redirect_uri.Length - 1) != "/")
+                redirect_uri = redirect_uri + "/";
+
+            _logger.Log(LogLevel.Debug, String.Format("FBAuth called State: {0}, Code {1}, redirect_uri: {2}", state, code, redirect_uri));
+
             string fbState = HttpContext.Current.Session["FBState"].ToString(); ;
             HttpContext.Current.Session["FBState"] = null;
 
@@ -54,6 +59,9 @@ namespace Mobile_PaidThx.Services
                 {
                     _logger.Log(LogLevel.Info, ex.Message);
                 }
+
+                if (resp == null)
+                    throw new Exception("Facebook response was null");
 
                 using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
                 {
@@ -105,6 +113,8 @@ namespace Mobile_PaidThx.Services
         }
         public List<FacebookModels.Friend> GetFriendsList(string token)
         {
+            _logger.Log(LogLevel.Info, String.Format("Getting Friends List for Token {0}", token));
+
             //Use Graph API to get FB UserID and email
             string requestStuff = "https://graph.facebook.com/me/friends?access_token=" + token;
             string response = null;
@@ -115,6 +125,9 @@ namespace Mobile_PaidThx.Services
 
             wr = GetWebRequest(requestStuff);
             resp = (HttpWebResponse)wr.GetResponse();
+
+            if (resp == null)
+                throw new Exception(String.Format("Facebook response was null"));
 
             using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
             {
@@ -131,6 +144,8 @@ namespace Mobile_PaidThx.Services
 
         private HttpWebRequest GetWebRequest(string formattedUri)
         {
+            _logger.Log(LogLevel.Info, String.Format("Get Web Request {0}", formattedUri));
+
             // Create the request’s URI.
             Uri serviceUri = new Uri(formattedUri, UriKind.Absolute);
 
