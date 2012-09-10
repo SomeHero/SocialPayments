@@ -8,10 +8,10 @@
         <h1>
             Sign In</h1>
     </div>
-    <div data-role="content" style="background-color: #3E7D48">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+    <div data-role="content">
+        <div class="pad">
             @Html.ValidationSummary()
-            <h5 style="margin-top:10px">
+            <h5>
                 Sign in with Facebook:</h5>
             <button type="button" id="signin-facebook-submit" class="btn-jq" data-theme="d" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
                 Sign in with Facebook
@@ -43,4 +43,4 @@
         </div>
     </div>
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Sign In" }); }
-</div>
+     </div>

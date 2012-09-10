@@ -9,24 +9,22 @@
             Request Money</h1>
         <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
-    <div data-role="content" class="content-margin">
-        <div style="background-color: #FFFFFF">
+    <div data-role="content">
+        <div class="pad">
             @Html.ValidationSummary()
             @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
             {
                 <p style="margin-top: 0; padding-top: 0;">
-                    <label for="txtSendTo" style="font-size: 16px">
-                        Request To:</label>
                     <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch data-transition="slide">
-                        <button data-role="none" type="button" class="imgbtn field-btn">
-                            <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
+                        <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
+                            <span class="imgbg">
                             @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
                             <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
                         }
                         else
                         {
-                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="@Model.RecipientName" />
+                           
                         }
                             </span><span
                                     id="person-send">
@@ -36,19 +34,17 @@
                                                       }
                                     else
                                     {
-                                        <text>Choose a recipient</text>
+                                        <text>Choose Recipient</text>
                                     }
                                </span>
                         </button>
                     </a>
                 </p>
                 <p>
-                    <label for="clickamountbtn" style="font-size: 16px">
-                        Request Amount:</label>
                     <a href="@Url.Content("~/Request/AmountToRequest")" data-prefetch data-transition="slide">
-                        <button data-role="none" type="button" class="imgbtn field-btn">
-                            <span class="imgbg" style="margin-left: -2px">
-                                <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
+                        <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">
+                            <span class="imgbg">
+                              </span><span
                                     id="amount-request">
                                     @if (Model.Amount > 0)
                                     {
@@ -56,14 +52,12 @@
                                     }
                                     else
                                     {
-                                        <text>Choose Amount</text>
+                                        <text>Enter Amount</text>
                                     }</span></button></a>
                     <!--<div onclick="chooseAmountRequest()" class="clickamountbtn">
             <span id="amount-request">Select amount</span></div>-->
                 </p>
                 <p>
-                    <label for="txtComments" style="margin-bottom: 15px">
-                        Message:</label>
                     <textarea id="txtComments-Request" rows="10" cols="100" placeholder="For what? Add a message..."
                         required></textarea>
                 </p>

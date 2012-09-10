@@ -2,25 +2,47 @@
 <div data-role="page" id="add-email-paypoint-page">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-        <h1>Email Account</h1>
+        <h1>Email Details</h1>
     </div>
     <div data-role="content" class="panel main-body">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-         
+        <ul data-role="listview" data-inset="true">
+            <li class="settings email static">
+                   <h2>@Model.EmailAddress
+                   </h2>
+                   <h4>
+                   @if (Model.EmailAddress.Verified)
+                   {
+                    <text>Verified</text>
+                   }
+                   else
+                   {
+                        <text>Not Verified</text>
+                   }
+                    </h4>
+            </li>
+            </ul>
             @Html.ValidationSummary()
-            <p>
-                You have completed setup of the pay point and can now receive funds to this Email Address.  You can remove this pay point from your account by clicking
-                "Remove this PayPoint".  However, you will no longer be able to receive funds sent to this Email Address until you re-linkd re-verify this pay point 
-                to your account.
-            </p>
+             @if (!Model.EmailAddress.Verified)
+                   {
+                    <text>
+                    <div class="alert">
+                <p>To enable sending payment from this account, please verify it.
+                <a href="#">
+                <button type="button" id="btn-verify-account" data-theme="b" data-icon="refresh" data-iconpos="right" class="btn-jq">
+                  Resend Verify Email</button>
+
+                </a>
+                </p>
+                </div></text>
+                   }
+ 
             <p>
             @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
-                <button type="submit" id="remove-mecode-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Remove this PayPoint</span></button>
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove Email</button>
             }
             </p>
-        </div>
     </div>
 </div>

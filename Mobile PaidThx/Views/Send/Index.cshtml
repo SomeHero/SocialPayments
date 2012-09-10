@@ -9,23 +9,22 @@
             Send Money</h1>
         <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
     </div>
-    <div data-role="content" class="content-margin">
+    <div data-role="content">
+    <div class="pad">
         @Html.ValidationSummary()
        @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
        {
             <p style="margin-top: 0; padding-top: 0;">
-                <label for="txtSendTo">
-                    Send To:</label>
                 <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
-                    <button data-role="none" type="button" class="imgbtn field-btn">
-                        <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
+                    <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
+                        <span class="imgbg">
                         @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
                             <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
                         }
                         else
                         {
-                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="@Model.RecipientName" />
+
                         }</span><span
                                 id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientName))
                                                       {
@@ -33,18 +32,17 @@
                                                       }
                                                       else
                                                       {
-                                    <text>Select Recipient</text>
+                                    <text>Choose Recipient</text>
                                                       }</span>
                     </button>
                 </a>
             </p>
             <p>
-                <label for="txtAmount">
-                    Amount to Send:</label>
                 <a href="@Url.Content("~/Send/AmountToSend")" data-prefetch data-transition="slide">
-                    <button data-role="none" type="button" class="imgbtn field-btn">
-                        <span class="imgbg" style="margin-left: -2px">
-                            <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
+                    <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">
+                        <span class="imgbg">
+                           </span>
+                           <span
                                 id="amount-send">@if (Model.Amount > 0)
                                                  {
                                     <text>@string.Format("{0:C}", Model.Amount)</text>
@@ -57,8 +55,6 @@
                 </a>
             </p>
             <p>
-                <label for="txtComments">
-                    Message:</label>
                 <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
             </p>
             <p>
@@ -66,6 +62,7 @@
                     <span>Send Money</span></button>
             </p>
        }
+       </div>
     </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
 </div>
