@@ -222,6 +222,7 @@
     <Compile Include="UserProcessing\RegisteredUserTask.cs" />
     <Compile Include="UserProcessing\SubmittedUserTask.cs" />
     <Compile Include="UserService.cs" />
+    <Compile Include="UserSocialNetworkServices.cs" />
     <Compile Include="ValidationService.cs" />
   </ItemGroup>
   <ItemGroup>

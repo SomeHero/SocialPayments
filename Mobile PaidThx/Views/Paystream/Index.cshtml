@@ -20,13 +20,13 @@
                 All</label>
             <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
             <label for="paystream-sent">
-                Sent</label>
+                $ Sent</label>
             <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
             <label for="paystream-received">
-                Rec.</label>
+                $ Rec.</label>
             <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
             <label for="paystream-other">
-                Req.</label>
+                Other</label>
         </fieldset>
         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
             @foreach (var paymentGroup in Model.SortedPayments)

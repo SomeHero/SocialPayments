@@ -138,6 +138,11 @@ namespace Mobile_PaidThx
                     new { controller = "MeCodes", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
+                "SocialNetworks", // Route name
+                "SocialNetworks/{action}/{id}", // URL with parameters
+                    new { controller = "SocialNetworks", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
                 "Notifications", // Route name
                 "Notifications/{action}", // URL with parameters
             new { controller = "Notifications", action = "Index" } // Parameter defaults

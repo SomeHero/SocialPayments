@@ -215,6 +215,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
                             ConfigurationValue = c.ConfigurationValue,
                             ConfigurationType = c.ConfigurationType
                         }).ToList() : null),
+                    userSocialNetworks = (user.UserSocialNetworks != null ? user.UserSocialNetworks.Select(s =>
+                        new UserModels.UserSocialNetworkResponse() {
+                            SocialNetwork = "Facebook",
+                            SocialNetworkUserId = s.UserNetworkId,
+                            SocialNetworkUserToken = s.UserAccessToken
+                        }).ToList() : null),
                     numberOfPaystreamUpdates = numberOfPayStreamUpdates,
                     newMessageCount = 1,
                     pendingMessageCount = 1,
@@ -325,17 +331,38 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Start Personalize User"));
 
-            DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.UserService _userService = new DomainServices.UserService();
-
+            DomainServices.UserService userService = new DomainServices.UserService();
+            HttpResponseMessage response = null;
             try
             {
+                userService.PersonalizeUser(id, request.FirstName, request.LastName, request.ImageUrl);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Personalizing User {0}. Exception {1}", id, ex.Message));
 
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Personalizing User {0}. Exception {1}", id, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Personalizing User {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
