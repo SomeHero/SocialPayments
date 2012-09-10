@@ -525,6 +525,9 @@ namespace SocialPayments.DomainServices
         {
             using (var _ctx = new Context())
             {
+                DomainServices.UserService _userService =
+                       new DomainServices.UserService(_ctx);
+
                 Guid userId;
                 User user;
 
@@ -533,7 +536,7 @@ namespace SocialPayments.DomainServices
                 if (userId == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
 
-                user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
+                user = _userService.GetUserById(userId);
 
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", id));
@@ -551,7 +554,7 @@ namespace SocialPayments.DomainServices
                         if(messageGuid == null)
                             throw new Exception(String.Format("Message {0} Not Found", messageId));
 
-                        messageSeen = _ctx.Messages.FirstOrDefault(m => m.Id == messageGuid);
+                        messageSeen = GetMessage(messageGuid);
 
                         if (messageSeen.Recipient == user)
                             messageSeen.recipientHasSeen = true;
@@ -560,9 +563,11 @@ namespace SocialPayments.DomainServices
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(LogLevel.Warn, "Unable to update message seend for {0}. {1}", messageSeen.Id, ex.Message);
+                        _logger.Log(LogLevel.Warn, "Unable to update message seen for {0}. {1}", messageSeen.Id, ex.Message);
                     }
                 }
+
+                _ctx.SaveChanges();
             }
         }
         private PaymentAccount GetAccount(User sender, string id)

@@ -165,7 +165,7 @@ namespace SocialPayments.RestServices.Internal
 
             routes.MapHttpRoute(
                 name: "GetMatchingMECodesWithSearchTerm",
-                routeTemplate: "api/users/{searchTerm}/find_mecodes",
+                routeTemplate: "api/users/searchbymecode/{searchTerm}",
                 defaults: new { controller = "Users", action = "GetMatchingMECodesWithSearchTerm" }
             );
 
