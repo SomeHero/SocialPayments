@@ -367,6 +367,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
         // POST /api/users/{id}/upload_member_image
         public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
         {
@@ -942,7 +943,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
 
-        // GET /api/users/{userId}/find_mecodes
+        // GET /api/users/searchbymecode/{searchterm}
         public HttpResponseMessage<UserModels.FindMECodeResponse> GetMatchingMECodesWithSearchTerm (string searchTerm)
         {
             _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));
