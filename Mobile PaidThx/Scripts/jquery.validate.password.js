@@ -34,8 +34,10 @@
     $.validator.passwordRating = function (password, username) {
         if (!password)
             return rating(0, "nothing");
+
        if (password.length < 6)
-            return rating(0, "too-short");
+           return rating(0, "too-short");
+
         if (SAME.test(password))
             return rating(1, "very-weak");
 
@@ -59,6 +61,7 @@
         if ((lower || upper) && !digit && special) {
             return rating(2, "need-number");
         }
+
         return rating(2, "weak");
     }
 
@@ -83,7 +86,7 @@
         var rating = $.validator.passwordRating(password, username.val());
         // update message for this field
 
-        var meter = $(".password-meter");
+        var meter = $(".ui-tooltip-content .password-meter");
 
         meter.find(".password-meter-bar").removeClass().addClass("password-meter-bar").addClass("password-meter-" + rating.messageKey);
         meter.find(".password-meter-message")
@@ -93,7 +96,7 @@
 		.text($.validator.passwordRating.messages[rating.messageKey]);
         // display process bar instead of error message
 
-        return rating.rate > 2;
+        return rating.rate;
     }, "&nbsp;");
     // manually add class rule, to make username param optional
     $.validator.classRuleSettings.password = { password: true };
