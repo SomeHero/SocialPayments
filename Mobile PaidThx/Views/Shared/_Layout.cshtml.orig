@@ -54,8 +54,13 @@
     <script src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.placeholder.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.qtip.min.js")" type="text/javascript"></script>
+<<<<<<< HEAD
     <script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
+=======
+    
     <!--<script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
+>>>>>>> upstream/development
     <script src="@Url.Content("~/Scripts/home.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/send-money.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/dogood.js")" type="text/javascript"></script>

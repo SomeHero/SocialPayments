@@ -11,7 +11,7 @@
 
     <div data-role="content">
           <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
                    
         @foreach (var alphaGroup in Model.SortedContacts)
         {
@@ -41,12 +41,80 @@
                 </ul>
             </div>
     </div>
+    
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li>
+        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
+            <img src="http://graph.facebook.com/1/picture" />
+            ${meCode}
+        </a>
+     </li>
+</script>
+​
     <script language="javascript">
-//wait to do event binding until the page is being initialized
-        $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+        //wait to do event binding until the page is being initialized
+        var meCodeSearchController = (function ($, undefined) {
+            var pub = {},
+            $this = $(this);
+
+            pub.init = function () {
+
+                //When news updated, display items in list
+                $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+                    displayMeCodes(meCodes);
+                });
+
+                initialized = true;
+            };
+
+            pub.searchAndDisplayMeCodes = function () {
+                //Starting loading animation
+                $.mobile.showPageLoadingMsg();
+
+                //Get news and add success callback using then
+                searchByMeCode(function () {
+                    //Stop loading animation on success
+                    $.mobile.hidePageLoadingMsg();
+                });
+            };
+
+            function searchByMeCode(callback) {
+                //Get news via ajax and return jqXhr
+                $.ajax({
+                    url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
+                    dataType: "json",
+                    success: function (data, textStatus, xhr) {
+                        //Publish that news has been updated & allow
+                        //the 2 subscribers to update the UI content
+                        $this.trigger("meCodes.updated", data);
+                        if (callback) callback(data);
+                    }
+                });
+            }
+
+            function displayMeCodes(meCodes) {
+                //cache the list-view element for later use
+                var $listview = $(this).find('[data-role="listview"]');
+
+                //Empty current list
+                $listview.empty();
+
+                //Use template to create items & add to list
+                $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
+
+                //Call the listview jQuery UI Widget after adding 
+                //items to the list allowing correct rendering
+                $("#contactsList").listview("refresh");
+            }
+
+            return pub;
+        } (jQuery));
+        $("#send-contact-select-page").unbind('pageshow').bind('pageshow', function () {
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
+            meCodeSearchController.init();
 
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
@@ -54,32 +122,39 @@
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
-                //check to see if there are any visible list-items that are not the `#no-results` element
-                if ($listview.children(':visible').not('#no-results').length === 0) {
-
-                    //if none are found then fadeIn the `#no-results` element
-                    $('#no-results').fadeIn(500);
-                    if (isValidEmailAddress(searchVal)) {
-                        $("#results-header").text(searchVal);
-                        $("#results-description").text("New Email Recipient");
-                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                    } else if (isValidPhoneNumber(searchVal)) {
-                        $("#results-header").text(searchVal);
-                        $("#results-description").text("New Phone Recipient");
-                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                if (searchVal.substring(0, 1) == '$') {
+                    if (searchVal.length > 3) {
+                        meCodeSearchController.searchAndDisplayMeCodes();
                     }
-                    else {
-                        $("#results-header").text("No matches found");
-                        $("#results-description").text("Continue type or check entry");
-                        $("#recipient-uri").val('');
-                    }
-                } else {
+                }
+                else {
+                    //check to see if there are any visible list-items that are not the `#no-results` element
+                    if ($listview.children(':visible').not('#no-results').length === 0) {
 
-                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                    $('#no-results').fadeOut(250);
+                        //if none are found then fadeIn the `#no-results` element
+                        $('#no-results').fadeIn(500);
+                        if (isValidEmailAddress(searchVal)) {
+                            $("#results-header").text(searchVal);
+                            $("#results-description").text("New Email Recipient");
+                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                        } else if (isValidPhoneNumber(searchVal)) {
+                            $("#results-header").text(searchVal);
+                            $("#results-description").text("New Phone Recipient");
+                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                        }
+                        else {
+                            $("#results-header").text("No matches found");
+                            $("#results-description").text("Continue type or check entry");
+                            $("#recipient-uri").val('');
+                        }
+                    } else {
+
+                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                        $('#no-results').fadeOut(250);
+                    }
                 }
             });
-            $(".contact-recipient-uri").unbind("click").bind("click", function () {
+            $(".contact-recipient-uri").die("click").live("click", function () {
 
                 var recipientUri = $(this).attr('recipient-uri');
                 var recipientName = $(this).attr('recipient-name');
@@ -100,7 +175,7 @@
                 });
 
             });
-            $("#new-recipient-uri").unbind("click").bind("click", function () {
+            $("#new-recipient-uri").die("click").live("click", function () {
 
                 var recipientUri = $(this).attr('recipient-uri');
                 var recipientName = $(this).attr('recipient-uri');

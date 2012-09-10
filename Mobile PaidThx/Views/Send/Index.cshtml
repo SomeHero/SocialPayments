@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="send-page">
+<div data-role="page" id="send-page" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -12,11 +12,10 @@
     <div data-role="content">
     <div class="pad">
         @Html.ValidationSummary()
-       @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
-       {
+     
             <p style="margin-top: 0; padding-top: 0;">
-                <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
-                    <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
+            <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
+                <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
                         <span class="imgbg">
                         @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
@@ -35,7 +34,6 @@
                                     <text>Choose Recipient</text>
                                                       }</span>
                     </button>
-                </a>
             </p>
             <p>
                 <a href="@Url.Content("~/Send/AmountToSend")" data-prefetch data-transition="slide">
@@ -54,9 +52,12 @@
                     </button>
                 </a>
             </p>
+       
             <p>
                 <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
             </p>
+         @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
+       {
             <p>
                 <button type="submit" id="sendmoney2" class="btn-jq" data-theme="f">
                     <span>Send Money</span></button>
