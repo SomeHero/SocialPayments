@@ -393,8 +393,15 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                Guid userGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if(userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
                 var user = ctx.Users
-                    .FirstOrDefault(u => u.UserId.Equals(userId));
+                    .FirstOrDefault(u => u.UserId == userGuid);
 
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));

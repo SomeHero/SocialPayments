@@ -7,6 +7,18 @@ namespace SocialPayments.RestServices.Internal.Models
 {
     public class UserModels
     {
+        public class AddUserSocialNetworkRequest
+        {
+            public string SocialNetworkType { get; set; }
+            public string SocialNetworkUserId { get; set; }
+            public string SocialNetworkUserToken { get; set; }
+        }
+        public class AddUserSocialNetworkResponse
+        {
+            public string SocialNetworkType { get; set; }
+            public string SocialNetworkUserId { get; set; }
+            public string SocialNetworkUserToken { get; set; }
+        }
         public class PagedResults
         {
             public int TotalRecords { get; set; }
@@ -88,7 +100,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
             public List<AccountModels.AccountResponse> bankAccounts { get; set; }
             public List<UserModels.UserConfigurationResponse> userConfigurationVariables { get; set; }
-
+            public List<UserSocialNetworkResponse> userSocialNetworks { get; set; }
         }
         public class SubmitUserRequest
         {
@@ -251,6 +263,12 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool Verified { get; set; }
             public string VerifiedDate { get; set; }
             public string CreateDate { get; set; }
+        }
+        public class UserSocialNetworkResponse
+        {
+            public string SocialNetwork { get; set; }
+            public string SocialNetworkUserId { get; set; }
+            public string SocialNetworkUserToken { get; set; }
         }
         public class UserConfigurationResponse
         {

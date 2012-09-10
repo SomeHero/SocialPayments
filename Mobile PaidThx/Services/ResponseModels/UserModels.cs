@@ -79,7 +79,7 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
             public List<AccountModels.AccountResponse> bankAccounts { get; set; }
             public List<UserModels.UserConfigurationResponse> userConfigurationVariables { get; set; }
-
+            public List<UserModels.UserSocialNetworkResponse> userSocialNetworks { get; set; }
         }
 
         public class UserPayPointResponse
@@ -105,6 +105,12 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public Guid AttributeId { get; set; }
             public string AttributeName { get; set; }
             public string AttributeValue { get; set; }
+        }
+        public class UserSocialNetworkResponse
+        {
+            public string SocialNetwork { get; set; }
+            public string SocialNetworkUserId { get; set; }
+            public string SocialNetworkUserToken { get; set; }
         }
         public class UserMeCode
         {

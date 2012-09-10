@@ -91,9 +91,26 @@ namespace Mobile_PaidThx.Controllers
                     return View();
                 }
 
+                var facebookServices = new FacebookServices();
+                foreach (var socialNetwork in user.userSocialNetworks)
+                {
+                    if (socialNetwork.SocialNetwork == "Facebook")
+                        Session["Friends"] = facebookServices.GetFriendsList(socialNetwork.SocialNetworkUserToken);
+
+                }
+
                 Session["Application"] = application;
                 Session["UserId"] = validateResponse.userId;
                 Session["User"] = user;
+
+                if (String.IsNullOrEmpty(user.firstName)  || String.IsNullOrEmpty(user.lastName))
+                {
+                    return RedirectToAction("Personalize", "Register");
+                }
+                else if (user.bankAccounts.Count() == 0)
+                {
+                    return RedirectToAction("SetupACHAccount", "Register");
+                }
 
                 if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                     && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))

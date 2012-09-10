@@ -1,0 +1,40 @@
+﻿@model Mobile_PaidThx.Models.SocialNetworksModels.Index
+@{
+    ViewBag.Title = "Social Networks";
+}
+<div data-role="page" id="socialnetworks-page"  data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+             
+        <h1>
+            Social Networks</h1>
+    </div>
+    <div data-role="content">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+
+            @TempData["Message"]
+
+            <!-- Edit Profile -->
+            <ul data-role="listview" data-inset="true">
+                <li class="settings" id="socials">
+                @if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
+                {
+                
+                    <!-- Separate Set -->
+                    <!-- Email Accounts -->
+                    <a href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SocialNetworks/LinkFacebookAccount/&scope=email&state=", Model.FBState)'>
+                    <h2 class="heading"> Facebook </h2>
+                    <h4 class="subheading">Send/Request money with your facebook friends</h4> </a>
+                }
+                else
+                {
+                    <!-- Separate Set -->
+                    <!-- Email Accounts -->
+                    <h2 class="heading"> Facebook </h2>
+                    <h4 class="subheading">Send/Request money with your facebook friends - Linked</h4>
+                }
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
