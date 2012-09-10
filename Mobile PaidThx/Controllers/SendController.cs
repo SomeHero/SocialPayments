@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/Send";
+            TempData["DataUrl"] = "data-url=/mobile/Send";
 
             return View(new SendModels.SendMoneyModel()
             {
@@ -37,12 +37,15 @@ namespace Mobile_PaidThx.Controllers
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
-            if (user.bankAccounts.Count == 0)
+            return View(new SendModels.SendMoneyModel()
             {
-                return RedirectToAction("SetupACHAccount");
-            }
+                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
+                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+            });
 
-            return RedirectToAction("PopupPinSwipe");
         }
         public ActionResult SetupACHAccount()
         {
