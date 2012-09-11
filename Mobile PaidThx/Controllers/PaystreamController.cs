@@ -35,6 +35,8 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(String searchString)
         {
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 

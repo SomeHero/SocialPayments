@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<div data-role="page" id="page-signin">
+<div data-role="page" id="page-signin" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

@@ -37,7 +37,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (BadRequestException ex)
             {
-                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Pay Point {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
 
                 response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
@@ -46,7 +46,51 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Pay Point {0} for User {1}.  Exception {1}. Stack Trace {2}", request.SocialNetworkType, userId, ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Social Network {0} for User {1}.  Exception {1}. Stack Trace {2}", request.SocialNetworkType, userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+            response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.OK);
+
+            return response;
+        }
+          // POST /api/users/{userId}/SocialNetworks/unlink
+        public HttpResponseMessage UnlinkSocialNetwork(string userId, UserModels.DeleteUserSocialNetworkRequest request)
+        {
+            var userSocialNetworkServices = new DomainServices.UserSocialNetworkServices();
+            HttpResponseMessage<UserModels.AddUserSocialNetworkResponse> response = null;
+
+
+            try
+            {
+                userSocialNetworkServices.DeleteUserSocialNetwork(userId, request.SocialNetworkType);
+
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
+
+                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Social Network {0} for User {1}.  Exception {1}. Stack Trace {2}", request.SocialNetworkType, userId, ex.Message, ex.StackTrace));
 
                 response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Feedback";
 }
-<div data-role="page" id="profile-page" data-add-back-btn="true">
+<div data-role="page" id="profile-page" data-add-back-btn="true" @TempData["DataUrl"]>
   @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" >
         <h1>

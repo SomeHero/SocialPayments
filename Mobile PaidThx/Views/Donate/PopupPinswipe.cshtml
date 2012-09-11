@@ -1,5 +1,5 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
-<div data-role="page" id="donate-pinswipe-page">
+<div data-role="page" id="donate-pinswipe-page" @TempData["DataUrl"]>
         @Html.ValidationSummary()
        @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
