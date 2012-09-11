@@ -23,7 +23,7 @@
             <br />
         </div>
         <div id="setup-ach-account-form">
-            @using (Html.BeginForm("SetupACHAccount", "Send", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
+            @using (Html.BeginForm("SetupACHAccount", "Send", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
             {
                 <fieldset>
                     <div class="editor-field">
@@ -71,11 +71,12 @@
         }
 
         //wait to do event binding until the page is being initialized
-        $(document).on("pageshow", "#setup-ach-account-page", function () {
+        
+        /*$(document).on("pageshow", "#setup-ach-account-page", function () {
             $.validator.addMethod("accountmatch", function (value) {
                 return value == $("#AccountNumber").val();
             }, "Confirm Account Number must match Account Number");
             $("#frmSubmit").validate();
-        });
+        });*/
     </script>
 </div>

@@ -13,7 +13,7 @@
              </div>
     <div data-role="content">
         <div class="pad">
-        <!--
+        <!--TESTING
          <div id="pay-in" class="aui">
                 <div class="paystream-aui">
                     <img class="sender" src="../../Content/images/avatar.png" width="50" />
@@ -91,21 +91,20 @@
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, {"class", "validateMe"} }))
                 {
-                    <span class="form-holder"><input type="email" id="email" placeholder="Enter Your Email Address"
+                    <span class="form-holder"><input type="email" id="email" class="email required" placeholder="Enter Your Email Address"
                         name="email" value="@Model.UserName" /></span>
-                    <span class="form-holder"> <input type="password" id="password" placeholder="Create a Password"
+                    <span class="form-holder"> <input type="password" class="required passwrdvalidator" id="password" placeholder="Create a Password"
                         name="password" /></span>
-                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" type="password" placeholder="Confirm Your Password"
+                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" class="required pwmatch" type="password" placeholder="Confirm Your Password"
                         name="confirmPassword" /></span>
                 <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
                 Join with Email</button>
                   <div id="pass" class="hidden">
-                  <h4>Password must meet the following requirements:</h4>
-	<ul>
-		<li id="letter" class="invalid">At least <strong>one letter</strong></li>
-		<li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
-		<li id="number" class="invalid">At least <strong>one number</strong></li>
-		<li id="length" class="invalid">Be at least <strong>6 characters</strong></li>
+	<ul class="pass-help">
+		<li id="letter" class="invalid"><strong>1 letter (a-z)</strong> &nbsp;</li>
+		<li id="capital" class="invalid"><strong>1 capital (A-Z)</strong> &nbsp;</li>
+		<li id="number" class="invalid"><strong>1 number (0-9)</strong> &nbsp;</li>
+		<li id="length" class="invalid"><strong>6+ characters</strong></li>
 	</ul>
      </div>
                 }
@@ -121,17 +120,12 @@
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              
 <script type="text/javascript">
-    //$(document).delegate('#page-join', 'pageinit', function () {
-    $(document).ready(function () {
-        $.validator.addMethod("passwrdvalidator", function (value, element) {
-            return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/.test(value);
-        });
-
+$(document).delegate('#page-join', 'pageshow', function () {
         $('#registration-form #password').qtip({
             content: {
                 text: $('#pass'),
                 title: {
-                    text: 'Password Strength',
+                    text: 'Password must contain:',
                     button: true
                 }
             },
@@ -194,6 +188,7 @@
 
         });
 
+/*
         $("#frmSubmit").validate({
             submitHandler: function (form) {
                 form.submit();
@@ -217,12 +212,11 @@
             rules: {
                 password: {
                     required: true,
-                    passwrdvalidator: true,
-                    minlength: 6
+                    minlength: 6,
+                    passwrdvalidator: true
                 },
                 confirmPassword: {
                     required: true,
-                    minlength: 6,
                     equalTo: "#registration-form #password"
                 },
                 email: {
@@ -232,13 +226,12 @@
             },
             messages: {
                 password: {
-                    required: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character.",
-                    passwrdvalidator: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character."
-                    //minlength: "Password must be at least 6 characters long, contain at least 1 letter, 1 number, and 1 uppercase character."
+                    required: "Please create a password to protect your account.",
+                    minlength: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
+                    //passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
                 },
                 confirmPassword: {
                     required: "Please confirm your password",
-                    minlength: "Your password must be at least 6 characters long",
                     equalTo: "Please enter the same password as above"
                 },
                 email: {
@@ -247,10 +240,10 @@
                 }
             },
             errorPlacement: function (error, element) {
-                // Set positioning based on the elements position in the form
                 var elem = $(element);
                 // Check we have a valid error message
                 if (!error.is(':empty')) {
+
                     // Apply the tooltip only if it isn't valid
                     elem.filter(':not(.valid)').qtip({
                         overwrite: true,
@@ -266,9 +259,9 @@
                         },
                         hide: false,
                         style: {
-                            classes: 'ui-tooltip-red ui-tooltip qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
+                            classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
                         }
-                    }).qtip({
+                    }).qtip('destroy').qtip({
                         overwrite: true,
                         content: error,
                         position: {
@@ -282,28 +275,19 @@
                         },
                         hide: false,
                         style: {
-                            classes: 'ui-tooltip-red ui-tooltip qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
+                            classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
                             width: "88%"
 
                         }
                     });
-                }
-
-                else {
-                    elem.qtip('destroy');
+                } else {
+                          elem.qtip('destroy');
                 }
             },
             success: $.noop
         });
-        //$("#password").valid();
-        $('.tip-error').bind('tooltipshow', function () {
-            $("div.tip-error:not(:first)").hide();
-            alert('trying to hide');
-        });
-        
-        //$('#registration-form span.form-holder input').blur(function () {
-         //   $.validator.validate();
-        //});
+        */
+
     });
     </script>
 
