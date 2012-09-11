@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AddContactSend";
 }
-<div data-role="page" id="send-contact-select-page" data-add-back-btn="true">
+<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true">
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -10,7 +10,7 @@
     </div>
 
     <div data-role="content">
-          <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+          <div class="pad">
         <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
                    
         @foreach (var alphaGroup in Model.SortedContacts)

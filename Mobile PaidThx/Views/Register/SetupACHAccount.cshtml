@@ -10,21 +10,19 @@
         <div class="top-panel">
             @if (Model.Payment != null)
             {
-                <text> You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> in pending
-                payments. To enable sending and receiving of payments thru PaidThx, please enter
-                your preferred bank credentials below.
+                <text> You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> waiting for you. To receive this and future payments, please add
+                your preferred bank below.
                 </text>
             }
             else
             {
-                <text> Link a new bank account by entering the routing number and account number
-                of the account below.
+                <text> Link a new bank account by entering a routing number and account number below.
                 </text>
             }
             <br />
         </div>
         <div id="setup-ach-account-form">
-            @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
+            @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
             {
                 <fieldset>
                     <div class="editor-field">
@@ -32,11 +30,11 @@
                         @Html.ValidationMessageFor(m => m.NameOnAccount)
                     </div>
                     <div class="editor-field">
-                       <span class="form-holder">  @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" } })</span>
+                       <span class="form-holder">  @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" }, { "type", "number" } })</span>
                         @Html.ValidationMessageFor(m => m.RoutingNumber)
                     </div>
                     <div class="editor-field">
-                       <span class="form-holder">  @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required" } })</span>
+                       <span class="form-holder">  @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required accountformat" } })</span>
                         @Html.ValidationMessageFor(m => m.AccountNumber)
                     </div>
                     <div class="editor-field">
@@ -67,17 +65,9 @@
         </div>
     </div>
     </div>
-    <script language="javascript">
+    <script type="text/javascript">
         var getBaseURL = function () {
             return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
         }
-
-        //wait to do event binding until the page is being initialized
-        $(document).on("pageshow", "#setup-ach-account-page", function () {
-            $.validator.addMethod("accountmatch", function (value) {
-                return value == $("#AccountNumber").val();
-            }, "Confirm Account Number must match Account Number");
-            $("#frmSubmit").validate();
-        });
     </script>
 </div>
