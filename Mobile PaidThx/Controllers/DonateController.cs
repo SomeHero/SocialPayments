@@ -195,7 +195,7 @@ namespace Mobile_PaidThx.Controllers
 
             if (firstPinCode != model.PinCode)
             {
-                TempData["Message"] = "Confirmation Security Pin Does Not Match Your First Security Pin. Try Again.";
+                TempData["Message"] = "Your confirmation did not match your first PIN, please create a new PIN and try again.";
 
                 return View("SetupPinSwipe");
             }

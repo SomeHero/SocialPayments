@@ -9,6 +9,24 @@ var formattingController = (function($, undefined) {
     return pub;
 } (jQuery));
 
+
+//PINSWIPE RESIZE CONTROLLER
+
+var pinswipeResizeController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+    pub.resizePINs = function () {
+        $(".hackstyle").remove();
+        var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
+        divwidth = widthy * .95;
+        $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}</div>")
+        $(".patternlockcontainer > div").center();
+    };
+
+    return pub;
+} (jQuery));
+
+//ME CODE CONTROLLER
 var meCodeSearchController = (function ($, undefined) {
     var pub = {},
     $this = $(this);
@@ -66,10 +84,21 @@ var meCodeSearchController = (function ($, undefined) {
 
 $(document).on('pageshow', '[data-role=page]', function () {
 
+    //add center to jquery object
+    $.fn.center = function () {
+        this.css("position", "absolute");
+        this.css("left", ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + "px");
+        return this;
+    }
+
     $('form').bind('firstinvalid', function (e) {
         return false;
     });
 
+    //resize PINs on window resize
+    $(window).resize(function () {
+        pinswipeResizeController.resizePINs();
+    });
 
 
     //Create all custom rules
@@ -119,19 +148,19 @@ $(document).on('pageshow', '[data-role=page]', function () {
                 errorClass: 'error',
                 validClass: 'valid',
                 /*rules: {
-                    password: {
-                        required: true,
-                        minlength: 6,
-                        passwrdvalidator: true
-                    },
-                    confirmPassword: {
-                        required: true,
-                        equalTo: "#registration-form #password"
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    }
+                password: {
+                required: true,
+                minlength: 6,
+                passwrdvalidator: true
+                },
+                confirmPassword: {
+                required: true,
+                equalTo: "#registration-form #password"
+                },
+                email: {
+                required: true,
+                email: true
+                }
                 },*/
                 messages: {
                     password: {
