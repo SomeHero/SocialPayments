@@ -45,7 +45,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult LinkFacebookAccount(string state, string code)
         {
               if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             var userService = new Services.UserServices();
             var faceBookServices = new FacebookServices();
@@ -62,7 +62,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                userSocialNetworkServices.AddPaypoint(user.userId.ToString(), "Facebook", fbAccount.id, fbAccount.accessToken);
+                userSocialNetworkServices.LinkSocialNetworkAccount(user.userId.ToString(), "Facebook", fbAccount.id, fbAccount.accessToken);
             }
             catch (Exception ex)
             {
@@ -92,6 +92,37 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("Index");
             
+        }
+        public ActionResult UnlinkFacebookAccount()
+        {
+            if (Session["UserId"] == null)
+                return RedirectToAction("Index", "SignIn", null);
+
+            var userService = new Services.UserServices();
+            var faceBookServices = new FacebookServices();
+            var userSocialNetworkServices = new UserSocialNetworkServices();
+
+            var user = userService.GetUser(Session["UserId"].ToString());
+
+            if(user == null)
+                return RedirectToAction("Index", "SignIn", null);
+
+            try
+            {
+                userSocialNetworkServices.RemoveLinkedSocialNetworkAccount("Facebook", user.userId.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Unlinking Facebook Account for User {0}. Exception: {1}", user.userId.ToString(), ex.Message));
+           
+            }
+
+            var socialNetwork = user.userSocialNetworks.FirstOrDefault(u => u.SocialNetwork == "Facebook");
+            user.userSocialNetworks.Remove(socialNetwork);
+
+            Session["Friends"] = null;
+
+            return RedirectToAction("Index");
         }
     }
 }

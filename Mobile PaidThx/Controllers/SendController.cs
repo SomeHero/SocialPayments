@@ -35,21 +35,14 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(SendModels.SendMoneyModel model)
         {
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-
-            return View(new SendModels.SendMoneyModel()
-            {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
-            });
+            return RedirectToAction("PopupPinSwipe");
 
         }
         public ActionResult SetupACHAccount()
         {
             //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
+            
+            TempData["DataUrl"] = "data-url=/mobile/SetupACHAccount";
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -78,7 +71,7 @@ namespace Mobile_PaidThx.Controllers
         public bool ValidateRoutingNumber(string routingNumber)
         {
             //_logger.Log(LogLevel.Info, String.Format("Validating Routing Number {0}", routingNumber));
-
+            
             var routingNumberServices = new RoutingNumberServices();
 
             return routingNumberServices.ValidateRoutingNumber(routingNumber);
@@ -86,6 +79,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupPinSwipe()
         {
+            TempData["DataUrl"] = "data-url=/mobile/SetupPinSwipe";
+
             TempData["Message"] = "";
 
             return View();
@@ -94,10 +89,13 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
         {
             Session["PinCode"] = model.PinCode;
+            
             return RedirectToAction("ConfirmPinSwipe");
         }
         public ActionResult ConfirmPinSwipe()
         {
+            TempData["DataUrl"] = "data-url=/mobile/ConfirmPinSwipe";
+            
             return View();
         }
         [HttpPost]
@@ -118,6 +116,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SecurityQuestion()
         {
+            TempData["DataUrl"] = "data-url=/mobile/SecurityQuestion";
+            
             var securityQuestionServices = new SecurityQuestionServices();
             var securityQuestions = securityQuestionServices.GetSecurityQuestions();
             var questions = securityQuestions.Select(q => new Mobile_PaidThx.Models.SecurityQuestionModels.SecurityQuestionModel
@@ -184,7 +184,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult AddContactSend()
         {
-            TempData["DataUrl"] = "data-url=/Send/AddContactSend";
+            TempData["DataUrl"] = "data-url=/mobile/Send/AddContactSend";
             
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
@@ -217,7 +217,7 @@ namespace Mobile_PaidThx.Controllers
             Session["RecipientUri"] = model.RecipientUri;
             Session["RecipientName"] = model.RecipientName;
 
-            TempData["DataUrl"] = "data-url=/Send";
+            TempData["DataUrl"] = "data-url=/mobile/Send";
 
             string imageUrl = "";
             if (model.RecipientUri.Substring(0, 3) == "fb_")
@@ -236,7 +236,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=/Send/AmountToSend";
+            TempData["DataUrl"] = "data-url=/mobile/Send/AmountToSend";
             
             return View();
         }
@@ -246,7 +246,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["Amount"] = model.Amount;
 
-            TempData["DataUrl"] = "data-url=/Send";
+            TempData["DataUrl"] = "data-url=/mobile/Send";
 
 
 
@@ -261,6 +261,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult PopupPinswipe()
         {
+            TempData["DataUrl"] = "data-url=/mobile/Send/PinSwipe";
+            
             return View(new SendModels.PinSwipModel()
             {
                 RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
@@ -305,7 +307,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=/Paystream";
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             Session["RecipientUri"] = null;
             Session["RecipientName"] = null;
