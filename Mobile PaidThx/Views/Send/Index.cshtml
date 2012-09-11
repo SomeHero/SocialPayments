@@ -1,0 +1,69 @@
+﻿@model Mobile_PaidThx.Models.SendModels.SendMoneyModel
+@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="send-page" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Send Money</h1>
+        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+    <div data-role="content">
+    <div class="pad">
+        @Html.ValidationSummary()
+     
+            <p style="margin-top: 0; padding-top: 0;">
+            <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
+                <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
+                        <span class="imgbg">
+                        @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
+                        {
+                            <img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
+                        }
+                        else
+                        {
+
+                        }</span><span
+                                id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientName))
+                                                      {
+                                    <span id="modelRecipient">@Model.RecipientName</span>
+                                                      }
+                                                      else
+                                                      {
+                                    <text>Choose Recipient</text>
+                                                      }</span>
+                    </button>
+            </p>
+            <p>
+                <a href="@Url.Content("~/Send/AmountToSend")" data-prefetch data-transition="slide">
+                    <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">
+                        <span class="imgbg">
+                           </span>
+                           <span
+                                id="amount-send">@if (Model.Amount > 0)
+                                                 {
+                                    <text>@string.Format("{0:C}", Model.Amount)</text>
+                                                 }
+                                                 else
+                                                 {
+                                    <text>Enter Amount</text>
+                                                 }</span>
+                    </button>
+                </a>
+            </p>
+       
+            <p>
+                <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
+            </p>
+         @using(Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "slideup" }} ))
+       {
+            <p>
+                <button type="submit" id="sendmoney2" class="btn-jq" data-theme="f">
+                    <span>Send Money</span></button>
+            </p>
+       }
+       </div>
+    </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
+</div>

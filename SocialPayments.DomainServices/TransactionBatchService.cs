@@ -31,90 +31,6 @@ namespace SocialPayments.DomainServices
 
             return transactionBatch;
         }
-        public void BatchTransactions(Message message)
-        {
-            var transactionBatch = GetOpenBatch();
-
-            var withDrawalTransaction =
-                new Domain.Transaction()
-                {
-                    Amount = message.Amount,
-                    Category = Domain.TransactionCategory.Payment,
-                    CreateDate = System.DateTime.Now,
-                    FromAccountId = message.SenderAccountId.Value,
-                    Id = Guid.NewGuid(),
-                    MessageId = message.Id,
-                    PaymentChannelType = Domain.PaymentChannelType.Single,
-                    StandardEntryClass = Domain.StandardEntryClass.Web,
-                    Status = Domain.TransactionStatus.Pending,
-                    TransactionBatchId = transactionBatch.Id,
-                    Type = Domain.TransactionType.Withdrawal,
-                    UserId = message.SenderId,
-                    Message = message,
-                };
-
-            transactionBatch.Transactions.Add(withDrawalTransaction);
-            transactionBatch.TotalNumberOfWithdrawals += 1;
-            transactionBatch.TotalWithdrawalAmount += withDrawalTransaction.Amount;
-
-            Transaction deposit;
-
-            if (message.Recipient != null && message.Recipient.PaymentAccounts.Count > 0)
-            {
-                _logger.Log(LogLevel.Info, String.Format("Found Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
-                
-                var depositTransaction = 
-                    new Domain.Transaction()
-                    {
-                        Amount = message.Amount,
-                        Category = Domain.TransactionCategory.Payment,
-                        CreateDate = System.DateTime.Now,
-                        FromAccountId = message.Recipient.PaymentAccounts[0].Id,
-                        Id = Guid.NewGuid(),
-                        MessageId = message.Id,
-                        PaymentChannelType = Domain.PaymentChannelType.Single,
-                        StandardEntryClass = Domain.StandardEntryClass.Web,
-                        Status = Domain.TransactionStatus.Pending,
-                        TransactionBatchId = transactionBatch.Id,
-                        Type = Domain.TransactionType.Deposit,
-                        UserId = message.Recipient.UserId,
-                    };
-
-                transactionBatch.Transactions.Add(depositTransaction);
-                transactionBatch.TotalNumberOfDeposits += 1;
-                transactionBatch.TotalDepositAmount += depositTransaction.Amount;
-
-                message.Recipient = message.Recipient;
-            }
-
-            message.MessageStatus = Domain.MessageStatus.Pending;
-            message.LastUpdatedDate = System.DateTime.Now;
-
-            _ctx.SaveChanges();
-                       
-        }
-        public void BatchTransactions(List<Transaction> transactions)
-        {
-            var transactionBatch = GetOpenBatch();
-
-            foreach (var transaction in transactions)
-            {
-                transactionBatch.Transactions.Add(transaction);
-
-                if (transaction.Type == TransactionType.Deposit)
-                {
-                    transactionBatch.TotalNumberOfDeposits += 1;
-                    transactionBatch.TotalDepositAmount += transaction.Amount;
-                }
-                else
-                {
-                    transactionBatch.TotalNumberOfWithdrawals += 1;
-                    transactionBatch.TotalWithdrawalAmount += transaction.Amount;
-                }
-            }
-
-            _ctx.SaveChanges();
-        }
         public List<TransactionBatch> GetBatches(Expression<Func<TransactionBatch, bool>> expression)
         {
             return GetBatches(expression, 0, 1);
@@ -125,14 +41,34 @@ namespace SocialPayments.DomainServices
                 .Where(expression);
 
             model = model.OrderByDescending(t => t.CreateDate);
-                
-                return model.ToList<TransactionBatch>();
+
+            return model.ToList<TransactionBatch>();
         }
         public TransactionBatch GetOpenBatch()
         {
             return _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
                                    AddTransactionBatch(new TransactionBatch()
-               {
+                                   {
+                                       CreateDate = System.DateTime.Now,
+                                       Id = Guid.NewGuid(),
+                                       IsClosed = false,
+                                       TotalDepositAmount = 0,
+                                       TotalNumberOfDeposits = 0,
+                                       TotalWithdrawalAmount = 0,
+                                       TotalNumberOfWithdrawals = 0,
+                                       Transactions = new Collection<Transaction>()
+                                   });
+        }
+        public TransactionBatch CloseOpenBatch()
+        {
+            var batch = _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false);
+
+            batch.IsClosed = true;
+            batch.LastDateUpdated = System.DateTime.Now;
+            batch.ClosedDate = System.DateTime.Now;
+
+            _ctx.TransactionBatches.Add(new TransactionBatch()
+                {
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
                     IsClosed = false,
@@ -140,38 +76,78 @@ namespace SocialPayments.DomainServices
                     TotalNumberOfDeposits = 0,
                     TotalWithdrawalAmount = 0,
                     TotalNumberOfWithdrawals = 0,
-                    Transactions = new List<Transaction>()
+                    Transactions = new Collection<Transaction>()
                 });
-        }
 
-        public List<Transaction> BatchTransactions()
-        {
-
-            var transactionBatch = _ctx.TransactionBatches
-                .Include("Transactions")
-                .FirstOrDefault(t => t.IsClosed == false);
-
-            if(transactionBatch == null)
-                throw new Exception("No batch found while batching transactions");
-
-            transactionBatch.TotalNumberOfDeposits = transactionBatch.Transactions.Where(t => t.Type == TransactionType.Deposit).Count();
-            transactionBatch.TotalDepositAmount = transactionBatch.Transactions.Where(t => t.Type == TransactionType.Deposit).Sum(t => t.Amount);
-            transactionBatch.TotalNumberOfWithdrawals = transactionBatch.Transactions.Where(t => t.Type == TransactionType.Withdrawal).Count();
-            transactionBatch.TotalWithdrawalAmount = transactionBatch.Transactions.Where(t => t.Type == TransactionType.Withdrawal).Sum(t => t.Amount);
-            transactionBatch.IsClosed = true;
-            transactionBatch.ClosedDate = System.DateTime.Now;
-            transactionBatch.Transactions.ForEach(t => t.Status = TransactionStatus.Submitted);
-            transactionBatch.Transactions.ForEach(t => t.Message.MessageStatus = MessageStatus.Completed);
             _ctx.SaveChanges();
 
-            AddTransactionBatch(new TransactionBatch()
-                                    {
-                                        Id = Guid.NewGuid(),
-                                        CreateDate = System.DateTime.Now,
-                                        IsClosed = false
-                                                            
-                                    });
-            return transactionBatch.Transactions;
+            return batch;
+        }
+        public void AddTransactionsToBatch(Collection<Transaction> transactions)
+        {
+            var transactionBatch = GetOpenBatch();
+
+            _logger.Log(LogLevel.Info, String.Format("Batch {0} Transactions in Batch {1}", transactions.Count, transactionBatch.Id));
+
+            foreach (var transaction in transactions)
+            {
+                transactionBatch.Transactions.Add(new Transaction()
+                {
+                    ACHTransactionId = "",
+                    Amount = transaction.Amount,
+                    RoutingNumber = transaction.RoutingNumber,
+                    AccountNumber = transaction.AccountNumber,
+                    NameOnAccount = transaction.NameOnAccount,
+                    AccountType = Domain.AccountType.Checking,
+                    Id = Guid.NewGuid(),
+                    PaymentChannelType = PaymentChannelType.Single,
+                    StandardEntryClass = StandardEntryClass.Web,
+                    Status = TransactionStatus.Pending
+                });
+
+                if (transaction.Type == TransactionType.Deposit)
+                {
+                    transactionBatch.TotalNumberOfDeposits += 1;
+                    transactionBatch.TotalDepositAmount += transaction.Amount;
+                }
+                if (transaction.Type == TransactionType.Withdrawal)
+                {
+                    transactionBatch.TotalNumberOfWithdrawals += 1;
+                    transactionBatch.TotalWithdrawalAmount += transaction.Amount;
+                }
+            }
+
+            _ctx.SaveChanges();
+        }
+        public TransactionBatch BatchTransactions()
+        {
+            var transactionBatch = GetOpenBatch();
+
+            if (transactionBatch == null)
+                throw new Exception("No batch found while batching transactions");
+
+            transactionBatch.IsClosed = true;
+            transactionBatch.ClosedDate = System.DateTime.Now;
+
+            _logger.Log(LogLevel.Info, String.Format("Batching Transaction for transaction batch {0} with {1} transactions", transactionBatch.Id, transactionBatch.Transactions.Count()));
+
+            foreach (var transaction in transactionBatch.Transactions)
+            {
+                try
+                {
+                    //transaction.Payment.Message.Status = PaystreamMessageStatus.Complete;
+                    //transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                    transaction.Status = TransactionStatus.Complete;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Debug, String.Format("Warning Batching Transaction {0}. Exception: {1}", transaction.Id, ex.Message));
+                }
+            }
+            
+            _ctx.SaveChanges();
+
+            return transactionBatch;
         }
         private User GetRecipient(string uri)
         {
@@ -197,21 +173,28 @@ namespace SocialPayments.DomainServices
         }
 
 
-        public void RemoveFromBatch(Message message)
+        public void RemoveTransactionsFromBatch(Collection<Transaction> transactions)
         {
-            foreach (var temp in message.Transactions)
+            var transactionBatch = GetOpenBatch();
+
+            foreach (var transaction in transactions)
             {
-                var transactionBatch = GetOpenBatch();
-                
-                if (temp.Status == TransactionStatus.Submitted || temp.Status == TransactionStatus.Pending)
+                var item = transactionBatch.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+                  
+                if(item != null)
                 {
-                    var transaction = transactionBatch.Transactions
-                        .FirstOrDefault(t => t.Id.Equals(temp.Id));
-
-                    transaction.LastUpdatedDate = System.DateTime.Now;
-                    transaction.Status = TransactionStatus.Cancelled;
-
-                    transactionBatch.Transactions.Remove(temp);
+                    item.TransactionBatchId = null;
+                
+                    if (item.Type == TransactionType.Deposit)
+                    {
+                        transactionBatch.TotalNumberOfDeposits -= 1;
+                        transactionBatch.TotalDepositAmount -= transaction.Amount;
+                    }
+                    if (item.Type == TransactionType.Withdrawal)
+                    {
+                        transactionBatch.TotalNumberOfWithdrawals -= 1;
+                        transactionBatch.TotalWithdrawalAmount -= transaction.Amount;
+                    }
                 }
             }
         }

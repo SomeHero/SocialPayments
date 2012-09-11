@@ -27,7 +27,7 @@ namespace SocialPayments.RestServices.External.Controllers
 
             List<Transaction> transactions = _ctx.Transactions
                 .Include("FromAccount")
-                .Where(t => t.UserId.Equals(user.UserId))
+                .Where(t => t.User.UserId.Equals(user.UserId))
                 .OrderByDescending(t => t.CreateDate)
                 .ToList<Transaction>(); ;
 

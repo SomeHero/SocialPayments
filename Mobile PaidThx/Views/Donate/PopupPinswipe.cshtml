@@ -1,0 +1,51 @@
+﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
+<div data-role="page" id="donate-pinswipe-page" @TempData["DataUrl"]>
+        @Html.ValidationSummary()
+       @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Confirm</h1>
+    </div>
+  
+    <div data-role="content">
+        <div class="instructions" id="swipe-to-confirm">
+         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+            <text>Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName</text>
+        </div>
+              </div>
+        @using (Html.BeginForm("PopupPinswipe", "Donate", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+
+        }
+    </div>
+    
+  <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function resizePIN() {
+
+            $(".hackstyle").remove();
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>
+</div>

@@ -100,7 +100,7 @@ namespace CodeFirstMembershipDemoSharp.Code
                                                           RoutingNumber = securityService.Encrypt(routingNumber)
                                                       }
                                                   },
-                                                  UserStatus =  UserStatus.Pending,
+                                                  UserStatus =  UserStatus.Active,
                                                   LastLoggedIn = System.DateTime.Now,
                                                   Limit = 0
                         };

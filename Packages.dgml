@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="Mobile PaidThx" Label="Mobile PaidThx" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="jQuery 1.5.1" Label="jQuery 1.5.1" Category="Package" />
+    <Node Id="jQuery.UI.Combined 1.8.11" Label="jQuery.UI.Combined 1.8.11" Category="Package" />
+    <Node Id="jQuery.Validation 1.8.0" Label="jQuery.Validation 1.8.0" Category="Package" />
+    <Node Id="jQuery.vsdoc 1.5.1" Label="jQuery.vsdoc 1.5.1" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="Modernizr 1.7" Label="Modernizr 1.7" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="SocialPayments.DomainServices.UnitTests" Label="SocialPayments.DomainServices.UnitTests" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="SocialPayments.SMSified.Test" Label="SocialPayments.SMSified.Test" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="SocialPayments.RestServices.Internal" Label="SocialPayments.RestServices.Internal" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebApi 4.0.20126.16343" Label="AspNetWebApi 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebApi.Core 4.0.20126.16343" Label="AspNetWebApi.Core 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Facebook 6.0.20" Label="Facebook 6.0.20" Category="Package" />
+    <Node Id="jQuery 1.6.2" Label="jQuery 1.6.2" Category="Package" />
+    <Node Id="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Label="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Category="Package" />
+    <Node Id="jQuery.UI.Combined 1.8.11" Label="jQuery.UI.Combined 1.8.11" Category="Package" />
+    <Node Id="jQuery.Validation 1.8.1" Label="jQuery.Validation 1.8.1" Category="Package" />
+    <Node Id="jQuery.Validation.Unobtrusive 2.0.20126.16343" Label="jQuery.Validation.Unobtrusive 2.0.20126.16343" Category="Package" />
+    <Node Id="knockoutjs 2.0.0.0" Label="knockoutjs 2.0.0.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="Microsoft.Web.Optimization 1.0.0-beta" Label="Microsoft.Web.Optimization 1.0.0-beta" Category="Package" />
+    <Node Id="Modernizr 2.0.6" Label="Modernizr 2.0.6" Category="Package" />
+    <Node Id="System.Json 4.0.20126.16343" Label="System.Json 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Net.Http 2.0.20126.16343" Label="System.Net.Http 2.0.20126.16343" Category="Package" />
+    <Node Id="System.Net.Http.Formatting 4.0.20126.16343" Label="System.Net.Http.Formatting 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Web.Providers 1.1" Label="System.Web.Providers 1.1" Category="Package" />
+    <Node Id="System.Web.Providers.Core 1.0" Label="System.Web.Providers.Core 1.0" Category="Package" />
+    <Node Id="SocialPayments.RestServices.External" Label="SocialPayments.RestServices.External" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebApi 4.0.20126.16343" Label="AspNetWebApi 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebApi.Core 4.0.20126.16343" Label="AspNetWebApi.Core 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="jQuery 1.6.2" Label="jQuery 1.6.2" Category="Package" />
+    <Node Id="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Label="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Category="Package" />
+    <Node Id="jQuery.UI.Combined 1.8.11" Label="jQuery.UI.Combined 1.8.11" Category="Package" />
+    <Node Id="jQuery.Validation 1.8.1" Label="jQuery.Validation 1.8.1" Category="Package" />
+    <Node Id="jQuery.Validation.Unobtrusive 2.0.20126.16343" Label="jQuery.Validation.Unobtrusive 2.0.20126.16343" Category="Package" />
+    <Node Id="knockoutjs 2.0.0.0" Label="knockoutjs 2.0.0.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="Microsoft.Web.Optimization 1.0.0-beta" Label="Microsoft.Web.Optimization 1.0.0-beta" Category="Package" />
+    <Node Id="Modernizr 2.0.6" Label="Modernizr 2.0.6" Category="Package" />
+    <Node Id="System.Json 4.0.20126.16343" Label="System.Json 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Net.Http 2.0.20126.16343" Label="System.Net.Http 2.0.20126.16343" Category="Package" />
+    <Node Id="System.Net.Http.Formatting 4.0.20126.16343" Label="System.Net.Http.Formatting 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="System.Web.Providers 1.1" Label="System.Web.Providers 1.1" Category="Package" />
+    <Node Id="System.Web.Providers.Core 1.0" Label="System.Web.Providers.Core 1.0" Category="Package" />
+    <Node Id="SocialPayments.Facebook.Tests" Label="SocialPayments.Facebook.Tests" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="SocialPayments.Facebook" Label="SocialPayments.Facebook" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="jQuery 1.5.1" Label="jQuery 1.5.1" Category="Package" />
+    <Node Id="jQuery.UI.Combined 1.8.11" Label="jQuery.UI.Combined 1.8.11" Category="Package" />
+    <Node Id="jQuery.Validation 1.8.0" Label="jQuery.Validation 1.8.0" Category="Package" />
+    <Node Id="jQuery.vsdoc 1.5.1" Label="jQuery.vsdoc 1.5.1" Category="Package" />
+    <Node Id="Modernizr 1.7" Label="Modernizr 1.7" Category="Package" />
+    <Node Id="SocialPayments.WindowsServices.OpenPaymentsScheduler" Label="SocialPayments.WindowsServices.OpenPaymentsScheduler" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.Jobs.ProcessOpenPaymentsJob" Label="SocialPayments.Jobs.ProcessOpenPaymentsJob" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.ThirdPartyServices.FedACHService" Label="SocialPayments.ThirdPartyServices.FedACHService" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.Providers" Label="SocialPayments.Providers" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.UI.Controls" Label="SocialPayments.UI.Controls" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.WindowsServices.NachaBatchScheduler" Label="SocialPayments.WindowsServices.NachaBatchScheduler" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.Jobs.CreateNachaFileJob" Label="SocialPayments.Jobs.CreateNachaFileJob" Category="Project" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="SocialPayments.DomainServices" Label="SocialPayments.DomainServices" Category="Project" />
+    <Node Id="Facebook 6.0.20" Label="Facebook 6.0.20" Category="Package" />
+    <Node Id="SocialPayments.DataLayer" Label="SocialPayments.DataLayer" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+    <Node Id="SocialPayments.Domain" Label="SocialPayments.Domain" Category="Project" />
+    <Node Id="AspNetMvc 4.0.20126.16343" Label="AspNetMvc 4.0.20126.16343" Category="Package" />
+    <Node Id="AspNetRazor.Core 2.0.20126.16343" Label="AspNetRazor.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="AspNetWebPages.Core 2.0.20126.16343" Label="AspNetWebPages.Core 2.0.20126.16343" Category="Package" />
+    <Node Id="EntityFramework 4.1.10331.0" Label="EntityFramework 4.1.10331.0" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="System.Web.Http.Common 4.0.20126.16343" Label="System.Web.Http.Common 4.0.20126.16343" Category="Package" />
+  </Nodes>
+  <Links>
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="jQuery.UI.Combined 1.8.11" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="jQuery.Validation 1.8.0" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="jQuery.vsdoc 1.5.1" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="Mobile PaidThx" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="Mobile PaidThx" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="Mobile PaidThx" Target="jQuery.UI.Combined 1.8.11" Category="Installed Package" />
+    <Link Source="Mobile PaidThx" Target="jQuery.Validation 1.8.0" Category="Installed Package" />
+    <Link Source="Mobile PaidThx" Target="jQuery.vsdoc 1.5.1" Category="Installed Package" />
+    <Link Source="Mobile PaidThx" Target="Modernizr 1.7" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="SocialPayments.DomainServices.UnitTests" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.DomainServices.UnitTests" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="SocialPayments.SMSified.Test" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.SMSified.Test" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi 4.0.20126.16343" Target="AspNetWebApi.Core 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi.Core 4.0.20126.16343" Target="System.Net.Http.Formatting 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi.Core 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.UI.Combined 1.8.11" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.Validation 1.8.1" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.Validation.Unobtrusive 2.0.20126.16343" Target="jQuery.Validation 1.8.1" Category="Package Dependency" />
+    <Link Source="Microsoft.Web.Optimization 1.0.0-beta" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="System.Net.Http.Formatting 4.0.20126.16343" Target="System.Net.Http 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="System.Web.Providers 1.1" Target="System.Web.Providers.Core 1.0" Category="Package Dependency" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="AspNetWebApi 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="Facebook 6.0.20" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="jQuery.UI.Combined 1.8.11" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="jQuery.Validation.Unobtrusive 2.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="knockoutjs 2.0.0.0" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="Microsoft.Web.Optimization 1.0.0-beta" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="Modernizr 2.0.6" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="System.Json 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.Internal" Target="System.Web.Providers 1.1" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi 4.0.20126.16343" Target="AspNetWebApi.Core 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi.Core 4.0.20126.16343" Target="System.Net.Http.Formatting 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebApi.Core 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.UI.Combined 1.8.11" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.Validation 1.8.1" Target="jQuery 1.6.2" Category="Package Dependency" />
+    <Link Source="jQuery.Validation.Unobtrusive 2.0.20126.16343" Target="jQuery.Validation 1.8.1" Category="Package Dependency" />
+    <Link Source="Microsoft.Web.Optimization 1.0.0-beta" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="System.Net.Http.Formatting 4.0.20126.16343" Target="System.Net.Http 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="System.Web.Providers 1.1" Target="System.Web.Providers.Core 1.0" Category="Package Dependency" />
+    <Link Source="SocialPayments.RestServices.External" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="AspNetWebApi 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="jQuery.Ajax.Unobtrusive 2.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="jQuery.UI.Combined 1.8.11" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="jQuery.Validation.Unobtrusive 2.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="knockoutjs 2.0.0.0" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="Microsoft.Web.Optimization 1.0.0-beta" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="Modernizr 2.0.6" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="System.Json 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.RestServices.External" Target="System.Web.Providers 1.1" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="SocialPayments.Facebook.Tests" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.Facebook.Tests" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="jQuery.UI.Combined 1.8.11" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="jQuery.Validation 1.8.0" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="jQuery.vsdoc 1.5.1" Target="jQuery 1.5.1" Category="Package Dependency" />
+    <Link Source="SocialPayments.Facebook" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.Facebook" Target="jQuery.UI.Combined 1.8.11" Category="Installed Package" />
+    <Link Source="SocialPayments.Facebook" Target="jQuery.Validation 1.8.0" Category="Installed Package" />
+    <Link Source="SocialPayments.Facebook" Target="jQuery.vsdoc 1.5.1" Category="Installed Package" />
+    <Link Source="SocialPayments.Facebook" Target="Modernizr 1.7" Category="Installed Package" />
+    <Link Source="SocialPayments.WindowsServices.OpenPaymentsScheduler" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.Jobs.ProcessOpenPaymentsJob" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.ThirdPartyServices.FedACHService" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.Providers" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.UI.Controls" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.WindowsServices.NachaBatchScheduler" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.Jobs.CreateNachaFileJob" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="SocialPayments.DomainServices" Target="Facebook 6.0.20" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="SocialPayments.DataLayer" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.DataLayer" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetWebPages.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetMvc 4.0.20126.16343" Target="System.Web.Http.Common 4.0.20126.16343" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="AspNetWebPages.Core 2.0.20126.16343" Target="AspNetRazor.Core 2.0.20126.16343" Category="Package Dependency" />
+    <Link Source="SocialPayments.Domain" Target="AspNetMvc 4.0.20126.16343" Category="Installed Package" />
+    <Link Source="SocialPayments.Domain" Target="EntityFramework 4.1.10331.0" Category="Installed Package" />
+  </Links>
+  <Categories>
+    <Category Id="Project" />
+    <Category Id="Package" />
+  </Categories>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Project" ValueLabel="True">
+      <Condition Expression="HasCategory('Project')" />
+      <Setter Property="Background" Value="Blue" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Package Dependency" ValueLabel="True">
+      <Condition Expression="HasCategory('Package Dependency')" />
+      <Setter Property="Background" Value="Yellow" />
+    </Style>
+  </Styles>
+</DirectedGraph>

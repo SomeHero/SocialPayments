@@ -7,10 +7,11 @@ using System.IO;
 using SocialPayments.DataLayer;
 using NLog;
 using SocialPayments.DataLayer.Interfaces;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.DomainServices
 {
-    public class SMSService
+    public class SMSService: ISMSService
     {
         private ApplicationService _applicationService;
         private FormattingServices _formattingServices;
@@ -18,11 +19,13 @@ namespace SocialPayments.DomainServices
         private IDbContext _ctx;
         private Logger _logger;
 
+        public SMSService() : this(new Context()) { }
+
         public SMSService(IDbContext context)
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }
@@ -30,7 +33,7 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
             _logger = logger;
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _formattingServices = new FormattingServices();
             _smsLogService = new SMSLogService(_ctx);
         }

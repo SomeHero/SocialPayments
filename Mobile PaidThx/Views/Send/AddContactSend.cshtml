@@ -1,0 +1,201 @@
+﻿@model Mobile_PaidThx.Models.SendModels.AddContactSendModel
+@{
+    ViewBag.Title = "AddContactSend";
+}
+<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true" @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Enter Recipient</h1>
+    </div>
+
+    <div data-role="content">
+          <div class="pad">
+        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+                   
+        @foreach (var alphaGroup in Model.SortedContacts)
+        {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var friend in alphaGroup.Value)
+            {
+                    <li>
+                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
+                        <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
+                        @friend.name
+                    </a>
+                    </li>
+            }
+            }
+                    <li id="no-results">
+                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-type="new" recipient-uri="">
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No matches found 
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Continue type or check entry
+                       </span>
+                   </a>
+                    </li>
+                </ul>
+            </div>
+    </div>
+    
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li>
+        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
+            <img src="http://graph.facebook.com/1/picture" />
+            ${meCode}
+        </a>
+     </li>
+</script>
+​
+    <script language="javascript">
+
+        //wait to do event binding until the page is being initialized
+        var meCodeSearchController = (function ($, undefined) {
+            var pub = {},
+            $this = $(this);
+
+            pub.init = function () {
+
+                //When news updated, display items in list
+                $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+                    displayMeCodes(meCodes);
+                });
+            };
+
+            pub.searchAndDisplayMeCodes = function () {
+                //Starting loading animation
+                $.mobile.showPageLoadingMsg();
+
+                //Get news and add success callback using then
+                searchByMeCode(function () {
+                    //Stop loading animation on success
+                    $.mobile.hidePageLoadingMsg();
+                });
+            };
+
+            function searchByMeCode(callback) {
+                //Get news via ajax and return jqXhr
+                $.ajax({
+                    url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
+                    dataType: "json",
+                    success: function (data, textStatus, xhr) {
+                        //Publish that news has been updated & allow
+                        //the 2 subscribers to update the UI content
+                        $this.trigger("meCodes.updated", data);
+                        if (callback) callback(data);
+                    }
+                });
+            }
+
+            function displayMeCodes(meCodes) {
+                //cache the list-view element for later use
+                var $listview = $(this).find('[data-role="listview"]');
+
+                //Empty current list
+                $listview.empty();
+
+                //Use template to create items & add to list
+                $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
+
+                //Call the listview jQuery UI Widget after adding 
+                //items to the list allowing correct rendering
+                $("#contactsList").listview("refresh");
+            }
+
+            return pub;
+        } (jQuery));
+        $("#send-contact-select-page").unbind('pageshow').bind('pageshow', function () {
+
+            //cache the list-view element for later use
+            var $listview = $(this).find('[data-role="listview"]');
+            meCodeSearchController.init();
+
+            //delegate event binding since the search widget is added dynamically
+            //bind to the `keyup` event so we can check the value of the input after the user types
+            $(this).delegate('input[data-type="search"]', 'keyup', function () {
+
+                var searchVal = $(this).delegate('input[data-type="search"]').val();
+
+                if (searchVal.substring(0, 1) == '$') {
+                    if (searchVal.length > 3) {
+                        meCodeSearchController.searchAndDisplayMeCodes();
+                    }
+                }
+                else {
+                    //check to see if there are any visible list-items that are not the `#no-results` element
+                    if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                        //if none are found then fadeIn the `#no-results` element
+                        $('#no-results').fadeIn(500);
+                        if (isValidEmailAddress(searchVal)) {
+                            $("#results-header").text(searchVal);
+                            $("#results-description").text("New Email Recipient");
+                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                        } else if (isValidPhoneNumber(searchVal)) {
+                            $("#results-header").text(searchVal);
+                            $("#results-description").text("New Phone Recipient");
+                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                        }
+                        else {
+                            $("#results-header").text("No matches found");
+                            $("#results-description").text("Continue type or check entry");
+                            $("#recipient-uri").val('');
+                        }
+                    } else {
+
+                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                        $('#no-results').fadeOut(250);
+                    }
+                }
+            });
+            $(".contact-recipient-uri").die("click").live("click", function () {
+
+                var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-name');
+                var recipientType = $(this).attr('recipient-type');
+
+                var model = {
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
+                };
+
+                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
+                    data: model,
+                    dataUrl: getBaseURL() + 'Send/Index',
+                    reverse: true,
+                    transition: 'slide',
+                    type: 'post'
+                });
+
+            });
+            $("#new-recipient-uri").die("click").live("click", function () {
+
+                var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-uri');
+                var recipientType = $(this).attr('recipient-type');
+
+                var model = {
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
+                };
+
+                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
+                    data: model,
+                    dataUrl: getBaseURL() + 'Send/Index',
+                    reverse: true,
+                    transition: 'slide',
+                    type: 'post'
+                });
+
+            });
+
+        });
+        
+</script>
+</div>

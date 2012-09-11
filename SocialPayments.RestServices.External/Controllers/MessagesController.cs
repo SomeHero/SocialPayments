@@ -36,7 +36,7 @@ namespace SocialPayments.RestServices.External.Controllers
                 createDate = message.CreateDate,
                 Id = message.Id.ToString(),
                 lastUpdatedDate = message.LastUpdatedDate,
-                messageStatus = message.MessageStatus.ToString(),
+                messageStatus = message.Status.ToString(),
                 messageType = message.MessageType.ToString(),
                 recipient = new UserModels.UserResponse()
                 {
@@ -72,7 +72,7 @@ namespace SocialPayments.RestServices.External.Controllers
                 createDate = m.CreateDate,
                 Id = m.Id.ToString(),
                 lastUpdatedDate = m.LastUpdatedDate,
-                messageStatus = m.MessageStatus.ToString(),
+                messageStatus = m.Status.ToString(),
                 messageType = m.MessageType.ToString(),
                 recipient = new UserModels.UserResponse()
                 {
@@ -136,7 +136,7 @@ namespace SocialPayments.RestServices.External.Controllers
             try
             {
                 MessageType messageType = MessageType.Payment;
-                MessageStatus messageStatus = MessageStatus.Submitted;
+                
                 if (request.messageType == "Payment")
                     messageType = MessageType.Payment;
 
@@ -151,8 +151,8 @@ namespace SocialPayments.RestServices.External.Controllers
                     Comments = request.comments,
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
-                    MessageStatus = MessageStatus.Pending,
-                    MessageStatusValue = (int)messageStatus,
+                    Status = PaystreamMessageStatus.Processing,
+                    WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
                     MessageType = messageType,
                     MessageTypeValue = (int)messageType,
                     RecipientUri = request.recipientUri,

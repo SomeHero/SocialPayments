@@ -1,0 +1,23 @@
+﻿@model Mobile_PaidThx.Models.SecurityModels.ConfirmSecurityPinModel
+@{
+    ViewBag.Title = "Confirm Security Pin";
+}
+
+<div data-role="page" id="confirmsecuritypin-page" data-add-back-btn="true" @TempData["DataUrl"]>
+        @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Confirm Security Pin</h1>
+    </div>
+    <div data-role="content" style="margin: 15px;">
+    @Html.ValidationSummary()
+      
+        @using (Html.BeginForm("ChangeSecurityPinNew", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div style="margin-top:15px">
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="page-about"  @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            About</h1>
+        <!--<a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content">
+    <div class="pad">
+    <h3>PaidThx is...</h3>
+    <p>PaidThx is a social payment network that lets you easily transfer money with your friends, family and favorite organizations through mobile and web technology.</p>
+
+    <h3>Watch This</h3>
+    <p>A short video about PaidThx</p>
+    <a class="various fancybox.iframe" title="About PaidThx" href="http://www.youtube.com/watch?v=-bFf3yi7cNM?fs=1&amp;autoplay=1">
+        About
+        </a>
+
+         <h3>Learn More</h3>
+    <p>Questions?  Interested in learning more?  Visit our <a target="_blank" href="http://paidthx.zendesk.com/forums">FAQs</a></p>
+   
+
+
+    </div>
+    </div>
+    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".various").fancybox({
+                maxWidth: 800,
+                maxHeight: 600,
+                fitToView: false,
+                width: '90%',
+                height: '90%',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'elastic',
+                closeEffect: 'none', 
+                helpers: {
+                    overlay: {
+                        opacity: 0.9,
+                        css: { 'background-color': '#fff' }
+                    } // overlay
+                } // helpers
+            });
+        });
+		</script>
+</div>

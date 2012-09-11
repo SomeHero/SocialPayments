@@ -47,7 +47,7 @@ namespace SocialPayments.WindowsServices.NachaBatchScheduler
 
             //Setup trigger for NACHA file generation at 8:00 PM
            //Trigger trigger = TriggerUtils.MakeImmediateTrigger(100, new TimeSpan(0, 20, 0));
-           Trigger trigger = TriggerUtils.MakeDailyTrigger(22, 00);
+           Trigger trigger = TriggerUtils.MakeDailyTrigger(22, 30);
 
             trigger.StartTimeUtc = DateTime.UtcNow;
             trigger.Name = "myTrigger2";

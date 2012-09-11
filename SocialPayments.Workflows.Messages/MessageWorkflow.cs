@@ -59,7 +59,7 @@ namespace SocialPayments.Workflows.Messages
                 throw new ArgumentException("Invalid Message Id", "Id");
 
 
-            _logger.Log(LogLevel.Info, String.Format("Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
+            _logger.Log(LogLevel.Info, String.Format("Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.Status.ToString()));
             switch (message.MessageType)
             {
                 case Domain.MessageType.Payment:
@@ -69,7 +69,7 @@ namespace SocialPayments.Workflows.Messages
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(LogLevel.Error, String.Format("Error Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
+                        _logger.Log(LogLevel.Error, String.Format("Error Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.Status.ToString()));
             
                         throw ex;
                     }
@@ -87,82 +87,67 @@ namespace SocialPayments.Workflows.Messages
 
                     break;
             }
-            _logger.Log(LogLevel.Info, String.Format("Finished Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.MessageStatus.ToString()));
+
+            _logger.Log(LogLevel.Info, String.Format("Finished Processing Message {0} of Type {1} with Status {2}", message.Id, message.MessageType.ToString(), message.Status.ToString()));
             
         }
 
         private void ProcessPayment(Message message)
         {
-            _logger.Log(LogLevel.Error, String.Format("Processing Payment"));
+            _logger.Log(LogLevel.Error, String.Format("Processing Payment with Status {0} in {1}", message.Status, message.WorkflowStatus));
             
-            String smsMessage = "";
-            switch (message.MessageStatus)
-            {
-                case Domain.MessageStatus.Submitted:
+            IMessageProcessor messageProcessor;
 
-                    _logger.Log(LogLevel.Error, String.Format("Starting Payment Message Processor"));
+            switch (message.Status)
+            {
+                case Domain.PaystreamMessageStatus.Processing:
+
+                    _logger.Log(LogLevel.Error, String.Format("Starting Submitted Payment Message Processor"));
             
-                    IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx);
+                    messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedPaymentMessageProcessor(_ctx, _emailService, _smsService);
                     messageProcessor.Process(message);
 
                     break;
 
                 //remove associated transactions from batch and cancel transactions
-                case Domain.MessageStatus.CancelPending:
+
+                case Domain.PaystreamMessageStatus.Cancelled:
+                     _logger.Log(LogLevel.Error, String.Format("Starting Cancelled Payment Message Processor"));
+            
+                    messageProcessor = new SocialPayments.Services.MessageProcessors.CancelledPaymentMessageProcessor(_ctx, _emailService, _smsService);
+                    messageProcessor.Process(message);
 
                     break;
-                case Domain.MessageStatus.Cancelled:
+
+                case Domain.PaystreamMessageStatus.Complete:
                     //terminal state
                     break;
 
-                case Domain.MessageStatus.Completed:
-                    //terminal state
-                    break;
-
-                case Domain.MessageStatus.Failed:
-                    //terminal state
-
-                    break;
-                case Domain.MessageStatus.Pending:
-                    //moves to Completed State by NACHA processor when NACHA file is created
-
-                    break;
-
-                case Domain.MessageStatus.Refunded:
-                    //terminal state
-
-                    break;
             }
         }
 
         private void ProcessPaymentRequest(Message message)
         {
-            switch (message.MessageStatus)
+            switch (message.Status)
             {
-                case Domain.MessageStatus.Cancelled:
+                case Domain.PaystreamMessageStatus.Cancelled:
                     break;
-                case Domain.MessageStatus.Completed:
+                case Domain.PaystreamMessageStatus.Complete:
                     break;
-                case Domain.MessageStatus.Failed:
-                    break;
-                case Domain.MessageStatus.Pending:
-                    break;
-                case Domain.MessageStatus.Refunded:
-                    break;
-                case Domain.MessageStatus.Submitted:
+                case Domain.PaystreamMessageStatus.Processing:
                     _logger.Log(LogLevel.Error, String.Format("Starting Request Message Processor"));
             
                     IMessageProcessor messageProcessor = new SocialPayments.Services.MessageProcessors.SubmittedRequestMessageProcessor(_ctx);
                     messageProcessor.Process(message);
 
                     break;
-                case Domain.MessageStatus.RequestAccepted:
+                case Domain.PaystreamMessageStatus.Accepted:
 
                     //validate sender and recipient
                     //create withdraw and deposit records and batch
-                    _transactionBatchService.BatchTransactions(message);
+                    //_transactionBatchService.BatchTransactions(message);
 
-                    message.MessageStatus = Domain.MessageStatus.Pending;
+                    message.Status = PaystreamMessageStatus.Accepted;
                     message.LastUpdatedDate = System.DateTime.Now;
                        
                     _ctx.SaveChanges();
@@ -170,7 +155,7 @@ namespace SocialPayments.Workflows.Messages
                     //send sms and email confirmations
                     break;
 
-                case Domain.MessageStatus.RequestRejected:
+                case Domain.PaystreamMessageStatus.Rejected:
 
                     //send sms and email to sender
                     break;

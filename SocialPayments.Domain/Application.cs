@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace SocialPayments.Domain
 {
@@ -15,5 +16,8 @@ namespace SocialPayments.Domain
         public bool IsActive { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
+
+        public virtual Collection<ApplicationConfiguration> ConfigurationValues { get; set; }
+        public virtual Collection<SocialNetwork> SocialNetworks { get; set; }
     }
 }

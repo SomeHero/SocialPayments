@@ -15,9 +15,11 @@ namespace SocialPayments.Domain
         public double TotalWithdrawalAmount { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+        public DateTime? VerifiedDate { get; set; }
+        public DateTime? SentDate { get; set; }
         public DateTime? LastDateUpdated { get; set; }
         public bool IsClosed { get; set; }
 
-        public virtual List<Transaction> Transactions { get; set; } 
+        public virtual Collection<Transaction> Transactions { get; set; } 
     }
 }

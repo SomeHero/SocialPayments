@@ -1,0 +1,27 @@
+﻿@model Mobile_PaidThx.Models.ProfileModels
+<script src="@Url.Content("~/Scripts/send-money.js")" type="text/javascript"></script>
+@{Html.RenderPartial("PartialViews/SubNav");}
+<div id="main-body" class="panel">
+    <h2>
+        Send Money</h2>
+     <form id="frmSendMoney" action="@Url.Content("~/Profile/SendMoney")" method="post">
+    <p>
+        <label for="txtSendTo">
+            Send To:</label>
+        <input type="text" id="txtSendTo" name="RecipientUri" placeholder="Name, email or phone #" required />
+    </p>
+    <p>
+        <label for="txtAmount">
+            Amount to Send:</label>
+        <input type="text" id="txtAmount" name="Amount" placeholder="$0.00" required />
+    </p>
+    <p>
+        <label for="txtComments" style="margin-bottom: 15px">
+            Comments:</label>
+        <textarea name="Comments" id="txtComments" rows="10" cols="100" placeholder="Enter notes, comments, etc" required></textarea>
+    </p>
+    <p>
+        <input type="image" id="btnSendMoney" src="@Url.Content("~/Content/images/send_money_button.gif")" />
+    </p>
+    </form>
+</div>

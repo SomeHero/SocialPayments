@@ -8,6 +8,7 @@ using SocialPayments.DomainServices;
 using NLog;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using SocialPayments.DomainServices.Interfaces;
 
 namespace SocialPayments.Services.UserProcessors
 {
@@ -20,8 +21,8 @@ namespace SocialPayments.Services.UserProcessors
         private TransactionBatchService _transactionBatchService;
         private ValidationService _validationService;
         private UserService _userService;
-        private SMSService _smsService;
-        private EmailService _emailService;
+        private ISMSService _smsService;
+        private IEmailService _emailService;
 
         private string _mobileValidationMessage = "Welcome to PdThx.   Your verfication codes are {0} and {1}.";
         private string _templateName = "Welcome/Registration";
@@ -41,7 +42,7 @@ namespace SocialPayments.Services.UserProcessors
             _userService = new UserService(_ctx);
         }
 
-        public SubmittedUserProcessor(IDbContext context)
+        public SubmittedUserProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
@@ -49,8 +50,8 @@ namespace SocialPayments.Services.UserProcessors
             _formattingService = new FormattingServices();
             _transactionBatchService = new TransactionBatchService(_ctx, _logger);
             _validationService = new ValidationService(_logger);
-            _smsService = new SMSService(_ctx);
-            _emailService = new EmailService(_ctx);
+            _smsService = smsService;
+            _emailService = emailService;
             _userService = new UserService(_ctx);
         }
 
@@ -67,7 +68,7 @@ namespace SocialPayments.Services.UserProcessors
                 user.MobileVerificationCode1 = "1234";
                 user.MobileVerificationCode2 = "4321";
 
-                user.UserStatus = UserStatus.Pending;
+                user.UserStatus = UserStatus.Registered;
 
                 _ctx.SaveChanges();
 

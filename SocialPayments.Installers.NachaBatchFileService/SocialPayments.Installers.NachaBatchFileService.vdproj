@@ -15,164 +15,230 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0151FE93E0FA98150FF5E097A3923E38"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0151FE93E0FA98150FF5E097A3923E38"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_05DAFC3BB7B983D9EAB7B6187A872663"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_05DAFC3BB7B983D9EAB7B6187A872663"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_05DAFC3BB7B983D9EAB7B6187A872663"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_05DAFC3BB7B983D9EAB7B6187A872663"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "MsmKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "MsmKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
+        "MsmKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "OwnerKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_324D4CC044479F45F95018309006431F"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "MsmKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "OwnerKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "MsmKey" = "8:_1D4AB82DDC07EDD71B4FD625403AA73A"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_1D4AB82DDC07EDD71B4FD625403AA73A"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "MsmKey" = "8:_44E9BA7F2F87AC69E83F4B6213D20706"
+        "OwnerKey" = "8:_1D4AB82DDC07EDD71B4FD625403AA73A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
-        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
+        "MsmKey" = "8:_44E9BA7F2F87AC69E83F4B6213D20706"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "MsmKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
+        "OwnerKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "MsmKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
+        "OwnerKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6C074D849CFC0C80B6DFBC9645B5C9C1"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6C074D849CFC0C80B6DFBC9645B5C9C1"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "MsmKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6C074D849CFC0C80B6DFBC9645B5C9C1"
-        "OwnerKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
+        "MsmKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6C074D849CFC0C80B6DFBC9645B5C9C1"
-        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
+        "MsmKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1370DEDCB25E6F9FCBDBBFAB01E58EA"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1370DEDCB25E6F9FCBDBBFAB01E58EA"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_1D4AB82DDC07EDD71B4FD625403AA73A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "OwnerKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "MsmKey" = "8:_F5029C8DBA3C22E0CA2FEC79AE4D0B59"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FB89EE4E222BD6D92AF7BB9B7331ADBD"
-        "OwnerKey" = "8:_0151FE93E0FA98150FF5E097A3923E38"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FB89EE4E222BD6D92AF7BB9B7331ADBD"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "MsmKey" = "8:_F5029C8DBA3C22E0CA2FEC79AE4D0B59"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+        "OwnerKey" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_143DE54DBE956BE502C3277C85B42905"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_CE3A505214CBCA3B07B864DC9C144D90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -184,49 +250,61 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EF117918DE096AF4B8C01CDE9512E118"
+        "OwnerKey" = "8:_F5029C8DBA3C22E0CA2FEC79AE4D0B59"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0151FE93E0FA98150FF5E097A3923E38"
+        "OwnerKey" = "8:_1D4AB82DDC07EDD71B4FD625403AA73A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FB89EE4E222BD6D92AF7BB9B7331ADBD"
+        "OwnerKey" = "8:_44E9BA7F2F87AC69E83F4B6213D20706"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8E0C7E36A2F9D45B80D89973ACF6D442"
+        "OwnerKey" = "8:_D1370DEDCB25E6F9FCBDBBFAB01E58EA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3ED61BDFDE4E93AD27B48B3E88FBA915"
+        "OwnerKey" = "8:_8D1D79CFF7625042B67FB64D7DF2F7EC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_518939A2CB72EB61D44536DE51BB89AE"
+        "OwnerKey" = "8:_83ADBF7EB5481321201FD68A6FE082EB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6C074D849CFC0C80B6DFBC9645B5C9C1"
+        "OwnerKey" = "8:_87CE5615D419FBECFE3344F67E67919C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_324D4CC044479F45F95018309006431F"
+        "OwnerKey" = "8:_D56211C2204888D161524A6C7DA24A96"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1C28D3E36D8F34A9402075BBCE8F8A38"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7218DB2DAD6406248685EAECA7E87489"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -380,12 +458,123 @@
                 }
             }
         }
+        "Mobile"
+        {
+        "DisplayName" = "8:Mobile"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Mobile\\SocialPayments.Installers.NachaBatchFileService.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
+        "New Beta"
+        {
+        "DisplayName" = "8:New Beta"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:New Beta\\SocialPayments.Installers.NachaBatchFileService.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
         "Release"
         {
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
         "OutputFilename" = "8:Release\\SocialPayments.Installers.NachaBatchFileService.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
+        "Remote"
+        {
+        "DisplayName" = "8:Remote"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Remote\\SocialPayments.Installers.NachaBatchFileService.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -459,59 +648,59 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_263A60F2EC884B67B0DE7AE10C3EEC24"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0002FCAEB6704F90825C789D40612688"
             {
             "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
             "Condition" = "8:"
-            "Object" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-            "FileType" = "3:2"
-            "InstallAction" = "3:2"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_008826A6_F31E_4C94_AFC2_16728CEDB6DC"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B6EF47B11E8F464BB2292E8B5024183C"
-            {
-            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_9CFE3555_6FCB_487F_ACF6_9B418848096F"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_C425F243D7B544C5884650BFE857131C"
-            {
-            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_F892A4D6_7BFD_46DA_AC84_EB32FA67D809"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F91DCF42338D44BC806F87FA8A58D44D"
-            {
-            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_87A088AEAF144770AEEAC75D7C7C6817"
+            "Object" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
             "FileType" = "3:2"
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_E191B962_A753_4B04_9982_FCA36CA85102"
+            "Identifier" = "8:_A6BE56CC_9040_4695_9A8F_2E04642964D4"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_3B2EB2B94E4E45B4B4493E69A573AC66"
+            {
+            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_34CF3ECA_E305_4D89_9103_A1E4FFD9E40A"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_87AADEE38F1343C7AFCD37D44A6307B1"
+            {
+            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_DB4C0C5E_CF4D_45DB_98E0_040F43AD96C1"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_ACB2FE6E363D482A88AA0442C5E8A111"
+            {
+            "Name" = "8:Primary output from SocialPayments.WindowsServices.NachaBatchScheduler (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_BB11C5C7_A498_4605_8323_839577BF8385"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -538,37 +727,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0151FE93E0FA98150FF5E097A3923E38"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Quartz, Version=1.0.3.3, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_0151FE93E0FA98150FF5E097A3923E38"
-                    {
-                    "Name" = "8:Quartz.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Quartz.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_05DAFC3BB7B983D9EAB7B6187A872663"
             {
             "AssemblyRegister" = "3:1"
@@ -600,169 +758,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_324D4CC044479F45F95018309006431F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_324D4CC044479F45F95018309006431F"
-                    {
-                    "Name" = "8:NLog.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NLog.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3ED61BDFDE4E93AD27B48B3E88FBA915"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SocialPayments.DataLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_3ED61BDFDE4E93AD27B48B3E88FBA915"
-                    {
-                    "Name" = "8:SocialPayments.DataLayer.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:SocialPayments.DataLayer.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_518939A2CB72EB61D44536DE51BB89AE"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SocialPayments.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_518939A2CB72EB61D44536DE51BB89AE"
-                    {
-                    "Name" = "8:SocialPayments.Domain.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:SocialPayments.Domain.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6C074D849CFC0C80B6DFBC9645B5C9C1"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_6C074D849CFC0C80B6DFBC9645B5C9C1"
-                    {
-                    "Name" = "8:EntityFramework.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:EntityFramework.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8E0C7E36A2F9D45B80D89973ACF6D442"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SocialPayments.DomainServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_8E0C7E36A2F9D45B80D89973ACF6D442"
-                    {
-                    "Name" = "8:SocialPayments.DomainServices.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:SocialPayments.DomainServices.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EF117918DE096AF4B8C01CDE9512E118"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_143DE54DBE956BE502C3277C85B42905"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:SocialPayments.BatchFileServices.NachaBatchFile, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EF117918DE096AF4B8C01CDE9512E118"
+                    "_143DE54DBE956BE502C3277C85B42905"
                     {
                     "Name" = "8:SocialPayments.BatchFileServices.NachaBatchFile.dll"
                     "Attributes" = "3:512"
@@ -786,20 +789,330 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FB89EE4E222BD6D92AF7BB9B7331ADBD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1C28D3E36D8F34A9402075BBCE8F8A38"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_1C28D3E36D8F34A9402075BBCE8F8A38"
+                    {
+                    "Name" = "8:EntityFramework.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:EntityFramework.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1D4AB82DDC07EDD71B4FD625403AA73A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MoonAPNS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_1D4AB82DDC07EDD71B4FD625403AA73A"
+                    {
+                    "Name" = "8:MoonAPNS.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:MoonAPNS.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_44E9BA7F2F87AC69E83F4B6213D20706"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_44E9BA7F2F87AC69E83F4B6213D20706"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7218DB2DAD6406248685EAECA7E87489"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e"
                 "ScatterAssemblies"
                 {
-                    "_FB89EE4E222BD6D92AF7BB9B7331ADBD"
+                    "_7218DB2DAD6406248685EAECA7E87489"
                     {
                     "Name" = "8:Common.Logging.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:Common.Logging.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_83ADBF7EB5481321201FD68A6FE082EB"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SocialPayments.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_83ADBF7EB5481321201FD68A6FE082EB"
+                    {
+                    "Name" = "8:SocialPayments.Domain.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SocialPayments.Domain.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_87CE5615D419FBECFE3344F67E67919C"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Quartz, Version=1.0.3.3, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_87CE5615D419FBECFE3344F67E67919C"
+                    {
+                    "Name" = "8:Quartz.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Quartz.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8D1D79CFF7625042B67FB64D7DF2F7EC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SocialPayments.DataLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8D1D79CFF7625042B67FB64D7DF2F7EC"
+                    {
+                    "Name" = "8:SocialPayments.DataLayer.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SocialPayments.DataLayer.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CE3A505214CBCA3B07B864DC9C144D90"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SocialPayments.DomainServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CE3A505214CBCA3B07B864DC9C144D90"
+                    {
+                    "Name" = "8:SocialPayments.DomainServices.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SocialPayments.DomainServices.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D1370DEDCB25E6F9FCBDBBFAB01E58EA"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D1370DEDCB25E6F9FCBDBBFAB01E58EA"
+                    {
+                    "Name" = "8:Facebook.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Facebook.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D56211C2204888D161524A6C7DA24A96"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D56211C2204888D161524A6C7DA24A96"
+                    {
+                    "Name" = "8:NLog.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NLog.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F5029C8DBA3C22E0CA2FEC79AE4D0B59"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SocialPayments.ThirdPartyServices.FedACHService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F5029C8DBA3C22E0CA2FEC79AE4D0B59"
+                    {
+                    "Name" = "8:SocialPayments.ThirdPartyServices.FedACHService.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SocialPayments.ThirdPartyServices.FedACHService.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
@@ -833,6 +1146,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A883D9E40B9F44098473A7275EF9325C"
+                    {
+                    "Name" = "8:bin"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_343FE1087C2F49E7A09001D2BAFCD065"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_9F73FDA67DF0465BA4409457C2577C87"
@@ -874,7 +1198,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{2C9A4914-7F06-4E6E-80B1-B3C13C95C338}"
+        "PackageCode" = "8:{478C11E8-35D1-46DA-9783-74BFFD421B4D}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1393,7 +1717,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_87A088AEAF144770AEEAC75D7C7C6817"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E35D4E9D9A2245F6985C4B3F91C1FA5F"
             {
             "SourcePath" = "8:..\\SocialPayments.WindowsServices.NachaBatchScheduler\\obj\\x86\\Dev\\SocialPayments.WindowsServices.NachaBatchScheduler.exe"
             "TargetName" = "8:"
@@ -1416,62 +1740,6 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{4F193BBA-F1D4-426B-9C29-6B1D6529E8AE}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_930EEB566F374824B0B7C8D61E4B17E6"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{A06817CB-EF0F-49B3-B6ED-879EA399590A}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C77D776B509946B18CA9D2F92A0F3743"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33553AE9A84F48F993451B8265AB66B0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{A68BDEEB-0AA5-4A44-8662-11371C4D36E3}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

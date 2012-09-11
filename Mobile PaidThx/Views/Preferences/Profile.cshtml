@@ -1,0 +1,26 @@
+﻿@model Mobile_PaidThx.Models.PreferencesModels.ProfileModel
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div data-role="page" id="email-page" data-add-back-btn="true" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Me</h1>
+    </div>
+    <div data-role="content" style="margin: 15px;">
+        
+            @foreach (var profileSection in Model.ProfileSections)
+            { 
+                <h5>@profileSection.SectionHeader</h5>
+                <ul data-role="listview" data-inset="true">
+                @foreach (var profileItem in profileSection.ProfileItems)
+                {
+                    <li>@profileItem.Label</li>
+                } 
+                </ul>
+            }
+        
+    </div>
+</div>

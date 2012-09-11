@@ -1,0 +1,78 @@
+﻿@model Mobile_PaidThx.Models.DonateModels.AddContactModel
+@{
+    ViewBag.Title = "AddContactDonate";
+}
+<div data-role="page" id="donate-add-contact" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Select Non Profit</h1>
+    </div>
+    <div data-role="content">
+      
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+
+        @foreach (var alphaGroup in Model.SortedNonProfits)
+        {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var nonprofit in alphaGroup.Value)
+            {
+            <li>
+            <a class="contact-organization" recipient-id="@nonprofit.Id" organization-name="@nonprofit.Name" organization-image-url="@nonprofit.ImageUri" recipient-type="organization" >
+                <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                    <img style="float:left; padding-right:10px; width:50px; height:50px" src="@nonprofit.ImageUri" />
+                    @if (nonprofit.HasInfo)
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                    }
+                    <div style="margin-top: 8px">
+                            <span style="float: left; font-size: 12px; font-weight: bold;">@nonprofit.Name</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(nonprofit.Slogan))
+                        {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
+                        }
+                    </div>
+                </div>
+            </a>
+            </li>
+            }
+        }
+        </ul>
+     </div>
+      <script language="javascript">
+          //wait to do event binding until the page is being initialized
+          $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+              //cache the list-view element for later use
+              var $listview = $(this).find('[data-role="listview"]');
+
+              $(".contact-organization").unbind("click").bind("click", function () {
+
+                  var recipientId = $(this).attr('recipient-id');
+                  var recipientName = $(this).attr('organization-name');
+                  var recipientImageUrl = $(this).attr('organization-image-url');
+                  var recipientType = $(this).attr('recipient-type');
+
+                  var model = {
+                      RecipientId: recipientId,
+                      RecipientName: recipientName,
+                      RecipientType: recipientType,
+                      RecipientImageUrl: recipientImageUrl
+                  };
+
+                  $.mobile.changePage(getBaseURL() + 'Donate/AddContact', {
+                      data: model,
+                      dataUrl: getBaseURL() + 'Donate/Index',
+                      reverse: true,
+                      transition: 'slide',
+                      type: 'post'
+                  });
+
+              });
+
+          });
+        
+</script>
+</div>

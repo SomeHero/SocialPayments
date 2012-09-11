@@ -1,0 +1,71 @@
+﻿@model Mobile_PaidThx.Models.PledgeModels.PledgeMoneyModel
+<div data-role="page" id="pledge-page" data-add-back-btn="true" @TempData["DataUrl"]>
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Accept Pledge</h1>
+       <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+
+    <div data-role="content" class="content-margin">
+           @Html.ValidationSummary()
+       @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+       {
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
+        <div style="margin: 10px">
+                 <a href="@Url.Content("~/Pledge/AddCause")" data-prefetch data-transition="slide">
+                 <button type="button" class="imgbtn field-btn" data-role="none">
+               
+                    <span class="imgbg" style="padding-left: 0px; width: 55px; margin-left: -2px">
+                        <img style="margin-left:-8px; margin-top:-3px" src="@Url.Content("~/Content/images/icon-settings-orgs-40x40.png")" alt="" /></span><span
+                            id="organization-name">@if (!String.IsNullOrEmpty(Model.RecipientName))
+                                                   {
+                                <span id="org-name-donate">@Model.RecipientName</span>
+                                                   }
+                                                   else
+                                                   {
+                                <text>Select a Non Profit</text>
+                                                   }</span>
+                           
+                          </button></a>
+                <a href="@Url.Content("~/Pledge/AddContact")" data-prefetch data-transition="slide">
+                    <button type="button" class="imgbtn field-btn" data-role="none">
+                        <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
+                            <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
+                                id="person-sendmoney">@if (!String.IsNullOrEmpty(Model.RecipientUri))
+                                                      {
+                                    <span id="modelRecipient">@Model.RecipientUri</span>
+                                                      }
+                                                      else
+                                                      {
+                                    <text>Select Recipient</text>
+                                                      }</span>
+                    </button>
+                </a>
+                <a href="@Url.Content("~/Pledge/AmountToSend")" data-prefetch data-transition="slide">
+                    <button type="button" class="imgbtn field-btn" data-role="none">
+                 <span class="imgbg" style="margin-left: -2px">
+                        <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
+                            id="amount-request">@if (Model.Amount > 0)
+                                                {
+                                <text>@string.Format("{0:C}", Model.Amount)</text>
+                                                }
+                                                else
+                                                {
+                                <text>Enter Amount</text>
+                                                }</span></button></a>
+        </div>
+        <div style="margin-left: 10px; margin-right: 10px; margin-top: 20px">
+            <label for="txtComments-Donate" style="margin-bottom: 15px; font-size: 18px">
+                Dedicate to Someone?</label>
+            <textarea id="txtComments-Donate" rows="10" cols="100" placeholder="Enter dedications, comments, etc"></textarea>
+        </div>
+        <div style="margin-top: 20px; margin-left: 10px; margin-right: 10px">
+            <button type="submit" class="btn-jq" data-theme="f">
+                    <span>Accept Pledge</span></button>
+        </div>
+       }
+    </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Donate" }); }
+</div>
