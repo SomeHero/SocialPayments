@@ -1,10 +1,29 @@
 
 $(document).on('pageshow', '[data-role=page]', function () {
 
+    //add center to jquery object
+    $.fn.center = function () {
+        this.css("position", "absolute");
+        this.css("left", ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + "px");
+        return this;
+    }
+
     $('form').bind('firstinvalid', function (e) {
         return false;
     });
 
+    //resize PINswipes
+    function resizePIN() {
+        $(".hackstyle").remove();
+        var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
+        divwidth = widthy * .95;
+        $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}</div>")
+        $(".patternlockcontainer > div").center();
+    };
+
+    $(window).resize(function () {
+        resizePIN();
+    });
 
 
     //Create all custom rules
@@ -54,19 +73,19 @@ $(document).on('pageshow', '[data-role=page]', function () {
                 errorClass: 'error',
                 validClass: 'valid',
                 /*rules: {
-                    password: {
-                        required: true,
-                        minlength: 6,
-                        passwrdvalidator: true
-                    },
-                    confirmPassword: {
-                        required: true,
-                        equalTo: "#registration-form #password"
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    }
+                password: {
+                required: true,
+                minlength: 6,
+                passwrdvalidator: true
+                },
+                confirmPassword: {
+                required: true,
+                equalTo: "#registration-form #password"
+                },
+                email: {
+                required: true,
+                email: true
+                }
                 },*/
                 messages: {
                     password: {
