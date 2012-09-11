@@ -1,7 +1,11 @@
 ﻿@{
     ViewBag.Title = "AddContactRequest";
 }
-<div data-role="page" id="request-contact-select-page" class="full" data-add-back-btn="true" @TempData["DataUrl"]>
+<<<<<<< HEAD
+<div data-role="page" id="request-page" data-add-back-btn="true" @TempData["DataUrl"]>
+=======
+<div data-role="page" id="request-page" class="full" data-add-back-btn="true">
+>>>>>>> upstream/development
   @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -9,7 +13,7 @@
     </div>
     <div data-role="content" class="content">
         <div class="pad">
-         <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
         @foreach (var alphaGroup in Model.SortedContacts)
         {
             <li data-role="list-divider">@alphaGroup.Key</li>
@@ -38,64 +42,46 @@
                 </ul>
             </div>
         </div>
-        <script id="meCodeItem" type="text/x-jquery-tmpl">
-    <li>
-        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
-            <img src="http://graph.facebook.com/1/picture" />
-            ${meCode}
-        </a>
-     </li>
-</script>
         
     <script language="javascript">
         //wait to do event binding until the page is being initialized
-        $("#request-contact-select-page").unbind('pageshow').bind('pageshow', function () {
+        $(document).delegate('[data-role="page"]', 'pageinit', function () {
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
 
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
-            $('input[data-type="search"]').unbind('keyup').bind('keyup', function () {
+            $(this).delegate('input[data-type="search"]', 'keyup', function () {
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
-                meCodeSearchController.init();
+                //check to see if there are any visible list-items that are not the `#no-results` element
+                if ($listview.children(':visible').not('#no-results').length === 0) {
 
-                if (searchVal.substring(0, 1) == '$') {
-                    if (searchVal.length > 3) {
-                        meCodeSearchController.searchAndDisplayMeCodes();
+                    //if none are found then fadeIn the `#no-results` element
+                    $('#no-results').fadeIn(500);
+                    if (isValidEmailAddress(searchVal)) {
+                        $("#results-header").text(searchVal);
+                        $("#results-description").text("New Email Recipient");
+                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                    } else if (isValidPhoneNumber(searchVal)) {
+                        $("#results-header").text(searchVal);
+                        $("#results-description").text("New Phone Recipient");
+                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
                     }
-                }
-                else {
-                    //check to see if there are any visible list-items that are not the `#no-results` element
-                    if ($listview.children(':visible').not('#no-results').length === 0) {
-
-                        //if none are found then fadeIn the `#no-results` element
-                        $('#no-results').fadeIn(500);
-                        if (isValidEmailAddress(searchVal)) {
-                            $("#results-header").text(searchVal);
-                            $("#results-description").text("New Email Recipient");
-                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                        } else if (isValidPhoneNumber(searchVal)) {
-                            $("#results-header").text(searchVal);
-                            $("#results-description").text("New Phone Recipient");
-                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                        }
-                        else {
-                            $("#results-header").text("No matches found");
-                            $("#results-description").text("Continue type or check entry");
-                            $("#recipient-uri").val('');
-                        }
-                    } else {
-
-                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                        $('#no-results').fadeOut(250);
+                    else {
+                        $("#results-header").text("No matches found");
+                        $("#results-description").text("Continue type or check entry");
+                        $("#recipient-uri").val('');
                     }
-                }
+                } else {
 
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    $('#no-results').fadeOut(250);
+                }
             });
-            $(".contact-recipient-uri").die("click").live("click", function () {
+            $(".contact-recipient-uri").unbind("click").bind("click", function () {
 
                 var recipientUri = $(this).attr('recipient-uri');
                 var recipientName = $(this).attr('recipient-name');
