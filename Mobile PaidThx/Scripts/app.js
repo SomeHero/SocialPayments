@@ -9,6 +9,24 @@ var formattingController = (function($, undefined) {
     return pub;
 } (jQuery));
 
+
+//PINSWIPE RESIZE CONTROLLER
+
+var pinswipeResizeController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+    pub.resizePINs = function () {
+        $(".hackstyle").remove();
+        var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
+        divwidth = widthy * .95;
+        $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}</div>")
+        $(".patternlockcontainer > div").center();
+    };
+
+    return pub;
+} (jQuery));
+
+//ME CODE CONTROLLER
 var meCodeSearchController = (function ($, undefined) {
     var pub = {},
     $this = $(this);
@@ -77,17 +95,9 @@ $(document).on('pageshow', '[data-role=page]', function () {
         return false;
     });
 
-    //resize PINswipes
-    function resizePIN() {
-        $(".hackstyle").remove();
-        var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
-        divwidth = widthy * .95;
-        $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}</div>")
-        $(".patternlockcontainer > div").center();
-    };
-
+    //resize PINs on window resize
     $(window).resize(function () {
-        resizePIN();
+        pinswipeResizeController.resizePINs();
     });
 
 

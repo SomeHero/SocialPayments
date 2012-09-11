@@ -1,9 +1,10 @@
 ﻿@{
     ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.PageID = "confirm-pin-swipe-setup";
 }
 
 
-<div data-role="page" id="confirm-pin-swipe" class="modally" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="modally" @TempData["DataUrl"]>
      <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
 	    <h1>Confirm PIN</h1>
     </div>
@@ -13,6 +14,8 @@
     <div class="top-panel">
    
     <p>Swipe your security pin again below to confirm.</p></div>
+
+    </div>
         @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
         <div id="anchor">
@@ -20,16 +23,16 @@
             <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
          </div>
         }
-        </div>
+        
     </div>
 </div>
 
-        <div id="resizerHack">
+<div id="resizerHack">
         
         
-        </div>
+</div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        resizePIN();
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
     });
 </script>

@@ -59,6 +59,7 @@
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
+
             meCodeSearchController.init();
 
             //delegate event binding since the search widget is added dynamically
@@ -69,7 +70,7 @@
 
                 if (searchVal.substring(0, 1) == '$') {
                     if (searchVal.length > 3) {
-                        meCodeSearchController.searchAndDisplayMeCodes();
+                        meCodeSearchControllerA.searchAndDisplayMeCodes();
                     }
                 }
                 else {

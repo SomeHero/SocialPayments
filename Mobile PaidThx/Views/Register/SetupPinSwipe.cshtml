@@ -1,20 +1,22 @@
 ﻿@{
     ViewBag.Title = "SetupPinSwipe";
+    ViewBag.PageID = "setup-pin-swipe";
 }
 
-<div data-role="page" id="setup-pin-swipe" class="modally" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="modally" @TempData["DataUrl"]>
      <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-	    <h1>Create Security PIN</h1>
+	    <h1>Create PIN</h1>
     </div>
     <div data-role="content">
     <div class="pad">
         <div class="top-panel">
         @if(!String.IsNullOrEmpty(TempData["Message"].ToString()))
         {
-            <p>@TempData["Message"]</p>
+            <p class="error">@TempData["Message"]</p>
            }else{
-    <text>To complete setting up your account, create a security pin by connecting at least 4 pins below.</text>
+    <text> <p>To complete setting up your account, create a security pin by swiping your finger to connect at least 4 pins below.</p></text>
         }
+</div>
 </div>
         @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
@@ -25,16 +27,17 @@
             
          </div>
         }
-        </div>
+        
   <div id="resizerHack">
         
 
 
         </div>
         </div>
+        
 <script type="text/javascript">
-    $(document).on('pageshow', '#setup-pin-swipe', function () {
-        resizePIN();        
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
     });
 </script>
 </div>
