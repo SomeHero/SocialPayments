@@ -394,6 +394,9 @@
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
     <Content Include="Content\jquery.qtip.min.css" />
+    <Content Include="Scripts\jquery.formatCurrency-1.4.0.js" />
+    <Content Include="Scripts\jquery.formatCurrency-1.4.0.min.js" />
+    <Content Include="Scripts\jquery.formatCurrency-1.4.0.pack.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
     <Content Include="Content\jquery.validate.password.css" />
     <Content Include="Content\PaidThx-v1.css" />
