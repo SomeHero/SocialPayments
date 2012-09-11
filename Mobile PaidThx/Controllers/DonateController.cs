@@ -96,6 +96,8 @@ namespace Mobile_PaidThx.Controllers
             Session["RecipientName"] = model.RecipientName;
             Session["RecipientImageUrl"] = model.RecipientImageUrl;
 
+            TempData["DataUrl"] = "data-url=/Donate";
+
             return View("Index", new DonateModels.DonateMoneyModel()
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
@@ -131,6 +133,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupACHAccount()
         {
             //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
+            TempData["DataUrl"] = "data-url=/SetupACHAccount";
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -167,6 +170,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupPinSwipe()
         {
+            TempData["DataUrl"] = "data-url=/SetupPinSwipe";
+            
             TempData["Message"] = "";
 
             return View();
@@ -179,6 +184,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult ConfirmPinSwipe()
         {
+            TempData["DataUrl"] = "data-url=/ConfirmPinSwipe";
+            
             return View();
         }
         [HttpPost]
@@ -199,6 +206,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SecurityQuestion()
         {
+            TempData["DataUrl"] = "data-url=/SecurityQuestion";
+            
             var securityQuestionServices = new SecurityQuestionServices();
             var securityQuestions = securityQuestionServices.GetSecurityQuestions();
             var questions = securityQuestions.Select(q => new Mobile_PaidThx.Models.SecurityQuestionModels.SecurityQuestionModel
@@ -265,6 +274,8 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult PopupPinswipe()
         {
+            TempData["DataUrl"] = "data-url=/PopupPinSwipe";
+
             return View(new DonateModels.PinSwipeModel()
             {
                 RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),

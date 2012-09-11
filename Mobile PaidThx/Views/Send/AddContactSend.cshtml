@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AddContactSend";
 }
-<div data-role="page" id="send-contact-select-page" data-add-back-btn="true">
+<div data-role="page" id="send-contact-select-page" data-add-back-btn="true" @TempData["DataUrl"]>
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -64,8 +64,6 @@
                 $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
                     displayMeCodes(meCodes);
                 });
-
-                initialized = true;
             };
 
             pub.searchAndDisplayMeCodes = function () {

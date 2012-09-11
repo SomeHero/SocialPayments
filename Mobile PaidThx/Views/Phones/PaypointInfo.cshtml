@@ -1,5 +1,5 @@
 ﻿@model Mobile_PaidThx.Services.ResponseModels.UserModels.UserPayPointResponse
-<div data-role="page" id="paypointinfo-page">
+<div data-role="page" id="paypointinfo-page" @TempData["DataUrl"]>
     @{ Html.RenderPartial("LoggedInMenu"); }
     <div data-role="content" style="margin: 15px;">
     <h1>@Model.Uri</h1>

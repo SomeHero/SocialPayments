@@ -19,6 +19,10 @@ namespace SocialPayments.RestServices.Internal.Models
             public string SocialNetworkUserId { get; set; }
             public string SocialNetworkUserToken { get; set; }
         }
+        public class DeleteUserSocialNetworkRequest
+        {
+            public string SocialNetworkType { get; set; }
+        }
         public class PagedResults
         {
             public int TotalRecords { get; set; }

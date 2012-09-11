@@ -3,7 +3,7 @@
     ViewBag.Title = "Paystream";
 }
 <script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
-<div data-role="page" id="paystream-index">
+<div data-role="page" id="paystream-index" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
