@@ -1,176 +1,141 @@
 
-jQuery(document).ready(function ($) {
+$(document).on('pageshow', '[data-role=page]', function () {
 
-    $('form')
-	.bind('firstinvalid', function (e) {
-	    //show the invalid alert for first invalid element and pass the custom validation message
-	    //$.webshims.validityAlert.showFor(e.target, $(e.target).prop('customValidationMessage'));
-	    //prevent browser from showing native validation message
-	    return false;
-	});
-
-$("div").on("pageinit", function(){
-    try{
-        //Any form that might need validation
-        if($("form.validateMe").length > 0){
-            $("form.validateMe").validate();
-        }
-    } catch (e){
-    
-    }
-});
-
-    /* Use this js doc for all application specific JS */
-
-    /* TABS --------------------------------- */
-    /* Remove if you don't need :) */
-    /*
-    function activateTab($tab) {
-    var $activeTab = $tab.closest('dl').find('a.active'),
-    contentLocation = $tab.attr("href") + 'Tab';
-
-    //Make Tab Active
-    $activeTab.removeClass('active');
-    $tab.addClass('active');
-
-    //Show Tab Content
-    $(contentLocation).closest('.tabs-content').children('li').hide();
-    $(contentLocation).css('display', 'block');
-    }
-
-    $('dl.tabs').each(function () {
-    //Get all tabs
-    var tabs = $(this).children('dd').children('a');
-    tabs.click(function (e) {
-    activateTab($(this));
-    });
-    });
-    */
-    if (window.location.hash) {
-        activateTab($('a[href="' + window.location.hash + '"]'));
-    }
-
-    /* ALERT BOXES ------------ */
-    $(".alert-box").delegate("a.close", "click", function (event) {
-        event.preventDefault();
-        $(this).closest(".alert-box").fadeOut(function (event) {
-            $(this).remove();
-        });
+    $('form').bind('firstinvalid', function (e) {
+        return false;
     });
 
 
-    /* PLACEHOLDER FOR FORMS ------------- */
-    /* Remove this and jquery.placeholder.min.js if you don't need :) */
 
-    $('input, textarea').placeholder();
+    //Create all custom rules
 
-    /* TOOLTIPS ------------ */
+    //Validate Password
+    $.validator.addMethod("passwrdvalidator", function (value) {
+        return (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/).test(value);
+    });
 
-    /* SCREEN - SPECIFIC */
-      /*
-    (function () {
-        // initializes touch and scroll events
-        var supportTouch = $.support.touch,
-                scrollEvent = "touchmove scroll",
-                touchStartEvent = supportTouch ? "touchstart" : "mousedown",
-                touchStopEvent = supportTouch ? "touchend" : "mouseup",
-                touchMoveEvent = supportTouch ? "touchmove" : "mousemove";
+    //Confirm Account
+    $.validator.addMethod("pwmatch", function (value) {
+        return value == $("#registration-form #password").val();
+    }, "Please enter the same password as above");
 
 
-                      // handles swipeup and swipedown
-        $.event.special.swipeupdown = {
-            setup: function () {
-                var thisObject = this;
-                var $this = $(thisObject);
+    //Confirm Account
+    $.validator.addMethod("accountmatch", function (value) {
+        return value == $("#AccountNumber").val();
+    }, "Confirm Account Number must match Account Number");
 
-                $this.bind(touchStartEvent, function (event) {
-                    var data = event.originalEvent.touches ?
-                            event.originalEvent.touches[0] :
-                            event,
-                            start = {
-                                time: (new Date).getTime(),
-                                coords: [data.pageX, data.pageY],
-                                origin: $(event.target)
-                            },
-                            stop;
+    //Account Format
+    $.validator.addMethod("accountformat", function (value) {
+        return (/^(?=.*[0-9]).{4,17}$/).test(value);
+    }, "Please enter a valid bank account number (4-17 digits).  You can find this info on a check or in your online banking.");
 
-                    function moveHandler(event) {
-                        if (!start) {
-                            return;
-                        }
-
-                        var data = event.originalEvent.touches ?
-                                event.originalEvent.touches[0] :
-                                event;
-                        stop = {
-                            time: (new Date).getTime(),
-                            coords: [data.pageX, data.pageY]
-                        };
-
-                        // prevent scrolling
-                        if (Math.abs(start.coords[1] - stop.coords[1]) > 10) {
-                            event.preventDefault();
-                        }
+    try {
+        //Validate any form that might need validation
+        if ($("form.validateMe").length > 0) {
+            $("form.validateMe").validate({
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                invalidHandler: function (form, validator) {
+                    //invalid                
+                },
+                showErrors: function (errorMap, errorList) {
+                    if (errorList.length) {
+                        var s = errorList.shift();
+                        var n = [];
+                        n.push(s);
+                        this.errorList = n;
                     }
+                    this.defaultShowErrors();
+                },
+                onkeyup: false,
+                onfocusout: function (element) { $(element).valid(); },
+                errorClass: 'error',
+                validClass: 'valid',
+                /*rules: {
+                    password: {
+                        required: true,
+                        minlength: 6,
+                        passwrdvalidator: true
+                    },
+                    confirmPassword: {
+                        required: true,
+                        equalTo: "#registration-form #password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },*/
+                messages: {
+                    password: {
+                        required: "Please create a password to protect your account.",
+                        passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
+                    },
+                    confirmPassword: {
+                        required: "Please confirm your password",
+                        pwmatch: "Please enter the same password as above"
+                    },
+                    email: {
+                        required: "Please enter your email address",
+                        email: "Please enter a valid email address"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    var elem = $(element);
+                    // Check we have a valid error message
+                    if (!error.is(':empty')) {
 
-                    $this
-                            .bind(touchMoveEvent, moveHandler)
-                            .one(touchStopEvent, function (event) {
-                                $this.unbind(touchMoveEvent, moveHandler);
-                                if (start && stop) {
-                                    if (stop.time - start.time < 1000 &&
-                                    Math.abs(start.coords[1] - stop.coords[1]) > 30 &&
-                                    Math.abs(start.coords[0] - stop.coords[0]) < 75) {
-                                        start.origin
-                                        .trigger("swipeupdown")
-                                        .trigger(start.coords[1] > stop.coords[1] ? "swipeup" : "swipedown");
-                                    }
-                                }
-                                start = stop = undefined;
-                            });
-                });
-            }
-        };
+                        // Apply the tooltip only if it isn't valid
+                        elem.filter(':not(.valid)').qtip({
+                            overwrite: true,
+                            content: error,
+                            position: {
+                                my: 'bottom center',
+                                at: 'top center'
+                            },
+                            show: {
+                                event: false,
+                                solo: true,
+                                ready: true
+                            },
+                            hide: false,
+                            style: {
+                                classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
+                            }
+                        }).qtip('destroy').qtip({
+                            overwrite: true,
+                            content: error,
+                            position: {
+                                my: 'bottom center',
+                                at: 'top center'
+                            },
+                            show: {
+                                event: false,
+                                solo: true,
+                                ready: true
+                            },
+                            hide: false,
+                            style: {
+                                classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
+                                width: "88%"
 
-        //Adds the events to the jQuery events special collection
-        $.each({
-            swipedown: "swipeupdown",
-            swipeup: "swipeupdown"
-        }, function (event, sourceEvent) {
-            $.event.special[event] = {
-                setup: function () {
-                    $(this).bind(sourceEvent, $.noop);
-                }
-            };
-        });
+                            }
+                        });
+                    } else {
+                        elem.qtip('destroy');
+                    }
+                },
+                success: $.noop
+            });
 
-    })();
+        } else { } //end if
+    } catch (e) {
+        //catching
+        return false;
+    }
 
-
-    $("#quicksends").live('swipeup', function () {
-        var widthy = $('#quicksends').height();
-        $('.quicksend-container').animate({
-            height: (widthy) + 'px'
-        }, {
-            duration: 300,
-            complete: function () {
-
-            }
-        });
-    });
-    $("#quicksends").live('swipedown', function () {
-        $('.quicksend-container').animate({
-            height: '100px'
-        }, {
-
-            duration: 300,
-            complete: function () {
-
-            }
-        });
-    });
-    */
-
+    //$('input, textarea').placeholder();
 
 });
-

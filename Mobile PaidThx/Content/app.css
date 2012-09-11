@@ -229,7 +229,6 @@ label.error
     font-weight: normal;
     line-height: 1.4;
     margin-top: 0.5em;
-    width: 100%;
     float: none;
 }
 .copyright
@@ -2036,10 +2035,7 @@ top: -6px;
 
 .ui-page { -webkit-backface-visibility: hidden; }
 
-.ui-page .pad
-{
- margin:14px;   
-}
+
 
 li.static
 {
@@ -2047,9 +2043,13 @@ li.static
 }
 
 .pad{
-margin: 3px; padding: 5px; background-color: #FFFFFF;
+margin: 3px; padding: 10px; background-color: #FFFFFF;
 }
 
+.ui-page.full .pad
+{
+ margin: 0px; padding: 0px; background-color: #FFFFFF;  
+}
 
 /* TOOLTIPS */
 
@@ -2101,7 +2101,7 @@ background:url(images/bullet_red.png) no-repeat 0 50%;
 	line-height:24px;
 	color:#ec3f41;
 	font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
-	font-size:11px;
+	font-size:12px;
 	margin:0;
 	list-style-type:none;
 }
@@ -2163,13 +2163,19 @@ margin:0;
 #pass ul, #pass ul li 
 {
 	font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
-	font-size:14px;
+	font-size:12px;
 	color:#444;
 	margin:0;
 	padding:0;
 	list-style-type:none;
 }
 
+#pass ul li 
+{
+	float:left;
+	width:114px;
+	font-size:12px;
+}
 
 #pass .invalid {
 	background:url(images/bullet_red.png) no-repeat 0 50%;
@@ -2183,14 +2189,8 @@ margin:0;
 	line-height:24px;
 	color:#3a7d34;
 }
-#pass h4 {
-	margin:0 0 10px 0;
-	padding:0;
-	font-weight:normal;
-	font-size:14px;
-}
 
-/* REMOVE DEFAULT ERROR MESSAGES */
+/* REMOVE DEFAULT HTML5 ERROR MESSAGES */
 form input::-webkit-validation-bubble-message, 
 form select::-webkit-validation-bubble-message,
 form textarea::-webkit-validation-bubble-message {
@@ -2201,4 +2201,30 @@ form textarea::-webkit-validation-bubble-message {
 margin-left: 0;
 margin-top:0;
 text-shadow:none;
+background:url(images/bullet_red.png) no-repeat 0 50%;
+	padding-left:22px;
+	color:#ec3f41 !important;
+}
+
+.ui-tooltip.tip-error
+{
+background-color:#f2f2f2; 
+   
+}
+.ui-tooltip.tip-error .ui-tooltip-content{
+   font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
+	font-size:13px;
+	padding:9px;
+}
+
+.ui-tooltip.tip-error .ui-tooltip-tip{
+   background-color: #f2f2f2 !important;
+   border-color: #D95252;
+
+}
+
+
+.ui-field-contain, .ui-mobile fieldset.ui-field-contain 
+{
+    margin:1.1em 0;
 }
