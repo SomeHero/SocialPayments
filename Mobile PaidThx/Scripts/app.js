@@ -1,4 +1,59 @@
 
+var meCodeSearchController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+
+    pub.init = function (listview) {
+
+        //When news updated, display items in list
+        $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+            displayMeCodes(meCodes);
+        });
+    };
+
+    pub.searchAndDisplayMeCodes = function () {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        searchByMeCode(function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
+
+    function searchByMeCode(callback) {
+        //Get news via ajax and return jqXhr
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                //Publish that news has been updated & allow
+                //the 2 subscribers to update the UI content
+                $this.trigger("meCodes.updated", data);
+                if (callback) callback(data);
+            }
+        });
+    }
+
+    function displayMeCodes(meCodes) {
+        //cache the list-view element for later use
+        var $listview = $("#contactsList");
+
+        //Empty current list
+        $listview.empty();
+
+        //Use template to create items & add to list
+        $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
+
+        //Call the listview jQuery UI Widget after adding 
+        //items to the list allowing correct rendering
+        $("#contactsList").listview("refresh");
+    }
+
+    return pub;
+} (jQuery));
+
 $(document).on('pageshow', '[data-role=page]', function () {
 
     $('form').bind('firstinvalid', function (e) {
