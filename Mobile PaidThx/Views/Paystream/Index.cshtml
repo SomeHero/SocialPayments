@@ -28,170 +28,114 @@
             <label for="paystream-other">
                 Other</label>
         </fieldset>
-        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
-            @foreach (var paymentGroup in Model.SortedPayments)
-            {
-                <li data-role="list-divider">@paymentGroup.Key</li>
-                foreach (var payment in paymentGroup.Value)
-                {
-                <li><a onclick="openOffersDialog('@payment.Id');"><span class="trans-type">
-                @if(!String.IsNullOrEmpty(payment.TransactionImageUri))
-                {
-                   <text>
-                   <img width="50" height="50" class="rounded" src="@payment.TransactionImageUri" alt="Image" />
-                   </text>
-                    } else {
-                    <text>
-                    <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
-                    </text>
-                    }
-                </span>
-                    <div class="trans-title">
-                        @switch (payment.Direction)
-                        {
-                            case "In":
-                            <text> <strong>@payment.SenderName</strong>
-                            </text>
-                                      break;
-                            case "Out":
-                            <text> <strong>@payment.RecipientName</strong>
-                            </text>
-                                      break;
-                        }
-                        @switch (payment.MessageType)
-                        {
-                            case "Payment":
-                                switch (payment.Direction)
-                                {
-                                    case "In":
-                            <div class="title-pay-in">
-                                <text>You received money</text>
-                            </div>
-                                        break;
-
-                                    case "Out":
-                            <div class="title-pay-out">
-                                <text>You sent money</text>
-                            </div>
-                                        break;
-                                }
-                                break;
-
-
-                            case "PaymentRequest":
-                                switch (payment.Direction)
-                                {
-                                    case "In":
-                            <div class="title-request-in">
-                                <text>You received a request</text>
-                            </div>
-                                        break;
-
-                                    case "Out":
-                            <div class="title-request-out">
-                                <text>You sent a request</text>
-                            </div>
-                                        break;
-                                }
-                                break;
-                            case "Donation":
-                            <div class="title-request-out">
-                                <text>You donated</text>
-                            </div>
-                                        break;
-                                break;
-
-                        }
-                        <div class="trans-comment">
-                            <text>"@payment.Comments"</text>
-                        </div>
-                    </div>
-                    <span class="trans-amount">
-                        <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(payment.TransactionDate)</div>
-                        @switch (payment.MessageType)
-                        {
-                            case "Payment":
-                                switch (payment.Direction)
-                                {
-                                    case "In":
-                            <div class="paystream-pay-in">
-                                <text>+@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-
-                                    case "Out":
-                            <div class="paystream-pay-out">
-                                <text>-@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-                                }
-                                break;
-                            case "PaymentRequest":
-                                switch (payment.Direction)
-                                {
-                                    case "In":
-                            <div class="paystream-request-in">
-                                <text>+@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-
-                                    case "Out":
-                            <div class="paystream-request-out">
-                                <text>-@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-                                }
-                                break;
-                            case "Donation":
-                                switch (payment.Direction)
-                                {
-                                    case "In":
-                            <div class="paystream-request-in">
-                                <text>+@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-
-                                    case "Out":
-                            <div class="paystream-request-out">
-                                <text>-@string.Format("{0:C}", payment.Amount)</text>
-                            </div>
-                                  break;
-                                }
-                                break;
-                        }
-                        <div class="gray-out">
-                            <text>@payment.TransactionStatus</text>
-                        </div>
-                    </span></a></li>
-                }
-            }
-            @if(Model.SortedPayments.Count() == 0)
-            {
-             <text><li id="no-results" style="display: block;"></text>
-            }
-            else {
-                <text><li id="no-results" style="display: none;"></text>
-            }
-                        <img src="@Url.Content("~/Content/images/avatar.png")" />
-                        <span id="results-header">
-                        No paystream items found
-                        </span>
-                        <br />
-                        <span id="results-description">
-                        Start sending or request money
-                       </span>
-   
-                    </li>
+        <ul id="paystreamList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+            
         </ul>
     </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
 </div>
+<script id="paystreamItem" type="text/x-jquery-tmpl">
+    <li>
+        <a onclick="openOffersDialog('$Id');">
+        <span class="trans-type">
+        {{if transactionImageUri}}
+            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
+        {{else}}
+            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
+        {{/if}}
+        </span>
+        <div class="trans-title">
+        {{if direction == "In"}}
+            <strong>${senderName}</strong>
+        {{/if}}
+        {{if direction == "Out"}}
+            <strong>${recipientName}</strong>
+        {{/if}}
+            <div class="title-pay-in">
+                <text>You received money</text>
+            </div>
+        <div class="trans-comment">
+            <text>"${comments}"</text>
+        </div>
+        </div>
+        <span class="trans-amount">
+            <div class="gray-above">${createDate}</div>
+            <div class="paystream-pay-in">
+                ${amount}
+            </div>
+            <div class="gray-out">
+                ${messageStatus}
+            </div>
+        </span></a>
+     </li>
+</script>
 <script language="javascript">
+
+    var paystreamController = (function ($, undefined) {
+        var pub = {},
+        items = {},
+        $this = $(this);
+
+        pub.init = function (listview) {
+
+            //When news updated, display items in list
+            $this.unbind("paystream.updated").bind("paystream.updated", function (e, paystreamItems) {
+                displayPaystream(paystreamItems);
+            });
+        };
+
+        pub.searchAndDisplayPaystream = function () {
+            //Starting loading animation
+            $.mobile.showPageLoadingMsg();
+
+            //Get news and add success callback using then
+            searchPayStream(function () {
+                //Stop loading animation on success
+                $.mobile.hidePageLoadingMsg();
+            });
+        };
+
+        function searchPayStream(callback) {
+            //Get news via ajax and return jqXhr
+            $.ajax({
+                url: "http://23.21.203.171/api/internal/api/Users/B2610767-8C89-412E-AF96-1D32937C1A43/PaystreamMessages",
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    //Publish that news has been updated & allow
+                    //the 2 subscribers to update the UI content
+                    items = data;
+                    $this.trigger("paystream.updated", $.makeArray(data));
+
+                    if (callback) callback(data);
+                }
+            });
+        }
+
+        function displayPaystream(paystreamItems) {
+            //cache the list-view element for later use
+            var $listview = $("#paystreamList");
+
+            //Empty current list
+            $listview.empty();
+
+            //Use template to create items & add to list
+            $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
+
+            //Call the listview jQuery UI Widget after adding 
+            //items to the list allowing correct rendering
+            $("#paystreamList").listview("refresh");
+        }
+
+        return pub;
+    } (jQuery));
 //wait to do event binding until the page is being initialized
     $(document).delegate('[data-role="page"]', 'pageinit', function () {
 
         //cache the list-view element for later use
         var $listview = $(this).find('[data-role="listview"]');
+        
+        paystreamController.init();
+        paystreamController.searchAndDisplayPaystream();
 
         //delegate event binding since the search widget is added dynamically
         //bind to the `keyup` event so we can check the value of the input after the user types

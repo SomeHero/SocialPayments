@@ -1,3 +1,13 @@
+var formattingController = (function($, undefined) {
+    var pub = {},
+    $this = $(this);
+
+    pub.formatCurrency = function(val) {
+        return $(val).formatCurrency();
+    };
+
+    return pub;
+} (jQuery));
 
 var meCodeSearchController = (function ($, undefined) {
     var pub = {},
