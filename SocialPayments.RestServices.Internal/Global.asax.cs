@@ -27,7 +27,12 @@ namespace SocialPayments.RestServices.Internal
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            
+            routes.MapHttpRoute(
+               name: "UnlinkSocialNetwork",
+               routeTemplate: "api/users/{userId}/SocialNetworks/unlink",
+               defaults: new { controller = "UserSocialNetworks", action="UnlinkSocialNetwork" }
+            );
             routes.MapHttpRoute(
                name: "SocialNetworks",
                routeTemplate: "api/users/{userId}/socialnetworks",

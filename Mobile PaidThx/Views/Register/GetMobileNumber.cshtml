@@ -3,7 +3,7 @@
     ViewBag.Title = "Welcome to PaidThx";
 }
 <script src="@Url.Content("~/Scripts/verify-mobiledevice.js")" type="text/javascript"></script>
-<div id="container">
+<div id="container" @TempData["DataUrl"]>
     <dl id="main-tabs" class="tabs contained">
         <dd>
             @if (Model.Payment != null)

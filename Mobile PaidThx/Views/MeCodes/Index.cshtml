@@ -1,7 +1,7 @@
 ﻿@model Mobile_PaidThx.Models.MeCodesModels.MeCodesModel
 <div data-role="page" id="mecodes-page" data-add-back-btn="true">
         @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" @TempData["DataUrl"]>
         <h1>
             Me Codes</h1>
     </div>

@@ -5,7 +5,7 @@
         return true;
     }
 </script>
-<div data-role="page" id="pinswipe-page">
+<div data-role="page" id="pinswipe-page" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

@@ -2,7 +2,11 @@
 @{
     ViewBag.Title = "AddContactSend";
 }
-<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true" @TempData["DataUrl"]>
+<<<<<<< HEAD
+<div data-role="page" id="send-contact-select-page" data-add-back-btn="true" @TempData["DataUrl"]>
+=======
+<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true">
+>>>>>>> upstream/development
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -54,7 +58,60 @@
     <script language="javascript">
 
         //wait to do event binding until the page is being initialized
-       
+        var meCodeSearchController = (function ($, undefined) {
+            var pub = {},
+            $this = $(this);
+
+            pub.init = function () {
+
+                //When news updated, display items in list
+                $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+                    displayMeCodes(meCodes);
+                });
+            };
+
+            pub.searchAndDisplayMeCodes = function () {
+                //Starting loading animation
+                $.mobile.showPageLoadingMsg();
+
+                //Get news and add success callback using then
+                searchByMeCode(function () {
+                    //Stop loading animation on success
+                    $.mobile.hidePageLoadingMsg();
+                });
+            };
+
+            function searchByMeCode(callback) {
+                //Get news via ajax and return jqXhr
+                $.ajax({
+                    url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
+                    dataType: "json",
+                    success: function (data, textStatus, xhr) {
+                        //Publish that news has been updated & allow
+                        //the 2 subscribers to update the UI content
+                        $this.trigger("meCodes.updated", data);
+                        if (callback) callback(data);
+                    }
+                });
+            }
+
+            function displayMeCodes(meCodes) {
+                //cache the list-view element for later use
+                var $listview = $(this).find('[data-role="listview"]');
+
+                //Empty current list
+                $listview.empty();
+
+                //Use template to create items & add to list
+                $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
+
+                //Call the listview jQuery UI Widget after adding 
+                //items to the list allowing correct rendering
+                $("#contactsList").listview("refresh");
+            }
+
+            return pub;
+        } (jQuery));
         $("#send-contact-select-page").unbind('pageshow').bind('pageshow', function () {
 
             //cache the list-view element for later use
@@ -63,7 +120,7 @@
 
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
-            $('input[data-type="search"]').unbind('keyup').bind('keyup', function () {
+            $(this).delegate('input[data-type="search"]', 'keyup', function () {
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
