@@ -2206,11 +2206,19 @@ background:url(images/bullet_red.png) no-repeat 0 50%;
 	color:#ec3f41 !important;
 }
 
-.ui-tooltip.tip-error
+.ui-tooltip.tip-error, .error
 {
 background-color:#f2f2f2; 
-   
+  color:#ec3f41;
+  font-weight:bold;
+  font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
 }
+
+.error
+{
+background-color:transparent; 
+}
+
 .ui-tooltip.tip-error .ui-tooltip-content{
    font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
 	font-size:13px;
