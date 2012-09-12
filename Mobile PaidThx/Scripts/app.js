@@ -8,7 +8,103 @@ var formattingController = (function($, undefined) {
 
     return pub;
 } (jQuery));
+var paystreamController = (function ($, undefined) {
+    var pub = {},
+        take = 15,
+        skip = 0,
+        page = 0,
+        pageSize = 15,
+        type = "",
+        items = {},
+        displayedRecords = 0,
+        totalRecords = 0,
+        $this = $(this);
 
+    pub.init = function (listview) {
+
+        //When news updated, display items in list
+        $this.unbind("paystream.updated").bind("paystream.updated", function (e, paystreamItems) {
+            displayPaystream(paystreamItems, false);
+            if (totalRecords > displayedRecords)
+                $("#pagingList").show();
+            else
+                $("#pagingList").hide();
+        });
+        $this.unbind("paystream.added").bind("paystream.added", function (e, paystreamItems) {
+            displayPaystream(paystreamItems, true);
+            if (totalRecords > displayedRecords)
+                $("#pagingList").show();
+            else
+                $("#pagingList").hide();
+        });
+    };
+
+    pub.searchAndDisplayPaystream = function (theType) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg("Loading Paystream");
+
+        displayedRecords = 0;
+        page = 0;
+        skip = 0;
+        type = theType;
+
+        //Get news and add success callback using then
+        searchPayStream(function () {
+            //Stop loading animation on success
+            $this.trigger("paystream.updated", items);
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
+
+    pub.getAndDisplayMoreItems = function () {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        searchPayStream(function () {
+            //Stop loading animation on success
+            $this.trigger("paystream.added", items);
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
+
+    function searchPayStream(callback) {
+        //Get news via ajax and return jqXhr
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api/Users/B2610767-8C89-412E-AF96-1D32937C1A43/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                //Publish that news has been updated & allow
+                //the 2 subscribers to update the UI content
+                totalRecords = data.TotalRecords;
+                displayedRecords += data.Results.length;
+                skip = displayedRecords;
+                page += 1;
+                items = data.Results;
+
+                if (callback) callback(data);
+            }
+        });
+    }
+
+    function displayPaystream(paystreamItems, append) {
+        //cache the list-view element for later use
+        var $listview = $("#paystreamList");
+
+        //Empty current list
+        if (!append)
+            $listview.empty();
+
+        //Use template to create items & add to list
+        $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
+
+        //Call the listview jQuery UI Widget after adding 
+        //items to the list allowing correct rendering
+        $("#paystreamList").listview("refresh");
+    }
+
+    return pub;
+} (jQuery));
 var meCodeSearchController = (function ($, undefined) {
     var pub = {},
     $this = $(this);

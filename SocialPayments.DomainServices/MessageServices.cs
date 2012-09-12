@@ -612,27 +612,143 @@ namespace SocialPayments.DomainServices
             }
 
         }
-        public List<Domain.Message> GetPagedMessages(int take, int skip, int page, int pageSize, out int totalRecords)
+        public List<Domain.Message> GetPagedMessages(string userId, string type, int take, int skip, int page, int pageSize, out int totalRecords)
         {
             using (var ctx = new Context())
             {
-                totalRecords = ctx.Messages.Count();
+                Guid userGuid;
 
-                return ctx.Messages.Select(m => m)
-                    .OrderByDescending(m => m.CreateDate)
-                    .Skip(skip)
-                    .Take(take)
-                    .ToList();
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+
+
+                List<Domain.Message> messages = new List<Message>();
+                totalRecords = 0;
+
+                if (type.ToUpper() == "ALL" || String.IsNullOrEmpty(type))
+                {
+                    totalRecords = ctx.Messages
+                        .Where(m => m.SenderId == userGuid || m.RecipientId.Value == userGuid)
+                        .Count();
+
+                    messages = ctx.Messages
+                        .Include("Recipient")
+                        .Include("Sender")
+                        .Where(m => m.SenderId == userGuid || m.RecipientId.Value == userGuid)
+                        .OrderByDescending(m => m.CreateDate)
+                        .Skip(skip)
+                        .Take(take)
+                        .ToList<Message>();
+                }
+                else if(type.ToUpper() == "SENT")
+                {
+                    totalRecords = ctx.Messages
+                        .Where(m => m.SenderId == userGuid)
+                        .Count();
+
+                    messages = ctx.Messages
+                        .Include("Recipient")
+                        .Include("Sender")
+                        .Where(m => m.SenderId == userGuid)
+                        .OrderByDescending(m => m.CreateDate)
+                        .Skip(skip)
+                        .Take(take)
+                        .ToList<Message>();
+                }
+                else if (type.ToUpper() == "RECEIVED")
+                {
+                    totalRecords = ctx.Messages
+                        .Where(m => m.RecipientId.Value == userGuid)
+                        .Count();
+
+                    messages = ctx.Messages
+                        .Include("Recipient")
+                        .Include("Sender")
+                        .Where(m => m.RecipientId.Value == userGuid)
+                        .OrderByDescending(m => m.CreateDate)
+                        .Skip(skip)
+                        .Take(take)
+                        .ToList<Message>();
+                }
+                else if (type.ToUpper() == "OTHER")
+                {
+                    totalRecords = ctx.Messages
+                        .Where(m => m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
+                        .Count();
+                    
+                    messages = ctx.Messages
+                        .Include("Recipient")
+                        .Include("Sender")
+                        .Where(m => m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
+                        .OrderByDescending(m => m.CreateDate)
+                        .Skip(skip)
+                        .Take(take)
+                        .ToList<Message>();
+                }
+
+                URIType senderUriType = URIType.MECode;
+                URIType recipientUriType = URIType.MECode;
+
+                string senderName = "";
+                string recipientName = "";
+
+                foreach (var message in messages)
+                {
+                    senderUriType = URIType.MECode;
+                    recipientUriType = URIType.MECode;
+
+                    senderUriType = GetURIType(message.SenderUri);
+                    recipientUriType = GetURIType(message.RecipientUri);
+
+                    if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
+                        senderName = message.Sender.FirstName + " " + message.Sender.LastName;
+                    else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
+                        senderName = message.senderFirstName + " " + message.Sender.LastName;
+                    else
+                        senderName = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
+
+                    if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
+                        recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
+                    else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
+                        recipientName = message.recipientFirstName + " " + message.recipientLastName;
+                    else
+                        recipientName = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
+
+                    message.SenderName = senderName;
+                    message.RecipientName = recipientName;
+                    message.Direction = "In";
+
+                    if (message.SenderId.Equals(userGuid))
+                        message.Direction = "Out";
+
+
+                    if (message.Direction == "In")
+                    {
+                        if (message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
+                            message.TransactionImageUrl = message.Sender.ImageUrl;
+                    }
+                    else
+                    {
+                        if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
+                            message.TransactionImageUrl = message.Recipient.ImageUrl;
+                        else
+                            message.TransactionImageUrl = message.recipientImageUri;
+                    }
+                }
+
+                return messages;
             }
         }
         public List<Domain.Message> GetMessages(Guid userId)
         {
             using (var ctx = new Context())
             {
-                Domain.User user;
-
                 var messages = ctx.Messages
                     .Include("Recipient")
+                    .Include("Sender")
                     .Where(m => m.SenderId == userId || m.RecipientId.Value == userId)
                     .OrderByDescending(m => m.CreateDate)
                     .ToList<Message>();
