@@ -34,7 +34,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                messages = messageServices.GetPagedMessages(take, skip, page, pageSize, out totalRecords);
+                messages = messageServices.GetPagedMessages("", "1", take, skip, page, pageSize, out totalRecords);
             }
             catch (NotFoundException ex)
             {

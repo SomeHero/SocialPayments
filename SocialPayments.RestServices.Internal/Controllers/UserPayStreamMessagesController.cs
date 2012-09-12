@@ -17,6 +17,76 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
+        // GET /api/Users/{userId}/PayStreamMessages
+        public HttpResponseMessage<MessageModels.PagedResults> Get(string userId, string type, int take, int skip, int page, int pageSize)
+        {
+            HttpResponseMessage<MessageModels.PagedResults> response = null;
+            var messageServices = new DomainServices.MessageServices();
+            List<Domain.Message> messages = null;
+            int totalRecords = 0;
+
+            try
+            {
+                messages = messageServices.GetPagedMessages(userId, type, take, skip, page, pageSize, out totalRecords);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+
+            response = new HttpResponseMessage<MessageModels.PagedResults>(new MessageModels.PagedResults()
+            {
+                TotalRecords = totalRecords,
+                Results = messages.Select(m => new MessageModels.MessageResponse()
+                {
+                    amount = m.Amount,
+                    comments = (!String.IsNullOrEmpty(m.Comments) ? String.Format("{0}", m.Comments) : "No comments"),
+                    createDate = m.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                    Id = m.Id,
+                    //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                    messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() : m.Status.GetSenderMessageStatus()),
+                    messageType = m.MessageType.ToString(),
+                    recipientUri = m.RecipientUri,
+                    senderUri = m.SenderUri,
+                    direction = m.Direction,
+                    latitude = m.Latitude,
+                    longitutde = m.Longitude,
+                    senderName = m.SenderName,
+                    transactionImageUri = m.TransactionImageUrl,
+                    recipientName = m.RecipientName,
+                    senderSeen = m.senderHasSeen,
+                    recipientSeen = m.recipientHasSeen
+                }).ToList()
+            }, HttpStatusCode.OK);
+
+            return response;
+
+        }
+
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {
