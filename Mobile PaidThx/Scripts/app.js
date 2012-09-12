@@ -10,6 +10,7 @@ var formattingController = (function($, undefined) {
 } (jQuery));
 var paystreamController = (function ($, undefined) {
     var pub = {},
+        userId = "",
         take = 15,
         skip = 0,
         page = 0,
@@ -20,7 +21,9 @@ var paystreamController = (function ($, undefined) {
         totalRecords = 0,
         $this = $(this);
 
-    pub.init = function (listview) {
+    pub.init = function (theUserId) {
+
+        userId = theUserId;
 
         //When news updated, display items in list
         $this.unbind("paystream.updated").bind("paystream.updated", function (e, paystreamItems) {
@@ -71,7 +74,7 @@ var paystreamController = (function ($, undefined) {
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api/Users/B2610767-8C89-412E-AF96-1D32937C1A43/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
+            url: "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
             dataType: "json",
             success: function (data, textStatus, xhr) {
                 //Publish that news has been updated & allow

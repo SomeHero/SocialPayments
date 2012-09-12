@@ -9,33 +9,8 @@ namespace Mobile_PaidThx.Models
     {
         public class PaystreamModel
         {
-            public Dictionary<string, List<PaymentModel>> SortedPayments { get; set; }
-            public List<PaymentModel> AllReceipts { get; set; }
-            public List<PaymentModel> PaymentReceipts { get; set; }
-            public List<PaymentModel> RequestReceipts { get; set; }
-            public List<PaymentModel> Alerts { get; set; }
+            public String UserId { get; set; }
             public ProfileModels ProfileModel { get; set; }
-        }
-        public class PaymentModel
-        {
-            public string Id { get; set; }
-            public string SenderUri { get; set; }
-            public string RecipientUri { get; set; }
-            public string SenderName { get; set; }
-            public string RecipientName { get; set; }
-            public Double Amount { get; set; }
-            public DateTime TransactionDate { get; set; }
-            public string TransactionType { get; set; }
-            public string TransactionStatus { get; set; }
-            public string MessageType { get; set; }
-            public string Direction { get; set; }
-            public string Comments { get; set; }
-            public string TransactionImageUri { get; set; }
-        }
-        public class AlertModel
-        {
-            public string AlertMessage { get; set; }
-            public DateTime AlertDate { get; set; }
         }
     }
 }

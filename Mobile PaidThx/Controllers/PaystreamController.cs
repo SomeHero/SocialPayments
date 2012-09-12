@@ -38,52 +38,14 @@ namespace Mobile_PaidThx.Controllers
             TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
-
-            var userService = new Services.UserServices();
-            var userPayStreamServices = new Services.UserPayStreamMessageServices();
-
-            var user = userService.GetUser(Session["UserId"].ToString());
+                return RedirectToAction("Index", "SignIn", null);
 
             var model = new PaystreamModels.PaystreamModel()
             {
-                ProfileModel = new ProfileModels()
-                {
-                    FirstName = user.firstName,
-                    LastName = user.lastName,
-                    AccountType = "Personal",
-                    MobileNumber = user.mobileNumber,
-                    EmailAddress = user.emailAddress,
-                    Address = user.address,
-                    City = user.city,
-                    State = user.state,
-                    Zip = user.zip,
-                    SenderName = user.senderName,
-                    PaymentAccountsList = new ListPaymentAccountModel()
-                    {
-                        PaymentAccounts = user.bankAccounts.Select(b => new BankAccountModel() {
-                            AccountNumber = b.AccountNumber,
-                            AccountType = b.AccountType,
-                            BankIconURL = "",
-                            BankName = "",
-                            NameOnAccount = b.NameOnAccount,
-                            Nickname = b.Nickname,
-                            RoutingNumber = b.RoutingNumber,
-                            PaymentAccountId = b.Id
-                        }).ToList(),
-                        PreferredReceiveAccountId = user.preferredReceiveAccountId,
-                        PreferredSendAccountId = user.preferredReceiveAccountId
-                    }
-                }
+                UserId = Session["UserId"].ToString()
             };
 
             return View(model);
-        }
-        private List<PaystreamModels.AlertModel> GetAlerts(Guid userId)
-        {
-            var results = new List<PaystreamModels.AlertModel>();
-
-            return results;
         }
 
     }
