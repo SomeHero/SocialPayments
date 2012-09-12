@@ -11,7 +11,6 @@ namespace Mobile_PaidThx.Models
     {
         public ProfileModels()
         {
-            TransactionReceipts = new List<PaystreamModels.PaymentModel>();
             PaymentAccountsList = new ListPaymentAccountModel();
         }
         public string FirstName { get; set; }
@@ -26,7 +25,6 @@ namespace Mobile_PaidThx.Models
         public string Zip { get; set; }
 
         public MessageModel Payment { get; set; }
-        public List<PaystreamModels.PaymentModel> TransactionReceipts { get; set; }
         public ListPaymentAccountModel PaymentAccountsList { get; set; }
 
     }
