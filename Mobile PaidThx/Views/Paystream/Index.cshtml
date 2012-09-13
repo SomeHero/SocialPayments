@@ -30,7 +30,18 @@
                 Other</label>
         </fieldset>
         <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
-            
+            <li id="no-results">
+                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-type="new" recipient-uri="">
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No results found
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Continue type or check entry
+                       </span>
+                   </a>
+                    </li>
         </ul>
         <ul id="pagingList" data-role="listview" style="display: none;">
         
@@ -43,7 +54,7 @@
 
 <script id="paystreamItem" type="text/x-jquery-tmpl">
     <li>
-        <a onclick="openOffersDialog('$Id');">
+        <a href="#" class="paystreamItem" messageId="${id}">
         <span class="trans-type">
         {{if transactionImageUri}}
             <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
@@ -93,7 +104,8 @@
             <div class="gray-out">
                 ${messageStatus}
             </div>
-        </span></a>
+        </span>
+        </a>
      </li>
 </script>
 <script id="messageTemplate" type="text/html">
@@ -204,6 +216,10 @@
 <script type="text/javascript">
     $("#paystream-index").unbind('pageshow').bind('pageshow', function () {
 
+        $("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
+            return text.toString().toLowerCase().indexOf(searchValue) === -1;
+        });
+
         //cache the list-view element for later use
         var $listview = $(this).find('[data-role="listview"]');
 
@@ -214,16 +230,59 @@
             paystreamController.getAndDisplayMoreItems();
         });
         $('#paystream-all').die('change').live('change', function () {
-            paystreamController.searchAndDisplayPaystream('all');
+            paystreamController.searchAndDisplayPaystream('all', function () {
+                if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                    //if none are found then fadeIn the `#no-results` element
+                    $('#no-results').fadeIn(500);
+                } else {
+
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    $('#no-results').fadeOut(250);
+                }
+            });
         });
         $('#paystream-sent').die('change').live('change', function () {
-            paystreamController.searchAndDisplayPaystream('sent');
+            paystreamController.searchAndDisplayPaystream('sent', function () {
+                if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                    //if none are found then fadeIn the `#no-results` element
+                    $('#no-results').fadeIn(500);
+                } else {
+
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    $('#no-results').fadeOut(250);
+                }
+            });
         });
         $('#paystream-received').die('change').live('change', function () {
-            paystreamController.searchAndDisplayPaystream('received');
+            paystreamController.searchAndDisplayPaystream('received', function () {
+                if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                    //if none are found then fadeIn the `#no-results` element
+                    $('#no-results').fadeIn(500);
+                } else {
+
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    $('#no-results').fadeOut(250);
+                }
+            });
         });
         $('#paystream-other').die('change').live('change', function () {
-            paystreamController.searchAndDisplayPaystream('requests');
+            paystreamController.searchAndDisplayPaystream('requests', function () {
+                if ($listview.children(':visible').not('#no-results').length === 0) {
+
+                    //if none are found then fadeIn the `#no-results` element
+                    $('#no-results').fadeIn(500);
+                } else {
+
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    $('#no-results').fadeOut(250);
+                }
+            });
+        });
+        $('.paystreamItem').die('click').live('click', function () {
+            alert("detail clicked");
         });
         //delegate event binding since the search widget is added dynamically
         //bind to the `keyup` event so we can check the value of the input after the user types
