@@ -40,6 +40,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.NotFound);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (BadRequestException ex)
             {
@@ -47,6 +49,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.BadRequest);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -54,6 +58,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.InternalServerError);
                 response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
 

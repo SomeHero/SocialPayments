@@ -66,8 +66,7 @@ function openOffersDialog(transactionId) {
         processData: false,
         success: function (data) {
             $("#popup").empty();
-            $("#dialogTemplate").tmpl(data)
-    .appendTo("#popup");
+            $("#dialogTemplate").tmpl(data).appendTo("#popup");
         },
         error: function (objRequest, next, errorThrown) {
             alert(next);

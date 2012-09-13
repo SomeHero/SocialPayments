@@ -8,6 +8,29 @@ var formattingController = (function($, undefined) {
 
     return pub;
 } (jQuery));
+var validationController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+
+    pub.isValidEmailAddress = function(emailAddress) {
+        return isValidEmailAddress(emailAddress);
+    };
+
+    pub.isValidPhoneNumber = function(phoneNumber) {
+        return isValidPhoneNumber(phoneNumber);
+    };
+
+    function isValidEmailAddress(emailAddress) {
+        var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+        return pattern.test(emailAddress);
+    };
+    function isValidPhoneNumber(num) {
+        var pattern = new RegExp(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
+        return pattern.test(num);
+    };
+
+    return pub;
+} (jQuery));
 var paystreamController = (function ($, undefined) {
     var pub = {},
         userId = "",
@@ -42,7 +65,7 @@ var paystreamController = (function ($, undefined) {
         });
     };
 
-    pub.searchAndDisplayPaystream = function (theType) {
+    pub.searchAndDisplayPaystream = function (theType, callback) {
         //Starting loading animation
         $.mobile.showPageLoadingMsg("Loading Paystream");
 
@@ -56,6 +79,8 @@ var paystreamController = (function ($, undefined) {
             //Stop loading animation on success
             $this.trigger("paystream.updated", items);
             $.mobile.hidePageLoadingMsg();
+            if (callback)
+                callback();
         });
     };
 
@@ -71,12 +96,202 @@ var paystreamController = (function ($, undefined) {
         });
     };
 
+    pub.displayPaystreamDetail = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        openOffersDialog(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
+
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
         $.ajax({
             url: "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
             dataType: "json",
             success: function (data, textStatus, xhr) {
+
+                //Publish that news has been updated & allow
+                //the 2 subscribers to update the UI content
+                totalRecords = data.TotalRecords;
+                displayedRecords += data.Results.length;
+                skip = displayedRecords;
+                page += 1;
+                items = data.Results;
+
+                if (callback) callback(data);
+            }
+        });
+
+    }
+
+    function displayPaystream(paystreamItems, append) {
+        //cache the list-view element for later use
+        var $listview = $("#paystreamList");
+
+        //Empty current list
+        $("#paystreamList li").not("#no-results").remove();
+       
+        //Use template to create items & add to list
+        $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
+
+        //Call the listview jQuery UI Widget after adding 
+        //items to the list allowing correct rendering
+        $("#paystreamList").listview("refresh");
+    }
+
+    function openOffersDialog(transactionId, callback) {
+        var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamDialog/' + transactionId;
+
+        $.ajax({
+            url: serviceUrl,
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                $("#popup").empty();
+                $("#dialogTemplate").tmpl(data).appendTo("#popup");
+            },
+            error: function (objRequest, next, errorThrown) {
+                alert(next);
+                $("#error-block").appendTo(next);
+            }
+        });
+
+        $('#overlay').fadeIn('fast', function () {
+            $('#popup').css('display', 'block');
+            $('#popup').animate({ 'left': '5%' }, 500);
+        });
+
+        if (callback) callback(data);
+    }
+
+
+    function closeOffersDialog(prospectElementID) {
+        $(function ($) {
+            $(document).ready(function () {
+                $('#' + prospectElementID).css('position', 'absolute');
+                $('#' + prospectElementID).animate({ 'left': '100%' }, 500, function () {
+                    $('#' + prospectElementID).css('position', 'fixed');
+                    $('#' + prospectElementID).css('left', '100%');
+                    $('#overlay').fadeOut('fast');
+                });
+            });
+        });
+    }
+
+    return pub;
+} (jQuery));
+var meCodeSearchController = (function ($, undefined) {
+    var pub = {},
+    foundMeCodes = new Array(),
+    $this = $(this);
+
+    pub.init = function (listview) {
+
+        //When news updated, display items in list
+        $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+            displayMeCodes(meCodes);
+        });
+    };
+
+    pub.searchAndDisplayMeCodes = function (searchValue) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        searchByMeCode(searchValue, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
+    pub.clearMeCodes = function (searchValue) {
+        clearMeCodes();
+    };
+    pub.showNoResults = function (searchVal) {
+        updateNoResults(searchVal);
+    };
+    pub.hideNoResults = function (searchVal) {
+        hideNoResults(searchVal);
+    }
+
+    function searchByMeCode(searchValue, callback) {
+        //Get news via ajax and return jqXhr
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/" + searchValue,
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                //Publish that news has been updated & allow
+                //the 2 subscribers to update the UI content
+                $this.trigger("meCodes.updated", data);
+                if (callback) callback(data);
+            }
+        });
+    }
+
+    function displayMeCodes(meCodes) {
+        //cache the list-view element for later use
+        var $listview = $("#contactsList");
+        var newMeCodes = new Array();
+
+        if (meCodes) {
+            $.each(meCodes.foundUsers, function (index, value) {
+                if (!($.inArray(value.meCode, foundMeCodes) > -1)) {
+                    newMeCodes.push(value);
+                    foundMeCodes.push(value.meCode);
+                }
+            });
+            //Use template to create items & add to list
+            $("#meCodeItem").tmpl(newMeCodes).insertAfter($("#contactsList #me-codes-divider"));
+        }
+        else {
+            clearMeCodes();
+        }
+
+        //Call the listview jQuery UI Widget after adding 
+        //items to the list allowing correct rendering
+        if (newMeCodes)
+            $("#contactsList").listview("refresh");
+    }
+    function clearMeCodes() {
+        $("#contactsList .mecode-recipient").remove();
+        foundMeCodes = new Array();
+    }
+    function updateNoResults(searchVal) {
+        //if none are found then fadeIn the `#no-results` element
+        if (!$("#send-contact-select-page #contact-no-results").is(":visible")) {
+            $("#send-contact-select-page #contact-no-results").toggle();
+            $("#send-contact-select-page#contactsList").listview("refresh");
+        }
+        if (!$("#send-contact-select-page #contact-no-results-divider").is(":visible")) {
+            $("#send-contact-select-page #contact-no-results-divider").toggle();
+            $("#send-contact-select-page #contactsList").listview("refresh");
+        }
+
+        if (validationController.isValidEmailAddress(searchVal)) {
+            $("#send-contact-select-page #results-header").text(searchVal);
+            $("#send-contact-select-page #results-description").text("New Email Recipient");
+            $("#send-contact-select-page #contact-new-recipient-uri").attr('recipient-uri', searchVal);
+        } else if (validationController.isValidPhoneNumber(searchVal)) {
+            $("#send-contact-select-page #results-header").text(searchVal);
+            $("#send-contact-select-page #results-description").text("New Phone Recipient");
+            $("#send-contact-select-page #contact-new-recipient-uri").attr('recipient-uri', searchVal);
+        }
+        else {
+            $("#send-contact-select-page #results-header").text("No matches found");
+            $("#send-contact-select-page #results-description").text("Continue type or check entry");
+            $("#send-contact-select-page #contact-recipient-uri").val('');
+        }
+    }
+    function hideNoResults(searchVal) {
+        $("#send-contact-select-page #contact-no-results-divider").fadeOut(250);
+        $('#send-contact-select-page #contact-no-results').fadeOut(250);
+    }
+
+    return pub;
+} (jQuery));
 
 //PINSWIPE RESIZE CONTROLLER
 
@@ -95,92 +310,6 @@ var pinswipeResizeController = (function ($, undefined) {
 } (jQuery));
 
 //ME CODE CONTROLLER
-                //Publish that news has been updated & allow
-                //the 2 subscribers to update the UI content
-                totalRecords = data.TotalRecords;
-                displayedRecords += data.Results.length;
-                skip = displayedRecords;
-                page += 1;
-                items = data.Results;
-
-                if (callback) callback(data);
-            }
-        });
-    }
-
-    function displayPaystream(paystreamItems, append) {
-        //cache the list-view element for later use
-        var $listview = $("#paystreamList");
-
-        //Empty current list
-        if (!append)
-            $listview.empty();
-
-        //Use template to create items & add to list
-        $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
-
-        //Call the listview jQuery UI Widget after adding 
-        //items to the list allowing correct rendering
-        $("#paystreamList").listview("refresh");
-    }
-
-    return pub;
-} (jQuery));
-var meCodeSearchController = (function ($, undefined) {
-    var pub = {},
-    $this = $(this);
-
-    pub.init = function (listview) {
-
-        //When news updated, display items in list
-        $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
-            displayMeCodes(meCodes);
-        });
-    };
-
-    pub.searchAndDisplayMeCodes = function () {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
-        //Get news and add success callback using then
-        searchByMeCode(function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
-        });
-    };
-
-    function searchByMeCode(callback) {
-        //Get news via ajax and return jqXhr
-        $.ajax({
-            url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
-            dataType: "json",
-            success: function (data, textStatus, xhr) {
-                //Publish that news has been updated & allow
-                //the 2 subscribers to update the UI content
-                $this.trigger("meCodes.updated", data);
-                if (callback) callback(data);
-            }
-        });
-    }
-
-    function displayMeCodes(meCodes) {
-        //cache the list-view element for later use
-        var $listview = $("#contactsList");
-
-        //Empty current list
-        $listview.empty();
-
-        //Use template to create items & add to list
-        $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
-
-        //Call the listview jQuery UI Widget after adding 
-        //items to the list allowing correct rendering
-        $("#contactsList").listview("refresh");
-    }
-
-    return pub;
-} (jQuery));
-
 $(document).on('pageshow', '[data-role=page]', function () {
 
     //add center to jquery object

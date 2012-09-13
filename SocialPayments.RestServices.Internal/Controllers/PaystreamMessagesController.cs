@@ -25,7 +25,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"];
 
         // GET /api/paystreammessage
-        public HttpResponseMessage<MessageModels.PagedResults> Get(int take, int skip, int page, int pageSize)
+        public HttpResponseMessage<MessageModels.PagedResults> GetPaged(int take, int skip, int page, int pageSize)
         {
             var messageServices = new DomainServices.MessageServices();
             List<Domain.Message> messages = null;
@@ -84,7 +84,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     })
                 }, HttpStatusCode.OK);
         }
-        public HttpResponseMessage<MessageModels.MessageResponse> Get(string id)
+        public HttpResponseMessage<MessageModels.MessageResponse> Get(Guid id)
         {
             _logger.Log(LogLevel.Info, String.Format("Getting Message {0} Started", id));
 
