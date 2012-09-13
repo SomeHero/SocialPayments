@@ -977,7 +977,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
 
             if ( meCodesFound.Count() == 0 )
-                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.InternalServerError); // 500
+                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.OK); // 500
 
             var response = new UserModels.FindMECodeResponse()
             {
