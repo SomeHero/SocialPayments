@@ -16,64 +16,95 @@
                 <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                <li><a class="send-friend" friend-id="@friend.id" friend-name="@friend.name">
+                <li>
+                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
                     <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
                     @friend.name
                 </a></li>
             }
         }
-                <li id="no-results"><a id="new-recipient-uri" class="send-recipient-uri" recipient-uri="">
-                    <img src="@Url.Content("~/Content/images/avatar.png")" />
-                    <span id="results-header">No matches found </span>
-                    <br />
-                    <span id="results-description">Continue type or check entry </span></a></li>
-            </ul>
-        </div>
+         <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
+         <li id="contact-no-results" class="contact-no-results-item">
+                    <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No matches found 
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Continue type or check entry
+                       </span>
+                   </a>
+               </li>
+               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
+                </ul>
+            </div>
     </div>
+    <script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li>
+        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
+            <img src="http://graph.facebook.com/1/picture" />
+            ${meCode}
+        </a>
+     </li>
+</script>
+        
     <script language="javascript">
         //wait to do event binding until the page is being initialized
-        $(document).delegate('[data-role="page"]', 'pageinit', function () {
+        $("#pledge-contact-select-page").unbind('pageshow').bind('pageshow', function () {
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
 
+            $listview.listview('option', 'filterCallback', function (text, searchValue, item) {
+                if (item.attr('id') == "contact-no-results")
+                    return false;
+
+                return text.toString().toLowerCase().indexOf(searchValue) === -1;
+            });
+            contactsSearchController.init($("#pledge-contact-select-page"));
+
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
-            $(this).delegate('input[data-type="search"]', 'keyup', function () {
+            $('input[data-type="search"]').bind('keyup', function () {
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
-                //check to see if there are any visible list-items that are not the `#no-results` element
-                if ($listview.children(':visible').not('#no-results').length === 0) {
+                if (searchVal.substring(0, 1) == '$') {
 
-                    //if none are found then fadeIn the `#no-results` element
-                    $('#no-results').fadeIn(500);
-                    if (isValidEmailAddress(searchVal)) {
-                        $("#results-header").text(searchVal);
-                        $("#results-description").text("New Email Recipient");
-                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                    } else if (isValidPhoneNumber(searchVal)) {
-                        $("#results-header").text(searchVal);
-                        $("#results-description").text("New Phone Recipient");
-                        $("#new-recipient-uri").attr('recipient-uri', searchVal);
+                    if (searchVal.length > 3) {
+                        $("#me-codes-divider").show();
+                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
+                    } else {
+                        $("#me-codes-divider").hide();
+                        contactsSearchController.clearMeCodes();
                     }
-                    else {
-                        $("#results-header").text("No matches found");
-                        $("#results-description").text("Continue type or check entry");
-                        $("#recipient-uri").val('');
-                    }
-                } else {
+                }
+                else {
+                    $("#me-codes-divider").hide();
+                    contactsSearchController.clearMeCodes();
 
-                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                    $('#no-results').fadeOut(250);
+
+                    //check to see if there are any visible list-items that are not the `#no-results` element
+                    if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
+                        contactsSearchController.showNoResults(searchVal);
+
+                    } else {
+                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                        contactsSearchController.hideNoResults(searchVal);
+                    }
                 }
             });
-            $("#new-recipient-uri").unbind("click").bind("click", function () {
+            $(".contact-recipient-uri").die("click").live("click", function () {
 
                 var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-name');
+                var recipientType = $(this).attr('recipient-type');
 
                 var model = {
-                    RecipientUri: recipientUri
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
                 };
 
                 $.mobile.changePage(getBaseURL() + 'Pledge/AddContact', {

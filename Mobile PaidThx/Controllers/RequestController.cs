@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/Request";
+            TempData["DataUrl"] = "data-url=/mobile/Request";
 
             return View(new RequestModels.RequestMoneyModel()
             {
@@ -40,6 +40,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AddContactRequest()
         {
+            TempData["DataUrl"] = "data-url=/mobile/Request/AddContactRequest";
+
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
 
