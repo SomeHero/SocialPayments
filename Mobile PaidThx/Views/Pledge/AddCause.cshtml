@@ -10,7 +10,7 @@
     </div>
     <div data-role="content">
       
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+          <div class="pad">
         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
         @foreach (var alphaGroup in Model.SortedNonProfits)
@@ -41,4 +41,38 @@
         }
         </ul>
         </div>
+<script language="javascript">
+    //wait to do event binding until the page is being initialized
+    $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+        //cache the list-view element for later use
+        var $listview = $(this).find('[data-role="listview"]');
+
+        $(".organization-pledge").unbind("click").bind("click", function () {
+
+            var recipientId = $(this).attr('recipient-id');
+            var recipientName = $(this).attr('organization-name');
+            var recipientImageUrl = $(this).attr('organization-image-url');
+            var recipientType = $(this).attr('recipient-type');
+
+            var model = {
+                RecipientId: recipientId,
+                RecipientName: recipientName,
+                RecipientType: recipientType,
+                RecipientImageUrl: recipientImageUrl
+            };
+
+            $.mobile.changePage(getBaseURL() + 'Pledge/AddCause', {
+                data: model,
+                dataUrl: getBaseURL() + 'Pledge/Index',
+                reverse: true,
+                transition: 'slide',
+                type: 'post'
+            });
+
+        });
+
+    });
+        
+</script>
 </div>

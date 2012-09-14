@@ -27,11 +27,12 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            Session["FBState"] = RandomString(8, false);
+            if (Session["SignInFBState"] == null)
+                Session["SignInFBState"] = RandomString(8, false);
 
             return View(new SignInModels.SignInModel()
             {
-                FBState = Session["FBState"].ToString()
+                FBState = Session["SignInFBState"].ToString()
             });
         }
 
@@ -46,32 +47,39 @@ namespace Mobile_PaidThx.Controllers
             if (ModelState.IsValid)
             {
                 UserModels.ValidateUserResponse validateResponse;
-                    
+
                 try
                 {
                     validateResponse = userService.ValidateUser(model.Email, model.Password);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
 
                     _logger.Log(LogLevel.Error, String.Format("Exception Signing In User. Exception: {0} StackTrace: {1}", ex.Message, ex.StackTrace));
-                
-                    return View();
+
+                    return View(new SignInModels.SignInModel()
+                    {
+                        FBState = Session["SignInFBState"].ToString()
+                    });
                 }
 
                 UserModels.UserResponse user;
-                  
-                try {
+
+                try
+                {
                     user = userService.GetUser(validateResponse.userId);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
 
                     _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
 
-                    return View();
+                    return View(new SignInModels.SignInModel()
+                    {
+                        FBState = Session["SignInFBState"].ToString()
+                    });
                 }
 
                 FormsAuthentication.SetAuthCookie(model.Email, false);
@@ -88,7 +96,10 @@ namespace Mobile_PaidThx.Controllers
 
                     _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
 
-                    return View();
+                    return View(new SignInModels.SignInModel()
+                    {
+                        FBState = Session["SignInFBState"].ToString()
+                    });
                 }
 
                 var facebookServices = new FacebookServices();
@@ -103,7 +114,7 @@ namespace Mobile_PaidThx.Controllers
                 Session["UserId"] = validateResponse.userId;
                 Session["User"] = user;
 
-                if (String.IsNullOrEmpty(user.firstName)  || String.IsNullOrEmpty(user.lastName))
+                if (String.IsNullOrEmpty(user.firstName) || String.IsNullOrEmpty(user.lastName))
                 {
                     return RedirectToAction("Personalize", "Register");
                 }
@@ -130,8 +141,94 @@ namespace Mobile_PaidThx.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(new SignInModels.SignInModel()
+            {
+                FBState = Session["SignInFBState"].ToString()
+            });
         }
+        public ActionResult SignInWithFacebook(string state, string code)
+        {
+            var faceBookServices = new FacebookServices();
+            var userServices = new UserServices();
+
+            var redirect = String.Format(fbTokenRedirectURL, "SignIn/SignInWithFacebook/");
+
+            string fbState = Session["SignInFBState"].ToString();
+
+            if (state != fbState)
+                throw new Exception(String.Format("Unable to Link Facebook Account.  Invalid State {0}", fbState));
+
+            var fbAccount = faceBookServices.FBauth(code, redirect);
+
+            UserModels.FacebookSignInResponse facebookSignInResponse;
+            bool isNewUser = false;
+
+            try
+            {
+                facebookSignInResponse = userServices.SignInWithFacebook(_apiKey, fbAccount.id, fbAccount.first_name, fbAccount.last_name, fbAccount.email, "", fbAccount.accessToken, System.DateTime.Now.AddDays(30),
+                (Session["MessageId"] != null ? Session["MessageId"].ToString() : ""), out isNewUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Signing In with Facebook. {0} Stack Trace: {1}", ex.Message, ex.StackTrace));
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    FBState = Session["SignInFBState"].ToString(),
+                    Message = null
+                });
+            }
+
+            List<FacebookModels.Friend> friends;
+
+            try
+            {
+                _logger.Log(LogLevel.Error, String.Format("Getting Facebook Friends. Access Token {0}", fbAccount.accessToken));
+
+                friends = faceBookServices.GetFriendsList(fbAccount.accessToken);
+            }
+            catch (Exception ex)
+            {
+                friends = new List<FacebookModels.Friend>();
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Facebook Friends. Access Token {0}. Exception: {1}", fbAccount.accessToken, ex.Message));
+            }
+
+
+            UserModels.UserResponse userResponse;
+
+            try
+            {
+                userResponse = userServices.GetUser(facebookSignInResponse.userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. {0} Stack Trace: {1}", ex.Message));
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    FBState = Session["SignInFBState"].ToString(),
+                    Message = null
+                });
+            }
+
+            Session["UserId"] = facebookSignInResponse.userId;
+            Session["User"] = userResponse;
+            Session["Friends"] = friends;
+
+            if (isNewUser)
+                return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
+            else
+                return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+
+        }
+
         /// <summary>
         /// Generates a random string with the given length
         /// </summary>

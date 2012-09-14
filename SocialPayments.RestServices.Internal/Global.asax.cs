@@ -285,8 +285,13 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
 
             routes.MapHttpRoute(
                 name: "UserPayStreamMessages",
+                routeTemplate: "api/users/{userId}/PayStreamMessages",
+                defaults: new { controller = "UserPayStreamMessages"}
+            );
+            routes.MapHttpRoute(
+                name: "UserPayStreamMessage",
                 routeTemplate: "api/users/{userId}/PayStreamMessages/{id}",
-                defaults: new { controller = "UserPayStreamMessages", id = RouteParameter.Optional }
+                defaults: new { controller = "UserPayStreamMessages" }
             );
 
             routes.MapHttpRoute(

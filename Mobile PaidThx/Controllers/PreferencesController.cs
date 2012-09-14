@@ -140,6 +140,9 @@ namespace Mobile_PaidThx.Controllers
         {
             FormsAuthentication.SignOut();
 
+            Session.Clear();
+            Session.Abandon();
+
             return RedirectToAction("Index", "SignIn", new System.Web.Routing.RouteValueDictionary() { });
         }
 
