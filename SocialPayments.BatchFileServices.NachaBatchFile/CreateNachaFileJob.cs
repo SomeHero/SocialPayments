@@ -35,7 +35,8 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             try
             {
-                transactionBatch = transactionBatchService.CloseOpenBatch();
+                transactionBatch = CloseOpenBatch();
+
             }
             catch (Exception ex)
             {
@@ -130,6 +131,11 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             }
 
            
+        }
+
+        private void CloseOpenBatch()
+        {
+
         }
     }
 }

@@ -54,8 +54,13 @@ namespace Mobile_PaidThx.Controllers
             var user = userService.GetUser(Session["UserId"].ToString());
 
             var redirect = String.Format(fbTokenRedirectURL, "SocialNetworks/LinkFacebookAccount");
+            string fbState = Session["FBState"].ToString();
 
-            var fbAccount = faceBookServices.FBauth(state, code, redirect);
+
+            if (state != fbState)
+                throw new Exception("Unable to Link Facebook Account.  Invalid State");
+
+            var fbAccount = faceBookServices.FBauth(code, redirect);
 
             UserModels.FacebookSignInResponse facebookSignInResponse;
             bool isNewUser = false;

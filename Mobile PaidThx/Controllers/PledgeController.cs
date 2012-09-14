@@ -35,6 +35,34 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(PledgeModels.PledgeMoneyModel model)
         {
+            ModelState.Clear();
+
+            if (Session["RecipientId"] == null)
+                ModelState.AddModelError("", "Non Profit is required");
+            if (Session["Amount"] == null)
+                ModelState.AddModelError("", "Amount To Pledge is required");
+
+            double amount = 0;
+            if (Session["Amount"] != null)
+            {
+                amount = Convert.ToDouble(Session["Amount"]);
+
+                if (amount == 0)
+                    ModelState.AddModelError("", "Amount must be greater than $0.00");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new PledgeModels.PledgeMoneyModel()
+                {
+                    RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
+                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                });
+            }
+
             return RedirectToAction("PopupPinSwipe");
         }
 

@@ -36,6 +36,34 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(RequestModels.RequestMoneyModel model)
         {
+            ModelState.Clear();
+
+            if(Session["RecipientUri"] == null)
+                ModelState.AddModelError("", "Recipient is required");
+            if(Session["Amount"] == null)
+                ModelState.AddModelError("", "Amount To Request is required");
+
+            double amount = 0;
+            if (Session["Amount"] != null)
+            {
+                amount = Convert.ToDouble(Session["Amount"]);
+
+                if (amount == 0)
+                    ModelState.AddModelError("", "Amount must be greater than $0.00");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new RequestModels.RequestMoneyModel()
+                {
+                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                    RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
+                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                });
+            }
+
             return RedirectToAction("PopupPinSwipe");
         }
         public ActionResult AddContactRequest()
@@ -95,6 +123,8 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AmountToRequest(RequestModels.AmountToSendModel model)
         {
+            TempData["DataUrl"] = "data-url=/mobile/AmountToRequest";
+            
             Session["Amount"] = model.Amount;
 
             return View("Index", new RequestModels.RequestMoneyModel()
@@ -109,7 +139,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupACHAccount()
         {
             //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
-            TempData["DataUrl"] = "data-url=/SetupACHAccount";
+            TempData["DataUrl"] = "data-url=/mobile/SetupACHAccount";
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -146,7 +176,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupPinSwipe()
         {
-            TempData["DataUrl"] = "data-url=/SetupPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/SetupPinSwipe";
 
             TempData["Message"] = "";
 
@@ -160,7 +190,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult ConfirmPinSwipe()
         {
-            TempData["DataUrl"] = "data-url=/ConfirmPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/ConfirmPinSwipe";
             
             return View();
         }
@@ -182,7 +212,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SecurityQuestion()
         {
-            TempData["DataUrl"] = "data-url=/SecurityQuestion";
+            TempData["DataUrl"] = "data-url=/mobile/SecurityQuestion";
             
             var securityQuestionServices = new SecurityQuestionServices();
             var securityQuestions = securityQuestionServices.GetSecurityQuestions();
@@ -250,7 +280,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult PopupPinswipe()
         {
-            TempData["DataUrl"] = "data-url=/PinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/PinSwipe";
             
             return View(new RequestModels.PinSwipeModel()
             {
@@ -296,7 +326,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=/Paystream";
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             Session["RecipientUri"] = null;
             Session["RecipientName"] = null;

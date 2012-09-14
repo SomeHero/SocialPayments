@@ -106,6 +106,64 @@ var paystreamController = (function ($, undefined) {
             $.mobile.hidePageLoadingMsg();
         });
     };
+    pub.cancelPayment = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        cancelPayment(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.cancelRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        cancelRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.acceptRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        acceptRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.rejectRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        rejectRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.showPinSwipe = function () {
+        closeDetailDialog(function () {
+            $.mobile.changePage("/mobile/paystream/popuppinswipe",
+                { transition: "slideup",
+                    reverse: "false",
+                    changehash: "false"
+                });
+        });
+    }
+
 
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
@@ -134,7 +192,7 @@ var paystreamController = (function ($, undefined) {
 
         //Empty current list
         $("#paystreamList li").not("#no-results").remove();
-       
+
         //Use template to create items & add to list
         $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
@@ -144,7 +202,7 @@ var paystreamController = (function ($, undefined) {
     }
 
     function openOffersDialog(transactionId, callback) {
-        var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamDialog/' + transactionId;
+        var serviceUrl = "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages/" + transactionId;
 
         $.ajax({
             url: serviceUrl,
@@ -152,7 +210,16 @@ var paystreamController = (function ($, undefined) {
             processData: false,
             success: function (data) {
                 $("#popup").empty();
-                $("#dialogTemplate").tmpl(data).appendTo("#popup");
+                $("#detailTemplate").tmpl(data).appendTo("#popup");
+
+                $('#overlay').fadeIn('fast', function () {
+                    $('#popup').css('display', 'block');
+                    $('#popup').animate({ 'left': '5%' }, 500);
+                });
+
+                $("#popup").page();
+
+                if (callback) callback(data);
             },
             error: function (objRequest, next, errorThrown) {
                 alert(next);
@@ -160,15 +227,18 @@ var paystreamController = (function ($, undefined) {
             }
         });
 
-        $('#overlay').fadeIn('fast', function () {
-            $('#popup').css('display', 'block');
-            $('#popup').animate({ 'left': '5%' }, 500);
-        });
-
-        if (callback) callback(data);
     }
 
+    function closeDetailDialog(callback) {
+        $('#popup').css('position', 'absolute');
+        $('#popup').animate({ 'left': '100%' }, 500, function () {
+            $('#popup').css('position', 'fixed');
+            $('#popup').css('left', '100%');
+            $('#overlay').fadeOut('fast');
 
+            if (callback) callback();
+        });
+    };
     function closeOffersDialog(prospectElementID) {
         $(function ($) {
             $(document).ready(function () {
@@ -181,7 +251,50 @@ var paystreamController = (function ($, undefined) {
             });
         });
     }
-
+    function cancelPayment(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_payment",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function cancelRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function acceptRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/accept_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function rejectRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/reject_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
     return pub;
 } (jQuery));
 var contactsSearchController = (function ($, undefined) {

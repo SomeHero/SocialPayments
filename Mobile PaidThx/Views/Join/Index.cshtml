@@ -82,7 +82,7 @@
 
             <h5>
                 Connect with Facebook</h5>
-                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
                 Join with Facebook</button>
             <h5 style="margin-top:25px" id="form-marker">
                 Or join with your Email Address</h5>

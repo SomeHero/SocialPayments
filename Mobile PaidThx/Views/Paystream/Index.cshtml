@@ -54,7 +54,7 @@
 
 <script id="paystreamItem" type="text/x-jquery-tmpl">
     <li>
-        <a href="#" class="paystreamItem" messageId="${id}">
+        <a href="#" class="paystreamItem" messageId="${Id}">
         <span class="trans-type">
         {{if transactionImageUri}}
             <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
@@ -114,7 +114,7 @@
             <div class="ui-btn-inner ui-li">
 
                 <div class="ui-btn-text">
-                    <a onclick="openOffersDialog();" class="ui-link-inherit">
+                    <a onclick="openOffersDialog();" class="ui-link-inherit" messageId="${Id}">
 
                         <span class="trans-type">
 
@@ -123,7 +123,7 @@
 
                             <div class="trans-title">
 
-                            {{if Direction == "In" }}
+                            {{if direction == "In" }}
                             <strong>${senderName}</strong>
 
                             {{else}}
@@ -193,24 +193,69 @@
         </li>
 
     </script>
-    <script id="dialogTemplate" type="text/html">
+    <script id="detailTemplate" type="text/html">
 
     <a onclick="closeOffersDialog('popup');" class="paystream-dialog-closebtn"></a>
     <div class="paystream-dialog-title-bg">
 
-    {{if MessageType == "1" && Direction == "In"}}
+    {{if messageType == "Payment" && direction == "In"}}
+    $ Received
+    {{/if}}
+    {{if messageType == "Payment" && direction == "Out"}}
 
-    $ Received{{/if}}
-    {{if MessageType == "1" && Direction == "Out"}}
-
-    $ Sent{{/if}}
-    {{if MessageType == "0" && Direction == "In"}}
+    $ Sent
+    
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
 
     Request Received{{/if}}
-    {{if MessageType == "0" && Direction == "Out"}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
 
     Request Sent{{/if}}    
     </div>
+
+    {{if messageType == "Payment" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq cancel-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Cancel Payment
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "Payment" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq send-reminder-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Send Reminder
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq cancel-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Cancel Request
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq send-reminder-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Send Reminder
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+    <p>
+     <button type="button" class="btn-jq accept-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Accept & Pay
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+    <p>
+     <button type="button" class="btn-jq reject-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Reject Request
+     </button>
+    </p>
+    {{/if}}
     </script>
 
 <script type="text/javascript">
@@ -282,7 +327,31 @@
             });
         });
         $('.paystreamItem').die('click').live('click', function () {
-            alert("detail clicked");
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.displayPaystreamDetail(messageId);
+        });
+        $('.cancel-payment').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.showPinSwipe();
+        });
+        $('.send-reminder-payment').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.cancel-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.cancelRequest(messageId);
+        });
+        $('.send-reminder-payment-request').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.accept-payment-request').die('click').live('click', function () {
+            alert('accept payment request');
+        });
+        $('.reject-payment-request').die('click').live('click', function () {
+            alert('reject payment request');
         });
         //delegate event binding since the search widget is added dynamically
         //bind to the `keyup` event so we can check the value of the input after the user types
@@ -306,4 +375,10 @@
 
     });
     </script>
+</div>
+<div id="popup" class="paystream-dialog">
+    
+</div>
+
+<div id="overlay" class="overlay">
 </div>
