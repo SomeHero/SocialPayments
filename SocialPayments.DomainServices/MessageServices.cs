@@ -320,7 +320,7 @@ namespace SocialPayments.DomainServices
                 if(message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
-                if (message.Status != PaystreamMessageStatus.SubmittedPayment || message.Status != PaystreamMessageStatus.ProcessingPayment)
+                if (message.Status != PaystreamMessageStatus.SubmittedPayment && message.Status != PaystreamMessageStatus.NotifiedPayment && message.Status != PaystreamMessageStatus.ProcessingPayment)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment {0} Cannot be Cancelled.  Invalid State", id));
 
                 message.LastUpdatedDate = System.DateTime.Now;
@@ -358,7 +358,7 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
-                if (message.Status != PaystreamMessageStatus.SubmittedPayment || message.Status != PaystreamMessageStatus.ProcessingPayment)
+                if (message.Status != PaystreamMessageStatus.SubmittedRequest && message.Status != PaystreamMessageStatus.NotifiedRequest)
                     throw new CustomExceptions.BadRequestException(String.Format("Request {0} Cannot be Cancelled.  Invalid State", id));
 
                 message.LastUpdatedDate = System.DateTime.Now;

@@ -18,7 +18,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/Users/{userId}/PayStreamMessages
-        public HttpResponseMessage<MessageModels.PagedResults> Get(string userId, string type, int take, int skip, int page, int pageSize)
+        public HttpResponseMessage<MessageModels.PagedResults> GetPaged(string userId, string type, int take, int skip, int page, int pageSize)
         {
             HttpResponseMessage<MessageModels.PagedResults> response = null;
             var messageServices = new DomainServices.MessageServices();
@@ -147,6 +147,71 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 senderSeen = m.senderHasSeen,
                 recipientSeen = m.recipientHasSeen
             }).ToList(), HttpStatusCode.OK);
+
+
+            return response;
+        }
+
+        // GET /api/{userId}/PayStreamMessages/{id}
+        public HttpResponseMessage<MessageModels.MessageResponse> Get(string userId, string id)
+        {
+            var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+            HttpResponseMessage<MessageModels.MessageResponse> response = null;
+            Domain.Message message = null;
+
+            try
+            {
+                message = userPayStreamMessageServices.GetPayStreamMessage(userId, id);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
+
+                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
+                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+
+
+            response = new HttpResponseMessage<MessageModels.MessageResponse>(new MessageModels.MessageResponse()
+            {
+                amount = message.Amount,
+                comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
+                createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                Id = message.Id,
+                //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                messageStatus = (message.Direction == "In" ? message.Status.GetRecipientMessageStatus() : message.Status.GetSenderMessageStatus()),
+                messageType = message.MessageType.ToString(),
+                recipientUri = message.RecipientUri,
+                senderUri = message.SenderUri,
+                direction = message.Direction,
+                latitude = message.Latitude,
+                longitutde = message.Longitude,
+                senderName = message.SenderName,
+                transactionImageUri = message.TransactionImageUrl,
+                recipientName = message.RecipientName,
+                senderSeen = message.senderHasSeen,
+                recipientSeen = message.recipientHasSeen
+            }, HttpStatusCode.OK);
 
 
             return response;

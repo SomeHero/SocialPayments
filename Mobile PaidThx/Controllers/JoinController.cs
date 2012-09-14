@@ -25,13 +25,14 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
-            Session["FBState"] = RandomString(8, false);
+            if (Session["JoinFBState"] == null)
+                Session["JoinFBState"] = RandomString(8, false);
 
             if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
                 return View("Index", new JoinModels.JoinModel()
                 {
                     UserName = "",
-                    FBState = Session["FBState"].ToString(),
+                    FBState = Session["JoinFBState"].ToString(),
                     Message = null
                 });
 
@@ -42,7 +43,7 @@ namespace Mobile_PaidThx.Controllers
                 return View("Index", new JoinModels.JoinModel()
                 {
                     UserName = "",
-                    FBState = Session["FBState"].ToString(),
+                    FBState = Session["JoinFBState"].ToString(),
                     Message = null
                 });
 
@@ -51,7 +52,7 @@ namespace Mobile_PaidThx.Controllers
             return View("Index", new JoinModels.JoinModel()
             {
                 UserName = (payment.recipientUriType == "EmailAddress" ? payment.recipientUri : ""),
-                FBState = Session["FBState"].ToString(),
+                FBState = Session["JoinFBState"].ToString(),
                 Message = new MessageModel()
                 {
                     MessageType = payment.messageType,
@@ -82,10 +83,11 @@ namespace Mobile_PaidThx.Controllers
                 _logger.Log(LogLevel.Error, String.Format("Exception Registering User {0}. {1} Stack Trace: {2}", model.Email, ex.Message, ex.StackTrace));
 
                 ModelState.AddModelError("", ex.Message);
-
+                
                 return View("Index",  new JoinModels.JoinModel()
                 {
                     UserName = "",
+                    FBState = Session["JoinFBState"].ToString(),
                     Message = null
                 });
             }
@@ -97,14 +99,19 @@ namespace Mobile_PaidThx.Controllers
             return RedirectToAction("Personalize", "Register");
         }
 
-        public ActionResult SignInWithFacebook(string state, string code)
+        public ActionResult RegisterWithFacebook(string state, string code)
         {
             var faceBookServices = new FacebookServices();
             var userServices = new UserServices();
 
-            var redirect = String.Format(fbTokenRedirectURL, "Join/SignInWithFacebook/");
+            var redirect = String.Format(fbTokenRedirectURL, "Join/RegisterWithFacebook/");
 
-            var fbAccount = faceBookServices.FBauth(state, code, redirect);
+            string fbState = Session["JoinFBState"].ToString();
+
+            if (state != fbState)
+                throw new Exception(String.Format("Unable to Link Facebook Account.  Invalid State {0}", fbState));
+
+            var fbAccount = faceBookServices.FBauth(code, redirect);
 
             UserModels.FacebookSignInResponse facebookSignInResponse;
             bool isNewUser = false;
@@ -121,10 +128,11 @@ namespace Mobile_PaidThx.Controllers
                 ModelState.AddModelError("", ex.Message);
 
                 return View("Index", new JoinModels.JoinModel()
-                    {
-                        UserName = "",
-                        Message = null
-                    });
+                {
+                    UserName = "",
+                    FBState = Session["JoinFBState"].ToString(),
+                    Message = null
+                });
             }
 
             List<FacebookModels.Friend> friends;
@@ -155,7 +163,12 @@ namespace Mobile_PaidThx.Controllers
 
                 ModelState.AddModelError("", ex.Message);
 
-                return View("Index");
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    UserName = "",
+                    FBState = Session["JoinFBState"].ToString(),
+                    Message = null
+                });
             }
 
             Session["UserId"] = facebookSignInResponse.userId;
@@ -188,5 +201,6 @@ namespace Mobile_PaidThx.Controllers
                 return builder.ToString().ToLower();
             return builder.ToString();
         }
+
     }
 }

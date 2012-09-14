@@ -64,12 +64,12 @@
             var $listview = $(this).find('[data-role="listview"]');
 
             $listview.listview('option', 'filterCallback', function (text, searchValue, item) {
-                if (item.attr('id') == "#no-results")
+                if (item.attr('id') == "contact-no-results")
                     return false;
 
                 return text.toString().toLowerCase().indexOf(searchValue) === -1;
             });
-            meCodeSearchController.init();
+            contactsSearchController.init($("#send-contact-select-page"));
 
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
@@ -81,24 +81,24 @@
 
                     if (searchVal.length > 3) {
                         $("#me-codes-divider").show();
-                        meCodeSearchController.searchAndDisplayMeCodes(searchVal);
+                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
                     } else {
                         $("#me-codes-divider").hide();
-                        meCodeSearchController.clearMeCodes();
+                        contactsSearchController.clearMeCodes();
                     }
                 }
                 else {
                     $("#me-codes-divider").hide();
-                    meCodeSearchController.clearMeCodes();
+                    contactsSearchController.clearMeCodes();
 
 
                     //check to see if there are any visible list-items that are not the `#no-results` element
                     if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
-                        meCodeSearchController.showNoResults(searchVal);
+                        contactsSearchController.showNoResults(searchVal);
 
                     } else {
                         //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                        meCodeSearchController.hideNoResults(searchVal);
+                        contactsSearchController.hideNoResults(searchVal);
                     }
                 }
             });

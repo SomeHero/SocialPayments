@@ -37,7 +37,8 @@ namespace Mobile_PaidThx.Controllers
                     AccountType = paymentAccount.AccountType.ToString(),
                     NameOnAccount = paymentAccount.NameOnAccount,
                     Nickname = paymentAccount.Nickname,
-                    RoutingNumber = paymentAccount.RoutingNumber
+                    RoutingNumber = paymentAccount.RoutingNumber,
+                    Status = paymentAccount.Status
                 });
 
             }

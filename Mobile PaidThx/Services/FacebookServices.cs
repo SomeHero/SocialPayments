@@ -23,23 +23,18 @@ namespace Mobile_PaidThx.Services
         private string fbAppSecret = "628b100a8e6e9fd8278406a4a675ce0c";
         private string fbTokenRedirectURL = ConfigurationManager.AppSettings["fbTokenRedirectURL"];
 
-        public FacebookUserModels.FBuser FBauth(string state, string code, string redirect_uri)
+        public FacebookUserModels.FBuser FBauth(string code, string redirect_uri)
         {
             if (redirect_uri.Substring(redirect_uri.Length - 1) != "/")
                 redirect_uri = redirect_uri + "/";
 
-            _logger.Log(LogLevel.Debug, String.Format("FBAuth called State: {0}, Code {1}, redirect_uri: {2}", state, code, redirect_uri));
-
-            string fbState = HttpContext.Current.Session["FBState"].ToString(); ;
-            HttpContext.Current.Session["FBState"] = null;
+            _logger.Log(LogLevel.Debug, String.Format("FBAuth called  Code {0}, redirect_uri: {1}", code, redirect_uri));
 
             string response = null;
             string token = null;
             string tokenExp = null;
             FacebookUserModels.FBuser fbAccount = new FacebookUserModels.FBuser();
 
-            if (state == fbState)
-            {
                 //Exchange FB Code for FB Token
                 string requestToken = "https://graph.facebook.com/oauth/access_token?" +
                     "client_id=" + fbAppID +
@@ -107,7 +102,7 @@ namespace Mobile_PaidThx.Services
                     }
                     sr.Close();
                 }
-            }
+            
 
             return fbAccount;
         }
