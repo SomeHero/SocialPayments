@@ -35,6 +35,36 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(DonateModels.DonateMoneyModel model)
         {
+            ModelState.Clear();
+
+            if (Session["RecipientId"] == null)
+                ModelState.AddModelError("", "Not Profit is required");
+            if (Session["RecipientUri"] == null)
+                ModelState.AddModelError("", "Recipient is required");
+            if (Session["Amount"] == null)
+                ModelState.AddModelError("", "Amount To Donate is required");
+
+            double amount = 0;
+            if (Session["Amount"] != null)
+            {
+                amount = Convert.ToDouble(Session["Amount"]);
+
+                if (amount == 0)
+                    ModelState.AddModelError("", "Amount must be greater than $0.00");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new DonateModels.DonateMoneyModel()
+                {
+                    RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
+                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                    RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
+                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                });
+            }
+
             return RedirectToAction("PopupPinSwipe");
         }
 

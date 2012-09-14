@@ -12,6 +12,11 @@ namespace Mobile_PaidThx.Services
         private string _paystreamMessageUrl = "{0}PaystreamMessages";
         private string _donateMessageUrl = "{0}PaystreamMessages/donate";
         private string _pledgeMessageUrl = "{0}/PaystreamMessages/accept_pledge";
+        private string _cancelPaymentUrl = "/{0}/paystreammessages/{id}/cancel_payment";
+        private string _cancelRequestUrl = "/{0}/paystreammessages/{id}/cancel_request";
+        private string _acceptPaymentRequestUrl = "/{0}/paystreammessages/{id}/accept_request";
+        private string _rejectPaymentRequestUrl = "/{0}/paystreammessages/{id}/reject_request";
+
 
         public void SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
@@ -50,6 +55,13 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_pledgeMessageUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                throw new Exception(response.Description);
+        }
+        public void CancelPayment(string apiKey, string messageId)
+        {
+            var response = Post(String.Format(_cancelPaymentUrl, _webServicesBaseUrl), "");
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new Exception(response.Description);
         }
         private void SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)

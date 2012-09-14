@@ -20,7 +20,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/Pledge";
+            TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
             return View(new PledgeModels.PledgeMoneyModel
             {
@@ -35,6 +35,34 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult Index(PledgeModels.PledgeMoneyModel model)
         {
+            ModelState.Clear();
+
+            if (Session["RecipientId"] == null)
+                ModelState.AddModelError("", "Non Profit is required");
+            if (Session["Amount"] == null)
+                ModelState.AddModelError("", "Amount To Pledge is required");
+
+            double amount = 0;
+            if (Session["Amount"] != null)
+            {
+                amount = Convert.ToDouble(Session["Amount"]);
+
+                if (amount == 0)
+                    ModelState.AddModelError("", "Amount must be greater than $0.00");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new PledgeModels.PledgeMoneyModel()
+                {
+                    RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
+                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
+                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
+                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                });
+            }
+
             return RedirectToAction("PopupPinSwipe");
         }
 
@@ -85,7 +113,7 @@ namespace Mobile_PaidThx.Controllers
                 NonProfits = nonProfits,
             };
 
-            TempData["DataUrl"] = "data-url=/Pledge/AddContact";
+            TempData["DataUrl"] = "data-url=/mobile/Pledge/AddCause";
 
             return View(model);
         }
@@ -95,7 +123,7 @@ namespace Mobile_PaidThx.Controllers
             Session["RecipientId"] = model.RecipientId;
             Session["RecipientName"] = model.RecipientName;
 
-            TempData["DataUrl"] = "data-url=/Pledge";
+            TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
@@ -108,6 +136,8 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AddContact()
         {
+            TempData["DataUrl"] = "data-url=/mobile/Pledge/AddContact";
+
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
 
@@ -138,7 +168,7 @@ namespace Mobile_PaidThx.Controllers
         {
             Session["RecipientUri"] = model.RecipientUri;
 
-            TempData["DataUrl"] = "data-url=/Pledge";
+            TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
@@ -151,7 +181,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=/Pledge/AmountToSend";
+            TempData["DataUrl"] = "data-url=/mobile/Pledge/AmountToSend";
 
             return View();
         }
@@ -183,7 +213,7 @@ namespace Mobile_PaidThx.Controllers
             //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             var userId = Session["UserId"].ToString();
 

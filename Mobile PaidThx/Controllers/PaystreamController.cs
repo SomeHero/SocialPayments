@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Mobile_PaidThx.Models;
 using NLog;
 using System.Globalization;
+using System.Web.Routing;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -32,7 +33,15 @@ namespace Mobile_PaidThx.Controllers
         {
             return PartialView("PartialViews/RequestMoneyCopy");
         }
-
+        public ActionResult PopupPinSwipe()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult PopupPinSwipe(Mobile_PaidThx.Models.PaystreamModels.PinSwipeModel model)
+        {
+            return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+        }
         public ActionResult Index(String searchString)
         {
             TempData["DataUrl"] = "data-url=/mobile/Paystream";

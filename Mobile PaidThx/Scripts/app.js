@@ -106,6 +106,64 @@ var paystreamController = (function ($, undefined) {
             $.mobile.hidePageLoadingMsg();
         });
     };
+    pub.cancelPayment = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        cancelPayment(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.cancelRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        cancelRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.acceptRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        acceptRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.rejectRequest = function (id) {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        rejectRequest(id, function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+
+            $.mobile.changePage("/mobile/paystream");
+        });
+    };
+    pub.showPinSwipe = function () {
+        closeDetailDialog(function () {
+            $.mobile.changePage("/mobile/paystream/popuppinswipe",
+                { transition: "slideup",
+                    reverse: "false",
+                    changehash: "false"
+                });
+        });
+    }
+
 
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
@@ -134,7 +192,7 @@ var paystreamController = (function ($, undefined) {
 
         //Empty current list
         $("#paystreamList li").not("#no-results").remove();
-       
+
         //Use template to create items & add to list
         $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
@@ -144,7 +202,7 @@ var paystreamController = (function ($, undefined) {
     }
 
     function openOffersDialog(transactionId, callback) {
-        var serviceUrl = getBaseURL() + 'Profile/UpdatePayStreamDialog/' + transactionId;
+        var serviceUrl = "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages/" + transactionId;
 
         $.ajax({
             url: serviceUrl,
@@ -152,7 +210,16 @@ var paystreamController = (function ($, undefined) {
             processData: false,
             success: function (data) {
                 $("#popup").empty();
-                $("#dialogTemplate").tmpl(data).appendTo("#popup");
+                $("#detailTemplate").tmpl(data).appendTo("#popup");
+
+                $('#overlay').fadeIn('fast', function () {
+                    $('#popup').css('display', 'block');
+                    $('#popup').animate({ 'left': '5%' }, 500);
+                });
+
+                $("#popup").page();
+
+                if (callback) callback(data);
             },
             error: function (objRequest, next, errorThrown) {
                 alert(next);
@@ -160,15 +227,18 @@ var paystreamController = (function ($, undefined) {
             }
         });
 
-        $('#overlay').fadeIn('fast', function () {
-            $('#popup').css('display', 'block');
-            $('#popup').animate({ 'left': '5%' }, 500);
-        });
-
-        if (callback) callback(data);
     }
 
+    function closeDetailDialog(callback) {
+        $('#popup').css('position', 'absolute');
+        $('#popup').animate({ 'left': '100%' }, 500, function () {
+            $('#popup').css('position', 'fixed');
+            $('#popup').css('left', '100%');
+            $('#overlay').fadeOut('fast');
 
+            if (callback) callback();
+        });
+    };
     function closeOffersDialog(prospectElementID) {
         $(function ($) {
             $(document).ready(function () {
@@ -181,15 +251,62 @@ var paystreamController = (function ($, undefined) {
             });
         });
     }
-
+    function cancelPayment(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_payment",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function cancelRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function acceptRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/accept_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
+    function rejectRequest(messageId, callback) {
+        $.ajax({
+            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/reject_request",
+            dataType: "json",
+            type: "POST",
+            success: function (data, textStatus, xhr) {
+                if (callback)
+                    callback(data);
+            }
+        });
+    }
     return pub;
 } (jQuery));
-var meCodeSearchController = (function ($, undefined) {
+var contactsSearchController = (function ($, undefined) {
     var pub = {},
+    $page = $("#send-contact-select-page");
     foundMeCodes = new Array(),
     $this = $(this);
 
-    pub.init = function (listview) {
+    pub.init = function (page) {
+        $page = page;
+        hideMeCodes();
+        hideNoResults();
 
         //When news updated, display items in list
         $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
@@ -259,35 +376,42 @@ var meCodeSearchController = (function ($, undefined) {
         $("#contactsList .mecode-recipient").remove();
         foundMeCodes = new Array();
     }
+    function hideMeCodes() {
+        $page.find("#me-codes-divider").hide();
+        $page.find(".me-codes-receipient").hide();
+    }
     function updateNoResults(searchVal) {
         //if none are found then fadeIn the `#no-results` element
-        if (!$("#send-contact-select-page #contact-no-results").is(":visible")) {
-            $("#send-contact-select-page #contact-no-results").toggle();
-            $("#send-contact-select-page#contactsList").listview("refresh");
+        if (!$page.find("#contact-no-results").is(":visible")) {
+            $page.find("#contact-no-results").toggle();
+            $page.find("#contactsList").listview("refresh");
         }
-        if (!$("#send-contact-select-page #contact-no-results-divider").is(":visible")) {
-            $("#send-contact-select-page #contact-no-results-divider").toggle();
-            $("#send-contact-select-page #contactsList").listview("refresh");
+        if (!$page.find("#contact-no-results-divider").is(":visible")) {
+            $page.find("#contact-no-results-divider").toggle();
+            $page.find("#contactsList").listview("refresh");
         }
 
         if (validationController.isValidEmailAddress(searchVal)) {
-            $("#send-contact-select-page #results-header").text(searchVal);
-            $("#send-contact-select-page #results-description").text("New Email Recipient");
-            $("#send-contact-select-page #contact-new-recipient-uri").attr('recipient-uri', searchVal);
+            $page.find("#results-header").text(searchVal);
+            $page.find("#results-description").text("New Email Recipient");
+            $page.find("#contact-new-recipient-uri").attr('recipient-uri', searchVal);
+            $page.find("#contact-new-recipient-uri").attr('recipient-name', searchVal);
         } else if (validationController.isValidPhoneNumber(searchVal)) {
-            $("#send-contact-select-page #results-header").text(searchVal);
-            $("#send-contact-select-page #results-description").text("New Phone Recipient");
-            $("#send-contact-select-page #contact-new-recipient-uri").attr('recipient-uri', searchVal);
+            $page.find("#results-header").text(searchVal);
+            $page.find("#results-description").text("New Phone Recipient");
+            $page.find("#contact-new-recipient-uri").attr('recipient-uri', searchVal);
+            $page.find("#contact-new-recipient-uri").attr('recipient-name', searchVal);
         }
         else {
-            $("#send-contact-select-page #results-header").text("No matches found");
-            $("#send-contact-select-page #results-description").text("Continue type or check entry");
-            $("#send-contact-select-page #contact-recipient-uri").val('');
+            $page.find("#results-header").text("No matches found");
+            $page.find("#results-description").text("Continue type or check entry");
+            $page.find("#contact-recipient-uri").val('');
+            $page.find("#contact-new-recipient-uri").attr('recipient-name', '');
         }
     }
     function hideNoResults(searchVal) {
-        $("#send-contact-select-page #contact-no-results-divider").fadeOut(250);
-        $('#send-contact-select-page #contact-no-results').fadeOut(250);
+        $page.find("#contact-no-results-divider").fadeOut(250);
+        $page.find("#contact-no-results").fadeOut(250);
     }
 
     return pub;

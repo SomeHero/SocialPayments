@@ -64,6 +64,7 @@ namespace Mobile_PaidThx.Controllers
                     return View();
                 }
 
+                TempData["NameOnAccount"] = model.FirstName + " " + model.LastName;
                 return RedirectToAction("SetupACHAccount");
             }
 
@@ -79,8 +80,14 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=\"/Register/SetupACHAccount\"";
 
+            string nameOnAccount = "";
+
+            if (TempData["NameOnAccount"] != null)
+                nameOnAccount = TempData["NameOnAccount"].ToString();
+
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
+                NameOnAccount = nameOnAccount,
                 Payment = paymentModel
             });
         }

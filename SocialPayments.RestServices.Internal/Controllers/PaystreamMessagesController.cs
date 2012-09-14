@@ -459,7 +459,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             HttpResponseMessage response = null;
 
             try {
-                messageServices.CancelPayment(id);
+                messageServices.CancelRequest(id);
             }
             catch (NotFoundException ex)
             {
