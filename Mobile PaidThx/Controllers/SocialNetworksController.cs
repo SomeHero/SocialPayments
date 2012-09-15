@@ -46,16 +46,17 @@ namespace Mobile_PaidThx.Controllers
         {
               if (Session["UserId"] == null)
                 return RedirectToAction("Index", "SignIn", null);
+              if (Session["FBState"] == null)
+                  return RedirectToAction("Index");
 
             var userService = new Services.UserServices();
             var faceBookServices = new FacebookServices();
             var userSocialNetworkServices = new UserSocialNetworkServices();
+            string fbState = Session["FBState"].ToString();
 
             var user = userService.GetUser(Session["UserId"].ToString());
 
             var redirect = String.Format(fbTokenRedirectURL, "SocialNetworks/LinkFacebookAccount");
-            string fbState = Session["FBState"].ToString();
-
 
             if (state != fbState)
                 throw new Exception("Unable to Link Facebook Account.  Invalid State");

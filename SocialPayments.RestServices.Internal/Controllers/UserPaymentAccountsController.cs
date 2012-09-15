@@ -144,7 +144,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                userPaymentAccountServices.SetPreferredSendAccount(userId, request.PaymentAccountId);
+                userPaymentAccountServices.SetPreferredSendAccount(userId, request.PaymentAccountId, request.SecurityPin);
             }
             catch (NotFoundException ex)
             {
@@ -187,7 +187,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                userPaymentAccountServices.SetPreferredReceiveAccount(userId, request.PaymentAccountId);
+                userPaymentAccountServices.SetPreferredReceiveAccount(userId, request.PaymentAccountId, request.SecurityPin);
             }
             catch (NotFoundException ex)
             {
@@ -430,8 +430,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // DELETE /api/{userId}/paymentaccounts/{id}
+        [HttpDelete]
         public HttpResponseMessage Delete(string userId, string id)
         {
+            _logger.Log(LogLevel.Info, String.Format("Deleting Payment Account {0} for User {1}..", id, userId));
+
             var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
 
             HttpResponseMessage response = null;

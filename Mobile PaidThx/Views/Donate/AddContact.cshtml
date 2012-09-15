@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AddContactDonate";
 }
-<div data-role="page" id="donate-add-contact" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="donate-add-contact-page" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -12,7 +12,7 @@
       
         
           <div class="pad">
-          <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+          <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
         @foreach (var alphaGroup in Model.SortedNonProfits)
         {
@@ -40,16 +40,69 @@
             </li>
             }
         }
+                    <li id="contact-no-results" class="contact-no-results-item">
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No matches found 
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Please check entry
+                       </span>
+               </li>
+            <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
+               
         </ul>
      </div>
+    <script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li>
+        <a class="contact-organization" recipient-id="${userId}" recipient-uri="${meCode}" recipient-type="meCode" organization-name="${meCode}">
+            <img src="http://graph.facebook.com/1/picture" />
+            ${meCode}
+        </a>
+     </li>
+</script>
       <script language="javascript">
           //wait to do event binding until the page is being initialized
-          $(document).delegate('[data-role="page"]', 'pageinit', function () {
+          $("#donate-add-contact-page").unbind('pageshow').bind('pageshow', function () {
 
               //cache the list-view element for later use
               var $listview = $(this).find('[data-role="listview"]');
 
-              $(".contact-organization").unbind("click").bind("click", function () {
+              contactsSearchController.init($("#donate-add-contact"));
+
+              //delegate event binding since the search widget is added dynamically
+              //bind to the `keyup` event so we can check the value of the input after the user types
+              $('input[data-type="search"]').bind('keyup', function () {
+
+                  var searchVal = $(this).delegate('input[data-type="search"]').val();
+
+                  if (searchVal.substring(0, 1) == '$') {
+
+                      if (searchVal.length > 3) {
+                          $("#me-codes-divider").show();
+                          contactsSearchController.searchAndDisplayMeCodes(searchVal);
+                      } else {
+                          $("#me-codes-divider").hide();
+                          contactsSearchController.clearMeCodes();
+                      }
+                  }
+                  else {
+                      $("#me-codes-divider").hide();
+                      contactsSearchController.clearMeCodes();
+
+
+                      //check to see if there are any visible list-items that are not the `#no-results` element
+                      if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
+                          contactsSearchController.showNoResults(searchVal);
+
+                      } else {
+                          //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                          contactsSearchController.hideNoResults(searchVal);
+                      }
+                  }
+              });
+              $(".contact-organization").die("click").live("click", function () {
 
                   var recipientId = $(this).attr('recipient-id');
                   var recipientName = $(this).attr('organization-name');

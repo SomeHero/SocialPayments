@@ -19,12 +19,14 @@ namespace Mobile_PaidThx.Controllers
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
             if (Session["User"] == null)
-             return RedirectToAction("SignIn", "Account", null);
+             return RedirectToAction("Index", "SignIn", null);
 
             var model = new BankAccountModels.BankAccountsModel();
             model.PaymentAccounts = new List<BankAccountModel>();
-            model.PreferredReceiveAccountId = user.preferredReceiveAccountId.ToString();
-            model.PreferredSendAccountId = user.preferredPaymentAccountId.ToString();
+            if(!String.IsNullOrEmpty(user.preferredPaymentAccountId))
+                model.PreferredReceiveAccountId = user.preferredReceiveAccountId.ToString();
+            if(!String.IsNullOrEmpty(user.preferredReceiveAccountId))
+                model.PreferredSendAccountId = user.preferredPaymentAccountId.ToString();
 
             foreach (var paymentAccount in user.bankAccounts)
             {
