@@ -17,18 +17,29 @@ namespace Mobile_PaidThx.Controllers
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         //
         // GET: /Send/
+        private class PledgeInformation
+        {
+            public string RecipientId { get; set; }
+            public string RecipientName { get; set; }
+            public string RecipientUri { get; set; }
+            public string RecipientImageUrl { get; set; }
+            public double Amount { get; set; }
+            public string Comments { get; set; }
+        }
 
         public ActionResult Index()
         {
             TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+
             return View(new PledgeModels.PledgeMoneyModel
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                RecipientId = pledgeInformation.RecipientId,
+                RecipientName = pledgeInformation.RecipientName,
+                RecipientUri = pledgeInformation.RecipientUri,
+                Amount = pledgeInformation.Amount,
+                Comments = pledgeInformation.Comments
             });
         }
 
@@ -37,29 +48,24 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
-            if (Session["RecipientId"] == null)
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+
+            if (String.IsNullOrEmpty(pledgeInformation.RecipientId))
                 ModelState.AddModelError("", "Non Profit is required");
-            if (Session["Amount"] == null)
-                ModelState.AddModelError("", "Amount To Pledge is required");
-
-            double amount = 0;
-            if (Session["Amount"] != null)
-            {
-                amount = Convert.ToDouble(Session["Amount"]);
-
-                if (amount == 0)
-                    ModelState.AddModelError("", "Amount must be greater than $0.00");
-            }
+            if (String.IsNullOrEmpty(pledgeInformation.RecipientUri))
+                ModelState.AddModelError("", "Recipient is required");
+            if (pledgeInformation.Amount== 0)
+                ModelState.AddModelError("", "Amount must be greater than $0.00");
 
             if (!ModelState.IsValid)
             {
                 return View(new PledgeModels.PledgeMoneyModel()
                 {
-                    RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                    RecipientId = pledgeInformation.RecipientId,
+                    RecipientName = pledgeInformation.RecipientName,
+                    RecipientUri = pledgeInformation.RecipientUri,
+                    Amount = pledgeInformation.Amount,
+                    Comments = pledgeInformation.Comments
                 });
             }
 
@@ -120,18 +126,21 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AddCause(PledgeModels.AddCauseModel model)
         {
-            Session["RecipientId"] = model.RecipientId;
-            Session["RecipientName"] = model.RecipientName;
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
 
+            pledgeInformation.RecipientId = model.RecipientId;
+            pledgeInformation.RecipientName = model.RecipientName;
+
+            Session["PledgeInformation"] = pledgeInformation;
             TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientId = pledgeInformation.RecipientId,
+                RecipientName = pledgeInformation.RecipientName,
+                RecipientUri = pledgeInformation.RecipientUri,
+                Amount = pledgeInformation.Amount,
+                Comments = pledgeInformation.Comments
             });
         }
         public ActionResult AddContact()
@@ -166,17 +175,19 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AddContact(PledgeModels.AddContactModel model)
         {
-            Session["RecipientUri"] = model.RecipientUri;
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+            pledgeInformation.RecipientUri = model.RecipientUri;
 
             TempData["DataUrl"] = "data-url=/mobile/Pledge";
+            Session["PledgeInformation"] = pledgeInformation;
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientId = pledgeInformation.RecipientId,
+                RecipientName = pledgeInformation.RecipientName,
+                RecipientUri = pledgeInformation.RecipientUri,
+                Amount = pledgeInformation.Amount,
+                Comments = pledgeInformation.Comments
             });
         }
         public ActionResult AmountToSend()
@@ -189,17 +200,19 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AmountToSend(PledgeModels.PledgeMoneyModel model)
         {
-            Session["Amount"] = model.Amount;
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+            pledgeInformation.Amount = model.Amount;
 
             TempData["DataUrl"] = "data-url=/Pledge";
-            
+            Session["PledgeInformation"] = pledgeInformation;
+
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientId = pledgeInformation.RecipientId,
+                RecipientName = pledgeInformation.RecipientName,
+                RecipientUri = pledgeInformation.RecipientUri,
+                Amount = pledgeInformation.Amount,
+                Comments = pledgeInformation.Comments
             });
         }
         public ActionResult PopupPinswipe()
@@ -216,11 +229,7 @@ namespace Mobile_PaidThx.Controllers
                 return RedirectToAction("Index", "SignIn", null);
 
             var userId = Session["UserId"].ToString();
-
-            string organizationId = Session["RecipientId"].ToString();
-            string recipientUri = Session["RecipientUri"].ToString();
-            double amount = Convert.ToDouble(Session["Amount"]);
-            string comment = "";
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
 
             if (ModelState.IsValid)
             {
@@ -229,7 +238,8 @@ namespace Mobile_PaidThx.Controllers
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    paystreamMessageServices.AcceptPledge(_apiKey, organizationId, userId, recipientUri, amount, comment, "0", "0", "", "", "", model.Pincode);
+                    paystreamMessageServices.AcceptPledge(_apiKey, userId, pledgeInformation.RecipientId,  pledgeInformation.RecipientUri, 
+                        pledgeInformation.Amount, pledgeInformation.Comments, "0", "0", "", "", "", model.Pincode);
                 }
                 catch (Exception ex)
                 {
@@ -243,13 +253,9 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=/Paystream";
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
-            Session["RecipientId"] = null;
-            Session["RecipientName"] = null;
-            Session["RecipientUri"] = null;
-            Session["Amount"] = null;
-            Session["Comments"] = null;
+            Session["PledgeInformation"] = null;
 
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }

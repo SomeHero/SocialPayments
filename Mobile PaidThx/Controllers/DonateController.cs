@@ -15,20 +15,29 @@ namespace Mobile_PaidThx.Controllers
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
-        //
-        // GET: /Send/
+
+        private class DonateInformation
+        {
+            public string RecipientId { get; set; }
+            public string RecipientName { get; set; }
+            public string RecipientImageUrl { get; set; }
+            public double Amount { get; set; }
+            public string Comments { get; set; }
+        }
 
         public ActionResult Index()
         {
             TempData["DataUrl"] = "data-url=/Donate";
 
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
+
             return View(new DonateModels.DonateMoneyModel
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                RecipientId = donateInformation.RecipientId,
+                RecipientName = donateInformation.RecipientName,
+                RecipientImageUrl = donateInformation.RecipientImageUrl,
+                Amount = donateInformation.Amount,
+                Comments = donateInformation.Comments
             });
         }
 
@@ -37,31 +46,22 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
-            if (Session["RecipientId"] == null)
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
+
+            if (String.IsNullOrEmpty(donateInformation.RecipientId))
                 ModelState.AddModelError("", "Not Profit is required");
-            if (Session["RecipientUri"] == null)
-                ModelState.AddModelError("", "Recipient is required");
-            if (Session["Amount"] == null)
-                ModelState.AddModelError("", "Amount To Donate is required");
-
-            double amount = 0;
-            if (Session["Amount"] != null)
-            {
-                amount = Convert.ToDouble(Session["Amount"]);
-
-                if (amount == 0)
-                    ModelState.AddModelError("", "Amount must be greater than $0.00");
-            }
+            if (donateInformation.Amount == 0)
+                ModelState.AddModelError("", "Amount must be greater than $0.00");
 
             if (!ModelState.IsValid)
             {
                 return View(new DonateModels.DonateMoneyModel()
                 {
-                    RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                    RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                    RecipientId = donateInformation.RecipientId,
+                    RecipientName = donateInformation.RecipientName,
+                    RecipientImageUrl = donateInformation.RecipientImageUrl,
+                    Amount = donateInformation.Amount,
+                    Comments = donateInformation.Comments
                 });
             }
 
@@ -122,19 +122,23 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AddContact(DonateModels.AddContactModel model)
         {
-            Session["RecipientId"] = model.RecipientId;
-            Session["RecipientName"] = model.RecipientName;
-            Session["RecipientImageUrl"] = model.RecipientImageUrl;
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
+
+            donateInformation.RecipientId = model.RecipientId;
+            donateInformation.RecipientName= model.RecipientName;
+            donateInformation.RecipientImageUrl = model.RecipientImageUrl;
 
             TempData["DataUrl"] = "data-url=/Donate";
 
+            Session["DonateInformation"] = donateInformation;
+
             return View("Index", new DonateModels.DonateMoneyModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientId = donateInformation.RecipientId,
+                RecipientName = donateInformation.RecipientName,
+                RecipientImageUrl = donateInformation.RecipientImageUrl,
+                Amount = donateInformation.Amount,
+                Comments = donateInformation.Comments
             });
         }
         public ActionResult AmountToSend()
@@ -147,17 +151,20 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AmountToSend(DonateModels.SelectAmountModel model)
         {
-            Session["Amount"] = model.Amount;
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
+
+            donateInformation.Amount = model.Amount;
 
             TempData["DataUrl"] = "data-url=/Donate";
-            
+            Session["DonateInformation"] = donateInformation;
+
             return View("Index", new DonateModels.DonateMoneyModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientId = donateInformation.RecipientId,
+                RecipientName = donateInformation.RecipientName,
+                RecipientImageUrl = donateInformation.RecipientImageUrl,
+                Amount = donateInformation.Amount,
+                Comments = donateInformation.Comments
             });
         }
         public ActionResult SetupACHAccount()
@@ -306,12 +313,14 @@ namespace Mobile_PaidThx.Controllers
         {
             TempData["DataUrl"] = "data-url=/PopupPinSwipe";
 
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
+
             return View(new DonateModels.PinSwipeModel()
             {
-                RecipientId = (Session["RecipientId"] != null ? Session["RecipientId"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                RecipientId = donateInformation.RecipientId,
+                RecipientName = donateInformation.RecipientName,
+                RecipientImageUrl = donateInformation.RecipientImageUrl,
+                Amount = donateInformation.Amount
             });
         }
 
@@ -325,9 +334,7 @@ namespace Mobile_PaidThx.Controllers
 
             var userId = Session["UserId"].ToString();
 
-            string recipientId = Session["RecipientId"].ToString();
-            double amount = Convert.ToDouble(Session["Amount"]);
-            string comment = "";
+            var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
 
             if (ModelState.IsValid)
             {
@@ -336,8 +343,8 @@ namespace Mobile_PaidThx.Controllers
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    paystreamMessageServices.SendDonation(_apiKey, userId, recipientId, user.preferredPaymentAccountId, model.Pincode,
-                        amount, comment, "0", "0", "", "", "");
+                    paystreamMessageServices.SendDonation(_apiKey, userId, donateInformation.RecipientId, user.preferredPaymentAccountId, model.Pincode,
+                        donateInformation.Amount, donateInformation.Comments, "0", "0", "", "", "");
                 }
                 catch (Exception ex)
                 {
@@ -353,11 +360,7 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=/Paystream";
 
-            Session["RecipientId"] = null;
-            Session["RecipientName"] = null;
-            Session["RecipientImageUrl"] = null;
-            Session["Amount"] = null;
-            Session["Comments"] = null;
+            Session["DonateInformation"] = null;
 
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
