@@ -15,6 +15,7 @@ namespace SocialPayments.DomainServices
             {
                 UserService userService = new UserService(_ctx);
                 FormattingServices formattingService = new FormattingServices();
+                ValidationService validationService = new ValidationService();
 
                 var user = userService.GetUserById(userId);
 
@@ -26,8 +27,13 @@ namespace SocialPayments.DomainServices
                 if (payPointType == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Pay Point Type {0} not found", uri));
 
-                if (payPointType.Name == "Phone")
-                    uri = formattingService.RemoveFormattingFromMobileNumber(uri);
+                string unformattedUri = uri;
+                if (payPointType.Name == "Phone") {
+                        uri = formattingService.RemoveFormattingFromMobileNumber(uri);
+
+                    if (!validationService.IsPhoneNumber(uri))
+                        throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid Phone Number", unformattedUri));
+                }
 
                 var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == uri);
 

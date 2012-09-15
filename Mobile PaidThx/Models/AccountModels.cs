@@ -49,13 +49,10 @@ namespace Mobile_PaidThx.Models
         public bool PasswordSent { get; set; }
     }
 
-    public class ResetPasswordModelInput
+    public class ResetPasswordModel 
     {
         public string SecurityQuestion { get; set; }
         public bool HasSecurityQuestion { get; set; }
-    }
-    public class ResetPasswordModelOutput 
-    {
         public string NewPassword { get; set; }
         public string ConfirmPassword { get; set; }
         public string SecurityQuestionAnswer { get; set; }

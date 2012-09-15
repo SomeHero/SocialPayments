@@ -215,7 +215,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult ResetPassword(string id)
         {
              var userService = new UserServices();
-             ResetPasswordModelInput model = new ResetPasswordModelInput();
+             ResetPasswordModel model = new ResetPasswordModel();
              UserModels.ValidateResetPasswordAttemptResponse response = null;
 
             try {
@@ -237,7 +237,7 @@ namespace Mobile_PaidThx.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResetPassword(string id, ResetPasswordModelOutput model)
+        public ActionResult ResetPassword(string id, ResetPasswordModel model)
         {
             if (model.NewPassword.Equals(model.ConfirmPassword))
             {
@@ -247,7 +247,7 @@ namespace Mobile_PaidThx.Controllers
                 {
                     string userId = Session["UserId"].ToString();
 
-                    userServices.ChangePasssword(userId, model.ConfirmPassword, model.NewPassword);
+                    userServices.ResetPassword(userId, model.SecurityQuestionAnswer, model.NewPassword);
 
                     TempData["Message"] = "Your Password was successfully reset";
 
