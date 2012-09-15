@@ -1,9 +1,13 @@
-﻿
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PinSwipeRequestModel
+@{
+    ViewBag.Title = "Paystream";
+    ViewBag.PageId = "paystream-index";
+}
 <div data-role="page" id="paystream-pinswipe-page" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Confirm</h1>
+            Confirm - @Model.PaystreamAction</h1>
     </div>
   
     <div data-role="content">

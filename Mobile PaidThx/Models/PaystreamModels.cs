@@ -12,6 +12,11 @@ namespace Mobile_PaidThx.Models
             public String UserId { get; set; }
             public ProfileModels ProfileModel { get; set; }
         }
+        public class PinSwipeRequestModel
+        {
+            public string PaystreamAction { get; set; }
+            public string MessageId { get; set; }
+        }
         public class PinSwipeModel
         {
             public string Pincode { get; set; }
