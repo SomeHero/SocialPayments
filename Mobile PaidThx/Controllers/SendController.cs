@@ -15,6 +15,16 @@ namespace Mobile_PaidThx.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
+
+        private class SendInformation
+        {
+            public string RecipientUri { get; set; }
+            public string RecipientName { get; set; }
+            public string RecipientImageUrl { get; set; }
+            public double Amount { get; set; }
+            public string Comments { get; set; }
+        }
+
         //
         // GET: /Send/
 
@@ -22,13 +32,15 @@ namespace Mobile_PaidThx.Controllers
         {
             TempData["DataUrl"] = "data-url=/mobile/Send";
 
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+
             return View(new SendModels.SendMoneyModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                RecipientUri = sendInformation.RecipientImageUrl,
+                RecipientName = sendInformation.RecipientName,
+                RecipientImageUrl = sendInformation.RecipientImageUrl,
+                Amount = sendInformation.Amount,
+                Comments = sendInformation.Comments
             });
         }
 
@@ -37,29 +49,23 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
-            if(Session["RecipientUri"] == null)
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+
+            if(String.IsNullOrEmpty(sendInformation.RecipientUri))
                 ModelState.AddModelError("", "Recipient is required");
-            if(Session["Amount"] == null)
-                ModelState.AddModelError("", "AmountToRequest is required");
-
-            double amount = 0;
-            if (Session["Amount"] != null)
-            {
-                amount = Convert.ToDouble(Session["Amount"]);
-
-                if (amount == 0)
-                    ModelState.AddModelError("", "Amount must be greater than $0.00");
-            }
+            if(sendInformation.Amount == 0)
+                ModelState.AddModelError("", "Amount must be greater than $0.00");
 
             if (!ModelState.IsValid)
             {
+
                 return View(new SendModels.SendMoneyModel()
                 {
-                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                    RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                    RecipientUri = sendInformation.RecipientImageUrl,
+                    RecipientName = sendInformation.RecipientName,
+                    RecipientImageUrl = sendInformation.RecipientImageUrl,
+                    Amount = sendInformation.Amount,
+                    Comments = sendInformation.Comments
                 });
             }
 
@@ -242,8 +248,10 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AddContactSend(SendModels.AddContactSendModel model)
         {
-            Session["RecipientUri"] = model.RecipientUri;
-            Session["RecipientName"] = model.RecipientName;
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+
+            sendInformation.RecipientUri= model.RecipientUri;
+            sendInformation.RecipientName = model.RecipientName;
 
             TempData["DataUrl"] = "data-url=/mobile/Send";
 
@@ -251,15 +259,17 @@ namespace Mobile_PaidThx.Controllers
             if (model.RecipientUri.Substring(0, 3) == "fb_")
                 imageUrl = String.Format("http://graph.facebook.com/{0}/picture", model.RecipientUri.Substring(3));
 
-            Session["RecipientImageUrl"] = imageUrl;
+            sendInformation.RecipientImageUrl= imageUrl;
+
+            Session["SendInformation"] = sendInformation;
 
             return View("Index", new SendModels.SendMoneyModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientUri = sendInformation.RecipientImageUrl,
+                RecipientName = sendInformation.RecipientName,
+                RecipientImageUrl = sendInformation.RecipientImageUrl,
+                Amount = sendInformation.Amount,
+                Comments = sendInformation.Comments
             });
         }
         public ActionResult AmountToSend()
@@ -272,31 +282,34 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AmountToSend(SendModels.AmountToSendModel model)
         {
-            Session["Amount"] = model.Amount;
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+            sendInformation.Amount = model.Amount;
 
             TempData["DataUrl"] = "data-url=/mobile/Send";
 
-
+            Session["SendInformation"] = sendInformation;
 
             return View("Index", new SendModels.SendMoneyModel()
-            {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
-            });
+                {
+                    RecipientUri = sendInformation.RecipientImageUrl,
+                    RecipientName = sendInformation.RecipientName,
+                    RecipientImageUrl = sendInformation.RecipientImageUrl,
+                    Amount = sendInformation.Amount,
+                    Comments = sendInformation.Comments
+                });
         }
         public ActionResult PopupPinswipe()
         {
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+            
             TempData["DataUrl"] = "data-url=/mobile/Send/PinSwipe";
             
             return View(new SendModels.PinSwipModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                RecipientUri = sendInformation.RecipientUri,
+                RecipientName = sendInformation.RecipientName,
+                RecipientImageUrl = sendInformation.RecipientImageUrl,
+                Amount = sendInformation.Amount
             });
         }
 
@@ -309,19 +322,16 @@ namespace Mobile_PaidThx.Controllers
                 return RedirectToAction("SignIn", "Account", null);
 
             var userId = Session["UserId"].ToString();
-
-            string recipientUri = Session["RecipientUri"].ToString();
-            double amount = Convert.ToDouble(Session["Amount"]);
-            string comment = "";
-
+            var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
+           
             if (ModelState.IsValid)
             {
                 try
                 {
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, recipientUri, model.Pincode,
-                        amount, comment, "Payment", "0", "0", "", "", "");
+                    paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, sendInformation.RecipientUri, model.Pincode,
+                        sendInformation.Amount, sendInformation.Comments, "Payment", "0", "0", "", "", "");
                 }
                 catch (Exception ex)
                 {
@@ -337,11 +347,7 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
-            Session["RecipientUri"] = null;
-            Session["RecipientName"] = null;
-            Session["RecipientImageUrl"] = null;
-            Session["Amount"] = null;
-            Session["Comments"] = null;
+            Session["SendInformation"] = null;
 
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }

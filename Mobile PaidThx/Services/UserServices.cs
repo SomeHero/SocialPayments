@@ -24,6 +24,7 @@ namespace Mobile_PaidThx.Services
         private string _personalizeUrl = "{0}Users/{1}/personalize_user";
         private string _payPointVerificationUrl = "{0}Users/verify_paypoint";
         private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
+        private string _userServicesResetPasswordUrl = "{0}Users/reset_password";
         private string _userServicesResetSecurityPinUrl = "{0}Users/{1}/setup_securitypin";
 
         public UserModels.UserResponse GetUser(string userId)
@@ -190,17 +191,18 @@ namespace Mobile_PaidThx.Services
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);
         }
-        public void ResetPassword(string userId, string pinCode, string securityQuestionAnswer)
+        public void ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var json = js.Serialize(new
             {
-                securityPin = pinCode,
-                questionAnswer = securityQuestionAnswer
+                userid = userId,
+                securityQuestionAnswer = securityQuestionAnswer,
+                newPassword = newPassword
             });
 
-            var response = Post(String.Format(_userServicesResetSecurityPinUrl, _webServicesBaseUrl, userId), json);
+            var response = Post(String.Format(_userServicesResetPasswordUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.Description);

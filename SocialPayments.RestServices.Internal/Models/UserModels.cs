@@ -241,7 +241,9 @@ namespace SocialPayments.RestServices.Internal.Models
 
         public class ResetPasswordRequest
         {
-            public string emailAddress { get; set; }
+            public string userId { get; set; }
+            public string newPassword { get; set; }
+            public string securityQuestionAnswer { get; set; }
         }
 
         public class PushNotificationRequest

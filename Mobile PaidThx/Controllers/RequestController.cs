@@ -20,17 +20,27 @@ namespace Mobile_PaidThx.Controllers
         //
         // GET: /Request/
 
+        private class RequestInformation
+        {
+            public string RecipientUri { get; set; }
+            public string RecipientName { get; set; }
+            public string RecipientImageUrl { get; set; }
+            public double Amount { get; set; }
+            public string Comments { get; set; }
+        }
         public ActionResult Index()
         {
             TempData["DataUrl"] = "data-url=/mobile/Request";
 
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
+
             return View(new RequestModels.RequestMoneyModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                RecipientUri = requestInformation.RecipientUri,
+                RecipientName = requestInformation.RecipientName,
+                RecipientImageUrl = requestInformation.RecipientImageUrl,
+                Amount = requestInformation.Amount,
+                Comments = requestInformation.Comments
             });
         }
         [HttpPost]
@@ -38,29 +48,22 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
-            if(Session["RecipientUri"] == null)
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
+
+            if (String.IsNullOrEmpty(requestInformation.RecipientUri))
                 ModelState.AddModelError("", "Recipient is required");
-            if(Session["Amount"] == null)
-                ModelState.AddModelError("", "Amount To Request is required");
-
-            double amount = 0;
-            if (Session["Amount"] != null)
-            {
-                amount = Convert.ToDouble(Session["Amount"]);
-
-                if (amount == 0)
-                    ModelState.AddModelError("", "Amount must be greater than $0.00");
-            }
+            if (requestInformation.Amount == 0)
+                ModelState.AddModelError("", "Amount must be greater than $0.00");
 
             if (!ModelState.IsValid)
             {
                 return View(new RequestModels.RequestMoneyModel()
                 {
-                    RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                    RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                    RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                    Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                    Comments = (Session["Comments"] != null ? Session["Comments"].ToString() : "")
+                    RecipientUri = requestInformation.RecipientUri,
+                    RecipientName = requestInformation.RecipientName,
+                    RecipientImageUrl = requestInformation.RecipientImageUrl,
+                    Amount = requestInformation.Amount,
+                    Comments = requestInformation.Comments
                 });
             }
 
@@ -97,22 +100,26 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult AddContactrequest(RequestModels.AddContactRequestModel model)
         {
-            Session["RecipientUri"] = model.RecipientUri;
-            Session["RecipientName"] = model.RecipientName;
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
+
+            requestInformation.RecipientUri = model.RecipientUri;
+            requestInformation.RecipientName = model.RecipientName;
 
             string imageUrl = "";
             if (model.RecipientUri.Substring(0, 3) == "fb_")
                 imageUrl = String.Format("http://graph.facebook.com/{0}/picture", model.RecipientUri.Substring(3));
 
-            Session["RecipientImageUrl"] = imageUrl;
+            requestInformation.RecipientImageUrl = imageUrl;
+
+            Session["RequestInformation"] = requestInformation;
 
             return View("Index", new RequestModels.RequestMoneyModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientUri = requestInformation.RecipientUri,
+                RecipientName = requestInformation.RecipientName,
+                RecipientImageUrl = requestInformation.RecipientImageUrl,
+                Amount = requestInformation.Amount,
+                Comments = requestInformation.Comments
             });
         }
         public ActionResult AmountToRequest()
@@ -124,16 +131,19 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult AmountToRequest(RequestModels.AmountToSendModel model)
         {
             TempData["DataUrl"] = "data-url=/mobile/AmountToRequest";
-            
-            Session["Amount"] = model.Amount;
+
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
+
+            requestInformation.Amount = model.Amount;
+            Session["RequestInformation"] = requestInformation;
 
             return View("Index", new RequestModels.RequestMoneyModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
-                Comments = ""
+                RecipientUri = requestInformation.RecipientUri,
+                RecipientName = requestInformation.RecipientName,
+                RecipientImageUrl = requestInformation.RecipientImageUrl,
+                Amount = requestInformation.Amount,
+                Comments = requestInformation.Comments
             });
         }
         public ActionResult SetupACHAccount()
@@ -301,9 +311,7 @@ namespace Mobile_PaidThx.Controllers
 
             var userId = Session["UserId"].ToString();
 
-            string recipientUri = Session["RecipientUri"].ToString();
-            double amount = Convert.ToDouble(Session["Amount"]);
-            string comment = "";
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
 
             if (ModelState.IsValid)
             {
@@ -311,8 +319,8 @@ namespace Mobile_PaidThx.Controllers
                 {
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
-                    paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, recipientUri, model.Pincode,
-                        amount, comment, "PaymentRequest", "0", "0", "", "", "");
+                    paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, requestInformation.RecipientUri, model.Pincode,
+                        requestInformation.Amount, requestInformation.Comments, "PaymentRequest", "0", "0", "", "", "");
                 }
                 catch (Exception ex)
                 {
@@ -328,11 +336,7 @@ namespace Mobile_PaidThx.Controllers
 
             TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
-            Session["RecipientUri"] = null;
-            Session["RecipientName"] = null;
-            Session["RecipientImageUrl"] = null;
-            Session["Amount"] = null;
-            Session["Comments"] = null;
+            Session["RequestInformation"] = null;
 
             return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
         }
