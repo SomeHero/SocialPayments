@@ -24,22 +24,20 @@
         <div id="setup-ach-account-form">
             @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
             {
+                @Html.ValidationSummary()
+
                 <fieldset>
                     <div class="editor-field">
                         <span class="form-holder"> @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })</span>
-                        @Html.ValidationMessageFor(m => m.NameOnAccount)
                     </div>
                     <div class="editor-field">
                        <span class="form-holder">  @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" }, { "type", "number" } })</span>
-                        @Html.ValidationMessageFor(m => m.RoutingNumber)
                     </div>
                     <div class="editor-field">
                        <span class="form-holder">  @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required accountformat" } })</span>
-                        @Html.ValidationMessageFor(m => m.AccountNumber)
                     </div>
                     <div class="editor-field">
                        <span class="form-holder">  @Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" } })</span>
-                        @Html.ValidationMessageFor(m => m.ConfirmAccountNumber)
                     </div>
                     <div data-role="fieldcontain">
                         <div data-role="controlgroup" data-type="horizontal">

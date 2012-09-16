@@ -75,7 +75,7 @@ namespace Mobile_PaidThx.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult Delete(MeCodesModels.DeleteMeCodeModel model)
         {
             var user = (UserModels.UserResponse)Session["User"];
@@ -89,7 +89,12 @@ namespace Mobile_PaidThx.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
-                return View(model);
+                var meCode = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);
+
+                return View("Details", new MeCodesModels.DetailsMeCodeModel()
+                {
+                    MeCode = meCode
+                });
             }
 
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());

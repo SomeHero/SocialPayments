@@ -69,17 +69,31 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ChangeSecurityPinNew(SecurityModels.ConfirmSecurityPinModel model)
         {
+            Session["ChangeSecurityPin_NewPinCode"] = model.PinCode;
+
+            return RedirectToAction("ChangeSecurityPinConfirm");
+        }
+        public ActionResult ChangeSecurityPinConfirm()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ChangeSecurityPinConfirm(SecurityModels.ConfirmSecurityPinModel model)
+        {
             var userService = new Services.UserServices();
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
-            if (Session["User"] == null)
-                return RedirectToAction("SignIn", "Account", null);
-
-            var currentPinCode = Session["ChangeSecurityPin_CurrentPinCode"].ToString();
-
             try
             {
-                userService.ChangeSecurityPin(user.userId.ToString(), currentPinCode, model.PinCode);
+                if (model.PinCode != Session["ChangeSecurityPin_NewPinCode"].ToString())
+                {
+                    ModelState.AddModelError("", "Your security pins don't match.  Try Again");
+
+                    return RedirectToAction("ChangeSecurityPinNew");
+                }
+
+                userService.ChangeSecurityPin(user.userId.ToString(), Session["ChangeSecurityPin_CurrentPinCode"].ToString(), model.PinCode);
+
             }
             catch (Exception ex)
             {
@@ -87,6 +101,7 @@ namespace Mobile_PaidThx.Controllers
 
                 return View();
             }
+
 
             return RedirectToAction("Index");
         }

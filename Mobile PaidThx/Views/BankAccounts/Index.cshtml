@@ -2,9 +2,10 @@
 
 @{
     ViewBag.Title = "Linked Accounts";
+    TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
 }
 
-<div data-role="page" id="preferences-bankaccounts-page" data-add-back-btn="true">
+<div data-role="page" id="preferences-bankaccounts-page" data-add-back-btn="true"  @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

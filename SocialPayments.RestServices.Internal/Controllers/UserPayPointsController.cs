@@ -280,8 +280,11 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         }
 
         // DELETE /api/users/{userId}/PayPoints/{id}
+        [HttpDelete]
         public HttpResponseMessage Delete(string userId, string id)
         {
+            _logger.Log(LogLevel.Info, String.Format("Deleting Pay Point {0} for User {1}.", id, userId));
+
             DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
             HttpResponseMessage response = null;
 

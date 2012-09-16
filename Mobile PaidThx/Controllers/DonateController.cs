@@ -27,7 +27,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/Donate";
+            TempData["DataUrl"] = "data-url=/mobile/Donate";
 
             var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
 
@@ -115,7 +115,7 @@ namespace Mobile_PaidThx.Controllers
                 NonProfits = nonProfits,
             };
 
-            TempData["DataUrl"] = "data-url=/Donate/AddContact";
+            TempData["DataUrl"] = "data-url=/mobile/Donate/AddContact";
 
             return View(model);
         }
@@ -128,7 +128,7 @@ namespace Mobile_PaidThx.Controllers
             donateInformation.RecipientName= model.RecipientName;
             donateInformation.RecipientImageUrl = model.RecipientImageUrl;
 
-            TempData["DataUrl"] = "data-url=/Donate";
+            TempData["DataUrl"] = "data-url=/mobile/Donate";
 
             Session["DonateInformation"] = donateInformation;
 
@@ -143,7 +143,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=/Donate/AmountToSend";
+            TempData["DataUrl"] = "data-url=/mobile/Donate/AmountToSend";
 
             return View();
         }
@@ -155,7 +155,7 @@ namespace Mobile_PaidThx.Controllers
 
             donateInformation.Amount = model.Amount;
 
-            TempData["DataUrl"] = "data-url=/Donate";
+            TempData["DataUrl"] = "data-url=/mobile/Donate";
             Session["DonateInformation"] = donateInformation;
 
             return View("Index", new DonateModels.DonateMoneyModel()
@@ -170,7 +170,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupACHAccount()
         {
             //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
-            TempData["DataUrl"] = "data-url=/SetupACHAccount";
+            TempData["DataUrl"] = "data-url=/mobile/SetupACHAccount";
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -207,7 +207,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SetupPinSwipe()
         {
-            TempData["DataUrl"] = "data-url=/SetupPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/SetupPinSwipe";
             
             TempData["Message"] = "";
 
@@ -221,7 +221,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult ConfirmPinSwipe()
         {
-            TempData["DataUrl"] = "data-url=/ConfirmPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/ConfirmPinSwipe";
             
             return View();
         }
@@ -243,7 +243,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SecurityQuestion()
         {
-            TempData["DataUrl"] = "data-url=/SecurityQuestion";
+            TempData["DataUrl"] = "data-url=/mobile/SecurityQuestion";
             
             var securityQuestionServices = new SecurityQuestionServices();
             var securityQuestions = securityQuestionServices.GetSecurityQuestions();
@@ -267,7 +267,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SecurityQuestion(SecurityQuestionModel model)
         {
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn");
+                return RedirectToAction("Index", "SignIn");
 
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
@@ -311,7 +311,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult PopupPinswipe()
         {
-            TempData["DataUrl"] = "data-url=/PopupPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/PopupPinSwipe";
 
             var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
 
@@ -330,7 +330,7 @@ namespace Mobile_PaidThx.Controllers
             //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             var userId = Session["UserId"].ToString();
 
@@ -358,7 +358,7 @@ namespace Mobile_PaidThx.Controllers
             else
                 return View(model);
 
-            TempData["DataUrl"] = "data-url=/Paystream";
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             Session["DonateInformation"] = null;
 
