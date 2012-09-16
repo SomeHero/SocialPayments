@@ -826,16 +826,28 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                var formattingServices = new DomainServices.FormattingServices();
+
                 var message = ctx.Messages
                     .FirstOrDefault(m => m.Id == messageId);
+
+                URIType senderUriType = GetURIType(message.SenderUri);
+                URIType recipientUriType = GetURIType(message.RecipientUri);
 
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
 
                 if(message.Sender != null)
                     message.SenderName = _formattingServices.FormatUserName(message.Sender);
-                if(message.Recipient != null)
+                if (message.Recipient != null)
                     message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
+                else
+                {
+                    if (recipientUriType == URIType.MobileNumber)
+                        message.RecipientName = formattingServices.FormatMobileNumber(message.RecipientUri);
+                    else
+                        message.RecipientName = message.RecipientUri;
+                }
                 message.TransactionImageUrl = message.Sender.ImageUrl;
 
                 return message;

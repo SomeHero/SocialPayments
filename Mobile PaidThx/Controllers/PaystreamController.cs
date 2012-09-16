@@ -17,13 +17,22 @@ namespace Mobile_PaidThx.Controllers
  
         public ActionResult PopupPinSwipe(string paystreamAction, string messageId)
         {
+            if (Session["UserId"] == null)
+                return RedirectToAction("Index", "SignIn");
+
             Session["Action"] = paystreamAction;
             Session["MessageId"] = messageId;
+
+            var userId = Session["UserId"].ToString();
+
+            var messageService = new Services.UserPayStreamMessageServices();
+            var message = messageService.GetMessage(userId, messageId);
 
             return View(new PaystreamModels.PinSwipeRequestModel()
             {
                 PaystreamAction = paystreamAction,
-                MessageId = messageId
+                MessageId = messageId,
+                Message = message
             });
         }
         [HttpPost]

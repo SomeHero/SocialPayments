@@ -26,8 +26,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 FedACHService fedACHService = new FedACHService();
 
                 FedACHList fedACHList = new FedACHList();
-                //results = fedACHService.getACHByRoutingNumber(request.RoutingNumber, out fedACHList);
-                results = true;
+                results = fedACHService.getACHByRoutingNumber(request.RoutingNumber, out fedACHList);
             }
             catch (NotFoundException ex)
             {

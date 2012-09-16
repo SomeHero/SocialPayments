@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Models
 {
@@ -16,6 +17,7 @@ namespace Mobile_PaidThx.Models
         {
             public string PaystreamAction { get; set; }
             public string MessageId { get; set; }
+            public MessageModels.MessageResponse Message { get; set; }
         }
         public class PinSwipeModel
         {
