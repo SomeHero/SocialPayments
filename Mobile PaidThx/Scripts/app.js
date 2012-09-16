@@ -1,3 +1,16 @@
+var webServicesController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+
+    pub.getBaseURL = function () {
+        return getBaseURL();
+    };
+    function getBaseURL() {
+        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+    }
+
+    return pub;
+} (jQuery));
 var formattingController = (function($, undefined) {
     var pub = {},
     $this = $(this);

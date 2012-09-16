@@ -114,7 +114,7 @@
             <div class="ui-btn-inner ui-li">
 
                 <div class="ui-btn-text">
-                    <a onclick="openOffersDialog();" class="ui-link-inherit" messageId="${Id}">
+                    <a class="closePaystreamItem ui-link-inherit" messageId="${Id}">
 
                         <span class="trans-type">
 
@@ -331,6 +331,9 @@
 
             paystreamController.displayPaystreamDetail(messageId);
         });
+        $('.closePaystreamItem').die('click').live('click', function () {
+            paystreamController.closeDetailDialog(function() {});
+        });
         $('.cancel-payment').die('click').live('click', function () {
             var messageId = $(this).attr("messageId");
 
@@ -379,10 +382,10 @@
 
     });
     </script>
-</div>
-<div id="popup" class="paystream-dialog">
+    <div id="popup" class="paystream-dialog">
     
 </div>
 
 <div id="overlay" class="overlay">
+</div>
 </div>
