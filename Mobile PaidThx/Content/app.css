@@ -2220,10 +2220,7 @@ background-color:#f2f2f2;
 {
 background-color:transparent; 
 }
-input.error
-{
-  color:#333333;  
-}
+
 .ui-tooltip.tip-error .ui-tooltip-content{
    font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
 	font-size:13px;
@@ -2240,4 +2237,9 @@ input.error
 .ui-field-contain, .ui-mobile fieldset.ui-field-contain 
 {
     margin:1.1em 0;
+}
+
+input.error
+{
+  color:#333333 !important;  
 }
