@@ -44,6 +44,11 @@ var validationController = (function ($, undefined) {
 
     return pub;
 } (jQuery));
+
+var isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
+var isiPhone = /iphone/i.test(navigator.userAgent.toLowerCase());
+var totalErrors = 0;
+
 var paystreamController = (function ($, undefined) {
     var pub = {},
         userId = "",
@@ -464,14 +469,20 @@ $(document).on('pageshow', '[data-role=page]', function () {
                     form.submit();
                 },
                 invalidHandler: function (form, validator) {
-                    //invalid                
+                    //invalid         
+
                 },
                 showErrors: function (errorMap, errorList) {
+                    /*
                     if (errorList.length) {
-                        var s = errorList.shift();
-                        var n = [];
-                        n.push(s);
-                        this.errorList = n;
+                    var s = errorList.shift();
+                    var n = [];
+                    n.push(s);
+                    this.errorList = n;
+                    }*/
+                    totalErrors = errorList.length;
+                    if (errorList.length) {
+                        this.errorList = errorList.reverse()
                     }
                     this.defaultShowErrors();
                 },
@@ -526,7 +537,11 @@ $(document).on('pageshow', '[data-role=page]', function () {
                                 solo: true,
                                 ready: true
                             },
-                            hide: false,
+                            hide: {
+                                event: 'unfocus',
+                                inactive: 8000,
+                                target: $('input')
+                            },
                             style: {
                                 classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
                             }
@@ -542,7 +557,11 @@ $(document).on('pageshow', '[data-role=page]', function () {
                                 solo: true,
                                 ready: true
                             },
-                            hide: false,
+                            hide: {
+                                event: 'unfocus',
+                                inactive: 8000,
+                                target: $('input')
+                            },
                             style: {
                                 classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
                                 width: "88%"

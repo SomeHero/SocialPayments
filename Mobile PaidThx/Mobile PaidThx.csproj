@@ -181,6 +181,7 @@
     <Compile Include="HtmlHelpers\ProfileHelpers.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BankAccountModels.cs" />
+    <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\DonateModels.cs" />
     <Compile Include="Models\EmailsModels.cs" />
     <Compile Include="Models\FacebookUserModels.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Models\SharingModels.cs" />
     <Compile Include="Models\SignInModels.cs" />
+    <Compile Include="Models\SocialNetworkModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplicationServices.cs" />
     <Compile Include="Services\FacebookServices.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
     <Compile Include="Services\ResponseModels\UserConfigurationModels.cs" />
+    <Compile Include="Services\RoutingNumberServices.cs" />
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
@@ -722,6 +725,12 @@
     <Content Include="Views\Shared\TopMenu-App.cshtml" />
     <Content Include="Views\Paystream\PopupPinswipe.cshtml" />
     <Content Include="Views\Security\ChangeSecurityPinConfirm.cshtml" />
+    <Content Include="Views\Account\PasswordReset.cshtml" />
+    <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
+    <Content Include="Views\Donate\ConfirmPinSwipe.cshtml" />
+    <Content Include="Views\Donate\SecurityQuestion.cshtml" />
+    <Content Include="Views\Donate\SetupACHAccount.cshtml" />
+    <Content Include="Views\Donate\SetupPinSwipe.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

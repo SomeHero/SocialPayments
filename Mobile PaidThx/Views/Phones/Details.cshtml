@@ -18,8 +18,8 @@
             @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
-                <button type="submit" id="remove-mecode-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Remove this PayPoint</span></button>
+                 <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove ME Code</button>
             }
             </p>
         </div>
