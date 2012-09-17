@@ -223,6 +223,7 @@
     <Compile Include="Controllers\RoutingNumberController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\BatchTransactionsController.cs" />
+    <Compile Include="Controllers\BatchController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\UserAttributesController.cs" />
     <Compile Include="Controllers\UserConfigurationsController.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeyModels.cs" />
     <Compile Include="Models\MobileNumberSignUpKeySMSListenerModels.cs" />
+    <Compile Include="Models\TransactionBatchModels.cs" />
     <Compile Include="Models\TransactionModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

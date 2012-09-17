@@ -136,6 +136,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 messageStatus = message.Status.ToString(),
                 messageType = message.MessageType.ToString(),
                 recipientUri = message.RecipientUri,
+                recipientUriType = messageServices.GetURIType(message.RecipientUri).ToString(),
                 recipientName = message.RecipientName,
                 senderUri = message.SenderUri,
                 senderName = message.SenderName,

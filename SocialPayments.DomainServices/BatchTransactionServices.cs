@@ -23,6 +23,9 @@ namespace SocialPayments.DomainServices
                     .Include("Transactions")
                     .FirstOrDefault(b => b.Id.Equals(id));
 
+                if (batch == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Batch {0} Not Valid", batchId));
+
                 return batch;
             }
         }
