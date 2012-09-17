@@ -1,8 +1,9 @@
 ﻿@model Mobile_PaidThx.Models.JoinModels.JoinModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "page-join";
 }
-<div data-role="page" id="page-join" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -120,7 +121,7 @@
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              
 <script type="text/javascript">
-$(document).delegate('#page-join', 'pageshow', function () {
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
         $('#registration-form #password').qtip({
             content: {
                 text: $('#pass'),
@@ -188,105 +189,6 @@ $(document).delegate('#page-join', 'pageshow', function () {
 
         });
 
-/*
-        $("#frmSubmit").validate({
-            submitHandler: function (form) {
-                form.submit();
-            },
-            invalidHandler: function (form, validator) {
-                //invalid                
-            },
-            showErrors: function (errorMap, errorList) {
-                if (errorList.length) {
-                    var s = errorList.shift();
-                    var n = [];
-                    n.push(s);
-                    this.errorList = n;
-                }
-                this.defaultShowErrors();
-            },
-            onkeyup: false,
-            onfocusout: function (element) { $(element).valid(); },
-            errorClass: 'error',
-            validClass: 'valid',
-            rules: {
-                password: {
-                    required: true,
-                    minlength: 6,
-                    passwrdvalidator: true
-                },
-                confirmPassword: {
-                    required: true,
-                    equalTo: "#registration-form #password"
-                },
-                email: {
-                    required: true,
-                    email: true
-                }
-            },
-            messages: {
-                password: {
-                    required: "Please create a password to protect your account.",
-                    minlength: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
-                    //passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
-                },
-                confirmPassword: {
-                    required: "Please confirm your password",
-                    equalTo: "Please enter the same password as above"
-                },
-                email: {
-                    required: "Please enter your email address",
-                    email: "Please enter a valid email address"
-                }
-            },
-            errorPlacement: function (error, element) {
-                var elem = $(element);
-                // Check we have a valid error message
-                if (!error.is(':empty')) {
-
-                    // Apply the tooltip only if it isn't valid
-                    elem.filter(':not(.valid)').qtip({
-                        overwrite: true,
-                        content: error,
-                        position: {
-                            my: 'bottom center',
-                            at: 'top center'
-                        },
-                        show: {
-                            event: false,
-                            solo: true,
-                            ready: true
-                        },
-                        hide: false,
-                        style: {
-                            classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
-                        }
-                    }).qtip('destroy').qtip({
-                        overwrite: true,
-                        content: error,
-                        position: {
-                            my: 'bottom center',
-                            at: 'top center'
-                        },
-                        show: {
-                            event: false,
-                            solo: true,
-                            ready: true
-                        },
-                        hide: false,
-                        style: {
-                            classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
-                            width: "88%"
-
-                        }
-                    });
-                } else {
-                          elem.qtip('destroy');
-                }
-            },
-            success: $.noop
-        });
-        */
 
     });
     </script>

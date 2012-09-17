@@ -1,5 +1,10 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
-<div data-role="page" id="donate-pinswipe-page" @TempData["DataUrl"]>
+@{
+    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.PageID = "donate-pinswipe-page";
+}
+
+<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
         @Html.ValidationSummary()
        @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
@@ -30,23 +35,8 @@
         
         </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        function resizePIN() {
-
-            $(".hackstyle").remove();
-            var widthy = $(window).width();
-            divwidth = widthy * .93;
-
-            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
-
-        };
-
-        resizePIN();
-
-        $(window).resize(function () {
-            resizePIN();
-        });
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
     });
 </script>
 </div>
