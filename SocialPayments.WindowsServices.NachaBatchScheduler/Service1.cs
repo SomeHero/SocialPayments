@@ -32,16 +32,16 @@ namespace SocialPayments.WindowsServices.NachaBatchScheduler
             ISchedulerFactory schedFact = new StdSchedulerFactory();
 
             IScheduler sched = schedFact.GetScheduler();
-            Context ctx = new Context();
+            //Context ctx = new Context();
 
             //Get Holiday Calendar Days to Not Generate NACHA File
-            HolidayCalendar cal = new HolidayCalendar();
-            var calendar = ctx.Calendars.FirstOrDefault(c => c.CalendarCode == "NACHAHolidayCalendar");
-            foreach (var calendarDate in calendar.CalendarDates)
-            {
-                cal.AddExcludedDate(calendarDate.SelectedDate);
-            }
-            sched.AddCalendar("myHolidays", cal, true, true);
+            //HolidayCalendar cal = new HolidayCalendar();
+            //var calendar = ctx.Calendars.FirstOrDefault(c => c.CalendarCode == "NACHAHolidayCalendar");
+            //foreach (var calendarDate in calendar.CalendarDates)
+            //{
+            //    cal.AddExcludedDate(calendarDate.SelectedDate);
+            //}
+            //sched.AddCalendar("myHolidays", cal, true, true);
 
             JobDetail jobDetail = new JobDetail("myJob", null, typeof(CreateNachaFileJob));
 

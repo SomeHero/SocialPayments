@@ -42,7 +42,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             OriginatingTransitRoutingNumber = "053000111";
 
         }
-        public List<string> ProcessFile(ICollection<Transaction> transactions)
+        public List<string> ProcessFile(List<Models.Transaction> transactions)
         {
             DateTime processedDate = System.DateTime.Now;
             List<string> results = new List<string>();
@@ -98,7 +98,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             return sb.ToString();
         }
-        private string CreateBatchHeaderRecord(ICollection<Transaction> transactions, string standardEntryClass, string entryDescription, DateTime companyDescriptiveDate,
+        private string CreateBatchHeaderRecord(List<Models.Transaction> transactions, string standardEntryClass, string entryDescription, DateTime companyDescriptiveDate,
             DateTime effectiveEntryDate, string originatingTransitRoutingNumber, int batchNumber)
         {
             _logger.Log(LogLevel.Info, String.Format("Start Batch Header Record for {0} with {1}", batchNumber, transactions.Count));
@@ -127,15 +127,15 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             return sb.ToString();
         }
-        private string CreateBatchTrailerRecord(ICollection<Transaction> transactions, int batchNumber)
+        private string CreateBatchTrailerRecord(List<Models.Transaction> transactions, int batchNumber)
         {
             _logger.Log(LogLevel.Info, String.Format("Start Batch Trailer Record for {0} with {1}", batchNumber, transactions.Count));
 
             numberOfRecords += 1;
 
             string entryHash = CalcuateEntryHash(transactions);
-            double totalDebitAmount = transactions.Where(t => t.Type == TransactionType.Withdrawal).Sum(t => t.Amount);
-            double totalCreditAmount = transactions.Where(t => t.Type == TransactionType.Deposit).Sum(t => t.Amount);
+            double totalDebitAmount = transactions.Where(t => t.Type == "Withdrawal").Sum(t => t.Amount);
+            double totalCreditAmount = transactions.Where(t => t.Type == "Deposit").Sum(t => t.Amount);
 
             StringBuilder sb = new StringBuilder();
 
@@ -163,10 +163,10 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             return sb.ToString();
         }
 
-        private string CalcuateEntryHash(ICollection<Transaction> transactions)
+        private string CalcuateEntryHash(ICollection<Models.Transaction> transactions)
         {
             Int64 entryHash = 0;
-            foreach (Transaction transaction in transactions)
+            foreach (var transaction in transactions)
             {
                 try
                 {
@@ -188,15 +188,15 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             return entryHashString;
         }
 
-        private string CreateFileTrailerRecord(DateTime processedDate, ICollection<Transaction> transactions)
+        private string CreateFileTrailerRecord(DateTime processedDate, List<Models.Transaction> transactions)
         {
             _logger.Log(LogLevel.Info, String.Format("Start File Trailer Record for {0} with {1}", processedDate.ToString("MM/dd/yy hh:mm"), transactions.Count));
 
             numberOfRecords += 1;
 
             string entryHash = CalcuateEntryHash(transactions);
-            double totalDebitAmount = transactions.Where(t => t.Type == TransactionType.Withdrawal).Sum(t => t.Amount);
-            double totalCreditAmount = transactions.Where(t => t.Type == TransactionType.Deposit).Sum(t => t.Amount);
+            double totalDebitAmount = transactions.Where(t => t.Type == "Withdrawal").Sum(t => t.Amount);
+            double totalCreditAmount = transactions.Where(t => t.Type == "Deposit").Sum(t => t.Amount);
 
             StringBuilder sb = new StringBuilder();
 
@@ -223,7 +223,7 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
 
             return sb.ToString();
         }
-        private string CreateBatchDetailRecord(Transaction transaction)
+        private string CreateBatchDetailRecord(Models.Transaction transaction)
         {
             _logger.Log(LogLevel.Info, String.Format("Start Batch Detail Record for transaction {0}", transaction.Id));
 
@@ -235,16 +235,16 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             StringBuilder sb = new StringBuilder();
 
             sb.Append("6".PadLeft(1, ' '));     //Record Type Code
-            if (transaction.Type == TransactionType.Deposit)
+            if (transaction.Type == "Deposit")
             {
-                if (transaction.AccountType == AccountType.Checking)
+                if (transaction.AccountType == "Checking")
                     sb.Append("22".PadLeft(2, ' ')); //Transaction Code Deposit "Checking" account
                 else
                     sb.Append("32".PadLeft(2, ' ')); //Transaction Code Deposit "Savings" account
             }
             else
             {
-                if (transaction.AccountType == AccountType.Checking)
+                if (transaction.AccountType == "Checking")
                     sb.Append("27".PadLeft(2, ' ')); //Transaction Code Debit "Checking" account
                 else
                     sb.Append("37".PadLeft(2, ' ')); //Transaction Code Debit "Savings" account

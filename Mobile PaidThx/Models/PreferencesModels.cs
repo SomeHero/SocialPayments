@@ -12,6 +12,7 @@ namespace Mobile_PaidThx.Models
         public class ProfileModel
         {
             public List<ProfileSectionResponse> ProfileSections { get; set; }
+            public UserModels.UserResponse User { get; set; }
         }
         
         public class SocialNetworks

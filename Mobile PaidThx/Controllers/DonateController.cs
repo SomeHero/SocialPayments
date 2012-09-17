@@ -311,7 +311,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult PopupPinswipe()
         {
-            TempData["DataUrl"] = "data-url=/mobile/PopupPinSwipe";
+            TempData["DataUrl"] = "data-url=/mobile/Donate/PopupPinSwipe";
 
             var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
 

@@ -315,9 +315,10 @@ namespace SocialPayments.DomainServices.MessageProcessing
             //if recipient Uri Type is email address, Send Email
             if (recipientType == URIType.EmailAddress)
             {
-                _logger.Log(LogLevel.Info, String.Format("Send Email Message to Recipient - Not Registered"));
-
+                
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Request_NotRegistered_Email");
+
+                _logger.Log(LogLevel.Info, String.Format("Sending Email Message to Recipient - Not Registered using Template {0}", communicationTemplate.Template));
 
                 try
                 {

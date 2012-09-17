@@ -32,6 +32,7 @@ namespace SocialPayments.DomainServices
         {
             Guid organizationGuid;
             Domain.User organization = null;
+            var securityServices = new SecurityService();
 
             Guid.TryParse(organizationId, out organizationGuid);
 
@@ -47,7 +48,7 @@ namespace SocialPayments.DomainServices
             }
 
             return AddMessage(apiKey, organizationId, "", recipientUri, organization.PreferredReceiveAccount.Id.ToString(), amount, comments, "Pledge", 0.0, 0.0,
-                "", "", "", "");
+                "", "", "", securityServices.Decrypt(organization.SecurityPin));
 
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
@@ -137,7 +138,7 @@ namespace SocialPayments.DomainServices
 
                     ctx.SaveChanges();
 
-                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid"));
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
 
                 //if pinswipe is correct, reset lockout time and # of failures

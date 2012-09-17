@@ -18,6 +18,9 @@ namespace SocialPayments.DomainServices
         private IDbContext _ctx;
         private Logger _logger;
 
+        public TransactionBatchService()
+        { }
+
         public TransactionBatchService(IDbContext context, Logger logger)
         {
             _ctx = context;
@@ -61,27 +64,32 @@ namespace SocialPayments.DomainServices
         }
         public TransactionBatch CloseOpenBatch()
         {
-            var batch = _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false);
+            using (var ctx = new Context())
+            {
+                var batch = ctx.TransactionBatches
+                    .Include("Transactions")
+                    .FirstOrDefault(t => t.IsClosed == false);
 
-            batch.IsClosed = true;
-            batch.LastDateUpdated = System.DateTime.Now;
-            batch.ClosedDate = System.DateTime.Now;
+                batch.IsClosed = true;
+                batch.LastDateUpdated = System.DateTime.Now;
+                batch.ClosedDate = System.DateTime.Now;
 
-            _ctx.TransactionBatches.Add(new TransactionBatch()
-                {
-                    CreateDate = System.DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    IsClosed = false,
-                    TotalDepositAmount = 0,
-                    TotalNumberOfDeposits = 0,
-                    TotalWithdrawalAmount = 0,
-                    TotalNumberOfWithdrawals = 0,
-                    Transactions = new Collection<Transaction>()
-                });
+                ctx.TransactionBatches.Add(new TransactionBatch()
+                    {
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IsClosed = false,
+                        TotalDepositAmount = 0,
+                        TotalNumberOfDeposits = 0,
+                        TotalWithdrawalAmount = 0,
+                        TotalNumberOfWithdrawals = 0,
+                        Transactions = new Collection<Transaction>()
+                    });
 
-            _ctx.SaveChanges();
+                ctx.SaveChanges();
 
-            return batch;
+                return batch;
+            }
         }
         public void AddTransactionsToBatch(Collection<Transaction> transactions)
         {

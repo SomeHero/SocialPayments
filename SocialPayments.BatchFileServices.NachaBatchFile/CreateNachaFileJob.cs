@@ -9,19 +9,16 @@ using System.IO;
 using Amazon.S3.Model;
 using System.Configuration;
 using NLog;
-using SocialPayments.DataLayer;
 
 namespace SocialPayments.BatchFileServices.NachaBatchFile
 {
     public class CreateNachaFileJob: IJob
     {
-        private readonly Context _ctx = new Context();
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private TransactionBatchService transactionBatchService;
         public CreateNachaFileJob()
-        {
-            transactionBatchService = new DomainServices.TransactionBatchService(_ctx, logger);
-        }
+        {}
+
         public void Execute(JobExecutionContext context)
         {
             //Get Current Batch
@@ -31,16 +28,18 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
             logger.Log(LogLevel.Info, String.Format("Creating Nacha ACH File at {0}", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")));
 
             logger.Log(LogLevel.Info, String.Format("Batching Transactions"));
-            Domain.TransactionBatch transactionBatch = null;
+            var batchServices = new Services.BatchServices();
+            Models.TransactionBatch transactionBatch = null;
+
 
             try
             {
-                transactionBatch = CloseOpenBatch();
+                transactionBatch = batchServices.BatchTransactions();
 
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Info, String.Format("Batching Transactions Exception {0}", ex.Message));
+                logger.Log(LogLevel.Info, String.Format("Batching Transactions Exception: {0}. Stack Trace: {1}", ex.Message, ex.StackTrace));
 
                 Exception innerException = ex.InnerException;
 
@@ -104,22 +103,21 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 }
 
                 //Move all payments where we made the deposit to Sent To Bank
-                foreach (var transaction in transactionBatch.Transactions)
-                {
-                    transaction.Status = TransactionStatus.Complete;
-                    transaction.SentDate = System.DateTime.Now;
+                //foreach (var transaction in transactionBatch.Transactions)
+                //{
+                //    transaction.Status = TransactionStatus.Complete;
+                //    transaction.SentDate = System.DateTime.Now;
 
-                    if (transaction.Payment == null)
-                        continue;
+                //    if (transaction.Payment == null)
+                //        continue;
 
-                    if (transaction.Type == TransactionType.Deposit)
-                    {
-                        transaction.Payment.PaymentStatus = PaymentStatus.Complete;
-                        transaction.Payment.Message.Status = PaystreamMessageStatus.ProcessedPayment;
-                    }
-                }
+                //    if (transaction.Type == TransactionType.Deposit)
+                //    {
+                //        transaction.Payment.PaymentStatus = PaymentStatus.Complete;
+                //        transaction.Payment.Message.Status = PaystreamMessageStatus.ProcessedPayment;
+                //    }
+                //}
 
-                _ctx.SaveChanges();
                 //Update Batch File
                 //Start BatchFile Workflow
             }

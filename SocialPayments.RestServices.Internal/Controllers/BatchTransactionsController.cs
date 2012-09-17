@@ -57,14 +57,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 CreateDate = formattingService.FormatDateTimeForJSON(t.CreateDate),
                 Id = t.Id,
                 LastUpdatedDate = formattingService.FormatDateTimeForJSON(t.LastUpdatedDate),
-                PaymentAccount = new AccountModels.AccountResponse()
-                {
-                    AccountNumber = securityService.Decrypt(t.AccountNumber),
-                    AccountType = t.AccountType.ToString(),
-                    NameOnAccount = securityService.Decrypt(t.NameOnAccount),
-                    RoutingNumber = securityService.Decrypt(t.RoutingNumber)//,
-                    // UserId = t.FromAccount.UserId.ToString()
-                },
+                AccountNumber =  "****" + securityService.GetLastFour(securityService.Decrypt(t.AccountNumber)),
+                AccountType = t.AccountType.ToString(),
+                NameOnAccount = securityService.Decrypt(t.NameOnAccount),
+                RoutingNumber = securityService.Decrypt(t.RoutingNumber),
                 PaymentChannelType = t.PaymentChannelType.ToString(),
                 StandardEntryClass = t.StandardEntryClass.ToString(),
                 Status = t.Status.ToString(),

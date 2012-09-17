@@ -9,10 +9,9 @@
 
     <div data-role="content" class="content-margin">
            @Html.ValidationSummary()
-       @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+       @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
        {
-        <div style="height: 1px; width: 100%; background: #666666">
-        </div>
+
         <div style="margin: 10px">
                  <a href="@Url.Content("~/Pledge/AddCause")" data-prefetch data-transition="slide">
                  <button type="button" class="imgbtn field-btn" data-role="none">

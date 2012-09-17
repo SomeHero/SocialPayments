@@ -12,12 +12,13 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile.Models
         public int TotalNumberOfWithdrawals { get; set; }
         public double TotalDepositAmount { get; set; }
         public double TotalWithdrawalAmount { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? ClosedDate { get; set; }
-        public DateTime? VerifiedDate { get; set; }
-        public DateTime? SentDate { get; set; }
-        public DateTime? LastDateUpdated { get; set; }
+        public string CreateDate { get; set; }
+        public string ClosedDate { get; set; }
+        public string VerifiedDate { get; set; }
+        public string SentDate { get; set; }
+        public string LastDateUpdated { get; set; }
         public bool IsClosed { get; set; }
+        public List<Transaction> Transactions { get; set; }
     }
     public class Transaction
     {
@@ -38,10 +39,10 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile.Models
         public int PaymentChannelTypeValue { get; set; }
         public string PaymentChannelType { get; set; }
         public string IndividualIdentifier { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? SentDate { get; set; }
-        public DateTime? LastUpdatedDate { get; set; }
-        public DateTime? ReturnedDate { get; set; }
+        public string CreateDate { get; set; }
+        public string SentDate { get; set; }
+        public string LastUpdatedDate { get; set; }
+        public string ReturnedDate { get; set; }
         public int PaymentId { get; set; }
     }
 }
