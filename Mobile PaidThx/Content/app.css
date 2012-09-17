@@ -2143,6 +2143,8 @@ input[type="text"], input[type="password"], input[type="email"], input[type="num
 {
  box-shadow: 0 0 5px #e8e9eb inset; 
  border:1px solid #d5d9da;  
+ font-weight:bold;
+ color:#333333;
 }
 
 span.form-holder {
@@ -2218,7 +2220,10 @@ background-color:#f2f2f2;
 {
 background-color:transparent; 
 }
-
+input.error
+{
+  color:#333333;  
+}
 .ui-tooltip.tip-error .ui-tooltip-content{
    font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
 	font-size:13px;
