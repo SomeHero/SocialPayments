@@ -19,27 +19,33 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 var messageService = new MessageServices();
                 var transactionBatchService = new TransactionBatchService(ctx, _logger);
 
-                var message = messageService.GetMessage(messageId);
+                var message = ctx.Messages.FirstOrDefault(m => m.Id == messageId);
+
+                if (message == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
 
                 message.Status = PaystreamMessageStatus.CancelledPayment;
+                message.LastUpdatedDate = System.DateTime.Now;
 
                 if (message.Payment != null)
                 {
-                    //_logger.Log(LogLevel.Debug, String.Format("Removing {0} item(s) from batch", message.Payment.Transactions.Count));
 
-                    //transactionBatchService.RemoveTransactionsFromBatch(message.Payment.Transactions);
+                    foreach (var transaction in message.Payment.Transactions)
+                    {
+                        if (transaction.TransactionBatch != null)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Removing Transaction {0} from Batch {1}", transaction.Id, transaction.TransactionBatchId));
 
-                    //foreach (var transaction in message.Payment.Transactions)
-                    //{
-                    //    transaction.Status = TransactionStatus.Cancelled;
-                    //    transaction.LastUpdatedDate = System.DateTime.Now;
-                    //}
+                            transaction.TransactionBatch = null;
+                        }
+                        transaction.Status = TransactionStatus.Cancelled;
+                        transaction.LastUpdatedDate = System.DateTime.Now;
 
-                    //message.Payment.PaymentStatus = PaymentStatus.Cancelled;
-                    //message.LastUpdatedDate = System.DateTime.Now;
+                    }
 
-                    
+                    message.Payment.PaymentStatus = PaymentStatus.Cancelled;
                 }
+
 
                 ctx.SaveChanges();
 

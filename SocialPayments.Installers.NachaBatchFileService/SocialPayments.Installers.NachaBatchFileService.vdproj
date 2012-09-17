@@ -1186,7 +1186,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NACHA File Processor"
         "ProductCode" = "8:{E8EA936E-B941-448C-905C-958AE188D159}"
-        "PackageCode" = "8:{AAA1DAAB-F96C-45B8-AC43-267A1AA3776A}"
+        "PackageCode" = "8:{90B71FFF-31BF-4FE4-A6A1-253488203808}"
         "UpgradeCode" = "8:{1824B802-02D6-4EF0-AD21-6E7542ECA8D0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

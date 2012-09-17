@@ -33,5 +33,6 @@ namespace SocialPayments.DomainServices
                 return batch;
             }
         }
+
     }
 }

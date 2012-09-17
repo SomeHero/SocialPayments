@@ -262,39 +262,6 @@ namespace SocialPayments.DomainServices
             return AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "PaymentRequest", latitude, longitude, recipientFirstName,
                 recipientLastName, recipientImageUri, securityPin);
         }
-        public void CancelMessage(string id)
-        {
-            using (var ctx = new Context())
-            {
-                Guid messageId;
-
-                Guid.TryParse(id, out messageId);
-
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
-
-                if (message == null)
-                    throw new ArgumentException("Invalid Message Id.", "Id");
-
-                try
-                {
-                    message.LastUpdatedDate = System.DateTime.Now;
-                    if (message.MessageType == MessageType.Payment)
-                        message.Status = PaystreamMessageStatus.CancelledPayment;
-                    else
-                        message.Status = PaystreamMessageStatus.CancelledRequest;
-
-                    message.WorkflowStatus = PaystreamMessageWorkflowStatus.Pending;
-
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
-            }
-        }
         public void CancelPayment(string id)
         {
             using (var _ctx = new Context())
@@ -330,7 +297,13 @@ namespace SocialPayments.DomainServices
                 _ctx.SaveChanges();
 
                 //TODO: Start Domain service to remove from batch and kick out any emails
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    CancelledPaymentMessageTask task = new CancelledPaymentMessageTask();
+                    task.Execute(message.Id);
 
+                });
             }
         }
         public void CancelRequest(string id)
