@@ -36,11 +36,11 @@ var validationController = (function ($, undefined) {
     function isValidEmailAddress(emailAddress) {
         var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
         return pattern.test(emailAddress);
-    };
+    }
     function isValidPhoneNumber(num) {
         var pattern = new RegExp(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
         return pattern.test(num);
-    };
+    }
 
     return pub;
 } (jQuery));
@@ -48,6 +48,9 @@ var validationController = (function ($, undefined) {
 var isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
 var isiPhone = /iphone/i.test(navigator.userAgent.toLowerCase());
 var totalErrors = 0;
+jQuery.expr[':'].focus = function( elem ) {
+  return elem === document.activeElement && ( elem.type || elem.href );
+};
 
 var paystreamController = (function ($, undefined) {
     var pub = {},
@@ -479,35 +482,21 @@ $(document).on('pageshow', '[data-role=page]', function () {
                     var n = [];
                     n.push(s);
                     this.errorList = n;
-                    }*/
+                    }
                     totalErrors = errorList.length;
                     if (errorList.length) {
-                        this.errorList = errorList.reverse()
+                    this.errorList = errorList.reverse();
                     }
+                    */
                     this.defaultShowErrors();
                 },
                 onkeyup: false,
                 onfocusout: function (element) { $(element).valid(); },
                 errorClass: 'error',
                 validClass: 'valid',
-                /*rules: {
-                password: {
-                required: true,
-                minlength: 6,
-                passwrdvalidator: true
-                },
-                confirmPassword: {
-                required: true,
-                equalTo: "#registration-form #password"
-                },
-                email: {
-                required: true,
-                email: true
-                }
-                },*/
                 messages: {
                     password: {
-                        required: "Please create a password to protect your account.",
+                        required: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number.",
                         passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
                     },
                     confirmPassword: {
@@ -520,7 +509,15 @@ $(document).on('pageshow', '[data-role=page]', function () {
                     }
                 },
                 errorPlacement: function (error, element) {
+
+                    var formm = $(element).closest("form");
                     var elem = $(element);
+                    formElements = [];
+
+                    $(formm).find(':input').each(function () {
+                        formElements.push();
+                    })
+
                     // Check we have a valid error message
                     if (!error.is(':empty')) {
 
@@ -533,41 +530,27 @@ $(document).on('pageshow', '[data-role=page]', function () {
                                 at: 'top center'
                             },
                             show: {
-                                event: false,
+                                event: 'focus',
                                 solo: true,
                                 ready: true
                             },
                             hide: {
-                                event: 'unfocus',
-                                inactive: 8000,
-                                target: $('input')
+                                event: 'unfocus'
                             },
                             style: {
-                                classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error'
-                            }
-                        }).qtip('destroy').qtip({
-                            overwrite: true,
-                            content: error,
-                            position: {
-                                my: 'bottom center',
-                                at: 'top center'
-                            },
-                            show: {
-                                event: false,
-                                solo: true,
-                                ready: true
-                            },
-                            hide: {
-                                event: 'unfocus',
-                                inactive: 8000,
-                                target: $('input')
-                            },
-                            style: {
-                                classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-shadow ui-tooltip-light tip-error',
+                                classes: 'ui-tooltip-red qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light tip-error',
                                 width: "88%"
+                            },
+                            events: {
+                                show: function (event, api) {
 
+                                    if (!$(elem).is(":focus")) {
+                                        event.preventDefault();
+                                    }
+                                }
                             }
-                        });
+                        })// If we have a tooltip on this element already, just update its content
+					.qtip('option', 'content.text', error);
                     } else {
                         elem.qtip('destroy');
                     }
@@ -580,7 +563,5 @@ $(document).on('pageshow', '[data-role=page]', function () {
         //catching
         return false;
     }
-
-    //$('input, textarea').placeholder();
 
 });
