@@ -17,7 +17,22 @@
                 <ul data-role="listview" data-inset="true">
                 @foreach (var profileItem in profileSection.ProfileItems)
                 {
-                    <li>@profileItem.Label</li>
+                    string value = "";
+                    var attribute = Model.User.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
+                    if (attribute != null)
+                    {
+                        value = attribute.AttributeValue;
+                    }
+                    
+                    <li data-role="fieldcontain">
+                    <label for="@profileItem.Id">@profileItem.Label</label>
+                    @switch (profileItem.ItemType)
+                    {
+                        case "ShortText":
+                            <text><input type="text" name="@profileItem.Id" value="@value" /></text>
+                            break;
+                    }
+                    </li>
                 } 
                 </ul>
             }

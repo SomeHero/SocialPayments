@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/DoGood";
+            TempData["DataUrl"] = "data-url=/mobile/DoGood";
             
             return View();
         }
@@ -55,7 +55,7 @@ namespace Mobile_PaidThx.Controllers
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 
@@ -88,7 +88,7 @@ namespace Mobile_PaidThx.Controllers
             var userId = Session["UserId"].ToString();
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 

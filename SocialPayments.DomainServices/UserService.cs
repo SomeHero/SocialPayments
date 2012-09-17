@@ -123,6 +123,7 @@ namespace SocialPayments.DomainServices
             foreach (var message in messages)
             {
                 message.Recipient = user;
+                message.Status = PaystreamMessageStatus.ProcessingPayment;
             }
 
             _ctx.SaveChanges();
@@ -139,47 +140,58 @@ namespace SocialPayments.DomainServices
                 if (message.Recipient == null)
                 {
                     message.Recipient = user;
-                    message.Status = PaystreamMessageStatus.ProcessingPayment;
-
-                    UserPayPoint messagePayPoint;
-
-                    switch (GetURIType(message.RecipientUri))
-                    {
-                        case URIType.EmailAddress:
-                            if (message.RecipientUri != user.EmailAddress)
-                            {
-                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                                {
-                                    CreateDate = System.DateTime.Now,
-                                    Id = Guid.NewGuid(),
-                                    PayPointTypeId = 1,
-                                    URI = message.RecipientUri,
-                                    User = user
-                                });
-
-                                SendEmailVerificationLink(messagePayPoint);
-                            }
-
-                            break;
-                        case URIType.MobileNumber:
-
-                            if (message.RecipientUri != user.MobileNumber)
-                            {
-                                messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                                {
-                                    CreateDate = System.DateTime.Now,
-                                    Id = Guid.NewGuid(),
-                                    PayPointTypeId = 2,
-                                    URI = message.RecipientUri,
-                                    User = user
-                                });
-
-                                SendMobileVerificationCode(messagePayPoint);
-                            }
-                            break;
-                    }
-
                 }
+                switch (message.MessageType)
+                {
+                    case MessageType.Payment:
+                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        break;
+                    case MessageType.PaymentRequest:
+                        message.Status = PaystreamMessageStatus.NotifiedRequest;
+                        break;
+                    case MessageType.Donation:
+                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        break;
+                }
+
+                UserPayPoint messagePayPoint;
+
+                switch (GetURIType(message.RecipientUri))
+                {
+                    case URIType.EmailAddress:
+                        if (message.RecipientUri != user.EmailAddress)
+                        {
+                            messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                            {
+                                CreateDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 1,
+                                URI = message.RecipientUri,
+                                User = user
+                            });
+
+                            SendEmailVerificationLink(messagePayPoint);
+                        }
+
+                        break;
+                    case URIType.MobileNumber:
+
+                        if (message.RecipientUri != user.MobileNumber)
+                        {
+                            messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
+                            {
+                                CreateDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PayPointTypeId = 2,
+                                URI = message.RecipientUri,
+                                User = user
+                            });
+
+                            SendMobileVerificationCode(messagePayPoint);
+                        }
+                        break;
+                }
+
 
                 _ctx.SaveChanges();
             }
@@ -397,7 +409,7 @@ namespace SocialPayments.DomainServices
 
                 Guid.TryParse(userId, out userGuid);
 
-                if(userGuid == null)
+                if (userGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 var user = ctx.Users
@@ -867,7 +879,7 @@ namespace SocialPayments.DomainServices
                     .Include("SecurityQuestion")
                     .FirstOrDefault(u => u.UserId == userGuid);
 
-                if(user == null)
+                if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
 
                 if (user.SecurityQuestion != null)
@@ -900,12 +912,12 @@ namespace SocialPayments.DomainServices
 
                 application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationId);
 
-                if(application == null)
+                if (application == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} is Invalid", apiKey));
 
                 user = ctx.Users.FirstOrDefault(u => u.UserName == userName || u.MobileNumber == userName);
-                
-                if(user == null)
+
+                if (user == null)
                     throw new CustomExceptions.BadRequestException(String.Format("User {0} is Invalid", userName));
 
                 name = formattingService.FormatUserName(user);

@@ -28,6 +28,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View(new PreferencesModels.ProfileModel()
             {
+                User = (UserModels.UserResponse)Session["User"],
                 ProfileSections = application.ProfileSections
             });
         }

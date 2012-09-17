@@ -246,7 +246,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SecurityQuestion(SecurityQuestionModel model)
         {
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn");
+                return RedirectToAction("Index", "SignIn");
 
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
@@ -290,14 +290,16 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult PopupPinswipe()
         {
-            TempData["DataUrl"] = "data-url=/mobile/PinSwipe";
-            
+            TempData["DataUrl"] = "data-url=/mobile/Request/PinSwipe";
+
+            var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
+
             return View(new RequestModels.PinSwipeModel()
             {
-                RecipientUri = (Session["RecipientUri"] != null ? Session["RecipientUri"].ToString() : ""),
-                RecipientName = (Session["RecipientName"] != null ? Session["RecipientName"].ToString() : ""),
-                RecipientImageUrl = (Session["RecipientImageUrl"] != null ? Session["RecipientImageUrl"].ToString() : ""),
-                Amount = (Session["Amount"] != null ? Convert.ToDouble(Session["Amount"]) : 0),
+                RecipientUri = requestInformation.RecipientUri,
+                RecipientName = requestInformation.RecipientName,
+                RecipientImageUrl = requestInformation.RecipientImageUrl,
+                Amount = requestInformation.Amount
             });
         }
 
@@ -307,7 +309,7 @@ namespace Mobile_PaidThx.Controllers
             //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
             if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
+                return RedirectToAction("Index", "SignIn", null);
 
             var userId = Session["UserId"].ToString();
 
