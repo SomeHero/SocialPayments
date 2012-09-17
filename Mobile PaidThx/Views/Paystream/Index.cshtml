@@ -114,7 +114,7 @@
             <div class="ui-btn-inner ui-li">
 
                 <div class="ui-btn-text">
-                    <a onclick="openOffersDialog();" class="ui-link-inherit" messageId="${Id}">
+                    <a class="closePaystreamItem ui-link-inherit" messageId="${Id}">
 
                         <span class="trans-type">
 
@@ -331,10 +331,13 @@
 
             paystreamController.displayPaystreamDetail(messageId);
         });
+        $('.closePaystreamItem').die('click').live('click', function () {
+            paystreamController.closeDetailDialog(function() {});
+        });
         $('.cancel-payment').die('click').live('click', function () {
             var messageId = $(this).attr("messageId");
 
-            paystreamController.showPinSwipe();
+            paystreamController.cancelPayment(messageId);
         });
         $('.send-reminder-payment').die('click').live('click', function () {
             alert('sending reminder');
@@ -348,10 +351,14 @@
             alert('sending reminder');
         });
         $('.accept-payment-request').die('click').live('click', function () {
-            alert('accept payment request');
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.acceptRequest(messageId);
         });
         $('.reject-payment-request').die('click').live('click', function () {
-            alert('reject payment request');
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.rejectRequest(messageId);
         });
         //delegate event binding since the search widget is added dynamically
         //bind to the `keyup` event so we can check the value of the input after the user types
@@ -375,10 +382,10 @@
 
     });
     </script>
-</div>
-<div id="popup" class="paystream-dialog">
+    <div id="popup" class="paystream-dialog">
     
 </div>
 
 <div id="overlay" class="overlay">
+</div>
 </div>

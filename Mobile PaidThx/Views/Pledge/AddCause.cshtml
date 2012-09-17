@@ -19,7 +19,7 @@
             foreach (var nonprofit in alphaGroup.Value)
             {
             <li>
-            <a class="organization-pledge" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
+            <a class="organization-pledge" recipient-id="@nonprofit.Id" organization-name="@nonprofit.Name">
                 <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
                     <img style="float:left; padding-right:10px; width:50px; height:50px" src="@nonprofit.ImageUri" />
                     @if (nonprofit.HasInfo)

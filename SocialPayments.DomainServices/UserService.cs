@@ -833,6 +833,7 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.BadRequestException("Password reset link is invalid");
 
                 var passwordResetDb = ctx.PasswordResetAttempts
+                    .Include("User")
                     .Include("User.SecurityQuestion")
                         .FirstOrDefault(p => p.Id == passwordResetAttemptGuid);
 
@@ -851,32 +852,34 @@ namespace SocialPayments.DomainServices
                 return passwordResetDb;
             }
         }
-        public User ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
+        public void ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
         {
-            var user = GetUserById(userId);
-
-            if (user == null)
+            using (var ctx = new Context())
             {
-                var error = @"User Not Found";
+                Guid userGuid;
 
-                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", userId, error));
+                Guid.TryParse(userId, out userGuid);
 
-                throw new ArgumentException(String.Format("User {0} Not Found", userId), "userId");
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                var user = ctx.Users
+                    .Include("SecurityQuestion")
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if(user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                if (user.SecurityQuestion != null)
+                {
+                    if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
+                        throw new CustomExceptions.BadRequestException(String.Format("Unable to reset password. Security Question Answer Not Correct"));
+                }
+
+                user.Password = securityService.Encrypt(newPassword);
+
+                ctx.SaveChanges();
             }
-
-            if (!securityQuestionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer)))
-            {
-                var error = @"Security Question Incorrect";
-
-                _logger.Log(LogLevel.Error, String.Format("Unable to reset password for {0}. {1}", userId, error));
-
-                throw new ArgumentException("Incorrect SecurityQuestion", "securityQuestionAnswer");
-            }
-
-            user.Password = securityService.Encrypt(newPassword);
-            UpdateUser(user);
-
-            return user;
         }
 
         public void SendResetPasswordLink(string apiKey, string userName)

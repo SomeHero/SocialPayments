@@ -15,19 +15,42 @@ namespace SocialPayments.DomainServices
             {
                 UserService userService = new UserService(_ctx);
                 FormattingServices formattingService = new FormattingServices();
+                ValidationService validationService = new ValidationService();
 
-                var user = userService.GetUserById(userId);
+                Guid userGuid;
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+   
+                var user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
 
                 if (user == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found"));
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 var payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == payPointTypeName);
 
                 if (payPointType == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Pay Point Type {0} not found", uri));
 
-                if (payPointType.Name == "Phone")
-                    uri = formattingService.RemoveFormattingFromMobileNumber(uri);
+                string unformattedUri = uri;
+                if (payPointType.Name == "Phone") {
+                        uri = formattingService.RemoveFormattingFromMobileNumber(uri);
+
+                    if (!validationService.IsPhoneNumber(uri))
+                        throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid phone number", unformattedUri));
+                }
+                if (payPointType.Name == "Email")
+                {
+                    if (!validationService.IsEmailAddress(uri))
+                        throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid email address", unformattedUri));
+                }
+                if (payPointType.Name == "MeCode")
+                {
+                    if (!validationService.IsMECode(uri))
+                        throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid Me Code", unformattedUri));
+                }
 
                 var payPoints = _ctx.UserPayPoints.FirstOrDefault(p => p.URI == uri);
 
@@ -125,15 +148,28 @@ namespace SocialPayments.DomainServices
             {
                 UserService userService = new UserService();
                 UserPayPointServices userPayPointServices = new UserPayPointServices();
-                Domain.User user = new Domain.User();
                 Domain.UserPayPoint userPayPoint = new Domain.UserPayPoint();
 
-                user = userService.GetUser(userId);
+                Guid userGuid;
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                var user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
 
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
-                userPayPoint = GetUserPayPoint(userId, userPayPointId);
+                Guid userPayPointGuid;
+                Guid.TryParse(userPayPointId, out userPayPointGuid);
+
+                if (userPayPointGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Pay Point {0} Not Found", userPayPointId));
+
+                userPayPoint = _ctx.UserPayPoints
+                    .FirstOrDefault(p => p.UserId == user.UserId && p.Id == userPayPointGuid);
 
                 if (userPayPoint == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Pay Point {0} Not Found", userPayPointId));

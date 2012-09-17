@@ -1,3 +1,16 @@
+var webServicesController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+
+    pub.getBaseURL = function () {
+        return getBaseURL();
+    };
+    function getBaseURL() {
+        return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+    }
+
+    return pub;
+} (jQuery));
 var formattingController = (function($, undefined) {
     var pub = {},
     $this = $(this);
@@ -107,57 +120,24 @@ var paystreamController = (function ($, undefined) {
         });
     };
     pub.cancelPayment = function (id) {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
-        //Get news and add success callback using then
-        cancelPayment(id, function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
-
-            $.mobile.changePage("/mobile/paystream");
-        });
+        showPinSwipe("CancelPayment", id);
     };
     pub.cancelRequest = function (id) {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
-        //Get news and add success callback using then
-        cancelRequest(id, function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
-
-            $.mobile.changePage("/mobile/paystream");
-        });
+        showPinSwipe("CancelRequest", id);
     };
     pub.acceptRequest = function (id) {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
-        //Get news and add success callback using then
-        acceptRequest(id, function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
-
-            $.mobile.changePage("/mobile/paystream");
-        });
+        showPinSwipe("AcceptRequest", id);
     };
     pub.rejectRequest = function (id) {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
-        //Get news and add success callback using then
-        rejectRequest(id, function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
-
-            $.mobile.changePage("/mobile/paystream");
-        });
+        showPinSwipe("RejectRequest", id);
     };
-    pub.showPinSwipe = function () {
+    function showPinSwipe(action, id) {
         closeDetailDialog(function () {
-            $.mobile.changePage("/mobile/paystream/popuppinswipe",
-                { transition: "slideup",
+
+            $.mobile.changePage("/mobile/paystream/PopupPinSwipe?paystreamAction=" + action + "&messageId=" + id,
+                {
+                    type: "GET",
+                    transition: "slideup",
                     reverse: "false",
                     changehash: "false"
                 });

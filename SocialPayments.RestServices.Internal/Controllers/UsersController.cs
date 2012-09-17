@@ -564,7 +564,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(new UserModels.ValidatePasswordResetAttemptResponse() {
               HasSecurityQuestion = !(passwordResetAttempt.User.SecurityQuestion == null),
-              SecurityQuestion = passwordResetAttempt.User.SecurityQuestion.Question,
+              SecurityQuestion = (passwordResetAttempt.User.SecurityQuestion != null ? passwordResetAttempt.User.SecurityQuestion.Question : ""),
               UserId = passwordResetAttempt.UserId.ToString()
             }, HttpStatusCode.OK);
 
@@ -617,14 +617,41 @@ namespace SocialPayments.RestServices.Internal.Controllers
         //POST api/users/reset_password
         public HttpResponseMessage ResetPassword(UserModels.ResetPasswordRequest request)
         {
+            _logger.Log(LogLevel.Info, String.Format("Reset Password for User {0}", request.userId));
+
             HttpResponseMessage response = null;
+            var userServices = new DomainServices.UserService();
+            
             try
             {
-                //userServices.ResetPassword(request.userId, request.securityQuestion, request.newPassword);
+                userServices.ResetPassword(request.userId, request.securityQuestionAnswer, request.newPassword);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Reseting Password for {0}. Exception {1}", request.userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Reseting Password for {0}. Exception {1}", request.userId, ex.Message));
+
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Reseting Password for {0}. Exception {1}. Stack Trace {2}", request.userId, ex.Message, ex.StackTrace));
 
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.ReasonPhrase = ex.Message;
+
+                return response;
             }
 
             response = new HttpResponseMessage(HttpStatusCode.OK);

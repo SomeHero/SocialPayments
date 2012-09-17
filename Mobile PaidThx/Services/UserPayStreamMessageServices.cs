@@ -12,6 +12,7 @@ namespace Mobile_PaidThx.Services
     {
 
         private string _userPayStreamServiceGetUrl = "{0}/Users/{1}/PaystreamMessages";
+        private string _userPayStreamServicesBaseUrl = "{0}/Users/{1}/PaystreamMessages/{2}";
 
         public List<MessageModels.MessageResponse> GetMessages(string userId)
         {
@@ -25,6 +26,19 @@ namespace Mobile_PaidThx.Services
             var paystream = js.Deserialize<List<MessageModels.MessageResponse>>(response.JsonResponse);
 
             return paystream;
+        }
+        public MessageModels.MessageResponse GetMessage(string userId, string messageId)
+        {
+            var serviceUrl = String.Format(_userPayStreamServicesBaseUrl, _webServicesBaseUrl, userId, messageId);
+
+            var response = Get(serviceUrl);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception(response.JsonResponse);
+
+            var js = new JavaScriptSerializer();
+
+            return js.Deserialize<MessageModels.MessageResponse>(response.JsonResponse);
         }
 
     }

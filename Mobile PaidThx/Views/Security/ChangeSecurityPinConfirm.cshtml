@@ -11,11 +11,10 @@
     </div>
     <div data-role="content" style="margin: 15px;">
     @Html.ValidationSummary()
-      
                 <div class="top-panel">
    
-        <p>Now swipe a new security pin.</p></div>
-        @using (Html.BeginForm("ChangeSecurityPinNew", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
+        <p>Confirm your new security pin by swiping it again.</p></div>
+        @using (Html.BeginForm("ChangeSecurityPinConfirm", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
             <div style="margin-top:15px">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />

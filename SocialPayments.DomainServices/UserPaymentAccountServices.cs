@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
@@ -164,12 +165,13 @@ namespace SocialPayments.DomainServices
                 return account;
             }
         }
-        public void SetPreferredSendAccount(string userId, string paymentAccountId)
+        public void SetPreferredSendAccount(string userId, string paymentAccountId, string securityPin)
         {
             using (var _ctx = new Context())
             {
                 DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
                 DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
 
                 var user = _userService.GetUserById(userId);
 
@@ -180,6 +182,9 @@ namespace SocialPayments.DomainServices
 
                 if (paymentAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment Account {0} Not Found", paymentAccountId));
+
+                if (!(securityService.Encrypt(securityPin).Equals(user.SecurityPin)))
+                    throw new CustomExceptions.BadRequestException("Unable to Change Preferred Send Account. Security Pin Invalid");
 
                 user.PreferredSendAccount = paymentAccount;
 
@@ -187,12 +192,13 @@ namespace SocialPayments.DomainServices
 
             }
         }
-        public void SetPreferredReceiveAccount(string userId, string paymentAccountId)
+        public void SetPreferredReceiveAccount(string userId, string paymentAccountId, string securityPin)
         {
             using (var _ctx = new Context())
             {
                 DomainServices.UserService _userService = new DomainServices.UserService(_ctx);
                 DomainServices.PaymentAccountService paymentAccountService = new DomainServices.PaymentAccountService(_ctx);
+                DomainServices.SecurityService securityService = new DomainServices.SecurityService();
 
                 var user = _userService.GetUserById(userId);
 
@@ -203,6 +209,9 @@ namespace SocialPayments.DomainServices
 
                 if (paymentAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment Account {0} Not Found", paymentAccountId));
+
+                if (!(securityService.Encrypt(securityPin).Equals(user.SecurityPin)))
+                    throw new CustomExceptions.BadRequestException("Unable to Change Preferred Send Account. Security Pin Invalid");
 
                 user.PreferredReceiveAccount = paymentAccount;
 
@@ -305,18 +314,22 @@ namespace SocialPayments.DomainServices
             {
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
                 DomainServices.UserService _userService = new DomainServices.UserService();
+
+                Guid userGuid;
+                Guid.TryParse(userId, out userGuid);
+
+                var user = _ctx.Users
+                    .Include("PaymentAccounts")
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", user.UserId));
+
                 Guid paymentAccountGuid;
-
-
                 Guid.TryParse(paymentAccountId, out paymentAccountGuid);
 
                 if (paymentAccountGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment Account {0} Not Found"));
-
-                var user = _userService.GetUserById(userId);
-
-                if (user == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", user.UserId));
 
                 var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == paymentAccountGuid);
 

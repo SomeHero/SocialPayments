@@ -358,7 +358,7 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
-                if (message.Status != PaystreamMessageStatus.SubmittedRequest && message.Status != PaystreamMessageStatus.NotifiedRequest)
+                if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Request {0} Cannot be Cancelled.  Invalid State", id));
 
                 message.LastUpdatedDate = System.DateTime.Now;
@@ -379,46 +379,51 @@ namespace SocialPayments.DomainServices
         {
             using(var ctx = new Context())
             {
-            Guid messageId;
-            Guid.TryParse(id, out messageId);
+                Guid messageId;
+                Guid.TryParse(id, out messageId);
 
-            if (messageId == null)
-                throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
+                if (messageId == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
 
-            var message = ctx.Messages
-                .FirstOrDefault(m => m.Id == messageId);
+                var message = ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId);
 
-            if (message == null)
-                throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
+                if (message == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
 
-            if (!(message.Status == PaystreamMessageStatus.NotifiedRequest))
-                throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Request {0}.  Invalid State.", id));
+                if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
+                    throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Request {0}.  Invalid State {1}.", id, message.Status));
 
-            Domain.PaymentAccount paymentAccount = null;
-            Guid paymentAccountGuid;
+                Domain.PaymentAccount paymentAccount = null;
+                Guid paymentAccountGuid;
 
-            Guid.TryParse(paymentAccountId, out paymentAccountGuid);
+                Guid.TryParse(paymentAccountId, out paymentAccountGuid);
 
-            if (paymentAccountGuid == null)
-                throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
+                if (paymentAccountGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
 
-            paymentAccount = ctx.PaymentAccounts.FirstOrDefault(a => a.Id == paymentAccountGuid);
-
-
-            if (paymentAccount == null)
-                throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
+                paymentAccount = ctx.PaymentAccounts.FirstOrDefault(a => a.Id == paymentAccountGuid);
 
 
-            message.Status = PaystreamMessageStatus.AcceptedRequest;
-            message.LastUpdatedDate = System.DateTime.Now;
+                if (paymentAccount == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
 
-            //paymentMessage = _messageServices.AddMessage(message.ApiKey.ToString(), request.userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
-            //                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.SenderUri);
+
+                message.Status = PaystreamMessageStatus.AcceptedRequest;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                var paymentMessage = AddMessage(message.ApiKey.ToString(), recipientId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
+                                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin);
 
                 
-            ctx.SaveChanges();
+                ctx.SaveChanges();
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    AcceptedRequestMessageTask task = new AcceptedRequestMessageTask();
+                    task.Execute(message.Id);
 
-            //_amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
+                });
             }
 
         }
@@ -504,8 +509,8 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new ArgumentException("Invalid Message Id.", "Id");
 
-                if (!(message.Status == PaystreamMessageStatus.PendingRequest))
-                    throw new Exception("Unable to Cancel Message.  Message is not in Pending Status.");
+                if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
+                    throw new CustomExceptions.BadRequestException(String.Format("Unable to Reject Request {0}.  Invalid State {1}.", id, message.Status));
 
                 try
                 {
@@ -821,16 +826,28 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                var formattingServices = new DomainServices.FormattingServices();
+
                 var message = ctx.Messages
                     .FirstOrDefault(m => m.Id == messageId);
+
+                URIType senderUriType = GetURIType(message.SenderUri);
+                URIType recipientUriType = GetURIType(message.RecipientUri);
 
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
 
                 if(message.Sender != null)
                     message.SenderName = _formattingServices.FormatUserName(message.Sender);
-                if(message.Recipient != null)
+                if (message.Recipient != null)
                     message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
+                else
+                {
+                    if (recipientUriType == URIType.MobileNumber)
+                        message.RecipientName = formattingServices.FormatMobileNumber(message.RecipientUri);
+                    else
+                        message.RecipientName = message.RecipientUri;
+                }
                 message.TransactionImageUrl = message.Sender.ImageUrl;
 
                 return message;
