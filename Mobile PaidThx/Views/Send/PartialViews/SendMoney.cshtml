@@ -1,0 +1,54 @@
+﻿<div id="main-body" class="panel">
+@Html.ValidationSummary()
+
+@using(Html.BeginForm())
+{
+    <p style="margin-top:0; padding-top:0;">
+        <input type="hidden" id="theRecipientUri" name="RecipientUrl" value="@Model.RecipientUri" />
+        <label for="txtSendTo">
+            Send To:</label>
+        <a href="./Send/AddContactSend" data-prefetch>
+            <button type="button" class="imgbtn field-btn">
+                <span class="imgbg" style="padding-left: 0px; width: 50px; margin-left: -2px">
+                    <img src="@Url.Content("~/Content/images/icon-person.png")" alt="" /></span><span
+                        id="person-sendmoney">@if (Model.RecipientUri != null && !Model.RecipientUri.Equals("null"))
+                                              {
+                            <span id="modelRecipient">@Model.RecipientUri</span>
+                                              }
+                                              else
+                                              {
+                            <text>Choose a recipient</text>
+                                              }</span>
+            </button>
+        </a>
+    </p>
+    <p>
+        <input type="hidden" id="theAmountToSend" name="Amount" value="@Model.Amount" />
+        <label for="txtAmount">
+            Amount to Send:</label>
+        <a href="./Send/AmountToSend" data-prefetch>
+            <button type="button" class="imgbtn field-btn">
+                <span class="imgbg" style="margin-left: -2px">
+                    <img src="@Url.Content("~/Content/images/field-money-icon.png")" alt="" /></span><span
+                        id="amount-send">@if (Model.Amount > 0)
+                                         {
+                            <text>@string.Format("{0:C}", Model.Amount)</text>
+                                         }
+                                         else
+                                         {
+                            <text>Choose Amount</text>
+                                         }</span>
+            </button>
+        </a>
+    </p>
+    <p>
+        <label for="txtComments">
+            Message:</label>
+        <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
+    </p>
+    <p>
+            <button type="submit" id="sendmoney2" class="btn-new btn-green">
+                   <span>Send Money</span></button>
+    </p>
+}
+</div>

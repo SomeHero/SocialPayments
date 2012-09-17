@@ -1,0 +1,46 @@
+﻿@model Mobile_PaidThx.Models.PledgeModels.PinSwipeModel
+@{
+    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.PageID = "confirm-pin-swipe-pledge";
+}
+
+
+<script type="text/javascript">
+    function submitform() {
+        alert("You entered " + document.getElementById("patternlock").value);
+        return true;
+    }
+</script>
+<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <a href="Index" data-transition="slideup" data-direction="reverse">Cancel</a>
+        <h1>
+            Confirm PIN</h1>
+    </div>
+  
+    <div data-role="content">
+    <div class="pad">
+     <div class="instructions" id="swipe-to-confirm">
+            Swipe your security PIN to confirm.</div>
+        @Html.ValidationSummary()
+      
+        @using (Html.BeginForm("PopupPinswipe", "Pledge", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div>
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+        </div>
+        }
+    </div>
+    </div>
+<div id="resizerHack">
+        
+        
+</div>
+<script type="text/javascript">
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
+    });
+</script>
+

@@ -1,0 +1,130 @@
+﻿@model Mobile_PaidThx.Models.SendModels.AddContactSendModel
+@{
+    ViewBag.Title = "AddContactSend";
+}
+<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true" @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Enter Recipient</h1>
+    </div>
+
+    <div data-role="content">
+          <div class="pad">
+        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+                   
+        @foreach (var alphaGroup in Model.SortedContacts)
+        {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var friend in alphaGroup.Value)
+            {
+                    <li>
+                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
+                        <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
+                        @friend.name
+                    </a>
+                    </li>
+            }
+            }
+            <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
+                    <li id="contact-no-results" class="contact-no-results-item">
+                    <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
+                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                        <span id="results-header">
+                        No matches found 
+                        </span>
+                        <br />
+                        <span id="results-description">
+                        Continue type or check entry
+                       </span>
+                   </a>
+               </li>
+               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
+                </ul>
+            </div>
+    </div>
+    
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+
+    <li class="mecode-recipient">
+        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
+            <img src="http://graph.facebook.com/1/picture" />
+            ${meCode}
+        </a>
+     </li>
+</script>
+​
+    <script language="javascript">
+
+        //wait to do event binding until the page is being initialized
+
+        $("#send-contact-select-page").on('pageshow', function () {
+
+            //cache the list-view element for later use
+            var $listview = $(this).find('[data-role="listview"]');
+
+            $listview.listview('option', 'filterCallback', function (text, searchValue, item) {
+                if (item.attr('id') == "contact-no-results")
+                    return false;
+
+                return text.toString().toLowerCase().indexOf(searchValue) === -1;
+            });
+            contactsSearchController.init($("#send-contact-select-page"));
+
+            //delegate event binding since the search widget is added dynamically
+            //bind to the `keyup` event so we can check the value of the input after the user types
+            $('input[data-type="search"]').bind('keyup', function () {
+
+                var searchVal = $(this).delegate('input[data-type="search"]').val();
+
+                if (searchVal.substring(0, 1) == '$') {
+
+                    if (searchVal.length > 3) {
+                        $("#me-codes-divider").show();
+                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
+                    } else {
+                        $("#me-codes-divider").hide();
+                        contactsSearchController.clearMeCodes();
+                    }
+                }
+                else {
+                    $("#me-codes-divider").hide();
+                    contactsSearchController.clearMeCodes();
+
+
+                    //check to see if there are any visible list-items that are not the `#no-results` element
+                    if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
+                        contactsSearchController.showNoResults(searchVal);
+
+                    } else {
+                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                        contactsSearchController.hideNoResults(searchVal);
+                    }
+                }
+            });
+            $(".contact-recipient-uri").die("click").live("click", function () {
+
+                var recipientUri = $(this).attr('recipient-uri');
+                var recipientName = $(this).attr('recipient-name');
+                var recipientType = $(this).attr('recipient-type');
+
+                var model = {
+                    RecipientUri: recipientUri,
+                    RecipientName: recipientName,
+                    RecipientType: recipientType
+                };
+
+                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
+                    data: model,
+                    dataUrl: getBaseURL() + 'Send/Index',
+                    reverse: true,
+                    transition: 'slide',
+                    type: 'post'
+                });
+
+            });
+
+        });
+        
+</script>
+</div>

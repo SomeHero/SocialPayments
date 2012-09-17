@@ -54,34 +54,47 @@ namespace SocialPayments.Workflows.Users
         {
             logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}, Starting.", id));
 
-            Guid userId;
-            Guid.TryParse(id, out userId);
-
-            if (userId == null)
+            try
             {
-                logger.Log(LogLevel.Error, string.Format("Error Processing New User Registration for {0}", id));
-                throw new Exception(string.Format("Error Processing New User Registration for {0}", id));
+                Guid userId;
+                Guid.TryParse(id, out userId);
+
+                if (userId == null)
+                {
+                    logger.Log(LogLevel.Error, string.Format("Error Processing New User Registration for {0}", id));
+                    throw new Exception(string.Format("Error Processing New User Registration for {0}", id));
+                }
+
+                logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}. Retrieving User.", userId));
+                var user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId == userId);
+
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Error, string.Format("Error Processing New User Registration for {0}. Unable to find User.", userId));
+                    
+                    throw new Exception(string.Format("Error Processing New User Registration for {0}. Unable to find User.", userId));
+                }
+
+                IUserProcessor processor = null;
+                switch (user.UserStatus)
+                {
+                    case UserStatus.Submitted:
+                        processor = new SubmittedUserProcessor(_ctx, emailService, smsService);
+                        processor.Process(user);
+
+                        break;
+                    case UserStatus.Registered:
+
+                        processor = new RegisteredUserProcessor(_ctx, emailService, smsService);
+                        processor.Process(user);
+
+                        break;
+                }
             }
-
-            logger.Log(LogLevel.Info, string.Format("Processing New User Registration for {0}. Retrieving User.", userId));
-            var user = _ctx.Users
-                .FirstOrDefault(u => u.UserId == userId);
-
-            if (user == null)
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, string.Format("Error Processing New User Registration for {0}. Unable to find User.", userId));
-            }
-
-            switch (user.UserStatus)
-            {
-                case UserStatus.Submitted:
-                    IUserProcessor processor = new SubmittedUserProcessor(_ctx);
-                    processor.Process(user);
-
-                    break;
-                case UserStatus.Pending:
-
-                    break;
+                logger.Log(LogLevel.Fatal, string.Format("Unhandled Exception Processinging User {0}. {1}", id, ex.Message));
             }
         }
     }

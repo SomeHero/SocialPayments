@@ -1,0 +1,76 @@
+﻿@model Mobile_PaidThx.Models.JoinModels.JoinModel
+@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+        <h1>
+             @if (Model.Payment != null)
+            {<text>You Have Money!</text>}else{<text>Join</text>}</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content" style="background-color: #3E7D48">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+            @if (Model.Payment != null)
+            {
+                <text>
+                <div id="pay-recd">
+                <img src="@Model.Payment.SenderImageUrl" width="50" style="margin-bottom: 15px" />
+                <h4>@Model.Payment.Sender sent you @String.Format("{0:C}", Model.Payment.Amount).</h4></div>
+                @if (!String.IsNullOrEmpty(Model.Payment.Comments))
+                {
+                    <div class="thought" style="clear:both;"> <p>@Model.Payment.Comments</p> <span class="arrow"></span>
+                </div>
+                }
+                <p>
+                    To accept this payment, join PaidThx below. It's simple and free!</p>
+                </text>
+            }
+
+            <h5 style="margin-top:10px">
+                Connect with Facebook</h5>
+<<<<<<< HEAD
+            <button type="submit" id="signin-facebook-submit" class="imgbtn fbSignIn"  onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
+                <img src="@Url.Content("~/Content/images/facebook-f-icon.png")" alt="Facebook Logo" /><span>Join with Facebook </span>
+            </button>
+=======
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/SignInWithFacebook/&scope=email&state=pickle")'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
+                Join with Facebook</button>
+>>>>>>> upstream/development
+            <h5 style="margin-top:25px">
+                Or join with your Email Address</h5>
+                @Html.ValidationSummary()
+             
+            <a data-role="button" id="join-reveal" data-theme="b" data-icon="arrow-d" data-iconpos="right">
+                Join with Email</a>
+            <div id="registration-form" class="hidden">
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+                {
+                    <input type="text" id="email" class="required email" placeholder="Enter Your Email Address"
+                        name="Email" style="margin-bottom:15px" value="@Model.UserName" />
+                    <input type="password" id="password" class="required" placeholder="Create a Password"
+                        name="Password" style="margin-bottom:15px"  />
+                    <input type="password" id="confirmPasword" class="required" placeholder="Confirm Your Password"
+                        name="ConfirmPassword" style="margin-bottom:15px"  />
+                <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
+                Join with Email</button>
+                  
+                }
+            </div>
+            <div id="main-body-sub-links">
+                <p style="text-align: center">
+                    Already a member? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
+                        In</a></p>
+            </div>
+        </div>
+    </div>
+     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
+</div>
+<script type="text/javascript">
+/* JOIN */
+$('#join-reveal').live("click", function() {
+$('#join-reveal').hide();
+$('#registration-form').show();
+});
+</script>

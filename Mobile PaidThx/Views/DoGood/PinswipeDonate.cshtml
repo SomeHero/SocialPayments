@@ -1,0 +1,25 @@
+﻿@model Mobile_PaidThx.Models.DonateMoneyModel
+<script>
+    function submitform() {
+        alert("You entered " + document.getElementById("patternlock").value);
+        return true;
+    }
+</script>
+<div data-role="page" id="pinswipe-page">
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Enter Pinswipe</div>
+        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
+        </div>
+        <form id="pinSwipeForm" action="@Url.Content("~/DoGood/DonateMoney")" method="post">
+        <div style="margin-top: 15px">
+            <input type="hidden" name="Organization" id="sendUri-Donate" value="@Model.Organization" />
+            <input type="hidden" name="OrganizationId" id="orgId-Donate" value="@Model.OrganizationId" />
+            <input type="hidden" name="Amount" id="amountUri-Donate" value="@Model.Amount" />
+            <input type="hidden" name="Comments" id="commentsUri-Donate" value="@Model.Comments" />
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" />
+        </div>
+        </form>
+    </div>
+</div>

@@ -253,7 +253,8 @@ namespace SocialPayments.DomainServices.UnitTests
 
             _ctx.SaveChanges();
 
-           var fbUser =  _userService.SignInWithFacebook(apiKey, fbAccountId, emailAddress, firstName, lastName, "");
+            bool isNewUser = false;
+           var fbUser =  _userService.SignInWithFacebook(apiKey, fbAccountId, emailAddress, firstName, lastName, "","", System.DateTime.Now, out isNewUser);
 
            Assert.AreEqual(fbUser, user);
         }
@@ -275,7 +276,8 @@ namespace SocialPayments.DomainServices.UnitTests
 
             _userService = new UserService(_ctx);
 
-            var fbUser = _userService.SignInWithFacebook(apiKey, fbAccountId, emailAddress, firstName, lastName, "");
+            bool isNewUser = false;
+            var fbUser = _userService.SignInWithFacebook(apiKey, fbAccountId, emailAddress, firstName, lastName, "", "", System.DateTime.Now, out isNewUser);
 
             Assert.AreEqual(fbUser.EmailAddress, emailAddress);
         }

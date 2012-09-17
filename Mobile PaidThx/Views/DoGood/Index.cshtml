@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div data-role="page" id="dogood-page" @TempData["DataUrl"]>
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Do Good</h1>
+       <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+    </div>
+  
+    <div data-role="content">
+        <div class="pad">
+            <p class="instructions">Make a donation or
+                gift to a non-profit organization. As always, 100% of your generosity goes to the
+                organization.</p> 
+                <a href="@Url.Content("~/Donate")" data-prefetch data-transaction="slide">
+                    <button type="button" class="btn-jq" data-theme="f" style="margin-top: 10px">
+                       Give To A Cause
+                       </button></a>
+       
+        
+
+            <p class="instructions">Accept pledges and
+                charitable donations on behalf of your organization wherever you may be with just
+                an e-mail or phone #.</p> <a href="@Url.Content("~/Pledge")"  data-prefetch data-transaction="slide">
+                    <button type="button" class="btn-jq" data-theme="b" style="margin-top: 10px">
+                        Accept A Pledge</button></a>
+
+     </div>
+    </div>
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Do Good" }); }
+</div>

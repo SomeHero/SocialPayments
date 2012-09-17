@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "AmountToSendView";
+}
+<div data-role="page" id="send-amount-to-send-page" class="modally" data-add-back-btn="true" @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            How Much?</h1>
+    </div>
+
+    <div data-role="content" class="content">
+    @using (Html.BeginForm("AmountToSend", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    {
+            
+             <input type="text" id="customAmount" placeholder="0.00" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
+             <button id="gobtn-send2" data-role="none" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
+                Go
+            </button>
+            <div style="clear:both;"><br /></div>
+        <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px" data-role="none">
+            QUICK SEND AMOUNTS</div>
+        <div class="quicksend" style="width: 100%; margin: -5px">
+            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="1">
+                $1</button>
+            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="5">
+                $5</button>
+            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="10">
+                $10</button>
+            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="20">
+                $20</button>
+        </div>
+       
+        <div style="background: #000000; height: 1px; margin-bottom: 10px">
+        </div>
+    }
+    </div>
+        <script language="javascript">
+//wait to do event binding until the page is being initialized
+            $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+                var currentAmount = "0.00";
+
+                $(this).delegate('#customAmount', 'keydown', function () {
+                    if (event.shiftKey) {
+                        event.preventDefault();
+                        return;
+                    }
+                    if (event.keyCode == 46 || event.keyCode == 8) {
+                        currentAmount = currentAmount.substring(0, currentAmount.length - 1);
+
+                        currentAmount = currentAmount.replace('.', '');
+                        currentAmount = currentAmount.replace(',', '');
+
+                        if (currentAmount.length < 3)
+                            currentAmount = '0' + currentAmount;
+
+                        //number before the decimal point
+                        num = currentAmount.substring(0, currentAmount.length - 2);
+                        //number after the decimal point
+                        dec = currentAmount.substring(currentAmount.length - 2);
+
+                        //connect both parts while comma-ing the first half
+                        currentAmount = num + "." + dec;
+
+                        $(this).val(currentAmount);
+                        event.preventDefault();
+
+                        return;
+                    }
+                    else {
+                        if (event.keyCode < 95) {
+                            if (event.keyCode < 48 || event.keyCode > 57) {
+                                event.preventDefault();
+                                return;
+                            }
+                        }
+                        else {
+                            if (event.keyCode < 96 || event.keyCode > 105) {
+                                event.preventDefault();
+                                return;
+                            }
+                        }
+                    }
+                    currentAmount = currentAmount + String.fromCharCode(event.keyCode);
+
+                    if (currentAmount.charAt(0) == '0')
+                        currentAmount = currentAmount.slice(1);
+
+                    currentAmount = currentAmount.replace('.', '');
+                    currentAmount = currentAmount.replace(',', '');
+
+                    //number before the decimal point
+                    num = currentAmount.substring(0, currentAmount.length - 2);
+                    //number after the decimal point
+                    dec = currentAmount.substring(currentAmount.length - 2);
+
+                    //connect both parts while comma-ing the first half
+                    currentAmount = num + "." + dec;
+
+                    $(this).val(currentAmount);
+                    event.preventDefault();
+                });
+
+                $('.quickaddbtn-style').unbind("click").bind("click", function () {
+                    var amountToSend = $(this).attr('data-amount');
+
+                    var model = {
+                        Amount: amountToSend
+                    };
+
+                    $.mobile.changePage(getBaseURL() + 'Send/AmountToSend', {
+                        data: model,
+                        dataUrl: getBaseURL() + 'Send/Index',
+                        reverse: true,
+                        transition: 'slide',
+                        type: 'post'
+                    });
+                });
+            });
+    </script>
+</div>

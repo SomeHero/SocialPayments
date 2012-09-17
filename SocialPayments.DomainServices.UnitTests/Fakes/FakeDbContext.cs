@@ -15,6 +15,7 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<UserAttribute> _userAttributes;
         private IDbSet<Role> _roles;
         private IDbSet<Message> _messages;
+        private IDbSet<Payment> _payments;
         private IDbSet<PaymentAccount> _paymentAccounts;
         private IDbSet<BatchFile> _batchFiles;
         private IDbSet<Calendar> _calendars;
@@ -26,6 +27,15 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         private IDbSet<MobileNumberSignUpKey> _mobileNumberSignUpKey;
         private IDbSet<MECode> _meCodes;
         private IDbSet<PaymentAccountVerification> _paymentAccountVerifications;
+        private IDbSet<SecurityQuestion> _securityQuestions;
+        private IDbSet<NotificationType> _notificationTypes;
+        private IDbSet<PayPointType> _payPointTypes;
+        private IDbSet<UserPayPoint> _userPayPoints;
+        private IDbSet<UserNotification> _userNotificationConfigurations;
+        private IDbSet<ApplicationConfiguration> _applicationConfigurations { get; set; }
+        private IDbSet<UserConfiguration> _userConfigurations { get; set; }
+        private IDbSet<Merchant> _merchants { get; set; }
+        private IDbSet<PasswordResetAttempt> _passwordResetAttempts { get; set; }
 
         public FakeDbContext()
         {
@@ -44,6 +54,9 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             _roles = new FakeRoleSet();
             _paymentAccounts = new FakePaymentAccountSet();
             _paymentAccountVerifications = new FakePaymentAccountVerificationSet();
+            _securityQuestions = new FakeSecurityQuestionSet();
+            _notificationTypes = new FakeNotificationTypeSet();
+            _payPointTypes = new FakePayPointTypeSet();
         }
         public IDbSet<Application> Applications
         {
@@ -69,6 +82,11 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
         {
             get { return _messages; }
             set { _messages = value; }
+        }
+        public IDbSet<Payment> Payments
+        {
+            get { return _payments; }
+            set { _payments = value; }
         }
         public IDbSet<PaymentAccount> PaymentAccounts
         {
@@ -125,6 +143,38 @@ namespace SocialPayments.DomainServices.UnitTests.Fakes
             get { return _paymentAccountVerifications; }
             set { _paymentAccountVerifications = value; }
         }
+        public IDbSet<SecurityQuestion> SecurityQuestions
+        {
+            get { return _securityQuestions; }
+            set { _securityQuestions = value; }
+        }
+        public IDbSet<NotificationType> NotificationTypes
+        {
+            get { return _notificationTypes; }
+            set { _notificationTypes = value; }
+        }
+        public IDbSet<PayPointType> PayPointTypes
+        {
+            get { return _payPointTypes; }
+            set { _payPointTypes = value; }
+        }
+        public IDbSet<UserPayPoint> UserPayPoints
+        {
+            get { return _userPayPoints; }
+            set { _userPayPoints = value; }
+        }
+        public IDbSet<UserNotification> UserNotificationConfigurations 
+        { 
+            get { return _userNotificationConfigurations; }
+            set { _userNotificationConfigurations = value; }
+        }
+        public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
+        public IDbSet<UserConfiguration> UserConfigurations { get; set; }
+        public IDbSet<SocialNetwork> SocialNetworks { get; set; }
+        public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
+        public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<Merchant> Merchants { get; set; }
+        public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         public void SaveChanges()
         {
             //return 0;

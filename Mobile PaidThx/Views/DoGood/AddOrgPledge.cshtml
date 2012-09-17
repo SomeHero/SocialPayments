@@ -1,0 +1,121 @@
+﻿@model Mobile_PaidThx.Models.OrganizationModels.Organizations
+<div data-role="page" id="dogood-page">
+@{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Add Cause</h1>
+    </div>
+    <div data-role="content">
+        <div style="font-size: 16px; text-align: center; padding: 15px; font-weight: bold">
+            Add Organization</div>
+        <div style="height: 1px; width: 100%; background: #666666">
+        </div>
+        <div data-role="fieldcontain" style="margin-left: 10px">
+            <div style="font-size: 16px; margin-bottom: 10px">
+                Enter your organization's name:</div>
+            <label for="organization">
+                <span style="font-weight: bold">Organization:</span></label>
+            <input type="text" name="organization" id="organization" />
+        </div>
+        <p>
+            <button id="submitOrgDonate" type="button" style="padding: 10px; font-size: 18px;
+                margin: 15px">
+                Submit Organization</button>
+        </p>
+        <p>
+            <span style="font-size: 16px; font-weight: bold; margin-left: 15px">OR</span>
+        </p>
+        <label for="listoforgs">
+            <span style="font-weight: bold; margin-left: 5px; font-size: 14px">Choose from the list:</span></label>
+        <div id="listoforgs" style="padding: 8px; background-color: #000000; color: #FFFFFF;
+            font-size: 14px;">
+            NON-PROFITS
+        </div>
+        @foreach (var nonprofit in Model.NonProfits)
+        {
+            <a class="organization" data-value="@nonprofit.Id" organization-name="@nonprofit.Name">
+                <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                    <img style="float:left; padding-right:10px; width:50px; height:50px" src="@nonprofit.ImageUri" />
+                    @if (nonprofit.HasInfo)
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                    }
+                    else
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
+                    }
+                    <div style="margin-top: 8px">
+                        @if (nonprofit.Name != null && nonprofit.Name.Length > 0)
+                        {
+                            if (nonprofit.Name.Length > 25)
+                            {
+                            <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name.Substring(0, 24)..."</span>
+                            }
+                            else
+                            {
+                            <span style="float: left; font-size: 12px; font-weight: bold;">"@nonprofit.Name"</span>
+                            }
+                        }<br />
+                        @if (nonprofit.Slogan != null && nonprofit.Slogan.Length > 0)
+                        {
+                            if (nonprofit.Slogan.Length > 35)
+                            {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan.Substring(0, 36)..."</span>
+                            }
+                            else
+                            {
+                            <span style="float: left; font-size: 10px; font-style: italic">"@nonprofit.Slogan"</span>
+                            }
+                        }
+                    </div>
+                </div>
+            </a>   
+            <div style="height: 1px; background-color: #BFBFBF; width: 100%">
+            </div>
+        }
+        <div id="listoforgs" style="padding: 8px; background-color: #000000; color: #FFFFFF;
+            font-size: 14px;">
+            PUBLIC DIRECTORY
+        </div>
+        @foreach (var pub in Model.PublicDirectories)
+        {
+            <div style="height: 60px; padding: 5px; display: block; overflow: hidden">
+                <img style="float:left; padding-right:10px" src="@Url.Content(@pub.ImageUri)" />
+                @if (pub.HasInfo)
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                }
+                else
+                {
+                    <img style="float:right" src="@Url.Content("~/Content/images/btn_info_inactive.png")" />
+                }
+                <div style="margin-top: 8px">
+                    @if (pub.Name != null && pub.Name.Length > 0)
+                    {
+                        if (pub.Name.Length > 25)
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@pub.Name.Substring(0, 24)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 12px; font-weight: bold;">"@pub.Name"</span>
+                        }
+                    }<br />
+                    @if (pub.Slogan != null && pub.Slogan.Length > 0)
+                    {
+                        if (pub.Slogan.Length > 35)
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@pub.Slogan.Substring(0, 36)..."</span>
+                        }
+                        else
+                        {
+                        <span style="float: left; font-size: 10px; font-style: italic">"@pub.Slogan"</span>
+                        }
+                    }
+                </div>
+            </div>
+            <div style="height: 1px; background-color: #BFBFBF; width: 100%">
+            </div>
+        }
+    </div>
+</div>

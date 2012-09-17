@@ -1,0 +1,59 @@
+﻿@model Mobile_PaidThx.Models.BankAccountModels.BankAccountsModel
+
+@{
+    ViewBag.Title = "Linked Accounts";
+    TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
+}
+
+<div data-role="page" id="preferences-bankaccounts-page" data-add-back-btn="true"  @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Bank Accounts</h1>
+        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content" class="content panel">
+    <div class="pad">
+ <div id="accounts-list" class="main-body">
+        @Html.ValidationSummary()
+        <h5>
+            Your Linked Accounts</h5>
+        <ul data-role="listview" data-inset="true">
+            @foreach (var bankAccount in Model.PaymentAccounts)
+            {             
+                <li class="settings bank"><a href="@Url.Content("~/BankAccounts/Edit/" + bankAccount.PaymentAccountId)">
+                                      
+                    <span class="bank-info">
+                        <h2>@{if(!string.IsNullOrEmpty(bankAccount.Nickname)){
+                                  <text>@bankAccount.Nickname</text>;
+                             } else{
+                                  <text>@bankAccount.AccountType - @bankAccount.AccountNumber</text>
+                              }
+                              
+                              }
+                              </h2> 
+                        <h4>@bankAccount.Status</h4>
+                        
+                    </span>
+                </a></li>
+            }
+            <li class="settings add">
+                <a href="@Url.Content("~/BankAccounts/Add")">
+                    Add an Account
+                </a>
+            </li>
+            </ul>
+            <h5>Sending Account</h5>
+            @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            {     
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount" })
+            }
+            <h5>Receiving Account</h5>
+            @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            { 
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
+            }
+    </div>
+    </div>
+</div>
+</div>

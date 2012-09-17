@@ -1,0 +1,63 @@
+﻿@model Mobile_PaidThx.Models.BankAccountModels.EditPaymentAccountModel
+@{
+    ViewBag.Title = "PaymentAccouunt";
+    TempData["DataUrl"] = String.Format("data-url=/mobile/BankAccounts/Edit/{0}", Model.PaymentAccountId);
+}
+<div data-role="page" id="preferences-bankaccounts-edit-page" data-add-back-btn="true" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Account Details</h1>
+    </div>
+    <div data-role="content">
+        <div class="alert">
+            <p>
+                To enable sending payment from this account, please verify it. <a href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
+                    <button type="button" id="btn-verify-account" data-theme="b" data-icon="gear" data-iconpos="right"
+                        class="btn-jq">
+                        Verify Account</button>
+                </a>
+            </p>
+        </div>
+        @Html.ValidationSummary()
+        @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" }}))
+        {
+            <p>
+                <input type="text" id="txtNickname" name="Nickname" placeholder="Create an Account Nickname"
+                    required value="@Model.Nickname" /></p>
+            <p>
+                <input type="text" id="txtNameOnAccount" name="NameOnAccount" placeholder=" Name on the Account"
+                    required value="@Model.NameOnAccount" /></p>
+            <p>
+                <input type="text" id="txtRoutingNumber" name="RoutingNumber" placeholder="Routing Number"
+                    required value="@Model.RoutingNumber" /></p>
+            <p>
+                <input type="text" id="txtAccountNumber" name="AccountNumber" placeholder="Account Number"
+                    required value="@Model.AccountNumber" /></p>
+            <div data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                    @foreach (var radioItem in Model.AccountTypeOptions)
+                    {
+                        <label for="@radioItem.Text">
+                            @radioItem.Text</label>
+                        @Html.RadioButtonFor(model => model.AccountType, radioItem.Value, new { @id = @radioItem.Text })
+                    }
+                </fieldset>
+            </div>
+            <p>
+                <input type="hidden" name="PaymentAccountId" value="@Model.PaymentAccountId" />
+                <button type="submit" id="btn-update-account" data-theme="f" data-icon="check" data-iconpos="right"
+                    class="btn-jq">
+                    Confirm Changes</button></p>
+        }
+        @using (Html.BeginForm("Delete", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+        {
+            <p>
+                <input type="hidden" name="PaymentAccountId" value="@Model.PaymentAccountId" />
+                <button type="submit" id="btn-remove-account" data-theme="e" data-icon="delete" data-iconpos="right"
+                    class="btn-jq">
+                    Remove Account</button>
+            </p>
+        }
+    </div>
+</div>
