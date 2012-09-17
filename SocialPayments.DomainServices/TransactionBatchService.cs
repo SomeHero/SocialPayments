@@ -28,11 +28,14 @@ namespace SocialPayments.DomainServices
         }
         private TransactionBatch AddTransactionBatch(TransactionBatch transactionBatch)
         {
-            transactionBatch = _ctx.TransactionBatches.Add(transactionBatch);
+            using (var ctx = new Context())
+            {
+                transactionBatch = _ctx.TransactionBatches.Add(transactionBatch);
 
-            _ctx.SaveChanges();
+                _ctx.SaveChanges();
 
-            return transactionBatch;
+                return transactionBatch;
+            }
         }
         public List<TransactionBatch> GetBatches(Expression<Func<TransactionBatch, bool>> expression)
         {
@@ -49,18 +52,21 @@ namespace SocialPayments.DomainServices
         }
         public TransactionBatch GetOpenBatch()
         {
-            return _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
-                                   AddTransactionBatch(new TransactionBatch()
-                                   {
-                                       CreateDate = System.DateTime.Now,
-                                       Id = Guid.NewGuid(),
-                                       IsClosed = false,
-                                       TotalDepositAmount = 0,
-                                       TotalNumberOfDeposits = 0,
-                                       TotalWithdrawalAmount = 0,
-                                       TotalNumberOfWithdrawals = 0,
-                                       Transactions = new Collection<Transaction>()
-                                   });
+            using (var ctx = new Context())
+            {
+                return ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
+                                       AddTransactionBatch(new TransactionBatch()
+                                       {
+                                           CreateDate = System.DateTime.Now,
+                                           Id = Guid.NewGuid(),
+                                           IsClosed = false,
+                                           TotalDepositAmount = 0,
+                                           TotalNumberOfDeposits = 0,
+                                           TotalWithdrawalAmount = 0,
+                                           TotalNumberOfWithdrawals = 0,
+                                           Transactions = new Collection<Transaction>()
+                                       });
+            }
         }
         public TransactionBatch CloseOpenBatch()
         {

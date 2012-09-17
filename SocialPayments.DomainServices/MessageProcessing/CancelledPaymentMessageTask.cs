@@ -36,7 +36,17 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         {
                             _logger.Log(LogLevel.Info, String.Format("Removing Transaction {0} from Batch {1}", transaction.Id, transaction.TransactionBatchId));
 
-                            transaction.TransactionBatch = null;
+                            //]if (transaction.Type == TransactionType.Deposit)
+                            //{
+                            //    transaction.TransactionBatch.TotalNumberOfDeposits -= 1;
+                            //    transaction.TransactionBatch.TotalDepositAmount -= transaction.Amount;
+                            //}
+                            //if (transaction.Type == TransactionType.Withdrawal)
+                            //{
+                            //    transaction.TransactionBatch.TotalNumberOfWithdrawals -= 1;
+                            //    transaction.TransactionBatch.TotalWithdrawalAmount -= transaction.Amount;
+                            //}
+                            //transaction.TransactionBatch = null;
                         }
                         transaction.Status = TransactionStatus.Cancelled;
                         transaction.LastUpdatedDate = System.DateTime.Now;
