@@ -1,9 +1,14 @@
 ﻿@model Mobile_PaidThx.Models.MeCodesModels.DetailsMeCodeModel
-<div data-role="page" id="add-email-paypoint-page">
+@{
+    ViewBag.Title = "ME Code Details";
+    ViewBag.PageID = "mecode-details-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" @TempData["DataUrl"]>
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Add MeCode</h1>
+           ME Code Details</h1>
     </div>
     <div data-role="content" class="panel main-body">
         <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
@@ -17,8 +22,8 @@
             @using (Html.BeginForm("Delete", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.MeCode.Id" />
-                <button type="submit" id="remove-mecode-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Remove this PayPoint</span></button>
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove ME Code</button>
             }
             </p>
         </div>

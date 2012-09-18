@@ -1684,6 +1684,11 @@ padding-bottom:5px;
         {
             background-image: url(images/img-plus-40x40.png);
         }
+        li.settings.paystreaming
+        {
+            background-image: url(images/avatar.png);
+            padding-left:56px;
+        }
 
 .sliders.ui-listview .ui-slider-switch{
  float: right;
@@ -2119,7 +2124,7 @@ margin-top:0;
 .ui-content .ui-listview {
 margin: 0px;
 }
-#preferences-page .ui-content .ui-listview
+.ui-page.settings .ui-content .ui-listview
 {
  margin-bottom:15px;   
 }

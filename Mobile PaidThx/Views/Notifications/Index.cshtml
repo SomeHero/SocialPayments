@@ -1,14 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.NotificationModels.NotificationModel
 @{
     ViewBag.Title = "Notifications";
+    ViewBag.PageID = "notifications-page";
+    ViewBag.Classes = "settings";
 }
-<div data-role="page" id="notifications-page" data-theme="c" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-theme="c" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" >
         <h1>
             Notifications</h1>
     </div>
-    <div data-role="content" style="margin: 15px; background-color: #ffffff;">
+    <div data-role="content">
+    <div class="pad">
         @foreach (var subject in Model.NotificationSubjects)
         {
             @subject.Description
@@ -26,5 +29,6 @@
             }
             </ul>
         }
+    </div>
     </div>
 </div>

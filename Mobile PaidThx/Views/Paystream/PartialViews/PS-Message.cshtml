@@ -1,0 +1,86 @@
+﻿
+<script id="messageTemplate" type="text/html">
+        <li class="receive pending ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-a" data-theme="c">
+
+            <div class="ui-btn-inner ui-li">
+
+                <div class="ui-btn-text">
+                    <a class="closePaystreamItem ui-link-inherit" messageId="${Id}">
+
+                        <span class="trans-type">
+
+                        <img src="/Content/images/noavatar.png" alt="Picture"/>
+                        </span>
+
+                            <div class="trans-title">
+
+                            {{if direction == "In" }}
+                            <strong>${senderName}</strong>
+
+                            {{else}}
+                            <strong>${recipientName}</strong>
+
+                            {{/if}}
+                            
+
+                            {{if messageType == "Payment" && direction == "In"}}
+
+                            <div class="title-pay-in">Sent money to you</div>
+                            {{/if}}
+
+                            {{if messageType == "Payment" && direction == "Out"}}
+
+                            <div class="title-pay-out">You sent money to them</div>
+                            {{/if}}
+
+                            {{if messageType == "PaymentRequest" && direction == "In"}}
+
+                            <div class="title-request-in">Requested money from you</div>
+                            {{/if}}
+
+                            {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+                            <div class="title-request-out">You requested money from them</div>
+                            {{/if}}
+
+                            <div class="trans-comment">${comments}</div>
+
+                        </div>
+                        <span class="trans-amount">
+
+                            <div class="gray-above">${formatDate(createDate)}</div>
+
+
+                            {{if messageType == "Payment" && direction == "In"}}
+                            <div class="paystream-pay-in">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "Payment" && direction == "Out"}}
+
+                            <div class="paystream-pay-out">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "PaymentRequest" && direction == "In"}}
+
+                            <div class="paystream-request-in">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+                            <div class="paystream-request-out">${formatAmount(amount)}</div>
+
+                            {{/if}}
+
+                            <div class=gray-out>${messageStatus}</div>
+
+                        </span>
+
+                    </a>
+                </div>
+
+                <span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+
+            </div>
+        </li>
+
+    </script>

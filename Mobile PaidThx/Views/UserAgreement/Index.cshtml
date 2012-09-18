@@ -1,10 +1,17 @@
 ﻿@{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "useragreement-page";
+    ViewBag.Classes = "settings";
 }
-<div data-role="page" id="useragreement-page" @TempData["DataUrl"]>
-    <div data-role="content" style="background-color: #3E7D48">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
-            <span style="font-weight: bold">USER AGREEMENT</span>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  data-add-back-btn="true" @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" data-add-back-btn="true">
+        <h1>
+            User Agreement</h1>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+           USER AGREEMENT
             <p>
                 text text text text text text text text text text text text text text text text
                 text text text text text text text text text text text text text text text text

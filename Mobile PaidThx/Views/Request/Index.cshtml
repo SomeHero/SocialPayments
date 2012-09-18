@@ -1,8 +1,9 @@
 ﻿@model Mobile_PaidThx.Models.RequestModels.RequestMoneyModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "request-page";
 }
-<div id="request-page" data-role="page" @TempData["DataUrl"]>
+<div id="@ViewBag.PageID" data-role="page" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" data-add-back-btn="true">
         <h1>
