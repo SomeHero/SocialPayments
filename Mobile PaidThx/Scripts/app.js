@@ -184,9 +184,22 @@ var paystreamController = (function ($, undefined) {
         //Use template to create items & add to list
         $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
+
         //Call the listview jQuery UI Widget after adding 
         //items to the list allowing correct rendering
         $("#paystreamList").listview("refresh");
+
+        if ($("#paystreamList li").size() === 0) {
+            $("#paystreamList").append($("#no-results-holder").html());
+            $("#paystreamList").listview("refresh");
+            $('#paystreamList #no-results').fadeIn(500);
+        } else if ($("#paystreamList li").size() === 1 && $("#paystreamList #no-results").length) {
+            $('#paystreamList #no-results').fadeIn(500);
+        } else {
+            $('#paystreamList #no-results').fadeOut(250);
+            $('#paystreamList #no-results').remove();
+            $("#paystreamList").listview("refresh");
+        }
     }
 
     function openOffersDialog(transactionId, callback) {

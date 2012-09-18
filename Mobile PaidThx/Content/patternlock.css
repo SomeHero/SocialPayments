@@ -346,6 +346,7 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 -moz-transform:rotate(45deg); /* Firefox */
 -webkit-transform:rotate(45deg); /* Safari and Chrome */
 -o-transform:rotate(45deg); /* Opera */
+
 }
 
 .patternlocklinediagonalbackwards

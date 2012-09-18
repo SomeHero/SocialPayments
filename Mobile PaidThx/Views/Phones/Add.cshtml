@@ -1,12 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.PhonesModels.AddPhoneModel
-<div data-role="page" id="add-phone-paypoint-page" data-add-back-btn="true" @TempData["DataUrl"]>
+@{
+    ViewBag.Title = "Add Phone";
+    ViewBag.PageID = "add-phone-paypoint-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Add Phone</h1>
     </div>
-    <div data-role="content" class="panel main-body">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+    <div data-role="content">
+        <div class="pad">
          @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
             @Html.ValidationSummary()
