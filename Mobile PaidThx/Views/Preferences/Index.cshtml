@@ -1,8 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "preferences-page";
+    ViewBag.Classes = "settings";
     TempData["DataUrl"] = "data-url=/mobile/Preferences";
 }
-<div data-role="page" id="preferences-page"  data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
              
@@ -11,7 +13,7 @@
         <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
     </div>
     <div data-role="content">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div class="pad">
             <!-- Edit Profile -->
             <ul data-role="listview" data-inset="true">
                 <li class="settings" id="profile"><a href="@Url.Content("~/Preferences/Profile")" data-prefetch  data-transition="slide">

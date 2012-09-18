@@ -1,8 +1,9 @@
 ﻿@model Mobile_PaidThx.Models.SignInModels.SignInModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "page-signin";
 }
-<div data-role="page" id="page-signin" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -20,7 +21,7 @@
             <h5>
                 Or Sign in with Email or Phone #</h5>
             <div id="signin-form">
-                @using(Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object>{{ "data-transition", "pop" }}))
+                @using (Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
                 {       
                     <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address or Phone #"
                         name="Email" /></span>

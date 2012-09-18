@@ -1,8 +1,9 @@
 ﻿@model Mobile_PaidThx.Models.SendModels.SendMoneyModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "send-page";
 }
-<div data-role="page" id="send-page" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

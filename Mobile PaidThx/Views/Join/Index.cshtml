@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "page-join";
+    
 }
-<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
