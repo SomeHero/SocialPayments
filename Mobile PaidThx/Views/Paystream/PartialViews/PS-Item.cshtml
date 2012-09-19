@@ -1,13 +1,11 @@
-﻿
-
-    <script id="paystreamItem" type="text/x-jquery-tmpl">
+﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
     <li>
         <a href="#" class="paystreamItem" messageId="${Id}">
         <span class="trans-type">
         {{if transactionImageUri}}
-            <img width="50" height="50" class="rounded contact" src="${transactionImageUri}" alt="Image" />
+            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
         {{else}}
-            <img width="50" height="50" class="rounded contact" src="/mobile/Content/images/avatar.png" alt="Image" />
+            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
         {{/if}}
         </span>
         <div class="trans-title">
@@ -47,7 +45,10 @@
         <span class="trans-amount">
             <div class="gray-above">${createDate}</div>
             <div class="paystream-pay-in">
-                ${"$" + amount}
+                           <h4 class="subheading" style="margin-top:6px;">
+                        Start sending and requesting!
+                        </h4>
+                $${amount.toFixed(2)}
             </div>
             <div class="gray-out">
                 ${messageStatus}

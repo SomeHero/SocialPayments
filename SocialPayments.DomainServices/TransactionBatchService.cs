@@ -28,11 +28,14 @@ namespace SocialPayments.DomainServices
         }
         private TransactionBatch AddTransactionBatch(TransactionBatch transactionBatch)
         {
-            transactionBatch = _ctx.TransactionBatches.Add(transactionBatch);
+            using (var ctx = new Context())
+            {
+                transactionBatch = _ctx.TransactionBatches.Add(transactionBatch);
 
-            _ctx.SaveChanges();
+                _ctx.SaveChanges();
 
-            return transactionBatch;
+                return transactionBatch;
+            }
         }
         public List<TransactionBatch> GetBatches(Expression<Func<TransactionBatch, bool>> expression)
         {
@@ -49,18 +52,21 @@ namespace SocialPayments.DomainServices
         }
         public TransactionBatch GetOpenBatch()
         {
-            return _ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
-                                   AddTransactionBatch(new TransactionBatch()
-                                   {
-                                       CreateDate = System.DateTime.Now,
-                                       Id = Guid.NewGuid(),
-                                       IsClosed = false,
-                                       TotalDepositAmount = 0,
-                                       TotalNumberOfDeposits = 0,
-                                       TotalWithdrawalAmount = 0,
-                                       TotalNumberOfWithdrawals = 0,
-                                       Transactions = new Collection<Transaction>()
-                                   });
+            using (var ctx = new Context())
+            {
+                return ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false) ??
+                                       AddTransactionBatch(new TransactionBatch()
+                                       {
+                                           CreateDate = System.DateTime.Now,
+                                           Id = Guid.NewGuid(),
+                                           IsClosed = false,
+                                           TotalDepositAmount = 0,
+                                           TotalNumberOfDeposits = 0,
+                                           TotalWithdrawalAmount = 0,
+                                           TotalNumberOfWithdrawals = 0,
+                                           Transactions = new Collection<Transaction>()
+                                       });
+            }
         }
         public TransactionBatch CloseOpenBatch()
         {
@@ -95,7 +101,7 @@ namespace SocialPayments.DomainServices
         {
             var transactionBatch = GetOpenBatch();
 
-            _logger.Log(LogLevel.Info, String.Format("Batch {0} Transactions in Batch {1}", transactions.Count, transactionBatch.Id));
+            _logger.Log(LogLevel.Info, String.Format("Adding {0} Transactions in Batch {1}", transactions.Count, transactionBatch.Id));
 
             foreach (var transaction in transactions)
             {
@@ -181,29 +187,39 @@ namespace SocialPayments.DomainServices
         }
 
 
-        public void RemoveTransactionsFromBatch(Collection<Transaction> transactions)
+        public void RemoveTransactionsFromBatch(List<Transaction> transactions)
         {
-            var transactionBatch = GetOpenBatch();
-
-            foreach (var transaction in transactions)
+           
+            using(var ctx = new Context())
             {
-                var item = transactionBatch.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
-                  
-                if(item != null)
+                var transactionBatch = ctx.TransactionBatches.FirstOrDefault(t => t.IsClosed == false);
+
+                _logger.Log(LogLevel.Info, String.Format("Removing {0} Transactions from Batch {1}", transactions.Count, transactionBatch.Id));
+
+                foreach (var transaction in transactions)
                 {
-                    item.TransactionBatchId = null;
-                
-                    if (item.Type == TransactionType.Deposit)
+                    var item = transactionBatch.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+
+                    if (item != null)
                     {
-                        transactionBatch.TotalNumberOfDeposits -= 1;
-                        transactionBatch.TotalDepositAmount -= transaction.Amount;
-                    }
-                    if (item.Type == TransactionType.Withdrawal)
-                    {
-                        transactionBatch.TotalNumberOfWithdrawals -= 1;
-                        transactionBatch.TotalWithdrawalAmount -= transaction.Amount;
+                        _logger.Log(LogLevel.Info, String.Format("Removing Transaction {0} from Batch {1}", item.Id, transactionBatch.Id));
+
+                        item.TransactionBatchId = null;
+
+                        if (item.Type == TransactionType.Deposit)
+                        {
+                            transactionBatch.TotalNumberOfDeposits -= 1;
+                            transactionBatch.TotalDepositAmount -= transaction.Amount;
+                        }
+                        if (item.Type == TransactionType.Withdrawal)
+                        {
+                            transactionBatch.TotalNumberOfWithdrawals -= 1;
+                            transactionBatch.TotalWithdrawalAmount -= transaction.Amount;
+                        }
                     }
                 }
+
+                ctx.SaveChanges();
             }
         }
     }

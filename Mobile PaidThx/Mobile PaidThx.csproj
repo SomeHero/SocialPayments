@@ -172,6 +172,7 @@
     <Compile Include="Controllers\SendController.cs" />
     <Compile Include="Controllers\SharingController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
+    <Compile Include="Controllers\SocialNetworksController.cs" />
     <Compile Include="Controllers\UserAgreementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -228,6 +229,7 @@
     <Compile Include="Services\UserPayPointServices.cs" />
     <Compile Include="Services\UserPayStreamMessageServices.cs" />
     <Compile Include="Services\UserServices.cs" />
+    <Compile Include="Services\UserSocialNetworkServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.html" />
@@ -567,6 +569,7 @@
     <Content Include="Content\images\tab-request-30x30.png" />
     <Content Include="Content\images\tab-send-30x30-active.png" />
     <Content Include="Content\images\tab-send-30x30.png" />
+    <Content Include="Scripts\xdate.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -687,7 +690,6 @@
     <Content Include="Views\DoGood\PinswipeDonate.cshtml" />
     <Content Include="Views\DoGood\PinswipePledge.cshtml" />
     <Content Include="Views\Emails\Index.cshtml" />
-    <Content Include="Views\Preferences\SocialNetworks.cshtml" />
     <Content Include="Views\Phones\Index.cshtml" />
     <Content Include="Views\MeCodes\Index.cshtml" />
     <Content Include="Views\Preferences\Security.cshtml" />
@@ -740,11 +742,13 @@
     <Content Include="Views\Donate\SecurityQuestion.cshtml" />
     <Content Include="Views\Donate\SetupACHAccount.cshtml" />
     <Content Include="Views\Donate\SetupPinSwipe.cshtml" />
-    <Content Include="Views\Paystream\PartialViews\PS-Detail.cshtml" />
-    <Content Include="Views\Paystream\PartialViews\PS-Item.cshtml" />
+    <Content Include="Views\SocialNetworks\Index.cshtml" />
+    <Content Include="Views\Send\ConfirmPinSwipe.cshtml" />
     <Content Include="Views\Paystream\PartialViews\PS-Message.cshtml" />
     <Content Include="Views\Shared\WelcomeMenuTop.cshtml" />
     <Content Include="Views\Shared\LoggedInMenuTop.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\PS-Detail.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\PS-Item.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
