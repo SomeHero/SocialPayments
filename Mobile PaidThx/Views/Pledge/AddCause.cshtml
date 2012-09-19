@@ -1,8 +1,10 @@
 ﻿@model Mobile_PaidThx.Models.PledgeModels.AddCauseModel
 @{
     ViewBag.Title = "Select Your Cause";
+    ViewBag.PageID = "pledge-add-cause";
+    ViewBag.Classes = "full";
 }
-<div data-role="page" id="pledge-add-cause" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

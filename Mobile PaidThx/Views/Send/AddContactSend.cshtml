@@ -1,27 +1,30 @@
 ﻿@model Mobile_PaidThx.Models.SendModels.AddContactSendModel
 @{
     ViewBag.Title = "AddContactSend";
+    ViewBag.PageID = "send-contact-select-page";
+    ViewBag.Classes = "full";
 }
-<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
  @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Enter Recipient</h1>
+            Send To:</h1>
     </div>
 
     <div data-role="content">
           <div class="pad">
-        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
                    
         @foreach (var alphaGroup in Model.SortedContacts)
         {
             <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                    <li>
+                   <li class="contact">
                     <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
-                        <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
-                        @friend.name
+                        <img class="list-thumbnail" src="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
+                        <h2 class="heading">@friend.name</h2>
+                        <h4 class="subheading">Facebook Friend</h4>
                     </a>
                     </li>
             }
