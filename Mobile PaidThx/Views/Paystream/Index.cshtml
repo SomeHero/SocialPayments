@@ -4,16 +4,16 @@
     ViewBag.PageID = "paystream-index";
     ViewBag.Classes = "full";
 }
-<script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
 <div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-        <h1>
-            Paystream</h1>
-        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right">
-        </a>
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>Paystream</h1>
+        <a href="#"  id="search-control" class="ui-btn-right" data-role="button" data-theme="f" data-icon="search" data-iconpos="notext"></a>
+        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+        
     </div>
     <div data-role="content">
+    <div class="pad">
         <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items"
             data-type="horizontal" data-grid="c">
             <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked"
@@ -30,7 +30,7 @@
             <label for="paystream-other">
                 Other</label>
         </fieldset>
-        <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+        <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
            
         </ul>
         <ul id="pagingList" data-role="listview" style="display: none;">
@@ -51,6 +51,9 @@
                     </li>
                     </ul>
     </div>
+    </div>
+
+
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
 
 @{Html.RenderPartial("PartialViews/PS-Item");}
@@ -59,6 +62,13 @@
 
 <script type="text/javascript">
     $(document).on('pageshow', '#@ViewBag.PageID', function () {
+
+
+        $("#@ViewBag.PageID .ui-listview-filter").hide();
+
+        $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
+            $("#@ViewBag.PageID .ui-listview-filter").toggle();
+        });
 
         $("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
             return text.toString().toLowerCase().indexOf(searchValue) === -1;
@@ -74,7 +84,7 @@
             paystreamController.getAndDisplayMoreItems();
         });
         $('#paystream-all').die('change').live('change', function () {
-            alert("the change one - " + $("#paystreamList li").size());
+ 
             paystreamController.searchAndDisplayPaystream('all', function () {
 
             });
@@ -145,3 +155,8 @@
 <div id="overlay" class="overlay">
 </div>
 </div>
+
+@section PageScripts{
+<script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
+
+}

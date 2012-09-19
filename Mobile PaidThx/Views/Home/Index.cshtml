@@ -1,22 +1,22 @@
 ﻿@{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "page-welcome";
+    ViewBag.Classes = "";
 }
-<div data-role="page" id="page-welcome" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+
+@*
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-        <h1>
-           <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
-    </div>
+        <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
+        @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
+    </div>*@
     <div data-role="content">
         <div class="pad">
-                <h4 style="font-size: 26px; text-align: center; margin-bottom: 15px">
-                    Welcome to PaidThx!</h4>
-                <h6 style="text-align: center;">
-                    The fastest, easiest way to exchange money with friends, family, and your
-                    favorite organizations.</h6>
-            <div style="font-size: 14px; font-weight: bold; margin-top: 15px; text-align:center;margin-bottom: 15px">
-                Join or Sign in Below:</div>
+        <div class="logo-holder">
+               <img alt="PaidThx Logo" class="grow" src="@Url.Content("~/Content/images/logo-welcome.png")" /></div>
+               <div style="margin-bottom: 25px">
+            </div>
             <a id="join" class="btn-jq" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" href="@Url.Content("~/Join")">
                 Join (It's Free!)</a>
             <div style="margin-bottom: 15px">
@@ -25,5 +25,18 @@
                 Sign In</a>
         </div>
     </div>
+
+       <div data-role="footer" data-position="fixed"> 
+	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
+</div> 
+
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
 </div>
+
+@section PageScripts{
+<script type="text/javascript">
+ $(document).on('pageshow', '#@ViewBag.PageID', function () {
+
+});
+</script>
+}

@@ -8,10 +8,6 @@
     margin: 10px 10px 20px 10px;
 }
 
-.ui-header h1.ui-title
-{
- margin: 10px 90px 10px !important;   
-}
 em
 {
     color: red;
@@ -117,34 +113,30 @@ div.ui-page
  background:none !important;  
  background:  url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPHN0b3Agb2Zmc2V0PSI2MyUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPHN0b3Agb2Zmc2V0PSI5OSUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC42NSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDAwMDAwIiBzdG9wLW9wYWNpdHk9IjAuNjUiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 background: -moz-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%, rgba(32,104,50,0) 40%, rgba(32,104,50,0.65) 99%, rgba(32,104,50,0.65) 100%); /* FF3.6+ */
-
 background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(32,104,50,0)), color-stop(70%,rgba(32,104,50,0)), color-stop(99%,rgba(32,104,50,0.65)), color-stop(100%,rgba(32,104,50,0.65))); /* Chrome,Safari4+ */
-
 background: -webkit-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* Chrome10+,Safari5.1+ */
-
 background: -o-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* Opera 12+ */
-
 background: -ms-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* IE10+ */
-
 background: radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* W3C */
-  
+opacity:.8;
 }
 
   div.ui-page div.ui-header.ui-bar-a, div.ui-page div.ui-header.ui-bar-c
-  {
-      
-border: 1px solid #b8b8b8 /*{a-bar-border}*/;
-background: #eeeeee /*{a-bar-background-color}*/;
-color: #34363d !important; /*{a-bar-color}*/;
+  { 
+border:none;  
+border-width:0;
 font-weight: bold;
-text-shadow: 0 /*{a-bar-shadow-x}*/ -1px /*{a-bar-shadow-y}*/ 1px /*{a-bar-shadow-radius}*/ white /*{a-bar-shadow-color}*/;
-background-image: -webkit-gradient(linear, left top, left bottom, from( #dddddd /*{a-bar-background-start}*/), to( #f0f0f0 /*{a-bar-background-end}*/));
-background-image: -webkit-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
-background-image: -moz-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
-background-image: -ms-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
-background-image: -o-linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
-background-image: linear-gradient(#f0f0f0 /*{a-bar-background-start}*/, #dddddd /*{a-bar-background-end}*/);
+text-shadow: 0 -1px  1px white ;
 border-radius: 0px 0px 0px 0px;
+}
+
+.ui-header .ui-btn-icon-notext 
+{
+    top:10px;
+}
+.ui-header .ui-title
+{
+    margin: .8em 20% .7em;
 }
 
 div.allcontent
@@ -175,8 +167,151 @@ div.ui-content
   {
     height:50px;  
   }
-  
 
+
+.nav-pdthx.ui-footer
+{
+ box-shadow:0 -1px 1px #bebebe; 
+ moz-box-shadow:0 -1px 1px #bebebe;     
+} 
+
+
+        .nav-pdthx #home .ui-icon, .header-pdthx #home .ui-icon
+        {
+            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #paystream .ui-icon, .header-pdthx #paystream .ui-icon
+        {
+            background: url(images/icons/paystreamIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #send .ui-icon, .header-pdthx #send .ui-icon
+        {
+            background: url(images/icons/sendIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #request .ui-icon, .header-pdthx #request .ui-icon
+        {
+            background: url(images/icons/requestIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #profile .ui-icon, .header-pdthx #profile .ui-icon
+        {
+            background: url(images/icons/profileIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #dogood .ui-icon, .header-pdthx #dogood .ui-icon
+        {
+            background: url(images/icons/dogoodIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #home.ui-btn-active .ui-icon, .header-pdthx #home.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #paystream.ui-btn-active .ui-icon, .header-pdthx #paystream.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/paystreamIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #send.ui-btn-active .ui-icon, .header-pdthx #send.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/sendIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #request.ui-btn-active .ui-icon, .header-pdthx #request.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/requestIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #profile.ui-btn-active .ui-icon, .header-pdthx #profile.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/profileIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #dogood.ui-btn-active .ui-icon,  .header-pdthx #dogood.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
+        }
+         .nav-pdthx #welcome .ui-icon, .header-pdthx #welcome .ui-icon
+        {
+            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #signin .ui-icon, .header-pdthx #signin .ui-icon
+        {
+            background: url(images/icons/signinIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #join .ui-icon, .header-pdthx #join .ui-icon
+        {
+            background: url(images/icons/joinIcon.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #about .ui-icon, .header-pdthx #about .ui-icon
+        {
+            background: url(images/icons/aboutIcon.png) 50% 50% no-repeat;
+        }
+         .nav-pdthx #welcome.ui-btn-active .ui-icon, .header-pdthx #welcome.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #signin.ui-btn-active .ui-icon, .header-pdthx #signin.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/signinIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #join.ui-btn-active .ui-icon,  .header-pdthx #join.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/joinIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx #about.ui-btn-active .ui-icon, .header-pdthx #about.ui-btn-active .ui-icon
+        {
+            background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
+        }
+        .nav-pdthx .nav-item .ui-icon-custom.ui-icon, .header-pdthx .nav-item .ui-icon-custom.ui-icon
+        {
+         width:30px;
+         height:30px;
+         font-size:11px !important;
+         margin-left: -15px !important;
+        }
+        .nav-pdthx .nav-item .ui-btn-text, .header-pdthx .nav-item .ui-btn-text
+        {
+         font-size:11px !important;
+        }
+        
+        .nav-pdthx
+        {
+          border-top:1px solid #cccccc;  
+        }
+         .nav-pdthx .ui-navbar li .ui-btn, .header-pdthx.ui-header .ui-navbar li .ui-btn
+        {
+            border-bottom:1px solid #cccccc;
+background: #DFDFDF /*{c-bhover-background-color}*/;
+text-shadow: 0 /*{c-bhover-shadow-x}*/ 1px /*{c-bhover-shadow-y}*/ 0 /*{c-bhover-shadow-radius}*/ white /*{c-bhover-shadow-color}*/;
+background-image: -webkit-gradient(linear, left top, left bottom, from( #DFDFDF /*{c-bhover-background-start}*/), to( #DFDFDF /*{c-bhover-background-end}*/));
+background-image: -webkit-linear-gradient( #DFDFDF /*{c-bhover-background-start}*/, #DFDFDF /*{c-bhover-background-end}*/);
+background-image: -moz-linear-gradient( #DFDFDF /*{c-bhover-background-start}*/, #DFDFDF /*{c-bhover-background-end}*/);
+background-image: -ms-linear-gradient( #DFDFDF /*{c-bhover-background-start}*/, #DFDFDF /*{c-bhover-background-end}*/);
+background-image: -o-linear-gradient( #DFDFDF /*{c-bhover-background-start}*/, #DFDFDF /*{c-bhover-background-end}*/);
+background-image: linear-gradient( #DFDFDF /*{c-bhover-background-start}*/, #DFDFDF /*{c-bhover-background-end}*/);
+box-shadow:inset 0 -2px 4x #5b5b5b; 
+-moz-box-shadow:inset 0 -2px 4px #5b5b5b;
+        }
+        
+         .nav-pdthx .ui-navbar li .ui-btn-active, .header-pdthx.ui-header .ui-navbar li .ui-btn-active
+        {
+        border-left: 1px solid #cccccc;
+        border-right: 1px solid #cccccc;
+        background: #eeeeee;
+        font-weight: bold;
+        color: #48b201 /*{global-active-color}*/;
+        cursor: pointer;
+        text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
+        text-decoration: none;
+        background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff /*{global-active-background-start}*/), to( #fefefe /*{global-active-background-end}*/));
+        background-image: -webkit-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+        background-image: -moz-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+        background-image: -ms-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+        background-image: -o-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+        background-image: linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
+        font-family: Helvetica, Arial, sans-serif /*{global-font-family}*/;
+        border-bottom: 1px solid transparent;
+        box-shadow:none; 
+-moz-box-shadow:none;
+        }  
+ .ui-btn-active#dogood .ui-btn-text
+ {
+  color:#ea385c;   
+ }
 
 #footer-menu
 {
@@ -494,8 +629,12 @@ background-image:url('images/field-money-icon.png');
 button.field-btn#btn-recipient span.imgbg
 {
 background-image:url('images/icon-person.png');
-
     
+}
+button.field-btn#btn-nonprofit span.imgbg
+{
+background-image:url('images/icons/dogoodIcon.png');
+   
 }
 
 a.imgbtn span.ui-button-text, button.imgbtn span.ui-button-text
@@ -1001,130 +1140,6 @@ h9 span
 
   
 
-
-.nav-pdthx.ui-footer
-{
- box-shadow:0 -1px 1px #bebebe; 
- moz-box-shadow:0 -1px 1px #bebebe;     
-} 
-.nav-pdthx.ui-header
-{
- box-shadow:0 1px 1px #bebebe; 
- moz-box-shadow:0 1px 1px #bebebe;     
-} 
-
-        .nav-pdthx #home .ui-icon
-        {
-            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #paystream .ui-icon
-        {
-            background: url(images/icons/paystreamIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #send .ui-icon
-        {
-            background: url(images/icons/sendIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #request .ui-icon
-        {
-            background: url(images/icons/requestIcon.png) 50% 50% no-repeat;
-        }
-        
-        .nav-pdthx #profile .ui-icon
-        {
-            background: url(images/icons/profileIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #dogood .ui-icon
-        {
-            background: url(images/icons/dogoodIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #home.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #paystream.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/paystreamIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #send.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/sendIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #request.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/requestIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #profile.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/profileIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #dogood.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/dogoodIcon-active.png) 50% 50% no-repeat;
-        }
-        
-         .nav-pdthx #welcome .ui-icon
-        {
-            background: url(images/icons/homeIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #signin .ui-icon
-        {
-            background: url(images/icons/signinIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #join .ui-icon
-        {
-            background: url(images/icons/joinIcon.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #about .ui-icon
-        {
-            background: url(images/icons/aboutIcon.png) 50% 50% no-repeat;
-        }
-         .nav-pdthx #welcome.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/homeIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #signin.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/signinIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #join.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/joinIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx #about.ui-btn-active .ui-icon
-        {
-            background: url(images/icons/aboutIcon-active.png) 50% 50% no-repeat;
-        }
-        .nav-pdthx .ui-icon
-        {
-         width:30px;
-         height:30px;
-         font-size:11px !important;
-         margin-left: -15px !important;
-        }
-        .nav-pdthx .ui-btn-text
-        {
-         font-size:11px !important;
-        }
-      .ui-btn-active  
-      {
-          box-shadow:inset 0 0 8px #6ac36b; 
-          -moz-box-shadow:inset 0 0 8px #6ac36b; 
-        border: 1px solid #cccccc;
-background: #eeeeee;
-font-weight: bold;
-color: #2a7e43 /*{global-active-color}*/;
-cursor: pointer;
-text-shadow: 0 /*{global-active-shadow-x}*/ 1px /*{global-active-shadow-y}*/ 1px /*{global-active-shadow-radius}*/ #ffffff /*{global-active-shadow-color}*/;
-text-decoration: none;
-background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff /*{global-active-background-start}*/), to( #fefefe /*{global-active-background-end}*/));
-background-image: -webkit-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
-background-image: -moz-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
-background-image: -ms-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
-background-image: -o-linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
-background-image: linear-gradient( #ffffff /*{global-active-background-start}*/, #fefefe /*{global-active-background-end}*/);
-font-family: Helvetica, Arial, sans-serif /*{global-font-family}*/;
-      }
       
         #btn-settings
         {
@@ -1185,7 +1200,7 @@ border-top-right-radius: 5px /*{global-radii-blocks}*/;
         }
         
         .ui-navbar li .ui-btn-active{
-        color:#2A7E43;
+        color:#48b201;
         text-shadow:none !important;
         }
         .thumb
@@ -1412,7 +1427,6 @@ img.rounded
 {
  border-bottom:1px solid #cccccc;  
  margin-bottom:10px; 
- padding-bottom:8px;
 }
 
 .ui-btn-corner-all {
@@ -2048,7 +2062,7 @@ li.static
 }
 
 .pad{
-margin: 3px; padding: 10px; background-color: #FFFFFF;
+padding: 14px; background-color: #FFFFFF;
 }
 
 .ui-page.full .pad
@@ -2247,4 +2261,44 @@ background-color:transparent;
 input.error
 {
   color:#333333 !important;  
+}
+
+
+
+/* -----------------------------------------------------------PAGES: DO GOOD-------------------------------------------------------    */
+
+p.pledge
+{
+ border-top:1px solid #cccccc;
+ padding-top:20px;   
+ margin-top:30px;
+}
+
+.fb-image
+{
+   
+}
+
+.list-thumbnail
+{
+ margin-top: 15px;
+margin-left: 15px;  
+border-radius:5px;  
+}
+
+.ui-li-has-thumb .ui-btn-inner.contact a.ui-link-inherit, .contact .ui-li-static.ui-li-has-thumb, .ui-li-has-thumb .ui-btn-inner a.ui-link-inherit.contact-recipient-uri
+{
+ padding-left:84px;   
+}
+
+img.grow
+{
+	max-width: 100%;
+	height: auto;
+	margin:0 auto;
+	text-align:center;
+}
+.logo-holder
+{
+    text-align:center;
 }
