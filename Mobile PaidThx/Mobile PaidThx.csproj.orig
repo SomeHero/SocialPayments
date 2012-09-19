@@ -172,6 +172,7 @@
     <Compile Include="Controllers\SendController.cs" />
     <Compile Include="Controllers\SharingController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
+    <Compile Include="Controllers\SocialNetworksController.cs" />
     <Compile Include="Controllers\UserAgreementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -181,6 +182,7 @@
     <Compile Include="HtmlHelpers\ProfileHelpers.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BankAccountModels.cs" />
+    <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\DonateModels.cs" />
     <Compile Include="Models\EmailsModels.cs" />
     <Compile Include="Models\FacebookUserModels.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="Models\SendModels.cs" />
     <Compile Include="Models\SharingModels.cs" />
     <Compile Include="Models\SignInModels.cs" />
+    <Compile Include="Models\SocialNetworkModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ApplicationServices.cs" />
     <Compile Include="Services\FacebookServices.cs" />
@@ -217,6 +220,7 @@
     <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
     <Compile Include="Services\ResponseModels\UserConfigurationModels.cs" />
+    <Compile Include="Services\RoutingNumberServices.cs" />
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
@@ -225,6 +229,7 @@
     <Compile Include="Services\UserPayPointServices.cs" />
     <Compile Include="Services\UserPayStreamMessageServices.cs" />
     <Compile Include="Services\UserServices.cs" />
+    <Compile Include="Services\UserSocialNetworkServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.html" />
@@ -288,8 +293,13 @@
     <Content Include="Content\images\icon-settings-preferences-40x40-active.png" />
     <Content Include="Content\images\icons\aboutIcon-active.png" />
     <Content Include="Content\images\icons\aboutIcon.png" />
+    <Content Include="Content\images\icons\dogoodIcon-active.png" />
+    <Content Include="Content\images\icons\homeIcon-active.png" />
     <Content Include="Content\images\icons\joinIcon-active.png" />
     <Content Include="Content\images\icons\joinIcon.png" />
+    <Content Include="Content\images\icons\paystreamIcon-active.png" />
+    <Content Include="Content\images\icons\requestIcon-active.png" />
+    <Content Include="Content\images\icons\sendIcon-active.png" />
     <Content Include="Content\images\icons\signinIcon-active.png" />
     <Content Include="Content\images\icons\signinIcon.png" />
     <Content Include="Content\images\img-plus-40x40.png" />
@@ -297,6 +307,7 @@
     <Content Include="Content\images\line_diagonal2.png" />
     <Content Include="Content\images\line_hor.png" />
     <Content Include="Content\images\line_ver.png" />
+    <Content Include="Content\images\logo-welcome.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\org_acs.png" />
     <Content Include="Content\images\org_americandiabetes.png" />
@@ -321,11 +332,11 @@
     <Content Include="Content\images\org_zta.png" />
     <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\icons\settingsIcon.png" />
-    <Content Include="Content\images\icons\dogoodIcon-active.png" />
-    <Content Include="Content\images\icons\homeIcon-active.png" />
-    <Content Include="Content\images\icons\paystreamIcon-active.png" />
-    <Content Include="Content\images\icons\requestIcon-active.png" />
-    <Content Include="Content\images\icons\sendIcon-active.png" />
+    <Content Include="Content\images\icons\active-old\dogoodIcon-active.png" />
+    <Content Include="Content\images\icons\active-old\homeIcon-active.png" />
+    <Content Include="Content\images\icons\active-old\paystreamIcon-active.png" />
+    <Content Include="Content\images\icons\active-old\requestIcon-active.png" />
+    <Content Include="Content\images\icons\active-old\sendIcon-active.png" />
     <Content Include="Content\images\icons\dogoodIcon.png" />
     <Content Include="Content\images\icons\paystreamIcon.png" />
     <Content Include="Content\images\icons\requestIcon.png" />
@@ -384,8 +395,10 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\jquery.mobile.fixedToolbar.polyfill.css" />
     <Content Include="Content\PaidThx-v1.css" />
     <Content Include="Content\PaidThx-v1.min.css" />
+    <Content Include="Content\PaidThx-v2.css" />
     <Content Include="Content\patternlock.css" />
     <Content Include="Content\Dep.css" />
     <Content Include="navTest.html" />
@@ -431,6 +444,7 @@
     <Content Include="Scripts\fancybox\jquery.fancybox.js" />
     <Content Include="Scripts\fancybox\jquery.fancybox.pack.js" />
     <Content Include="Scripts\fancybox\jquery.mousewheel-3.0.4.pack.js" />
+    <Content Include="Scripts\jquery.mobile.fixedToolbar.polyfill.js" />
     <Content Include="Scripts\jquery.mobilemenu.js" />
     <Content Include="Scripts\jquery.mousewheel-3.0.6.pack.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
@@ -555,6 +569,7 @@
     <Content Include="Content\images\tab-request-30x30.png" />
     <Content Include="Content\images\tab-send-30x30-active.png" />
     <Content Include="Content\images\tab-send-30x30.png" />
+    <Content Include="Scripts\xdate.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -675,7 +690,6 @@
     <Content Include="Views\DoGood\PinswipeDonate.cshtml" />
     <Content Include="Views\DoGood\PinswipePledge.cshtml" />
     <Content Include="Views\Emails\Index.cshtml" />
-    <Content Include="Views\Preferences\SocialNetworks.cshtml" />
     <Content Include="Views\Phones\Index.cshtml" />
     <Content Include="Views\MeCodes\Index.cshtml" />
     <Content Include="Views\Preferences\Security.cshtml" />
@@ -720,22 +734,23 @@
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipe.cshtml" />
     <Content Include="Views\Security\ForgotSecurityPin_PinSwipeConfirm.cshtml" />
     <Content Include="Views\Shared\TopMenu-App.cshtml" />
-<<<<<<< HEAD
-=======
-    <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
-    <Content Include="Views\Send\SetupACHAccount.cshtml" />
-    <Content Include="Views\Send\ConfirmPinSwipe.cshtml" />
-    <Content Include="Views\Send\SetupPinSwipe.cshtml" />
-    <Content Include="Views\Send\SecurityQuestion.cshtml" />
-    <Content Include="Views\Request\SecurityQuestion.cshtml" />
-    <Content Include="Views\Request\SetupPinSwipe.cshtml" />
-    <Content Include="Views\Request\SetupACHAccount.cshtml" />
-    <Content Include="Views\Donate\SecurityQuestion.cshtml" />
-    <Content Include="Views\Donate\SetupPinSwipe.cshtml" />
-    <Content Include="Views\Donate\SetupACHAccount.cshtml" />
-    <Content Include="Views\Request\ConfirmPinSwipe.cshtml" />
-    <Content Include="Views\Donate\ConfirmPinSwipe.cshtml" />
     <Content Include="Views\Paystream\PopupPinswipe.cshtml" />
+    <Content Include="Views\Security\ChangeSecurityPinConfirm.cshtml" />
+    <Content Include="Views\Account\PasswordReset.cshtml" />
+    <Content Include="Views\BankAccounts\VerifyAccount.cshtml" />
+    <Content Include="Views\Donate\ConfirmPinSwipe.cshtml" />
+    <Content Include="Views\Donate\SecurityQuestion.cshtml" />
+    <Content Include="Views\Donate\SetupACHAccount.cshtml" />
+    <Content Include="Views\Donate\SetupPinSwipe.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\SocialNetworks\Index.cshtml" />
+    <Content Include="Views\Send\ConfirmPinSwipe.cshtml" />
+=======
+    <Content Include="Views\Paystream\PartialViews\PS-Detail.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\PS-Item.cshtml" />
+    <Content Include="Views\Paystream\PartialViews\PS-Message.cshtml" />
+    <Content Include="Views\Shared\WelcomeMenuTop.cshtml" />
+    <Content Include="Views\Shared\LoggedInMenuTop.cshtml" />
 >>>>>>> upstream/development
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />

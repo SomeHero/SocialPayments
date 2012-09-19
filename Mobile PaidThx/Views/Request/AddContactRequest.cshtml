@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "AddContactRequest";
-    ViewBag.PageID = "request-contact-select-pag";
+    ViewBag.PageID = "request-contact-select-page";
     ViewBag.Classes = "full";
 }
 <div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
@@ -54,7 +54,7 @@
         
     <script language="javascript">
         //wait to do event binding until the page is being initialized
-        $("#request-contact-select-page").unbind('pageshow').bind('pageshow', function () {
+        $("#@ViewBag.PageID").unbind('pageshow').bind('pageshow', function () {
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');

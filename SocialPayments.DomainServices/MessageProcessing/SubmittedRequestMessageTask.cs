@@ -33,67 +33,78 @@ namespace SocialPayments.DomainServices.MessageProcessing
         {
             using (var ctx = new Context())
             {
-                _logger.Log(LogLevel.Info, String.Format("Processing Request Message to {0}", messageId));
-
-                _messageService  = new DomainServices.MessageServices();
-                _userServices =  new DomainServices.UserService(ctx);
-                _smsServices = new DomainServices.SMSService(ctx);
-                _emailServices = new DomainServices.EmailService(ctx);
-                _communicationServices = new DomainServices.CommunicationService(ctx);
-                _facebookServices = new DomainServices.FacebookServices(ctx);
-                _iosNotificationServices = new DomainServices.IOSNotificationServices(ctx);
-
-                var urlShortnerService = new DomainServices.GoogleURLShortener();
-        
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
-
-                //Validate Payment Request
-                bool isRecipientEngaged = true;
-
-                message.Recipient = _userServices.GetUser(message.RecipientUri);
-                message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
-
-                if (message.Recipient != null)
+                try
                 {
-                    if (message.Recipient.PaymentAccounts.Where(a => a.IsActive).Count() == 0)
-                        isRecipientEngaged = false;
+                    _logger.Log(LogLevel.Info, String.Format("Processing Request Message to {0}", messageId));
 
-                    if (isRecipientEngaged)
+                    _messageService = new DomainServices.MessageServices();
+                    _userServices = new DomainServices.UserService(ctx);
+                    _smsServices = new DomainServices.SMSService(ctx);
+                    _emailServices = new DomainServices.EmailService(ctx);
+                    _communicationServices = new DomainServices.CommunicationService(ctx);
+                    _facebookServices = new DomainServices.FacebookServices(ctx);
+                    _iosNotificationServices = new DomainServices.IOSNotificationServices(ctx);
+
+                    var urlShortnerService = new DomainServices.GoogleURLShortener();
+
+                    var message = ctx.Messages
+                        .FirstOrDefault(m => m.Id == messageId);
+                    ctx.Messages.Attach(message);
+
+                    //Validate Payment Request
+                    bool isRecipientEngaged = true;
+
+                    message.Recipient = _userServices.GetUser(message.RecipientUri);
+                    message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+
+                    if (message.Recipient != null)
                     {
-                        _logger.Log(LogLevel.Info, String.Format("Sending Communication to Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
+                        if (message.Recipient.PaymentAccounts.Where(a => a.IsActive).Count() == 0)
+                            isRecipientEngaged = false;
 
-                        message.Status = PaystreamMessageStatus.PendingRequest;
+                        if (isRecipientEngaged)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Sending Communication to Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                        SendRecipientEngagedCommunication(message);
+                            message.Status = PaystreamMessageStatus.PendingRequest;
+
+                            SendRecipientEngagedCommunication(message);
+                        }
+                        else
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Sending Communication to Non Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
+
+                            message.Status = PaystreamMessageStatus.PendingRequest;
+
+                            SendRecipientNotEngagedCommunication(message);
+                        }
                     }
                     else
                     {
-                        _logger.Log(LogLevel.Info, String.Format("Sending Communication to Non Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
+                        _logger.Log(LogLevel.Info, String.Format("Sending Communication to Not Registered Recipient {0} for Message {1}", message.RecipientUri, message.Id));
 
-                        message.Status = PaystreamMessageStatus.PendingRequest;
+                        message.Status = PaystreamMessageStatus.NotifiedRequest;
 
-                        SendRecipientNotEngagedCommunication(message);
+                        SendRecipientNotRegisteredCommunication(message);
+                    }
+
+                    SendSenderReceiptCommunication(message);
+
+                    message.LastUpdatedDate = System.DateTime.Now;
+
+                    ctx.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Post Payment Message Task. Exception: {0}. Stack Trace: {1}", ex.Message, ex.StackTrace));
+
+                    var innerException = ex.InnerException;
+                    while (innerException != null)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Post Payment Message Task. Inner Exception: {0}. Stack Trace: {1}", innerException.Message, innerException.StackTrace));
+                        innerException = innerException.InnerException;
                     }
                 }
-                else
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Sending Communication to Not Registered Recipient {0} for Message {1}", message.RecipientUri, message.Id));
-
-                    message.Status = PaystreamMessageStatus.NotifiedRequest;
-
-                    SendRecipientNotRegisteredCommunication(message);
-                }
-
-                _logger.Log(LogLevel.Info, String.Format("Sending Communication to Sender {0} for Message {1}", message.Sender.UserId, message.Id));
-                SendSenderReceiptCommunication(message);
-
-                //Update Payment Status
-                _logger.Log(LogLevel.Info, String.Format("Updating Payment Request"));
-
-                message.LastUpdatedDate = System.DateTime.Now;
-
-                ctx.SaveChanges();
             }
         }
         private void SendRecipientEngagedCommunication(Domain.Message message)

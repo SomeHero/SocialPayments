@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿﻿<!doctype html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -21,13 +21,18 @@
     <!-- Included CSS Files -->
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/foundation.css")">
     <!--<link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/jquery.mobile-1.0.1.css")"  />-->
-    <link rel="Stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.css" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/fancybox/jquery.fancybox.css?v=2.1.0")" media="screen" />
 	<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/fancybox/helpers/jquery.fancybox-buttons.css?v=1.0.3")" />
 	<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/fancybox/helpers/jquery.fancybox-thumbs.css?v=1.0.6")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jquery.qtip.min.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jquery.validate.password.css")" />
-    <link rel="Stylesheet" href="@Url.Content("~/Content/PaidThx-v1.css")" />
+
+    <!--JQUERY MOBILE-->
+    <link type="text/css" rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.css" />
+    <!--<link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/jquery.mobile.fixedToolbar.polyfill.css")" />-->
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/PaidThx-v2.css")" />
+
+    <!--CUSTOM-->
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/app.css?ver=0.1")" />
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/patternlock.css")"  />
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Tangerine|Inconsolata|Droid+Sans" />
@@ -36,31 +41,30 @@
 	<![endif]-->
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+    <!--JQUERY-->
     <!-- <script>        window.jQuery || document.write('<script src="@Url.Content("~/Scripts/libs/jquery-1.7.1.js")"><\/script>')</script>-->
-    <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     
     
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.password.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.livequery.js")" type="text/javascript"></script>
+    <script type="text/javascript"src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.password.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.livequery.js")"></script>
 
     <script type="text/javascript" src="@Url.Content("~/Scripts/fancybox/jquery.fancybox.js?v=2.1.0")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/fancybox/helpers/jquery.fancybox-buttons.js?v=1.0.3")"></script>
 	<script type="text/javascript" src="@Url.Content("~/Scripts/fancybox/helpers/jquery.fancybox-thumbs.js?v=1.0.6")"></script>
 	<script type="text/javascript" src="@Url.Content("~/Scripts/fancybox/helpers/jquery.fancybox-media.js?v=1.0.3")"></script>
 
+<<<<<<< HEAD
     <script src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.placeholder.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.qtip.min.js")" type="text/javascript"></script>
-<<<<<<< HEAD
     <script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
-=======
-    
+    <script src="@Url.Content("~/Scripts/xdate.js")" type="text/javascript"></script>
     <!--<script src="@Url.Content("~/Scripts/settings.js")" type="text/javascript"></script>
->>>>>>> upstream/development
     <script src="@Url.Content("~/Scripts/home.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/send-money.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/dogood.js")" type="text/javascript"></script>
@@ -70,19 +74,39 @@
     <script src="@Url.Content("~/Scripts/popuppinswipe.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/notifications.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/sharing.js")" type="text/javascript"></script>
+=======
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.placeholder.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.qtip.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.tmpl.min.js")"></script>
+>>>>>>> upstream/development
 
+    <!--  CUSTOM SCRIPTS-->
+    <!-- DO WE NEED THESE 3? -->
+    <script type="text/javascript" src="@Url.Content("~/Scripts/popuppinswipe.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/notifications.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/sharing.js")"></script>
+    
+    <script type="text/javascript" src="@Url.Content("~/Scripts/patternlock.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
+
+    <script>
+        webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
+    </script>
     <!--  JQUERY MOBILE -->
-    <script src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js" type="text/javascript"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"
-        type="text/javascript"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js" ></script>
+    <!--<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.mobile.fixedToolbar.polyfill.js")"></script>-->
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
 </head>
 <body class="ui-mobile-viewport">
     <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
     @RenderBody()
-    <!-- Included JS Files -->
-    <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
 
+
+
+
+<!-- PAGE LEVEL SCRIPTS -->
 @RenderSection("EndScripts", required: false)
-
+@RenderSection("PageScripts", required: false)
 </body>
 </html>

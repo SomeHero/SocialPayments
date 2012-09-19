@@ -75,7 +75,7 @@ namespace Mobile_PaidThx.Controllers
             });
         }
 
-        [HttpDelete]
+        [HttpPost]
         public ActionResult Delete(MeCodesModels.DeleteMeCodeModel model)
         {
             var user = (UserModels.UserResponse)Session["User"];

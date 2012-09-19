@@ -50,12 +50,20 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Add()
         {
+            if (Session["User"] == null)
+                return RedirectToAction("Index", "SignIn", null);
+
+            var user = (UserModels.UserResponse)Session["User"];
+
+            string nameOnAccount = "";
+            if (!String.IsNullOrEmpty(user.firstName) || !String.IsNullOrEmpty(user.lastName))
+                nameOnAccount = user.firstName + " " + user.lastName;
 
             return View(new BankAccountModels.AddPaymentAccountModel()
             {
                 AccountNumber = "",
                 AccountType = "Checking",
-                NameOnAccount = "",
+                NameOnAccount = nameOnAccount,
                 Nickname = "",
                 RoutingNumber = ""
             });
