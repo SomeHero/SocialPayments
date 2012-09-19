@@ -5,9 +5,9 @@
         <a href="#" class="paystreamItem" messageId="${Id}">
         <span class="trans-type">
         {{if transactionImageUri}}
-            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
+            <img width="50" height="50" class="rounded contact" src="${transactionImageUri}" alt="Image" />
         {{else}}
-            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
+            <img width="50" height="50" class="rounded contact" src="/mobile/Content/images/avatar.png" alt="Image" />
         {{/if}}
         </span>
         <div class="trans-title">
@@ -47,7 +47,7 @@
         <span class="trans-amount">
             <div class="gray-above">${createDate}</div>
             <div class="paystream-pay-in">
-                ${amount}
+                ${"$" + amount}
             </div>
             <div class="gray-out">
                 ${messageStatus}

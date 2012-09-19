@@ -2,9 +2,10 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "page-join";
+    ViewBag.Classes = "";
     
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
@@ -12,6 +13,7 @@
              {<text>You Have Money!</text>}
              else
              {<text>Join</text>}</h1>
+ @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              </div>
     <div data-role="content">
         <div class="pad">
@@ -81,9 +83,6 @@
                 </text>
                 }
             }
-
-            <h5>
-                Connect with Facebook</h5>
                 <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
                 Join with Facebook</button>
             <h5 style="margin-top:25px" id="form-marker">
@@ -119,6 +118,11 @@
         </div>
 
     </div>
+    <div data-role="footer" data-position="fixed"> 
+	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
+</div> 
+
+
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              
 <script type="text/javascript">
@@ -193,5 +197,5 @@
 
     });
     </script>
+    </div>
 
-</div>

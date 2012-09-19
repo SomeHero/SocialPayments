@@ -2,19 +2,20 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "send-page";
+    ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
             Send Money</h1>
-        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+        <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
+        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
     </div>
     <div data-role="content">
     <div class="pad">
         @Html.ValidationSummary()
      
-            <p style="margin-top: 0; padding-top: 0;">
             <a href="@Url.Content("~/Send/AddContactSend")" data-prefetch data-transition="slide">
                 <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
                         <span class="imgbg">
@@ -34,8 +35,7 @@
                                                       {
                                     <text>Choose Recipient</text>
                                                       }</span>
-                    </button>
-            </p>
+                    </button></a>
             <p>
                 <a href="@Url.Content("~/Send/AmountToSend")" data-prefetch data-transition="slide">
                     <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">

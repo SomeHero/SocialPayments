@@ -1,8 +1,10 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.AddContactModel
 @{
-    ViewBag.Title = "AddContactDonate";
+    ViewBag.Title = "Donate To:";
+    ViewBag.PageID = "donate-add-contact-page";
+    ViewBag.Classes = "full";
 }
-<div data-role="page" id="donate-add-contact-page" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

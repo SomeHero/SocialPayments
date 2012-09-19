@@ -40,7 +40,7 @@ namespace Mobile_PaidThx.HtmlHelpers
             {
                 if (menuModel.SelectedTabIndex == tabIndex)
                 {
-                    cssClass = "nav-item ui-btn-active";
+                    cssClass = "nav-item ui-btn-active ui-state-persist";
                 }
                 else
                 {
