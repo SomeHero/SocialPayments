@@ -1,5 +1,10 @@
 ﻿@model Mobile_PaidThx.Models.EmailsModels.DetailsEmailModel
-<div data-role="page" id="add-email-paypoint-page" @TempData["DataUrl"]>
+@{
+    ViewBag.Title = "Email Details";
+    ViewBag.PageID = "email-details-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>Email Details</h1>

@@ -1,8 +1,10 @@
 ﻿@model Mobile_PaidThx.Models.BankAccountModels.AddPaymentAccountModel
 @{
     ViewBag.Title = "Add Payment Account";
+    ViewBag.PageID = "bankaccounts-add-page";
+    ViewBag.Classes = "settings";
 }
-<div data-role="page" id="bankaccounts-add-page" data-add-back-btn="true">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true">
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>

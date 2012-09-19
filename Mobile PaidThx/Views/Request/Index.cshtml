@@ -1,20 +1,22 @@
 ﻿@model Mobile_PaidThx.Models.RequestModels.RequestMoneyModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageID = "request-page";
+    ViewBag.Classes = "";
 }
-<div id="request-page" data-role="page" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" data-add-back-btn="true">
-        <h1>
-            Request Money</h1>
-        <a href="@Url.Content("~/Preferences")" id="btn-settings" class="top-button ui-btn-right"></a>
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c" data-add-back-btn="true">
+        <h1>Request Money</h1>
+        <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
+        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Request Money" }); }
     </div>
     <div data-role="content">
         <div class="pad">
             @Html.ValidationSummary()
             @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
             {
-                <p style="margin-top: 0; padding-top: 0;">
+ 
                     <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch data-transition="slide">
                         <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
                             <span class="imgbg">
@@ -39,7 +41,6 @@
                                </span>
                         </button>
                     </a>
-                </p>
                 <p>
                     <a href="@Url.Content("~/Request/AmountToRequest")" data-prefetch data-transition="slide">
                         <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">

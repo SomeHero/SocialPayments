@@ -1,0 +1,65 @@
+﻿
+    <script id="detailTemplate" type="text/html">
+
+    <a onclick="closeOffersDialog('popup');" class="paystream-dialog-closebtn"></a>
+    <div class="paystream-dialog-title-bg">
+
+    {{if messageType == "Payment" && direction == "In"}}
+    $ Received
+    {{/if}}
+    {{if messageType == "Payment" && direction == "Out"}}
+
+    $ Sent
+    
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+
+    Request Received{{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+    Request Sent{{/if}}    
+    </div>
+
+    {{if messageType == "Payment" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq cancel-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Cancel Payment
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "Payment" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq send-reminder-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Send Reminder
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq cancel-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Cancel Request
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    <p>
+     <button type="button" class="btn-jq send-reminder-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Send Reminder
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+    <p>
+     <button type="button" class="btn-jq accept-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Accept & Pay
+     </button>
+    </p>
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+    <p>
+     <button type="button" class="btn-jq reject-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Reject Request
+     </button>
+    </p>
+    {{/if}}
+    </script>
