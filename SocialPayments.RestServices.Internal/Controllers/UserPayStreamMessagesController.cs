@@ -86,7 +86,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return response;
 
         }
-
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
         {

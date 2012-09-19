@@ -16,48 +16,71 @@ namespace SocialPayments.DomainServices.MessageProcessing
         {
             using (Context ctx = new Context())
             {
-                var messageService = new MessageServices();
-                var transactionBatchService = new TransactionBatchService(ctx, _logger);
-
-                var message = ctx.Messages.FirstOrDefault(m => m.Id == messageId);
-
-                if (message == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
-
-                message.Status = PaystreamMessageStatus.CancelledPayment;
-                message.LastUpdatedDate = System.DateTime.Now;
-
-                if (message.Payment != null)
+                try
                 {
+                    var messageService = new MessageServices();
+                    var transactionBatchService = new TransactionBatchService(ctx, _logger);
 
-                    foreach (var transaction in message.Payment.Transactions)
+                    var message = ctx.Messages.FirstOrDefault(m => m.Id == messageId);
+
+                    if (message == null)
+                        throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
+
+                    ctx.Messages.Attach(message);
+
+                    var transactionBatch = transactionBatchService.GetOpenBatch();
+                        throw new CustomExceptions.BadRequestException("Unable to Get Open Batch {0}");
+                    ctx.TransactionBatches.Attach(transactionBatch);
+
+                    message.Status = PaystreamMessageStatus.CancelledPayment;
+                    message.LastUpdatedDate = System.DateTime.Now;
+
+                    if (message.Payment != null)
                     {
-                        if (transaction.TransactionBatch != null)
+
+                        foreach (var transaction in message.Payment.Transactions)
                         {
-                            _logger.Log(LogLevel.Info, String.Format("Removing Transaction {0} from Batch {1}", transaction.Id, transaction.TransactionBatchId));
+                            var item = transactionBatch.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
 
-                            //]if (transaction.Type == TransactionType.Deposit)
-                            //{
-                            //    transaction.TransactionBatch.TotalNumberOfDeposits -= 1;
-                            //    transaction.TransactionBatch.TotalDepositAmount -= transaction.Amount;
-                            //}
-                            //if (transaction.Type == TransactionType.Withdrawal)
-                            //{
-                            //    transaction.TransactionBatch.TotalNumberOfWithdrawals -= 1;
-                            //    transaction.TransactionBatch.TotalWithdrawalAmount -= transaction.Amount;
-                            //}
-                            //transaction.TransactionBatch = null;
+                            if (item != null)
+                            {
+                                _logger.Log(LogLevel.Info, String.Format("Removing Transaction {0} from Batch {1}", item.Id, transactionBatch.Id));
+
+                                item.TransactionBatchId = null;
+
+                                if (item.Type == TransactionType.Deposit)
+                                {
+                                    transactionBatch.TotalNumberOfDeposits -= 1;
+                                    transactionBatch.TotalDepositAmount -= transaction.Amount;
+                                }
+                                if (item.Type == TransactionType.Withdrawal)
+                                {
+                                    transactionBatch.TotalNumberOfWithdrawals -= 1;
+                                    transactionBatch.TotalWithdrawalAmount -= transaction.Amount;
+                                }
+                            }
+                            transaction.Status = TransactionStatus.Cancelled;
+                            transaction.LastUpdatedDate = System.DateTime.Now;
+
                         }
-                        transaction.Status = TransactionStatus.Cancelled;
-                        transaction.LastUpdatedDate = System.DateTime.Now;
 
+                        message.Payment.PaymentStatus = PaymentStatus.Cancelled;
                     }
 
-                    message.Payment.PaymentStatus = PaymentStatus.Cancelled;
+
+                    ctx.SaveChanges();
                 }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Cancelled Payment Message Task. Exception: {0}. Stack Trace: {1}", ex.Message, ex.StackTrace));
 
-
-                ctx.SaveChanges();
+                    var innerException = ex.InnerException;
+                    while (innerException != null)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Cancelled Payment Message Task. Inner Exception: {0}. Stack Trace: {1}", innerException.Message, innerException.StackTrace));
+                        innerException = innerException.InnerException;
+                    }
+                }
 
             }
         }

@@ -1,12 +1,22 @@
 var webServicesController = (function ($, undefined) {
     var pub = {},
+    webServicesBaseUrl = "",
     $this = $(this);
 
+    pub.init = function(theWebServicesBaseUrl){
+        webServicesBaseUrl = theWebServicesBaseUrl;
+    };
     pub.getBaseURL = function () {
         return getBaseURL();
     };
+    pub.getWebServicesBaseUrl = function () {
+        return getWebServicesBaseUrl();
+    };
     function getBaseURL() {
         return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+    }
+    function getWebServicesBaseUrl() {
+        return webServicesBaseUrl;
     }
 
     return pub;
@@ -52,6 +62,7 @@ jQuery.expr[':'].focus = function( elem ) {
   return elem === document.activeElement && ( elem.type || elem.href );
 };
 
+
 var paystreamController = (function ($, undefined) {
     var pub = {},
         userId = "",
@@ -63,6 +74,7 @@ var paystreamController = (function ($, undefined) {
         items = {},
         displayedRecords = 0,
         totalRecords = 0,
+        currentHeader = "",
         $this = $(this);
 
     pub.init = function (theUserId) {
@@ -156,7 +168,7 @@ var paystreamController = (function ($, undefined) {
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
+            url: webServicesController.getWebServicesBaseUrl() + "Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
             dataType: "json",
             success: function (data, textStatus, xhr) {
 
@@ -179,10 +191,62 @@ var paystreamController = (function ($, undefined) {
         var $listview = $("#paystreamList");
 
         //Empty current list
-        $("#paystreamList li").not("#no-results").remove();
+        if (!append)
+            $("#paystreamList li").not("#no-results").remove();
 
+        var today = new XDate();
+        var yesterday = today.clone().addDays(-1);
+        var thisWeek = today.clone().getWeek();
+        var thisWeekYear = today.clone().getYear();
+        var lastWeek = thisWeek - 1;
+        var lastWeekYear = thisWeekYear;
+        if (lastWeek == 0) {
+            lastWeek = 53;
+            lastWeekYear -= 1;
+        }
+        var thisMonth = today.getMonth();
+        var thisMonthYear = today.getYear();
+
+        var thisYear = today.getYear();
+
+        var headerText = "";
         //Use template to create items & add to list
-        $("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
+        for (i = 0; i < items.length; i++) {
+            var header = {};
+            header.groupHeading = "";
+
+            var createDate = new XDate(new Date($(items).get(i).createDate));
+            var createDateWeek = createDate.getWeek();
+            var createDateMonth = createDate.getMonth();
+            var createDateYear = createDate.getYear();
+
+            if (createDate.getMonth() == today.getMonth() && createDate.getDate() == today.getDate() && createDate.getYear() == today.getYear()) {
+                headerText = "Today";
+            } else if (createDate.getMonth() == today.getMonth() && createDate.getDate() == yesterday.getDate() && yesterday.getYear() == yesterday.getYear()) {
+                headerText = "Yesterday";
+            } else if (createDateWeek == thisWeek && createDateYear == thisWeekYear) {
+                headerText = "This Week";
+            } else if (createDateWeek == lastWeek && createDateYear == lastWeekYear) {
+                headerText = "Last Week";
+            } else if (createDateMonth == thisMonth && createDateYear == thisYear) {
+                headerText = "This Month";
+            } else if (createDateMonth == lastMonth && createDateYear == lastMonthYear) {
+                headerText = "Last Month";
+            } else {
+                headerText = createDate.toString("MMMM") + " " + createDate.toString("yyyy")
+            }
+
+
+            if (currentHeader != headerText) {
+                currentHeader = headerText;
+                header.groupHeading = currentHeader;
+                $("#paystreamHeader").tmpl(header).appendTo($("#paystreamList"));
+            }
+
+            $("#paystreamItem").tmpl($(items).get(i)).appendTo($("#paystreamList"));
+
+        };
+        //$("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
         //Call the listview jQuery UI Widget after adding 
         //items to the list allowing correct rendering
@@ -190,7 +254,7 @@ var paystreamController = (function ($, undefined) {
     }
 
     function openOffersDialog(transactionId, callback) {
-        var serviceUrl = "http://23.21.203.171/api/internal/api/Users/" + userId + "/PaystreamMessages/" + transactionId;
+        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId;
 
         $.ajax({
             url: serviceUrl,
@@ -241,7 +305,7 @@ var paystreamController = (function ($, undefined) {
     }
     function cancelPayment(messageId, callback) {
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_payment",
+            url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/cancel_payment",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
@@ -252,7 +316,7 @@ var paystreamController = (function ($, undefined) {
     }
     function cancelRequest(messageId, callback) {
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/cancel_request",
+            url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/cancel_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
@@ -263,7 +327,7 @@ var paystreamController = (function ($, undefined) {
     }
     function acceptRequest(messageId, callback) {
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/accept_request",
+            url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/accept_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
@@ -274,7 +338,7 @@ var paystreamController = (function ($, undefined) {
     }
     function rejectRequest(messageId, callback) {
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api//PaystreamMessages/" + messageId + "/reject_request",
+            url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/reject_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
@@ -325,7 +389,7 @@ var contactsSearchController = (function ($, undefined) {
     function searchByMeCode(searchValue, callback) {
         //Get news via ajax and return jqXhr
         $.ajax({
-            url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/" + searchValue,
+            url: webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue,
             dataType: "json",
             success: function (data, textStatus, xhr) {
                 //Publish that news has been updated & allow

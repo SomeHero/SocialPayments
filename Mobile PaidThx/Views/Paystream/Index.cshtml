@@ -51,7 +51,9 @@
         </ul>
     </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
-
+<script id="paystreamHeader" type="text/x-jquery-tmpl">
+    <li data-role="list-divider">${groupHeading}</li>
+</script>
 <script id="paystreamItem" type="text/x-jquery-tmpl">
     <li>
         <a href="#" class="paystreamItem" messageId="${Id}">
@@ -99,7 +101,7 @@
         <span class="trans-amount">
             <div class="gray-above">${createDate}</div>
             <div class="paystream-pay-in">
-                ${amount}
+                $${amount.toFixed(2)}
             </div>
             <div class="gray-out">
                 ${messageStatus}

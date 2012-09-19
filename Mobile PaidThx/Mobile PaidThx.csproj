@@ -560,6 +560,7 @@
     <Content Include="Content\images\tab-request-30x30.png" />
     <Content Include="Content\images\tab-send-30x30-active.png" />
     <Content Include="Content\images\tab-send-30x30.png" />
+    <Content Include="Scripts\xdate.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
