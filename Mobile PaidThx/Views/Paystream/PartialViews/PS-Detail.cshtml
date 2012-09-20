@@ -20,7 +20,7 @@
     Request Sent{{/if}}    
     </div>
 
-    {{if messageType == "Payment" && direction == "Out"}}
+    {{if messageType == "Payment" && isCancellable }}
     <p>
      <button type="button" class="btn-jq cancel-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Cancel Payment
@@ -34,7 +34,7 @@
      </button>
     </p>
     {{/if}}
-    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    {{if messageType == "PaymentRequest" && isCancellable }}
     <p>
      <button type="button" class="btn-jq cancel-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Cancel Request

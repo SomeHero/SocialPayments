@@ -24,6 +24,9 @@ namespace SocialPayments.DomainServices
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
+                if (String.IsNullOrEmpty(securityQuestionAnswer))
+                    throw new CustomExceptions.BadRequestException("Security Question Answer is Required");
+
                 //TODO: validate routing number
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;

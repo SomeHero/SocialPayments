@@ -47,7 +47,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var message = ctx.Messages
                         .FirstOrDefault(m => m.Id == messageId);
-                    ctx.Messages.Add(message);
 
                     //Validate Payment Request
                     bool isRecipientEngaged = true;
@@ -161,7 +160,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         {
                             new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                             new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
-                            new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                            new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                             new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
@@ -275,7 +274,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                 {
                                     new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
-                                    new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                    new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),      
@@ -370,7 +369,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     {
                                     new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
-                                    new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                    new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
                                     new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),

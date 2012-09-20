@@ -35,6 +35,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public double longitutde { get; set; }
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
+
+            public bool isCancellable { get; set; }
+            public bool isRemindable { get; set; }
+            public bool isAcceptable { get; set; }
+            public bool isRejectable { get; set; }
         }
         public class MessageSeenUpdateRequest
         {

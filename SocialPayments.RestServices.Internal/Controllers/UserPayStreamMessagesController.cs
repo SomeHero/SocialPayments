@@ -79,12 +79,23 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     transactionImageUri = m.TransactionImageUrl,
                     recipientName = m.RecipientName,
                     senderSeen = m.senderHasSeen,
-                    recipientSeen = m.recipientHasSeen
+                    recipientSeen = m.recipientHasSeen,
+                    isCancellable = IsCancellable(m)
                 }).ToList()
             }, HttpStatusCode.OK);
 
             return response;
 
+        }
+        private bool IsCancellable(Domain.Message message)
+        {
+            if (message.PaymentRequest != null)
+                return false;
+
+            if (message.Direction == "In")
+                return false;
+            else
+                return message.Status.IsCancellable();
         }
         // GET /api/{userId}/PayStreamMessages
         public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
@@ -144,7 +155,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 transactionImageUri = m.TransactionImageUrl,
                 recipientName = m.RecipientName,
                 senderSeen = m.senderHasSeen,
-                recipientSeen = m.recipientHasSeen
+                recipientSeen = m.recipientHasSeen,
+                isCancellable = IsCancellable(m)
             }).ToList(), HttpStatusCode.OK);
 
 
@@ -209,7 +221,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 transactionImageUri = message.TransactionImageUrl,
                 recipientName = message.RecipientName,
                 senderSeen = message.senderHasSeen,
-                recipientSeen = message.recipientHasSeen
+                recipientSeen = message.recipientHasSeen,
+                isCancellable = IsCancellable(message)
             }, HttpStatusCode.OK);
 
 

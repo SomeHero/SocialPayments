@@ -692,7 +692,6 @@
     <Content Include="Views\Emails\Index.cshtml" />
     <Content Include="Views\Phones\Index.cshtml" />
     <Content Include="Views\MeCodes\Index.cshtml" />
-    <Content Include="Views\Preferences\Security.cshtml" />
     <Content Include="Views\Preferences\About.cshtml" />
     <Content Include="Views\Shared\TitleBar.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
