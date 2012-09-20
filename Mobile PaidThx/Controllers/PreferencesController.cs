@@ -128,10 +128,6 @@ namespace Mobile_PaidThx.Controllers
             });
         }
 
-        public ActionResult Security()
-        {
-            return View();
-        }
         public ActionResult UserAgreement()
         {
             return View();

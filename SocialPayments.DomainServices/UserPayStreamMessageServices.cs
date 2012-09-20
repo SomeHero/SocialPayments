@@ -54,7 +54,8 @@ namespace SocialPayments.DomainServices
 
                 var message = ctx.Messages
                     .Include("Recipient")
-                     .Include("Sender")
+                    .Include("Sender")
+                    .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageGuid);
 
                 if (message == null)

@@ -249,7 +249,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 message = _messageServices.AcceptPledge(request.apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
-                    request.comments, request.securityPin);
+                    request.comments, request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientLastName,
+                    request.securityPin);
             }
             catch (NotFoundException ex)
             {

@@ -41,7 +41,7 @@ namespace SocialPayments.DomainServices
                     if (!validationService.IsPhoneNumber(uri))
                         throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid phone number", unformattedUri));
                 }
-                if (payPointType.Name == "Email")
+                if (payPointType.Name == "EmailAddress")
                 {
                     if (!validationService.IsEmailAddress(uri))
                         throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid email address", unformattedUri));

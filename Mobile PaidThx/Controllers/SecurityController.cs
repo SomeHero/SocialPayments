@@ -15,7 +15,15 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (Session["User"] == null)
+                return RedirectToAction("Index", "SignIn");
+
+            var user = (UserModels.UserResponse)Session["User"];
+
+            return View(new SecurityModels.SecurityPreferencesModel()
+            {
+                SetupSecurityPin = user.setupSecurityPin
+            });
         }
 
         public ActionResult ChangePassword()

@@ -7,6 +7,10 @@ namespace Mobile_PaidThx.Models
 {
     public class SecurityModels
     {
+        public class SecurityPreferencesModel
+        {
+            public bool SetupSecurityPin { get; set; }
+        }
         public class ChangePasswordModel
         {
             public String OldPassword { get; set; }

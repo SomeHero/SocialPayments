@@ -691,6 +691,7 @@ namespace SocialPayments.DomainServices
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: firstname {1} lastname {2}", accountId, firstName, lastName));
 
             User user = null;
+            SocialNetwork socialNetwork = null;
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
@@ -698,6 +699,9 @@ namespace SocialPayments.DomainServices
             {
                 user = _ctx.Users
                     .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+
+                socialNetwork = _ctx.SocialNetworks
+                    .FirstOrDefault(u => u.Name == "Facebook");
 
                 if (user == null)
                 {
@@ -717,6 +721,15 @@ namespace SocialPayments.DomainServices
                         TokenExpiration = tokenExpiration,
                         OAuthToken = oAuthToken
                     };
+                    user.UserSocialNetworks = new Collection<UserSocialNetwork>();
+
+                    user.UserSocialNetworks.Add(new UserSocialNetwork()
+                    {
+                        EnableSharing = true,
+                        SocialNetwork = socialNetwork,
+                        UserNetworkId = accountId,
+                        UserAccessToken = oAuthToken
+                    });
 
                     user.FirstName = firstName;
                     user.LastName = lastName;

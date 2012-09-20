@@ -9,5 +9,6 @@ namespace SocialPayments.Domain.CustomAttributes
     {
         public string SenderDescription { get; set; }
         public string RecipientDescription { get; set; }
+        public bool IsCancellable { get; set; }
     }
 }
