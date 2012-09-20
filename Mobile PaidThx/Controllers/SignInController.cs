@@ -120,6 +120,9 @@ namespace Mobile_PaidThx.Controllers
                 }
                 else if (user.bankAccounts.Count() == 0)
                 {
+                    if (!String.IsNullOrEmpty(user.firstName) && !String.IsNullOrEmpty(user.lastName))
+                        TempData["NameOnAccount"] = user.firstName + " " + user.lastName;
+
                     return RedirectToAction("SetupACHAccount", "Register");
                 }
 
