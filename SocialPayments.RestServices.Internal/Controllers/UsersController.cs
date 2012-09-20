@@ -771,32 +771,43 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     int recipientType = -1;
 
-                    if (msg.RecipientId == null)
+                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+
+                    if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
                     {
-                        _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
 
-                        if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
+                        if (msg.Recipient != null)
                         {
-                            _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
-
-
-                            if (msg.RecipientName != null && msg.RecipientName.Length > 0)
-                                recipName = msg.RecipientName;
-                            else
-                                recipName = msg.recipientFirstName + " " + msg.recipientLastName;
-
                             quickSends.Add(new UserModels.QuickSendUserReponse()
                             {
                                 userUri = msg.RecipientUri,
-                                userName = recipName,
-                                userFirstName = msg.recipientFirstName,
-                                userLastName = msg.recipientLastName,
-                                userImage = String.Format("http://graph.facebook.com/{0}/picture",msg.RecipientUri.Substring(3)),
+                                userName = msg.Recipient.SenderName,
+                                userFirstName = msg.Recipient.FirstName,
+                                userLastName = msg.Recipient.LastName,
+                                userImage = String.Format("http://graph.facebook.com/{0}/picture", msg.RecipientUri.Substring(3)),
                                 userType = 0 // Normal User
                             });
                         }
                         else
                         {
+                            quickSends.Add(new UserModels.QuickSendUserReponse()
+                            {
+                                userUri = msg.RecipientUri,
+                                userName = msg.RecipientName,
+                                userFirstName = msg.recipientFirstName,
+                                userLastName = msg.recipientLastName,
+                                userImage = String.Format("http://graph.facebook.com/{0}/picture", msg.RecipientUri.Substring(3)),
+                                userType = 0 // Normal User
+                            });
+                        }
+                    }
+                    else
+                    {
+                        if (msg.RecipientId == null)
+                        {
+                            _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+
                             recipName = msg.RecipientUri;
 
                             quickSends.Add(new UserModels.QuickSendUserReponse()
@@ -809,59 +820,50 @@ namespace SocialPayments.RestServices.Internal.Controllers
                                 userType = 0 // Normal User
                             });
                         }
-                    }
-                    else if (msg.Recipient.Merchant != null)
-                    {
-                        _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
-
-                        recipName = msg.RecipientUri;
-
-                        recipientType = 1;
-
-                        string imageUri = null;
-
-                        if (msg.Recipient != null)
-                            imageUri = msg.Recipient.ImageUrl;
-
-                        quickSends.Add(new UserModels.QuickSendUserReponse()
+                        else if (msg.Recipient.Merchant != null)
                         {
-                            userUri = msg.RecipientId.ToString(),
-                            userName = recipName,
-                            userFirstName = msg.Recipient.FirstName,
-                            userLastName = msg.Recipient.LastName,
-                            userImage = imageUri,
-                            userType = recipientType
-                        });
-                    }
-                    else
-                    {
-                        if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
-                        {
-                            _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+                            _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
 
-                            recipName = String.Format("{0} {1}", msg.recipientFirstName, msg.recipientLastName);
+                            recipName = msg.RecipientUri;
+
+                            recipientType = 1;
+
+                            string imageUri = null;
+
+                            if (msg.Recipient != null)
+                                imageUri = msg.Recipient.ImageUrl;
+
+                            quickSends.Add(new UserModels.QuickSendUserReponse()
+                            {
+                                userUri = msg.RecipientId.ToString(),
+                                userName = recipName,
+                                userFirstName = msg.Recipient.FirstName,
+                                userLastName = msg.Recipient.LastName,
+                                userImage = imageUri,
+                                userType = recipientType
+                            });
                         }
                         else
                         {
                             recipName = msg.Recipient.SenderName;
+
+                            recipientType = 0;
+
+                            string imageUri = null;
+
+                            if (msg.Recipient != null)
+                                imageUri = msg.Recipient.ImageUrl;
+
+                            quickSends.Add(new UserModels.QuickSendUserReponse()
+                            {
+                                userUri = msg.RecipientUri,
+                                userName = recipName,
+                                userFirstName = msg.Recipient.FirstName,
+                                userLastName = msg.Recipient.LastName,
+                                userImage = imageUri,
+                                userType = recipientType
+                            });
                         }
-
-                        recipientType = 0;
-
-                        string imageUri = null;
-
-                        if (msg.Recipient != null)
-                            imageUri = msg.Recipient.ImageUrl;
-
-                        quickSends.Add(new UserModels.QuickSendUserReponse()
-                        {
-                            userUri = msg.RecipientUri,
-                            userName = recipName,
-                            userFirstName = msg.Recipient.FirstName,
-                            userLastName = msg.Recipient.LastName,
-                            userImage = imageUri,
-                            userType = recipientType
-                        });
                     }
                 }
             }
