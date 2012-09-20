@@ -30,6 +30,7 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public double longitutde { get; set; }
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
+            public bool isCancellable { get; set; }
         }
     }
 }

@@ -79,6 +79,19 @@ namespace SocialPayments.DataLayer
                     .WithOptionalDependent(p => p.Message)
                     .Map(m => m.MapKey("PaymentId"))
                     .WillCascadeOnDelete(false);
+
+                modelBuilder.Entity<Message>()
+                    .HasOptional(m => m.Originator)
+                    .WithMany()
+                    .Map(m => m.MapKey("OriginatorId"))
+                    .WillCascadeOnDelete(false);
+
+
+                modelBuilder.Entity<Message>()
+                    .HasOptional(m => m.PaymentRequest)
+                    .WithMany()
+                    .Map(m => m.MapKey("PaymentRequestId"))
+                    .WillCascadeOnDelete(false);
                     
                 modelBuilder.Entity<Payment>()
                     .HasRequired(m => m.Application)
