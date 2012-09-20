@@ -299,13 +299,13 @@ body{
 	width:42%; 
 	position:absolute;
 	border-radius:30px;
-	background: #207532; /* for non-css3 browsers */
+	background: #188100; /* for non-css3 browsers */
 opacity:0.9;
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#389f5a', endColorstr='#207532'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#389f5a), to(#207532)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ */
-    background: -ms-linear-gradient(top, #389f5a, #207532);
-    background: -o-linear-gradient(top, #389f5a, #207532); 
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b201', endColorstr='#188100'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#48b201), to(#188100)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #48b201,  #188100); /* for firefox 3.6+ */
+    background: -ms-linear-gradient(top, #48b201, #188100);
+    background: -o-linear-gradient(top, #48b201, #188100); 
 }
 
 .patternlocklinevertical
@@ -316,13 +316,13 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 	height:38%; 
 	position:absolute;
 	border-radius:30px;
-	background: #207532; /* for non-css3 browsers */
+	background: #188100; /* for non-css3 browsers */
 
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#389f5a', endColorstr='#207532'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#389f5a), to(#207532)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ */
-    background: -ms-linear-gradient(top, #389f5a, #207532);
-    background: -o-linear-gradient(top, #389f5a, #207532); 
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b201', endColorstr='#188100'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#48b201), to(#188100)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #48b201,  #188100); /* for firefox 3.6+ */
+    background: -ms-linear-gradient(top, #48b201, #188100);
+    background: -o-linear-gradient(top, #48b201, #188100); 
 }
 
 .patternlocklinediagonalforward
@@ -333,13 +333,13 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 	height:53.74%; 
 	position:absolute;
 	border-radius:30px;
-	background: #207532; /* for non-css3 browsers */
+	background: #188100; /* for non-css3 browsers */
 
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#389f5a', endColorstr='#207532'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#389f5a), to(#207532)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ */
-    background: -ms-linear-gradient(top, #389f5a, #207532);
-    background: -o-linear-gradient(top, #389f5a, #207532); 
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b201', endColorstr='#188100'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#48b201), to(#188100)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #48b201,  #188100); /* for firefox 3.6+ */
+    background: -ms-linear-gradient(top, #48b201, #188100);
+    background: -o-linear-gradient(top, #48b201, #188100); 
     
     transform:rotate(45deg);
 -ms-transform:rotate(45deg); /* IE 9 */
@@ -361,12 +361,12 @@ background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ *
 	height:53.74%; 
 	position:absolute;
 	border-radius:30px;
-	background: #207532; /* for non-css3 browsers */
+	background: #188100; /* for non-css3 browsers */
 
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#389f5a', endColorstr='#207532'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#389f5a), to(#207532)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #389f5a,  #207532); /* for firefox 3.6+ */
-    background: -ms-linear-gradient(top, #389f5a, #207532);
-    background: -o-linear-gradient(top, #389f5a, #207532); 
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b201', endColorstr='#188100'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#48b201), to(#188100)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #48b201,  #188100); /* for firefox 3.6+ */
+    background: -ms-linear-gradient(top, #48b201, #188100);
+    background: -o-linear-gradient(top, #48b201, #188100); 
 	visibility:hidden;
 }

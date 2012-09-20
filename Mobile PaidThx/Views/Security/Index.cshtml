@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.SecurityModels.SecurityPreferencesModel
+@{
     ViewBag.Title = "Index";
 }
 <div data-role="page" id="security-page" data-add-back-btn="true" @TempData["DataUrl"]>
@@ -17,6 +18,8 @@
                     <!-- User Agreement -->
                     <a href="@Url.Content("~/Security/ChangePassword")" data-prefetch data-transition="slide">
                     Change Password </a></li>
+                @if (Model.SetupSecurityPin)
+                {
                 <li>
                     <!-- Sign Out -->
                     <a  href="@Url.Content("~/Security/ChangeSecurityPin")" data-prefetch data-transition="slide">
@@ -25,6 +28,7 @@
                     <!-- Sign Out -->
                     <a  href="@Url.Content("~/Security/ForgotSecurityPin")" data-prefetch data-transition="slide">
                     Forgot Security Pin</a></li>
+                }
             </ul>
         </div>
     </div>

@@ -28,16 +28,45 @@ namespace SocialPayments.DomainServices
         public MessageServices()
         {}
 
-        public Message AcceptPledge(string apiKey, string senderId, string organizationId, string recipientUri, double amount, string comments, string securityPin)
+        public Message AcceptPledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments, 
+            double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
+            Guid applicationGuid;
+            Guid originatorGuid;
             Guid organizationGuid;
+
             Domain.User organization = null;
+            Domain.User originator = null;
+
+            var userService = new UserService();
             var securityServices = new SecurityService();
 
+            Guid.TryParse(apiKey, out applicationGuid);
+            Guid.TryParse(originatorId, out originatorGuid);
             Guid.TryParse(organizationId, out organizationGuid);
+
+            Domain.MessageType  type = MessageType.AcceptPledge;
+            Domain.PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPledge;
 
             using (var ctx = new Context())
             {
+               
+                if (applicationGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+
+                Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
+
+                if (application == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+
+                originator = ctx.Users.FirstOrDefault(u => u.UserId == originatorGuid);
+
+                if(originator == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Orriginator of Pledge {0} Not Found", originatorId));
+
+                if (!(securityServices.Encrypt(securityPin).Equals(originator.SecurityPin)))
+                    throw new CustomExceptions.BadRequestException("Invalid Security Pin");
+
                 organization = ctx.Users.FirstOrDefault(u => u.UserId == organizationGuid);
 
                 if (organization == null)
@@ -45,14 +74,51 @@ namespace SocialPayments.DomainServices
 
                 if (organization.PreferredReceiveAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("No Receive Account Specified for Organization {0}", organizationId));
-            }
 
-            return AddMessage(apiKey, organizationId, "", recipientUri, organization.PreferredReceiveAccount.Id.ToString(), amount, comments, "Pledge", 0.0, 0.0,
-                "", "", "", securityServices.Decrypt(organization.SecurityPin));
+                Domain.Message messageItem = ctx.Messages.Add(new Message()
+                {
+                    Amount = amount,
+                    Application = application,
+                    ApiKey = application.ApiKey,
+                    Comments = comments,
+                    CreateDate = System.DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    Status = status,
+                    WorkflowStatus = PaystreamMessageWorkflowStatus.Pending,
+                    MessageType = type,
+                    Originator = originator,
+                    RecipientUri = recipientUri,
+                    SenderUri = organization.Merchant.Name,
+                    Sender = organization,
+                    SenderId = organization.UserId,
+                    SenderAccount = organization.PreferredReceiveAccount,
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    recipientFirstName = (!String.IsNullOrEmpty(recipientFirstName) ? recipientFirstName : null),
+                    recipientLastName = (!String.IsNullOrEmpty(recipientLastName) ? recipientLastName : null),
+                    recipientImageUri = recipientImageUri,
+                    recipientHasSeen = false,
+                    senderHasSeen = false
+                });
+
+                ctx.SaveChanges();
+
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    SubmittedPledgeMessageTask pledgeTask = new SubmittedPledgeMessageTask();
+                    pledgeTask.Execute(messageItem.Id);
+
+                });
+
+                return messageItem;
+            
+            }
 
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
-             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
+             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin,
+            string associatedRequestId)
         {
             _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1} with {2}", senderId, recipientUri, senderAccountId));
 
@@ -67,6 +133,7 @@ namespace SocialPayments.DomainServices
                 User sender = null;
                 Guid recipientGuid;
                 User recipient = null;
+                Message associatedRequest = null;
 
                 if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST" || messageType.ToUpper() == "PLEDGE" || messageType.ToUpper() == "DONATION"))
                     throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment, PaymentRequest, Pledge or Donation"));
@@ -181,6 +248,15 @@ namespace SocialPayments.DomainServices
                 if (senderAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Sender Account {0} Not Valid", senderAccountId));
 
+                Guid associatedRequestGuid;
+
+                Guid.TryParse(associatedRequestId, out associatedRequestGuid);
+
+                if (associatedRequestGuid != null)
+                {
+                    associatedRequest = ctx.Messages
+                        .FirstOrDefault(m => m.Id == associatedRequestGuid);
+                }
                 //TODO: confirm amount is within payment limits (maybe)
 
                 //Add message
@@ -209,42 +285,11 @@ namespace SocialPayments.DomainServices
                         recipientLastName = (recipient != null && !String.IsNullOrEmpty(recipient.LastName) ? recipient.LastName : recipientLastName),
                         recipientImageUri = recipientImageUri,
                         recipientHasSeen = false,
-                        senderHasSeen = true
+                        PaymentRequest = associatedRequest,
+                        senderHasSeen = true,
                     });
 
                 ctx.SaveChanges();
-
-
-                //kick off background taskes to lookup recipient, send emails, and bath transactions
-                Task.Factory.StartNew(() =>
-                {
-                    switch (messageItem.MessageType)
-                    {
-                        case MessageType.Payment:
-                            SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
-                            paymentTask.Execute(messageItem.Id);
-
-                            break;
-
-                        case MessageType.PaymentRequest:
-                            SubmittedRequestMessageTask requestTask = new SubmittedRequestMessageTask();
-                            requestTask.Execute(messageItem.Id);
-
-                            break;
-
-                        case MessageType.AcceptPledge:
-                            SubmittedPledgeMessageTask pledgeTask = new SubmittedPledgeMessageTask();
-                            pledgeTask.Execute(messageItem.Id);
-
-                            break;
-                        case MessageType.Donation:
-                            SubmittedDonationMessageTask donationTask = new SubmittedDonationMessageTask();
-                            donationTask.Execute(messageItem.Id);
-
-                            break;
-                    }
-
-                });
 
                 return messageItem;
             }
@@ -253,47 +298,39 @@ namespace SocialPayments.DomainServices
         public Domain.Message AddPayment(string apiKey, string senderId, string recientUri, string senderAccountId, double amount, string comments, double latitude,
             double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
-             return AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "Payment", latitude, longitude, recipientFirstName,
-                    recipientLastName, recipientImageUri, securityPin);
+            using (var ctx = new Context())
+            {
+                Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "Payment", latitude, longitude, recipientFirstName,
+                       recipientLastName, recipientImageUri, securityPin, "");
+
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    SubmittedPaymentMessageTask paymentTask = new SubmittedPaymentMessageTask();
+                    paymentTask.Execute(message.Id);
+                });
+
+                return message;
+            }
         }
         public Domain.Message AddRequest(string apiKey, string senderId, string recientUri, string senderAccountId, double amount, string comments, double latitude,
             double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
-            return AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "PaymentRequest", latitude, longitude, recipientFirstName,
-                recipientLastName, recipientImageUri, securityPin);
-        }
-        public void CancelMessage(string id)
-        {
             using (var ctx = new Context())
             {
-                Guid messageId;
+                Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "PaymentRequest", latitude, longitude, recipientFirstName,
+                    recipientLastName, recipientImageUri, securityPin, "");
 
-                Guid.TryParse(id, out messageId);
-
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
-
-                if (message == null)
-                    throw new ArgumentException("Invalid Message Id.", "Id");
-
-                try
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
                 {
-                    message.LastUpdatedDate = System.DateTime.Now;
-                    if (message.MessageType == MessageType.Payment)
-                        message.Status = PaystreamMessageStatus.CancelledPayment;
-                    else
-                        message.Status = PaystreamMessageStatus.CancelledRequest;
+                    SubmittedRequestMessageTask task = new SubmittedRequestMessageTask();
+                    task.Execute(message.Id);
+                });
 
-                    message.WorkflowStatus = PaystreamMessageWorkflowStatus.Pending;
-
-                    ctx.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
+                return message;
             }
+
         }
         public void CancelPayment(string id)
         {
@@ -330,7 +367,13 @@ namespace SocialPayments.DomainServices
                 _ctx.SaveChanges();
 
                 //TODO: Start Domain service to remove from batch and kick out any emails
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    CancelledPaymentMessageTask task = new CancelledPaymentMessageTask();
+                    task.Execute(message.Id);
 
+                });
             }
         }
         public void CancelRequest(string id)
@@ -374,7 +417,21 @@ namespace SocialPayments.DomainServices
         public Domain.Message Donate(string apiKey, string senderId, string organizationId, string organizationName, string senderAccountId, double amount,
             string comments, string securityPin)
         {
-            return AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments, "Donation", 0.0, 0.0, "", "", "", securityPin);
+            using (var ctx = new Context())
+            {
+                Domain.Message message = AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments, 
+                    "Donation", 0.0, 0.0, "", "", "", securityPin, "");
+
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    SubmittedDonationMessageTask task = new SubmittedDonationMessageTask();
+                    task.Execute(message.Id);
+                });
+
+                return message;
+            }
+        
         }
         public void AcceptPaymentRequest(string id, string recipientId, string paymentAccountId, string securityPin)
         {
@@ -414,10 +471,9 @@ namespace SocialPayments.DomainServices
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 var paymentMessage = AddMessage(message.ApiKey.ToString(), recipientId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
-                                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin);
+                                         message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
+                                         message.Id.ToString());
 
-                
-                ctx.SaveChanges();
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
                 {
@@ -652,13 +708,13 @@ namespace SocialPayments.DomainServices
                 else if(type.ToUpper() == "SENT")
                 {
                     totalRecords = ctx.Messages
-                        .Where(m => m.SenderId == userGuid)
+                        .Where(m => m.SenderId == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
                         .Count();
 
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
-                        .Where(m => m.SenderId == userGuid)
+                        .Where(m => m.SenderId == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)
@@ -667,13 +723,13 @@ namespace SocialPayments.DomainServices
                 else if (type.ToUpper() == "RECEIVED")
                 {
                     totalRecords = ctx.Messages
-                        .Where(m => m.RecipientId.Value == userGuid)
+                        .Where(m => m.RecipientId.Value == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
                         .Count();
 
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
-                        .Where(m => m.RecipientId.Value == userGuid)
+                        .Where(m => m.RecipientId.Value == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)
@@ -682,13 +738,13 @@ namespace SocialPayments.DomainServices
                 else if (type.ToUpper() == "OTHER")
                 {
                     totalRecords = ctx.Messages
-                        .Where(m => m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
+                        .Where(m => (m.SenderId == userGuid || m.RecipientId.Value == userGuid) && m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
                         .Count();
                     
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
-                        .Where(m => m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
+                        .Where(m => (m.SenderId == userGuid || m.RecipientId.Value == userGuid) && m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)
@@ -755,6 +811,7 @@ namespace SocialPayments.DomainServices
                 var messages = ctx.Messages
                     .Include("Recipient")
                     .Include("Sender")
+                    .Include("PaymentRequest")
                     .Where(m => m.SenderId == userId || m.RecipientId.Value == userId)
                     .OrderByDescending(m => m.CreateDate)
                     .ToList<Message>();
@@ -830,6 +887,9 @@ namespace SocialPayments.DomainServices
                 var formattingServices = new DomainServices.FormattingServices();
 
                 var message = ctx.Messages
+                    .Include("Recipient")
+                    .Include("Sender")
+                    .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageId);
 
                 URIType senderUriType = GetURIType(message.SenderUri);

@@ -58,6 +58,9 @@ namespace SocialPayments.Domain
 
         public virtual Payment Payment { get; set; }
 
+        public virtual Message PaymentRequest { get; set; }
+        public virtual User Originator { get; set; }
+
         [NotMapped]
         public string Direction { get; set; }
         [NotMapped]
@@ -69,6 +72,7 @@ namespace SocialPayments.Domain
 
         public bool recipientHasSeen { get; set; }
         public bool senderHasSeen { get; set; }
+ 
     }
 
     public class SameRecipientComparer : IEqualityComparer<Message>

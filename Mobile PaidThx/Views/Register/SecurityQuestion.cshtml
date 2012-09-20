@@ -12,10 +12,10 @@
     <div class="top-panel">
    
     <p>Select and answer a security question below.  You will be asked this in the event that you forget your Security PIN.</p></div>
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("SecurityQuestion", "Register", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {
-            @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "pop" }})
-            @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" } })
+            @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "pop" } })
+            @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })
             <br />
             <button type="submit" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">Complete Set Up</button>
         }

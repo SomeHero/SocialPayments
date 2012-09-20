@@ -109,6 +109,53 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("SetupPinSwipe");
         }
+        public ActionResult SkipACHSetup()
+        {
+            if (Session["UserId"] == null)
+                return RedirectToAction("SignIn");
+
+            var userServices = new Services.UserServices();
+            var applicationServices = new Services.ApplicationServices();
+            var userId = Session["UserId"].ToString();
+
+            UserModels.UserResponse user;
+
+            try
+            {
+                user = userServices.GetUser(userId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                return View();
+            }
+
+            ApplicationResponse application;
+
+            try
+            {
+                application = applicationServices.GetApplication(_apiKey);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
+
+                return View();
+            }
+
+            Session["Application"] = application;
+            Session["UserId"] = user.userId;
+            Session["User"] = user;
+
+            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+
+            return RedirectToAction("Index", "Paystream");
+        }
         [HttpPost]
         public bool ValidateRoutingNumber(string routingNumber)
         {
@@ -179,11 +226,12 @@ namespace Mobile_PaidThx.Controllers
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
 
+            var applicationServices = new Services.ApplicationServices();
             var userServices = new Services.UserServices();
             var userPaymentAccountService = new Services.UserPaymentAccountServices();
 
             var userId = Session["UserId"].ToString();
-            var nickName = String.Format("{0} {1}", achAccountModel.AccountType, achAccountModel.AccountNumber.Substring(achAccountModel.AccountNumber.Length - 5, 4));
+            var nickName = String.Format("{0} {1}", achAccountModel.AccountType, achAccountModel.AccountNumber.Substring(achAccountModel.AccountNumber.Length - 4, 4));
 
             string paymentAccountId = "";
 
@@ -214,6 +262,23 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
 
+            ApplicationResponse application;
+
+            try
+            {
+                application = applicationServices.GetApplication(_apiKey);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
+
+                return View();
+            }
+
+            Session["Application"] = application;
+            Session["UserId"] = user.userId;
             Session["User"] = user;
 
             TempData["DataUrl"] = "data-url=/mobile/Paystream";

@@ -2,18 +2,17 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "page-signin";
+    ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-        <h1>
-            Sign In</h1>
+        <h1>Sign In</h1>
+    @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Sign In" }); }
     </div>
     <div data-role="content">
         <div class="pad">
             @Html.ValidationSummary()
-            <h5>
-                Sign in with Facebook:</h5>
             <button type="button" id="signin-facebook-submit" class="btn-jq" data-theme="d" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
                 Sign in with Facebook
             </button>

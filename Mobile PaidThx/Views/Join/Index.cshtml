@@ -2,16 +2,32 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "page-join";
+    ViewBag.Classes = "";
     
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
     @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
              @if (Model.Message != null)
-             {<text>You Have Money!</text>}
+             {
+                 if (Model.Message.MessageType == "Payment")
+                 {
+                    <text>You Have Money!</text>
+                 }
+                 if (Model.Message.MessageType == "PaymentRequest")
+                 {
+                    <text>You Have a Pending Request!</text>
+                 }
+                 if (Model.Message.MessageType == "AcceptPledge")
+                 {
+                 <text>Thanks for your pledge!</text>
+                 }
+
+             }
              else
              {<text>Join</text>}</h1>
+ @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              </div>
     <div data-role="content">
         <div class="pad">
@@ -63,14 +79,14 @@
                 </div>
                 </text>
                 }
-                if (Model.Message.MessageType == "Pledge")
+                if (Model.Message.MessageType == "AcceptPledge")
                 {
                 <text>
 
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
                     <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <h4 class="aui-message">You pledged @String.Format("{0:C}", Model.Message.Amount) to <span class="sender">@Model.Message.Sender</span>.</h4>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
@@ -81,9 +97,6 @@
                 </text>
                 }
             }
-
-            <h5>
-                Connect with Facebook</h5>
                 <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
                 Join with Facebook</button>
             <h5 style="margin-top:25px" id="form-marker">
@@ -91,7 +104,7 @@
                 @Html.ValidationSummary()
              
             <div id="registration-form">
-                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, {"class", "validateMe"} }))
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
                 {
                     <span class="form-holder"><input type="email" id="email" class="email required" placeholder="Enter Your Email Address"
                         name="email" value="@Model.UserName" /></span>
@@ -119,79 +132,12 @@
         </div>
 
     </div>
+    <div data-role="footer" data-position="fixed"> 
+	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
+</div> 
+
+
      @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
-             
-<script type="text/javascript">
-    $(document).on('pageshow', '#@ViewBag.PageID', function () {
-        $('#registration-form #password').qtip({
-            content: {
-                text: $('#pass'),
-                title: {
-                    text: 'Password must contain:',
-                    button: true
-                }
-            },
-            position: {
-                my: 'bottom center',
-                at: 'top center'
-            },
-            show: {
-                event: 'focus',
-                solo: true
-            },
-            hide: {
-                event: 'blur'
-            },
-            style: {
-                classes: 'ui-tooltip qtip ui-tooltip-default ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-light',
-                width: "88%"
-            }
-        });
+            
+    </div>
 
-        $('#registration-form #confirmPasswordHolder').hide();
-
-        $('#registration-form #password').keyup(function () {
-            var pswd = $(this).val();
-
-            //validate the length
-            if (pswd.length < 6) {
-                $('#length').removeClass('valid').addClass('invalid');
-            } else {
-                $('#length').removeClass('invalid').addClass('valid');
-            }
-
-            //validate letter
-            if (pswd.match(/[A-z]/)) {
-                $('#letter').removeClass('invalid').addClass('valid');
-            } else {
-                $('#letter').removeClass('valid').addClass('invalid');
-            }
-
-            //validate capital letter
-            if (pswd.match(/[A-Z]/)) {
-                $('#capital').removeClass('invalid').addClass('valid');
-            } else {
-                $('#capital').removeClass('valid').addClass('invalid');
-            }
-
-            //validate number
-            if (pswd.match(/\d/)) {
-                $('#number').removeClass('invalid').addClass('valid');
-            } else {
-                $('#number').removeClass('valid').addClass('invalid');
-            }
-
-            if ((pswd.match(/\d/)) && (pswd.match(/[A-Z]/)) && (pswd.match(/[A-z]/)) && (pswd.length > 5)) {
-                $('#confirmPasswordHolder').css("display", "block");
-                $('#confirmPasswordHolder').fadeIn(800);
-            } else {
-
-            }
-
-        });
-
-
-    });
-    </script>
-
-</div>

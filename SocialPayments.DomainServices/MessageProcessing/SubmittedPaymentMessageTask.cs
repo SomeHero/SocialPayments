@@ -34,146 +34,168 @@ namespace SocialPayments.DomainServices.MessageProcessing
         {
             using (var ctx = new Context())
             {
-                _messageServices = new DomainServices.MessageServices();
-                _userServices = new DomainServices.UserService(ctx);
-                _smsServices = new DomainServices.SMSService(ctx);
-                _emailServices = new DomainServices.EmailService(ctx);
-                _communicationServices = new DomainServices.CommunicationService(ctx);
-                _facebookServices = new DomainServices.FacebookServices(ctx);
-                _iosNotificationServices = new DomainServices.IOSNotificationServices(ctx);
-
-                var communicationService = new DomainServices.CommunicationService(ctx);
-                var urlShortnerService = new DomainServices.GoogleURLShortener();
-                var transactionBatchServices = new DomainServices.TransactionBatchService(ctx, _logger);
-
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
-
-                //Batch Transacations
-                //Calculate the # of hold days
-                var holdDays = 0;
-                var scheduledProcessingDate = System.DateTime.Now.Date;
-                var verificationLevel = PaymentVerificationLevel.Verified;
-                var verifiedLimit = _userServices.GetUserInstantLimit(message.Sender);
-
-                _senderName = _userServices.GetSenderName(message.Sender);
-
-                if (message.Amount > verifiedLimit)
+                try
                 {
-                    holdDays = 3;
-                    scheduledProcessingDate = scheduledProcessingDate.AddDays(holdDays);
-                    verificationLevel = PaymentVerificationLevel.UnVerified;
-                }
+                    _messageServices = new DomainServices.MessageServices();
+                    _userServices = new DomainServices.UserService(ctx);
+                    _smsServices = new DomainServices.SMSService(ctx);
+                    _emailServices = new DomainServices.EmailService(ctx);
+                    _communicationServices = new DomainServices.CommunicationService(ctx);
+                    _facebookServices = new DomainServices.FacebookServices(ctx);
+                    _iosNotificationServices = new DomainServices.IOSNotificationServices(ctx);
 
-                var transactionBatch = transactionBatchServices.GetOpenBatch();
+                    var communicationService = new DomainServices.CommunicationService(ctx);
+                    var urlShortnerService = new DomainServices.GoogleURLShortener();
+                    var transactionBatchServices = new DomainServices.TransactionBatchService(ctx, _logger);
 
-                //Create Payment
-                message.Payment = new Payment()
-                {
-                    Amount = message.Amount,
-                    ApiKey = message.ApiKey,
-                    Comments = message.Comments,
-                    CreateDate = System.DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    PaymentStatus = PaymentStatus.Pending,
-                    SenderAccount = message.SenderAccount,
-                    HoldDays = holdDays,
-                    ScheduledProcessingDate = scheduledProcessingDate,
-                    PaymentVerificationLevel = verificationLevel,
-                    Transactions = new List<Transaction>()  
-                };
+                    var message = _messageServices.GetMessage(messageId);
+                    ctx.Messages.Attach(message);
 
-                //Add the withdrawal transaction
-                message.Payment.Transactions.Add(new Domain.Transaction() {
-                    AccountNumber = message.SenderAccount.AccountNumber,
-                    Amount = message.Payment.Amount,
-                    AccountType = Domain.AccountType.Checking,
-                    ACHTransactionId = "",
-                    CreateDate = System.DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    IndividualIdentifier = message.RecipientUri,
-                    NameOnAccount = message.SenderAccount.NameOnAccount,
-                    PaymentChannelType = PaymentChannelType.Single,
-                    RoutingNumber = message.SenderAccount.RoutingNumber,
-                    StandardEntryClass = StandardEntryClass.Web,
-                    Status = TransactionStatus.Pending,
-                    Type = TransactionType.Withdrawal,
-                    TransactionBatch = transactionBatch,
-                    Payment = message.Payment
-                });
+                    //Batch Transacations
+                    //Calculate the # of hold days
+                    var holdDays = 0;
+                    var scheduledProcessingDate = System.DateTime.Now.Date;
+                    var verificationLevel = PaymentVerificationLevel.Verified;
+                    var verifiedLimit = _userServices.GetUserInstantLimit(message.Sender);
 
-                transactionBatch.TotalNumberOfWithdrawals += 1;
-                transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
+                    _senderName = _userServices.GetSenderName(message.Sender);
 
-                message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
-                message.LastUpdatedDate = System.DateTime.Now;
-
-                message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
-                message.Recipient = _userServices.GetUser(message.RecipientUri);
-
-                if (message.Recipient != null)
-                {
-                    string recipientName = _userServices.GetSenderName(message.Recipient);
-                    bool isRecipientEngaged = true;
-
-                    if (message.Recipient.PaymentAccounts.Where(a => a.IsActive).Count() == 0)
-                        isRecipientEngaged = false;
-
-                    //create deposit transaction for recipient if they have an account that is verified
-                    //and the payment is not being held
-                    if (isRecipientEngaged && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
+                    if (message.Amount > verifiedLimit)
                     {
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
-
-                        transactionBatch.TotalNumberOfDeposits += 1;
-                        transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
-
-                        message.Payment.Transactions.Add(new Transaction()
-                        {
-                            AccountNumber = message.Recipient.PaymentAccounts[0].AccountNumber,
-                            RoutingNumber = message.Recipient.PaymentAccounts[0].RoutingNumber,
-                            NameOnAccount = message.Recipient.PaymentAccounts[0].NameOnAccount,
-                            AccountType = Domain.AccountType.Checking,
-                            Amount = message.Payment.Amount,
-                            CreateDate = System.DateTime.Now,
-                            Id = Guid.NewGuid(),
-                            PaymentChannelType = PaymentChannelType.Single,
-                            StandardEntryClass = StandardEntryClass.Web,
-                            Status = TransactionStatus.Pending,
-                            TransactionBatch = transactionBatch,
-                            Type = TransactionType.Deposit,
-                            Payment = message.Payment,
-                            IndividualIdentifier = _senderName,
-
-                        });
+                        holdDays = 3;
+                        scheduledProcessingDate = scheduledProcessingDate.AddDays(holdDays);
+                        verificationLevel = PaymentVerificationLevel.UnVerified;
                     }
 
-                    //Send SMS Message to recipient - not engaged
-                    if(!isRecipientEngaged)
-                    {
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                    var transactionBatch = transactionBatchServices.GetOpenBatch();
+                    ctx.TransactionBatches.Attach(transactionBatch);
 
-                        //Send Recipient Not Engaged Communication
-                        SendRecipientNotEngagedCommunication(message);
+                    //Create Payment
+                    message.Payment = new Payment()
+                    {
+                        Amount = message.Amount,
+                        ApiKey = message.ApiKey,
+                        Comments = message.Comments,
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        PaymentStatus = PaymentStatus.Pending,
+                        SenderAccount = message.SenderAccount,
+                        HoldDays = holdDays,
+                        ScheduledProcessingDate = scheduledProcessingDate,
+                        PaymentVerificationLevel = verificationLevel,
+                        Transactions = new List<Transaction>()
+                    };
+
+                    //Add the withdrawal transaction
+                    message.Payment.Transactions.Add(new Domain.Transaction()
+                    {
+                        AccountNumber = message.SenderAccount.AccountNumber,
+                        Amount = message.Payment.Amount,
+                        AccountType = Domain.AccountType.Checking,
+                        ACHTransactionId = "",
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IndividualIdentifier = message.RecipientUri,
+                        NameOnAccount = message.SenderAccount.NameOnAccount,
+                        PaymentChannelType = PaymentChannelType.Single,
+                        RoutingNumber = message.SenderAccount.RoutingNumber,
+                        StandardEntryClass = StandardEntryClass.Web,
+                        Status = TransactionStatus.Pending,
+                        Type = TransactionType.Withdrawal,
+                        TransactionBatch = transactionBatch,
+                        Payment = message.Payment
+                    });
+
+                    transactionBatch.TotalNumberOfWithdrawals += 1;
+                    transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
+
+                    message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
+                    message.LastUpdatedDate = System.DateTime.Now;
+
+                    message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+                    var recipient = _userServices.GetUser(message.RecipientUri);
+
+                    if (recipient != null)
+                    {
+                        ctx.Users.Attach(recipient);
+                       message.Recipient = recipient;
+
+                        string recipientName = _userServices.GetSenderName(message.Recipient);
+                        bool isRecipientEngaged = true;
+
+                        var preferredReceiveAccount = message.Recipient.PreferredReceiveAccount;
+
+                        if (preferredReceiveAccount == null)
+                            isRecipientEngaged = false;
+
+                        //create deposit transaction for recipient if they have an account that is verified
+                        //and the payment is not being held
+                        if (isRecipientEngaged && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
+                        {
+                            message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                            transactionBatch.TotalNumberOfDeposits += 1;
+                            transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
+
+                            message.Payment.Transactions.Add(new Transaction()
+                            {
+                                AccountNumber = preferredReceiveAccount.AccountNumber,
+                                RoutingNumber = preferredReceiveAccount.RoutingNumber,
+                                NameOnAccount = preferredReceiveAccount.NameOnAccount,
+                                AccountType = Domain.AccountType.Checking,
+                                ACHTransactionId = "",
+                                Amount = message.Payment.Amount,
+                                CreateDate = System.DateTime.Now,
+                                Id = Guid.NewGuid(),
+                                PaymentChannelType = PaymentChannelType.Single,
+                                StandardEntryClass = StandardEntryClass.Web,
+                                Status = TransactionStatus.Pending,
+                                TransactionBatch = transactionBatch,
+                                Type = TransactionType.Deposit,
+                                Payment = message.Payment,
+                                IndividualIdentifier = _senderName,
+
+                            });
+                        }
+
+                        //Send SMS Message to recipient - not engaged
+                        if (!isRecipientEngaged)
+                        {
+                            message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                            //Send Recipient Not Engaged Communication
+                            SendRecipientNotEngagedCommunication(message);
+                        }
+                        else
+                        {
+                            if (holdDays > 0)
+                                message.Status = PaystreamMessageStatus.HoldPayment;
+                            else
+                                message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                            SendRecipientReceiptCommunication(message);
+                        }
                     }
                     else
                     {
-                        if (holdDays > 0)
-                            message.Status = PaystreamMessageStatus.HoldPayment;
-                        else
-                            message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        message.Status = PaystreamMessageStatus.NotifiedPayment;
 
-                        SendRecipientReceiptCommunication(message);
+                        SendRecipientNotRegisteredCommunication(message);
+                    }
+
+                    ctx.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Post Payment Message Task. Exception: {0}. Stack Trace: {1}", ex.Message, ex.StackTrace));
+
+                    var innerException = ex.InnerException;
+                    while (innerException !=  null)
+                    {
+                        _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Post Payment Message Task. Inner Exception: {0}. Stack Trace: {1}", innerException.Message, innerException.StackTrace));
+                        innerException = innerException.InnerException;
                     }
                 }
-                else
-                {
-                    message.Status = PaystreamMessageStatus.NotifiedPayment;
-
-                    SendRecipientNotRegisteredCommunication(message);
-                }
-
-                ctx.SaveChanges();
 
             }
         }

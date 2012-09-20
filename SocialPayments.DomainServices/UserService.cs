@@ -265,52 +265,44 @@ namespace SocialPayments.DomainServices
         }
         public User GetUser(string userUri)
         {
-            _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
-
-            var uriType = GetURIType(userUri);
-
-            _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
-
-            User user = null;
-
-            try
+            using (var ctx = new Context())
             {
+                _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
+
+                var uriType = GetURIType(userUri);
+
+                _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
+
+                User user = null;
+
                 switch (uriType)
                 {
                     case URIType.FacebookAccount:
-                        user = _ctx.Users
+                        user = ctx.Users
                             .FirstOrDefault(u => u.UserName.Equals(userUri));
 
-                        return user;
+                        break;
 
                     case URIType.MECode:
                         var meCode = _ctx.UserPayPoints.FirstOrDefault(m => m.URI.Equals(userUri));
 
                         user = meCode.User;
-
-                        return user;
+                        break;
                     case URIType.EmailAddress:
-                        user = _ctx.Users
+                        user = ctx.Users
                             .FirstOrDefault(u => u.EmailAddress.Equals(userUri));
-
-                        return user;
+                        break;
 
                     case URIType.MobileNumber:
                         var phoneNumber = formattingServices.RemoveFormattingFromMobileNumber(userUri);
 
-                        user = _ctx.Users
+                        user = ctx.Users
                             .FirstOrDefault(u => u.MobileNumber == phoneNumber);
-
-                        return user;
+                        break;
                 }
+                return user;
 
             }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Exception Getting User {0}", userUri));
-            }
-
-            return null;
         }
 
         public bool ConfirmUser(string accountConfirmationToken)
@@ -699,6 +691,7 @@ namespace SocialPayments.DomainServices
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: firstname {1} lastname {2}", accountId, firstName, lastName));
 
             User user = null;
+            SocialNetwork socialNetwork = null;
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
@@ -706,6 +699,9 @@ namespace SocialPayments.DomainServices
             {
                 user = _ctx.Users
                     .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
+
+                socialNetwork = _ctx.SocialNetworks
+                    .FirstOrDefault(u => u.Name == "Facebook");
 
                 if (user == null)
                 {
@@ -725,6 +721,15 @@ namespace SocialPayments.DomainServices
                         TokenExpiration = tokenExpiration,
                         OAuthToken = oAuthToken
                     };
+                    user.UserSocialNetworks = new Collection<UserSocialNetwork>();
+
+                    user.UserSocialNetworks.Add(new UserSocialNetwork()
+                    {
+                        EnableSharing = true,
+                        SocialNetwork = socialNetwork,
+                        UserNetworkId = accountId,
+                        UserAccessToken = oAuthToken
+                    });
 
                     user.FirstName = firstName;
                     user.LastName = lastName;
@@ -1089,27 +1094,28 @@ namespace SocialPayments.DomainServices
         }
         public double GetUserInstantLimit(User User)
         {
-            var timeToCheck = System.DateTime.Now.AddHours(-24);
+            using (var ctx = new Context())
+            {
+                var timeToCheck = System.DateTime.Now.AddHours(-24);
 
-            var verifiedPaymentAmounts = _ctx.Messages
-                .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.Verified));
+                var verifiedPaymentAmounts = ctx.Messages
+                    .Where(m => m.SenderId.Equals(User.UserId) && m.MessageTypeValue.Equals((int)MessageType.Payment) && m.CreateDate > timeToCheck && m.Payment.PaymentVerificationLevelValue.Equals((int)PaymentVerificationLevel.Verified));
 
-            double amountSent = 0;
+                double amountSent = 0;
 
-            _logger.Log(LogLevel.Debug, String.Format("Getting Verified Limi {0}", verifiedPaymentAmounts.Count()));
+                if (verifiedPaymentAmounts.Count() > 0)
+                    amountSent = verifiedPaymentAmounts.Sum(m => m.Amount);
 
-            if (verifiedPaymentAmounts.Count() > 0)
-                amountSent = verifiedPaymentAmounts.Sum(m => m.Amount);
-
-            if (100 - amountSent > 0)
-                return 100 - amountSent;
-            else
-                return 0;
+                if (100 - amountSent > 0)
+                    return 100 - amountSent;
+                else
+                    return 0;
+            }
         }
 
         public string GetSenderName(User sender)
         {
-            _logger.Log(LogLevel.Debug, String.Format("Getting UserName {0}", sender.UserId));
+            _logger.Log(LogLevel.Info, String.Format("Getting UserName {0}", sender.UserId));
 
             if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;

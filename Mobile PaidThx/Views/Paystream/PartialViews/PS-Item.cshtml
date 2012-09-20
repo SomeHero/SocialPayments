@@ -1,6 +1,4 @@
-﻿
-
-    <script id="paystreamItem" type="text/x-jquery-tmpl">
+﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
     <li>
         <a href="#" class="paystreamItem" messageId="${Id}">
         <span class="trans-type">
@@ -47,7 +45,10 @@
         <span class="trans-amount">
             <div class="gray-above">${createDate}</div>
             <div class="paystream-pay-in">
-                ${amount}
+                           <h4 class="subheading" style="margin-top:6px;">
+                        Start sending and requesting!
+                        </h4>
+                $${amount.toFixed(2)}
             </div>
             <div class="gray-out">
                 ${messageStatus}
