@@ -92,6 +92,7 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/paystreammessages/{id}/cancel_request",
                 defaults: new { controller = "PaystreamMessages", action = "CancelRequest" }
             );
+
             routes.MapHttpRoute(
                 name: "IgnorePaymentRequest",
                 routeTemplate: "api/paystreammessages/{id}/ignore_request",
@@ -99,7 +100,7 @@ namespace SocialPayments.RestServices.Internal
             );
             routes.MapHttpRoute(
                 name: "UpdateMessagesSeen",
-                routeTemplate: "api/paystreammessages/update_messages_seen",
+                routeTemplate: "api/paystreammessages/{userId}/update_messages_seen",
                 defaults: new { controller = "PaystreamMessages", action = "UpdateMessagesSeen" }
             );
             routes.MapHttpRoute(
@@ -107,7 +108,7 @@ namespace SocialPayments.RestServices.Internal
                 routeTemplate: "api/paystreammessages/multiple_uris",
                 defaults: new { controller = "PaystreamMessages", action = "DetermineRecipient" }
             );
-
+            // hey... this is a comment.
             // /api/Users/{0}/attributes
             routes.MapHttpRoute(
                 name: "UserAttribute",
