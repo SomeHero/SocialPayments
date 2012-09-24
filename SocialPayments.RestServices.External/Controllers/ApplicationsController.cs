@@ -17,6 +17,7 @@ namespace SocialPayments.RestServices.External.Controllers
         // GET /api/applications
         public HttpResponseMessage Get()
         {
+            
             return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
         }
 

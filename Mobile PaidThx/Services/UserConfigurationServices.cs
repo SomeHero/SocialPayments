@@ -5,6 +5,8 @@ using System.Web;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Script.Serialization;
 using System.Net;
+using Mobile_PaidThx.Services.CustomExceptions;
+using Mobile_PaidThx.Models;
 
 namespace Mobile_PaidThx.Services
 {
@@ -25,8 +27,11 @@ namespace Mobile_PaidThx.Services
             var response = Put(String.Format(_updateUserConfigurationVariable, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
 
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
     }
 }

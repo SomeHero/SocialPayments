@@ -6,6 +6,8 @@ using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Script.Serialization;
 using System.Net;
 using System.Web.Mvc;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -30,7 +32,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
         }
         [HttpPost]
@@ -47,7 +53,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
 

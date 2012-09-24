@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Script.Serialization;
 using System.Net;
 using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -19,12 +21,14 @@ namespace Mobile_PaidThx.Services
             var serviceUrl = String.Format(_getPayPointsUrl, _webServicesBaseUrl, userId);
 
             var response = Get(serviceUrl);
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
             if(response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
 
-            var js = new JavaScriptSerializer();
-
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             return js.Deserialize<List<UserModels.UserPayPointResponse>>(response.JsonResponse);
         }
@@ -42,7 +46,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
         }
 
@@ -50,11 +58,16 @@ namespace Mobile_PaidThx.Services
         public void DeletePaypoint(string apiKey, string userId, string paypointId)
         {
             string serviceUrl = String.Format(_deletePaypointUrl, _webServicesBaseUrl, userId, paypointId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
 
             var response = Delete(serviceUrl);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
     }
 }

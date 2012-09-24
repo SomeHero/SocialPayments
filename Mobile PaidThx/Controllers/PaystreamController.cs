@@ -8,6 +8,7 @@ using NLog;
 using System.Globalization;
 using System.Web.Routing;
 using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -51,7 +52,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                switch(paystreamAction)
+                switch (paystreamAction)
                 {
                     case "CancelPayment":
                         paystreamMessageServices.CancelPayment("", messageId);
@@ -70,6 +71,18 @@ namespace Mobile_PaidThx.Controllers
                     default:
                         throw new Exception(String.Format("Invalid Action {0}", paystreamAction));
 
+                }
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session.Abandon();
+                    Session.Clear();
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
                 }
             }
             catch (Exception ex)

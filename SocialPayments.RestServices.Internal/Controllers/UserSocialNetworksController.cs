@@ -15,11 +15,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         
          // POST /api/users/{userId}/SocialNetworks
-        public HttpResponseMessage<UserModels.AddUserSocialNetworkResponse> Post(string userId, UserModels.AddUserSocialNetworkRequest request)
+        [HttpPost]
+        public HttpResponseMessage Post(string userId, UserModels.AddUserSocialNetworkRequest request)
         {
             var userSocialNetworkServices = new DomainServices.UserSocialNetworkServices();
-            HttpResponseMessage<UserModels.AddUserSocialNetworkResponse> response = null;
-
 
             try
             {
@@ -30,40 +29,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Social Network {0} for User {1}.  Exception {1}. Stack Trace {2}", request.SocialNetworkType, userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.OK);
-
-            return response;
+            return  Request.CreateResponse(HttpStatusCode.OK);
         }
           // POST /api/users/{userId}/SocialNetworks/unlink
+        [HttpPost]
         public HttpResponseMessage UnlinkSocialNetwork(string userId, UserModels.DeleteUserSocialNetworkRequest request)
         {
             var userSocialNetworkServices = new DomainServices.UserSocialNetworkServices();
-            HttpResponseMessage<UserModels.AddUserSocialNetworkResponse> response = null;
-
 
             try
             {
@@ -74,33 +64,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Social Network {0} for User {1}.  Exception {2}.", request.SocialNetworkType, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Social Network {0} for User {1}.  Exception {1}. Stack Trace {2}", request.SocialNetworkType, userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<UserModels.AddUserSocialNetworkResponse>(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

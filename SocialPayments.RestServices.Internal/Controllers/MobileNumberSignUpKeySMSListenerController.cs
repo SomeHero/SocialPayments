@@ -15,19 +15,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Logger _logger = LogManager.GetCurrentClassLogger();
         private DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
-        // GET /api/mobilenumbersignupkeysmslistener
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET /api/mobilenumbersignupkeysmslistener/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST /api/mobilenumbersignupkeysmslistener
+        [HttpPost]
         public HttpResponseMessage Post(MobileNumberSignUpKeySMSListenerModels.UpdateSignUpKeyRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Received request for Registration SignUp Key"));
@@ -38,7 +27,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Request details Mobile Number {0}; SignUp Key {1}", mobileNumber, signUpKey));
 
             var userPayPointServices = new DomainServices.UserPayPointServices();
-            HttpResponseMessage response = null;
 
             try
             {
@@ -48,38 +36,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Mobile Number SMS Listener. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+ 
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Mobile Number SMS Listener. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Mobile Number SMS Listener. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+  
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
-
-        }
-
-        // PUT /api/mobilenumbersignupkeysmslistener/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/mobilenumbersignupkeysmslistener/5
-        public void Delete(int id)
-        {
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

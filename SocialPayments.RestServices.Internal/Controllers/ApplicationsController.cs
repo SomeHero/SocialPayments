@@ -16,21 +16,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
     {
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
-        // GET /api/applications
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET /api/applications/5
-        public HttpResponseMessage<ApplicationModels.ApplicationResponse> Get(String id)
+        [HttpGet]
+        public HttpResponseMessage Get(String id)
         {
             var applicationServices = new DomainServices.ApplicationService();
             var profileServices = new DomainServices.ProfileServices();
 
             Domain.Application application = null;
             List<Domain.ProfileSection> profileSections = null;
-            HttpResponseMessage<ApplicationModels.ApplicationResponse> response = null;
+            HttpResponseMessage response = null;
 
             try
             {
@@ -45,31 +41,32 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
+            
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
+            
             }
             
-            return new HttpResponseMessage<ApplicationModels.ApplicationResponse>(new ApplicationModels.ApplicationResponse()
+            return Request.CreateResponse<ApplicationModels.ApplicationResponse>(HttpStatusCode.OK, new ApplicationModels.ApplicationResponse()
             {
                 apiKey = application.ApiKey.ToString(),
                 id = application.ApiKey.ToString(),
@@ -102,10 +99,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     .OrderBy(i => i.SortOrder)
                     .ToList()
                 }).ToList()
-            }, HttpStatusCode.OK);
+            });
         }
 
         // POST /api/applications
+        [HttpPost]
         public HttpResponseMessage Post(ApplicationModels.SubmitApplicationRequest request)
         {
             DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
@@ -119,36 +117,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Application {0}.  Exception {1}. Stack Trace {2}", request.name, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
+            
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.Created);
+            response = Request.CreateResponse(HttpStatusCode.Created);
 
             return response;
         }
 
         // PUT /api/applications/5
+        [HttpPut]
         public HttpResponseMessage Put(String id, ApplicationModels.UpdateApplicationRequest request)
         {
             DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
@@ -170,28 +169,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
             response = new HttpResponseMessage(HttpStatusCode.OK);
@@ -200,6 +197,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // DELETE /api/applications/5
+        [HttpDelete]
         public HttpResponseMessage Delete(string id)
         {
             DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
@@ -220,31 +218,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
+            response = Request.CreateResponse(HttpStatusCode.OK);
 
             return response;
         }

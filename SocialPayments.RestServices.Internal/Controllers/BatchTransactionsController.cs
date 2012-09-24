@@ -16,13 +16,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/batches/{batchId}/transactions
-        public HttpResponseMessage<List<TransactionModels.TransactionResponse>> Get(string batchId)
+        [HttpGet]
+        public HttpResponseMessage Get(string batchId)
         {
             var securityService = new DomainServices.SecurityService();
             var formattingService = new DomainServices.FormattingServices();
             var batchTransactionServices = new DomainServices.BatchTransactionsServices();
             Domain.TransactionBatch batch = null;
-            HttpResponseMessage<List<TransactionModels.TransactionResponse>> response = null;
+            HttpResponseMessage response = null;
 
             try
             {
@@ -32,25 +33,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Batch Transactions {0}. Exception {1}. Stack Trace {2}", batchId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<TransactionModels.TransactionResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Batch Transactions {0}. Exception {1}. Stack Trace {2}", batchId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<TransactionModels.TransactionResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Batch Transactions {0}. Exception {1}. Stack Trace {2}", batchId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<TransactionModels.TransactionResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage<List<TransactionModels.TransactionResponse>>(batch.Transactions.Select(t => new TransactionModels.TransactionResponse()
+            response = Request.CreateResponse(HttpStatusCode.OK, batch.Transactions.Select(t => new TransactionModels.TransactionResponse()
             {
                 ACHTransactionId = t.ACHTransactionId,
                 Amount = t.Amount,
@@ -65,31 +70,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 StandardEntryClass = t.StandardEntryClass.ToString(),
                 Status = t.Status.ToString(),
                 Type = t.Type.ToString()
-            }).ToList(), HttpStatusCode.OK);
+            }).ToList());
 
             return response;
-        }
-
-        // GET /api/transactions/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST /api/transactions
-        public void Post(string value)
-        {
-        }
-
-        // PUT /api/transactions/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/transactions/5
-        public void Delete(int id)
-        {
-            
         }
     }
 }

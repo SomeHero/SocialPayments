@@ -28,9 +28,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
-        public HttpResponseMessage<UserModels.PagedResults> Get(int take, int skip, int page, int pageSize)
+        public HttpResponseMessage Get(int take, int skip, int page, int pageSize)
         {
-            HttpResponseMessage<UserModels.PagedResults> response = null;
             var userServices = new DomainServices.UserService();
             List<Domain.User> users = null;
             int totalRecords = 0;
@@ -41,10 +40,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<UserModels.PagedResults>(new UserModels.PagedResults()
+            return Request.CreateResponse<UserModels.PagedResults>(HttpStatusCode.OK, new UserModels.PagedResults()
             {
                 TotalRecords = totalRecords,
                 Results = users.Select(u => new UserModels.UserResponse()
@@ -59,12 +58,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     userName = u.UserName,
                     userStatus = u.UserStatus.ToString()
                 }).ToList()
-            }, HttpStatusCode.OK);
-
-            return response;
+            });
         }
         // GET /api/users/5
-        public HttpResponseMessage<UserModels.UserResponse> Get(string id)
+        public HttpResponseMessage Get(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
 
@@ -87,10 +84,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (user == null)
             {
-                var message = new HttpResponseMessage<UserModels.UserResponse>(HttpStatusCode.NotFound);
-                message.ReasonPhrase = "User Not Found";
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, String.Format("User {0} Not Valid", id));
             }
 
 
@@ -230,18 +224,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                string errorMessage = ex.Message;
+                _logger.Log(LogLevel.Error, String.Format("Unhandled exception formatting User Response {0}. Exception: {1}. Stack Trace: {2}", id, ex.Message, ex.StackTrace));
 
-                _logger.ErrorException(String.Format("Unhandled exception formatting User Response {0}. {1}", id, errorMessage), ex);
-
-                throw new HttpResponseException(errorMessage, HttpStatusCode.InternalServerError);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            return new HttpResponseMessage<UserModels.UserResponse>(userResponse, HttpStatusCode.OK);
+            return Request.CreateResponse<UserModels.UserResponse>(HttpStatusCode.OK, userResponse);
         }
 
         // POST /api/user
-        public HttpResponseMessage<UserModels.SubmitUserResponse> Post(UserModels.SubmitUserRequest request)
+        [HttpPost]
+        public HttpResponseMessage Post(UserModels.SubmitUserRequest request)
         {
             _logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.userName));
 
@@ -274,10 +267,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (user != null)
             {
-                var errorMessage = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.BadRequest);
-                errorMessage.ReasonPhrase = String.Format("The email address {0} is already registered.", request.emailAddress);
-
-                return errorMessage;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("User {0} Not Valid", request.userName));
             }
 
             //if(!String.IsNullOrEmpty(mobileNumber))
@@ -312,10 +302,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     innerException = innerException.InnerException;
                 }
-                var message = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = String.Format("Unable to register user. {0}", ex.Message);
 
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
             }
 
             var responseMessage = new UserModels.SubmitUserResponse()
@@ -323,7 +312,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 userId = user.UserId.ToString()
             };
 
-            return new HttpResponseMessage<UserModels.SubmitUserResponse>(responseMessage, HttpStatusCode.Created);
+            return Request.CreateResponse<UserModels.SubmitUserResponse>(HttpStatusCode.Created, responseMessage);
         }
 
         // POST /api/user/{id}/personalize_user
@@ -332,7 +321,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Start Personalize User"));
 
             DomainServices.UserService userService = new DomainServices.UserService();
-            HttpResponseMessage response = null;
+
             try
             {
                 userService.PersonalizeUser(id, request.FirstName, request.LastName, request.ImageUrl);
@@ -341,35 +330,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Personalizing User {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Personalizing User {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Personalizing User {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
-
+        /*
         // POST /api/users/{id}/upload_member_image
-        public Task<HttpResponseMessage<FileUploadResponse>> UploadMemberImage([FromUri] string id)
+        public Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -382,11 +366,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             // Read the form data and return an async task.
             var task = Request.Content.ReadAsMultipartAsync(provider).
-                ContinueWith<HttpResponseMessage<FileUploadResponse>>(readTask =>
+                ContinueWith<HttpResponseMessage>(readTask =>
                 {
                     if (readTask.IsFaulted || readTask.IsCanceled)
                     {
-                        return new HttpResponseMessage<FileUploadResponse>(HttpStatusCode.InternalServerError);
+                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Exception Occurred Reading Image");
                     }
 
                     var fileName = "";
@@ -424,15 +408,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         _logger.Log(LogLevel.Error, String.Format("Unable to upload member image to S3. {0}", ex.Message));
                     }
 
-                    return new HttpResponseMessage<FileUploadResponse>(
+                    return Request.CreateResponse<FileUploadResponse>(HttpStatusCode.Created,
                         new FileUploadResponse()
                         {
                             ImageUrl = String.Format("http://memberimages.paidthx.com/{0}/image1.png", id)
-                        }, HttpStatusCode.Created);
+                        });
                 });
 
             return task;
-        }
+        }*/
         // PUT /api/user/5
         public void Put(int id, string value)
         {
@@ -449,9 +433,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (!securityService.Decrypt(user.SecurityPin).Equals(request.currentSecurityPin))
             {
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Security Pin doesn't match";
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Security Pin Don't Match");
             }
             if (request.newSecurityPin.Length < 4)
             {
@@ -459,16 +441,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
+            
             }
 
             user.SecurityPin = securityService.Encrypt(request.newSecurityPin);
             userService.UpdateUser(user);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         //POST /api/users/{userId}/setup_securityquestion
@@ -484,10 +464,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            
             }
             if (request.questionAnswer.Length < 1)
             {
@@ -495,10 +473,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
 
             try
@@ -507,28 +482,23 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
+                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, ex.Message));
 
-                _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Question for {0}. {1}", id, error));
-
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
 
         //POST /api/users/validate_passwordreset
-        public HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse> ValidatePasswordResetAttempt(UserModels.ValidatePasswordResetAttemptRequest request)
+        public HttpResponseMessage ValidatePasswordResetAttempt(UserModels.ValidatePasswordResetAttemptRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Validating Password Reset Attempt {0}", request.ResetPasswordAttemptId));
 
             DomainServices.UserService userService = new DomainServices.UserService();
             Domain.PasswordResetAttempt passwordResetAttempt = null;
-            HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse> response = null;
 
             try
             {
@@ -538,37 +508,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Validating Password Reset Attempt {0}. Exception {1}", request.ResetPasswordAttemptId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Validating Password Reset Attempt {0}. Exception {1}", request.ResetPasswordAttemptId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating Password Reset Attempt {0}. Exception {1}. Stack Trace {2}", request.ResetPasswordAttemptId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<UserModels.ValidatePasswordResetAttemptResponse>(new UserModels.ValidatePasswordResetAttemptResponse() {
+            return Request.CreateResponse<UserModels.ValidatePasswordResetAttemptResponse>(HttpStatusCode.OK, new UserModels.ValidatePasswordResetAttemptResponse() {
               HasSecurityQuestion = !(passwordResetAttempt.User.SecurityQuestion == null),
               SecurityQuestion = (passwordResetAttempt.User.SecurityQuestion != null ? passwordResetAttempt.User.SecurityQuestion.Question : ""),
               UserId = passwordResetAttempt.UserId.ToString()
-            }, HttpStatusCode.OK);
-
-            return response;
+            });
         }
         public HttpResponseMessage ChangePassword(string id, UserModels.ChangePasswordRequest request)
         {
@@ -576,7 +538,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             DomainServices.UserService userService = new DomainServices.UserService();
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-            HttpResponseMessage response = null;
+
             try
             {
                 userService.ChangePassword(id, request.currentPassword, request.newPassword);
@@ -585,33 +547,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Changing Password for User {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception  Changing Password for User  {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Changing Password for User  {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         //POST api/users/reset_password
@@ -619,7 +573,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Reset Password for User {0}", request.userId));
 
-            HttpResponseMessage response = null;
             var userServices = new DomainServices.UserService();
             
             try
@@ -630,40 +583,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Reseting Password for {0}. Exception {1}", request.userId, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Reseting Password for {0}. Exception {1}", request.userId, ex.Message));
+                
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Reseting Password for {0}. Exception {1}. Stack Trace {2}", request.userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         //POST api/users/forgot_password
         public HttpResponseMessage ForgotPassword(UserModels.ForgotPasswordRequest request)
         {
             var validateService = new DomainServices.ValidationService();
-
-            HttpResponseMessage response = null;
             var userService = new DomainServices.UserService();
 
             try
@@ -677,32 +620,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Sending Forgot Password Email to {0}. Exception {1}", request.userName, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Sending Forgot Password Email to {0}. Exception {1}", request.userName, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Sending Forgot Password Email to {0}. Exception {1}. Stack Trace {2}", request.userName, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+           
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         //POST /api/users/{userId}/registerpushnotifications
         public HttpResponseMessage RegisterForPushNotifications(string id, UserModels.PushNotificationRequest request)
@@ -718,7 +654,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 try
                 {
                     userService.AddPushNotificationRegistrationId(id, request.deviceToken, request.registrationId);
-                    return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 catch (Exception ex)
                 {
@@ -726,34 +661,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     _logger.Log(LogLevel.Error, String.Format("Unable to register push notifications for {0}. {1}", id, error));
 
-                    var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    message.ReasonPhrase = error;
-
-                    return message;
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
                 }
             }
             else
             {
-                var error = "DeviceTokens match, no need to reregister for Android push.";
+                var error = "Device Tokens match, no need to reregister for Android push.";
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to register push notifications for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // GET /api/users/{userId}/refresh_homepage
-        public HttpResponseMessage<UserModels.HomepageRefreshReponse> RefreshHomepageInformation(string id)
+        [HttpGet]
+        public HttpResponseMessage RefreshHomepageInformation(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
 
             List<Domain.Message> recentPayments = null;
             var userService = new DomainServices.UserService();
             var messageService = new DomainServices.MessageServices();
-            HttpResponseMessage<UserModels.HomepageRefreshReponse> response = null;
             List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
             int numberOfIncomingNotifications = 0;
             int numberOfOutgoingNotifications = 0;
@@ -866,97 +798,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         }
                     }
                 }
-            }
-            catch (NotFoundException ex)
-            {
-                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-            catch (BadRequestException ex)
-            {
-                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-            try
-            {
-                numberOfIncomingNotifications = messageService.GetNumberOfNewMessages(id);
-
-            }
-            catch (NotFoundException ex)
-            {
-                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-            catch (BadRequestException ex)
-            {
-                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
-
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
-            }
-
-            try
-            {
+ 
                 numberOfOutgoingNotifications = messageService.GetNumberOfPendingMessages(id);
             }
             catch (NotFoundException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);       
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Refreshing Home Page Information {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Refreshing Home Page Information {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             var results = new UserModels.HomepageRefreshReponse()
@@ -967,13 +831,19 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 quickSendContacts = quickSends
             };
 
-            response = new HttpResponseMessage<UserModels.HomepageRefreshReponse>(results, HttpStatusCode.OK);
-            return response;
+            return Request.CreateResponse<UserModels.HomepageRefreshReponse>(HttpStatusCode.OK, new UserModels.HomepageRefreshReponse()
+            {
+                userId = id,
+                numberOfIncomingNotifications = numberOfIncomingNotifications,
+                numberOfOutgoingNotifications = numberOfOutgoingNotifications,
+                quickSendContacts = quickSends
+            });
         }
 
 
         // GET /api/users/searchbymecode/{searchterm}
-        public HttpResponseMessage<UserModels.FindMECodeResponse> GetMatchingMECodesWithSearchTerm (string searchTerm)
+        [HttpGet]
+        public HttpResponseMessage GetMatchingMECodesWithSearchTerm(string searchTerm)
         {
             _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));
 
@@ -992,7 +862,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Finding me codes for {0} failed. {1}",searchTerm,ex.StackTrace));
-                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.InternalServerError); // 500
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
             }
 
             foreach (Domain.UserPayPoint meCode in foundPaypoints)
@@ -1005,21 +876,17 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 });
             }
 
-            if ( meCodesFound.Count() == 0 )
-                return new HttpResponseMessage<UserModels.FindMECodeResponse>(HttpStatusCode.OK); // 500
-
-            var response = new UserModels.FindMECodeResponse()
+            return Request.CreateResponse<UserModels.FindMECodeResponse>(HttpStatusCode.OK, new UserModels.FindMECodeResponse()
             {
                 searchTerm = searchTerm,
                 foundUsers = meCodesFound
-            };
-
-            return new HttpResponseMessage<UserModels.FindMECodeResponse>(response, HttpStatusCode.OK);
+            });
         }
 
 
 
         //POST /api/users/{userId}/setup_securitypin
+        [HttpPost]
         public HttpResponseMessage SetupSecurityPin(string id, UserModels.UpdateSecurityPin request)
         {
             _logger.Log(LogLevel.Info, String.Format("Setting up Security Pin for {0}", id));
@@ -1035,10 +902,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Security Pin Too Short");
             }
 
             try
@@ -1051,25 +915,24 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 _logger.Log(LogLevel.Error, String.Format("Unable to Setup Security Pin for {0}. {1}", id, error));
 
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = error;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         //POST /api/users/validate_user
-        public HttpResponseMessage<UserModels.ValidateUserResponse> ValidateUser(UserModels.ValidateUserRequest request)
+        [HttpPost]
+        public HttpResponseMessage ValidateUser(UserModels.ValidateUserRequest request)
         {
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.UserService _userService = new DomainServices.UserService();
 
-            HttpResponseMessage<UserModels.ValidateUserResponse> responseMessage;
-
             User user;
+            string securityQuestion = "";
             var isValid = false;
+            _logger.Log(LogLevel.Error, String.Format("Validating User {0}.", request.userName));
 
             try
             {
@@ -1077,47 +940,54 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.InternalServerError);
-                responseMessage.ReasonPhrase = ex.Message;
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating User {0}. Exception: {1}. Stack Trace {2}.", request.userName, ex.Message, ex.StackTrace));
 
-                return responseMessage;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             if (isValid)
             {
-                bool hasACHAccount = false;
-                if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
-                    hasACHAccount = true;
-
-                var message = new UserModels.ValidateUserResponse()
+                if (user.IsLockedOut)
                 {
-                    userId = user.UserId.ToString(),
-                    mobileNumber = user.MobileNumber,
-                    paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
-                    setupSecurityPin = user.SetupSecurityPin,
-                    upperLimit = Convert.ToInt32(user.Limit),
-                    hasACHAccount = hasACHAccount,
-                    hasSecurityPin = user.SetupSecurityPin,
-                    setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false), // If SecurityQuestion setup (value not null > -1 ), return true.
-                    isLockedOut = user.IsLockedOut
-                };
+                    return Request.CreateResponse<UserModels.ValidateUserResponse>(HttpStatusCode.OK, new UserModels.ValidateUserResponse()
+                    {
+                        userId = user.UserId.ToString(),
+                        isLockedOut = true,
+                        securityQuestion = user.SecurityQuestion.Question
+                    });
+                }
+                else
+                {
+                    bool hasACHAccount = false;
+                    if (user.PaymentAccounts.Where(a => a.IsActive = true).Count() > 0)
+                        hasACHAccount = true;
 
-                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(message, HttpStatusCode.OK);
-
-                return responseMessage;
+                    return Request.CreateResponse<UserModels.ValidateUserResponse>(HttpStatusCode.OK, new UserModels.ValidateUserResponse()
+                    {
+                        userId = user.UserId.ToString(),
+                        mobileNumber = user.MobileNumber,
+                        paymentAccountId = (user.PaymentAccounts != null && user.PaymentAccounts.Count() > 0 ? user.PaymentAccounts[0].Id.ToString() : ""),
+                        setupSecurityPin = user.SetupSecurityPin,
+                        upperLimit = Convert.ToInt32(user.Limit),
+                        hasACHAccount = hasACHAccount,
+                        hasSecurityPin = user.SetupSecurityPin,
+                        setupSecurityQuestion = (user.SecurityQuestionID >= 0 ? true : false), // If SecurityQuestion setup (value not null > -1 ), return true.
+                        isLockedOut = user.IsLockedOut,
+                        securityQuestion = securityQuestion
+                    });
+                }
             }
             else
             {
-                responseMessage = new HttpResponseMessage<UserModels.ValidateUserResponse>(HttpStatusCode.Forbidden);
-                responseMessage.ReasonPhrase = "Invalid Username and Password";
-
-                return responseMessage;
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid Username and Password");
+            
             }
 
         }
 
         //POST /api/users/signin_withfacebook
-        public HttpResponseMessage<UserModels.FacebookSignInResponse> SignInWithFacebook(UserModels.FacebookSignInRequest request)
+        [HttpPost]
+        public HttpResponseMessage SignInWithFacebook(UserModels.FacebookSignInRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0} {1}", request.deviceToken, request.oAuthToken));
 
@@ -1129,6 +999,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             bool isNewUser = false;
 
+            //TODO: Add exception
             try
             {
                 user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
@@ -1138,10 +1009,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
 
-                var message = new HttpResponseMessage<UserModels.FacebookSignInResponse>(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = ex.Message;
-
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             bool hasACHAccount = false;
@@ -1160,11 +1028,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
             };
 
             if (isNewUser)
-                return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.Created);
+                return Request.CreateResponse(HttpStatusCode.Created, response);
             else
-                return new HttpResponseMessage<UserModels.FacebookSignInResponse>(response, HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
+        [HttpPost]
         public HttpResponseMessage LinkFacebook(string id, UserModels.LinkFacebookRequest request)
         {
             //using (var ctx = new Context())
@@ -1228,33 +1097,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        // DELETE /api/user/5
-        public void Delete(int id)
-        {
-        }
         //api/users/verify_paypoint
+        [HttpPost]
         public HttpResponseMessage VerifyPayPoint(UserModels.ValidatePayPointRequest request)
         {
             var userService = new DomainServices.UserService();
             HttpResponseMessage responseMessage;
 
             bool result = false;
+
+            //TODO: Add exception handling
             try
             {
                 result = userService.VerifyPayPoint(request.PayPointVerificationId);
             }
             catch (Exception ex)
             {
-                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest);
-                responseMessage.ReasonPhrase = ex.Message;
-
-                return responseMessage;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            responseMessage = Request.CreateResponse(HttpStatusCode.OK);
-            responseMessage.ReasonPhrase = String.Format("Thanks. You have completed verification.  You can now begin to accept payments using this pay point.");
-
-            return responseMessage;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

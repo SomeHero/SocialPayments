@@ -17,11 +17,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/securityquestions
-        public HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>> Get()
+        [HttpGet]
+        public HttpResponseMessage Get()
         {
             var securityQuestionServices = new DomainServices.SecurityQuestionServices();
             List<Domain.SecurityQuestion> results = null;
-            HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>> response = null;
 
             try
             {
@@ -31,45 +31,39 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Security Questions.  Exception {0}.",  ex.Message));
 
-                response = new HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Security Questions.  Exception {0}.", ex.Message));
 
-                response = new HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Security Questions.  Exception {0}. Stack Trace {1}",  ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<List<SecurityQuestionModel.QuestionResponse>>(results.Select(q => new SecurityQuestionModel.QuestionResponse() {
+            return Request.CreateResponse<List<SecurityQuestionModel.QuestionResponse>>(HttpStatusCode.OK, results.Select(q => new SecurityQuestionModel.QuestionResponse()
+            {
                 Id = q.Id,
                 IsActive = q.IsActive,
                 Question = q.Question
-            }).ToList(), HttpStatusCode.OK);
-
-            return response;
+            }).ToList());
             
         }
 
         // GET /api/securityquestion/5
-        public HttpResponseMessage<SecurityQuestionModel.QuestionResponse> Get(int id)
+        [HttpGet]
+        public HttpResponseMessage Get(int id)
         {
             var securityQuestionServices = new DomainServices.SecurityQuestionServices();
-            HttpResponseMessage<SecurityQuestionModel.QuestionResponse> response = null;
+            HttpResponseMessage response = null;
             Domain.SecurityQuestion securityQuestion = null;
 
             try
@@ -77,53 +71,47 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 securityQuestion = securityQuestionServices.GetSecurityQuestion(id);
 
                 if (securityQuestion == null)
-                    throw new Exception(String.Format("Security Question {0} Not Found", id.ToString()));
+                    throw new NotFoundException(String.Format("Security Question {0} Not Found", id.ToString()));
             }
             catch (NotFoundException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Security Question {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Security Question {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Security Question {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(new SecurityQuestionModel.QuestionResponse()
+            return Request.CreateResponse<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.OK, new SecurityQuestionModel.QuestionResponse()
             {
                 Id = securityQuestion.Id,
                 IsActive = securityQuestion.IsActive,
                 Question = securityQuestion.Question
-            }, HttpStatusCode.OK);
+            });
 
             return response;
 
         }
 
         //POST /api/{userId}/validate_security_question
+        [HttpPost]
         public HttpResponseMessage ValidateSecurityQuestion(string id, SecurityQuestionModel.ValidateQuestionRequest request)
         {
             var securityQuestionServices = new DomainServices.SecurityQuestionServices();
             bool result = false;
-            HttpResponseMessage response = null;
 
             try
             {
@@ -132,40 +120,32 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (NotFoundException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Validating Security Question for User {0}.  Exception {1}.", id, ex.Message));
-
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Validating Security Question for User {0}.  Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating Security Question for User {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         // POST /api/{userId}/securityquestion
+        [HttpPost]
         public HttpResponseMessage Post(string userId, SecurityQuestionModel.SetupQuestionRequest request)
         {
             var securityQuestionServices = new DomainServices.SecurityQuestionServices();
-            HttpResponseMessage response = null;
 
             try
             {
@@ -175,33 +155,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Security Question Answer for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Security Question Answer for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Security Question Answer {0}. Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<SecurityQuestionModel.QuestionResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.Created);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
         // PUT /api/{userId}/securityquestion
@@ -241,12 +213,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             //    return errorMessage;
             //}
-            return new HttpResponseMessage(HttpStatusCode.NotImplemented);
-        }
-
-        // DELETE /api/{userId}/securityquestion
-        public void Delete(int id)
-        {
+            return Request.CreateResponse(HttpStatusCode.NotImplemented);
         }
     }
 }
