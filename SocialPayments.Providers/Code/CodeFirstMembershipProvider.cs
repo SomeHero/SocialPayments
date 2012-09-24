@@ -571,6 +571,8 @@ namespace CodeFirstMembershipDemoSharp.Code
                 public override bool ValidateUser(string username, string password)
                 {
                     User user;
+                    bool isLockedOut = false;
+                    string securityQuestion = "";
                     var isValid = userService.ValidateUser(username, password, out user);
 
                     return isValid;

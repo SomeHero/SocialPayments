@@ -8,6 +8,8 @@ using System.Text;
 using System.IO;
 using Mobile_PaidThx.Services.ResponseModels;
 using NLog;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -35,7 +37,11 @@ namespace Mobile_PaidThx.Services
             var response = Get(serviceUrl);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             return js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
 
@@ -62,7 +68,11 @@ namespace Mobile_PaidThx.Services
 
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created && response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             if(response.StatusCode == HttpStatusCode.Created)
                 isNewUser = true;
@@ -92,7 +102,11 @@ namespace Mobile_PaidThx.Services
             ServiceResponse response = Post(String.Format(_userServiceBaseUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             return js.Deserialize<UserModels.UserResponse>(response.JsonResponse);
         }
@@ -112,7 +126,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void ChangePasssword(string userId, string currentPassword, string newPassword)
         {
@@ -127,7 +145,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServiceChangePasswordUrl, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void ForgotPassword(string apiKey, string userName)
         {
@@ -142,7 +164,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServiceForgotPasswordUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public UserModels.ValidateResetPasswordAttemptResponse ValidateResetPasswordAttempt(string apiKey, string id)
         {
@@ -157,7 +183,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServiceValidateResetPasswordUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             return js.Deserialize<UserModels.ValidateResetPasswordAttemptResponse>(response.JsonResponse);
         }
@@ -174,7 +204,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServiceChangeSecurityPinUrl, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void ResetSecurityPin(string userId, string pinCode, string securityQuestionAnswer)
         {
@@ -189,7 +223,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServicesResetSecurityPinUrl, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void ResetPassword(string userId, string securityQuestionAnswer, string newPassword)
         {
@@ -205,7 +243,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_userServicesResetPasswordUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public UserModels.ValidateUserResponse ValidateUser(string userName, string password)
         {
@@ -218,9 +260,14 @@ namespace Mobile_PaidThx.Services
             });
 
             var response = Post(String.Format(_userServiceValidateUserUrl, _webServicesBaseUrl), json);
+            var user = js.Deserialize<UserModels.ValidateUserResponse>(response.JsonResponse);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new Exception(error.Message);
+            }
 
             return js.Deserialize<UserModels.ValidateUserResponse>(response.JsonResponse);
         }
@@ -237,7 +284,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_payPointVerificationUrl, _webServicesBaseUrl, payPointVerificationId), json);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
     }
