@@ -18,14 +18,14 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         
         // GET /api/users/{userId}/PayPoints/
-        [HttpGet]
+        [AcceptVerbs("GET")]
         public HttpResponseMessage Get(string userId)
         {
             return Get(userId, "");
         }
 
         // GET /api/users/{userId}/PayPoints/{type}
-        [HttpGet]
+        [AcceptVerbs("GET")]
         public HttpResponseMessage Get(string userId, string type)
         {
             var userPayPointServices = new DomainServices.UserPayPointServices();
@@ -69,7 +69,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         }
 
         // GET /api/users/{userId}/PayPoints/{id}
-        [HttpGet]
+        [AcceptVerbs("GET")]
         public HttpResponseMessage Get(string userId, string id, string type)
         {
             var userPayPointServices = new DomainServices.UserPayPointServices();
@@ -112,7 +112,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
         }
 
         // POST /api/users/{userId}/PayPoints
-        [HttpPost]
         public HttpResponseMessage Post(string userId, Models.UserModels.AddUserPayPointRequest request)
         {
             var userPayPointServices = new DomainServices.UserPayPointServices();
@@ -150,7 +149,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
             });
         }
         // POST /api/users/{userId}/PayPoints/resend_verification_code
-        [HttpPost]
         public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
         {
             DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
@@ -191,7 +189,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
         // POST /api/users/{userId}/PayPoints/resend_email_verification_link
-        [HttpPost]
         public HttpResponseMessage ResendEmailVerificationLink(string userId, UserModels.ResendVerificationCodeRequest model)
         {
                 DomainServices.UserPayPointServices userPayPointService = new DomainServices.UserPayPointServices();
@@ -234,14 +231,14 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
         }
         // PUT /api/users/{userId}/PayPoints/{id}
-        [HttpPut]
+        [AcceptVerbs("PUT")]
         public HttpResponseMessage Put(string userId)
         {
             return Request.CreateResponse(HttpStatusCode.NotImplemented);
         }
 
         // DELETE /api/users/{userId}/PayPoints/{id}
-        [HttpDelete]
+        [AcceptVerbs("DELETE")]
         public HttpResponseMessage Delete(string userId, string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Deleting Pay Point {0} for User {1}.", id, userId));
@@ -280,7 +277,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
         // api/users/{userId}/PayPoints/{id}/verify_mobile_paypoint
-        [HttpPost]
         public HttpResponseMessage VerifyMobilePayPoint(string userId, string id, UserModels.VerifyMobilePayPointRequest request)
         {
             var userService = new DomainServices.UserService();

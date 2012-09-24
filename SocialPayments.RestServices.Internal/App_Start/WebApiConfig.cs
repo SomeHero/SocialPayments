@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Routing;
 
 namespace SocialPayments
 {
@@ -159,7 +160,12 @@ namespace SocialPayments
                 routeTemplate: "api/users/verify_paypoint",
                 defaults: new { controller = "Users", action = "VerifyPayPoint" }
             );
-
+            config.Routes.MapHttpRoute(
+                name: "PayPoints",
+                routeTemplate: "api/users/{userId}/PayPoints",
+                defaults: new { controller = "UserPayPoint", action = "Post" },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            );
             config.Routes.MapHttpRoute(
                 name: "RefreshHomePageInformation",
                 routeTemplate: "api/users/{id}/refresh_homepage",
@@ -184,8 +190,8 @@ namespace SocialPayments
             );
             config.Routes.MapHttpRoute(
                 name: "UserPayPoints",
-                routeTemplate: "api/users/{userId}/PayPoints/{id}",
-                defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+                routeTemplate: "api/users/{userId}/PayPoints",
+                defaults: new { controller = "UserPayPoint" }
             );
             config.Routes.MapHttpRoute(
     name: "UserPayPointsWithType",
