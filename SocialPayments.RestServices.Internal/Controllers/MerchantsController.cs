@@ -16,19 +16,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/merchants
-        public HttpResponseMessage<List<MerchantModels.MerchantResponseModel>> Get(string type)
+        [HttpGet]
+        public HttpResponseMessage Get(string type)
         {
             var merchantServices = new DomainServices.MerchantServices();
             List<Domain.Merchant> merchants = null;
-            HttpResponseMessage<List<MerchantModels.MerchantResponseModel>> response = null;
+            HttpResponseMessage response = null;
             
             if (type != "NonProfits" && type != "Organizations")
-            {
-                return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.BadRequest)
-                {
-                    ReasonPhrase = "Type specified in request must be NonProfits or Organizations"
-                };
-            }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Type Must Be NonProfits or Organizations");
 
             try
             {
@@ -36,30 +32,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
-                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Merchants. Exception {0}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                var error = new HttpError(ex.Message);
+ 
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Merchants. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
 
@@ -84,14 +78,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 }).ToList()
             }).ToList();
 
-            return new HttpResponseMessage<List<MerchantModels.MerchantResponseModel>>(results, HttpStatusCode.OK);
+            return Request.CreateResponse<List<MerchantModels.MerchantResponseModel>>(HttpStatusCode.OK, results);
         }
 
         // GET /api/merchants/5
-        public HttpResponseMessage<MerchantModels.MerchantDetailResponse> GetDetail(string id)
+        [HttpGet]
+        public HttpResponseMessage GetDetail(string id)
         {
             Domain.Merchant merchant = null;
-            HttpResponseMessage<MerchantModels.MerchantDetailResponse> response;
+            HttpResponseMessage response;
             var merchantServices = new DomainServices.MerchantServices();
 
             try
@@ -105,26 +100,30 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Merchant Detail {0}. Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Merchant Detail {0}. Exception {1}.", id, ex.Message));
 
-                response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Merchant Detail {0}. Exception {1}. Stack Trace {2}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
 
-            return new HttpResponseMessage<MerchantModels.MerchantDetailResponse>(new MerchantModels.MerchantDetailResponse()
+            return Request.CreateResponse<MerchantModels.MerchantDetailResponse>(HttpStatusCode.OK, new MerchantModels.MerchantDetailResponse()
             {
                 Id = merchant.UserId,
                 Name = merchant.Name,
@@ -134,7 +133,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 PreferredReceiveAccountId = (merchant.User.PreferredReceiveAccount != null ? merchant.User.PreferredReceiveAccount.Id.ToString() : ""),
                 PreferredSendAccountId = (merchant.User.PreferredSendAccount != null ? merchant.User.PreferredSendAccount.Id.ToString() : ""),
                 SuggestedAmount = 50
-            }, HttpStatusCode.OK);
+            });
         }
 
         // POST /api/merchants

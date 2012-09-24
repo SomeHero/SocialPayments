@@ -16,12 +16,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/batch
-        public HttpResponseMessage<List<BatchModels.BatchResponse>> Get()
+        [HttpGet]
+        public HttpResponseMessage Get()
         {
             var batchServices = new DomainServices.BatchServices();
             var formattingServices = new DomainServices.FormattingServices();
             List<Domain.TransactionBatch> batches = null;
-            HttpResponseMessage<List<BatchModels.BatchResponse>> response = null;
+            HttpResponseMessage response = null;
 
             
             try
@@ -32,25 +33,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Batches. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<BatchModels.BatchResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Batches. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                response = new HttpResponseMessage<List<BatchModels.BatchResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Batches. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<BatchModels.BatchResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage<List<BatchModels.BatchResponse>>(batches.Select(b =>
+            response = Request.CreateResponse(HttpStatusCode.OK, batches.Select(b =>
                     new BatchModels.BatchResponse()
                     {
                         ClosedDate = formattingServices.FormatDateTimeForJSON(b.ClosedDate),
@@ -62,17 +66,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         TotalNumberOfDeposits = b.TotalNumberOfDeposits,
                         TotalWithdrawalAmount = b.TotalWithdrawalAmount,
                         TotalNumberOfWithdrawals = b.TotalNumberOfWithdrawals
-                    }).ToList(), HttpStatusCode.OK);
+                    }).ToList());
 
             return response;;
         }
 
-        public HttpResponseMessage<BatchModels.BatchResponse> Get(string id)
+        [HttpGet]
+        public HttpResponseMessage Get(string id)
         {
             var batchServices = new DomainServices.BatchServices();
             var formattingServices = new DomainServices.FormattingServices();
             Domain.TransactionBatch batch = null;
-            HttpResponseMessage<BatchModels.BatchResponse> response = null;
+            HttpResponseMessage response = null;
 
             try
             {
@@ -82,25 +87,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Batch {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<BatchModels.BatchResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+  
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Batch {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<BatchModels.BatchResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Batch {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<BatchModels.BatchResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage<BatchModels.BatchResponse>(new BatchModels.BatchResponse()
+            response = Request.CreateResponse(HttpStatusCode.OK, new BatchModels.BatchResponse()
                 {
                     ClosedDate = formattingServices.FormatDateTimeForJSON(batch.ClosedDate),
                     CreateDate = formattingServices.FormatDateTimeForJSON(batch.CreateDate),
@@ -111,27 +120,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     TotalNumberOfDeposits = batch.TotalNumberOfDeposits,
                     TotalWithdrawalAmount = batch.TotalWithdrawalAmount,
                     TotalNumberOfWithdrawals = batch.TotalNumberOfWithdrawals
-                }, HttpStatusCode.OK);
+                });
 
             return response;
 
-        }
-
-        // POST /api/batches
-        // addes transactions to the current open batch
-        public void Post(string value)
-        {
-
-        }
-
-        // PUT /api/batch/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/batch/5
-        public void Delete(int id)
-        {
         }
     }
 }

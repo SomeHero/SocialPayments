@@ -64,8 +64,27 @@ namespace SocialPayments.DomainServices
                 if(originator == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Orriginator of Pledge {0} Not Found", originatorId));
 
-                if (!(securityServices.Encrypt(securityPin).Equals(originator.SecurityPin)))
-                    throw new CustomExceptions.BadRequestException("Invalid Security Pin");
+                //Check is SENDER is LOCKED OUT
+                if (originator.IsLockedOut)
+                    throw new CustomExceptions.BadRequestException(String.Format("Sender {0} Is Locked Out", originatorId), 1001);
+
+                //Validate SENDER Security PINSWIPE
+                if (!securityServices.Encrypt(securityPin).Equals(originator.SecurityPin))
+                {
+                    originator.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (originator.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        originator.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", originator.UserId), 1001);
+                    }
+
+                    ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
 
                 organization = ctx.Users.FirstOrDefault(u => u.UserId == organizationGuid);
 
@@ -188,7 +207,7 @@ namespace SocialPayments.DomainServices
 
                 //Check is SENDER is LOCKED OUT
                 if (sender.IsLockedOut)
-                    throw new CustomExceptions.BadRequestException(String.Format("Sender {0} Is Locked Out", senderId));
+                    throw new CustomExceptions.BadRequestException(String.Format("Sender {0} Is Locked Out", senderId), 1001);
 
                 //Validate SENDER Security PINSWIPE
                 if (!securityServices.Encrypt(securityPin).Equals(sender.SecurityPin))
@@ -200,7 +219,7 @@ namespace SocialPayments.DomainServices
                         sender.IsLockedOut = true;
                         ctx.SaveChanges();
 
-                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", sender.UserId));
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", sender.UserId), 1001);
                     }
 
                     ctx.SaveChanges();
