@@ -145,13 +145,11 @@ namespace Mobile_PaidThx.Services
 
                     statusCode = httpResponse.StatusCode;
                     statusReason = httpResponse.StatusDescription;
-
+                    using (StreamReader sr = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        jsonResponse = sr.ReadToEnd();
+                    }
                 }
-            }
-
-            if (statusCode.Equals(HttpStatusCode.BadRequest))
-            {
-                throw new Exception(statusReason);
             }
 
             return new ServiceResponse()

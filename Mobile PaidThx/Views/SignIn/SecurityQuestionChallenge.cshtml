@@ -1,0 +1,24 @@
+﻿@model Mobile_PaidThx.Models.SignInModels.SecurityQuestionChallengeModel
+@{
+    ViewBag.Title = "SecurityQuestion";
+}
+<div data-role="page" id="personalize-page" class="modally" @TempData["DataUrl"]>
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+	    <h1>Account Locked</h1>
+    </div>
+    <div data-role="content">
+    <div class="pad">
+     @Html.ValidationSummary()
+    <div class="top-panel">
+   
+    <p>Your account has been locked.  Please provide the answer to the question below to unlock your account.</p></div>
+        @using (Html.BeginForm("SecurityQuestionChallenge", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
+        {
+            @Html.HiddenFor(m => m.SecurityQuestion)
+            <p>@Model.SecurityQuestion</p>
+             @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })
+           <button type="submit" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">Submit</button>
+        }
+        </div>
+    </div>
+</div>

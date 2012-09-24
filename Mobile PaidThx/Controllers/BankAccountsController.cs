@@ -45,6 +45,9 @@ namespace Mobile_PaidThx.Controllers
 
             }
 
+            TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
+
+
             return View(model);
         }
 
@@ -58,6 +61,8 @@ namespace Mobile_PaidThx.Controllers
             string nameOnAccount = "";
             if (!String.IsNullOrEmpty(user.firstName) || !String.IsNullOrEmpty(user.lastName))
                 nameOnAccount = user.firstName + " " + user.lastName;
+
+            TempData["DataUrl"] = "data-url=/mobile/BankAccounts/Add";
 
             return View(new BankAccountModels.AddPaymentAccountModel()
             {
@@ -74,6 +79,11 @@ namespace Mobile_PaidThx.Controllers
         {
             try
             {
+                if (Session["User"] == null)
+                    return RedirectToAction("Index", "SignIn", null);
+
+                var user = (UserModels.UserResponse)Session["User"];
+
                 var routingNumberServices = new RoutingNumberServices();
 
                 if (!routingNumberServices.ValidateRoutingNumber(model.RoutingNumber))
@@ -83,7 +93,24 @@ namespace Mobile_PaidThx.Controllers
                     return View(model);
                 }
 
+               
+                if (!user.setupSecurityPin)
+                {
+                    Session["UserSetupReturnUrl"] = "/mobile/BankAccounts/SetupACHAccountComplete";
+                    Session["ACHAccountModel"] = new SetupACHAccountModel()
+                    {
+                        AccountNumber = model.AccountNumber,
+                        AccountType = model.AccountType,
+                        ConfirmAccountNumber = model.AccountNumber,
+                        NameOnAccount = model.NameOnAccount,
+                        Payment = null,
+                        RoutingNumber = model.RoutingNumber
+                    };
+                    return RedirectToAction("SetupPinSwipe", "Register");
+                }
+
                 Session["NewBankAccount"] = model;
+
 
                 return RedirectToAction("AddPopUpPinswipe");
             }
@@ -117,6 +144,19 @@ namespace Mobile_PaidThx.Controllers
             }
 
             user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
+
+            TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
+
+            return RedirectToAction("Index");
+        }
+        public ActionResult SetupACHAccountComplete()
+        {
+            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var bankAccountServices = new Services.UserPaymentAccountServices();
+            
+            user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
+
+            TempData["DataUrl"] = "data-url=/mobile/BankAccounts/SetupACHAccountComplete";
 
             return RedirectToAction("Index");
         }

@@ -226,7 +226,20 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 if (!securityService.Encrypt(currentPassword).Equals(user.Password))
+                {
+                    user.PasswordFailuresSinceLastSuccess += 1;
+
+                    if (user.PasswordFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Password Invalid. Userr {0} is Locked out", user.UserId), 1001);
+                    }
+                    ctx.SaveChanges();
+
                     throw new CustomExceptions.BadRequestException(String.Format("Current Password Does Not Match Our Records. Try Again."));
+                }
 
                 if (securityService.Decrypt(user.Password).Equals(newPassword))
                     throw new CustomExceptions.BadRequestException(String.Format("New Password Can't Match Your Current Password. Try Again."));
@@ -446,89 +459,108 @@ namespace SocialPayments.DomainServices
         }
         public bool ValidateUser(string userNameOrEmail, string password, out User foundUser)
         {
-            logger.Log(LogLevel.Info, "Validating User");
-
-            CryptoService cryptoService = new CryptoService();
-            if (string.IsNullOrEmpty(userNameOrEmail))
+            using (var ctx = new Context())
             {
-                throw CreateArgumentNullOrEmptyException("userNameOrEmail");
-            }
-            if (string.IsNullOrEmpty(password))
-            {
-                throw CreateArgumentNullOrEmptyException("password");
-            }
+                logger.Log(LogLevel.Info, "Validating User");
 
-            User user = null;
-
-            user = _ctx.Users
-                .Include("PaymentAccounts")
-                .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
-
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
-                user = _ctx.Users
-                    .Include("PaymentAccounts")
-                    .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
-            }
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
-                user = _ctx.Users
-                    .Include("PaymentAccounts")
-                    .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
-            }
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by user name.");
-                foundUser = null;
-                return false;
-            }
-            //if (!user.IsConfirmed)
-            //{
-            //    foundUser = null;
-            //    return false;
-            //}
-            var hashedPassword = securityService.Encrypt(password);
-            logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
-
-            bool verificationSucceeded = false;
-
-            try
-            {
-                logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
-                verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
-
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
-            }
-
-            logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
-
-            if (verificationSucceeded)
-            {
-                user.PasswordFailuresSinceLastSuccess = 0;
-            }
-            else
-            {
-                int failures = user.PasswordFailuresSinceLastSuccess;
-                if (failures != -1)
+                CryptoService cryptoService = new CryptoService();
+                if (string.IsNullOrEmpty(userNameOrEmail))
                 {
-                    user.PasswordFailuresSinceLastSuccess += 1;
-                    user.LastPasswordFailureDate = DateTime.UtcNow;
+                    throw CreateArgumentNullOrEmptyException("userNameOrEmail");
                 }
-            }
-            _ctx.SaveChanges();
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw CreateArgumentNullOrEmptyException("password");
+                }
 
-            if (verificationSucceeded)
-            {
-                foundUser = user;
-                return true;
-            }
-            else
-            {
+                User user = null;
+
+                user = ctx.Users
+                    .Include("PaymentAccounts")
+                    .Include("SecurityQuestion")
+                    .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
+
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
+                    user = ctx.Users
+                        .Include("PaymentAccounts")
+                        .Include("SecurityQuestion")
+                        .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
+                }
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
+                    user = ctx.Users
+                        .Include("PaymentAccounts")
+                        .Include("SecurityQuestion")
+                        .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
+                }
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by user name.");
+                    foundUser = null;
+                    return false;
+                }
+
+                //if (!user.IsConfirmed)
+                //{
+                //    foundUser = null;
+                //    return false;
+                //}
+                var hashedPassword = securityService.Encrypt(password);
+                logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
+
+                bool verificationSucceeded = false;
+
+                try
+                {
+                    logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
+                    verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
+
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
+                }
+
+                logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
+
+                if (verificationSucceeded)
+                {
+                    if (String.IsNullOrEmpty(user.SecurityPin))
+                    {
+                        user.PinCodeFailuresSinceLastSuccess = 0;
+                        user.IsLockedOut = false;
+
+                        ctx.SaveChanges();
+                    }
+
+                    foundUser = user;
+
+                    return true;
+
+                }
+                else
+                {
+
+                    int failures = user.PasswordFailuresSinceLastSuccess;
+                    if (failures != -1)
+                    {
+                        user.PasswordFailuresSinceLastSuccess += 1;
+                        user.LastPasswordFailureDate = DateTime.UtcNow;
+
+                        if (failures > 3)
+                            user.IsLockedOut = true;
+
+                        ctx.SaveChanges();
+
+                        foundUser = null;
+
+                        return false;
+                    }
+                }
+
                 foundUser = null;
                 return false;
             }

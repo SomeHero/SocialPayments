@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using SocialPayments.RestServices.Internal.Models;
-using SocialPayments.Domain;
 using System.Net;
-using NLog;
-using System.Threading.Tasks;
-using System.IO;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web.Http;
+using NLog;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -17,12 +14,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
     {
         public RenamingMultipartFormDataStreamProvider(string root) : base(root)
         { }
-        protected override string GetLocalFileName(HttpContentHeaders headers)
+        public override string GetLocalFileName(HttpContentHeaders headers)
         {
             return String.Format(@"image_{0}.png", System.DateTime.Now.ToFileTime());
         }
     }
-
+    /*
     public class FileUploadController : ApiController
     {
         private Logger _logger = LogManager.GetCurrentClassLogger();
@@ -59,5 +56,5 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return task;
         }
 
-    }
+    }*/
 }

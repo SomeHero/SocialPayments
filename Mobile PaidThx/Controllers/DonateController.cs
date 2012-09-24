@@ -8,6 +8,7 @@ using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 using System.Web.Routing;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -345,6 +346,22 @@ namespace Mobile_PaidThx.Controllers
                     var paystreamMessageServices = new PaystreamMessageServices();
                     paystreamMessageServices.SendDonation(_apiKey, userId, donateInformation.RecipientId, user.preferredPaymentAccountId, model.Pincode,
                         donateInformation.Amount, donateInformation.Comments, "0", "0", "", "", "");
+                }
+                catch (ErrorException ex)
+                {
+                    if (ex.ErrorCode == 1001)
+                    {
+                        Session["User"] = null;
+                        Session["UserId"] = null;
+
+                        TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                        return RedirectToAction("Index", "SignIn");
+                    }
+
+                    ModelState.AddModelError("", ex.Message);
+
+                    return View(model);
                 }
                 catch (Exception ex)
                 {

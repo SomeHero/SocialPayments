@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Script.Serialization;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -11,15 +13,19 @@ namespace Mobile_PaidThx.Services
     {
         private string _userPayStreamServiceGetUrl = "{0}SecurityQuestions";
 
-        public List<SecurityQuestionModels.SecurityQuestionResponse> GetSecurityQuestions()
+        public List<ResponseModels.SecurityQuestionModels.SecurityQuestionResponse> GetSecurityQuestions()
         {
             var response = Get(String.Format(_userPayStreamServiceGetUrl, _webServicesBaseUrl));
-
+            var js = new JavaScriptSerializer();
+           
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            var securityQuestions = js.Deserialize<List<SecurityQuestionModels.SecurityQuestionResponse>>(response.JsonResponse);
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
+             var securityQuestions = js.Deserialize<List<ResponseModels.SecurityQuestionModels.SecurityQuestionResponse>>(response.JsonResponse);
 
             return securityQuestions;
         }

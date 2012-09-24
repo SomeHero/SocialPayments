@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -55,7 +57,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_pledgeMessageUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void CancelPayment(string apiKey, string messageId)
         {
@@ -66,7 +72,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_cancelPaymentUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void CancelRequest(string apiKey, string messageId)
         {
@@ -76,7 +86,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_cancelRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void AcceptPaymentRequest(string apiKey, string userId, string securityPin, string paymentAccountId, string messageId)
         {
@@ -91,7 +105,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_acceptPaymentRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         public void RejectPaymentRequest(string apiKey, string messageId)
         {
@@ -101,7 +119,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_rejectPaymentRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
         private void SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
         {
@@ -129,7 +151,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_paystreamMessageUrl, _webServicesBaseUrl), json);
            
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
         private void SendDonationMessage(string apiKey, string senderId, string recipientId, string senderAccountId, string securityPin, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
@@ -154,8 +180,12 @@ namespace Mobile_PaidThx.Services
 
             var response = Post(String.Format(_donateMessageUrl, _webServicesBaseUrl), json);
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK  && response.StatusCode != System.Net.HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Created)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
     }
 }

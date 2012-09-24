@@ -164,6 +164,7 @@ namespace SocialPayments.RestServices.Internal.Models
             // Added Security Question Implementation
             public bool setupSecurityQuestion { get; set; }
             public bool isLockedOut { get; set; }
+            public string securityQuestion { get; set; }
         }
         public class FacebookSignInRequest
         {
