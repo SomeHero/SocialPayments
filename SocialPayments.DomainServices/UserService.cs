@@ -528,7 +528,7 @@ namespace SocialPayments.DomainServices
 
                 if (verificationSucceeded)
                 {
-                    if (String.IsNullOrEmpty(user.SecurityPin))
+                    if (user.SecurityQuestion == null)
                     {
                         user.PinCodeFailuresSinceLastSuccess = 0;
                         user.IsLockedOut = false;
