@@ -45,7 +45,7 @@ namespace SocialPayments.RestServices.Internal
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            WebApiConfig.Register(config);
         }
     }
 }
