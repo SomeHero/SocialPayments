@@ -680,7 +680,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
         // GET /api/users/{userId}/refresh_homepage
-        [HttpPost]
+        [HttpGet]
         public HttpResponseMessage RefreshHomepageInformation(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Refreshing homepage for {0}", id));
