@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Routing;
 
 namespace SocialPayments
 {
@@ -41,8 +42,9 @@ namespace SocialPayments
             config.Routes.MapHttpRoute(
                name: "PaystreamMessagesPost",
                routeTemplate: "api/paystreammessages",
-               defaults: new { controller = "PaystreamMessages", action = "Post" }
-           );
+               defaults: new { controller = "PaystreamMessages", action = "Post" },
+               constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            );
             config.Routes.MapHttpRoute(
                name: "Donate",
                routeTemplate: "api/paystreammessages/donate",
@@ -126,12 +128,23 @@ namespace SocialPayments
                 routeTemplate: "api/users/{id}/change_securitypin",
                 defaults: new { controller = "Users", action = "ChangeSecurityPin" }
             );
-
+            config.Routes.MapHttpRoute(
+                name: "RefreshHomePageInformation",
+                routeTemplate: "api/users/{id}/refresh_homepage",
+                defaults: new { controller = "Users", action = "RefreshHomepageInformation" }
+            );
             config.Routes.MapHttpRoute(
                 name: "Join",
                 routeTemplate: "api/users",
-                defaults: new { controller = "Users", action = "Post" }
+                defaults: new { controller = "Users", action = "Post" },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
             );
+            config.Routes.MapHttpRoute(
+                 name: "GetUser",
+                 routeTemplate: "api/users/{id}",
+                 defaults: new { controller = "Users", action = "Get" },
+                 constraints: new { httpMethod = new HttpMethodConstraint("GET") }
+             );
             config.Routes.MapHttpRoute(
                 name: "SignInWithFacebook",
                 routeTemplate: "api/users/signin_withfacebook",
@@ -159,13 +172,12 @@ namespace SocialPayments
                 routeTemplate: "api/users/verify_paypoint",
                 defaults: new { controller = "Users", action = "VerifyPayPoint" }
             );
-
             config.Routes.MapHttpRoute(
-                name: "RefreshHomePageInformation",
-                routeTemplate: "api/users/{id}/refresh_homepage",
-                defaults: new { controller = "Users", action = "RefreshHomepageInformation" }
+                name: "PayPoints",
+                routeTemplate: "api/users/{userId}/PayPoints",
+                defaults: new { controller = "UserPayPoint", action = "Post" },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
             );
-
             config.Routes.MapHttpRoute(
                 name: "GetMatchingMECodesWithSearchTerm",
                 routeTemplate: "api/users/searchbymecode/{searchTerm}",
@@ -184,8 +196,8 @@ namespace SocialPayments
             );
             config.Routes.MapHttpRoute(
                 name: "UserPayPoints",
-                routeTemplate: "api/users/{userId}/PayPoints/{id}",
-                defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional }
+                routeTemplate: "api/users/{userId}/PayPoints",
+                defaults: new { controller = "UserPayPoint" }
             );
             config.Routes.MapHttpRoute(
     name: "UserPayPointsWithType",
@@ -238,7 +250,9 @@ namespace SocialPayments
             config.Routes.MapHttpRoute(
     name: "PaymentAccounts",
     routeTemplate: "api/users/{userId}/PaymentAccounts",
-    defaults: new { controller = "UserPaymentAccounts", action = "Post" }
+    defaults: new { controller = "UserPaymentAccounts", action = "Post" },
+       constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            
 );
 
             config.Routes.MapHttpRoute(

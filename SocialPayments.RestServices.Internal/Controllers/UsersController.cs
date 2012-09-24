@@ -28,6 +28,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Guid ApiKey = new Guid("bda11d91-7ade-4da1-855d-24adfe39d174");
 
         // GET /api/user
+        [HttpGet]
         public HttpResponseMessage Get(int take, int skip, int page, int pageSize)
         {
             var userServices = new DomainServices.UserService();
@@ -61,6 +62,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             });
         }
         // GET /api/users/5
+        [HttpGet]
         public HttpResponseMessage Get(string id)
         {
             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
