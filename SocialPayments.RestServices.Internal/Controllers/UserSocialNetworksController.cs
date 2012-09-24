@@ -24,7 +24,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 userSocialNetworkServices.AddUserSocialNetwork(userId, request.SocialNetworkType, request.SocialNetworkUserId, request.SocialNetworkUserToken);
-
             }
             catch (NotFoundException ex)
             {
