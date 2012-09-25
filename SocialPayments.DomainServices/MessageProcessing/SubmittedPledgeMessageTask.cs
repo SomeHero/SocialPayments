@@ -177,7 +177,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
 
             }
-            //if the recipient has a device token; send a push notification
+            /*
+            if the recipient has a device token; send a push notification
             if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
             {
                 if (!String.IsNullOrEmpty(message.Recipient.RegistrationId))
@@ -202,8 +203,21 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     _iosNotificationServices.PushIOSNotification(_recipientRequestNotification, message, senderName);
                 }
-
             }
+            */
+            if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
+            {
+                // Submitted Pledge:
+                // iOS Notification Payload:
+                // Device Token from User
+                // -> Message: ?
+                var sndrName = message.Sender.SenderName;
+                var pushMsg = String.Format("You pledged {0:C} to {1}.", message.Amount, message.Sender.OrganizationName);
+                // -> Alert#: ? (1 for now)
+                var badgeNum = 1;
+                _iosNotificationServices.SendPushNotification(message.Recipient.DeviceToken, pushMsg, badgeNum);
+            }
+
             //if the recipient has a linked facebook account; send a facebook message
             if (message.Recipient.FacebookUser != null)
             {

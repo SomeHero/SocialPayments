@@ -172,33 +172,20 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
 
             }
-            //if the recipient has a device token; send a push notification
+
             if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
             {
-                if (!String.IsNullOrEmpty(message.Recipient.RegistrationId))
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
-                    //Fix this.
-                    try
-                    {
-                        string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
-                        AndroidNotificationService.sendAndroidPushNotification(
-                            auth_token, message.Recipient.UserId.ToString(), message.Recipient.RegistrationId, senderName, message);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
-                    }
-                }
-                else
-                {
-
-                    _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
-
-                    _iosNotificationServices.PushIOSNotification(_recipientRequestNotification, message, senderName);
-                }
-
+                // Submitted Request:
+                // iOS Notification Payload:
+                // Device Token from User
+                // -> Message: ?
+                var sndrName = message.Sender.SenderName;
+                var pushMsg = String.Format("{0} requested {1:C} from you.", sndrName, message.Amount);
+                // -> Alert#: ? (1 for now)
+                var badgeNum = 1;
+                _iosNotificationServices.SendPushNotification(message.Recipient.DeviceToken, pushMsg, badgeNum);
             }
+
             //if the recipient has a linked facebook account; send a facebook message
             if (message.Recipient.FacebookUser != null)
             {

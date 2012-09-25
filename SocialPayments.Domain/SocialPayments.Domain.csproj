@@ -206,6 +206,7 @@
     <Compile Include="MerchantOffer.cs" />
     <Compile Include="PaymentTransaction.cs" />
     <Compile Include="ProfileItemSelectOption.cs" />
+    <Compile Include="UserDevice.cs" />
     <Compile Include="UserPayPointHistory.cs" />
     <Compile Include="UserPayPointVerification.cs" />
     <Compile Include="Merchant.cs" />
