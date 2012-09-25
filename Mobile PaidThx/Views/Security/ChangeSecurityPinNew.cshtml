@@ -1,15 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.ConfirmSecurityPinModel
 @{
-    ViewBag.Title = "Confirm Security Pin";
+    ViewBag.Title = "Confirm Security PIN";
+    ViewBag.PageID = "confirmsecuritypin-page";
 }
 
-<div data-role="page" id="confirmsecuritypin-page" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID"  data-add-back-btn="true" @TempData["DataUrl"]>
         @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Confirm Security Pin</h1>
+            Confirm PIN</h1>
     </div>
-    <div data-role="content" style="margin: 15px;">
+    <div data-role="content">
+    <div class="pad">
     @Html.ValidationSummary()
       
                 <div class="top-panel">
@@ -17,10 +19,21 @@
         <p>Now swipe a new security pin.</p></div>
         @using (Html.BeginForm("ChangeSecurityPinNew", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
-            <div style="margin-top:15px">
+            <div>
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none"  />
         </div>
         }
+        </div>
     </div>
+      <div id="resizerHack">
+        
+
+
+        </div>
+<script type="text/javascript">
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
+    });
+</script>
 </div>

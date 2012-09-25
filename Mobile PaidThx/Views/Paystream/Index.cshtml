@@ -16,6 +16,7 @@
     </div>
     <div data-role="content">
         <div class="pad">
+        <div class="filter-holder">
             <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items"
                 data-type="horizontal" data-grid="c">
                 <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked"
@@ -32,6 +33,7 @@
                 <label for="paystream-other">
                     Other</label>
             </fieldset>
+            </div>
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
             </ul>
             <ul id="pagingList" data-role="listview" style="display: none;">
