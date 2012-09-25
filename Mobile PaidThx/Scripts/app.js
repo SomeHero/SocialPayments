@@ -140,6 +140,16 @@ var paystreamController = (function ($, undefined) {
             $.mobile.hidePageLoadingMsg();
         });
     };
+    pub.closeDetailDialog = function () {
+        //Starting loading animation
+        $.mobile.showPageLoadingMsg();
+
+        //Get news and add success callback using then
+        closeDetailDialog(function () {
+            //Stop loading animation on success
+            $.mobile.hidePageLoadingMsg();
+        });
+    };
     pub.cancelPayment = function (id) {
         showPinSwipe("CancelPayment", id);
     };
