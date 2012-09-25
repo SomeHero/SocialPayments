@@ -10,9 +10,10 @@
         <h1>Email Details</h1>
     </div>
     <div data-role="content" class="panel main-body">
+        <div class="pad">
         <ul data-role="listview" data-inset="true">
             <li class="settings email static">
-                   <h2>@Model.EmailAddress
+                   <h2>@Model.EmailAddress.Uri
                    </h2>
                    <h4>
                    @if (Model.EmailAddress.Verified)
@@ -49,5 +50,6 @@
                    Remove Email</button>
             }
             </p>
+            </div>
     </div>
 </div>

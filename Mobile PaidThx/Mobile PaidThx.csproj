@@ -726,7 +726,6 @@
     <Content Include="Views\Emails\Add.cshtml" />
     <Content Include="Views\MeCodes\Add.cshtml" />
     <Content Include="Views\Phones\PaypointInfo.cshtml" />
-    <Content Include="Views\Emails\PaypointInfo.cshtml" />
     <Content Include="Views\MeCodes\PaypointInfo.cshtml" />
     <Content Include="Views\MeCodes\Details.cshtml" />
     <Content Include="Views\Emails\Details.cshtml" />
