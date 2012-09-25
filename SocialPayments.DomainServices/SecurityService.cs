@@ -293,6 +293,7 @@ namespace SocialPayments.DomainServices
             // Return decrypted string.   
             return plainText;
         }
+
         public string GetLastFour(string p)
         {
             if (p.Length >= 4)
@@ -301,5 +302,4 @@ namespace SocialPayments.DomainServices
             return p;
         }
     }
-
 }
