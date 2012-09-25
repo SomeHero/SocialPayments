@@ -514,7 +514,7 @@ var pinswipeResizeController = (function ($, undefined) {
     return pub;
 } (jQuery));
 
-//ME CODE CONTROLLER
+
 $(document).on('pageshow', '[data-role=page]', function () {
 
     //add center to jquery object

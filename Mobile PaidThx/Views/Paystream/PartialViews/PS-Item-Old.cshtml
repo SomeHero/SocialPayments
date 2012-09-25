@@ -1,0 +1,59 @@
+﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
+    <li>
+        <a href="#" class="paystreamItem" messageId="${Id}">
+        <span class="trans-type">
+        {{if transactionImageUri}}
+            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
+        {{else}}
+            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
+        {{/if}}
+        </span>
+        <div class="trans-title">
+        {{if direction == "In"}}
+            <strong>${senderName}</strong>
+        {{/if}}
+        {{if direction == "Out"}}
+            <strong>${recipientName}</strong>
+        {{/if}}
+            <div class="title-pay-in">
+            {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+                ${senderName} requests money from you
+                {{else messageType == "Payment"}}
+                You received money
+                {{else messageType == "Donation"}}
+                ${senderName} made a donation
+                {{else messageType == "Pledge"}}
+                You pledged a donation
+                {{/if}}
+            {{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                Your request money
+                {{else messageType == "Payment"}}
+                You sent money
+                {{else messageType == "Donation"}}
+                You donated money
+                {{else messageType == "Pledge"}}
+                You sent a pledge to ${recipientName}
+                {{/if}}
+            {{/if}}
+            </div>
+        <div class="trans-comment">
+            <text>"${comments}"</text>
+        </div>
+        </div>
+        <span class="trans-amount">
+            <div class="gray-above">${createDate}</div>
+            <div class="paystream-pay-in">
+                           <h4 class="subheading" style="margin-top:6px;">
+                        Start sending and requesting!
+                        </h4>
+                $${amount.toFixed(2)}
+            </div>
+            <div class="gray-out">
+                ${messageStatus}
+            </div>
+        </span>
+        </a>
+     </li>
+</script>
