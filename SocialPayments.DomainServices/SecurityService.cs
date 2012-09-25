@@ -295,11 +295,10 @@ namespace SocialPayments.DomainServices
         }
         public string GetLastFour(string p)
         {
-            if (p.Length <= 4)
-                return p;
-            else
-                return p.Substring(0, 4);
+            if (p.Length >= 4)
+                return p.Substring(p.Length - 4, 4);
 
+            return p;
         }
     }
 
