@@ -1,29 +1,34 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.ForgotSecurityPinModel
-
 @{
-    ViewBag.Title = "Forgot Security Pin";
+    ViewBag.Title = "Forgot PIN";
+    ViewBag.PageID = "forgotsecuritypin-page";
 }
 
-<div data-role="page" id="forgotsecuritypin-page" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" data-add-back-btn="true" @TempData["DataUrl"]>
         @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Forgot Security Pin</h1>
+            Forgot PIN</h1>
     </div>
-    <div data-role="content" style="margin: 15px;">
+    <div data-role="content">
+    <div class="pad">
+        <div class="top-panel">
+        <p>Answer your security question below to reset your security PIN.</p>
+        </div>
      @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "data-ajax", "false" }  }))
          {   
         @Html.ValidationSummary()
-        <h4>My Security Question</h4>
+
         <p>@Model.SecurityQuestion</p>
         <p>
             @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Security Question Answer" } })
         </p>
                  <p>
-            <button type="submit" id="register-submit" class="imgbtn">
-                <img src="@Url.Content("~/Content/images/checkmark-btn-icon.png")" alt="" /><span>Continue</span></button>
+            <button type="submit" id="changepassword-submit" data-theme="f" data-icon="check" data-iconpos="right">
+                Submit</button>
 
         </p>
          }
+    </div>
     </div>
 </div>

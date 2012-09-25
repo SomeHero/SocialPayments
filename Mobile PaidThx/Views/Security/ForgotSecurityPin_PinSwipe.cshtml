@@ -1,49 +1,37 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.ChangeSecurityPinModel
 
 @{
-    ViewBag.Title = "Change Security Pin";
+    ViewBag.Title = "Change PIN";
+    ViewBag.PageID = "forgotsecuritypin-pinswipe-page";
 }
 
-<div data-role="page" id="forgotsecuritypin-pinswipe-page" data-add-back-btn="true" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" data-add-back-btn="true" @TempData["DataUrl"]>
         @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Change Security Pin</h1>
+            New PIN</h1>
     </div>
-    <div data-role="content" style="margin: 15px;">
+    <div data-role="content">
+    <div class="pad">
     @Html.ValidationSummary()
       
         @using (Html.BeginForm("ForgotSecurityPin_PinSwipe", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
-            <div style="margin-top:15px">
+            <div>
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit"  data-role="none" />
         </div>
         }
     </div>
-</div>
-  <div id="resizerHack">
+    </div>
+       <div id="resizerHack">
         
-        
+
+
         </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        function resizePIN() {
-
-            $(".hackstyle").remove();
-            var widthy = $(window).width();
-            divwidth = widthy * .93;
-
-            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
-
-        };
-
-        resizePIN();
-
-        $(window).resize(function () {
-            resizePIN();
-        });
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
     });
 </script>
 </div>
