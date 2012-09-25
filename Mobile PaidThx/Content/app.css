@@ -118,7 +118,6 @@ background: -webkit-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%
 background: -o-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* Opera 12+ */
 background: -ms-radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* IE10+ */
 background: radial-gradient(center, ellipse cover,  rgba(32,104,50,0) 0%,rgba(32,104,50,0) 40%,rgba(32,104,50,0.65) 99%,rgba(32,104,50,0.65) 100%); /* W3C */
-opacity:.8;
 }
 
   div.ui-page div.ui-header.ui-bar-a, div.ui-page div.ui-header.ui-bar-c
