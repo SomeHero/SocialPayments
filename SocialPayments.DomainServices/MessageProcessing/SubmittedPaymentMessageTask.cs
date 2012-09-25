@@ -330,7 +330,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     _logger.Log(LogLevel.Error, String.Format("Exception posting to wall for Facebook user {0}. {1}", message.Recipient.FacebookUser.FBUserID, ex.Message));
                 }
             }
-            //PUsh Notification Stuff
+            
+            /*Push Notification Stuff
             if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
             {
                 if (!String.IsNullOrEmpty(message.Recipient.RegistrationId))
@@ -350,9 +351,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
                 else
                 {
-
                     _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
-
+                    
                     try
                     {
 
@@ -367,7 +367,21 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     }
                 }
 
+            }*/
+
+            if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
+            {
+                // Submitted Payment:
+                // iOS Notification Payload:
+                // Device Token from User
+                // -> Message: ?
+                var sndrName = message.Sender.SenderName;
+                var pushMsg = String.Format("{0} sent you {1:C}.", sndrName, message.Amount);
+                // -> Alert#: ? (1 for now)
+                var badgeNum = 1;
+                _iosNotificationServices.SendPushNotification(message.Recipient.DeviceToken, pushMsg, badgeNum);
             }
+
             if (message.Recipient.FacebookUser != null)
             {
                 //Send Facebook Message
