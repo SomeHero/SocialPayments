@@ -106,6 +106,7 @@ var paystreamController = (function ($, undefined) {
         page = 0;
         skip = 0;
         type = theType;
+        currentHeader = "";
 
         //Get news and add success callback using then
         searchPayStream(function () {
@@ -379,12 +380,12 @@ var contactsSearchController = (function ($, undefined) {
         });
     };
 
-    pub.searchAndDisplayMeCodes = function (searchValue) {
+    pub.searchAndDisplayMeCodes = function (searchValue, type) {
         //Starting loading animation
         $.mobile.showPageLoadingMsg();
 
         //Get news and add success callback using then
-        searchByMeCode(searchValue, function () {
+        searchByMeCode(searchValue, type, function () {
             //Stop loading animation on success
             $.mobile.hidePageLoadingMsg();
         });
@@ -399,10 +400,15 @@ var contactsSearchController = (function ($, undefined) {
         hideNoResults(searchVal);
     }
 
-    function searchByMeCode(searchValue, callback) {
+    function searchByMeCode(searchValue, type, callback) {
         //Get news via ajax and return jqXhr
+        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue;
+
+        if (type)
+            serviceUrl = serviceUrl + "?type=" + type;
+
         $.ajax({
-            url: webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue,
+            url: serviceUrl,
             dataType: "json",
             success: function (data, textStatus, xhr) {
                 //Publish that news has been updated & allow

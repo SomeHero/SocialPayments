@@ -63,7 +63,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Get(int id)
         {
             var securityQuestionServices = new DomainServices.SecurityQuestionServices();
-            HttpResponseMessage response = null;
             Domain.SecurityQuestion securityQuestion = null;
 
             try
@@ -101,9 +100,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 IsActive = securityQuestion.IsActive,
                 Question = securityQuestion.Question
             });
-
-            return response;
-
         }
 
         //POST /api/{userId}/validate_security_question
@@ -137,6 +133,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating Security Question for User {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            if (!result)
+            {
+                var error = new HttpError("Security Question Answer Does Not Match Our Records");
+                error["ErrorCode"] = 1004;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);

@@ -74,10 +74,27 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     recipientName = m.RecipientName,
                     senderSeen = m.senderHasSeen,
                     recipientSeen = m.recipientHasSeen,
-                    isCancellable = IsCancellable(m)
+                    isAcceptable = IsAcceptable(m),
+                    isRejectable = IsRejectable(m),
+                    isCancellable = IsCancellable(m),
+                    isRemindable = IsRemindable(m)
                 }).ToList()
             });
 
+        }
+        private bool IsAcceptable(Domain.Message message)
+        {
+            if (message.Direction == "In")
+                return message.Status.IsAcceptable();
+
+            return false;
+        }
+        private bool IsRejectable(Domain.Message message)
+        {
+            if (message.Direction == "In")
+                return message.Status.IsRejectable();
+
+            return false;
         }
         private bool IsCancellable(Domain.Message message)
         {
@@ -88,6 +105,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return false;
             else
                 return message.Status.IsCancellable();
+        }
+        private bool IsRemindable(Domain.Message message)
+        {
+            if (message.Direction == "Out")
+                return message.Status.IsRemindable();
+
+            return false;
         }
         // GET /api/{userId}/PayStreamMessages
         [HttpGet]
@@ -142,7 +166,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 recipientName = m.RecipientName,
                 senderSeen = m.senderHasSeen,
                 recipientSeen = m.recipientHasSeen,
-                isCancellable = IsCancellable(m)
+                isAcceptable = IsAcceptable(m),
+                isRejectable = IsRejectable(m),
+                isCancellable = IsCancellable(m),
+                isRemindable = IsRemindable(m)
             }).ToList());
 
         }
@@ -200,7 +227,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 recipientName = message.RecipientName,
                 senderSeen = message.senderHasSeen,
                 recipientSeen = message.recipientHasSeen,
-                isCancellable = IsCancellable(message)
+                isAcceptable = IsAcceptable(message),
+                isRejectable = IsRejectable(message),
+                isCancellable = IsCancellable(message),
+                isRemindable = IsRemindable(message)
             });
         }
 
