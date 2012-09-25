@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
@@ -15,7 +16,15 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (Session["User"] == null)
+                return RedirectToAction("Index", "SignIn");
+
+            var user = (UserModels.UserResponse)Session["User"];
+
+            return View(new SecurityModels.SecurityPreferencesModel()
+            {
+                SetupSecurityPin = user.setupSecurityPin
+            });
         }
 
         public ActionResult ChangePassword()
@@ -41,6 +50,22 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                 userService.ChangePasssword(user.userId.ToString(), model.OldPassword, model.NewPassword);
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
             }
             catch (Exception ex)
             {

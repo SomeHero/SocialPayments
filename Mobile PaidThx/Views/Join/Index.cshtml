@@ -10,7 +10,21 @@
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
              @if (Model.Message != null)
-             {<text>You Have Money!</text>}
+             {
+                 if (Model.Message.MessageType == "Payment")
+                 {
+                    <text>You Have Money!</text>
+                 }
+                 if (Model.Message.MessageType == "PaymentRequest")
+                 {
+                    <text>You Have a Pending Request!</text>
+                 }
+                 if (Model.Message.MessageType == "AcceptPledge")
+                 {
+                 <text>Thanks for your pledge!</text>
+                 }
+
+             }
              else
              {<text>Join</text>}</h1>
  @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
@@ -65,14 +79,14 @@
                 </div>
                 </text>
                 }
-                if (Model.Message.MessageType == "Pledge")
+                if (Model.Message.MessageType == "AcceptPledge")
                 {
                 <text>
 
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
                     <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <h4 class="aui-message">You pledged @String.Format("{0:C}", Model.Message.Amount) to <span class="sender">@Model.Message.Sender</span>.</h4>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
@@ -90,7 +104,7 @@
                 @Html.ValidationSummary()
              
             <div id="registration-form">
-                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, {"class", "validateMe"} }))
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
                 {
                     <span class="form-holder"><input type="email" id="email" class="email required" placeholder="Enter Your Email Address"
                         name="email" value="@Model.UserName" /></span>

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Script.Serialization;
 using Mobile_PaidThx.Services.ResponseModels;
 using System.Net;
+using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
@@ -33,12 +35,14 @@ namespace Mobile_PaidThx.Services
             var serviceUrl = String.Format(_getACHAccountsUrl, _webServicesBaseUrl, userId);
 
             var response = Get(serviceUrl);
-
-            if(response.StatusCode != HttpStatusCode.OK)
-                throw new Exception(response.Description);
-
             var js = new JavaScriptSerializer();
 
+            if(response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             return js.Deserialize<List<AccountModels.AccountResponse>>(response.JsonResponse);
         }
@@ -64,7 +68,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
         public void SetReceiveAccount(String apiKey, String userId, String bankId, String securityPin)
@@ -82,7 +90,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
         public void EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, String routingNumber, String accountType)
@@ -102,7 +114,11 @@ namespace Mobile_PaidThx.Services
             var response = Put(editUrl, json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
 
         public void AddAccount(String apiKey, String userId, String nickName, String nameOnAccount, String routingNumber, string accountNumber, string accountType, string securityPin)
@@ -124,7 +140,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(serviceUrl, json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             //var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
@@ -153,7 +173,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_setupACHAccountServiceUrl, _webServicesBaseUrl, userId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
 
             var jsonObject = js.Deserialize<Dictionary<string, dynamic>>(response.JsonResponse);
 
@@ -172,7 +196,11 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_verifyACHAccountUrl, _webServicesBaseUrl, userId, accountId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(response.Description);
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
         }
     }
 }

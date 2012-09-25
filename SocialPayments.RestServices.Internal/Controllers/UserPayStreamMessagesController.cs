@@ -18,9 +18,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private static DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         // GET /api/Users/{userId}/PayStreamMessages
-        public HttpResponseMessage<MessageModels.PagedResults> GetPaged(string userId, string type, int take, int skip, int page, int pageSize)
+        [HttpGet]
+        public HttpResponseMessage GetPaged(string userId, string type, int take, int skip, int page, int pageSize)
         {
-            HttpResponseMessage<MessageModels.PagedResults> response = null;
             var messageServices = new DomainServices.MessageServices();
             List<Domain.Message> messages = null;
             int totalRecords = 0;
@@ -33,32 +33,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
 
-            response = new HttpResponseMessage<MessageModels.PagedResults>(new MessageModels.PagedResults()
+            return Request.CreateResponse<MessageModels.PagedResults>(HttpStatusCode.OK, new MessageModels.PagedResults()
             {
                 TotalRecords = totalRecords,
                 Results = messages.Select(m => new MessageModels.MessageResponse()
@@ -79,18 +73,51 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     transactionImageUri = m.TransactionImageUrl,
                     recipientName = m.RecipientName,
                     senderSeen = m.senderHasSeen,
-                    recipientSeen = m.recipientHasSeen
+                    recipientSeen = m.recipientHasSeen,
+                    isAcceptable = IsAcceptable(m),
+                    isRejectable = IsRejectable(m),
+                    isCancellable = IsCancellable(m),
+                    isRemindable = IsRemindable(m)
                 }).ToList()
-            }, HttpStatusCode.OK);
-
-            return response;
+            });
 
         }
+        private bool IsAcceptable(Domain.Message message)
+        {
+            if (message.Direction == "In")
+                return message.Status.IsAcceptable();
+
+            return false;
+        }
+        private bool IsRejectable(Domain.Message message)
+        {
+            if (message.Direction == "In")
+                return message.Status.IsRejectable();
+
+            return false;
+        }
+        private bool IsCancellable(Domain.Message message)
+        {
+            if (message.PaymentRequest != null)
+                return false;
+
+            if (message.Direction == "In")
+                return false;
+            else
+                return message.Status.IsCancellable();
+        }
+        private bool IsRemindable(Domain.Message message)
+        {
+            if (message.Direction == "Out")
+                return message.Status.IsRemindable();
+
+            return false;
+        }
         // GET /api/{userId}/PayStreamMessages
-        public HttpResponseMessage<List<MessageModels.MessageResponse>> Get(string userId)
+        [HttpGet]
+        public HttpResponseMessage Get(string userId)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
-            HttpResponseMessage<List<MessageModels.MessageResponse>> response = null;
             List<Domain.Message> messages = null;
             
             try 
@@ -101,32 +128,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             
-            response = new HttpResponseMessage<List<MessageModels.MessageResponse>>(messages.Select(m => new MessageModels.MessageResponse()
+            return Request.CreateResponse<List<MessageModels.MessageResponse>>(HttpStatusCode.OK, messages.Select(m => new MessageModels.MessageResponse()
             {
                 amount = m.Amount,
                 comments = (!String.IsNullOrEmpty(m.Comments) ? String.Format("{0}", m.Comments) : "No comments"),
@@ -144,18 +165,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 transactionImageUri = m.TransactionImageUrl,
                 recipientName = m.RecipientName,
                 senderSeen = m.senderHasSeen,
-                recipientSeen = m.recipientHasSeen
-            }).ToList(), HttpStatusCode.OK);
+                recipientSeen = m.recipientHasSeen,
+                isAcceptable = IsAcceptable(m),
+                isRejectable = IsRejectable(m),
+                isCancellable = IsCancellable(m),
+                isRemindable = IsRemindable(m)
+            }).ToList());
 
-
-            return response;
         }
 
         // GET /api/{userId}/PayStreamMessages/{id}
-        public HttpResponseMessage<MessageModels.MessageResponse> Get(string userId, string id)
+        [HttpGet]
+        public HttpResponseMessage Get(string userId, string id)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
-            HttpResponseMessage<MessageModels.MessageResponse> response = null;
             Domain.Message message = null;
 
             try
@@ -166,32 +189,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages for User {0}.  Exception {1}.", userId, ex.Message));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
 
-            response = new HttpResponseMessage<MessageModels.MessageResponse>(new MessageModels.MessageResponse()
+            return Request.CreateResponse<MessageModels.MessageResponse>(HttpStatusCode.OK, new MessageModels.MessageResponse()
             {
                 amount = message.Amount,
                 comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
@@ -209,32 +226,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 transactionImageUri = message.TransactionImageUrl,
                 recipientName = message.RecipientName,
                 senderSeen = message.senderHasSeen,
-                recipientSeen = message.recipientHasSeen
-            }, HttpStatusCode.OK);
-
-
-            return response;
+                recipientSeen = message.recipientHasSeen,
+                isAcceptable = IsAcceptable(message),
+                isRejectable = IsRejectable(message),
+                isCancellable = IsCancellable(message),
+                isRemindable = IsRemindable(message)
+            });
         }
 
-        // GET /api/{userId}/PayStreamMessages/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST /api/{userId}/PayStreamMessages
-        public void Post(string value)
-        {
-        }
-
-        // PUT /api/userpaystreammessages/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/userpaystreammessages/5
-        public void Delete(int id)
-        {
-        }
     }
 }

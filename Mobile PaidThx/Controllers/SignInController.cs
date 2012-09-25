@@ -64,6 +64,14 @@ namespace Mobile_PaidThx.Controllers
                     });
                 }
 
+                if (validateResponse.isLockedOut)
+                {
+                    Session["UserId"] = validateResponse.userId;
+
+                    TempData["SecurityQuestion"] = validateResponse.securityQuestion;
+                    return RedirectToAction("SecurityQuestionChallenge");
+                }
+
                 UserModels.UserResponse user;
 
                 try
@@ -120,6 +128,9 @@ namespace Mobile_PaidThx.Controllers
                 }
                 else if (user.bankAccounts.Count() == 0)
                 {
+                    if (!String.IsNullOrEmpty(user.firstName) && !String.IsNullOrEmpty(user.lastName))
+                        TempData["NameOnAccount"] = user.firstName + " " + user.lastName;
+
                     return RedirectToAction("SetupACHAccount", "Register");
                 }
 
@@ -130,8 +141,6 @@ namespace Mobile_PaidThx.Controllers
                 }
                 else
                 {
-                    TempData["DataUrl"] = "data-url=./Paystream";
-
                     return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
                 }
             }
@@ -145,6 +154,53 @@ namespace Mobile_PaidThx.Controllers
             {
                 FBState = Session["SignInFBState"].ToString()
             });
+        }
+        public ActionResult SecurityQuestionChallenge()
+        {
+            return View(new SignInModels.SecurityQuestionChallengeModel()
+            {
+                SecurityQuestion = TempData["SecurityQuestion"].ToString()
+            });
+        }
+        [HttpPost]
+        public ActionResult SecurityQuestionChallenge(SignInModels.SecurityQuestionChallengeModel model)
+        {
+            var userSecurityQuestionService = new UserSecurityQuestionService();
+            var userService = new UserServices();
+
+            if (Session["UserId"] == null)
+                return RedirectToAction("Index");
+
+            var userId = Session["UserId"].ToString();
+            bool results = false;
+            UserModels.UserResponse user = null;
+            try
+            {
+                results = userSecurityQuestionService.ValidateSecurityQuestion(userId, model.SecurityQuestionAnswer);
+
+                if (!results)
+                {
+                    ModelState.AddModelError("", "Your answer did not match our records. Try again");
+
+                    return View(model);
+                }
+
+                user = userService.GetUser(userId);
+
+                Session["User"] = user;
+
+                return RedirectToAction("Index", "Paystream");
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
+            }
+
+            return View(model);
+
         }
         public ActionResult SignInWithFacebook(string state, string code)
         {

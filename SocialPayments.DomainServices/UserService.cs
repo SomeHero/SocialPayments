@@ -86,15 +86,18 @@ namespace SocialPayments.DomainServices
             if (payPointType == null)
                 throw new Exception("Pay Point Type Email Address Not Found");
 
-            user.PayPoints.Add(new UserPayPoint()
+            if (!String.IsNullOrEmpty(emailAddress))
             {
-                Id = Guid.NewGuid(),
-                CreateDate = System.DateTime.Now,
-                IsActive = true,
-                URI = userName,
-                Type = payPointType,
-                Verified = false
-            });
+                user.PayPoints.Add(new UserPayPoint()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    IsActive = true,
+                    URI = emailAddress,
+                    Type = payPointType,
+                    Verified = false
+                });
+            }
 
             if (!String.IsNullOrEmpty(mobileNumber))
             {
@@ -226,7 +229,20 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 if (!securityService.Encrypt(currentPassword).Equals(user.Password))
+                {
+                    user.PasswordFailuresSinceLastSuccess += 1;
+
+                    if (user.PasswordFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Password Invalid. Userr {0} is Locked out", user.UserId), 1001);
+                    }
+                    ctx.SaveChanges();
+
                     throw new CustomExceptions.BadRequestException(String.Format("Current Password Does Not Match Our Records. Try Again."));
+                }
 
                 if (securityService.Decrypt(user.Password).Equals(newPassword))
                     throw new CustomExceptions.BadRequestException(String.Format("New Password Can't Match Your Current Password. Try Again."));
@@ -363,18 +379,39 @@ namespace SocialPayments.DomainServices
             return true;
         }
 
-        public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm)
+        public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm, string type)
         {
             using (var ctx = new Context())
             {
-                List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
+                List<Domain.UserPayPoint> meCodesFound = new List<Domain.UserPayPoint>();
 
-                int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
+                int meCodeTypeInt = _ctx.PayPointTypes
+                    .First(m => m.Name.Equals("MeCode")).Id;
 
                 // Takes the top 20 found matches.
-                MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
+                if (!String.IsNullOrEmpty(type) && (!(type.ToLower() == "non-profits" || type.ToLower() == "organizations")))
+                    throw new CustomExceptions.BadRequestException("If type is specified, type must be Non-Profits or Organizations");
 
-                return MeCodesFound;
+                if (!String.IsNullOrEmpty(type) && type.ToLower() == "non-profits")
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                       .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && m.User.UserTypeId.Equals((int)Domain.UserType.NonProfit))
+                       .OrderBy(m => m.URI).Take(20).ToList();
+                }
+                else if (!String.IsNullOrEmpty(type) && type.ToLower() == "organizations")
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                       .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && m.User.UserTypeId.Equals((int)Domain.UserType.Organization))
+                       .OrderBy(m => m.URI).Take(20).ToList();
+                }
+                else
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                        .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && (m.User.UserTypeId.Equals((int)Domain.UserType.Individual) || m.User.UserTypeId.Equals((int)Domain.UserType.Organization)))
+                        .OrderBy(m => m.URI).Take(20).ToList();
+                }
+
+                return meCodesFound;
             }
         }
 
@@ -446,89 +483,115 @@ namespace SocialPayments.DomainServices
         }
         public bool ValidateUser(string userNameOrEmail, string password, out User foundUser)
         {
-            logger.Log(LogLevel.Info, "Validating User");
-
-            CryptoService cryptoService = new CryptoService();
-            if (string.IsNullOrEmpty(userNameOrEmail))
+            using (var ctx = new Context())
             {
-                throw CreateArgumentNullOrEmptyException("userNameOrEmail");
-            }
-            if (string.IsNullOrEmpty(password))
-            {
-                throw CreateArgumentNullOrEmptyException("password");
-            }
+                logger.Log(LogLevel.Info, "Validating User");
 
-            User user = null;
-
-            user = _ctx.Users
-                .Include("PaymentAccounts")
-                .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
-
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
-                user = _ctx.Users
-                    .Include("PaymentAccounts")
-                    .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
-            }
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
-                user = _ctx.Users
-                    .Include("PaymentAccounts")
-                    .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
-            }
-            if (user == null)
-            {
-                logger.Log(LogLevel.Warn, "Unable to find user by user name.");
-                foundUser = null;
-                return false;
-            }
-            //if (!user.IsConfirmed)
-            //{
-            //    foundUser = null;
-            //    return false;
-            //}
-            var hashedPassword = securityService.Encrypt(password);
-            logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
-
-            bool verificationSucceeded = false;
-
-            try
-            {
-                logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
-                verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
-
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
-            }
-
-            logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
-
-            if (verificationSucceeded)
-            {
-                user.PasswordFailuresSinceLastSuccess = 0;
-            }
-            else
-            {
-                int failures = user.PasswordFailuresSinceLastSuccess;
-                if (failures != -1)
+                CryptoService cryptoService = new CryptoService();
+                if (string.IsNullOrEmpty(userNameOrEmail))
                 {
-                    user.PasswordFailuresSinceLastSuccess += 1;
-                    user.LastPasswordFailureDate = DateTime.UtcNow;
+                    throw CreateArgumentNullOrEmptyException("userNameOrEmail");
                 }
-            }
-            _ctx.SaveChanges();
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw CreateArgumentNullOrEmptyException("password");
+                }
 
-            if (verificationSucceeded)
-            {
-                foundUser = user;
-                return true;
-            }
-            else
-            {
+                User user = null;
+
+                user = ctx.Users
+                    .Include("PaymentAccounts")
+                    .Include("SecurityQuestion")
+                    .FirstOrDefault(Usr => Usr.UserName == userNameOrEmail);
+
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by user name. Check email address.");
+                    user = ctx.Users
+                        .Include("PaymentAccounts")
+                        .Include("SecurityQuestion")
+                        .FirstOrDefault(Usr => Usr.EmailAddress == userNameOrEmail);
+                }
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by email address. Check mobile number.");
+                    user = ctx.Users
+                        .Include("PaymentAccounts")
+                        .Include("SecurityQuestion")
+                        .FirstOrDefault(Usr => Usr.MobileNumber == userNameOrEmail);
+                }
+                if (user == null)
+                {
+                    logger.Log(LogLevel.Warn, "Unable to find user by user name.");
+                    foundUser = null;
+                    return false;
+                }
+
+                //if (!user.IsConfirmed)
+                //{
+                //    foundUser = null;
+                //    return false;
+                //}
+                var hashedPassword = securityService.Encrypt(password);
+                logger.Log(LogLevel.Info, "Verifying Hashed Passwords");
+
+                bool verificationSucceeded = false;
+
+                try
+                {
+                    logger.Log(LogLevel.Info, string.Format("Passwords {0} {1}", user.Password, hashedPassword));
+                    verificationSucceeded = (hashedPassword != null && hashedPassword.Equals(user.Password));
+
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(LogLevel.Info, String.Format("Exception Verifying Password Hash {0}", ex.Message));
+                }
+
+                logger.Log(LogLevel.Info, String.Format("Verifying Results {0}", verificationSucceeded.ToString()));
+
+                if (verificationSucceeded)
+                {
+
+                    if (user.SecurityQuestion == null)
+                    {
+
+                        user.PasswordFailuresSinceLastSuccess = 0; 
+                        user.PinCodeFailuresSinceLastSuccess = 0;
+                        user.IsLockedOut = false;
+
+                        ctx.SaveChanges();
+                    }
+
+
+                    user.PasswordFailuresSinceLastSuccess = 0;
+                    ctx.SaveChanges();
+
+                    foundUser = user;
+
+                    return true;
+
+                }
+                else
+                {
+
+                    int failures = user.PasswordFailuresSinceLastSuccess;
+                    if (failures != -1)
+                    {
+                        user.PasswordFailuresSinceLastSuccess += 1;
+                        user.LastPasswordFailureDate = DateTime.UtcNow;
+
+                        if (failures > 3)
+                            user.IsLockedOut = true;
+
+                        ctx.SaveChanges();
+
+                        foundUser = null;
+
+                        return false;
+                    }
+                }
+
                 foundUser = null;
                 return false;
             }
@@ -679,10 +742,10 @@ namespace SocialPayments.DomainServices
         }
         public User GetUserById(Guid userId)
         {
-            var user = _ctx.Users
-                .FirstOrDefault(u => u.UserId.Equals(userId));
+                var user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId.Equals(userId));
 
-            return user;
+                return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
             string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
@@ -691,6 +754,7 @@ namespace SocialPayments.DomainServices
             _logger.Log(LogLevel.Info, String.Format("Sign in with Facebook {0}: firstname {1} lastname {2}", accountId, firstName, lastName));
 
             User user = null;
+            SocialNetwork socialNetwork = null;
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
@@ -699,14 +763,14 @@ namespace SocialPayments.DomainServices
                 user = _ctx.Users
                     .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
 
+                socialNetwork = _ctx.SocialNetworks
+                    .FirstOrDefault(u => u.Name == "Facebook");
+
                 if (user == null)
                 {
                     _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Create new user.", accountId, emailAddress));
 
                     isNewUser = true;
-
-                    var emailAttribute = _ctx.UserAttributes
-                         .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
 
                     user = AddUser(apiKey, "fb_" + accountId, "tempPassword", emailAddress, deviceToken, "", messageId);
 
@@ -717,6 +781,15 @@ namespace SocialPayments.DomainServices
                         TokenExpiration = tokenExpiration,
                         OAuthToken = oAuthToken
                     };
+                    user.UserSocialNetworks = new Collection<UserSocialNetwork>();
+
+                    user.UserSocialNetworks.Add(new UserSocialNetwork()
+                    {
+                        EnableSharing = true,
+                        SocialNetwork = socialNetwork,
+                        UserNetworkId = accountId,
+                        UserAccessToken = oAuthToken
+                    });
 
                     user.FirstName = firstName;
                     user.LastName = lastName;

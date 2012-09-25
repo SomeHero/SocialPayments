@@ -16,12 +16,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
         // GET /api/users/{userId}/configurations
-        public HttpResponseMessage<List<UserModels.UserConfigurationResponse>> Get(string userId)
+        [HttpGet]
+        public HttpResponseMessage Get(string userId)
         {
             var userConfigurationServices = new DomainServices.UserConfigurationServices();
             Collection<Domain.UserConfiguration> configItems = null;
-            HttpResponseMessage<List<UserModels.UserConfigurationResponse>> response = null;
-            
+
             try
             {
                 configItems = userConfigurationServices.GetUserConfigurationItems(userId);
@@ -30,43 +30,40 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Configuration Setting for User {0}. Exception {1}", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Configuration Setting for User {0}. Exception {1}", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Configuration Setting for User {0}. Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-
-            response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(configItems.Select(u => new UserModels.UserConfigurationResponse()
+            return Request.CreateResponse<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.OK, configItems.Select(u => new UserModels.UserConfigurationResponse()
                 {
                     Id = u.Id.ToString(),
                     UserId = u.UserId.ToString(),
                     ConfigurationKey = u.ConfigurationKey,
                     ConfigurationValue = u.ConfigurationValue,
                     ConfigurationType = u.ConfigurationType
-                }).ToList(), HttpStatusCode.OK);
-
-            return response;
+                }).ToList());
         }
 
         // GET /api/users/{userId}/configurations/{id}
-        public HttpResponseMessage<UserModels.UserConfigurationResponse> Get(string userId, string id)
+        [HttpGet]
+        public HttpResponseMessage Get(string userId, string id)
         {
             var userConfigurationServices = new DomainServices.UserConfigurationServices();
             Domain.UserConfiguration configItem = null;
-            HttpResponseMessage<UserModels.UserConfigurationResponse> response = null;
 
             try
             {
@@ -76,47 +73,48 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Configuration Setting {0} for User {1}. Exception {2}", id, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.UserConfigurationResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Configuration Setting {0} for User {1}. Exception {2}", id, userId, ex.Message));
 
-                response = new HttpResponseMessage<UserModels.UserConfigurationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Configuration Setting for User {0} for User {1}. Exception {2}. Stack Trace {3}", id, userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<UserModels.UserConfigurationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<UserModels.UserConfigurationResponse>(new UserModels.UserConfigurationResponse()
+            return Request.CreateResponse<UserModels.UserConfigurationResponse>(HttpStatusCode.OK,
+                new UserModels.UserConfigurationResponse()
             {
                 Id = configItem.Id.ToString(),
                 UserId = configItem.UserId.ToString(),
                 ConfigurationKey = configItem.ConfigurationKey,
                 ConfigurationValue = configItem.ConfigurationValue,
                 ConfigurationType = configItem.ConfigurationType
-            }, HttpStatusCode.OK);
+            });
 
-            return response;
         }
 
         // POST /api/users/{userId}/configurations
+        [HttpPost]
         public HttpResponseMessage Post(string userId)
         {
             return new HttpResponseMessage(HttpStatusCode.NotImplemented);
         }
 
         // PUT /api/users/{userId}/configurations/
+        [HttpPut]
         public HttpResponseMessage Put(string userId, UserModels.UpdateUserConfigurationRequest request)
         {
             var userConfigurationServices = new DomainServices.UserConfigurationServices();
-            HttpResponseMessage response = null;
 
             try
             {
@@ -126,30 +124,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating User Configuration Setting for User {0}. Exception {1}", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating User Configuration Setting for User {0}. Exception {1}", userId, ex.Message));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating User Configuration Setting for User {0}. Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<UserModels.UserConfigurationResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // DELETE /api/users/{userId}/configurations/{id}
+        [HttpDelete]
         public HttpResponseMessage Delete(string userId, string id)
         {
             return new HttpResponseMessage(HttpStatusCode.NotImplemented); ;

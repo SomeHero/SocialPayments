@@ -85,6 +85,8 @@ namespace Mobile_PaidThx.Controllers
             if (TempData["NameOnAccount"] != null)
                 nameOnAccount = TempData["NameOnAccount"].ToString();
 
+            Session["UserSetupReturnUrl"] = null;
+
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
                 NameOnAccount = nameOnAccount,
@@ -152,9 +154,17 @@ namespace Mobile_PaidThx.Controllers
             Session["UserId"] = user.userId;
             Session["User"] = user;
 
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+            string returnUrl = (Session["UserSetupReturnUrl"] != null ? Session["UserSetupReturnUrl"].ToString() : "");
 
-            return RedirectToAction("Index", "Paystream");
+            if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                 && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Paystream");
+            }
         }
         [HttpPost]
         public bool ValidateRoutingNumber(string routingNumber)
@@ -169,6 +179,8 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupPinSwipe()
         {
             TempData["Message"] = "";
+
+            TempData["DataUrl"] = "data-url=/mobile/Register/SetupPinSwipe";
 
             return View();
         }
@@ -222,6 +234,7 @@ namespace Mobile_PaidThx.Controllers
         {
             if (Session["UserId"] == null)
                 return RedirectToAction("SignIn");
+
 
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
@@ -281,9 +294,19 @@ namespace Mobile_PaidThx.Controllers
             Session["UserId"] = user.userId;
             Session["User"] = user;
 
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+            string returnUrl = (Session["UserSetupReturnUrl"] != null ? Session["UserSetupReturnUrl"].ToString() : "");
 
-            return RedirectToAction("Index", "Paystream");
+            if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                 && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                TempData["DataUrl"] = "data-url=/mobile/Paystream";
+
+                return RedirectToAction("Index", "Paystream");
+            }
         }
 
         //public ActionResult ValidateMobileDevice()

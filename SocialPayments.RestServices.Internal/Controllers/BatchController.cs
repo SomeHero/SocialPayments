@@ -10,29 +10,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class BatchController : ApiController
     {
-        // GET /api/transactionbatchservices
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET /api/transactionbatchservices/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST /api/transactionbatchservices
-        public void Post(string value)
-        {
-        }
         //POST /api/batches/BatchServices/batch_transactions
-        public HttpResponseMessage<BatchModels.BatchResponse> BatchTransactions()
+        [HttpPost]
+        public HttpResponseMessage BatchTransactions()
         {
             var transactionBatchServices = new DomainServices.TransactionBatchService();
             var formattingServices = new DomainServices.FormattingServices();
             Domain.TransactionBatch transactionBatch = null;
-            HttpResponseMessage<BatchModels.BatchResponse> response = null;
+            HttpResponseMessage response = null;
 
             try
             {
@@ -41,13 +27,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage<BatchModels.BatchResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                //error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
 
-            response = new HttpResponseMessage<BatchModels.BatchResponse>(new BatchModels.BatchResponse() {
+            response = Request.CreateResponse<BatchModels.BatchResponse>(HttpStatusCode.OK, new BatchModels.BatchResponse()
+            {
                 ClosedDate = formattingServices.FormatDateTimeForJSON(transactionBatch.ClosedDate),
                 CreateDate = formattingServices.FormatDateTimeForJSON(transactionBatch.CreateDate),
                 Id = transactionBatch.Id,
@@ -73,19 +60,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Status = t.Status.ToString(),
                     Type = t.Type.ToString(),
                 }).ToList()
-            }, HttpStatusCode.OK);
+            });
 
             return response;
-        }
-
-        // PUT /api/transactionbatchservices/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/transactionbatchservices/5
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -25,12 +25,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"];
 
         // GET /api/paystreammessage
-        public HttpResponseMessage<MessageModels.PagedResults> GetPaged(int take, int skip, int page, int pageSize)
+        [HttpGet]
+        public HttpResponseMessage GetPaged(int take, int skip, int page, int pageSize)
         {
             var messageServices = new DomainServices.MessageServices();
             List<Domain.Message> messages = null;
             int totalRecords = 0;
-            HttpResponseMessage<MessageModels.PagedResults> response = null;
 
             try
             {
@@ -40,31 +40,25 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Paged Messages. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Paged Messages. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Paged Messages. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.PagedResults>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            return new HttpResponseMessage<MessageModels.PagedResults>(
+            return Request.CreateResponse<MessageModels.PagedResults>(HttpStatusCode.OK,
                 new MessageModels.PagedResults()
                 {
                     TotalRecords = totalRecords,
@@ -82,15 +76,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         recipientUri = m.RecipientUri,
                         senderUri = m.SenderUri
                     })
-                }, HttpStatusCode.OK);
+                });
         }
-        public HttpResponseMessage<MessageModels.MessageResponse> Get(Guid id)
+        [HttpGet]
+        public HttpResponseMessage Get(Guid id)
         {
             _logger.Log(LogLevel.Info, String.Format("Getting Message {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
             Domain.Message message = null;
-            HttpResponseMessage<MessageModels.MessageResponse> response = null;
 
             try
             {
@@ -100,31 +94,26 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Message {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
+           
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Message {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Message {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.MessageResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<MessageModels.MessageResponse>(new MessageModels.MessageResponse()
+            return Request.CreateResponse<MessageModels.MessageResponse>(HttpStatusCode.OK, new MessageModels.MessageResponse()
             {
                 amount = message.Amount,
                 comments = message.Comments,
@@ -141,17 +130,15 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 senderUri = message.SenderUri,
                 senderName = message.SenderName,
                 transactionImageUri = message.TransactionImageUrl
-            }, HttpStatusCode.OK);
-
-            return response;
+            });
         }
 
 
         //POST /api/{userId}/PayStreamMessages/update_messages_seen
+        [HttpPost]
         public HttpResponseMessage UpdateMessagesSeen(MessageModels.MessageSeenUpdateRequest request)
         {
             var messagesServices = new DomainServices.MessageServices();
-            HttpResponseMessage response = null;
 
             try
             {
@@ -161,43 +148,37 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Update Messages Seen. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Update Messages Seen. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+           
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Update Messages Seen. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // POST /api/paystreammessages/donate
-        public HttpResponseMessage<MessageModels.SubmitMessageResponse> Donate(MessageModels.SubmitDonateRequest request)
+        [HttpPost]
+        public HttpResponseMessage Donate(MessageModels.SubmitDonateRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.senderId, request.organizationId, request.recipientFirstName, request.recipientLastName));
 
             var messagesServices = new DomainServices.MessageServices();
-            HttpResponseMessage<MessageModels.SubmitMessageResponse> response = null;
             Domain.Message message = null;
+
             try
             {
                 message = messagesServices.Donate(request.apiKey, request.senderId, request.organizationId, request.organizationId, request.senderAccountId, request.amount, request.comments, request.securityPin);
@@ -206,90 +187,72 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Donation. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Donation. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Donation. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(new MessageModels.SubmitMessageResponse()
-            {
-
-            }, HttpStatusCode.Created);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
         // POST /api/message/accept_pledge
-        public HttpResponseMessage<MessageModels.SubmitMessageResponse> AcceptPledge(MessageModels.SubmitPledgeRequest request)
+        [HttpPost]
+        public HttpResponseMessage AcceptPledge(MessageModels.SubmitPledgeRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.onBehalfOfId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
             DomainServices.MessageServices _messageServices = new DomainServices.MessageServices();
             Domain.Message message = null;
-            HttpResponseMessage<MessageModels.SubmitMessageResponse> response = null;
 
             try
             {
                 message = _messageServices.AcceptPledge(request.apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
-                    request.comments, request.securityPin);
+                    request.comments, request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientLastName,
+                    request.securityPin);
             }
             catch (NotFoundException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Pledge. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Pledge. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Pledge. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
         // api/message/route_message
-        public HttpResponseMessage<List<MessageModels.MultipleURIResponse>> DetermineRecipient(MessageModels.MultipleURIRequest request)
+        [HttpPost]
+        public HttpResponseMessage DetermineRecipient(MessageModels.MultipleURIRequest request)
         {
             var messageServices = new DomainServices.MessageServices();
             Dictionary<string, User> results = null;
             List<MessageModels.MultipleURIResponse> list = new List<MessageModels.MultipleURIResponse>();
-            HttpResponseMessage<List<MessageModels.MultipleURIResponse>> response = null;
 
             try
             {
@@ -306,61 +269,50 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (NotFoundException ex)
             {
-                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Determining Recipient. Exception {0}.", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
-                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Determining Recipient. Exception {0}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             //TODO: fix this
             if (list.Count == 0)
             {
                 //Ask user how they want to invite this user to PaidThx.
-                return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.NoContent);
+                return Request.CreateResponse(HttpStatusCode.NoContent);
             }
             else
             {
                 //Determine who to send it to.
-                return new HttpResponseMessage<List<MessageModels.MultipleURIResponse>>(list, HttpStatusCode.OK);
+                return Request.CreateResponse<List<MessageModels.MultipleURIResponse>>(HttpStatusCode.OK, list);
             }
               
         }
 
         // POST /api/messages
-        public HttpResponseMessage<MessageModels.SubmitMessageResponse> Post(MessageModels.SubmitMessageRequest request)
+        [HttpPost]
+        public HttpResponseMessage Post(MessageModels.SubmitMessageRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("{0} - New Message Posted {1} {2} {3} {4}", request.apiKey, request.senderId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
             var messageServices = new DomainServices.MessageServices();
-            HttpResponseMessage<MessageModels.SubmitMessageResponse> response = null;
 
             if (request.messageType.ToUpper() != @"PAYMENT" && request.messageType.ToUpper() != @"PAYMENTREQUEST")
-            {
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = String.Format("Message Type {0} Invalid. Message Type Must Be Payment or PaymentRequest", request.messageType);
-
-                return response;
-            }
+                throw new SocialPayments.DomainServices.CustomExceptions.BadRequestException(String.Format("Message Type {0} Invalid. Message Type Must Be Payment or PaymentRequest", request.messageType));
            
             try
             {
@@ -375,32 +327,29 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                var error = new HttpError(ex.Message);
+ 
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Determining Recipient. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            response = new HttpResponseMessage<MessageModels.SubmitMessageResponse>(HttpStatusCode.Created);
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
         // POST /api/paystreammessages/{id}/cancel_payment
@@ -410,7 +359,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Cancel Payment {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
-            HttpResponseMessage response = null;
 
             try {
                 messageServices.CancelPayment(id);
@@ -419,35 +367,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Cancelling Payment {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Cancelling Payment {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Cancelling Payment {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
             _logger.Log(LogLevel.Info, String.Format("Cancel Payment {0} Complete", id));
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
 
 
         }
@@ -458,7 +402,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Cancel Request {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
-            HttpResponseMessage response = null;
 
             try {
                 messageServices.CancelRequest(id);
@@ -467,36 +410,31 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Cancelling Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Cancelling Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Cancelling Request {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
-
 
             _logger.Log(LogLevel.Info, String.Format("Cancel Request {0} Complete", id));
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
 
         }
         // POST /api/paystreammessages/{id}/refund_payment
@@ -512,8 +450,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Accept Payment Request Started {0}", id));
 
             var messageServices = new DomainServices.MessageServices();
-            HttpResponseMessage response = null;
-
+ 
             try
             {
                 messageServices.AcceptPaymentRequest(id, request.userId, request.paymentAccountId, request.securityPin);
@@ -522,34 +459,28 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Cancelling Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Cancelling Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Cancelling Request {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             _logger.Log(LogLevel.Info, String.Format("Accept Payment Request Complete {0}", id));
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/reject_request
         [HttpPost]
@@ -558,7 +489,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Reject Payment Request Started {0}", id));
 
             var messageServices = new DomainServices.MessageServices();
-            HttpResponseMessage response = null;
 
             try
             {
@@ -568,50 +498,33 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Rejecting Payment Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Rejecting Payment Request {0}. Exception {1}", id, ex.Message));
 
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Rejecting Payment Request {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
-
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
-
 
             _logger.Log(LogLevel.Info, String.Format("Reject Payment Request Complete {0}", id));
 
-            response = new HttpResponseMessage(HttpStatusCode.OK);
-            return response;
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
         // POST /api/paystreammessages/{id}/ignore_request
         [HttpPost]
         public HttpResponseMessage IgnorePaymentRequest(string id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-        // PUT /api/paystreammessage/5
-        public void Put(int id, string value)
-        {
-        }
-
-        // DELETE /api/paystreammessage/5
-        public void Delete(int id)
-        {
         }
 
     }
