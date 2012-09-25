@@ -1,59 +1,97 @@
 ﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
-    <li>
+    <li class="paystreamLi {{if direction == "In"}}in{{/if}} {{if direction == "Out"}}out{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if !recipientSeen}}new{{/if}}">
         <a href="#" class="paystreamItem" messageId="${Id}">
-        <span class="trans-type">
+
         {{if transactionImageUri}}
-            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
+            <img width="50" height="50" class="rounded ps-image" src="${transactionImageUri}" alt="Image" />
         {{else}}
-            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
+            <img width="50" height="50" class="rounded ps-image" src="/mobile/Content/images/avatar.png" alt="Image" />
         {{/if}}
-        </span>
-        <div class="trans-title">
+
+<h2 class="ps-other-party"> 
         {{if direction == "In"}}
-            <strong>${senderName}</strong>
+${senderName}
         {{/if}}
         {{if direction == "Out"}}
-            <strong>${recipientName}</strong>
+${recipientName}
         {{/if}}
-            <div class="title-pay-in">
-            {{if direction == "In"}}
+
+        <br><span class="ps-message">
+         {{if comments}}                                               
+ <text>"${comments}"</text>
+ {{else}}
+No message
+ {{/if}}
+</span>  
+<br><span class="ps-datetime">                                               
+${createDate}
+</span>  
+
+</h2>
+
+                              
+<div class="ps-details">
+<div class="left">
+
+<span class="ps-type">
+ {{if direction == "In"}}
                 {{if messageType == "PaymentRequest"}}
-                ${senderName} requests money from you
+               Request In
                 {{else messageType == "Payment"}}
-                You received money
+                Money In
                 {{else messageType == "Donation"}}
-                ${senderName} made a donation
+                Donation In
                 {{else messageType == "Pledge"}}
-                You pledged a donation
+                Pledge In
                 {{/if}}
-            {{else direction == "Out"}}
+{{else direction == "Out"}}
                 {{if messageType == "PaymentRequest"}}
-                Your request money
+                Request Out
                 {{else messageType == "Payment"}}
-                You sent money
+                Money Out
                 {{else messageType == "Donation"}}
-                You donated money
+                Donation Out
                 {{else messageType == "Pledge"}}
-                You sent a pledge to ${recipientName}
+                Pledge Out
                 {{/if}}
             {{/if}}
-            </div>
-        <div class="trans-comment">
-            <text>"${comments}"</text>
-        </div>
-        </div>
-        <span class="trans-amount">
-            <div class="gray-above">${createDate}</div>
-            <div class="paystream-pay-in">
-                           <h4 class="subheading" style="margin-top:6px;">
-                        Start sending and requesting!
-                        </h4>
-                $${amount.toFixed(2)}
-            </div>
-            <div class="gray-out">
-                ${messageStatus}
-            </div>
-        </span>
+</span>
+<span class="ps-status">
+&nbsp;|&nbsp;&nbsp;${messageStatus}
+</span>
+<span class="ps-dummy">
+&nbsp;
+</span>
+</div>
+<div class="right">
+<span class="ps-amount">
+ {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+               -
+                {{else messageType == "Payment"}}
+                +
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "Pledge"}}
+                &#9829;
+                {{/if}}
+{{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                +
+                {{else messageType == "Payment"}}
+                -
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "Pledge"}}
+                &#9829;
+                {{/if}}
+            {{/if}}$${amount.toFixed(2)}
+</span>
+</div>
+<div class="clear">
+</div>
+</div>             
+
         </a>
      </li>
 </script>
