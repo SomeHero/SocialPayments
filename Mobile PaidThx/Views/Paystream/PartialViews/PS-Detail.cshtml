@@ -1,7 +1,7 @@
 ﻿
     <script id="detailTemplate" type="text/html">
 
-    <a onclick="closeOffersDialog('popup');" class="paystream-dialog-closebtn"></a>
+    <a class="paystream-dialog-closebtn closePaystreamItem"></a>
     <div class="paystream-dialog-title-bg">
 
     {{if messageType == "Payment" && direction == "In"}}
@@ -27,7 +27,7 @@
      </button>
     </p>
     {{/if}}
-    {{if messageType == "Payment" && direction == "Out"}}
+    {{if messageType == "Payment" && isCancellable }}
     <p>
      <button type="button" class="btn-jq send-reminder-payment" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Send Reminder
@@ -41,21 +41,21 @@
      </button>
     </p>
     {{/if}}
-    {{if messageType == "PaymentRequest" && direction == "Out"}}
+    {{if messageType == "PaymentRequest" && isCancellable }}
     <p>
      <button type="button" class="btn-jq send-reminder-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Send Reminder
      </button>
     </p>
     {{/if}}
-    {{if messageType == "PaymentRequest" && direction == "In"}}
+    {{if messageType == "PaymentRequest" && isAcceptable }}
     <p>
      <button type="button" class="btn-jq accept-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Accept & Pay
      </button>
     </p>
     {{/if}}
-    {{if messageType == "PaymentRequest" && direction == "In"}}
+    {{if messageType == "PaymentRequest" && isRejectable}}
     <p>
      <button type="button" class="btn-jq reject-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Reject Request

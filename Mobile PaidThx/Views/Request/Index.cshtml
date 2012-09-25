@@ -14,8 +14,7 @@
     <div data-role="content">
         <div class="pad">
             @Html.ValidationSummary()
-            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
-            {
+
  
                     <a href="@Url.Content("~/Request/AddContactRequest")" data-prefetch data-transition="slide">
                         <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
@@ -61,6 +60,8 @@
                 <p>
                     <textarea id="txtComments-Request" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
                 </p>
+            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+            {
                 <p>
                     <button data-theme="f" type="submit" id="request-money" class="btn-new btn-green">
                         <span>Request Money</span></button>

@@ -81,7 +81,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Info, String.Format("Unable to find user by id {0}. {1}", id, ex.Message));
+                _logger.Log(LogLevel.Warn, String.Format("Unable to find user by id {0}. {1}", id, ex.Message));
             }
 
             if (user == null)
@@ -843,9 +843,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
 
 
-        // GET /api/users/searchbymecode/{searchterm}
+        // GET /api/users/searchbymecode/{searchterm}?type={type}
         [HttpGet]
-        public HttpResponseMessage GetMatchingMECodesWithSearchTerm(string searchTerm)
+        public HttpResponseMessage GetMatchingMECodesWithSearchTerm(string searchTerm, string type)
         {
             _logger.Log(LogLevel.Info, String.Format("Finding ME Codes maching {0}", searchTerm));
 
@@ -859,7 +859,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                foundPaypoints = _userService.FindTopMatchingMeCodes(searchTerm);
+                foundPaypoints = _userService.FindTopMatchingMeCodes(searchTerm, type);
             }
             catch (Exception ex)
             {

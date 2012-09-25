@@ -181,7 +181,7 @@ namespace SocialPayments
             config.Routes.MapHttpRoute(
                 name: "GetMatchingMECodesWithSearchTerm",
                 routeTemplate: "api/users/searchbymecode/{searchTerm}",
-                defaults: new { controller = "Users", action = "GetMatchingMECodesWithSearchTerm" }
+                defaults: new { controller = "Users", action = "GetMatchingMECodesWithSearchTerm", type = "" }
             );
 
             config.Routes.MapHttpRoute(

@@ -123,7 +123,11 @@ namespace SocialPayments.Domain
 
         public int UserTypeId { get; set; }
         [ForeignKey("UserTypeId")]
-        public UserType UserType { get; set; }
+        public virtual UserType UserType
+        {
+            get { return (UserType)UserType; }
+            set { UserTypeId = (int)value; }
+        }
 
         public DateTime? LastViewedPaystream { get; set; }
 
