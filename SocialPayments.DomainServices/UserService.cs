@@ -86,15 +86,18 @@ namespace SocialPayments.DomainServices
             if (payPointType == null)
                 throw new Exception("Pay Point Type Email Address Not Found");
 
-            user.PayPoints.Add(new UserPayPoint()
+            if (!String.IsNullOrEmpty(emailAddress))
             {
-                Id = Guid.NewGuid(),
-                CreateDate = System.DateTime.Now,
-                IsActive = true,
-                URI = userName,
-                Type = payPointType,
-                Verified = false
-            });
+                user.PayPoints.Add(new UserPayPoint()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = System.DateTime.Now,
+                    IsActive = true,
+                    URI = emailAddress,
+                    Type = payPointType,
+                    Verified = false
+                });
+            }
 
             if (!String.IsNullOrEmpty(mobileNumber))
             {
@@ -376,18 +379,39 @@ namespace SocialPayments.DomainServices
             return true;
         }
 
-        public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm)
+        public List<Domain.UserPayPoint> FindTopMatchingMeCodes(string searchTerm, string type)
         {
             using (var ctx = new Context())
             {
-                List<Domain.UserPayPoint> MeCodesFound = new List<Domain.UserPayPoint>();
+                List<Domain.UserPayPoint> meCodesFound = new List<Domain.UserPayPoint>();
 
-                int meCodeTypeInt = _ctx.PayPointTypes.First(m => m.Name.Equals("MeCode")).Id;
+                int meCodeTypeInt = _ctx.PayPointTypes
+                    .First(m => m.Name.Equals("MeCode")).Id;
 
                 // Takes the top 20 found matches.
-                MeCodesFound = _ctx.UserPayPoints.Select(m => m).Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm)).OrderBy(m => m.URI).Take(20).ToList();
+                if (!String.IsNullOrEmpty(type) && (!(type.ToLower() == "non-profits" || type.ToLower() == "organizations")))
+                    throw new CustomExceptions.BadRequestException("If type is specified, type must be Non-Profits or Organizations");
 
-                return MeCodesFound;
+                if (!String.IsNullOrEmpty(type) && type.ToLower() == "non-profits")
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                       .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && m.User.UserTypeId.Equals((int)Domain.UserType.NonProfit))
+                       .OrderBy(m => m.URI).Take(20).ToList();
+                }
+                else if (!String.IsNullOrEmpty(type) && type.ToLower() == "organizations")
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                       .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && m.User.UserTypeId.Equals((int)Domain.UserType.Organization))
+                       .OrderBy(m => m.URI).Take(20).ToList();
+                }
+                else
+                {
+                    meCodesFound = _ctx.UserPayPoints.Select(m => m)
+                        .Where(m => m.PayPointTypeId == meCodeTypeInt && m.URI.Contains(searchTerm) && (m.User.UserTypeId.Equals((int)Domain.UserType.Individual) || m.User.UserTypeId.Equals((int)Domain.UserType.Organization)))
+                        .OrderBy(m => m.URI).Take(20).ToList();
+                }
+
+                return meCodesFound;
             }
         }
 
@@ -528,13 +552,20 @@ namespace SocialPayments.DomainServices
 
                 if (verificationSucceeded)
                 {
+
                     if (user.SecurityQuestion == null)
                     {
+
+                        user.PasswordFailuresSinceLastSuccess = 0; 
                         user.PinCodeFailuresSinceLastSuccess = 0;
                         user.IsLockedOut = false;
 
                         ctx.SaveChanges();
                     }
+
+
+                    user.PasswordFailuresSinceLastSuccess = 0;
+                    ctx.SaveChanges();
 
                     foundUser = user;
 
@@ -711,10 +742,10 @@ namespace SocialPayments.DomainServices
         }
         public User GetUserById(Guid userId)
         {
-            var user = _ctx.Users
-                .FirstOrDefault(u => u.UserId.Equals(userId));
+                var user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId.Equals(userId));
 
-            return user;
+                return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
             string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
@@ -740,9 +771,6 @@ namespace SocialPayments.DomainServices
                     _logger.Log(LogLevel.Info, String.Format("Unable to find user with Facebook account {0}: Email Address {1}.  Create new user.", accountId, emailAddress));
 
                     isNewUser = true;
-
-                    var emailAttribute = _ctx.UserAttributes
-                         .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
 
                     user = AddUser(apiKey, "fb_" + accountId, "tempPassword", emailAddress, deviceToken, "", messageId);
 

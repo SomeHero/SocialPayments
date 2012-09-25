@@ -607,7 +607,7 @@ namespace SocialPayments.DomainServices
             using (var _ctx = new Context())
             {
                 DomainServices.UserService _userService =
-                       new DomainServices.UserService(_ctx);
+                       new DomainServices.UserService();
 
                 Guid userId;
                 User user;
@@ -635,7 +635,7 @@ namespace SocialPayments.DomainServices
                         if(messageGuid == null)
                             throw new Exception(String.Format("Message {0} Not Found", messageId));
 
-                        messageSeen = GetMessage(messageGuid);
+                        messageSeen = user.Messages.FirstOrDefault(m => m.Id == messageGuid);
 
                         if (messageSeen.Recipient == user)
                             messageSeen.recipientHasSeen = true;
@@ -648,7 +648,7 @@ namespace SocialPayments.DomainServices
                     }
                 }
 
-                _ctx.SaveChanges();
+                _userService.UpdateUser(user);
             }
         }
         private PaymentAccount GetAccount(User sender, string id)

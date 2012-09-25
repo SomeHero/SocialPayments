@@ -1154,7 +1154,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     OrganizationName = "Richmond Road Runners",
-                    UserType = UserType.NonProfit
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$richmondroadrunners",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.Regular
 
@@ -1198,6 +1212,21 @@ namespace SocialPayments.DataLayer
                             IsActive = true,
                              BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
                             BankName = "Wells Fargo"
+                        }
+                    },
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$richmondcitysports",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
                         }
                     }
                 },
@@ -1257,6 +1286,21 @@ namespace SocialPayments.DataLayer
                              BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
                             BankName = "Wells Fargo"
                         }
+                    },
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$richmondbeardleague",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
                     }
                 },
                 MerchantType = MerchantType.Regular
@@ -1300,9 +1344,25 @@ namespace SocialPayments.DataLayer
                             IsActive = true,
                              BankIconURL = "http://images.PaidThx.com/BankIcons/bank.png",
                             BankName = "Wells Fargo"
-                        }
+                        },
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_hostelling.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$hostellingint",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
+                    
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1348,7 +1408,22 @@ namespace SocialPayments.DataLayer
                             BankName = "Wells Fargo"
                         }
                     },
+                    UserType = UserType.NonProfit,
                     ImageUrl = "http://memberimages.paidthx.com/org_acs.png",
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$americancancersociety",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1395,6 +1470,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_americandiabetes.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$americandiabetesassoc",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1441,6 +1531,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_americanheart.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$healthyhearts",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1487,6 +1592,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_beta.png",
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$betathetas",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.Regular,
 
@@ -1533,6 +1653,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_bsa.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$boyscouts",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1579,6 +1714,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_cvsa.png",
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$cvsa",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.Regular,
 
@@ -1625,6 +1775,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_childsavers.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$childsavers",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1671,6 +1836,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_obxparish.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$holyredeemer",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1717,6 +1897,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_goodwill.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$goodwill",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1763,6 +1958,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_marchofdimes.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$marchofdimes",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1809,6 +2019,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_natureconservancy.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$nature",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1855,6 +2080,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_rivercitysports.png",
+                    UserType = UserType.Organization,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$richmondsports",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.Regular,
 
@@ -1901,6 +2141,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_specialolympics.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$specialolympics",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1947,6 +2202,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_teach4amer.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$susangkomen",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -1993,6 +2263,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_rotary.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$rotaryint",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -2039,6 +2324,21 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_uturn.png",
+                    UserType = UserType.NonProfit,
+                    PayPoints = new Collection<UserPayPoint>()
+                    {
+                        new UserPayPoint() {
+                            CreateDate = System.DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            IsActive = true,
+                            Type = meCodePayPoint,
+                            URI = "$uturn",
+                            VerifiedDate = System.DateTime.Now,
+                            Verified = true,
+                            VerificationCode = "",
+                            VerificationLink = ""
+                        }
+                    }
                 },
                 MerchantListings = new List<MerchantListing>() {
                     new MerchantListing() {
@@ -2100,6 +2400,7 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_worldvision.png",
+                    UserType = UserType.NonProfit
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -2146,6 +2447,7 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_wwf.png",
+                    UserType = UserType.NonProfit
                 },
                 MerchantType = MerchantType.NonProfit,
 
@@ -2192,6 +2494,7 @@ namespace SocialPayments.DataLayer
                         }
                     },
                     ImageUrl = "http://memberimages.paidthx.com/org_zta.png",
+                    UserType = UserType.NonProfit
                 },
                 MerchantType = MerchantType.Regular,
 
