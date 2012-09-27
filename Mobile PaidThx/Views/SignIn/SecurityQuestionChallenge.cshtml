@@ -7,11 +7,12 @@
 	    <h1>Account Locked</h1>
     </div>
     <div data-role="content">
-    <div class="pad">
-     @Html.ValidationSummary()
     <div class="top-panel">
    
     <p>Your account has been locked.  Please provide the answer to the question below to unlock your account.</p></div>
+    <div class="pad">
+     @Html.ValidationSummary()
+    
         @using (Html.BeginForm("SecurityQuestionChallenge", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {
             @Html.HiddenFor(m => m.SecurityQuestion)

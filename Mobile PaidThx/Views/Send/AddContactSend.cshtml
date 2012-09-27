@@ -29,17 +29,16 @@
                     </li>
             }
             }
-            <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
+            <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Contacts Found</li>
                     <li id="contact-no-results" class="contact-no-results-item">
                     <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
                         <img src="@Url.Content("~/Content/images/avatar.png")" />
-                        <span id="results-header">
-                        No matches found 
-                        </span>
-                        <br />
-                        <span id="results-description">
-                        Continue type or check entry
-                       </span>
+                        <h2 id="results-header" class="heading">
+                        No contacts...yet
+                        </h2>
+                         <h4 id="results-description" class="subheading">
+                        Type a new email or phone # above
+                       </h4>
                    </a>
                </li>
                <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
@@ -57,7 +56,7 @@
      </li>
 </script>
 ​
-    <script language="javascript">
+    <script type="text/javascript">
 
         //wait to do event binding until the page is being initialized
 

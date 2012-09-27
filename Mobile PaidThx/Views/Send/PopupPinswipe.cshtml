@@ -12,8 +12,7 @@
     </div>
   
     <div data-role="content">
-        @Html.ValidationSummary()
-        <div class="instructions" id="swipe-to-confirm">
+     <div class="top-panel" id="swipe-to-confirm">
         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
             <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
@@ -27,15 +26,18 @@
             <text>Please swipe your security pin to confirm your payment of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
         }     
         </div>
-        <div style="height: 1px; width: 100%; background: #666666">
-        </div>
+    <div class="pad">
+        @Html.ValidationSummary()
+       
+        
         @using (Html.BeginForm("PopupPinswipe", "Send", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
-            <div style="margin-top:15px">
+            <div>
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
         }
+    </div>
     </div>
     
   <div id="resizerHack">

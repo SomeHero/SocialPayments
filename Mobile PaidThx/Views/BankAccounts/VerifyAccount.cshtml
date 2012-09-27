@@ -9,7 +9,7 @@
             Verify Account</h1>
     </div>
     <div data-role="content" class="panel main-body">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div class="pad">
          @using (Html.BeginForm("VerifyAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
             @Html.ValidationSummary()
@@ -20,8 +20,9 @@
                 @Html.TextBoxFor(m => m.Amount2, new Dictionary<string, object>() { { "id", "depositAmount2" }, { "placeholder", "Amount 2 (ex: $0.76)" } })
             </p>
             <p>
-                <button type="submit" id="add-account-submit" class="imgbtn">
-                    <img src="@Url.Content("~/Content/images/add-icon.png")" alt="" /><span>Verify Amounts</span></button></p>
+                <button type="submit" id="btn-update-account" data-theme="f" data-icon="check" data-iconpos="right"
+                    class="btn-jq">
+                    Verify Amounts</button></p>
          }
         </div>
     </div>

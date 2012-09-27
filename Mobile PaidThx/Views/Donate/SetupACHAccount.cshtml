@@ -9,8 +9,7 @@
             @if (Model.Payment != null)
             {
                 <text> You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> in pending
-                payments. To enable sending and receiving of payments thru PaidThx, please enter
-                your preferred bank credentials below.
+                payments. Add a bank account to receive these funds.
                 </text>
             }
             else
@@ -19,8 +18,8 @@
                 of the account below.
                 </text>
             }
-            <br />
         </div>
+        <div class="pad">
         <div id="setup-ach-account-form">
             @using (Html.BeginForm("SetupACHAccount", "Donate", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition" , "slideup" } }))
             {
@@ -62,6 +61,7 @@
                         <a href="@Url.Content("~/Paystream")">Remind Me Later</a>
                     </p>
             }
+        </div>
         </div>
     </div>
     <script language="javascript">

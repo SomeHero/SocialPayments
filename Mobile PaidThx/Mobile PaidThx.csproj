@@ -250,6 +250,7 @@
     <Content Include="bg-texture.png" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\arrow.png" />
+    <Content Include="Content\images\avatar-active.png" />
     <Content Include="Content\images\avatar.png" />
     <Content Include="Content\images\bank.png" />
     <Content Include="Content\images\bg-pattern.png" />
@@ -319,6 +320,10 @@
     <Content Include="Content\images\line_ver.png" />
     <Content Include="Content\images\logo-welcome.png" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\money-active.png" />
+    <Content Include="Content\images\money.png" />
+    <Content Include="Content\images\npo-active.png" />
+    <Content Include="Content\images\npo.png" />
     <Content Include="Content\images\org_acs.png" />
     <Content Include="Content\images\org_americandiabetes.png" />
     <Content Include="Content\images\org_americanheart.png" />

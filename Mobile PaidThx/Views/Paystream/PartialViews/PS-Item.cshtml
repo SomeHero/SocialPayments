@@ -2,11 +2,12 @@
     <li class="paystreamLi {{if direction == "In"}}in{{/if}} {{if direction == "Out"}}out{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if !recipientSeen}}new{{/if}}">
         <a href="#" class="paystreamItem" messageId="${Id}">
 
-        {{if transactionImageUri}}
-            <img width="50" height="50" class="rounded ps-image" src="${transactionImageUri}" alt="Image" />
-        {{else}}
-            <img width="50" height="50" class="rounded ps-image" src="/mobile/Content/images/avatar.png" alt="Image" />
+<img width="50" height="50" class="rounded ps-image" src="{{if direction == "In"}}
+${senderImageUri}
         {{/if}}
+        {{if direction == "Out"}}
+${recipientImageUri}
+        {{/if}}" alt="Image" />
 
 <h2 class="ps-other-party"> 
         {{if direction == "In"}}
