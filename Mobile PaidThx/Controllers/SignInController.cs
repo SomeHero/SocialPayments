@@ -209,10 +209,29 @@ namespace Mobile_PaidThx.Controllers
 
             var redirect = String.Format(fbTokenRedirectURL, "SignIn/SignInWithFacebook/");
 
+            if (Session["SignInFBState"] == null)
+            {
+                Session["SignInFBState"] = RandomString(8, false);
+                ModelState.AddModelError("", "Unable to sign in with Facebook.  Please try again");
+
+                return View("Index", new SignInModels.SignInModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
+
             string fbState = Session["SignInFBState"].ToString();
 
             if (state != fbState)
-                throw new Exception(String.Format("Unable to Link Facebook Account.  Invalid State {0}", fbState));
+            {
+                Session["SignInFBState"] = RandomString(8, false);
+                ModelState.AddModelError("", "Unable to sign in with Facebook.  Please try again");
+
+                return View("Index",new SignInModels.SignInModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
 
             var fbAccount = faceBookServices.FBauth(code, redirect);
 

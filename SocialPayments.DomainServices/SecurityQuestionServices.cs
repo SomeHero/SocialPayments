@@ -79,7 +79,7 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.BadRequestException(String.Format("No security question was setup for user {0}", userId));
 
 
-                if (questionAnswer.Equals(securityService.Decrypt(user.SecurityQuestionAnswer), StringComparison.OrdinalIgnoreCase))
+                if (securityService.Encrypt(questionAnswer).Equals(user.SecurityQuestionAnswer))
                 {
                     user.IsLockedOut = false;
                     user.PinCodeFailuresSinceLastSuccess = 0;
