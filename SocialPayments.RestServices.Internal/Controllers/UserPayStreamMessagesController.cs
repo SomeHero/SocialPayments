@@ -9,6 +9,7 @@ using System.Net;
 using SocialPayments.Domain;
 using SocialPayments.Domain.ExtensionMethods;
 using SocialPayments.DomainServices.CustomExceptions;
+using System.Configuration;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
@@ -77,7 +78,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     isAcceptable = IsAcceptable(m),
                     isRejectable = IsRejectable(m),
                     isCancellable = IsCancellable(m),
-                    isRemindable = IsRemindable(m)
+                    isRemindable = IsRemindable(m),
+                    senderImageUri = (m.Sender != null ? (!String.IsNullOrEmpty(m.Sender.ImageUrl) ? m.Sender.ImageUrl : ConfigurationManager.AppSettings["DefaultAvatarImage"]) : ConfigurationManager.AppSettings["DefaultAvatarImage"]),
+                    recipientImageUri = (m.Recipient != null ? (!String.IsNullOrEmpty(m.Recipient.ImageUrl) ? m.Recipient.ImageUrl : (!String.IsNullOrEmpty(m.recipientImageUri) ? m.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+                        : (!String.IsNullOrEmpty(m.recipientImageUri) ? m.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+
                 }).ToList()
             });
 
@@ -169,7 +174,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 isAcceptable = IsAcceptable(m),
                 isRejectable = IsRejectable(m),
                 isCancellable = IsCancellable(m),
-                isRemindable = IsRemindable(m)
+                isRemindable = IsRemindable(m),
+                senderImageUri = (m.Sender != null ? (!String.IsNullOrEmpty(m.Sender.ImageUrl) ? m.Sender.ImageUrl : ConfigurationManager.AppSettings["DefaultAvatarImage"]) : ConfigurationManager.AppSettings["DefaultAvatarImage"]),
+                recipientImageUri = (m.Recipient != null ? (!String.IsNullOrEmpty(m.Recipient.ImageUrl) ? m.Recipient.ImageUrl : (!String.IsNullOrEmpty(m.recipientImageUri) ? m.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+                    : (!String.IsNullOrEmpty(m.recipientImageUri) ? m.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+
             }).ToList());
 
         }
@@ -230,8 +239,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 isAcceptable = IsAcceptable(message),
                 isRejectable = IsRejectable(message),
                 isCancellable = IsCancellable(message),
-                isRemindable = IsRemindable(message)
-            });
+                isRemindable = IsRemindable(message),
+                senderImageUri = (message.Sender != null ? (!String.IsNullOrEmpty(message.Sender.ImageUrl) ? message.Sender.ImageUrl : ConfigurationManager.AppSettings["DefaultAvatarImage"]) : ConfigurationManager.AppSettings["DefaultAvatarImage"]),
+                recipientImageUri = (message.Recipient != null ? (!String.IsNullOrEmpty(message.Recipient.ImageUrl) ? message.Recipient.ImageUrl : (!String.IsNullOrEmpty(message.recipientImageUri) ? message.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+                    : (!String.IsNullOrEmpty(message.recipientImageUri) ? message.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+});
         }
 
     }

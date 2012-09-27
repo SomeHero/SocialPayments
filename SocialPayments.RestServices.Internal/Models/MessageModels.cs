@@ -40,6 +40,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool isRemindable { get; set; }
             public bool isAcceptable { get; set; }
             public bool isRejectable { get; set; }
+
+            public string senderImageUri { get; set; }
+            public string recipientImageUri { get; set; }
         }
         public class MessageSeenUpdateRequest
         {
