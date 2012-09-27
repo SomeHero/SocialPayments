@@ -406,6 +406,8 @@
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
     <Content Include="Content\jquery.mobile.fixedToolbar.polyfill.css" />
+    <Content Include="Content\jquery.qtip.min.css" />
+    <Content Include="Content\jquery.validate.password.css" />
     <Content Include="Content\PaidThx-v1.css" />
     <Content Include="Content\PaidThx-v1.min.css" />
     <Content Include="Content\PaidThx-v2.css" />
@@ -417,6 +419,7 @@
     <Content Include="Content\images\icons\profileIcon.png" />
     <Content Include="Scripts\complete-profile-dialog.js" />
     <Content Include="Scripts\complete-profile.js" />
+    <Content Include="Scripts\date.js" />
     <Content Include="Scripts\fancybox\blank.gif" />
     <Content Include="Scripts\fancybox\fancybox-x.png" />
     <Content Include="Scripts\fancybox\fancybox-y.png" />
@@ -458,8 +461,10 @@
     <Content Include="Scripts\jquery.mobilemenu.js" />
     <Content Include="Scripts\jquery.mousewheel-3.0.6.pack.js" />
     <Content Include="Scripts\jquery.placeholder.min.js" />
+    <Content Include="Scripts\jquery.qtip.min.js" />
     <Content Include="Scripts\jquery.tipsy.js" />
     <Content Include="Scripts\jquery.touchSwipe.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\send-money-2.js" />
     <Content Include="Scripts\sharing.js" />
     <Content Include="Scripts\home.js" />
