@@ -12,11 +12,12 @@
             Confirm PIN</h1>
     </div>
     <div data-role="content">
-    <div class="pad">
-    @Html.ValidationSummary()
-                <div class="top-panel">
+     <div class="top-panel">
    
         <p>Confirm your new security pin by swiping it again.</p></div>
+    <div class="pad">
+    @Html.ValidationSummary()
+               
         @using (Html.BeginForm("ChangeSecurityPinConfirm", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
             <div>

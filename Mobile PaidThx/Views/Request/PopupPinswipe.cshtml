@@ -12,7 +12,7 @@
     </div>
   
     <div data-role="content">
-        <div class="instructions" id="swipe-to-confirm">
+        <div class="top-panel">
          @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
             <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
@@ -26,8 +26,8 @@
             <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
         }     
         </div>
-        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
-        </div>
+        <div class="pad">
+        
         @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
             <div style="margin-top:15px">
@@ -36,7 +36,7 @@
         </div>
         }
     </div>
-      
+      </div>
   <div id="resizerHack">
         
         

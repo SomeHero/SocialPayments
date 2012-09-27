@@ -9,11 +9,12 @@
 	    <h1>Confirm PIN</h1>
     </div>
      <div data-role="content">
-     <div class="pad">
-     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
-    <div class="top-panel">
+     <div class="top-panel">
    
     <p>Swipe your security pin again below to confirm.</p></div>
+     <div class="pad">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    
     </div>
         @using (Html.BeginForm("ConfirmPinSwipe", "Send", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {

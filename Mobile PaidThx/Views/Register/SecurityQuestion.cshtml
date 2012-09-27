@@ -7,11 +7,12 @@
 	    <h1>Security Question</h1>
     </div>
     <div data-role="content">
-    <div class="pad">
-     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
     <div class="top-panel">
    
     <p>Select and answer a security question below.  You will be asked this in the event that you forget your Security PIN.</p></div>
+    <div class="pad">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    
         @using (Html.BeginForm("SecurityQuestion", "Register", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {
             @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "pop" } })
