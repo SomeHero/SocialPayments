@@ -613,8 +613,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                if (!validateService.IsEmailAddress(request.userName))
-                    throw new SocialPayments.DomainServices.CustomExceptions.BadRequestException("Facebook accounts cannot reset their password. Sign in with Facebook to continue");
+                if (!(validateService.IsEmailAddress(request.userName) || validateService.IsPhoneNumber(request.userName)))
+                    throw new SocialPayments.DomainServices.CustomExceptions.BadRequestException("You must enter a valid email address or mobile #.");
 
                 userService.SendResetPasswordLink(request.apiKey, request.userName);
             }
