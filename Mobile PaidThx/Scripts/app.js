@@ -287,10 +287,10 @@ var paystreamController = (function ($, undefined) {
             success: function (data) {
                 $("#popup").empty();
                 $("#detailTemplate").tmpl(data).appendTo("#popup");
-
+                $('#popup').css('display', 'block');
                 $('#overlay').fadeIn('fast', function () {
                     $('#popup').css('display', 'block');
-                    $('#popup').animate({ 'left': '5%' }, 500);
+                    $('#popup').animate({ 'left': '10px' }, 300);
                 });
 
                 $("#popup").page();
@@ -307,7 +307,7 @@ var paystreamController = (function ($, undefined) {
 
     function closeDetailDialog(callback) {
         $('#popup').css('position', 'absolute');
-        $('#popup').animate({ 'left': '100%' }, 500, function () {
+        $('#popup').animate({ 'left': '100%' }, 300, function () {
             $('#popup').css('position', 'fixed');
             $('#popup').css('left', '100%');
             $('#overlay').fadeOut('fast');
