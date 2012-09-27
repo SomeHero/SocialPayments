@@ -12,7 +12,7 @@ namespace SocialPayments.Domain
         SubmittedPayment = 0,
         [MessageStatusAttribute(RecipientDescription = "Submitted", SenderDescription = "Submitted", IsAcceptable=true, IsRejectable=false, IsCancellable=true, IsRemindable=false)]
         SubmittedRequest = 1,
-        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Notified", IsAcceptable=false, IsRejectable=false, IsCancellable=true, IsRemindable=true)]
+        [MessageStatusAttribute(RecipientDescription = "Respond", SenderDescription = "Notified", IsAcceptable=false, IsRejectable=false, IsCancellable=true, IsRemindable=true)]
         NotifiedPayment = 2,
         [MessageStatusAttribute(RecipientDescription = "Processing", SenderDescription = "Processing", IsAcceptable=false, IsRejectable=false, IsCancellable = true, IsRemindable=false)]
         ProcessingPayment = 3,
@@ -28,9 +28,9 @@ namespace SocialPayments.Domain
         CompletePayment = 8,
         [MessageStatusAttribute(RecipientDescription = "Returned", SenderDescription = "", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
         ReturnedPayment = 9,
-        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Request Sent", IsAcceptable = true, IsRejectable = true, IsCancellable = true, IsRemindable = true)]
+        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Notified", IsAcceptable = true, IsRejectable = true, IsCancellable = true, IsRemindable = true)]
         NotifiedRequest = 10,
-        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Awaiting Response", IsAcceptable = true, IsRejectable = true, IsCancellable = true, IsRemindable = false)]
+        [MessageStatusAttribute(RecipientDescription = "Respond", SenderDescription = "Waiting", IsAcceptable = true, IsRejectable = true, IsCancellable = true, IsRemindable = false)]
         PendingRequest = 11,
         [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
         AcceptedRequest = 12,
@@ -40,9 +40,9 @@ namespace SocialPayments.Domain
         CancelledRequest = 14,
         [MessageStatusAttribute(RecipientDescription = "Submitted", SenderDescription = "Submitted", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
         SubmittedPledge = 15,
-        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Request Sent", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
+        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Notified", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
         NotifiedPledge = 16,
-        [MessageStatusAttribute(RecipientDescription = "Action Needed", SenderDescription = "Awaiting Response", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
+        [MessageStatusAttribute(RecipientDescription = "Respond", SenderDescription = "Waiting", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
         PendingPledge = 17,
         [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
         AcceptedPledge = 18,
@@ -50,7 +50,7 @@ namespace SocialPayments.Domain
         RejectedPledge = 19,
         [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled", IsAcceptable=false, IsRejectable=false, IsCancellable = false, IsRemindable = false)]
         CancelledPledge = 20,
-        [MessageStatusAttribute(RecipientDescription = "Donation Submitted", SenderDescription = "Donation Submitted", IsAcceptable = false, IsRejectable = false, IsCancellable = true, IsRemindable = false)]
+        [MessageStatusAttribute(RecipientDescription = "Processing", SenderDescription = "Processing", IsAcceptable = false, IsRejectable = false, IsCancellable = true, IsRemindable = false)]
         SubmittedDonation = 21,
         
     }

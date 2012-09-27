@@ -17,14 +17,14 @@ ${recipientName}
         {{/if}}
 
         <br><span class="ps-message">
-         {{if comments}}                                               
+          {{if comments != "No comments" && comments != ""}}                                             
  <text>"${comments}"</text>
  {{else}}
 No message
  {{/if}}
 </span>  
 <br><span class="ps-datetime">                                               
-${createDate}
+${XDate(createDate).toString("ddd MMM d, yyyy")}
 </span>  
 
 </h2>
