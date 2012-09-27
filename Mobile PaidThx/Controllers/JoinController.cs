@@ -106,10 +106,29 @@ namespace Mobile_PaidThx.Controllers
 
             var redirect = String.Format(fbTokenRedirectURL, "Join/RegisterWithFacebook/");
 
+            if (Session["JoinFBState"] == null)
+            {
+                Session["JoinFBState"] = RandomString(8, false);
+                ModelState.AddModelError("", "Unable to register with Facebook.  Please try again");
+
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    FBState = Session["JoinFBState"].ToString()
+                });
+            }
+
             string fbState = Session["JoinFBState"].ToString();
 
             if (state != fbState)
-                throw new Exception(String.Format("Unable to Link Facebook Account.  Invalid State {0}", fbState));
+            {
+                Session["SignInFBState"] = RandomString(8, false);
+                ModelState.AddModelError("", "Unable to register with Facebook.  Please try again");
+
+                return View("Index", new JoinModels.JoinModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
 
             var fbAccount = faceBookServices.FBauth(code, redirect);
 

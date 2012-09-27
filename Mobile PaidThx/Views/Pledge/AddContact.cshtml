@@ -17,10 +17,11 @@
                 <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                <li>
+                <li class="contact">
                     <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
-                    <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
-                    @friend.name
+                    <img class="list-thumbnail lazy"  src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
+                    <h2 class="heading">@friend.name</h2>
+                    <h4 class="subheading">Facebook Friend</h4>
                 </a></li>
             }
         }
@@ -53,6 +54,8 @@
     <script language="javascript">
         //wait to do event binding until the page is being initialized
         $("#pledge-contact-select-page").unbind('pageshow').bind('pageshow', function () {
+
+            $(this).find("img.lazy").lazyload();
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');

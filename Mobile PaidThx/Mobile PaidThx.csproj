@@ -454,6 +454,8 @@
     <Content Include="Scripts\fancybox\jquery.fancybox.js" />
     <Content Include="Scripts\fancybox\jquery.fancybox.pack.js" />
     <Content Include="Scripts\fancybox\jquery.mousewheel-3.0.4.pack.js" />
+    <Content Include="Scripts\jquery.lazyload.js" />
+    <Content Include="Scripts\jquery.lazyload.min.js" />
     <Content Include="Scripts\jquery.mobile.fixedToolbar.polyfill.js" />
     <Content Include="Scripts\jquery.mobilemenu.js" />
     <Content Include="Scripts\jquery.mousewheel-3.0.6.pack.js" />
