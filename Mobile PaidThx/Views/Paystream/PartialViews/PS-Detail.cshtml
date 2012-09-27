@@ -27,56 +27,56 @@ Details
 
     {{if messageType == "Payment" && direction == "In"}}
 
-    <img width="40" height="40" class="psd-image sender" src="" alt="Sender"> 
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
     <p class="whathappened-content">
     <span class="lbl-sender">${senderName}</span><br> 
 sent you <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 <span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
-<img width="40" height="40" class="psd-image recipient" src="" alt="Recipient">
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
     {{/if}}
 
     {{if messageType == "Payment" && direction == "Out"}}
     
-    <img width="40" height="40" class="psd-image sender" src="" alt="Sender"> 
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
     <p class="whathappened-content">
     <span class="lbl-sender">You</span> sent <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 to <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
-    <img width="40" height="40" class="psd-image recipient" src="${transactionImageURI}" alt="Recipient">
+    <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
     {{/if}}
 
     {{if messageType == "PaymentRequest" && direction == "In"}}
 
-    <img width="40" height="40" class="psd-image sender" src="" alt="Sender"> 
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
     <p class="whathappened-content">
  <span class="lbl-sender">${senderName}</span><br> 
 requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 <span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
-<img width="40" height="40" class="psd-image recipient" src="" alt="Recipient">
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}}
 
     {{if messageType == "PaymentRequest" && direction == "Out"}}
 
-    <img width="40" height="40" class="psd-image sender" src="" alt="Sender"> 
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 from <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
-<img width="40" height="40" class="psd-image recipient" src="${transactionImageURI}" alt="Recipient">
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}} 
 
     {{if messageType == "Donation" && direction == "Out"}}
-    <img width="40" height="40" class="psd-image sender" src="" alt="Sender">
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender">
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> donated <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 to <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
-<img width="40" height="40" class="psd-image recipient" src="${transactionImageURI}" alt="Recipient">
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}} 
 
 
@@ -101,15 +101,17 @@ to <span class="lbl-recipient">${recipientName}</span>
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
 <span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
-{{if isExpressable }}
+{{if messageType == "Payment"}}
 <hr class="divider" />
 <div class="d-left">
 <h2 class="d-head express">Express It</h2>
 <h4 class="d-subhead">Est. Arrival: 06/10/12</h4>
 </div>
 <input type="checkbox" name="express" class="express-box" value="no" />
-{{/if}}
 <div class="clear"></div>
+{{/if}}
+</div>
+</div>
 {{/if}} 
 
 
@@ -134,9 +136,6 @@ to <span class="lbl-recipient">${recipientName}</span>
      </button>
     {{/if}}
 
-   
-    </div>
-    </div>
     </div>
 
 

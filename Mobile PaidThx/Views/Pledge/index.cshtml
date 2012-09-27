@@ -16,55 +16,113 @@
        @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
        {
 
-                 <a href="@Url.Content("~/Pledge/AddCause")" data-prefetch data-transition="slide">
-                 <button id="btn-nonprofit" type="button" class="imgbtn field-btn" data-role="none">
-                    <span class="imgbg">
-                       </span>@if (!String.IsNullOrEmpty(Model.RecipientName))
-                                                   {
-                                <span id="org-name-donate">@Model.RecipientName</span>
-                                                   }
-                                                   else
-                                                   {
-                                <text><span
-                            id="select-organization">Select a Non Profit</span></text>
-                                                   }
-                           
-                          </button></a>
-                <a href="@Url.Content("~/Pledge/AddContact")" data-prefetch data-transition="slide">
-                     <button id="btn-recipient" data-role="none" type="button" class="imgbtn field-btn">
-                        <span class="imgbg">
-                           </span>@if (!String.IsNullOrEmpty(Model.RecipientUri))
-                                                      {
-                                    <span id="modelRecipient">@Model.RecipientUri</span>
-                                                      }
-                                                      else
-                                                      {
-                                    <text><span
-                                id="person-select">Select Recipient</span></text>
-                                                      }
-                    </button>
+                    
+ <a href="@Url.Content("~/Pledge/AddCause")" class="a-recipient" data-prefetch data-transition="slide">
+                <div id="btn-recipient" class="btn-sends">
+                        @if (!String.IsNullOrEmpty(Model.RecipientName))
+                        {
+                       
+                        <img class="img-recipient" src="@Url.Content("~/Content/images/npo-active.png")" alt="Recipient" />
+
+                        }
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(Model.RecipientName))
+                            {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/npo-active.png")" alt="Recipient" />
+                            }
+                            else
+                            {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/npo.png")" alt="Recipient" />
+                            }
+                        }
+                        <div class="recipient-txt overno">
+                        
+                              @if (!String.IsNullOrEmpty(Model.RecipientName))
+                              {
+                                  
+                                    <text><h2 class="heading overno">@Model.RecipientName</h2>
+                                  <h4 class="subheading overno"></h4></text>
+                              }
+                              else
+                              {
+                                    <text><h2 class="heading"><span>Select Non-Profit</span></h2>
+                                  <h4 class="subheading">Choose your organization</h4></text>
+                              }
+                                              </div>  
+                                              <div class="clear"></div> 
+                                              
+                                              <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>       
+                    </div></a>
+           
+
+ <a href="@Url.Content("~/Pledge/AddContact")" class="a-recipient on-pledge" data-prefetch data-transition="slide">
+                <div id="btn-recipient" class="btn-sends">
+                    
+                            @if (!String.IsNullOrEmpty(Model.RecipientName))
+                            {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/avatar-active.png")" alt="Recipient" />
+                            }
+                            else
+                            {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/avatar.png")" alt="Recipient" />
+                            }
+           
+                        <div class="recipient-txt overno">
+                        
+                              @if (!String.IsNullOrEmpty(Model.RecipientName))
+                              {
+                                    <text><h2 class="heading overno">@Model.RecipientName</h2>
+                                  <h4 class="subheading overno">@Model.RecipientUri</h4></text>
+                              }
+                              else
+                              {
+                                    <text><h2 class="heading">Select Donor</h2>
+                                  <h4 class="subheading">Select friend, email, or phone</h4></text>
+                              }
+                                              </div>  
+                                              <div class="clear"></div> 
+                                              
+                                              <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>       
+                    </div></a>           
+           
+                <a href="@Url.Content("~/Pledge/AmountToSend")" class="a-amount" data-prefetch data-transition="slide">
+                    <div id="btn-amount" data-role="none" type="button" class="btn-sends">
+                          @if (Model.Amount > 0)
+                          {
+                            <img class="img-amount" src="@Url.Content("~/Content/images/money-active.png")" alt="Amount" />
+                          }
+                          else
+                          {
+                         <img class="img-amount" src="@Url.Content("~/Content/images/money.png")" alt="Amount" />
+                          }
+                        <div class="amount-txt">
+                           @if (Model.Amount > 0)
+                           {
+                                    <text>
+                                    <h2 class="thenumber">@string.Format("{0:n2}", Model.Amount)</h2>
+                                    </text>
+                           }
+                           else
+                           {
+                                    <text><h2 class="heading">Enter Amount</h2>
+                                    <h4 class="subheading">How much to donate</h4>
+                                    </text>
+                           }
+                                    </div>
+                                    <div class="clear"></div> 
+                                    <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>       
+                    </div>
                 </a>
-                <a href="@Url.Content("~/Pledge/AmountToSend")" data-prefetch data-transition="slide">
-                 <button id="btn-amount" data-role="none" type="button" class="imgbtn field-btn">
-                        <span class="imgbg">
-                           </span><span
-                            id="amount-request">@if (Model.Amount > 0)
-                                                {
-                                <text>@string.Format("{0:C}", Model.Amount)</text>
-                                                }
-                                                else
-                                                {
-                                <text>Enter Amount</text>
-                                                }</span></button></a>
-<p>
-            <textarea id="txtComments-Donate" rows="10" cols="100" placeholder="Enter dedications, comments, etc"></textarea>
-            </p>
+           
+           
+            <textarea id="txtComments-Donate" rows="10" cols="100" placeholder="Add a message..."></textarea>
 
         <p>
             <button type="submit" class="btn-jq" data-theme="f">
                     <span>Accept Pledge</span></button>
                     </p>
-        }
+       }
        </div>
        </div>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Donate" }); }

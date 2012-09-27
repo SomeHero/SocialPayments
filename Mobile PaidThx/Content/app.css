@@ -717,12 +717,7 @@ background: -moz-linear-gradient(top,  #eeeeee,  #cccccc); /* for firefox 3.6+ *
     width: 255px;
     height: 48px;
 }
-#customAmount
-{
-    background: transparent;
-    border: none;
-    border-width: 0px;
-}
+
 @media screen and (orientation: portrait)
 {
     label.error
@@ -1047,29 +1042,6 @@ h9 span
     color: #FFFFFF;
 }
 
-.availableamt
-{
-    background: #FFFFFF;
-    color: #7D7D7D;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 50px;
-    padding-right: 50px;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.quicksend
-{
-    position: relative;
-    background: #FFFFFF;
-    color: #7D7D7D;
-    font-weight: bold;
-    padding-top: 10px;
-    padding-bottom: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
 
 .fieldamount
 {
@@ -1318,11 +1290,8 @@ margin-top:20px;
 }
 .btn-new.field.icon.money
 {
- padding-left:  50px;
- padding-right:  50px;
- background-image:url(/Content/images/field-money-icon.png);
- background-position:20px center;
- background-repeat:no-repeat;
+ padding-left:  20px;
+ padding-right:  20px;
 }
 
 
@@ -1389,11 +1358,19 @@ img.rounded
  width:100%;   
 }
 
-.modally .top-panel
+.modally .top-panel, .top-panel
 {
  border-bottom:1px solid #cccccc;  
- margin-bottom:10px; 
+ padding:14px;
+ background-color:#f8f8f8;
 }
+
+.top-panel p
+{
+ margin:0;   
+}
+
+
 
 .ui-btn-corner-all {
 -moz-border-radius: 5px /*{global-radii-buttons}*/;
@@ -1469,7 +1446,7 @@ border-radius: 5px;
 
 .heading, li.settings h2
 {
- font-size:15pt;
+ font-size:14pt;
  font-weight:bold;   
  margin-bottom:0px;
  margin-top:6px;
@@ -2707,6 +2684,11 @@ border-radius:5px;
  padding-left:84px;   
 }
 
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-thumb {
+padding-left: 84px;
+}
+
+
 img.grow
 {
 	max-width: 100%;
@@ -2717,4 +2699,163 @@ img.grow
 .logo-holder
 {
     text-align:center;
+}
+
+.a-recipient h2, .a-amount h2
+{
+ margin-top:0px;  
+ padding-top:6px; 
+}
+
+.a-recipient, .a-amount
+{
+border:1px solid #cccccc;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color:#ffffff;
+-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;
+font-size:10pt;
+padding:10px;
+display:block;
+position:relative;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+padding-right: 30px;
+}
+
+.overno{
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+
+}
+.a-recipient:active, .a-amount:active
+{
+ border-color:#48b201; 
+}
+
+.a-amount
+{
+ margin-top:10px;   
+}
+
+.thenumber
+{
+font-size: 26pt;
+padding-top: 4px !important;
+ color:#231f20;   
+ margin:0;
+}
+
+.on-pledge
+{
+ margin-top:10px;   
+}
+
+
+/*    HOW MUCH AMOUNT  */
+#customAmount
+{
+   width:68%; 
+   float:left;
+   margin:0;
+   font-size:30px;
+   line-height:50px;
+   height:50px;
+   border:1px solid #cccccc;
+   -moz-box-shadow: 0px 1px 4px /*{global-box-shadow-size}*/ rgba(0,0,0,.3) /*{global-box-shadow-color}*/;
+-webkit-box-shadow: 0px 1px 4px /*{global-box-shadow-size}*/ rgba(0, 0, 0, .3) /*{global-box-shadow-color}*/;
+box-shadow: 0px 1px 4px /*{global-box-shadow-size}*/ rgba(0, 0, 0, .3) /*{global-box-shadow-color}*/;
+text-align:center;
+}
+
+input#customAmount::-webkit-input-placeholder {
+   font-size:30px;
+   line-height:50px;
+   height:50px;
+   
+}
+input#customAmount:-moz-placeholder {
+  font-size:30px;
+   line-height:50px;
+   height:50px;
+}
+input#customAmount:-ms-input-placeholder {
+  font-size:30px;
+   line-height:50px;
+   height:50px;
+}
+
+.go-button-holder
+{
+   width:28%; 
+  float:right;
+  margin:0;
+  font-size:30px;
+   line-height:50px;
+  height:50px;
+}
+
+.go-button-holder .ui-btn, .go-button-holder .ui-btn-inner
+{
+ margin:0;
+ height:50px; 
+ line-height:50px;
+ padding:0;  
+}
+
+#txtComments, #txtComments-Request, #txtComments-Donate
+{
+border:1px solid #cccccc;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color:#ffffff;
+background-image:none;
+-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;
+font-size:10pt;
+padding:10px;
+display:block;
+position:relative; 
+margin-top:10px;   
+}
+
+#txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus
+{
+  border-color:#48b201;  
+}
+
+.a-recipient .ui-icon, .a-amount .ui-icon {
+position: absolute;
+top: 50%;
+margin-top: -9px;
+right: 10px;
+}
+
+.img-recipient, .img-amount
+{
+ float:left;  
+ display:block;
+border:1px solid #fff;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+-moz-box-shadow:    1px 1px 2px 0px #a3a3a3;
+-webkit-box-shadow: 1px 1px 2px 0px #a3a3a3;
+box-shadow:         1px 1px 2px 0px #a3a3a3;
+margin:0 10px 0 0; 
+}
+.ui-mobile a img.img-recipient, .ui-mobile a img.img-amount
+{
+ border-width:1px;   
+}
+.recipient-txt, .amount-txt
+{
+  
 }
