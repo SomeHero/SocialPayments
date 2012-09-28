@@ -35,14 +35,20 @@ namespace SocialPayments.RestServices.Internal.Models
             public double longitutde { get; set; }
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
+            public DateTime estimatedDeliveryDate { get; set; }
+            public bool isExpressed { get; set; }
+            public double expressDeliveryFee { get; set; }
+            public DateTime expressDeliveryDate { get; set; }
 
             public bool isCancellable { get; set; }
             public bool isRemindable { get; set; }
             public bool isAcceptable { get; set; }
             public bool isRejectable { get; set; }
+             public bool isExpressable { get; set; }
 
-            public string senderImageUri { get; set; }
-            public string recipientImageUri { get; set; }
+             public string senderImageUri { get; set; }
+             public string recipientImageUri { get; set; }
+           
         }
         public class MessageSeenUpdateRequest
         {
@@ -78,7 +84,7 @@ namespace SocialPayments.RestServices.Internal.Models
             public string recipientFirstName { get; set; }
             public string recipientLastName { get; set; }
             public string recipientImageUri { get; set; }
-            
+            public string deliveryMethod { get; set; }
         }
         public class SubmitDonateRequest
         {
@@ -129,6 +135,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public String recipientUri { get; set; }
             public Double amount { get; set; }
             public String comments { get; set; }
+        }
+        public class ExpressPaymentRequest
+        {
+            public string securityPin { get; set; }
+            public string sendAccountId { get; set; }
         }
     }
 }

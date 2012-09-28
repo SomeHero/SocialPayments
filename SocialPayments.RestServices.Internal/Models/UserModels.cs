@@ -99,6 +99,9 @@ namespace SocialPayments.RestServices.Internal.Models
             public int numberOfPaystreamUpdates { get; set; }
             public int newMessageCount { get; set; }
             public int pendingMessageCount { get; set; }
+            public double expressDeliveryThreshold { get; set; }
+            public double expressDeliveryFeePercentage { get; set; }
+            public bool canExpress { get; set; }
 
             public List<UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }

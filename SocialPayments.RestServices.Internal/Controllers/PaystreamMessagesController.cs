@@ -207,6 +207,42 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return Request.CreateResponse(HttpStatusCode.Created);
         }
+        [HttpPost]
+        public HttpResponseMessage ExpressPayment(string userId, string id, MessageModels.ExpressPaymentRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Express Payment Started Sender: {0} Message: {1} Sender Account: {2}", userId, id, request.sendAccountId));
+
+            var messagesServices = new DomainServices.MessageServices();
+
+            try
+            {
+                messagesServices.ExpressPayment(userId, id, request.sendAccountId, request.securityPin);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Expressing Payment. Exception {0}.", ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Expressing Payment. Exception {0}.", ex.Message, ex.StackTrace));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Expressing Payment. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+
+        }
         // POST /api/message/accept_pledge
         [HttpPost]
         public HttpResponseMessage AcceptPledge(MessageModels.SubmitPledgeRequest request)
@@ -318,7 +354,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 if(request.messageType.ToUpper() == @"PAYMENT")
                     messageServices.AddPayment(request.apiKey, request.senderId, request.recipientUri, request.senderAccountId, request.amount, request.comments,
-                        request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientImageUri, request.securityPin);
+                        request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientImageUri, request.securityPin, request.deliveryMethod);
                 if (request.messageType.ToUpper() == @"PAYMENTREQUEST")
                     messageServices.AddRequest(request.apiKey, request.senderId, request.recipientUri, request.senderAccountId, request.amount, request.comments,
                         request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientImageUri, request.securityPin);

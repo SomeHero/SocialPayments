@@ -20,14 +20,15 @@ namespace Mobile_PaidThx.Services
         private string _rejectPaymentRequestUrl = "{0}/paystreammessages/{1}/reject_request";
 
 
-        public void SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        public void SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string deliveryMethod)
         {
-            SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
+            SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri, deliveryMethod);
 
         }
-        public void RequestMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        public void RequestMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri,
+            string deliveryMethod)
         {
-            SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri);
+            SendMessage(apiKey, senderId, recipientId, senderUri, senderAccountId, recipientUri, securityPin, amount, comments, messageType, latitude, longitude, recipientFirstName, recipientLastName, recipientImageUri, deliveryMethod);
 
         }
         public void SendDonation(string apiKey, string senderId, string recipientId, string senderAccountId, string securityPin, double amount, string comments, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
@@ -125,7 +126,9 @@ namespace Mobile_PaidThx.Services
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
         }
-        private void SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri)
+        private void SendMessage(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri,
+            string securityPin, double amount, string comments, string messageType, string latitude, string longitude,
+            string recipientFirstName, string recipientLastName, string recipientImageUri, string deliveryMethod)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -145,7 +148,8 @@ namespace Mobile_PaidThx.Services
                 longitude = longitude,
                 recipientFirstName = recipientFirstName,
                 recipientLastName = recipientLastName,
-                recipientImageUri = recipientImageUri
+                recipientImageUri = recipientImageUri,
+                deliveryMethod = deliveryMethod
             });
 
             var response = Post(String.Format(_paystreamMessageUrl, _webServicesBaseUrl), json);

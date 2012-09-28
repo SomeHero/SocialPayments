@@ -138,6 +138,14 @@ namespace SocialPayments.Domain
         public virtual Collection<UserSocialNetwork> UserSocialNetworks { get; set; }
 
         public virtual Merchant Merchant { get; set; }
+
+        //Express Delivery
+        [DefaultValue(0)]
+        public double ExpressDeliveryFreeThreshold { get; set; }
+        [DefaultValue(0.0275)]
+        public double ExpressDeliveryFeePercentage { get; set; }
+        [DefaultValue(true)]
+        public bool CanExpress { get; set; }
     }
 
 }

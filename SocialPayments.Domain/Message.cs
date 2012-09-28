@@ -72,7 +72,14 @@ namespace SocialPayments.Domain
 
         public bool recipientHasSeen { get; set; }
         public bool senderHasSeen { get; set; }
- 
+
+        public double deliveryFeeAmount { get; set; }
+        public int deliveryMethodId { get; set; }
+        public DeliveryMethod deliveryMethod
+        {
+            get { return (DeliveryMethod)deliveryMethodId; }
+            set { deliveryMethodId = (int)value; }
+        }
     }
 
     public class SameRecipientComparer : IEqualityComparer<Message>
