@@ -248,6 +248,7 @@
     <Content Include="apple-touch-icon.png" />
     <None Include="Content\patternlock.less" />
     <Content Include="bg-texture.png" />
+    <Content Include="Content\images\activity-icon-big.png" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\avatar-active.png" />
@@ -269,6 +270,7 @@
     <Content Include="Content\images\button.png" />
     <Content Include="Content\images\button_active.png" />
     <Content Include="Content\images\button_active2.png" />
+    <Content Include="Content\images\dogood-icon-big.png" />
     <Content Include="Content\images\enable-payments-button-icon.png" />
     <Content Include="Content\images\helpIcon.png" />
     <Content Include="Content\images\home.png" />
@@ -345,6 +347,8 @@
     <Content Include="Content\images\org_worldvision.png" />
     <Content Include="Content\images\org_wwf.png" />
     <Content Include="Content\images\org_zta.png" />
+    <Content Include="Content\images\request-icon-big.png" />
+    <Content Include="Content\images\send-icon-big.png" />
     <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\icons\settingsIcon.png" />
     <Content Include="Content\images\icons\active-old\dogoodIcon-active.png" />
@@ -410,6 +414,7 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\images\video.png" />
     <Content Include="Content\jquery.mobile.fixedToolbar.polyfill.css" />
     <Content Include="Content\jquery.qtip.min.css" />
     <Content Include="Content\jquery.validate.password.css" />
@@ -462,6 +467,14 @@
     <Content Include="Scripts\fancybox\jquery.fancybox.js" />
     <Content Include="Scripts\fancybox\jquery.fancybox.pack.js" />
     <Content Include="Scripts\fancybox\jquery.mousewheel-3.0.4.pack.js" />
+    <Content Include="Scripts\flexslider\flexslider.css" />
+    <Content Include="Scripts\flexslider\froogaloop.js" />
+    <Content Include="Scripts\flexslider\jquery.easing.js" />
+    <Content Include="Scripts\flexslider\jquery.fitvid.js" />
+    <Content Include="Scripts\flexslider\jquery.flexslider-min.js" />
+    <Content Include="Scripts\flexslider\jquery.mousewheel.js" />
+    <Content Include="Scripts\flexslider\modernizr.js" />
+    <Content Include="Scripts\flexslider\shThemeDefault.css" />
     <Content Include="Scripts\jquery.lazyload.js" />
     <Content Include="Scripts\jquery.lazyload.min.js" />
     <Content Include="Scripts\jquery.mobile.fixedToolbar.polyfill.js" />
