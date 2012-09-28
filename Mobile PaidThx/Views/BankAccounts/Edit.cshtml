@@ -12,7 +12,7 @@
             Account Details</h1>
     </div>
     <div data-role="content">
-        <div class="alert">
+        <div class="top-panel">
             <p>
                 To enable sending payment from this account, please verify it. <a href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
                     <button type="button" id="btn-verify-account" data-theme="b" data-icon="gear" data-iconpos="right"
@@ -21,6 +21,7 @@
                 </a>
             </p>
         </div>
+        <div class="pad">
         @Html.ValidationSummary()
         @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" }}))
         {
@@ -61,5 +62,6 @@
                     Remove Account</button>
             </p>
         }
+    </div>
     </div>
 </div>

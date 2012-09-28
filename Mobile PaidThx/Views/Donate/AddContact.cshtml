@@ -8,7 +8,7 @@
 @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            Select Non Profit</h1>
+            Select Non-Profit</h1>
     </div>
     <div data-role="content">
       
@@ -101,6 +101,7 @@
                       }
                   }
               });
+              
               $(".contact-organization").die("click").live("click", function () {
 
                   var recipientId = $(this).attr('recipient-id');

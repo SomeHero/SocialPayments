@@ -4,7 +4,7 @@
 
 <div data-role="page" id="setup-pin-swipe" class="modally" @TempData["DataUrl"]>
      <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
-	    <h1>Create Security PIN</h1>
+	    <h1>Create PIN</h1>
     </div>
     <div data-role="content">
         <div class="top-panel">
@@ -14,6 +14,7 @@
            }
     To complete setting up your account, create a security pin by connecting at least 4 pins below.
 </div>
+<div class="pad">
         @using (Html.BeginForm("SetupPinSwipe", "Donate", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
          <div>
@@ -23,6 +24,7 @@
             
          </div>
         }
+        </div>
         </div>
   <div id="resizerHack">
         

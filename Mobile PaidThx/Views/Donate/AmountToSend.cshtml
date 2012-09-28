@@ -8,18 +8,20 @@
             How Much?</h1>
     </div>
 
-    <div data-role="content" class="content">
+    <div data-role="content">
+    <div class="pad">
     @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
     {
             
-            <input type="text" id="customAmount" placeholder="0.00" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
-             <button id="gobtn-send2" data-role="none" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
+            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="btn-jq go-button" data-theme="f">
                 Go
-            </button>
-            <div style="clear:both;"><br /></div>
-        <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
+            </button></span>
+            <div style="clear:both;"></div>
+        <br />
+        <div class="quicksend-title">
             QUICK SEND AMOUNTS</div>
-        <div class="quicksend" style="width: 100%; margin: -5px">
+        <div class="quicksend">
             <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="1">
                 $1</button>
             <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="5">
@@ -29,12 +31,11 @@
             <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="20">
                 $20</button>
         </div>
-       
-        <div style="background: #000000; height: 1px; margin-bottom: 10px">
-        </div>
+     
     }
     </div>
-     <script language="javascript">
+    </div>
+     <script type="text/javascript">
          //wait to do event binding until the page is being initialized
          $(document).delegate('[data-role="page"]', 'pageinit', function () {
 
