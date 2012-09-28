@@ -137,7 +137,7 @@ namespace SocialPayments.DomainServices
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
              double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin,
-            string associatedRequestId)
+            string associatedRequestId, string deliveryMethod, double deliveryFeeAmount)
         {
             _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1} with {2}", senderId, recipientUri, senderAccountId));
 
@@ -155,8 +155,11 @@ namespace SocialPayments.DomainServices
                 Message associatedRequest = null;
 
                 if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST" || messageType.ToUpper() == "PLEDGE" || messageType.ToUpper() == "DONATION"))
-                    throw new ArgumentException(String.Format("Invalid Message Type.  Message Type must be Payment, PaymentRequest, Pledge or Donation"));
+                    throw new BadRequestException("Invalid Message Type.  Message Type must be Payment, PaymentRequest, Pledge or Donation");
 
+                if(!(deliveryMethod.ToUpper() == "STANDARD" || deliveryMethod.ToUpper() == "EXPRESS"))
+                    throw new BadRequestException("Delivery Method Must be Standard or Express");
+                
                 MessageType type = MessageType.Payment;
                 PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPayment;
 
@@ -306,6 +309,8 @@ namespace SocialPayments.DomainServices
                         recipientHasSeen = false,
                         PaymentRequest = associatedRequest,
                         senderHasSeen = true,
+                        deliveryMethod = DeliveryMethod.Standard,
+                        deliveryFeeAmount = deliveryFeeAmount,
                     });
 
                 ctx.SaveChanges();
@@ -315,12 +320,12 @@ namespace SocialPayments.DomainServices
         }
 
         public Domain.Message AddPayment(string apiKey, string senderId, string recientUri, string senderAccountId, double amount, string comments, double latitude,
-            double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
+            double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin, string deliveryMethod)
         {
             using (var ctx = new Context())
             {
                 Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "Payment", latitude, longitude, recipientFirstName,
-                       recipientLastName, recipientImageUri, securityPin, "");
+                       recipientLastName, recipientImageUri, securityPin, "", deliveryMethod, 0);
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -338,7 +343,7 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "PaymentRequest", latitude, longitude, recipientFirstName,
-                    recipientLastName, recipientImageUri, securityPin, "");
+                    recipientLastName, recipientImageUri, securityPin, "", "Standard", 0);
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -438,8 +443,8 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
-                Domain.Message message = AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments, 
-                    "Donation", 0.0, 0.0, "", "", "", securityPin, "");
+                Domain.Message message = AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments,
+                    "Donation", 0.0, 0.0, "", "", "", securityPin, "", "Standard", 0);
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -491,7 +496,7 @@ namespace SocialPayments.DomainServices
 
                 var paymentMessage = AddMessage(message.ApiKey.ToString(), recipientId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
                                          message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
-                                         message.Id.ToString());
+                                         message.Id.ToString(), "Standard", 0);
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -1170,6 +1175,74 @@ namespace SocialPayments.DomainServices
 
                 return count;
             }
+        }
+
+        public void ExpressPayment(string userId, string id, string senderAccountId, string securityPin)
+        {
+            using (var ctx = new Context())
+            {
+                var userService = new UserService(ctx);
+                var securityService = new DomainServices.SecurityService();
+
+                Guid userGuid;
+                Guid messageGuid;
+                Guid senderAccountGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                Guid.TryParse(id, out messageGuid);
+
+                if (messageGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Valid", id));
+
+                Guid.TryParse(senderAccountId, out senderAccountGuid);
+
+                if (senderAccountGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Sender Account {0} Not Valid", senderAccountId));
+
+                var user = userService.GetUserById(userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                var message = GetMessage(messageGuid);
+                ctx.Messages.Attach(message);
+
+                var paymentAccount = user.PaymentAccounts
+                    .FirstOrDefault(a => a.Id == senderAccountGuid);
+
+                if (paymentAccount == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Sender Account {0} Not Valid", senderAccountId));
+
+                if (!securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException("Account Locked", 1001);
+                    }
+
+                    ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException("Invalid Security Pin", 1003);
+                }
+
+                message.Payment.IsExpressed = true;
+                message.Payment.EstimatedDeliveryDate = message.Payment.ExpressDeliveryDate;
+
+                ctx.SaveChanges();
+
+                //Start Post Processing Task to batch fee payment
+            }
+
         }
     }
 }

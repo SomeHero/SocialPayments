@@ -76,6 +76,10 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public int newMessageCount { get; set; }
             public int pendingMessageCount { get; set; }
 
+            public bool canExpress { get; set; }
+            public double expressDeliveryFeePercentage { get; set; }
+            public double expressDeliveryFreeThreshold { get; set; }
+
             public List<UserModels.UserPayPointResponse> userPayPoints { get; set; }
             public List<MessageModels.MessageResponse> pendingMessages { get; set; }
             public List<AccountModels.AccountResponse> bankAccounts { get; set; }

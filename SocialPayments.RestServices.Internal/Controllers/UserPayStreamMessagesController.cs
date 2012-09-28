@@ -111,6 +111,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
             else
                 return message.Status.IsCancellable();
         }
+        private bool IsExpressable(Domain.Message message)
+        {
+            if (message.Payment == null)
+                return false;
+
+            if (message.Payment.IsExpressed)
+                return false;
+
+            return message.Status.IsExpressable();
+        }
+
+
         private bool IsRemindable(Domain.Message message)
         {
             if (message.Direction == "Out")

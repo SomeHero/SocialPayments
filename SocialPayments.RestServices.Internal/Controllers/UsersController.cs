@@ -57,7 +57,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     lastLoggedIn = (u.LastLoggedIn != null ? u.LastLoggedIn.ToString("MM/dd/yyyy") : ""),
                     userId = u.UserId,
                     userName = u.UserName,
-                    userStatus = u.UserStatus.ToString()
+                    userStatus = u.UserStatus.ToString(),
+                    canExpress = u.CanExpress,
+                    expressDeliveryFeePercentage = u.ExpressDeliveryFeePercentage,
+                    expressDeliveryThreshold = u.ExpressDeliveryFreeThreshold
                 }).ToList()
             });
         }
@@ -221,7 +224,10 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     newMessageCount = 1,
                     pendingMessageCount = 1,
                     facebookId = fbId,
-                    facebookToken = fbToken
+                    facebookToken = fbToken,
+                    canExpress = user.CanExpress,
+                    expressDeliveryFeePercentage = user.ExpressDeliveryFeePercentage,
+                    expressDeliveryThreshold = user.ExpressDeliveryFreeThreshold
                 };
             }
             catch (Exception ex)

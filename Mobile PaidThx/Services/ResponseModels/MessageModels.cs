@@ -31,6 +31,15 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
             public bool isCancellable { get; set; }
+            public bool isRemindable { get; set; }
+            public bool isAcceptable { get; set; }
+            public bool isRejectable { get; set; }
+            public bool isExpressable { get; set; }
+
+            public DateTime estimatedDeliveryDate { get; set; }
+            public DateTime expressDeliveryDate { get; set; }
+            public DateTime expressDeliveryFee { get; set; }
+            public bool isExpressed { get; set; }
         }
     }
 }
