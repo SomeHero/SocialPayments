@@ -46,5 +46,15 @@ namespace SocialPayments.Domain
         public virtual Message Message { get; set; }
 
         public virtual List<Transaction> Transactions { get; set; }
+
+        //Delivery
+        public DateTime EstimatedDeliveryDate { get; set; }
+        public bool IsExpressed { get; set; }
+        public double ExpressDeliveryFee { get; set; }
+        public DateTime ExpressDeliveryDate { get; set; }
+
+        //Fees
+        public virtual List<Fee> Fees { get; set; }
+
     }
 }

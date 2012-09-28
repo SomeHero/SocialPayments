@@ -323,7 +323,7 @@ namespace Mobile_PaidThx.Controllers
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
                     paystreamMessageServices.RequestMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, requestInformation.RecipientUri, model.Pincode,
-                        requestInformation.Amount, requestInformation.Comments, "PaymentRequest", "0", "0", "", "", "");
+                        requestInformation.Amount, requestInformation.Comments, "PaymentRequest", "0", "0", "", "", "", "Standard");
                 }
                 catch (ErrorException ex)
                 {

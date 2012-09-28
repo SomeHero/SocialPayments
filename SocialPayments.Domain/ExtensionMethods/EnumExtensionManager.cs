@@ -124,6 +124,22 @@ namespace SocialPayments.Domain.ExtensionMethods
 
             return false;
         }
+        public static bool IsExpressable(this Enum enumerator)
+        {
+            Type type = enumerator.GetType();
+
+            MemberInfo[] memberInfo = type.GetMember(enumerator.ToString());
+
+            if (memberInfo != null && memberInfo.Length > 0)
+            {
+                object[] attribute = memberInfo[0].GetCustomAttributes(typeof(MessageStatusAttribute), false);
+
+                if (attribute != null && attribute.Length > 0)
+                    return ((MessageStatusAttribute)attribute[0]).IsExpressable;
+            }
+
+            return false;
+        }
 
 
     }

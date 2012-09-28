@@ -201,7 +201,11 @@
     <Compile Include="CommunicationMethod.cs" />
     <Compile Include="CommunicationType.cs" />
     <Compile Include="CustomAttributes\MessageStatusAttribute.cs" />
+    <Compile Include="DeliveryMethod.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionManager.cs" />
+    <Compile Include="Fee.cs" />
+    <Compile Include="FeeStatus.cs" />
+    <Compile Include="FeeType.cs" />
     <Compile Include="MerchantListing.cs" />
     <Compile Include="MerchantOffer.cs" />
     <Compile Include="PaymentTransaction.cs" />
