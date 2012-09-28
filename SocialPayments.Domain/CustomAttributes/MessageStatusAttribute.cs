@@ -13,5 +13,6 @@ namespace SocialPayments.Domain.CustomAttributes
         public bool IsRejectable { get; set; }
         public bool IsAcceptable { get; set; }
         public bool IsRemindable { get; set; }
+        public bool IsExpressable { get; set; }
     }
 }

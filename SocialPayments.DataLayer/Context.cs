@@ -721,7 +721,10 @@ namespace SocialPayments.DataLayer
                         URI = "8043555555"
                     },
                 },
-                UserType = UserType.Individual
+                UserType = UserType.Individual,
+                CanExpress = true,
+                ExpressDeliveryFeePercentage = 0.0275,
+                ExpressDeliveryFreeThreshold = 10
             });
 
             context.Users.Add(new User()
@@ -833,7 +836,10 @@ namespace SocialPayments.DataLayer
                         VerificationLink = ""
                     }
                 },
-                UserType = UserType.Individual
+                UserType = UserType.Individual,
+                CanExpress = true,
+                ExpressDeliveryFeePercentage = 0.0275,
+                ExpressDeliveryFreeThreshold = 10
             });
 
             var sender = context.Users.Add(new User()
@@ -886,7 +892,10 @@ namespace SocialPayments.DataLayer
                         BankName = "Wells Fargo"
                     }
                 },
-                UserType = UserType.Individual
+                UserType = UserType.Individual,
+                CanExpress = true,
+                ExpressDeliveryFeePercentage = 0.0275,
+                ExpressDeliveryFreeThreshold = 10
             });
 
             var meCode = context.MECodes.Add(new MECode()
@@ -926,6 +935,8 @@ namespace SocialPayments.DataLayer
                 SenderAccount = sender.PaymentAccounts[0],
                 CreateDate = System.DateTime.Now,
                 Application = application,
+                deliveryMethod = DeliveryMethod.Standard,
+                deliveryFeeAmount = 0
             });
 
             var sentPayment = sentMessage.Payment = new Payment()
@@ -941,6 +952,10 @@ namespace SocialPayments.DataLayer
                     SenderAccount = sentMessage.Sender.PaymentAccounts[0],
                     HoldDays = 0,
                     ScheduledProcessingDate = System.DateTime.Now,
+                    EstimatedDeliveryDate = System.DateTime.Now.AddDays(3),
+                    ExpressDeliveryDate = System.DateTime.Now,
+                    ExpressDeliveryFee = 10,
+                    IsExpressed = false
                     //PaymentVerificationLevel = PaymentVerificationLevel.Verified
                 };
 
@@ -962,6 +977,8 @@ namespace SocialPayments.DataLayer
                 SenderAccount = sender.PaymentAccounts[0],
                 CreateDate = System.DateTime.Now,
                 Application = application,
+                deliveryMethod = DeliveryMethod.Standard,
+                deliveryFeeAmount = 0
             });
 
             var sendRequest = context.Messages.Add(new Message()
@@ -979,6 +996,8 @@ namespace SocialPayments.DataLayer
                 SenderAccount = sender.PaymentAccounts[0],
                 CreateDate = System.DateTime.Now,
                 Application = application,
+                deliveryMethod = DeliveryMethod.Standard,
+                deliveryFeeAmount = 0
             });
 
             var receivedMessage = context.Messages.Add(new Message()
@@ -997,6 +1016,8 @@ namespace SocialPayments.DataLayer
                 SenderAccount = sender.PaymentAccounts[0],
                 CreateDate = System.DateTime.Now,
                 Application = application,
+                deliveryMethod = DeliveryMethod.Standard,
+                deliveryFeeAmount = 0
             });
 
             var receivedPayment = receivedMessage.Payment = new Payment()
@@ -1012,6 +1033,10 @@ namespace SocialPayments.DataLayer
                 SenderAccount = receivedMessage.Sender.PaymentAccounts[0],
                 HoldDays = 0,
                 ScheduledProcessingDate = System.DateTime.Now,
+                EstimatedDeliveryDate = System.DateTime.Now.AddDays(3),
+                ExpressDeliveryDate = System.DateTime.Now,
+                ExpressDeliveryFee = 10,
+                IsExpressed = false
                 //PaymentVerificationLevel = PaymentVerificationLevel.Verified
             };
 
@@ -1055,6 +1080,8 @@ namespace SocialPayments.DataLayer
                     SenderAccount = james.PaymentAccounts[0],
                     CreateDate = System.DateTime.Now,
                     Application = application,
+                    deliveryMethod = DeliveryMethod.Standard,
+                    deliveryFeeAmount = 0,
                     Payment = new Payment()
                     {
                         Amount = amount,
@@ -1066,6 +1093,10 @@ namespace SocialPayments.DataLayer
                         SenderAccount = james.PaymentAccounts[0],
                         HoldDays = 0,
                         ScheduledProcessingDate = System.DateTime.Now,
+                        EstimatedDeliveryDate = System.DateTime.Now.AddDays(3),
+                        ExpressDeliveryDate = System.DateTime.Now,
+                        ExpressDeliveryFee = 10,
+                        IsExpressed = false
                        // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
@@ -1094,6 +1125,8 @@ namespace SocialPayments.DataLayer
                     SenderAccount = james.PaymentAccounts[0],
                     CreateDate = System.DateTime.Now,
                     Application = application,
+                    deliveryMethod = DeliveryMethod.Standard,
+                    deliveryFeeAmount = 0,
                     Payment = new Payment()
                     {
                         Amount = amount,
@@ -1105,6 +1138,10 @@ namespace SocialPayments.DataLayer
                         SenderAccount = james.PaymentAccounts[0],
                         HoldDays = 0,
                         ScheduledProcessingDate = System.DateTime.Now,
+                        EstimatedDeliveryDate= System.DateTime.Now.AddDays(3),
+                        ExpressDeliveryDate = System.DateTime.Now,
+                        ExpressDeliveryFee = 10,
+                        IsExpressed = false
                        // PaymentVerificationLevel = PaymentVerificationLevel.Verified
                     }
                 });
