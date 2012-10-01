@@ -1,16 +1,9 @@
 ﻿@{
     ViewBag.Title = "Index";
     ViewBag.PageID = "page-welcome";
-    ViewBag.Classes = "";
+    ViewBag.Classes = "page";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
-
-@*
-    
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
-        <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
-        @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
-    </div>*@
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     <div data-role="content">
         <div class="pad">
         <div class="logo-holder">
@@ -29,8 +22,6 @@
        <div data-role="footer"> 
 	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
 </div> 
-
-     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
 </div>
 
 @section PageScripts{

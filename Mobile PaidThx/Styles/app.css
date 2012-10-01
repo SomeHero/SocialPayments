@@ -533,6 +533,7 @@ a.imgbtn img, button.imgbtn img
     padding: 0 10px;
     float: left;
 }
+
 a.imgbtn span, button.imgbtn span
 {
     display: block;

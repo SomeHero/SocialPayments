@@ -2,14 +2,13 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "send-page";
-    ViewBag.Classes = "";
+    ViewBag.Classes = "page";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
         <h1>Send Money</h1>
         <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
-        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
     </div>
     <div data-role="content">
     <div class="pad">
@@ -84,11 +83,10 @@
          @using (Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
          {
             <p>
-                <button type="submit" id="sendmoney2" class="btn-jq" data-theme="f">
+                <button type="submit" id="sendmoney2" class="pd-btn green" data-theme="f">
                     <span>Send Money</span></button>
             </p>
          }
        </div>
     </div>
-    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }
 </div>

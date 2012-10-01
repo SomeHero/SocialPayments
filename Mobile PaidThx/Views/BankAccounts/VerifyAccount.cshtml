@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Add Payment Account";
 }
-<div data-role="page" id="bankaccounts-add-page" >
+<div  id="bankaccounts-add-page" >
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
@@ -21,14 +21,14 @@
             </p>
             <p>
                 <button type="submit" id="btn-update-account" data-theme="f" data-icon="check" data-iconpos="right"
-                    class="btn-jq">
+                    class="pd-btn green">
                     Verify Amounts</button></p>
          }
         </div>
     </div>
 <script language="javascript">
     //wait to do event binding until the page is being initialized
-    $(document).delegate('[data-role="page"]', 'pageinit', function () {
+    $(document).delegate('[]', 'pageinit', function () {
 
         var depositAmount1 = "0.00";
         var depositAmount2 = "0.00";

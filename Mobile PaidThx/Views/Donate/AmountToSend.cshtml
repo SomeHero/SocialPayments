@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "AmountToSendView";
 }
-<div data-role="page" id="donate-amount-to-send-page" class="modally" data-dom-cache="true"   >
+<div  id="donate-amount-to-send-page" class="modally" data-dom-cache="true"   >
  
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
@@ -14,7 +14,7 @@
     {
             
             <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
-             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="btn-jq go-button" data-theme="f">
+             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="go-button" data-theme="f">
                 Go
             </button></span>
             <div style="clear:both;"></div>
@@ -37,7 +37,7 @@
     </div>
      <script type="text/javascript">
          //wait to do event binding until the page is being initialized
-         $(document).delegate('[data-role="page"]', 'pageinit', function () {
+         $(document).delegate('[]', 'pageinit', function () {
 
              var currentAmount = "0.00";
 

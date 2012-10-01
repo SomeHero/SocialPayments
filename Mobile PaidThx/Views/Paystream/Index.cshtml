@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Paystream";
     ViewBag.PageID = "paystream-index";
-    ViewBag.Classes = "full";
+    ViewBag.Classes = "page full";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx"
         >
@@ -12,7 +12,6 @@
             Paystream</h1>
         <a href="#" id="search-control" class="ui-btn-right" data-role="button" data-theme="f"
             data-icon="search" data-iconpos="notext"></a>
-        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
     </div>
     <div data-role="content">
         <div class="pad">
@@ -58,6 +57,8 @@
     @{Html.RenderPartial("PartialViews/PS-Item");}
     @{Html.RenderPartial("PartialViews/PS-Message");}
     @{Html.RenderPartial("PartialViews/PS-Detail");}
+
+    @section PageScripts{
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -155,6 +156,7 @@
 
         });
     </script>
+    }
     <div id="popup" class="paystream-dialog">
     </div>
     <div id="overlay" class="overlay">
