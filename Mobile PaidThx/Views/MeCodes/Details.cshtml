@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "ME Code Details";
     ViewBag.PageID = "mecode-details-page";
-    ViewBag.Classes = "settings";
+    ViewBag.Classes = "page page settings";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
@@ -22,7 +22,7 @@
             @using (Html.BeginForm("Delete", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.MeCode.Id" />
-                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="pd-btn red">
                    Remove ME Code</button>
             }
             </p>
