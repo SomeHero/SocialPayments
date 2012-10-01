@@ -55,10 +55,17 @@
         <li data-role="list-divider" class="removable">${groupHeading}</li>
     </script>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+    <div id="popup" class="paystream-dialog">
+    </div>
+    <div id="overlay" class="overlay">
+    </div>
+</div>
+@section PageScripts
+{
     @{Html.RenderPartial("PartialViews/PS-Item");}
     @{Html.RenderPartial("PartialViews/PS-Message");}
     @{Html.RenderPartial("PartialViews/PS-Detail");}
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
 
             webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
@@ -155,8 +162,4 @@
 
         });
     </script>
-    <div id="popup" class="paystream-dialog">
-    </div>
-    <div id="overlay" class="overlay">
-    </div>
-</div>
+   }

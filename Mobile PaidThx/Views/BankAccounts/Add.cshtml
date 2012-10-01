@@ -50,17 +50,21 @@
          }
         </div>
     </div>
-            <script type="text/javascript">
-                $(document).delegate('#bankaccounts-add-page', 'pageinit', function () {
-                    $('#txtNameOnAccount').focus();
-                });
-                //wait to do event binding until the page is being initialized
-                $(document).on("pageshow", "#bankaccounts-add-page", function () {
-                    $.validator.addMethod("accountmatch", function (value) {
-                        return value == $("#AccountNumber").val();
-                    }, "Confirm Account Number must match Account Number");
 
-                    $("#frmSubmit").validate();
-                });
-    </script>
 </div>
+@section PageScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtNameOnAccount').focus();
+        });
+        //wait to do event binding until the page is being initialized
+        $(document).on("pageshow", "#bankaccounts-add-page", function () {
+            $.validator.addMethod("accountmatch", function (value) {
+                return value == $("#AccountNumber").val();
+            }, "Confirm Account Number must match Account Number");
+
+            $("#frmSubmit").validate();
+        });
+    </script>
+}
