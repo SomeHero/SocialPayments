@@ -4,9 +4,9 @@
     ViewBag.PageID = "send-page";
     ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
         <h1>Send Money</h1>
         <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
         @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Send Money" }); }

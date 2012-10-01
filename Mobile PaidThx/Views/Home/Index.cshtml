@@ -3,11 +3,11 @@
     ViewBag.PageID = "page-welcome";
     ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
 
 @*
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
         @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Welcome" }); }
     </div>*@
@@ -17,11 +17,11 @@
                <img alt="PaidThx Logo" class="grow" src="@Url.Content("~/Content/images/logo-welcome.png")" /></div>
                <div style="margin-bottom: 20px">
             </div>
-            <a id="join" class="btn-jq" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" href="@Url.Content("~/Join")">
+            <a id="join" class="pd-btn blue" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" href="@Url.Content("~/Join")">
                 Join (It's Free!)</a>
             <div style="margin-bottom: 20px">
             </div>
-            <a id="signin" data-role="button" data-theme="f" data-icon="arrow-r" data-iconpos="right" class="btn-jq" href="@Url.Content("~/SignIn")">
+            <a id="signin" data-role="button" data-theme="f" data-icon="arrow-r" data-iconpos="right" class="pd-btn green" href="@Url.Content("~/SignIn")">
                 Sign In</a>
         </div>
     </div>
@@ -35,7 +35,7 @@
 
 @section PageScripts{
 <script type="text/javascript">
- $(document).on('pageshow', '#@ViewBag.PageID', function () {
+ $(document).ready(function() {
 
 });
 </script>

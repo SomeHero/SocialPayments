@@ -4,16 +4,16 @@
     ViewBag.PageID = "donate-add-contact-page";
     ViewBag.Classes = "full";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-dom-cache="true" data-add-back-btn="true" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-dom-cache="true"  >
+
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>Select Non-Profit</h1>
     </div>
     <div data-role="content">
-
-
-        <div class="pad">
-            <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+      
+        
+          <div class="pad">
+          <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
                 @foreach (var alphaGroup in Model.SortedNonProfits)
                 {

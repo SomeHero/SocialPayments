@@ -1,72 +1,99 @@
-﻿<!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en">
-<!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>PaidThx | </title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <script>
-        // workaround Facebook oauth feature-bug
-        if (window.location.hash == '#_=_') {
-            window.location.hash = '';
-        }
-    </script>
-    <link rel="icon" type="image/png" href="~/Content/images/favicon.png">
-    <!-- Included CSS Files -->
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jquery.validate.password.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/flexslider/flexslider.css")" />
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>PaidThx | @ViewBag.Title </title>
+        <meta name="description" content="The PaidThx Mobile App - Best Viewed on a Mobile Device">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="cleartype" content="on">
 
-    <!--CUSTOM-->
-    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/app.css?ver=0.11")" />
-    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/patternlock.css")"  />
-    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Tangerine|Inconsolata|Droid+Sans" />
-    <!--[if lt IE 9]>
-		<link rel="stylesheet" href="stylesheets/ie.css">
-	<![endif]-->
-    <!-- IE Fix for HTML5 Tags -->
-    <!--[if lt IE 9]>
-		<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+        <!-- not yet
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="">
+        <link rel="apple-touch-icon-precomposed" href="">
+        <link rel="shortcut icon" href="">-->
+
+        <link rel="icon" type="image/png" href="@Url.Content("~/Content/images/favicon.png")">
+
+        <!-- For iOS web apps. Delete if not needed. -->
+        <!--
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        -->
+
+        <!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
+        <!--
+        <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+        -->
+
+        <!-- ++++++++++++++++++++++ STYLESHEETS ++++++++++++++++++++++ -->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/normalize.css")">
+
+        <!-- CUSTOM -->
+        <!--<link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/app.css?ver=0.11")" />-->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/patternlock.css")"  />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/main.css")">
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans|Droid+Sans" />
+        
+        @RenderSection("PageStyles", required: false)
+
+        <!-- ++++++++++++++++++++++ HEAD SCRIPTS ++++++++++++++++++++++ -->
+
+        <!-- PLUGINS LIBS -->
+        
+    <script type="text/javascript" src="@Url.Content("~/Scripts/modernizr-2.6.1.min.js")"></script>
+
+        <!-- ++++++++++++++++++++++ FACEBOOK ++++++++++++++++++++++ -->
+    <script type="text/javascript">
+                if (window.location.hash == '#_=_') {
+                    window.location.hash = '';
+                }
+    </script>
+
+    @RenderSection("HeadScripts", required: false)
+    </head>
+    <body class="@ViewBag.Title" id="@ViewBag.PageID">
+
+    @RenderBody()
+
+
+    <!-- end body -->
 
     <!--JQUERY-->
-    <!-- <script>        window.jQuery || document.write('<script src="@Url.Content("~/Scripts/libs/jquery-1.7.1.js")"><\/script>')</script>-->
+    <!-- <script>        window.jQuery || document.write('<script src="@Url.Content("~/Scripts/jquery-1.7.1.js")"><\/script>')</script>-->
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-    
-    
+
+    <!--JQUERY PLUGINS-->
     <script type="text/javascript"src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.password.js")"></script>
-
-    <script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.flexslider-min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.fitvid.js")"></script>
-
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.placeholder.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.tmpl.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.lazyload.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/iso8601.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/xdate.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/helper.js")"></script>
 
+    <!--CUSTOM SCRIPTS-->
     <script type="text/javascript" src="@Url.Content("~/Scripts/patternlock.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
-
-    <!--  JQUERY MOBILE -->
     
-</head>
-<body class="ui-mobile-viewport">
-    <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-    @RenderBody()
 
+    <!-- Google Analytics - Hard Coded Dev -->
+        <script>
+            var _gaq = [["_setAccount", "UA-30208011-2"], ["_trackPageview"]];
+            (function (d, t) {
+                var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
+                g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+                s.parentNode.insertBefore(g, s)
+            } (document, "script"));
+        </script>
 
+    @RenderSection("PageScripts", required: false)
 
-
-<!-- PAGE LEVEL SCRIPTS -->
-@RenderSection("EndScripts", required: false)
-@RenderSection("PageScripts", required: false)
-</body>
-</html>
+    </body>
+    </html>

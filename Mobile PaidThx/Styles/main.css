@@ -1,0 +1,420 @@
+/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+body {
+font-size: 1em;
+line-height: 1.4;
+background-color: white;
+height: 100%;
+margin: 0;
+background-image: url('../Content/images/bg-texture.png');
+background-position: top left;
+background-repeat: repeat;
+background-attachment: fixed;
+text-shadow: 2px 2px 0 white;
+background: #F9F9F9;
+}
+
+a {
+    color: #0084b4;
+}
+
+a:visited {
+    color: #0084b4;
+}
+
+a:hover {
+    color: #06e;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Ryan's custom styles
+   ========================================================================== */
+
+/* ++++++++++++++++++++BUTTONS++++++++++++++++++ */
+.pd-btn
+{
+ width:100%;  
+ -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
+-moz-box-shadow: 0px 1px 4px rgba(0,0,0,.3);
+-webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, .3) ;
+box-shadow: 0px 1px 4px rgba(0, 0, 0, .3) ; 
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding;
+background-clip: padding-box;
+border: 1px solid #F0F0F0;
+font-weight: bold;
+color: white !important;
+text-decoration:none !important;
+display: block;
+text-align: center;
+cursor: pointer;
+position: relative;
+margin: .5em 0;
+padding: 0;
+background: #5b5b5b;
+padding: 12px 0px;
+}
+
+.pd-btn.blue{
+text-shadow: 0 1px 0 #136600;
+background-image: -webkit-gradient(linear, left top, left bottom, from( #48B201), to( #188100));
+background-image: -webkit-linear-gradient( #48B201, #188100);
+background-image: -moz-linear-gradient( #48B201, #188100);
+background-image: -ms-linear-gradient( #48B201, #188100);
+background-image: -o-linear-gradient( #48B201, #188100);
+background-image: linear-gradient( #48B201, #188100);
+}
+
+.pd-btn.green{
+background: #00839D ;
+text-shadow: 0 1px 0 #015565;
+background-image: -webkit-gradient(linear, left top, left bottom, from( #319EBC), to( #00839D));
+background-image: -webkit-linear-gradient( #319EBC, #00839D);
+background-image: -moz-linear-gradient( #319EBC, #00839D);
+background-image: -ms-linear-gradient( #319EBC, #00839D);
+background-image: -o-linear-gradient( #319EBC, #00839D);
+background-image: linear-gradient( #319EBC, #00839D);
+}
+
+.pd-btn.fb
+{
+background: #3B5998;
+text-shadow: 0 /*{d-bup-shadow-x}*/ 1px /*{d-bup-shadow-y}*/ 0 /*{d-bup-shadow-radius}*/ #102A67 /*{d-bup-shadow-color}*/;
+background-image: -webkit-gradient(linear, left top, left bottom, from( #4A6BB0 /*{d-bup-background-start}*/), to( #3B5998 /*{d-bup-background-end}*/));
+background-image: -webkit-linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998 /*{d-bup-background-end}*/);
+background-image: -moz-linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998 /*{d-bup-background-end}*/);
+background-image: -ms-linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998 /*{d-bup-background-end}*/);
+background-image: -o-linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998 /*{d-bup-background-end}*/);
+background-image: linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998 /*{d-bup-background-end}*/);
+}
+
+
+
+/*++++++++++++++++++++++++++++++FORM FIELDS+++++++++++++++++++++++++++*/
+
+span.form-holder {
+background: #F6F6F6;
+padding: 3px 5px;
+display: block;
+border-radius: 5px;
+margin-top: 5px;
+margin-bottom: 15px;
+-moz-box-shadow: 0px 1px 4px rgba(0,0,0,.3);
+-webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, .3) ;
+box-shadow: 0px 1px 4px rgba(0, 0, 0, .3) ; 
+ -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
+}
+
+input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+box-shadow: 0 0 5px #E8E9EB inset;
+width:100%;
+border: 1px solid #D5D9DA;
+font-weight: bold;
+color: #333;
+font-size: 14px;
+padding: 10px;
+text-shadow: none;
+background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E6E6E6), to(white));
+background: -webkit-linear-gradient(top, white, #E6E6E6);
+background: -moz-linear-gradient(top, white, #E6E6E6);
+background: -ms-linear-gradient(top, white, #E6E6E6);
+background: -o-linear-gradient(top, white, #E6E6E6);
+ -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+display: block;
+outline: 0;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="number"]:focus {
+	-moz-box-shadow: 0px 0px 2px #65be0f;
+	-webkit-box-shadow: 0px 0px 2px #65be0f ;
+	box-shadow: 0px 0px 2px #65be0f ;
+	border-color:#48b201;	
+}
+
+
+
+/*+++++++++++++++++++++++++++LAYOUT ELEMENTS+++++++++++++++++++++++*/
+
+.header-pdthx
+{
+-webkit-background-clip: border-box;
+-webkit-background-origin: padding-box;
+-webkit-background-size: auto;
+-webkit-border-image: none;
+-webkit-font-smoothing: antialiased;
+background-attachment: scroll;
+background-clip: border-box;
+background-color: #EEE;
+background-image: -webkit-linear-gradient(top, #F0F0F0, #DDD);
+background-origin: padding-box;
+background-size: auto;
+border-bottom-color: #3E3E3E;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 0px;
+border-bottom-style: none;
+border-bottom-width: 0px;
+border-left-color: #3E3E3E;
+border-left-style: none;
+border-left-width: 0px;
+border-right-color: #3E3E3E;
+border-right-style: none;
+border-right-width: 0px;
+border-top-color: #3E3E3E;
+border-top-left-radius: 0px;
+border-top-right-radius: 0px;
+border-top-style: none;
+border-top-width: 0px;
+color: #3E3E3E;
+display: block;
+font-family: Helvetica, Arial, sans-serif;
+font-size: 13px;
+font-weight: bold;
+height: 43.983333587646484px;
+left: 0px;
+line-height: 18px;
+margin-bottom: 0px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+padding-bottom: 0px;
+padding-left: 0px;
+padding-right: 0px;
+padding-top: 0px;
+position: absolute;
+right: 0px;
+text-shadow: white 0px -1px 1px;
+top: 0px;
+vertical-align: baseline;  
+}
+
+.header-pdthx h1{
+margin: .8em 20% .7em;
+min-height: 1.1em;
+text-align: center;
+font-size: 16px;
+display: block;
+margin: .6em 30% .8em;
+padding: 0;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+outline: 0 !important;
+font-size: 14px;
+margin-bottom: 12px;
+color: #181818;
+font-weight: bold;
+line-height: 1.25;
+}
+
+.pad {
+padding: 14px;
+background-color: transparent;
+}
+
+.full .pad {
+margin: 0px;
+padding: 0px;
+background-color: transparent;
+}
+
+
+.ctr-me, .logo-holder, .video-holder, .icon-holder {
+text-align: center;
+}
+
+
+/*+++++++++++++++++++++++++++ IMAGES +++++++++++++++++++++++*/
+img.grow {
+max-width: 100%;
+height: auto;
+margin: 0 auto;
+text-align: center;
+}
+
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/* Prevent callout */
+
+.nocallout {
+    -webkit-touch-callout: none;
+}
+
+.pressed {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* A hack for HTML5 contenteditable attribute on mobile */
+
+textarea[contenteditable] {
+    -webkit-appearance: none;
+}
+
+/* A workaround for S60 3.x and 5.0 devices which do not animated gif images if
+   they have been set as display: none */
+
+.gifhidden {
+    position: absolute;
+    left: -100%;
+}
+
+/*
+ * Image replacement
+ */
+
+.ir {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 0;
+    direction: ltr;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    text-indent: -999em;
+}
+
+.ir br {
+    display: none;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/**
+ * Clearfix helper
+ * Used to contain floats: h5bp.com/q
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   Theses examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 800px) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (min-resolution: 144dpi) {
+    /* Style adjustments for viewports that meet the condition */
+}
