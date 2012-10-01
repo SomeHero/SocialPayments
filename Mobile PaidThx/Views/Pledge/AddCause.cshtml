@@ -21,7 +21,13 @@
             foreach (var nonprofit in alphaGroup.Value)
             {
             <li class="contact">
-            <a class="organization-pledge" recipient-id="@nonprofit.Id" organization-name="@nonprofit.Name">
+                @using (Html.BeginForm())
+                   {
+                       @Html.Hidden("recipientId", @nonprofit.Id)
+                       @Html.Hidden("recipientName", @nonprofit.Name)
+                       @Html.Hidden("recipientImageUrl", "");
+                       @Html.Hidden("recipientType", "NonProfit");
+            <a class="organization-pledge">
                 <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
                     @if (nonprofit.HasInfo)
                     {
@@ -33,6 +39,7 @@
                             <h4 class="subheading">"@nonprofit.Slogan"</h4>
                         }
             </a>
+                }
             </li>
             }
         }
@@ -40,7 +47,7 @@
         </div>
 <script language="javascript">
     //wait to do event binding until the page is being initialized
-    $(document).delegate('[data-role="page"]', 'pageinit', function () {
+    $(document).ready(function () {
 
         $(this).find("img.lazy").lazyload();
 
@@ -49,25 +56,7 @@
 
         $(".organization-pledge").unbind("click").bind("click", function () {
 
-            var recipientId = $(this).attr('recipient-id');
-            var recipientName = $(this).attr('organization-name');
-            var recipientImageUrl = $(this).attr('organization-image-url');
-            var recipientType = $(this).attr('recipient-type');
-
-            var model = {
-                RecipientId: recipientId,
-                RecipientName: recipientName,
-                RecipientType: recipientType,
-                RecipientImageUrl: recipientImageUrl
-            };
-
-            $.mobile.changePage(getBaseURL() + 'Pledge/AddCause', {
-                data: model,
-                dataUrl: getBaseURL() + 'Pledge/Index',
-                reverse: true,
-                transition: 'slide',
-                type: 'post'
-            });
+            $(this).parents("form:first").submit();
 
         });
 
