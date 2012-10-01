@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Feedback";
+    ViewBag.PageID = "feedback-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
+  @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c" >
+        <h1>
+            Feedback</h1>
+       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+    </div>
+    <div data-role="content">
+
+    </div>
+</div>

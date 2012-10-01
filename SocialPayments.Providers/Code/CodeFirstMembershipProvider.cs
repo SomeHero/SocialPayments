@@ -100,7 +100,7 @@ namespace CodeFirstMembershipDemoSharp.Code
                                                           RoutingNumber = securityService.Encrypt(routingNumber)
                                                       }
                                                   },
-                                                  UserStatus =  UserStatus.Pending,
+                                                  UserStatus =  UserStatus.Active,
                                                   LastLoggedIn = System.DateTime.Now,
                                                   Limit = 0
                         };
@@ -571,6 +571,8 @@ namespace CodeFirstMembershipDemoSharp.Code
                 public override bool ValidateUser(string username, string password)
                 {
                     User user;
+                    bool isLockedOut = false;
+                    string securityQuestion = "";
                     var isValid = userService.ValidateUser(username, password, out user);
 
                     return isValid;

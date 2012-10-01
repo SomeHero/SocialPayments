@@ -1,0 +1,86 @@
+﻿@model Mobile_PaidThx.Models.SetupACHAccountModel
+
+@{
+    ViewBag.Title = "Link Bank Account";
+    ViewBag.PageID = "setup-ach-account-page";
+}
+
+
+<script src="@Url.Content("~/Scripts/setupACHAccount.js")" type="text/javascript"></script>
+<div data-role="page" id="@ViewBag.PageID" class="modally" @TempData["DataUrl"]>
+     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Enable Payments</h1>
+    </div>
+    <div data-role="content">
+    <div class="top-panel">
+            @if (Model.Payment != null)
+            {
+                <text> <p>You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> waiting for you. To receive this and future payments, please add
+                your preferred bank below.</p>
+                </text>
+            }
+            else
+            {
+                <text> <p>Link a new bank account by entering a routing number and account number below.</p>
+                </text>
+            }
+        </div>
+    <div class="pad">
+        
+        <div id="setup-ach-account-form">
+            @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
+            {
+                @Html.ValidationSummary()
+
+                <fieldset>
+                    <div class="editor-field">
+                        <span class="form-holder"> @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })</span>
+                    </div>
+                    <div class="editor-field">
+                       <span class="form-holder">  @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" }, { "pattern", "[0-9]*" } })</span>
+                    </div>
+                    <div class="editor-field">
+                       <span class="form-holder">  @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required accountformat" }, { "pattern", "[0-9]*" } })</span>
+                    </div>
+                    <div class="editor-field">
+                       <span class="form-holder">  @Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" }, { "pattern", "[0-9]*" } })</span>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <div data-role="controlgroup" data-type="horizontal">
+                            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
+                            <label for="radio-choice-1">
+                                Checking</label>
+                            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
+                            <label for="radio-choice-2">
+                                Savings</label>
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px">
+                        <button type="submit" id="button-submit-ach" class="btn-jq" data-theme="f" data-icon="check"
+                            data-iconpos="right">
+                            Add Bank Account</button>
+                    </p>
+                    
+                </fieldset>
+                <p>
+                        <a href="@Url.Content("~/Register/SkipACHSetup")">Remind Me Later</a>
+                    </p>
+            }
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+        var getBaseURL = function () {
+            return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+        }
+
+$(document).on('pageshow', '#@ViewBag.PageID', function () {
+
+if (isAndroid){
+//do something if android
+}
+
+});
+    </script>
+</div>

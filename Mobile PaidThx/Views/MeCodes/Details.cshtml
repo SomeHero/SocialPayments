@@ -1,0 +1,31 @@
+﻿@model Mobile_PaidThx.Models.MeCodesModels.DetailsMeCodeModel
+@{
+    ViewBag.Title = "ME Code Details";
+    ViewBag.PageID = "mecode-details-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+           ME Code Details</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         
+            @Html.ValidationSummary()
+            <p>
+                You have completed setup of the pay point and can now receive funds to this MeCode.  You can remove this pay point from your account by clicking
+                "Remove this PayPoint".  However, you will no longer be able to receive funds sent to this MeCode until you re-link this pay point to your account.
+            </p>
+            <p>
+            @using (Html.BeginForm("Delete", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            {
+                <input type="hidden" name="PayPointId" value="@Model.MeCode.Id" />
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove ME Code</button>
+            }
+            </p>
+        </div>
+    </div>
+</div>

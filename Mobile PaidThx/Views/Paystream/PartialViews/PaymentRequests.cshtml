@@ -1,0 +1,181 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+<div id="main-body">
+    <input style="width: 99%;" type="text" id="txtSearchPaystreamPayments" name="txtSearchPaystream" placeholder="Search Paystream" />
+    @{
+        int i = 1;
+        String prevHeader = "";
+        int size = Model.RequestReceipts.Count();
+            //check string
+    }
+    <ul id="transactionsListRequests" data-role="listview" class="transactions">
+        @foreach (var transaction in Model.RequestReceipts)
+        {
+            String header = Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.FormatDate(transaction.TransactionDate);
+            if (!header.Equals(prevHeader))
+            {
+
+                prevHeader = header;
+            <div class="paystream-header">
+                @header
+            </div>
+            }
+            <li><a onclick="openOffersDialog('@transaction.Id');">
+                <span class="trans-type">
+                    <text>
+                   <img width="50" height="50" class="rounded" src="@Url.Content("~/Content/images/avatar.png")" alt="Image" />
+         </text>
+                </span>
+                <div class="trans-title">
+                    @switch (transaction.Direction)
+                    {
+                        case "In":
+                        <text> <strong>@Html.FormatUri(transaction.SenderUri)</strong>
+                        </text>
+                                  break;
+                        case "Out":
+                        <text> <strong>@Html.FormatUri(transaction.RecipientUri)</strong>
+                        </text>
+                                  break;
+                    }
+                    @switch (transaction.MessageType)
+                    {
+                        case "Payment":
+                            switch (transaction.Direction)
+                            {
+                                case "In":
+                        <div class="title-pay-in">
+                            <text>You received money</text>
+                        </div>
+                                    break;
+
+                                case "Out":
+                        <div class="title-pay-out">
+                            <text>You sent money</text>
+                        </div>
+                                    break;
+                            }
+                            break;
+
+
+                        case "PaymentRequest":
+                            switch (transaction.Direction)
+                            {
+                                case "In":
+                        <div class="title-request-in">
+                            <text>You received a request</text>
+                        </div>
+                                    break;
+
+                                case "Out":
+                        <div class="title-request-out">
+                            <text>You sent a request</text>
+                        </div>
+                                    break;
+                            }
+                            break;
+
+                    }
+                    <div class="trans-comment">
+                        <text>"@transaction.Comments"</text>
+                    </div>
+                </div>
+                <span class="trans-amount">
+                    <div class="gray-above">@Mobile_PaidThx.HtmlHelpers.PaystreamHelperExtensions.formatTime(transaction.TransactionDate)</div>
+                    @switch (transaction.MessageType)
+                    {
+                        case "Payment":
+                            switch (transaction.Direction)
+                            {
+                                case "In":
+                        <div class="paystream-pay-in">
+                            <text>+@string.Format("{0:C}", transaction.Amount)</text>
+                        </div>
+                              break;
+
+                                case "Out":
+                        <div class="paystream-pay-out">
+                            <text>-@string.Format("{0:C}", transaction.Amount)</text>
+                        </div>
+                              break;
+                            }
+                            break;
+                        case "PaymentRequest":
+                            switch (transaction.Direction)
+                            {
+                                case "In":
+                        <div class="paystream-request-in">
+                            <text>+@string.Format("{0:C}", transaction.Amount)</text>
+                        </div>
+                              break;
+
+                                case "Out":
+                        <div class="paystream-request-out">
+                            <text>-@string.Format("{0:C}", transaction.Amount)</text>
+                        </div>
+                              break;
+                            }
+                            break;
+                    }
+                    <div class="gray-out">
+                        <text>@transaction.TransactionStatus</text>
+                    </div>
+                </span></a></li>
+ 
+                    i += 1;
+
+        }
+    </ul>
+    @{
+        if (size < 1)
+        {
+        <p id="noResults" style="font-size: medium; display: block">
+            No elements in paystream.</p>
+        }
+    }
+    <p id="resultsFilteredRequests" style="display: none">
+        You have filtered all of payment requests in your Paystream.</p>
+</div>
+<div id="overlay" class="overlay">
+</div>
+<div id="popup" class="paystream-dialog">
+    <a onclick="closeOffersDialog('popup');" class="paystream-dialog-closebtn"></a>
+    <div id="paysteamdialog-title" class="paystream-dialog-title-bg">
+        TITLE</div>
+    <div id="content" class="paystream-dialog-inner-display">
+        <div id="wrapper" style="display: block; height: 120px">
+            <div id="user1pic" class="paystream-user">
+                <img src="http://images.paidthx.com/assets/noavatar.png" alt="user" />
+            </div>
+            <div id="user2pic" class="paystream-user-next">
+                <img src="http://images.paidthx.com/assets/noavatar.png" alt="user2pic" /></div>
+            <div id="user1" style="font-size: large; font-weight: bold; padding-top: 10px">
+                User1</div>
+            <div id="status" class="paystream-users-status">
+                sent 10.00 to
+            </div>
+            <div id="user2" style="font-size: large; color: #32A113; font-weight: bold; padding-top: 20px;
+                text-align: right">
+                User2</div>
+        </div>
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula
+        eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient
+        montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
+        pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla
+        vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+        venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
+        Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean
+        leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante,
+        dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius
+        laoreet. Quisque rutrum.<br />
+        <div style="text-align: right; font-size: medium; font-style: italic; color: #B3B3B3;
+            padding-bottom: 15px">
+            on July 11, 2012 at 2:11:14PM</div>
+    </div>
+    <div class="paystream-subbar">
+        CURRENT STATUS</div>
+    <div style="text-align: center; margin: 15px; border-style: solid; border-color: #A3A3A3;
+        border-width: 1px; color: #B56B16; font-weight: bold; padding: 15px">
+        Processing</div>
+    <div class="paystream-subbar">
+        WHAT NEXT?</div>
+</div>

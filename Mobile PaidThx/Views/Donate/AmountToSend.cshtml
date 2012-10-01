@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "AmountToSendView";
+}
+<div data-role="page" id="donate-amount-to-send-page" class="modally" data-dom-cache="true" data-add-back-btn="true"  @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            How Much?</h1>
+    </div>
+
+    <div data-role="content">
+    <div class="pad">
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    {
+            
+            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="btn-jq go-button" data-theme="f">
+                Go
+            </button></span>
+            <div style="clear:both;"></div>
+        <br />
+        <div class="quicksend-title">
+            QUICK SEND AMOUNTS</div>
+        <div class="quicksend">
+            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="1">
+                $1</button>
+            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="5">
+                $5</button>
+            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="10">
+                $10</button>
+            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="20">
+                $20</button>
+        </div>
+     
+    }
+    </div>
+    </div>
+     <script type="text/javascript">
+         //wait to do event binding until the page is being initialized
+         $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+             var currentAmount = "0.00";
+
+             $(this).delegate('#customAmount', 'keydown', function () {
+                 if (event.shiftKey) {
+                     event.preventDefault();
+                     return;
+                 }
+                 if (event.keyCode == 46 || event.keyCode == 8) {
+                     currentAmount = currentAmount.substring(0, currentAmount.length - 1);
+
+                     currentAmount = currentAmount.replace('.', '');
+                     currentAmount = currentAmount.replace(',', '');
+
+                     if (currentAmount.length < 3)
+                         currentAmount = '0' + currentAmount;
+
+                     //number before the decimal point
+                     num = currentAmount.substring(0, currentAmount.length - 2);
+                     //number after the decimal point
+                     dec = currentAmount.substring(currentAmount.length - 2);
+
+                     //connect both parts while comma-ing the first half
+                     currentAmount = num + "." + dec;
+
+                     $(this).val(currentAmount);
+                     event.preventDefault();
+
+                     return;
+                 }
+                 else {
+                     if (event.keyCode < 95) {
+                         if (event.keyCode < 48 || event.keyCode > 57) {
+                             event.preventDefault();
+                             return;
+                         }
+                     }
+                     else {
+                         if (event.keyCode < 96 || event.keyCode > 105) {
+                             event.preventDefault();
+                             return;
+                         }
+                     }
+                 }
+                 currentAmount = currentAmount + String.fromCharCode(event.keyCode);
+
+                 if (currentAmount.charAt(0) == '0')
+                     currentAmount = currentAmount.slice(1);
+
+                 currentAmount = currentAmount.replace('.', '');
+                 currentAmount = currentAmount.replace(',', '');
+
+                 //number before the decimal point
+                 num = currentAmount.substring(0, currentAmount.length - 2);
+                 //number after the decimal point
+                 dec = currentAmount.substring(currentAmount.length - 2);
+
+                 //connect both parts while comma-ing the first half
+                 currentAmount = num + "." + dec;
+
+                 $(this).val(currentAmount);
+                 event.preventDefault();
+             });
+
+             $('.quickaddbtn-style').unbind("click").bind("click", function () {
+                 var amountToSend = $(this).attr('data-amount');
+
+                 var model = {
+                     Amount: amountToSend
+                 };
+
+                 $.mobile.changePage(getBaseURL() + 'Donate/AmountToSend', {
+                     data: model,
+                     dataUrl: getBaseURL() + 'Donate/Index',
+                     reverse: true,
+                     transition: 'slide',
+                     type: 'post'
+                 });
+             });
+         });
+    </script>
+</div>

@@ -18,96 +18,10 @@ namespace SocialPayments.RestServices.Internal
     public class WebApiApplication : System.Web.HttpApplication
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapHttpRoute(
-                name: "CancelPayment",
-                routeTemplate: "api/paystreammessages/{id}/cancel_payment",
-                defaults: new { controller = "PaystreamMessages", action = "CancelPayment" }
-            );
-            routes.MapHttpRoute(
-                name: "RefundPayment",
-                routeTemplate: "api/paystreammessages/{id}/refund_payment",
-                defaults: new { controller = "PaystreamMessages", action = "RefundPayment" }
-            );
-            routes.MapHttpRoute(
-                name: "AcceptPaymentRequest",
-                routeTemplate: "api/paystreammessages/{id}/accept_request",
-                defaults: new { controller = "PaystreamMessages", action = "AcceptPaymentRequest" }
-            );
-            routes.MapHttpRoute(
-                name: "RejectPaymentRequest",
-                routeTemplate: "api/paystreammessages/{id}/accept_request",
-                defaults: new { controller = "PaystreamMessages", action = "RejectPaymentRequest" }
-            );
-            routes.MapHttpRoute(
-                name: "IgnorePaymentRequest",
-                routeTemplate: "api/paystreammessages/{id}/ignore_request",
-                defaults: new { controller = "PaystreamMessages", action = "IgnorePaymentRequest" }
-            );
-
-            routes.MapHttpRoute(
-                name: "SetupSecurityPin",
-                routeTemplate: "api/users/{id}/setup_securitypin",
-                defaults: new { controller = "Users", action = "SetupSecurityPin" }
-            );
-
-            routes.MapHttpRoute(
-            name: "ChangeSecurityPin",
-            routeTemplate: "api/users/{id}/change_securitypin",
-            defaults: new { controller = "Users", action = "ChangeSecurityPin" }
-            );
-
-            routes.MapHttpRoute(
-                name: "SignInWithFacebook",
-                routeTemplate: "api/users/signin_withfacebook",
-                defaults: new { controller = "Users", action = "SignInWithFacebook" }
-            );
-
-            routes.MapHttpRoute(
-                name: "ValidateUser",
-                routeTemplate: "api/users/validate_user",
-                defaults: new { controller = "Users", action = "ValidateUser" }
-            );
-
-            routes.MapHttpRoute(
-                name: "UserMECodes",
-                routeTemplate: "api/users/{userId}/mecodes/{id}",
-                defaults: new { controller = "UserMeCodes", id = RouteParameter.Optional }
-            );
-
-
-            routes.MapHttpRoute(
-                name: "UserPaymentAccounts",
-                routeTemplate: "api/users/{userId}/PaymentAccounts/{id}",
-                defaults: new { controller = "UserPaymentAccounts", id = RouteParameter.Optional }
-            );
-
-            routes.MapHttpRoute(
-                name: "UserPayStreamMessages",
-                routeTemplate: "api/users/{userId}/PayStreamMessages/{id}",
-                defaults: new { controller = "UserPayStreamMessages", id = RouteParameter.Optional }
-            );
-
-            routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
         }
 
         protected void Application_Start()
@@ -127,13 +41,11 @@ namespace SocialPayments.RestServices.Internal
 
                 throw ex;
             }
-            
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
-
-            BundleTable.Bundles.RegisterTemplateBundles();
+            WebApiConfig.Register(config);
         }
     }
 }

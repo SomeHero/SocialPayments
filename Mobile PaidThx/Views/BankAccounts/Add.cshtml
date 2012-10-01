@@ -1,0 +1,66 @@
+﻿@model Mobile_PaidThx.Models.BankAccountModels.AddPaymentAccountModel
+@{
+    ViewBag.Title = "Add Payment Account";
+    ViewBag.PageID = "bankaccounts-add-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true">
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Add Bank Account</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         @using (Html.BeginForm("Add", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
+         {
+             @Html.ValidationSummary()
+            <fieldset>
+                   <div class="editor-field">
+                        @Html.TextBoxFor(m => m.Nickname, new Dictionary<string, object>() { { "placeholder", "Nickname" }, { "class", "required" } })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required" } })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required" } })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" } })
+                    </div>
+                    <div data-role="fieldcontain">
+                        <div data-role="controlgroup" data-type="horizontal">
+                            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
+                            <label for="radio-choice-1">
+                                Checking</label>
+                            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
+                            <label for="radio-choice-2">
+                                Savings</label>
+                        </div>
+                    </div>
+                    <p>
+                <button type="submit" id="btn-add-account" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+                   Add Bank Account</button></p>
+                    
+                </fieldset>
+
+         }
+        </div>
+    </div>
+            <script type="text/javascript">
+                $(document).delegate('#bankaccounts-add-page', 'pageinit', function () {
+                    $('#txtNameOnAccount').focus();
+                });
+                //wait to do event binding until the page is being initialized
+                $(document).on("pageshow", "#bankaccounts-add-page", function () {
+                    $.validator.addMethod("accountmatch", function (value) {
+                        return value == $("#AccountNumber").val();
+                    }, "Confirm Account Number must match Account Number");
+
+                    $("#frmSubmit").validate();
+                });
+    </script>
+</div>

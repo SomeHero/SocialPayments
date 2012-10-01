@@ -1,0 +1,47 @@
+﻿@model Mobile_PaidThx.Models.PersonalizeModel
+@{
+    ViewBag.Title = "Personalize";
+}
+
+<div data-role="page" id="personalize-page" class="modally" @TempData["DataUrl"]>
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+	    <h1>Personalize</h1>
+    </div>
+    <div data-role="content">   
+    <div class="top-panel">
+   
+    <p>Thx for giving PaidThx a try! Let's start by setting up your account. Please provide your name below.  PaidThx works best if your use your real name.</p></div>
+    <div class="pad">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    
+        @using (Html.BeginForm("Personalize", "Register", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "class", "validateMe" } }))
+        {
+            <div>
+                <fieldset>
+
+                    <div class="editor-label">
+                        <label for="FirstName">First Name</label>
+                    </div>
+                    <div class="editor-field">
+                        <span class="form-holder"> @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object>() { { "placeholder", "First Name" }, { "class", "required" } })</span>
+                        @Html.ValidationMessageFor(m => m.FirstName)
+                    </div>
+
+                    <div class="editor-label">
+                        <label for="LastName">Last Name</label>
+                    </div>
+                    <div class="editor-field">
+                       <span class="form-holder"> @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object>() { { "placeholder", "Last Name" }, { "class", "required" } })</span>
+                        @Html.ValidationMessageFor(m => m.LastName)
+                    </div>
+
+                    <p>
+                         <button type="submit" id="register" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">
+                Save & Continue</button>
+                    </p>
+                </fieldset>
+            </div>
+        }
+    </div>
+    </div>
+</div>

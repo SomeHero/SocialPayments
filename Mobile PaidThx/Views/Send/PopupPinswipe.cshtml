@@ -1,0 +1,52 @@
+﻿@model Mobile_PaidThx.Models.SendModels.PinSwipModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "send-popup-pinswipe-page";
+}
+<div data-role="page" id="@ViewBag.PageID" data-add-back-btn="true" @TempData["DataUrl"]>
+ @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <a href="Index" data-transition="slideup" data-direction="reverse">Cancel</a>
+        <h1>
+            Confirm</h1>
+    </div>
+  
+    <div data-role="content">
+     <div class="top-panel" id="swipe-to-confirm">
+        @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+        @if(!String.IsNullOrEmpty(Model.RecipientName))
+        {
+            <text>Please swipe your security pin to confirm your payment of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName.</text>
+        } 
+        else
+        {
+            <text>Please swipe your security pin to confirm your payment of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
+        }     
+        </div>
+    <div class="pad">
+        @Html.ValidationSummary()
+       
+        
+        @using (Html.BeginForm("PopupPinswipe", "Send", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div>
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+        </div>
+        }
+    </div>
+    </div>
+    
+  <div id="resizerHack">
+        
+        
+        </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        pinswipeResizeController.resizePINs();
+    });
+</script>
+</div>

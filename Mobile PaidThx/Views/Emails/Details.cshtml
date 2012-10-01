@@ -1,0 +1,55 @@
+﻿@model Mobile_PaidThx.Models.EmailsModels.DetailsEmailModel
+@{
+    ViewBag.Title = "Email Details";
+    ViewBag.PageID = "email-details-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>Email Details</h1>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div class="pad">
+        <ul data-role="listview" data-inset="true">
+            <li class="settings email static">
+                   <h2>@Model.EmailAddress.Uri
+                   </h2>
+                   <h4>
+                   @if (Model.EmailAddress.Verified)
+                   {
+                    <text>Verified</text>
+                   }
+                   else
+                   {
+                        <text>Not Verified</text>
+                   }
+                    </h4>
+            </li>
+            </ul>
+            @Html.ValidationSummary()
+             @if (!Model.EmailAddress.Verified)
+                   {
+                    <text>
+                    <div class="alert">
+                <p>To enable sending payment from this account, please verify it.
+                <a href="#">
+                <button type="button" id="btn-verify-account" data-theme="b" data-icon="refresh" data-iconpos="right" class="btn-jq">
+                  Resend Verify Email</button>
+
+                </a>
+                </p>
+                </div></text>
+                   }
+ 
+            <p>
+            @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            {
+                <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove Email</button>
+            }
+            </p>
+            </div>
+    </div>
+</div>

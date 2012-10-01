@@ -1,0 +1,177 @@
+﻿
+    <script id="detailTemplate" type="text/html">
+ <a class="paystream-dialog-closebtn closePaystreamItem"></a>   
+ <div class="paystream-dialog-title-bg">
+Details  
+    </div>   
+
+<div class="paystreamDetail  {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if direction == "Out"}}out{{/if}} {{if direction == "In"}}in{{/if}}">
+<div class="whathappened">
+<h2 class="psd-type">
+    {{if messageType == "Payment" && direction == "In"}}
+    Payment Received
+    {{/if}}
+    {{if messageType == "Payment" && direction == "Out"}}
+
+    Payment Sent
+    
+    {{/if}}
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+
+    Request Received{{/if}}
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+    Request Sent{{/if}}  </h2>
+<div class="whathappened-details">
+
+
+    {{if messageType == "Payment" && direction == "In"}}
+
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <p class="whathappened-content">
+    <span class="lbl-sender">${senderName}</span><br> 
+sent you <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
+<span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
+</p>
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
+    {{/if}}
+
+    {{if messageType == "Payment" && direction == "Out"}}
+    
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <p class="whathappened-content">
+    <span class="lbl-sender">You</span> sent <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
+to <span class="lbl-recipient">${recipientName}</span>
+<br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
+</p>
+    <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
+    {{/if}}
+
+    {{if messageType == "PaymentRequest" && direction == "In"}}
+
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <p class="whathappened-content">
+ <span class="lbl-sender">${senderName}</span><br> 
+requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
+<span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
+</p>
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
+{{/if}}
+
+    {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <p class="whathappened-content">
+   <span class="lbl-sender">You</span> requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
+from <span class="lbl-recipient">${recipientName}</span>
+<br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
+</p>
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
+{{/if}} 
+
+    {{if messageType == "Donation" && direction == "Out"}}
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender">
+    <p class="whathappened-content">
+   <span class="lbl-sender">You</span> donated <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
+to <span class="lbl-recipient">${recipientName}</span>
+<br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
+</p>
+<img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
+{{/if}} 
+
+
+<div class="clear"></div>
+</div>
+</div>
+
+ {{if comments != "No comments" && comments != ""}}                                               
+ <span class="bubble"><text>"${comments}"</text></span></text>
+ {{/if}}
+
+
+<div class="t-panel">
+<h2 class="t-panel-heading">Status</h2>
+<div class="t-panel-details">
+<span class="lbl-status">${messageStatus}</span> - need status description returned
+</div>
+</div>
+
+{{if messageType == "Payment"}}
+<div class="t-panel">
+<h2 class="t-panel-heading">Delivery</h2>
+<div class="t-panel-details">
+<span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
+{{if messageType == "Payment"}}
+<hr class="divider" />
+<div class="d-left">
+<h2 class="d-head express">Express It</h2>
+<h4 class="d-subhead">Est. Arrival: 06/10/12</h4>
+</div>
+<input type="checkbox" name="express" class="express-box" value="no" />
+<div class="clear"></div>
+{{/if}}
+</div>
+</div>
+{{/if}} 
+
+
+{{if messageType == "Payment"}}
+ {{if isRemindable }}
+     <button type="button" class="btn-jq send-reminder send-reminder-payment" messageId="${Id}" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+        Send Reminder
+     </button>
+    {{/if}}
+{{/if}}
+    {{if messageType == "PaymentRequest"}}
+ {{if isRemindable }}
+     <button type="button" class="btn-jq send-reminder send-reminder-payment-request" messageId="${Id}" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+        Send Reminder
+     </button>
+    {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
+    {{if isAcceptable }}
+     <button type="button" class="btn-jq accept accept-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+        Accept & Pay
+     </button>
+    {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
+    {{if isRejectable}}
+     <button type="button" class="btn-jq reject reject-payment-request" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+        Reject Request
+     </button>
+    {{/if}}
+{{/if}}
+{{if messageType == "Payment"}}
+{{if isCancellable }}
+     <button type="button" class="btn-jq cancel cancel-payment" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+        Cancel
+     </button>
+    {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
+    {{if isCancellable }}
+     <button type="button" class="btn-jq cancel cancel-payment-request" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+        Cancel
+     </button>
+    {{/if}}
+{{/if}}
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+    </script>

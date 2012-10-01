@@ -12,6 +12,8 @@ using SocialPayments.DataLayer.Interfaces;
 using System.Net;
 using System.IO;
 using System.Web;
+using SocialPayments.DomainServices.Interfaces;
+using MoonAPNS;
 
 
 namespace SocialPayments.Services.MessageProcessors
@@ -26,8 +28,9 @@ namespace SocialPayments.Services.MessageProcessors
         private TransactionBatchService _transactionBatchService;
         private ValidationService _validationService;
         private UserService _userService;
-        private SMSService _smsService;
-        private EmailService _emailService;
+        private ISMSService _smsService;
+        private IEmailService _emailService;
+        private IAmazonNotificationService _amazonNotificationService;
         private MessageServices _messageService;
 
         private string _recipientSMSMessage = "You received a PdThx request for {0:C} from {1}.";
@@ -36,6 +39,7 @@ namespace SocialPayments.Services.MessageProcessors
         private string _senderSMSMessage = "Your PdThx request for {0:C} to {1} was sent.";
         private string _senderConfirmationEmailSubject = "Confirmation of your PaidThx request to {0}.";
         private string _senderConfirmationEmailBody = "Your PaidThx request in the amount of {0:C} was delivered to {1}.";
+        private string _recipientRequestNotification = "{0} requested {1:C} from you using PaidThx!";
         
         private string _fromAddress;
 
@@ -49,7 +53,7 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
@@ -66,10 +70,28 @@ namespace SocialPayments.Services.MessageProcessors
             _smsService = new SMSService(_ctx);
             _emailService = new EmailService(_ctx);
             _userService = new UserService(_ctx);
-            _messageService = new MessageServices(_ctx);
+            _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
 
             _fromAddress = "jrhodes2705@gmail.com";
             
+        }
+        public SubmittedRequestMessageProcessor(IDbContext context, IEmailService emailService, ISMSService smsService)
+        {
+            _ctx = context;
+            _logger = LogManager.GetCurrentClassLogger();
+
+            _formattingService = new FormattingServices();
+            _transactionBatchService = new TransactionBatchService(_ctx, _logger);
+            _validationService = new ValidationService(_logger);
+            _smsService = smsService;
+            _emailService = emailService;
+            _userService = new UserService(_ctx);
+            _amazonNotificationService = new AmazonNotificationService();
+            _messageService = new MessageServices(_ctx, _amazonNotificationService);
+
+            _fromAddress = "jrhodes2705@gmail.com";
+
         }
         public bool Process(Message message)
         {
@@ -128,7 +150,78 @@ namespace SocialPayments.Services.MessageProcessors
                 //if the recipient has a device token; send a push notification
                 if (!String.IsNullOrEmpty(recipient.DeviceToken))
                 {
-                    _logger.Log(LogLevel.Info, String.Format("Send Push Notification to Recipient"));
+                    if (!String.IsNullOrEmpty(recipient.RegistrationId))
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Sending Android Push Notification to Recipient"));
+                        //Fix this.
+                        try
+                        {
+                            string auth_token = AndroidNotificationService.getToken("android.paidthx@gmail.com", "pdthx123");
+                            AndroidNotificationService.sendAndroidPushNotification(
+                                auth_token, recipient.UserId.ToString(), recipient.RegistrationId, senderName, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Info, String.Format("Exception Pushing Android Notification. {0}", ex.Message));
+                        }
+                    }
+                    else
+                    {
+
+                        _logger.Log(LogLevel.Info, String.Format("Sending iOS Push Notification to Recipient"));
+
+
+                        // We need to know the number of pending requests that the user must take action on for the application badge #
+                        // The badge number is the number of PaymentRequests in the Messages database with the Status of (1 - Pending)
+                        //      If we are processing a payment, we simply add 1 to the number in this list. This will allow the user to
+                        //      Be notified of money received, but it will not stick on the application until the users looks at it. Simplyt
+                        //      Opening the application is sufficient
+                        var numPending = _ctx.Messages.Where(p => p.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest) && p.StatusValue.Equals((int)Domain.PaystreamMessageStatus.Processing));
+
+                        _logger.Log(LogLevel.Info, String.Format("iOS Push Notification Num Pending: {0}", numPending.Count()));
+
+                        NotificationPayload payload = null;
+                        String notification;
+
+                        // Send a mobile push notification
+                        if (message.MessageType == Domain.MessageType.PaymentRequest)
+                        {
+                            notification = String.Format(_recipientRequestNotification, senderName, message.Amount);
+                            payload = new NotificationPayload(recipient.DeviceToken, notification, numPending.Count());
+                            payload.AddCustom("nType", "recPRQ");
+                        }
+
+                        /*
+                         *  Payment Notification Types:
+                         *      Payment Request [recPRQ]
+                         *          - Recipient receives notification that takes them to the
+                         *                 paystream detail view about that payment request
+                         *      Payment Confirmation [recPCNF]
+                         *          - Recipient receices notification that takes them to the paysteam detail view about the payment request
+                         */
+
+                        payload.AddCustom("tID", message.Id);
+                        var notificationList = new List<NotificationPayload>() { payload };
+
+                        List<string> result;
+
+                        try
+                        {
+                            var push = new PushNotification(true, @"C:\APNS\DevKey\aps_developer_identity.p12", "KKreap1566");
+                            result = push.SendToApple(notificationList); // You are done!
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", ex.Message));
+                            var exception = ex.InnerException;
+
+                            while (exception != null)
+                            {
+                                _logger.Log(LogLevel.Fatal, String.Format("Exception sending iOS push notification. {0}", exception.Message));
+
+                            }
+                        }
+                    }
 
                 }
                 //if the recipient has a linked facebook account; send a facebook message
@@ -160,12 +253,7 @@ namespace SocialPayments.Services.MessageProcessors
                     _emailService.SendEmail(message.ApiKey, _fromAddress, message.RecipientUri, emailSubject, emailBody);
 
                 }
-                //if recipient Uri Type is facebook count, send a facebook message
-                if (recipientType == URIType.FacebookAccount)
-                {
-                    _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
-
-                }
+                
             }
 
             //if sender has mobile #, send confirmation email to sender
@@ -200,13 +288,42 @@ namespace SocialPayments.Services.MessageProcessors
             if (sender.FacebookUser != null)
             {
                 _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
+            }
+            if (recipientType == URIType.FacebookAccount)
+            {
+                try
+                {
+                    var client = new Facebook.FacebookClient(sender.FacebookUser.OAuthToken);
+                    var args = new Dictionary<string, object>();
+
+                    // All this next line is doing is ending it with a period if it does not end in a period or !
+                    // I'm sure this can be done better, but for now it looks good.
+                    var formattedComments = message.Comments.Trim();
+
+                    if (!(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('.')) && !(message.Comments.Length > 0 && message.Comments[message.Comments.Length - 1].Equals('!')))
+                        formattedComments = String.Format("{0}.", formattedComments);
+
+                    args["message"] = String.Format("I requested ${0} from you using PaidThx. Why, you ask? {1} Click on this link to send me it! {2}", message.Amount, formattedComments, message.shortUrl);
+                    args["link"] = message.shortUrl;
+
+                    args["name"] = "PaidThx";
+                    args["caption"] = "The FREE Social Payment Network";
+                    args["picture"] = "http://www.crunchbase.com/assets/images/resized/0019/7057/197057v2-max-250x250.png";
+                    args["description"] = "PaidThx lets you send and receive money whenever you want, wherever you want. Whether you owe a friend a few bucks or want to donate to your favorite cause, it should be simple and not cost you a penny.";
+                    
+                    client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, ex.Message);
+                }
 
             }
 
             //Update Payment Status
             _logger.Log(LogLevel.Info, String.Format("Updating Payment Request"));
 
-            message.MessageStatus = MessageStatus.Pending;
+            message.Status = PaystreamMessageStatus.Processing;
             message.LastUpdatedDate = System.DateTime.Now;
 
             _ctx.SaveChanges();

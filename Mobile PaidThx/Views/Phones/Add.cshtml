@@ -1,0 +1,32 @@
+﻿@model Mobile_PaidThx.Models.PhonesModels.AddPhoneModel
+@{
+    ViewBag.Title = "Add Phone";
+    ViewBag.PageID = "add-phone-paypoint-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Add Phone</h1>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+         @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                <input type="text" id="txtPhoneNumber" name="PhoneNumber" placeholder="Phone Number"
+                required /></p>
+            <p>
+              <button type="submit" id="btn-add-phone" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+                   Add Phone Number</button></p>
+         }
+        </div>
+    </div>
+        <script type="text/javascript">
+            $(document).delegate('#add-phone-paypoint-page', 'pageinit', function () {
+                $('#txtPhoneNumber').focus();
+            });
+    </script>
+</div>

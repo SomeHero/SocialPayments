@@ -1,0 +1,32 @@
+﻿@model Mobile_PaidThx.Models.PhonesModels.DetailsPhonesModels
+@{
+    ViewBag.Title = "Phone Details";
+    ViewBag.PageID = "add-email-paypoint-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Phone Details</h1>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+         
+            @Html.ValidationSummary()
+            <p>
+                You have completed setup of the pay point and can now receive funds to this Email Address.  You can remove this pay point from your account by clicking
+                "Remove this PayPoint".  However, you will no longer be able to receive funds sent to this Email Address until you re-linkd re-verify this pay point 
+                to your account.
+            </p>
+            <p>
+            @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            {
+                <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                 <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                   Remove ME Code</button>
+            }
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.PageID = "confirm-pin-swipe-send";
+}
+
+
+<div data-role="page" id="@ViewBag.PageID" class="modally" @TempData["DataUrl"]>
+     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+	    <h1>Confirm PIN</h1>
+    </div>
+     <div data-role="content">
+     <div class="top-panel">
+   
+    <p>Swipe your security pin again below to confirm.</p></div>
+     <div class="pad">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    
+    </div>
+        @using (Html.BeginForm("ConfirmPinSwipe", "Send", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
+        {
+        <div id="anchor">
+            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+         </div>
+        }
+    </div>
+</div>
+
+<div id="resizerHack">
+        
+        
+</div>
+<script type="text/javascript">
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        pinswipeResizeController.resizePINs();
+    });
+</script>

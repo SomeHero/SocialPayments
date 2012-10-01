@@ -33,7 +33,7 @@ namespace SocialPayments.RestServices.External.Controllers
                 achTransactionInformation = new TransactionModels.ACHTransactionInformation() {
                     paymentChannel = transaction.PaymentChannelType.ToString(),
                     standardEntryClass = transaction.StandardEntryClass.ToString(),
-                    transactionBatchId = transaction.TransactionBatchId.ToString(),
+                    transactionBatchId = transaction.TransactionBatch.Id.ToString(),
                     transactionDate = transaction.SentDate,
                     transactionId = transaction.ACHTransactionId,
                     transactionType = transaction.Type.ToString()

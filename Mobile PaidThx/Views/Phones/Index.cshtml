@@ -1,0 +1,42 @@
+﻿@model Mobile_PaidThx.Models.PhonesModels.PhonesModel
+@{
+    ViewBag.Title = "Phone #s";
+    ViewBag.PageID = "phone-page";
+    ViewBag.Classes = "settings";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
+        @{ Html.RenderPartial("TitleBar"); }
+<div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Phone #'s</h1>
+    </div>
+    <div data-role="content">
+    <div class="pad">
+        <ul data-role="listview" data-inset="true">
+            @foreach (var payPoint in Model.PayPoints)
+            { 
+            <li class="settings phone" >
+                 <a href="@Url.Content("~/Phones/Details/" + payPoint.Id)">
+                    <h2>@payPoint.Uri</h2>
+                    <h4>@if (payPoint.Verified)
+                    {
+                        <text>Verified</text>
+                    }
+                    else
+                    {
+                        <text>Not Verified</text>
+                    }
+                    </h4>
+                </a>
+            </li>
+            }
+        </ul>
+        <ul data-role="listview" data-inset="true">
+            <li class="settings add">
+                <a href="@Url.Content("~/Phones/Add")">
+                    Add Phone Number</a>
+            </li>
+        </ul>
+    </div>
+    </div>
+</div>

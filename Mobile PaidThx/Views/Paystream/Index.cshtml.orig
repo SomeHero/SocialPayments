@@ -1,0 +1,311 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamModel
+@{
+    ViewBag.Title = "Paystream";
+    ViewBag.PageID = "paystream-index";
+    ViewBag.Classes = "full";
+}
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>Paystream</h1>
+        <a href="#"  id="search-control" class="ui-btn-right" data-role="button" data-theme="f" data-icon="search" data-iconpos="notext"></a>
+        @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+        
+    </div>
+    <div data-role="content">
+    <div class="pad">
+        <fieldset id="payment-type-group" data-role="controlgroup" class="fullwidth four-items"
+            data-type="horizontal" data-grid="c">
+            <input type="radio" name="paystream-choice" id="paystream-all" value="all" checked="checked"
+                style="width: 25%" />
+            <label for="paystream-all">
+                All</label>
+            <input type="radio" name="paystream-choice" id="paystream-sent" value="sent" />
+            <label for="paystream-sent">
+                $ Sent</label>
+            <input type="radio" name="paystream-choice" id="paystream-received" value="received" />
+            <label for="paystream-received">
+                $ Rec.</label>
+            <input type="radio" name="paystream-choice" id="paystream-other" value="other" />
+            <label for="paystream-other">
+                Other</label>
+        </fieldset>
+        <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
+           
+        </ul>
+        <ul id="pagingList" data-role="listview" style="display: none;">
+        
+<li>
+    <div id="more-results">More Results</div>
+</li>
+        </ul>
+        <ul class="hidden" id="no-results-holder">
+         <li id="no-results" class="hidden settings paystreaming">
+                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-type="new" recipient-uri="">
+                        <h2 class="heading">
+                        No Paystream Items</h2>
+                           <h4 class="subheading" style="margin-top:6px;">
+                        Start sending and requesting!
+                        </h4>
+                   </a>
+                    </li>
+                    </ul>
+    </div>
+    </div>
+<<<<<<< HEAD
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+<script id="paystreamHeader" type="text/x-jquery-tmpl">
+    <li data-role="list-divider">${groupHeading}</li>
+</script>
+<script id="paystreamItem" type="text/x-jquery-tmpl">
+    <li>
+        <a href="#" class="paystreamItem" messageId="${Id}">
+        <span class="trans-type">
+        {{if transactionImageUri}}
+            <img width="50" height="50" class="rounded" src="${transactionImageUri}" alt="Image" />
+        {{else}}
+            <img width="50" height="50" class="rounded" src="/mobile/Content/images/avatar.png" alt="Image" />
+        {{/if}}
+        </span>
+        <div class="trans-title">
+        {{if direction == "In"}}
+            <strong>${senderName}</strong>
+        {{/if}}
+        {{if direction == "Out"}}
+            <strong>${recipientName}</strong>
+        {{/if}}
+            <div class="title-pay-in">
+            {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+                ${senderName} requests money from you
+                {{else messageType == "Payment"}}
+                You received money
+                {{else messageType == "Donation"}}
+                ${senderName} made a donation
+                {{else messageType == "Pledge"}}
+                You pledged a donation
+                {{/if}}
+            {{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                Your request money
+                {{else messageType == "Payment"}}
+                You sent money
+                {{else messageType == "Donation"}}
+                You donated money
+                {{else messageType == "Pledge"}}
+                You sent a pledge to ${recipientName}
+                {{/if}}
+            {{/if}}
+            </div>
+        <div class="trans-comment">
+            <text>"${comments}"</text>
+        </div>
+        </div>
+        <span class="trans-amount">
+            <div class="gray-above">${createDate}</div>
+            <div class="paystream-pay-in">
+                $${amount.toFixed(2)}
+            </div>
+            <div class="gray-out">
+                ${messageStatus}
+            </div>
+        </span>
+        </a>
+     </li>
+</script>
+<script id="messageTemplate" type="text/html">
+        <li class="receive pending ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-a" data-theme="c">
+
+            <div class="ui-btn-inner ui-li">
+
+                <div class="ui-btn-text">
+                    <a class="closePaystreamItem ui-link-inherit" messageId="${Id}">
+
+                        <span class="trans-type">
+
+                        <img src="/Content/images/noavatar.png" alt="Picture"/>
+                        </span>
+
+                            <div class="trans-title">
+
+                            {{if direction == "In" }}
+                            <strong>${senderName}</strong>
+
+                            {{else}}
+                            <strong>${recipientName}</strong>
+
+                            {{/if}}
+                            
+
+                            {{if messageType == "Payment" && direction == "In"}}
+
+                            <div class="title-pay-in">Sent money to you</div>
+                            {{/if}}
+
+                            {{if messageType == "Payment" && direction == "Out"}}
+
+                            <div class="title-pay-out">You sent money to them</div>
+                            {{/if}}
+
+                            {{if messageType == "PaymentRequest" && direction == "In"}}
+
+                            <div class="title-request-in">Requested money from you</div>
+                            {{/if}}
+
+                            {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+                            <div class="title-request-out">You requested money from them</div>
+                            {{/if}}
+
+                            <div class="trans-comment">${comments}</div>
+
+                        </div>
+                        <span class="trans-amount">
+
+                            <div class="gray-above">${formatDate(createDate)}</div>
+
+
+                            {{if messageType == "Payment" && direction == "In"}}
+                            <div class="paystream-pay-in">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "Payment" && direction == "Out"}}
+
+                            <div class="paystream-pay-out">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "PaymentRequest" && direction == "In"}}
+
+                            <div class="paystream-request-in">${formatAmount(Amount)}</div>
+
+                            {{/if}}
+                            {{if messageType == "PaymentRequest" && direction == "Out"}}
+
+                            <div class="paystream-request-out">${formatAmount(amount)}</div>
+
+                            {{/if}}
+
+                            <div class=gray-out>${messageStatus}</div>
+
+                        </span>
+
+                    </a>
+                </div>
+
+                <span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+
+            </div>
+        </li>
+
+    </script>
+    <script id="detailTemplate" type="text/html">
+=======
+>>>>>>> upstream/development
+
+
+    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
+
+@{Html.RenderPartial("PartialViews/PS-Item");}
+@{Html.RenderPartial("PartialViews/PS-Message");}
+@{Html.RenderPartial("PartialViews/PS-Detail");}
+
+<script type="text/javascript">
+    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+
+
+        $("#@ViewBag.PageID .ui-listview-filter").hide();
+
+        $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
+            $("#@ViewBag.PageID .ui-listview-filter").toggle();
+        });
+
+        $("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
+            return text.toString().toLowerCase().indexOf(searchValue) === -1;
+        });
+
+        //cache the list-view element for later use
+        var $listview = $(this).find('[data-role="listview"]');
+
+        paystreamController.init('@Model.UserId');
+        paystreamController.searchAndDisplayPaystream('all');
+
+        $('#more-results').die('click').live('click', function () {
+            paystreamController.getAndDisplayMoreItems();
+        });
+        $('#paystream-all').die('change').live('change', function () {
+ 
+            paystreamController.searchAndDisplayPaystream('all', function () {
+
+            });
+        });
+        $('#paystream-sent').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('sent', function () {
+             
+            });
+        });
+        $('#paystream-received').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('received', function () {
+              
+            });
+        });
+        $('#paystream-other').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('requests', function () {
+              
+            });
+        });
+        $('.paystreamItem').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.displayPaystreamDetail(messageId);
+        });
+        $('.closePaystreamItem').die('click').live('click', function () {
+            paystreamController.closeDetailDialog(function() {});
+        });
+        $('.cancel-payment').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.cancelPayment(messageId);
+        });
+        $('.send-reminder-payment').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.cancel-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.cancelRequest(messageId);
+        });
+        $('.send-reminder-payment-request').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.accept-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.acceptRequest(messageId);
+        });
+        $('.reject-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.rejectRequest(messageId);
+        });
+        //delegate event binding since the search widget is added dynamically
+        //bind to the `keyup` event so we can check the value of the input after the user types
+        $(this).delegate('input[data-type="search"]', 'keyup', function () {
+
+            var searchVal = $(this).delegate('input[data-type="search"]').val();
+          
+        });
+
+    });
+    </script>
+    <div id="popup" class="paystream-dialog">
+    
+</div>
+
+<div id="overlay" class="overlay">
+</div>
+</div>
+
+@section PageScripts{
+<script src="@Url.Content("~/Scripts/paystream.js")" type="text/javascript"></script>
+
+}

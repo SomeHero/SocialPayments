@@ -8,7 +8,7 @@ namespace SocialPayments.Domain
     public enum PaymentAccountVerificationStatus
     {
         Submitted = 0,
-        Deliveried = 1,
+        Delivered = 1,
         Verified = 2,
         Expired = 3,
         Failed = 4

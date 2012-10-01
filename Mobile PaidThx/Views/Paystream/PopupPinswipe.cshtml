@@ -1,0 +1,73 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PinSwipeRequestModel
+@{
+    ViewBag.Title = "Paystream";
+    ViewBag.PageId = "paystream-index";
+}
+<div data-role="page" id="paystream-pinswipe-page" data-add-back-btn="true" data-back-btn-text="Cancel" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
+    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+        <h1>
+            Confirm - @Model.PaystreamAction</h1>
+    </div>
+  
+    <div data-role="content">
+        <div class="top-panel" id="swipe-to-confirm">
+        @if (Model.PaystreamAction == "CancelPayment")
+        {
+                <text>@String.Format("You are about to cancel your payment of {0:C} to {1}.  To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+        }
+        @if (Model.PaystreamAction == "CancelRequest")
+        {
+            <text>@String.Format("You are about to cancel your request for {0:C} from {1}.  To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+        }
+        @if (Model.PaystreamAction == "AcceptRequest")
+        {
+            <text>@String.Format("You are about to accept the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+        }
+        @if (Model.PaystreamAction == "RejectRequest")
+        {
+            <text>@String.Format("You are about to reject the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+        }
+        </div>
+    <div class="pad">
+        @Html.ValidationSummary()
+       
+        @using (Html.BeginForm("PopupPinswipe", "Paystream", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
+        {       
+            <div style="margin-top:15px">
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+        </div>
+        }
+    </div>
+      
+  <div id="resizerHack">
+  </div>
+<script type="text/javascript">
+    $("#paystream-pinswipe-page").unbind('pageshow').bind('pageshow', function () {
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function resizePIN() {
+
+            $(".hackstyle").remove();
+            var widthy = $(window).width();
+            divwidth = widthy * .93;
+
+            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
+
+        };
+
+        resizePIN();
+
+        $(window).resize(function () {
+            resizePIN();
+        });
+    });
+</script>
+</div>
+    </div>
