@@ -35,17 +35,24 @@
             </fieldset>
             </div>
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
-            </ul>
-            <ul id="pagingList" data-role="listview" style="display: none;">
-                <li>
-                    <div id="more-results">
-                        + More Results</div>
+                <li id="paystream-no-results-divider" class="paystream-no-results-item" data-role="list-divider" style="display:none;">No Results Found</li>
+                <li id="paystream-no-results" class="paystream-no-results-item" style="display: none;">
+                    <img src="@Url.Content("~/Content/images/avatar.png")" />
+                    <h2>
+                        You haven't sent or received any money.  Get started...</h2>
+
+                 </li>
+                <li class="more-results" style="display: none;">
+                        <a href="#">+ More Results</a>
                 </li>
+            </ul>
+            <ul>
+
             </ul>
         </div>
     </div>
     <script id="paystreamHeader" type="text/x-jquery-tmpl">
-        <li data-role="list-divider">${groupHeading}</li>
+        <li data-role="list-divider" class="removable">${groupHeading}</li>
     </script>
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
     @{Html.RenderPartial("PartialViews/PS-Item");}
@@ -54,7 +61,7 @@
     <script type="text/javascript">
         $(document).on('pageshow', '#@ViewBag.PageID', function () {
 
-
+            webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
             $("#@ViewBag.PageID .ui-listview-filter").hide();
 
             $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
@@ -71,7 +78,7 @@
             paystreamController.init('@Model.UserId');
             paystreamController.searchAndDisplayPaystream('all');
 
-            $('#more-results').die('click').live('click', function () {
+            $('.more-results a').die('click').live('click', function () {
                 paystreamController.getAndDisplayMoreItems();
             });
             $('#paystream-all').die('change').live('change', function () {
@@ -135,6 +142,15 @@
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
+                //check to see if there are any visible list-items that are not the `#no-results` element
+                if ($listview.children('.paystreamLi:visible').length === 0) {
+                    paystreamController.showNoResults(searchVal);
+                    paystreamController.hideMoreResults();
+                } else {
+                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                    paystreamController.hideNoResults(searchVal);
+                    paystreamController.showMoreResults();
+                }
             });
 
         });

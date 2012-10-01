@@ -254,7 +254,24 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 isRemindable = IsRemindable(message),
                 senderImageUri = (message.Sender != null ? (!String.IsNullOrEmpty(message.Sender.ImageUrl) ? message.Sender.ImageUrl : ConfigurationManager.AppSettings["DefaultAvatarImage"]) : ConfigurationManager.AppSettings["DefaultAvatarImage"]),
                 recipientImageUri = (message.Recipient != null ? (!String.IsNullOrEmpty(message.Recipient.ImageUrl) ? message.Recipient.ImageUrl : (!String.IsNullOrEmpty(message.recipientImageUri) ? message.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
-                    : (!String.IsNullOrEmpty(message.recipientImageUri) ? message.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"]))
+                    : (!String.IsNullOrEmpty(message.recipientImageUri) ? message.recipientImageUri : ConfigurationManager.AppSettings["DefaultAvatarImage"])),
+                    payment = (message.Payment != null ? new PaymentModels.PaymentResponse() {
+                        Amount = message.Payment.Amount,
+                        Comments = message.Payment.Comments,
+                        CreateDate = _formattingServices.FormatDateTimeForJSON(message.Payment.CreateDate),
+                        EstimatedDeliveryDate = _formattingServices.FormatDateTimeForJSON(message.Payment.EstimatedDeliveryDate),
+                        ExpressDeliveryDate = _formattingServices.FormatDateTimeForJSON(message.Payment.ExpressDeliveryDate),
+                        ExpressDeliveryFee = message.Payment.ExpressDeliveryFee,
+                        HoldDays = message.Payment.HoldDays,
+                        Id = message.Payment.Id.ToString(),
+                        IsExpressed = message.Payment.IsExpressed,
+                        LastUpdatedDate = _formattingServices.FormatDateTimeForJSON(message.Payment.LastUpdatedDate),
+                        PaymentStatus = message.Payment.PaymentStatus.ToString(),
+                        PaymentVerificationLevel = message.Payment.PaymentVerificationLevel.ToString(),
+                        RecipientAccountId = (message.Payment.RecipientAccount != null ? message.Payment.RecipientAccountId.ToString() : ""),
+                        ScheduledProcessingDate = _formattingServices.FormatDateTimeForJSON(message.Payment.ScheduledProcessingDate),
+                        SenderAccountId = message.Payment.SenderAccountId.ToString()
+                    } : null)
 });
         }
 

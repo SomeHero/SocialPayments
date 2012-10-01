@@ -70,17 +70,18 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             _logger.Log(LogLevel.Info, String.Format("Getting User {0}", id));
 
-            DomainServices.SecurityService securityService = new DomainServices.SecurityService();
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.UserService _userService = new DomainServices.UserService();
-            DomainServices.MessageServices messageServices = new DomainServices.MessageServices(); ;
+            var securityService = new DomainServices.SecurityService();
+            var formattingService = new DomainServices.FormattingServices();
+            var validationServices = new DomainServices.ValidationService();
+            var userService = new DomainServices.UserService();
+            var messageServices = new DomainServices.MessageServices(); ;
             UserModels.UserResponse userResponse = null;
 
             User user = null;
 
             try
             {
-                user = _userService.GetUserById(id);
+                user = userService.GetUserById(id);
             }
             catch (Exception ex)
             {
@@ -92,6 +93,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, String.Format("User {0} Not Valid", id));
             }
 
+            foreach (var payPoint in user.PayPoints)
+            {
+                if (validationServices.IsPhoneNumber(payPoint.URI))
+                    payPoint.URI = formattingService.FormatMobileNumber(payPoint.URI);
+            }
 
             double sentTotal = 0;
             double receivedTotal = 0;
@@ -108,7 +114,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             //if (receivedPayments.Count() > 0)
             //    receivedTotal = receivedPayments.Sum(m => m.Amount);
 
-            string userName = _userService.GetSenderName(user);
+            string userName = userService.GetSenderName(user);
             var numberOfPayStreamUpdates = messageServices.GetNumberOfPaystreamUpdates(user);
             var outstandingMessages = messageServices.GetOutstandingMessage(user);
             var newCount = messageServices.GetNewMessages(user);
@@ -152,7 +158,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         AttributeValue = (a.AttributeValue != null ? a.AttributeValue : "")
                     }).ToList(),
                     upperLimit = user.Limit,
-                    instantLimit = _userService.GetUserInstantLimit(user),
+                    instantLimit = userService.GetUserInstantLimit(user),
                     totalMoneyReceived = receivedTotal,
                     totalMoneySent = sentTotal,
                     preferredPaymentAccountId = user.PreferredSendAccountId.ToString(),
@@ -275,7 +281,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             if (user != null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("User {0} Not Valid", request.userName));
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Sorry, {0} belongs to an existing account.", request.userName));
             }
 
             //if(!String.IsNullOrEmpty(mobileNumber))

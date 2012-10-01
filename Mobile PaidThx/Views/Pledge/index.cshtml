@@ -59,7 +59,7 @@
  <a href="@Url.Content("~/Pledge/AddContact")" class="a-recipient on-pledge" data-prefetch data-transition="slide">
                 <div id="btn-recipient" class="btn-sends">
                     
-                            @if (!String.IsNullOrEmpty(Model.RecipientName))
+                            @if (!String.IsNullOrEmpty(Model.RecipientUri))
                             {
                          <img class="img-recipient" src="@Url.Content("~/Content/images/avatar-active.png")" alt="Recipient" />
                             }
@@ -70,9 +70,9 @@
            
                         <div class="recipient-txt overno">
                         
-                              @if (!String.IsNullOrEmpty(Model.RecipientName))
+                              @if (!String.IsNullOrEmpty(Model.RecipientUri))
                               {
-                                    <text><h2 class="heading overno">@Model.RecipientName</h2>
+                                    <text><h2 class="heading overno">@Model.RecipientUri</h2>
                                   <h4 class="subheading overno">@Model.RecipientUri</h4></text>
                               }
                               else

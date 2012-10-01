@@ -21,13 +21,13 @@ namespace Mobile_PaidThx.Controllers
             if (Session["UserId"] == null)
                 return RedirectToAction("Index", "SignIn");
 
-            Session["Action"] = paystreamAction;
-            Session["MessageId"] = messageId;
-
             var userId = Session["UserId"].ToString();
 
             var messageService = new Services.UserPayStreamMessageServices();
             var message = messageService.GetMessage(userId, messageId);
+            
+            Session["Action"] = paystreamAction;
+            Session["Message"] = message;
 
             return View(new PaystreamModels.PinSwipeRequestModel()
             {
@@ -47,7 +47,7 @@ namespace Mobile_PaidThx.Controllers
 
             var user = (UserModels.UserResponse)Session["User"];
 
-            string messageId = Session["MessageId"].ToString();
+            MessageModels.MessageResponse message = (MessageModels.MessageResponse)Session["Message"];
             string paystreamAction = Session["Action"].ToString();
 
             try
@@ -55,18 +55,17 @@ namespace Mobile_PaidThx.Controllers
                 switch (paystreamAction)
                 {
                     case "CancelPayment":
-                        paystreamMessageServices.CancelPayment("", messageId);
+                        paystreamMessageServices.CancelPayment("", message.Id.ToString(), user.userId.ToString(), model.Pincode);
                         break;
                     case "CancelRequest":
-                        paystreamMessageServices.CancelRequest("", messageId);
+                        paystreamMessageServices.CancelRequest("", message.Id.ToString(), user.userId.ToString(), model.Pincode);
                         break;
                     case "AcceptRequest":
                         paystreamMessageServices.AcceptPaymentRequest("", user.userId.ToString(), model.Pincode, user.preferredReceiveAccountId,
-                            messageId);
-
+                            message.Id.ToString());
                         break;
                     case "RejectRequest":
-                        paystreamMessageServices.RejectPaymentRequest("", messageId);
+                        paystreamMessageServices.RejectPaymentRequest("", message.Id.ToString(), user.userId.ToString(), model.Pincode);
                         break;
                     default:
                         throw new Exception(String.Format("Invalid Action {0}", paystreamAction));
@@ -77,13 +76,23 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session.Abandon();
-                    Session.Clear();
+                    Session["User"] = null;
+                    Session["UserId"] = null;
 
                     TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
 
                     return RedirectToAction("Index", "SignIn");
                 }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View(new PaystreamModels.PinSwipeRequestModel()
+                {
+                    PaystreamAction = paystreamAction,
+                    MessageId = message.Id.ToString(),
+                    Message = message
+                });
+                
             }
             catch (Exception ex)
             {
@@ -92,7 +101,8 @@ namespace Mobile_PaidThx.Controllers
                 return View(new PaystreamModels.PinSwipeRequestModel()
                 {
                     PaystreamAction = paystreamAction,
-                    MessageId = messageId
+                    MessageId = message.Id.ToString(),
+                    Message = message
                 });
             }
 

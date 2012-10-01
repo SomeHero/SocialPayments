@@ -338,7 +338,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                userPaymentAccountServices.UpdatePaymentAccount(userId, id, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountType);
+                userPaymentAccountServices.UpdatePaymentAccount(userId, id, request.Nickname, request.NameOnAccount, request.RoutingNumber, request.AccountType,
+                    request.SecurityPin);
             }
             catch (NotFoundException ex)
             {
@@ -368,7 +369,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         // DELETE /api/{userId}/paymentaccounts/{id}
         [HttpDelete]
-        public HttpResponseMessage Delete(string userId, string id)
+        public HttpResponseMessage Delete(string userId, string id, AccountModels.DeletePaymentAccountRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Deleting Payment Account {0} for User {1}..", id, userId));
 
@@ -376,7 +377,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                userPaymentAccountServices.DeletePaymentAccount(userId, id);
+                userPaymentAccountServices.DeletePaymentAccount(userId, id, request.SecurityPin);
             }
             catch (NotFoundException ex)
             {

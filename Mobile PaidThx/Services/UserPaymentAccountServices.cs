@@ -46,10 +46,25 @@ namespace Mobile_PaidThx.Services
 
             return js.Deserialize<List<AccountModels.AccountResponse>>(response.JsonResponse);
         }
-        public ServiceResponse DeleteAccount(String apiKey, String userId, String bankId)
+        public ServiceResponse DeleteAccount(String apiKey, String userId, String bankId, string securityPin)
         {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                SecurityPin = securityPin
+            });
+
             string serviceUrl = String.Format(_deleteACHAccountUrl, _webServicesBaseUrl, userId, bankId);
-            var response = Delete(serviceUrl);
+            var response = Delete(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
             return response;
         }
         
@@ -97,7 +112,8 @@ namespace Mobile_PaidThx.Services
             }
         }
 
-        public void EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, String routingNumber, String accountType)
+        public void EditAccount(String apiKey, String userId, String bankId, String nickname, String nameOnAccount, 
+            String routingNumber, String accountType, string securityPin)
         {
             string editUrl = String.Format(_editACHAccountUrl, _webServicesBaseUrl, userId,  bankId);
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -108,7 +124,8 @@ namespace Mobile_PaidThx.Services
                 Nickname = nickname,
                 NameOnAccount = nameOnAccount,
                 RoutingNumber = routingNumber,
-                AccountType = accountType
+                AccountType = accountType,
+                SecurityPin = securityPin
             });
 
             var response = Put(editUrl, json);

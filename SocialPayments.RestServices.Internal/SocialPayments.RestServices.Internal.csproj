@@ -265,6 +265,7 @@
     <Compile Include="Models\BetaSignUpModels.cs" />
     <Compile Include="Models\FileUploadResponse.cs" />
     <Compile Include="Models\MerchantModels.cs" />
+    <Compile Include="Models\PaymentModels.cs" />
     <Compile Include="Models\RoutingNumberModels.cs" />
     <Compile Include="Models\SecurityQuestionModel.cs" />
     <Compile Include="Models\MessageModels.cs" />

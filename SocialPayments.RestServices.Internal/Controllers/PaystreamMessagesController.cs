@@ -390,14 +390,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         // POST /api/paystreammessages/{id}/cancel_payment
         [HttpPost]
-        public HttpResponseMessage CancelPayment(string id)
+        public HttpResponseMessage CancelPayment(string id, MessageModels.CancelPaymentRequestModel request)
         {
             _logger.Log(LogLevel.Info, String.Format("Cancel Payment {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
 
             try {
-                messageServices.CancelPayment(id);
+                messageServices.CancelPayment(id, request.userId, request.securityPin);
             }
             catch (NotFoundException ex)
             {
@@ -433,14 +433,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
         // POST /api/paystreammessages/{id}/cancel_request
         [HttpPost]
-        public HttpResponseMessage CancelRequest(string id)
+        public HttpResponseMessage CancelRequest(string id, MessageModels.CancelPaymentRequestRequestModel request)
         {
             _logger.Log(LogLevel.Info, String.Format("Cancel Request {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
 
             try {
-                messageServices.CancelRequest(id);
+                messageServices.CancelRequest(id, request.userId, request.securityPin);
             }
             catch (NotFoundException ex)
             {
@@ -520,7 +520,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
         // POST /api/paystreammessages/{id}/reject_request
         [HttpPost]
-        public HttpResponseMessage RejectPaymentRequest(string id)
+        public HttpResponseMessage RejectPaymentRequest(string id, MessageModels.RejectPaymentRequestModel request)
         {
             _logger.Log(LogLevel.Info, String.Format("Reject Payment Request Started {0}", id));
 
@@ -528,7 +528,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                messageServices.RejectPaymentRequest(id);
+                messageServices.RejectPaymentRequest(id, request.userId, request.securityPin);
             }
             catch (NotFoundException ex)
             {

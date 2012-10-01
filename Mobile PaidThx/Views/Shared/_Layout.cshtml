@@ -33,7 +33,7 @@
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/PaidThx-v2.css")" />
 
     <!--CUSTOM-->
-    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/app.css?ver=0.1")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/app.css?ver=0.11")" />
     <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/patternlock.css")"  />
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Tangerine|Inconsolata|Droid+Sans" />
     <!--[if lt IE 9]>
@@ -64,6 +64,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.qtip.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.tmpl.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.lazyload.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/iso8601.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/xdate.js")"></script>
 
     <!--  CUSTOM SCRIPTS-->
@@ -75,9 +76,6 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/patternlock.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
 
-    <script>
-        webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
-    </script>
     <!--  JQUERY MOBILE -->
     <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js" ></script>
     <!--<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.mobile.fixedToolbar.polyfill.js")"></script>-->

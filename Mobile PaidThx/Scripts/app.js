@@ -75,26 +75,31 @@ var paystreamController = (function ($, undefined) {
         displayedRecords = 0,
         totalRecords = 0,
         currentHeader = "",
+        $page = null,
+        $listview = null,
         $this = $(this);
 
     pub.init = function (theUserId) {
 
         userId = theUserId;
+        $page = $("#paystream-index"),
+        $listview = $("#paystreamList"),
 
         //When news updated, display items in list
         $this.unbind("paystream.updated").bind("paystream.updated", function (e, paystreamItems) {
             displayPaystream(paystreamItems, false);
+
             if (totalRecords > displayedRecords)
-                $("#pagingList").show();
+                showMoreResults();
             else
-                $("#pagingList").hide();
+                hideMoreResults();
         });
         $this.unbind("paystream.added").bind("paystream.added", function (e, paystreamItems) {
             displayPaystream(paystreamItems, true);
             if (totalRecords > displayedRecords)
-                $("#pagingList").show();
+                showMoreResults();
             else
-                $("#pagingList").hide();
+                hideMoreResults();
         });
     };
 
@@ -112,6 +117,11 @@ var paystreamController = (function ($, undefined) {
         searchPayStream(function () {
             //Stop loading animation on success
             $this.trigger("paystream.updated", items);
+            if (displayedRecords == 0)
+                showNoResults();
+            else
+                hideNoResults();
+
             $.mobile.hidePageLoadingMsg();
             if (callback)
                 callback();
@@ -150,6 +160,19 @@ var paystreamController = (function ($, undefined) {
             $.mobile.hidePageLoadingMsg();
         });
     };
+    pub.showNoResults = function(val) {
+        showNoResults();
+    }
+    pub.hideNoResults = function (val) {
+        hideNoResults();
+    }
+    pub.showMoreResults = function () {
+        if(totalRecords > displayedRecords)
+            showMoreResults();
+    },
+    pub.hideMoreResults = function () {
+        hideMoreResults();
+    },
     pub.cancelPayment = function (id) {
         showPinSwipe("CancelPayment", id);
     };
@@ -181,6 +204,10 @@ var paystreamController = (function ($, undefined) {
         $.ajax({
             url: webServicesController.getWebServicesBaseUrl() + "Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
             dataType: "json",
+            error: function (data, textStatus, xhr) {
+                alert(textStatus);
+                if(callback) callback(data);
+            },
             success: function (data, textStatus, xhr) {
 
                 //Publish that news has been updated & allow
@@ -198,12 +225,9 @@ var paystreamController = (function ($, undefined) {
     }
 
     function displayPaystream(paystreamItems, append) {
-        //cache the list-view element for later use
-        var $listview = $("#paystreamList");
-
         //Empty current list
-        if (!append)
-            $("#paystreamList li").not("#no-results").remove();
+        if (!append) 
+            $listview.find(".removable").remove();
 
         var today = new XDate();
         var yesterday = today.clone().addDays(-1);
@@ -216,8 +240,12 @@ var paystreamController = (function ($, undefined) {
             lastWeekYear -= 1;
         }
         var thisMonth = today.getMonth();
+        var lastMonth = thisMonth - 1;
         var thisMonthYear = today.getYear();
-
+        if (lastMonth == 0) {
+            lastMonth = 12;
+            thisMonthYear -= 1;
+        }
         var thisYear = today.getYear();
 
         var headerText = "";
@@ -226,7 +254,7 @@ var paystreamController = (function ($, undefined) {
             var header = {};
             header.groupHeading = "";
 
-            var createDate = new XDate(new Date($(items).get(i).createDate));
+            var createDate = new XDate(Date.parse($(items).get(i).createDate));
             var createDateWeek = createDate.getWeek();
             var createDateMonth = createDate.getMonth();
             var createDateYear = createDate.getYear();
@@ -251,32 +279,37 @@ var paystreamController = (function ($, undefined) {
             if (currentHeader != headerText) {
                 currentHeader = headerText;
                 header.groupHeading = currentHeader;
-                $("#paystreamHeader").tmpl(header).appendTo($("#paystreamList"));
+                $("#paystreamHeader").tmpl(header).insertBefore($listview.find(".more-results"));
             }
 
-            $("#paystreamItem").tmpl($(items).get(i)).appendTo($("#paystreamList"));
+            $("#paystreamItem").tmpl($(items).get(i)).insertBefore($listview.find(".more-results"));
 
         };
         //$("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
-
         //Call the listview jQuery UI Widget after adding 
-        //items to the list allowing correct rendering
         $("#paystreamList").listview("refresh");
 
-        if ($("#paystreamList li").size() === 0) {
-            $("#paystreamList").append($("#no-results-holder").html());
-            $("#paystreamList").listview("refresh");
-            $('#paystreamList #no-results').fadeIn(500);
-        } else if ($("#paystreamList li").size() === 1 && $("#paystreamList #no-results").length) {
-            $('#paystreamList #no-results').fadeIn(500);
-        } else {
-            $('#paystreamList #no-results').fadeOut(250);
-            $('#paystreamList #no-results').remove();
-            $("#paystreamList").listview("refresh");
-        }
-    }
 
+    }
+    function showMoreResults() {
+        $listview.find(".more-results").show();
+        $listview.listview("refresh");
+    }
+    function hideMoreResults() {
+        $listview.find(".more-results").hide();
+        $listview.listview("refresh");
+    }
+    function showNoResults() {
+        $listview.find("#paystream-no-results-divider").show();
+        $listview.find("#paystream-no-results").show();
+        $listview.listview("refresh");
+    }
+    function hideNoResults() {
+        $listview.find("#paystream-no-results-divider").hide();
+        $listview.find("#paystream-no-results").hide();
+        $listview.listview("refresh");
+    }
     function openOffersDialog(transactionId, callback) {
         var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId;
 

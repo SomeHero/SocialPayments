@@ -224,6 +224,7 @@
     <Compile Include="Services\ResponseModels\FacebookModels.cs" />
     <Compile Include="Services\ResponseModels\MerchantModels.cs" />
     <Compile Include="Services\ResponseModels\MessageModels.cs" />
+    <Compile Include="Services\ResponseModels\PaymentModels.cs" />
     <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
     <Compile Include="Services\ResponseModels\UserConfigurationModels.cs" />
@@ -471,6 +472,8 @@
     <Content Include="Scripts\jquery.qtip.min.js" />
     <Content Include="Scripts\jquery.tipsy.js" />
     <Content Include="Scripts\jquery.touchSwipe.js" />
+    <Content Include="Scripts\iso8601.js" />
+    <Content Include="Scripts\iso8601.min.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\send-money-2.js" />
     <Content Include="Scripts\sharing.js" />
