@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Mobile_PaidThx.Models.RequestModels.AddContactRequestModel
+@{
     ViewBag.Title = "AddContactRequest";
     ViewBag.PageID = "request-contact-select-page";
     ViewBag.Classes = "full";
@@ -18,11 +19,16 @@
             foreach (var friend in alphaGroup.Value)
             {
                     <li class="contact">
-                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
+                    @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "fb_" + @friend.id)
+                        @Html.Hidden("recipientType", "facebook")
+                        @Html.Hidden("recipientName", @friend.name);
+                    <a class="contact-recipient-uri">
                         <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
                         <h2 class="heading">@friend.name</h2>
                         <h4 class="subheading">Facebook Friend</h4>
                     </a>
+                    }
                     </li>
             }
         }
@@ -54,19 +60,13 @@
         
     <script language="javascript">
         //wait to do event binding until the page is being initialized
-        $("#@ViewBag.PageID").unbind('pageshow').bind('pageshow', function () {
+        $(document).ready(function () {
 
             $(this).find("img.lazy").lazyload();
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
 
-            $listview.listview('option', 'filterCallback', function (text, searchValue, item) {
-                if (item.attr('id') == "contact-no-results")
-                    return false;
-
-                return text.toString().toLowerCase().indexOf(searchValue) === -1;
-            });
             contactsSearchController.init($("#request-contact-select-page"));
 
             //delegate event binding since the search widget is added dynamically
@@ -102,23 +102,7 @@
             });
             $(".contact-recipient-uri").die("click").live("click", function () {
 
-                var recipientUri = $(this).attr('recipient-uri');
-                var recipientName = $(this).attr('recipient-name');
-                var recipientType = $(this).attr('recipient-type');
-
-                var model = {
-                    RecipientUri: recipientUri,
-                    RecipientName: recipientName,
-                    RecipientType: recipientType
-                };
-
-                $.mobile.changePage(getBaseURL() + 'Request/AddContactRequest', {
-                    data: model,
-                    dataUrl: getBaseURL() + 'Request/Index',
-                    reverse: true,
-                    transition: 'slide',
-                    type: 'post'
-                });
+                $(this).parents("form:first").submit();
 
             });
         });
