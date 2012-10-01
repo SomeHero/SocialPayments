@@ -4,9 +4,9 @@
     ViewBag.PageID = "changesecuritypin-page";
 }
 
-<div data-role="page" id="@ViewBag.PageID" data-add-back-btn="true" @TempData["DataUrl"]>
-        @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID"  >
+        
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
             Change PIN</h1>
     </div>
@@ -33,7 +33,7 @@
 
         </div>
 <script type="text/javascript">
-    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+    $(document).ready(function() {
         pinswipeResizeController.resizePINs();
     });
 </script>

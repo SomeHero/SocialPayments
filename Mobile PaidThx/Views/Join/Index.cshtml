@@ -5,9 +5,8 @@
     ViewBag.Classes = "";
     
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
              @if (Model.Message != null)
              {
@@ -27,7 +26,6 @@
              }
              else
              {<text>Join</text>}</h1>
- @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
              </div>
     <div data-role="content">
         <div class="pad">
@@ -97,7 +95,7 @@
                 </text>
                 }
             }
-                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="btn-jq" data-theme="d">
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
                 Join with Facebook</button>
             <h5 style="margin-top:25px" id="form-marker">
                 Or join with your Email Address</h5>
@@ -112,7 +110,7 @@
                         name="password" /></span>
                     <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" class="required pwmatch" type="password" placeholder="Confirm Your Password"
                         name="confirmPassword" /></span>
-                <button type="submit" id="register-submit" data-theme="f" data-icon="check" data-iconpos="right">
+                <button type="submit" id="register-submit" class="pd-btn green">
                 Join with Email</button>
                   <div id="pass" class="hidden">
 	<ul class="pass-help">
@@ -135,9 +133,6 @@
     <div data-role="footer"> 
 	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
 </div> 
-
-
-     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 2, HeaderText = "Join" }); }
             
     </div>
 

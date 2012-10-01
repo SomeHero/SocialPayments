@@ -3,9 +3,9 @@
     ViewBag.Title = "Index";
     ViewBag.PageID = "request-popup-pin-swipe-page";
 }
-<div data-role="page" id="@ViewBag.PageID" data-add-back-btn="true" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID"  >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <a href="Index" data-transition="slideup" data-direction="reverse">Cancel</a>
         <h1>
             Confirm</h1>
@@ -42,7 +42,7 @@
         
         </div>
 <script type="text/javascript">
-    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+    $(document).ready(function() {
         pinswipeResizeController.resizePINs();
     });
 </script>

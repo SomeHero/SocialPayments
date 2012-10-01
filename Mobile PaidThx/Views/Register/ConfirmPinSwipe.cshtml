@@ -4,8 +4,8 @@
 }
 
 
-<div data-role="page" id="@ViewBag.PageID" class="modally" @TempData["DataUrl"]>
-     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" class="modally" >
+     <div data-role="header" data-position="fixed" class="header-pdthx" >
 	    <h1>Confirm PIN</h1>
     </div>
      <div data-role="content">
@@ -33,7 +33,7 @@
         
 </div>
 <script type="text/javascript">
-    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+    $(document).ready(function() {
         pinswipeResizeController.resizePINs();
     });
 </script>
