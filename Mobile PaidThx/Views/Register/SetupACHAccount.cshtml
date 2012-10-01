@@ -70,17 +70,20 @@
         </div>
     </div>
     </div>
-    <script type="text/javascript">
-        var getBaseURL = function () {
-            return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
-        }
-
-$(document).ready(function() {
-
-if (isAndroid){
-//do something if android
-}
-
-});
-    </script>
 </div>
+@section PageScripts
+{
+        <script type="text/javascript">
+            var getBaseURL = function () {
+                return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+            }
+
+            $(document).ready(function () {
+
+                if (isAndroid) {
+                    //do something if android
+                }
+
+            });
+    </script>
+}

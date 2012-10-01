@@ -25,11 +25,11 @@
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")
                         @Html.Hidden("recipientName", @friend.name);
-                        <span class="contact-recipient-uri">
-                            <img class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
                             <h2 class="heading">@friend.name</h2>
                             <h4 class="subheading">Facebook Friend</h4>
-                        </span>
+                        </a>
                     }
                     </li>
             }
@@ -50,7 +50,9 @@
                 </ul>
             </div>
     </div>
-    
+</div>
+@section PageScripts
+{
 <script id="meCodeItem" type="text/x-jquery-tmpl">
 
     <li class="mecode-recipient">
@@ -106,7 +108,7 @@
                     }
                 }
             });
-            $(".contact-recipient-uri").die("click").live("click", function () {
+            $listview.on("click", ".contact-recipient-uri", function(event) {
 
                 $(this).parents("form:first").submit();
 
@@ -115,4 +117,5 @@
         });
         
 </script>
-</div>
+}
+

@@ -26,6 +26,11 @@
          }
         </div>
     </div>
+<<<<<<< HEAD
+<script language="javascript">
+    //wait to do event binding until the page is being initialized
+    $(document).delegate('[]', 'pageinit', function () {
+=======
 </div>
 @section PageScripts
 {
@@ -43,6 +48,7 @@
                 }
                 if (event.keyCode == 46 || event.keyCode == 8) {
                     depositAmount1 = depositAmount1.substring(0, depositAmount1.length - 1);
+>>>>>>> upstream/development
 
                     depositAmount1 = depositAmount1.replace('.', '');
                     currentAmount = depositAmount1.replace(',', '');

@@ -303,12 +303,12 @@ var paystreamController = (function ($, undefined) {
     function showNoResults() {
         $listview.find("#paystream-no-results-divider").show();
         $listview.find("#paystream-no-results").show();
-        $listview.listview("refresh");
+        //$listview.listview("refresh");
     }
     function hideNoResults() {
         $listview.find("#paystream-no-results-divider").hide();
         $listview.find("#paystream-no-results").hide();
-        $listview.listview("refresh");
+        //$listview.listview("refresh");
     }
     function openOffersDialog(transactionId, callback) {
         var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId;
@@ -326,7 +326,7 @@ var paystreamController = (function ($, undefined) {
                     $('#popup').animate({ 'left': '10px' }, 300);
                 });
 
-                $("#popup").page();
+                //$("#popup").page();
 
                 if (callback) callback(data);
             },
