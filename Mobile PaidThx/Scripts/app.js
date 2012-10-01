@@ -105,7 +105,7 @@ var paystreamController = (function ($, undefined) {
 
     pub.searchAndDisplayPaystream = function (theType, callback) {
         //Starting loading animation
-        $.mobile.showPageLoadingMsg("Loading Paystream");
+        //$.mobile.showPageLoadingMsg("Loading Paystream");
 
         displayedRecords = 0;
         page = 0;
@@ -122,7 +122,7 @@ var paystreamController = (function ($, undefined) {
             else
                 hideNoResults();
 
-            $.mobile.hidePageLoadingMsg();
+            //$.mobile.hidePageLoadingMsg();
             if (callback)
                 callback();
         });
@@ -288,17 +288,17 @@ var paystreamController = (function ($, undefined) {
         //$("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
         //Call the listview jQuery UI Widget after adding 
-        $("#paystreamList").listview("refresh");
+        //$("#paystreamList").listview("refresh");
 
 
     }
     function showMoreResults() {
         $listview.find(".more-results").show();
-        $listview.listview("refresh");
+        //$listview.listview("refresh");
     }
     function hideMoreResults() {
         $listview.find(".more-results").hide();
-        $listview.listview("refresh");
+       // $listview.listview("refresh");
     }
     function showNoResults() {
         $listview.find("#paystream-no-results-divider").show();

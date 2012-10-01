@@ -59,7 +59,7 @@
     @{Html.RenderPartial("PartialViews/PS-Message");}
     @{Html.RenderPartial("PartialViews/PS-Detail");}
     <script type="text/javascript">
-        $(document).on('pageshow', '#@ViewBag.PageID', function () {
+        $(document).ready(function () {
 
             webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
             $("#@ViewBag.PageID .ui-listview-filter").hide();
@@ -68,9 +68,9 @@
                 $("#@ViewBag.PageID .ui-listview-filter").toggle();
             });
 
-            $("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
-                return text.toString().toLowerCase().indexOf(searchValue) === -1;
-            });
+            //$("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
+            //    return text.toString().toLowerCase().indexOf(searchValue) === -1;
+            //});
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');

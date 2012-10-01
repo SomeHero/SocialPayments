@@ -1,22 +1,41 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model Mobile_PaidThx.Models.PreferencesModels.ProfileModel
+@{
+    ViewBag.Title = "Profile";
 }
-<div data-role="page" id="profile-page" @TempData["DataUrl"]>
+
+<div data-role="page" id="preferences-profile-page" data-add-back-btn="true" @TempData["DataUrl"]>
+    @{ Html.RenderPartial("TitleBar"); }
     <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
         <h1>
-            My Profile</h1>
-        <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
-        <div data-role="navbar" class="nav-pdthx" data-grid="d">
-            <ul>
-                <li><a href="./Home" class="nav-item" id="home" data-icon="custom">Home</a></li>
-                <li><a href="./Request" class="nav-item" id="request" data-icon="custom">Req. $</a></li>
-                <li><a href="./Send" class="nav-item" id="send" data-icon="custom">Send $</a></li>
-                <li><a href="./DoGood" class="nav-item" id="dogood" data-icon="custom">Do Good</a></li>
-                <li><a href="./Paystream" class="nav-item" id="paystream" data-icon="custom">Stream</a></li>
-            </ul>
-        </div>
+            Me</h1>
     </div>
-    <div data-role="content">
-        @{Html.RenderPartial("PartialViews/Settings");}
+    <div data-role="content" style="margin: 15px;">
+        
+            @foreach (var profileSection in Model.ProfileSections)
+            { 
+                <h5>@profileSection.SectionHeader</h5>
+                <ul data-role="listview" data-inset="true">
+                @foreach (var profileItem in profileSection.ProfileItems)
+                {
+                    string value = "";
+                    var attribute = Model.User.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
+                    if (attribute != null)
+                    {
+                        value = attribute.AttributeValue;
+                    }
+                    
+                    <li data-role="fieldcontain">
+                    <label for="@profileItem.Id">@profileItem.Label</label>
+                    @switch (profileItem.ItemType)
+                    {
+                        case "ShortText":
+                            <text><input type="text" name="@profileItem.Id" value="@value" /></text>
+                            break;
+                    }
+                    </li>
+                } 
+                </ul>
+            }
+        
     </div>
 </div>
