@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Email Details";
     ViewBag.PageID = "email-details-page";
-    ViewBag.Classes = "settings";
+    ViewBag.Classes = "page settings";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>Email Details</h1>
@@ -34,7 +34,7 @@
                     <div class="alert">
                 <p>To enable sending payment from this account, please verify it.
                 <a href="#">
-                <button type="button" id="btn-verify-account" data-theme="b" data-icon="refresh" data-iconpos="right" class="btn-jq">
+                <button type="button" id="btn-verify-account" data-theme="b" data-icon="refresh" data-iconpos="right" class="pd-btn blue">
                   Resend Verify Email</button>
 
                 </a>
@@ -46,7 +46,7 @@
             @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
-                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="btn-jq">
+                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="pd-btn red">
                    Remove Email</button>
             }
             </p>

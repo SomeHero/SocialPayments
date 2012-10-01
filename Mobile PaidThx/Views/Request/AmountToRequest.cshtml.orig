@@ -35,11 +35,17 @@
         </div>
     }
     </div>
+<<<<<<< HEAD
+     <script language="javascript">
+         //wait to do event binding until the page is being initialized
+         $(document).delegate('[]', 'pageinit', function () {
+=======
 </div>
 @section PageScripts {
          <script language="javascript">
              //wait to do event binding until the page is being initialized
              $(document).ready(function () {
+>>>>>>> upstream/development
 
                  var currentAmount = "0.00";
 

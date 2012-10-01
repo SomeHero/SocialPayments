@@ -2,14 +2,13 @@
 @{
     ViewBag.Title = "Home";
     ViewBag.PageID = "dashboard-page";
-    ViewBag.Classes = "settings";
+    ViewBag.Classes = "page settings";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
         <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
        <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
-       @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }
     </div>
     <div data-role="content">
     <div class="pad">
@@ -42,6 +41,4 @@
     </div>
 
         </div>
-     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }
-
 </div>

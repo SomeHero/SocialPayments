@@ -415,6 +415,10 @@
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
     <Content Include="Content\images\video.png" />
+    <Content Include="Libs\qtip2\jquery.qtip.css" />
+    <Content Include="Libs\qtip2\jquery.qtip.js" />
+    <Content Include="Libs\qtip2\jquery.qtip.min.css" />
+    <Content Include="Libs\qtip2\jquery.qtip.min.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.6.1.min.js" />

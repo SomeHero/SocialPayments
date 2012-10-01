@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "AmountToSendView";
 }
-<div data-role="page" id="send-amount-to-send-page" class="modally"  >
+<div  id="send-amount-to-send-page" class="modally"  >
  
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
@@ -34,7 +34,7 @@
     </div>
         <script language="javascript">
 //wait to do event binding until the page is being initialized
-            $(document).delegate('[data-role="page"]', 'pageinit', function () {
+            $(document).delegate('[]', 'pageinit', function () {
 
                 var currentAmount = "0.00";
 

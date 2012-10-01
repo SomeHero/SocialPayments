@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Add ME Code";
     ViewBag.PageID = "add-mecode-paypoint-page";
-    ViewBag.Classes = "settings";
+    ViewBag.Classes = "page page settings";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
@@ -19,7 +19,7 @@
                 <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" 
                 required /></p>
             <p>
-             <button type="submit" id="btn-add-mecode" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+             <button type="submit" id="btn-add-mecode" class="pd-btn green">
                   Add ME Code </button></p>
          }
         </div>
