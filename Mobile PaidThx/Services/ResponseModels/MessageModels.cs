@@ -36,10 +36,7 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public bool isRejectable { get; set; }
             public bool isExpressable { get; set; }
 
-            public DateTime estimatedDeliveryDate { get; set; }
-            public DateTime expressDeliveryDate { get; set; }
-            public DateTime expressDeliveryFee { get; set; }
-            public bool isExpressed { get; set; }
+            public PaymentModels.PaymentResponse Payment { get; set; }
         }
     }
 }

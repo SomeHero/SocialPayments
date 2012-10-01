@@ -60,7 +60,7 @@ namespace Mobile_PaidThx.Services
             string serviceUrl = String.Format(_deletePaypointUrl, _webServicesBaseUrl, userId, paypointId);
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var response = Delete(serviceUrl);
+            var response = Delete(serviceUrl, "");
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

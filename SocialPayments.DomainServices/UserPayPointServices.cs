@@ -85,7 +85,10 @@ namespace SocialPayments.DomainServices
         {
             using (var _ctx = new Context())
             {
-                UserService userService = new UserService();
+                var userService = new UserService();
+                var validationService = new DomainServices.ValidationService();
+                var formattingServices = new DomainServices.FormattingServices();
+                
                 List<Domain.UserPayPoint> payPoints;
 
                 var user = userService.GetUserById(userId);
@@ -119,6 +122,12 @@ namespace SocialPayments.DomainServices
                     .ToList<Domain.UserPayPoint>();
                 }
 
+                foreach (var payPoint in payPoints)
+                {
+                    if (validationService.IsPhoneNumber(payPoint.URI))
+                        payPoint.URI = formattingServices.FormatMobileNumber(payPoint.URI);
+                }
+
                 return payPoints;
 
             }
@@ -127,6 +136,9 @@ namespace SocialPayments.DomainServices
         {
             using (var _ctx = new Context())
             {
+                var validationService = new DomainServices.ValidationService();
+                var formattingServices = new DomainServices.FormattingServices();
+                
                 UserService userService = new UserService(_ctx);
 
                 var user = userService.GetUserById(userId);
@@ -137,6 +149,9 @@ namespace SocialPayments.DomainServices
                 var payPoint = _ctx.UserPayPoints
                     .Include("Type")
                     .FirstOrDefault(p => p.UserId == user.UserId && p.Id == payPointId);
+
+                if (validationService.IsPhoneNumber(payPoint.URI))
+                    payPoint.URI = formattingServices.FormatMobileNumber(payPoint.URI);
 
                 return payPoint;
             }

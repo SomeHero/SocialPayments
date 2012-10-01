@@ -84,9 +84,22 @@ namespace SocialPayments.DomainServices
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
-                if (user.SecurityPin != securityServices.Encrypt(securityPin))
-                    throw new CustomExceptions.BadRequestException("Invalid Security Pin");
+                if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
 
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
                 //TODO: validate routing number
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
@@ -271,7 +284,8 @@ namespace SocialPayments.DomainServices
                 
             }
         }
-        public void UpdatePaymentAccount(string userId, string paymentAccountId, string nickName, string nameOnAccount, string routingNumber, string accountTypeName)
+        public void UpdatePaymentAccount(string userId, string paymentAccountId, string nickName, string nameOnAccount, string routingNumber, string accountTypeName,
+            string securityPin)
         {
             using (var _ctx = new Context())
             {
@@ -294,6 +308,23 @@ namespace SocialPayments.DomainServices
                 if (userAccount == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment Account {0} Not Found", paymentAccountId));
 
+
+                if (!_securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
 
                 if (accountTypeName.ToUpper() == "CHECKING")
@@ -311,7 +342,7 @@ namespace SocialPayments.DomainServices
 
             }
         }
-        public void DeletePaymentAccount(string userId, string paymentAccountId)
+        public void DeletePaymentAccount(string userId, string paymentAccountId, string securityPin)
         {
             using (var _ctx = new Context())
             {
@@ -339,6 +370,23 @@ namespace SocialPayments.DomainServices
                 if (userAccount == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment Account {0} Not Found", paymentAccountId));
 
+
+                if (!_securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
                 userAccount.IsActive = false;
                 userAccount.LastUpdatedDate = System.DateTime.Now;
 

@@ -7,6 +7,7 @@ using SocialPayments.Domain;
 using SocialPayments.DataLayer;
 using MoonAPNS;
 using System.Configuration;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices.MessageProcessing
 {
