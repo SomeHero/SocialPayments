@@ -4,9 +4,9 @@
     ViewBag.PageID = "request-page";
     ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" data-theme="c" data-add-back-btn="true">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx"  >
         <h1>Request Money</h1>
         <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
         @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 1, HeaderText = "Request Money" }); }

@@ -3,9 +3,9 @@
     ViewBag.Title = "ConfirmPinSwipe";
     ViewBag.PageID = "confirm-pin-swipe-pledge";
 }
-<div data-role="page" id="@ViewBag.PageID" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <a href="Index" data-transition="slideup" data-direction="reverse">Cancel</a>
         <h1>
             Confirm PIN</h1>
@@ -32,7 +32,7 @@
         
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         pinswipeResizeController.resizePINs();
     });
 </script>

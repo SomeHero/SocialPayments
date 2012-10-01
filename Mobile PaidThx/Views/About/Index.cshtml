@@ -3,9 +3,9 @@
     ViewBag.PageID = "page-about";
     ViewBag.Classes = "";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" data-add-back-btn="true" @TempData["DataUrl"]>
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="nav-pdthx" data-theme="c">
+<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    
+    <div data-role="header" data-position="fixed" class="nav-pdthx" >
         <h1>About PaidThx</h1>
     @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
     </div>
@@ -59,10 +59,22 @@
 </div> 
     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
 
+    @section PageStyles{
 
+<!-- FLEXSLIDER -->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/flexslider/flexslider.css")" />
+
+    }
+
+
+
+    @section PageScripts{
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.flexslider-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.fitvid.js")"></script>
 <script type="text/javascript">
 
-    $(document).on('pageshow', '#@ViewBag.PageID', function () {
+    $(document).ready(function() {
 
             $(".video-link").fancybox({
 					maxWidth	: 800,
@@ -145,8 +157,7 @@
         });
     });
 </script>
+}
 </div>
 
-@section PageScripts{
 
-}
