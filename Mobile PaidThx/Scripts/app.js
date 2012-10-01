@@ -130,34 +130,34 @@ var paystreamController = (function ($, undefined) {
 
     pub.getAndDisplayMoreItems = function () {
         //Starting loading animation
-        $.mobile.showPageLoadingMsg();
+        //$.mobile.showPageLoadingMsg();
 
         //Get news and add success callback using then
         searchPayStream(function () {
             //Stop loading animation on success
             $this.trigger("paystream.added", items);
-            $.mobile.hidePageLoadingMsg();
+            //$.mobile.hidePageLoadingMsg();
         });
     };
 
     pub.displayPaystreamDetail = function (id) {
         //Starting loading animation
-        $.mobile.showPageLoadingMsg();
+        //$.mobile.showPageLoadingMsg();
 
         //Get news and add success callback using then
         openOffersDialog(id, function () {
             //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
+            //$.mobile.hidePageLoadingMsg();
         });
     };
     pub.closeDetailDialog = function () {
         //Starting loading animation
-        $.mobile.showPageLoadingMsg();
+        //$.mobile.showPageLoadingMsg();
 
         //Get news and add success callback using then
         closeDetailDialog(function () {
             //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
+            //$.mobile.hidePageLoadingMsg();
         });
     };
     pub.showNoResults = function(val) {

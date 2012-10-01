@@ -13,7 +13,7 @@
     <div data-role="content">
     <div class="pad">
         @Html.ValidationSummary()
-        @using (Html.BeginForm("Index", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+        @using (Html.BeginForm("Index", "Donate", FormMethod.Post))
         {
             
  <a href="@Url.Content("~/Donate/AddContact")" class="a-recipient" data-prefetch data-transition="slide">
