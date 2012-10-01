@@ -30,13 +30,16 @@
         }
     </div>
     </div>
-  <div id="resizerHack">
-        
-        
-        </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        pinswipeResizeController.resizePINs();
-    });
-</script>
+    <div id="resizerHack">
+    </div>
+
 </div>
+@section PageScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pinswipeResizeController.resizePINs();
+        });
+    </script>
+}
+}
