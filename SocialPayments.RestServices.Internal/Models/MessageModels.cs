@@ -36,9 +36,6 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool senderSeen { get; set; }
             public bool recipientSeen { get; set; }
             public DateTime estimatedDeliveryDate { get; set; }
-            public bool isExpressed { get; set; }
-            public double expressDeliveryFee { get; set; }
-            public DateTime expressDeliveryDate { get; set; }
 
             public bool isCancellable { get; set; }
             public bool isRemindable { get; set; }
@@ -48,7 +45,8 @@ namespace SocialPayments.RestServices.Internal.Models
 
              public string senderImageUri { get; set; }
              public string recipientImageUri { get; set; }
-           
+
+             public PaymentModels.PaymentResponse payment { get; set; }
         }
         public class MessageSeenUpdateRequest
         {
@@ -127,7 +125,21 @@ namespace SocialPayments.RestServices.Internal.Models
             public string securityPin { get; set; }
             public string paymentAccountId { get; set; }
         }
-
+        public class CancelPaymentRequestModel
+        {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+        }
+        public class CancelPaymentRequestRequestModel 
+        {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+        }
+        public  class RejectPaymentRequestModel
+        {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+        }
         public class UpdateMessageRequest {
             public String Id { get; set; }
             public String senderUri { get; set; }

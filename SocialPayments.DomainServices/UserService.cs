@@ -281,44 +281,42 @@ namespace SocialPayments.DomainServices
         }
         public User GetUser(string userUri)
         {
-            using (var ctx = new Context())
+            _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
+
+            var uriType = GetURIType(userUri);
+
+            _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
+
+            User user = null;
+
+            switch (uriType)
             {
-                _logger.Log(LogLevel.Debug, String.Format("Find User {0}", userUri));
+                case URIType.FacebookAccount:
+                    user = _ctx.Users
+                        .FirstOrDefault(u => u.UserName.Equals(userUri));
 
-                var uriType = GetURIType(userUri);
+                    break;
 
-                _logger.Log(LogLevel.Debug, String.Format("Find User {0} with UriType {1}", userUri, uriType));
+                case URIType.MECode:
+                    var meCode = _ctx.UserPayPoints.FirstOrDefault(m => m.URI.Equals(userUri));
 
-                User user = null;
+                    user = meCode.User;
+                    break;
+                case URIType.EmailAddress:
+                    user = _ctx.Users
+                        .FirstOrDefault(u => u.EmailAddress.Equals(userUri));
+                    break;
 
-                switch (uriType)
-                {
-                    case URIType.FacebookAccount:
-                        user = ctx.Users
-                            .FirstOrDefault(u => u.UserName.Equals(userUri));
+                case URIType.MobileNumber:
+                    var phoneNumber = formattingServices.RemoveFormattingFromMobileNumber(userUri);
 
-                        break;
-
-                    case URIType.MECode:
-                        var meCode = _ctx.UserPayPoints.FirstOrDefault(m => m.URI.Equals(userUri));
-
-                        user = meCode.User;
-                        break;
-                    case URIType.EmailAddress:
-                        user = ctx.Users
-                            .FirstOrDefault(u => u.EmailAddress.Equals(userUri));
-                        break;
-
-                    case URIType.MobileNumber:
-                        var phoneNumber = formattingServices.RemoveFormattingFromMobileNumber(userUri);
-
-                        user = ctx.Users
-                            .FirstOrDefault(u => u.MobileNumber == phoneNumber);
-                        break;
-                }
-                return user;
-
+                    user = _ctx.Users
+                        .FirstOrDefault(u => u.MobileNumber == phoneNumber);
+                    break;
             }
+
+            return user;
+
         }
 
         public bool ConfirmUser(string accountConfirmationToken)
@@ -742,10 +740,10 @@ namespace SocialPayments.DomainServices
         }
         public User GetUserById(Guid userId)
         {
-                var user = _ctx.Users
-                    .FirstOrDefault(u => u.UserId.Equals(userId));
+            var user = _ctx.Users
+                .FirstOrDefault(u => u.UserId.Equals(userId));
 
-                return user;
+            return user;
         }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
             string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)

@@ -53,6 +53,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string RoutingNumber { get; set; }
             public string AccountType { get; set; }
             public string Status { get; set; }
+            public string SecurityPin { get; set; }
+        }
+        public class DeletePaymentAccountRequest
+        {
+            public string SecurityPin { get; set; }
         }
         public class ChangePreferredAccountRequest
         {

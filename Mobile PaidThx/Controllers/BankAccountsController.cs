@@ -7,6 +7,7 @@ using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Models;
 using NLog;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -136,6 +137,23 @@ namespace Mobile_PaidThx.Controllers
                      bankAccount.AccountType, model.PinCode);
 
             }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+
+            }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
@@ -232,7 +250,24 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                bankAccountServices.DeleteAccount(_apiKey, user.userId.ToString(), paymentAccountId);
+                bankAccountServices.DeleteAccount(_apiKey, user.userId.ToString(), paymentAccountId, model.PinCode);
+
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
 
             }
             catch (Exception ex)
@@ -257,7 +292,24 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                bankAccountServices.EditAccount(_apiKey, user.userId.ToString(), bankAccount.PaymentAccountId, bankAccount.Nickname,
-                   bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountType);
+                   bankAccount.NameOnAccount, bankAccount.RoutingNumber, bankAccount.AccountType, model.PinCode);
+
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
 
             }
             catch (Exception ex)

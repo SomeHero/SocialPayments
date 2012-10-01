@@ -356,7 +356,7 @@ namespace SocialPayments.DomainServices
             }
 
         }
-        public void CancelPayment(string id)
+        public void CancelPayment(string id, string userId, string securityPin)
         {
             using (var _ctx = new Context())
             {
@@ -371,13 +371,29 @@ namespace SocialPayments.DomainServices
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
 
                 Guid messageId;
+                Guid userGuid;
+
                 Domain.Message message = null;
+                Domain.User user = null;
+                
+                Guid.TryParse(userId, out userGuid);
+
+                if(userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if(user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
                 Guid.TryParse(id, out messageId);
 
                 if (messageId == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
-                message = _ctx.Messages.FirstOrDefault(m => m.Id == messageId);
+                message = _ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId && m.SenderId == user.UserId);
 
                 if(message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
@@ -385,6 +401,22 @@ namespace SocialPayments.DomainServices
                 if (message.Status != PaystreamMessageStatus.SubmittedPayment && message.Status != PaystreamMessageStatus.NotifiedPayment && message.Status != PaystreamMessageStatus.ProcessingPayment)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment {0} Cannot be Cancelled.  Invalid State", id));
 
+                if (!_securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
                 message.LastUpdatedDate = System.DateTime.Now;
                 message.Status = PaystreamMessageStatus.CancelledPayment;
 
@@ -400,7 +432,7 @@ namespace SocialPayments.DomainServices
                 });
             }
         }
-        public void CancelRequest(string id)
+        public void CancelRequest(string id, string userId, string securityPin)
         {
             using (var _ctx = new Context())
             {
@@ -415,7 +447,22 @@ namespace SocialPayments.DomainServices
                 DomainServices.SecurityService _securityService = new DomainServices.SecurityService();
 
                 Guid messageId;
+                Guid userGuid;
+
                 Domain.Message message = null;
+                Domain.User user = null;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = _ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
                 Guid.TryParse(id, out messageId);
 
                 if (messageId == null)
@@ -428,6 +475,23 @@ namespace SocialPayments.DomainServices
 
                 if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Request {0} Cannot be Cancelled.  Invalid State", id));
+                
+                if (!_securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
 
                 message.LastUpdatedDate = System.DateTime.Now;
                 message.Status = PaystreamMessageStatus.CancelledRequest;
@@ -457,21 +521,40 @@ namespace SocialPayments.DomainServices
             }
         
         }
-        public void AcceptPaymentRequest(string id, string recipientId, string paymentAccountId, string securityPin)
+        public void AcceptPaymentRequest(string id, string userId, string paymentAccountId, string securityPin)
         {
             using(var ctx = new Context())
             {
+                var securityServices = new DomainServices.SecurityService();
+
                 Guid messageId;
+                Guid userGuid;
+
+                Domain.Message message = null;
+                Domain.User user = null;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
                 Guid.TryParse(id, out messageId);
 
                 if (messageId == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
+                    throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
+                message = ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId && m.RecipientId == user.UserId);
 
                 if (message == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
+                    throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
+
 
                 if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Request {0}.  Invalid State {1}.", id, message.Status));
@@ -494,7 +577,7 @@ namespace SocialPayments.DomainServices
                 message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
-                var paymentMessage = AddMessage(message.ApiKey.ToString(), recipientId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
+                var paymentMessage = AddMessage(message.ApiKey.ToString(), userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
                                          message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
                                          message.Id.ToString(), "Standard", 0);
 
@@ -507,33 +590,6 @@ namespace SocialPayments.DomainServices
                 });
             }
 
-        }
-        public void RejectRequest(string id)
-        {
-            using (var ctx = new Context())
-            {
-                Guid messageId;
-                Guid.TryParse(id, out messageId);
-
-                if (messageId == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
-
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
-
-                if (message == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Request {0} Not Found", id));
-
-                if (!(message.Status == PaystreamMessageStatus.NotifiedRequest))
-                    throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Request {0}.  Invalid State.", id));
-
-                message.Status = PaystreamMessageStatus.RejectedRequest;
-                message.LastUpdatedDate = System.DateTime.Now;
-
-                ctx.SaveChanges();
-
-                //_amazonNotificationService.PushSNSNotification(ConfigurationManager.AppSettings["MessagePostedTopicARN"], "New Message Received", message.Id.ToString());
-            }
         }
         public Dictionary<string, User> RouteMessage(List<string> recipientUris)
         {
@@ -576,34 +632,63 @@ namespace SocialPayments.DomainServices
                 return matchedUsers;
             }
         }
-        public void RejectPaymentRequest(string id)
+        public void RejectPaymentRequest(string id, string userId, string securityPin)
         {
             using (var ctx = new Context())
             {
+                var securityServices = new DomainServices.SecurityService();
+
                 Guid messageId;
+                Guid userGuid;
+
+                Domain.Message message = null;
+                Domain.User user = null;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
 
                 Guid.TryParse(id, out messageId);
 
-                var message = ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageId);
+                if (messageId == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
+
+                message = ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId && m.RecipientId == user.UserId);
 
                 if (message == null)
-                    throw new ArgumentException("Invalid Message Id.", "Id");
+                    throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
                 if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Unable to Reject Request {0}.  Invalid State {1}.", id, message.Status));
 
-                try
+                if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
                 {
-                    message.Status = PaystreamMessageStatus.RejectedRequest;
-                    message.LastUpdatedDate = System.DateTime.Now;
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
 
                     ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                message.Status = PaystreamMessageStatus.RejectedRequest;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                ctx.SaveChanges();
 
             }
         }
@@ -732,13 +817,13 @@ namespace SocialPayments.DomainServices
                 else if(type.ToUpper() == "SENT")
                 {
                     totalRecords = ctx.Messages
-                        .Where(m => m.SenderId == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                        .Where(m => m.SenderId == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .Count();
 
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
-                        .Where(m => m.SenderId == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                        .Where(m => m.SenderId == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)
@@ -747,13 +832,13 @@ namespace SocialPayments.DomainServices
                 else if (type.ToUpper() == "RECEIVED")
                 {
                     totalRecords = ctx.Messages
-                        .Where(m => m.RecipientId.Value == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                        .Where(m => m.RecipientId.Value == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .Count();
 
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
-                        .Where(m => m.RecipientId.Value == userGuid && m.MessageTypeValue.Equals((int)MessageType.Payment))
+                        .Where(m => m.RecipientId.Value == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)

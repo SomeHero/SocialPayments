@@ -115,26 +115,48 @@ to <span class="lbl-recipient">${recipientName}</span>
 {{/if}} 
 
 
+{{if messageType == "Payment"}}
  {{if isRemindable }}
-     <button type="button" class="btn-jq send-reminder" messageId="${Id}" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+     <button type="button" class="btn-jq send-reminder send-reminder-payment" messageId="${Id}" data-theme="b" data-icon="arrow-r" data-iconpos="right">
         Send Reminder
      </button>
     {{/if}}
+{{/if}}
+    {{if messageType == "PaymentRequest"}}
+ {{if isRemindable }}
+     <button type="button" class="btn-jq send-reminder send-reminder-payment-request" messageId="${Id}" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+        Send Reminder
+     </button>
+    {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
     {{if isAcceptable }}
-     <button type="button" class="btn-jq accept" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
+     <button type="button" class="btn-jq accept accept-payment-request" messageId="${Id}" data-theme="f" data-icon="check" data-iconpos="right">
         Accept & Pay
      </button>
     {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
     {{if isRejectable}}
-     <button type="button" class="btn-jq reject" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+     <button type="button" class="btn-jq reject reject-payment-request" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
         Reject Request
      </button>
     {{/if}}
-        {{if isCancellable }}
-     <button type="button" class="btn-jq cancel" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+{{/if}}
+{{if messageType == "Payment"}}
+{{if isCancellable }}
+     <button type="button" class="btn-jq cancel cancel-payment" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
         Cancel
      </button>
     {{/if}}
+{{/if}}
+{{if messageType == "PaymentRequest"}}
+    {{if isCancellable }}
+     <button type="button" class="btn-jq cancel cancel-payment-request" messageId="${Id}" data-theme="e" data-icon="delete" data-iconpos="right">
+        Cancel
+     </button>
+    {{/if}}
+{{/if}}
 
     </div>
 

@@ -9,8 +9,7 @@
             Enter Recipient</h1>
     </div>
     <div data-role="content">
-        
-          <div class="pad">
+        <div class="pad">
             <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
         @foreach (var alphaGroup in Model.SortedContacts)
         {
@@ -27,20 +26,20 @@
         }
          <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
          <li id="contact-no-results" class="contact-no-results-item">
-                    <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
-                        <img src="@Url.Content("~/Content/images/avatar.png")" />
-                        <span id="results-header">
-                        No matches found 
-                        </span>
-                        <br />
-                        <span id="results-description">
-                        Continue type or check entry
-                       </span>
-                   </a>
-               </li>
-               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
-                </ul>
-            </div>
+            <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
+                <img src="@Url.Content("~/Content/images/avatar.png")" />
+                <span id="results-header">
+                No matches found 
+                </span>
+                <br />
+                <span id="results-description">
+                Continue type or check entry
+                </span>
+            </a>
+        </li>
+        <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
+        </ul>
+    </div>
     </div>
     <script id="meCodeItem" type="text/x-jquery-tmpl">
     <li>

@@ -61,10 +61,18 @@ namespace Mobile_PaidThx.Services
             };
         }
 
-        protected ServiceResponse Delete(string serviceUrl)
+        protected ServiceResponse Delete(string serviceUrl, string json)
         {
+            // Create new HTTP request.
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
             req.Method = "DELETE";
+            req.ContentType = "application/json";
+            byte[] postData = Encoding.ASCII.GetBytes(json);
+            req.ContentLength = postData.Length;
+
+            // Send HTTP request.
+            Stream PostStream = req.GetRequestStream();
+            PostStream.Write(postData, 0, postData.Length);
 
             HttpStatusCode statusCode = HttpStatusCode.OK;
 
@@ -91,13 +99,11 @@ namespace Mobile_PaidThx.Services
 
                     statusCode = httpResponse.StatusCode;
                     statusReason = httpResponse.StatusDescription;
-
+                    using (StreamReader sr = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        jsonResponse = sr.ReadToEnd();
+                    }
                 }
-            }
-
-            if (statusCode.Equals(HttpStatusCode.BadRequest))
-            {
-                throw new Exception(statusReason);
             }
 
             return new ServiceResponse()
@@ -197,13 +203,11 @@ namespace Mobile_PaidThx.Services
 
                     statusCode = httpResponse.StatusCode;
                     statusReason = httpResponse.StatusDescription;
-
+                    using (StreamReader sr = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        jsonResponse = sr.ReadToEnd();
+                    }
                 }
-            }
-
-            if (statusCode.Equals(HttpStatusCode.BadRequest))
-            {
-                throw new Exception(statusReason);
             }
 
             return new ServiceResponse()

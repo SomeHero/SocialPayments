@@ -64,12 +64,15 @@ namespace Mobile_PaidThx.Services
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
         }
-        public void CancelPayment(string apiKey, string messageId)
+        public void CancelPayment(string apiKey, string messageId, string userId, string securityPin)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var json = js.Serialize(new
-            {});
+            {
+                userId = userId,
+                securityPin = securityPin
+            });
             var response = Post(String.Format(_cancelPaymentUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -79,11 +82,14 @@ namespace Mobile_PaidThx.Services
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
         }
-        public void CancelRequest(string apiKey, string messageId)
+        public void CancelRequest(string apiKey, string messageId, string userId, string securityPin)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var json = js.Serialize(new { });
+            var json = js.Serialize(new {
+                userId = userId,
+                securityPin = securityPin
+            });
             var response = Post(String.Format(_cancelRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -112,11 +118,14 @@ namespace Mobile_PaidThx.Services
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
         }
-        public void RejectPaymentRequest(string apiKey, string messageId)
+        public void RejectPaymentRequest(string apiKey, string messageId, string userId, string securityPin)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            var json = js.Serialize(new { });
+            var json = js.Serialize(new {
+                userId = userId,
+                securityPin = securityPin
+            });
             var response = Post(String.Format(_rejectPaymentRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)

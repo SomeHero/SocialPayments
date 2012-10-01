@@ -11,7 +11,7 @@
     </div>
   
     <div data-role="content">
-        <p>
+        <div class="top-panel" id="swipe-to-confirm">
         @if (Model.PaystreamAction == "CancelPayment")
         {
                 <text>@String.Format("You are about to cancel your payment of {0:C} to {1}.  To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
@@ -28,9 +28,10 @@
         {
             <text>@String.Format("You are about to reject the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
         }
-        </p>
-        <div style="height: 1px; width: 100%; background: #666666; margin-bottom: 15px">
         </div>
+    <div class="pad">
+        @Html.ValidationSummary()
+       
         @using (Html.BeginForm("PopupPinswipe", "Paystream", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
             <div style="margin-top:15px">
@@ -41,9 +42,7 @@
     </div>
       
   <div id="resizerHack">
-        
-        
-        </div>
+  </div>
 <script type="text/javascript">
     $("#paystream-pinswipe-page").unbind('pageshow').bind('pageshow', function () {
 
@@ -71,3 +70,4 @@
     });
 </script>
 </div>
+    </div>
