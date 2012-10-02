@@ -544,7 +544,6 @@ var pinswipeResizeController = (function ($, undefined) {
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
         $(".patternlockcontainer > div").css("left", ($(window).width() - $(".patternlockcontainer > div").width()) / 2 + $(window).scrollLeft() + "px");
-        $("#patternlock").css({ opacity: 0.0, visibility: "visible" }).animate({ opacity: 1.0 });
     };
 
     return pub;
