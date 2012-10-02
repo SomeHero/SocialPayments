@@ -48,6 +48,7 @@
 </div>
 @section PageScripts
 {
+    <script language="javascript">
     //wait to do event binding until the page is being initialized
     $(document).ready(function () {
 
@@ -56,7 +57,7 @@
         //cache the list-view element for later use
         var $listview = $(this).find('[data-role="listview"]');
 
-        $(".organization-pledge").unbind("click").bind("click", function () {
+        $listview.on("click", ".organization-pledge", function (event) {
 
             $(this).parents("form:first").submit();
 

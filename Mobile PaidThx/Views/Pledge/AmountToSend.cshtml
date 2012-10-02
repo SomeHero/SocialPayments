@@ -9,28 +9,28 @@
    </div>
 
     <div data-role="content" class="content">
-    @using (Html.BeginForm("AmountToSend", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    @using (Html.BeginForm("AmountToSend", "Pledge", FormMethod.Post))
     {
             
              <input type="text" id="customAmount" placeholder="0.00" name="Amount" type="number" step="0.01" class="btn-new icon money field" style="width: 75%; float:left;" />
-             <button data-role="none" id="gobtn-send2" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
+             <button type="submit" id="gobtn-send2" class="btn-new small  btn-green field" style="float:right; width:22%; color: #FFFFFF">
                 Go
             </button>
             <div style="clear:both;"><br /></div>
+    }
+    @using (Html.BeginForm("AmountToSend", "Pledge", FormMethod.Post))
+    {
         <div style="background: #7D7D7D; color: #FFFFFF; font-weight: bold; padding: 5px">
             QUICK SEND AMOUNTS</div>
         <div class="quicksend" style="width: 100%; margin: -5px">
-            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="1">
+            <button id="onedollarbtnsend" type="submit" class="quickaddbtn-style" name="Amount" value="1">
                 $1</button>
-            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="5">
+            <button id="fivedollarbtnsend" type="submit" class="quickaddbtn-style" name="Amount" value="5">
                 $5</button>
-            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="10">
+            <button id="tendollarbtnsend" type="submit" class="quickaddbtn-style" name="Amount" value="10">
                 $10</button>
-            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="20">
+            <button id="twentydollarbtnsend" type="submit" class="quickaddbtn-style" name="Amount" value="20">
                 $20</button>
-        </div>
-       
-        <div style="background: #000000; height: 1px; margin-bottom: 10px">
         </div>
     }
     </div>
@@ -102,22 +102,6 @@
 
                 $(this).val(currentAmount);
                 event.preventDefault();
-            });
-
-            $('.quickaddbtn-style').unbind("click").bind("click", function () {
-                var amountToSend = $(this).attr('data-amount');
-
-                var model = {
-                    Amount: amountToSend
-                };
-
-                $.mobile.changePage(getBaseURL() + 'Pledge/AmountToSend', {
-                    data: model,
-                    dataUrl: getBaseURL() + 'Pledge/Index',
-                    reverse: true,
-                    transition: 'slide',
-                    type: 'post'
-                });
             });
         });
     </script>

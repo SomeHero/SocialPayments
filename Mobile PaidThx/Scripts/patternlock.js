@@ -19,7 +19,7 @@ var patternlock = {
 
     // Parameters-------------------
 
-    autoInit: false,
+    autoInit: true,
     autoSubmit: true,
 
     // Code-------------------------
