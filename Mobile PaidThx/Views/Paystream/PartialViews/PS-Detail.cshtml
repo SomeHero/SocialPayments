@@ -28,54 +28,69 @@ Details
     {{if messageType == "Payment" && direction == "In"}}
 
     <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+<div class="ps-detail-textpad">
     <p class="whathappened-content">
     <span class="lbl-sender">${senderName}</span><br> 
 sent you <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 <span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
+<div class="clear"></div>
+</div>
 <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
     {{/if}}
 
     {{if messageType == "Payment" && direction == "Out"}}
     
     <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <div class="ps-detail-textpad">
     <p class="whathappened-content">
     <span class="lbl-sender">You</span> sent <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 to <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
+<div class="clear"></div>
+</div>
     <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
     {{/if}}
 
     {{if messageType == "PaymentRequest" && direction == "In"}}
 
-    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" />
+    <div class="ps-detail-textpad"> 
     <p class="whathappened-content">
  <span class="lbl-sender">${senderName}</span><br> 
 requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 <span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
+<div class="clear"></div>
+</div>
 <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}}
 
     {{if messageType == "PaymentRequest" && direction == "Out"}}
 
     <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender" /> 
+    <div class="ps-detail-textpad">
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> requested <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 from <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
+<div class="clear"></div>
+</div>
 <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}} 
 
     {{if messageType == "Donation" && direction == "Out"}}
     <img width="40" height="40" class="psd-image sender" src="${senderImageUri}" alt="Sender">
+    <div class="ps-detail-textpad">
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> donated <span class="lbl-amount">$${amount.toFixed(2)}</span><br>
 to <span class="lbl-recipient">${recipientName}</span>
 <br><span class="lbl-date">on ${XDate(createDate).toString("ddd MMM d, yyyy")}</span>
 </p>
+<div class="clear"></div>
+</div>
 <img width="40" height="40" class="psd-image recipient" src="${recipientImageUri}" alt="Recipient" />
 {{/if}} 
 
