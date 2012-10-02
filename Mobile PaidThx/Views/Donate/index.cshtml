@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Index";
     ViewBag.PageID = "donate-page";
-    ViewBag.Classes = "";
+    ViewBag.Classes = "page ";
 }
-<div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>Donate</h1>
@@ -82,13 +82,12 @@
                 <textarea id="txtComments-Donate" rows="10" cols="100" placeholder="Enter dedications, notes, etc."></textarea>
 
                 <p>
-                <button type="submit" class="btn-jq" data-theme="f">
+                <button type="submit" class="pd-btn" data-theme="f">
                     <span>Make Donation</span></button>
                     </p>
         }
         </div>
     </div>
-    @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "Donate" }); }
 </div>
 
 @section PageScripts{
