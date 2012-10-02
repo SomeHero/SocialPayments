@@ -2868,11 +2868,16 @@ padding:10px;
 display:block;
 position:relative; 
 margin-top:10px;   
+height:80px;
+-webkit-transition: all .5s ease;
+       -moz-transition: all .5s ease;
+            transition: all .5s ease;
 }
 
 #txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus
 {
   border-color:#48b201;  
+  height:100px;
 }
 
 .a-recipient .ui-icon, .a-amount .ui-icon {

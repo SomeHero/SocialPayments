@@ -6,9 +6,11 @@
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
             How Much?</h1>
+             <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back history">Back</a>
    </div>
 
-    <div data-role="content" class="content">
+    <div data-role="content">
+    <div class="pad">
     @using (Html.BeginForm("AmountToSend", "Pledge", FormMethod.Post))
     {
             
@@ -33,6 +35,7 @@
                 $20</button>
         </div>
     }
+    </div>
     </div>
 </div>
 @section PageScripts

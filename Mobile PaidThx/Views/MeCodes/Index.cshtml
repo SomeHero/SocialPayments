@@ -6,11 +6,13 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
         
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div data-role="header" class="header-pdthx" >
         <h1>
             Me Codes</h1>
+            <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content" style="margin: 15px;">
+    <div data-role="content">
+    <div class="pad">
         <ul data-role="listview" data-inset="true">
             @foreach (var payPoint in Model.PayPoints)
             { 
@@ -29,5 +31,6 @@
                     Add Me Code</a>
             </li>
         </ul>
+    </div>
     </div>
 </div>

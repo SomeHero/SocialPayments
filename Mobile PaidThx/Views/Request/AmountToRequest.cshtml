@@ -3,12 +3,14 @@
 }
 <div  class="modally" id="request-amount-page"  >
 
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div data-role="header" class="header-pdthx" >
         <h1>
             How Much?</h1>
+             <a href="@Url.Content("~/Request")"  class="hd-btn-left btn-back history">Back</a>
     </div>
 
     <div data-role="content">
+    <div class="pad">
 
     @using (Html.BeginForm("AmountToRequest", "Request", FormMethod.Post))
     {
@@ -34,6 +36,7 @@
                 $20</button>
         </div>
     }
+    </div>
     </div>
 </div>
 @section PageScripts {

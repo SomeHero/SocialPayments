@@ -9,9 +9,10 @@
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
             Add Email</h1>
+            <a href="@Url.Content("~/Emails")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content" class="panel main-body">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+    <div data-role="content">
+        <div class="pad">
          @using (Html.BeginForm("Add", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
             @Html.ValidationSummary()

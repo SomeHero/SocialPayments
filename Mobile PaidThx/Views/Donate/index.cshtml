@@ -6,9 +6,9 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div data-role="header" class="header-pdthx" >
         <h1>Donate</h1>
-        
+        <a href="@Url.Content("~/DoGood")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div data-role="content">
     <div class="pad">
@@ -48,7 +48,7 @@
                                               </div>  
                                               <div class="clear"></div> 
                                               
-                                              <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>       
+                                              <span class="arrow-rt">&nbsp;</span>       
                     </div></a>
                 <a href="@Url.Content("~/Donate/AmountToSend")" class="a-amount" data-prefetch data-transition="slide">
                     <div id="btn-amount" data-role="none" type="button" class="btn-sends">
@@ -75,7 +75,7 @@
                            }
                                     </div>
                                     <div class="clear"></div> 
-                                    <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>       
+                                    <span class="arrow-rt">&nbsp;</span>       
                     </div>
                 </a>
                         

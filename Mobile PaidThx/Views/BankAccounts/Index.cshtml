@@ -4,17 +4,16 @@
     ViewBag.Title = "Linked Bank Accounts";
     ViewBag.PageID = "preferences-bankaccounts-page";
     ViewBag.Classes = "page settings";
-    TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
 }
 
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
 
     <div data-role="header" data-position="fixed" class="header-pdthx" >
-    <a href="@Url.Content("~/Preferences")" class="ui-btn-left ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-left ui-btn-up-c" data-rel="back" data-icon="arrow-l"  data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Back</span><span class="ui-icon ui-icon-arrow-l ui-icon-shadow">&nbsp;</span></span></a>
+    
         <h1>
             Bank Accounts</h1>
-        <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+        <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div data-role="content">
     <div class="pad">
