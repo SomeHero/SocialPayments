@@ -43,7 +43,7 @@ ${XDate(createDate).toString("ddd MMM d, yyyy")}
                 {{else messageType == "Donation"}}
                 Donation In
                 {{else messageType == "Pledge"}}
-                Pledge In
+                Pledge
                 {{/if}}
 {{else direction == "Out"}}
                 {{if messageType == "PaymentRequest"}}
@@ -51,9 +51,9 @@ ${XDate(createDate).toString("ddd MMM d, yyyy")}
                 {{else messageType == "Payment"}}
                 Money Out
                 {{else messageType == "Donation"}}
-                Donation Out
+                Donation
                 {{else messageType == "Pledge"}}
-                Pledge Out
+                Pledge
                 {{/if}}
             {{/if}}
 </span>

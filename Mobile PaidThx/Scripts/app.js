@@ -540,15 +540,35 @@ var pinswipeResizeController = (function ($, undefined) {
         $(".hackstyle").remove();
         var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
         divwidth = widthy * .95;
-        $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ; width:" + divwidth + "px ;}</div>")
-        $(".patternlockcontainer > div").center();
+        $('.patternlockcontainer > div').css('height', (divwidth));
+        $('.patternlockcontainer > div').css('width', (divwidth));
+        $(".patternlockcontainer > div").css("position", "absolute");
+        $(".patternlockcontainer > div").css("left", ($(window).width() - $(".patternlockcontainer > div").width()) / 2 + $(window).scrollLeft() + "px");
+        $("#patternlock").css({ opacity: 0.0, visibility: "visible" }).animate({ opacity: 1.0 });
     };
 
     return pub;
 } (jQuery));
 
-
+//LOAD
 $(document).ready(function(){
+
+$(window).bind('resize', function (event) {
+    //resize PINs on window resize
+        pinswipeResizeController.resizePINs();
+    });
+
+//my attempt to recreate jquery mobile full page
+        $(window).bind('resize', function (event) {
+            var content_height = $('div.page').height(),
+            header_height = $('div.header-pdthx').height(),
+            window_height = $(this).height();
+
+            if (content_height < (window_height)) {
+                $('div.page').css('min-height', (window_height));
+            }
+            event.stopImmediatePropagation();
+        }).trigger('resize');
 
     //add center to jquery object
     $.fn.center = function () {
@@ -561,10 +581,7 @@ $(document).ready(function(){
         return false;
     });
 
-    //resize PINs on window resize
-    $(window).resize(function () {
-        pinswipeResizeController.resizePINs();
-    });
+ 
 
 
     //Create all custom rules
