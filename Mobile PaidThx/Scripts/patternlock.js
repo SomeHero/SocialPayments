@@ -143,6 +143,7 @@ var patternlock = {
 
 
         pel.appendChild(patternTag);
+        pinswipeResizeController.resizePINs();
     },
 
     buttontouchstart: function (b) {
@@ -159,7 +160,7 @@ var patternlock = {
         if (patternlock.isdrawing) {
             var thisbutton = b.id.split("patternlockbutton").join("");
 
-            if (thisbutton != patternlock.to) { // touching the same button twice in a row is not allowed (should it ?)
+            if (thisbutton != patternlock.to) { // touching the same button twice in a row is not allowed
 
                 var cn = b.className;
                 if (cn.indexOf('touched') < 0) {
