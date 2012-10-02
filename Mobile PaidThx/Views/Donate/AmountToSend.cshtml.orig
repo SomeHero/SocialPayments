@@ -12,6 +12,7 @@
     <div class="pad">
     @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
     {
+<<<<<<< HEAD
         <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
         <span class="button-holder go-button-holder">
             <button id="gobtn-send2" type="submit" class="btn-jq go-button" data-theme="f">
@@ -21,6 +22,14 @@
         </span>
         <div style="clear:both;"></div>
     }
+=======
+            
+            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="go-button" data-theme="f">
+                Go
+            </button></span>
+            <div style="clear:both;"></div>
+>>>>>>> upstream/development
         <br />
     @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
     {
@@ -44,7 +53,11 @@
     {
      <script type="text/javascript">
          //wait to do event binding until the page is being initialized
+<<<<<<< HEAD
          $(document).ready(function () {
+=======
+         $(document).delegate('[]', 'pageinit', function () {
+>>>>>>> upstream/development
 
              var currentAmount = "0.00";
 
