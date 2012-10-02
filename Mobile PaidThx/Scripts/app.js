@@ -552,6 +552,14 @@ var pinswipeResizeController = (function ($, undefined) {
 //LOAD
 $(document).ready(function(){
 
+
+    //BACK BUTTONS
+
+    $('.btn-back.history').live('click', function () {
+        history.back(); return false;
+    });
+
+
 $(window).bind('resize', function (event) {
     //resize PINs on window resize
         pinswipeResizeController.resizePINs();

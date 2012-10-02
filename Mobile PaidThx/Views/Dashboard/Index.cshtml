@@ -2,46 +2,63 @@
 @{
     ViewBag.Title = "Home";
     ViewBag.PageID = "dashboard-page";
-    ViewBag.Classes = "settings";
+    ViewBag.Classes = "page settings";
 }
 <div data-role="page" id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
         <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
-       <a href="@Url.Content("~/Preferences")"  class="ui-btn-right" data-role="button" data-theme="f" data-icon="gear" data-iconpos="notext">Settings</a>
-       @{Html.RenderPartial("LoggedInMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }
+       <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
     </div>
     <div data-role="content">
     <div class="pad">
-        <div id="profile-new">
-        <div id="myprofile">
-         <ul data-role="listview" data-inset="true">
-                <li class="settings" id="profile">
+         
                     <!-- Profile -->
-                    <a href="@Url.Content("~/Preferences/Profile")">
+                    <a href="@Url.Content("~/Profile")" class="profile-area">
+                     <img class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
+                    <div class="profile-section">
+                   
+                   
+                     <div class="txt-flt">
                     <h2 class="heading"> @Model.UserName </h2>
-                    <h4 class="subheading">Edit Profile</h4> </a></li>
-                    </ul>
-   
-        <div class="clear"></div>
-        </div>
-         <ul data-role="listview" data-inset="true">
-                <li class="settings" id="incoming">
-                    <!-- Incoming -->
-                    <a href="@Url.Content("~/Paystream")" data-prefetch data-ajax="false" data-transition="slide">
-                                   <h2 class="heading"> Incoming </h2>
-                    <h4 class="subheading">New Items Received</h4> </a></li>
-                <li class="settings" id="outgoing">
-                    <!-- Outgoing -->
-                    <a href="@Url.Content("~/Paystream")" data-prefetch data-ajax="false" data-transition="slide">
-                                   <h2 class="heading"> Outgoing </h2>
-                    <h4 class="subheading">Pending Items Sent</h4></a></li>
-            </ul>
+                    <h4 class="subheading">Profile: <span class="percent">50% Complete</span></h4> 
+                    <div class="progress-bar">
+    <div class="profile-complete" style="width:50%">
+        &nbsp;
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+</a>
+
+<div class="profile-line"></div>
+                    
+     
+     <div class="nav-panel">
+     
+     <a href="@Url.Content("~/Paystream")" id="nav-panel-paystream" class="nav-item top-left">
+      <img class="hm-icon" src="@Url.Content("~/Content/images/icn-stream-bg.png")" alt="Paystream" /><br />
+     ACTIVITY
+     <div id="new-items">3</div>
+     </a>
+     <a href="@Url.Content("~/DoGood")" id="nav-panel-dogood" class="nav-item top-right">
+     <img class="hm-icon" src="@Url.Content("~/Content/images/icn-dogood-bg.png")" alt="Do Good" /><br />
+     DO GOOD
+     </a>
+     <a href="@Url.Content("~/Send")" id="nav-panel-send" class="nav-item bottom-left">
+     <img class="hm-icon" src="@Url.Content("~/Content/images/icn-send-bg.png")" alt="Send" /><br />
+     SEND
+     </a>
+      <a href="@Url.Content("~/Request")" id="nav-panel-request" class="nav-item bottom-right">
+      <img class="hm-icon" src="@Url.Content("~/Content/images/icn-request-bg.png")" alt="Request" /><br />
+      REQUEST
+     </a>
+     </div>               
+  
         </div>
         
     </div>
+       </div>
+     
 
-        </div>
-     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 0, HeaderText = "Home" }); }
-
-</div>

@@ -6,9 +6,11 @@
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
             How Much?</h1>
+            <a href="@Url.Content("~/Security/ChangeSecurityPin")"  class="hd-btn-left btn-back">Cancel</a>
     </div>
 
     <div data-role="content" class="content">
+    <div class="pad">
     @using (Html.BeginForm("AmountToSend", "Send", FormMethod.Post))
     {
             
@@ -34,9 +36,13 @@
         </div>
     }
     </div>
-        <script language="javascript">
+    </div>
+    </div>
+
+    @section PageScripts{
+        <script type="text/javascript">
 //wait to do event binding until the page is being initialized
-            $(document).delegate('[]', 'pageinit', function () {
+            $(document).ready(function () {
 
                 var currentAmount = "0.00";
 
@@ -102,4 +108,5 @@
                 });
             });
     </script>
-</div>
+    }
+

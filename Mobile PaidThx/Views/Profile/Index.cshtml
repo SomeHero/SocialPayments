@@ -3,13 +3,15 @@
     ViewBag.Title = "Profile";
 }
 
-<div  id="preferences-profile-page"  >
+<div  id="preferences-profile-page">
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Me</h1>
+            <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back history">Back</a>
     </div>
-    <div data-role="content" style="margin: 15px;">
+    <div data-role="content">
+    <div class="pad">
         
             @foreach (var profileSection in Model.ProfileSections)
             { 
@@ -36,6 +38,6 @@
                 } 
                 </ul>
             }
-        
+        </div>
     </div>
 </div>
