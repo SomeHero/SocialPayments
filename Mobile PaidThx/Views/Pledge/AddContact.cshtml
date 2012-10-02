@@ -101,7 +101,7 @@
                     }
                 }
             });
-            $(".contact-recipient-uri").die("click").live("click", function () {
+            $listview.on("click", ".contact-recipient-uri", function (event) {
 
                 $(this).parents("form:first").submit();
 

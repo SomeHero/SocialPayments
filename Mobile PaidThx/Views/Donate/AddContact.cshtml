@@ -108,7 +108,7 @@
                     }
                 });
 
-                $(".contact-organization").die("click").live("click", function () {
+                $listview.on("click", ".contact-organization", function (event) {
 
                     $(this).parents("form:first").submit();
 

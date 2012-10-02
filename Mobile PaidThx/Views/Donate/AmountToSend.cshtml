@@ -10,28 +10,32 @@
 
     <div data-role="content">
     <div class="pad">
-    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" } }))
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
     {
-            
-            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
-             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="btn-jq go-button" data-theme="f">
-                Go
-            </button></span>
-            <div style="clear:both;"></div>
+        <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+        <span class="button-holder go-button-holder">
+            <button id="gobtn-send2" type="submit" class="btn-jq go-button" data-theme="f">
+            Go
+        </button>
+
+        </span>
+        <div style="clear:both;"></div>
+    }
         <br />
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
+    {
         <div class="quicksend-title">
             QUICK SEND AMOUNTS</div>
         <div class="quicksend">
-            <button id="onedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="1">
+            <button id="onedollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="1" data-amount="1">
                 $1</button>
-            <button id="fivedollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="5">
+            <button id="fivedollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="5" data-amount="5">
                 $5</button>
-            <button id="tendollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="10">
+            <button id="tendollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="10" data-amount="10">
                 $10</button>
-            <button id="twentydollarbtnsend" type="button" class="quickaddbtn-style" data-role="none" data-amount="20">
+            <button id="twentydollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="20" data-amount="20">
                 $20</button>
         </div>
-     
     }
     </div>
     </div>
@@ -40,11 +44,11 @@
     {
      <script type="text/javascript">
          //wait to do event binding until the page is being initialized
-         $(document).delegate('[data-role="page"]', 'pageinit', function () {
+         $(document).ready(function () {
 
              var currentAmount = "0.00";
 
-             $(this).delegate('#customAmount', 'keydown', function () {
+             $(this).on('keydown', '#customAmount', function () {
                  if (event.shiftKey) {
                      event.preventDefault();
                      return;
@@ -103,22 +107,6 @@
 
                  $(this).val(currentAmount);
                  event.preventDefault();
-             });
-
-             $('.quickaddbtn-style').unbind("click").bind("click", function () {
-                 var amountToSend = $(this).attr('data-amount');
-
-                 var model = {
-                     Amount: amountToSend
-                 };
-
-                 $.mobile.changePage(getBaseURL() + 'Donate/AmountToSend', {
-                     data: model,
-                     dataUrl: getBaseURL() + 'Donate/Index',
-                     reverse: true,
-                     transition: 'slide',
-                     type: 'post'
-                 });
              });
          });
     </script>

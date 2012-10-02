@@ -69,7 +69,7 @@ body{
 	}
 
 .patternlockbutton{
-	background-image:url('images/btn-pinswipe.png');
+	background-image:url('../content/images/btn-pinswipe.png');
 	background-repeat:no-repeat;
 	display:block;
 	width:70px;
@@ -286,11 +286,11 @@ body{
 
 
 .touched{
-	background-image:url('images/btn-pinswipe-pressed.png');
+	background-image:url('../content/images/btn-pinswipe-pressed.png');
 }
 
 .multiple{
-	background-image:url('images/btn-pinswipe-selected.png');
+	background-image:url('../content/images/btn-pinswipe-selected.png');
 }
 
 .patternlocklinehorizontal{
