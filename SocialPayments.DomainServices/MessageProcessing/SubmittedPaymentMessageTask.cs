@@ -83,6 +83,10 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         HoldDays = holdDays,
                         ScheduledProcessingDate = scheduledProcessingDate,
                         PaymentVerificationLevel = verificationLevel,
+                        EstimatedDeliveryDate = System.DateTime.Now,
+                        ExpressDeliveryFee = message.deliveryFeeAmount,
+                        ExpressDeliveryDate = System.DateTime.Now,
+                        IsExpressed = (message.deliveryMethod == DeliveryMethod.Express ? true : false),
                         Transactions = new List<Transaction>()
                     };
 
@@ -153,8 +157,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                 TransactionBatch = transactionBatch,
                                 Type = TransactionType.Deposit,
                                 Payment = message.Payment,
-                                IndividualIdentifier = _senderName,
-
+                                IndividualIdentifier = _senderName
                             });
                         }
 
@@ -164,7 +167,14 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             message.Status = PaystreamMessageStatus.ProcessingPayment;
 
                             //Send Recipient Not Engaged Communication
-                            SendRecipientNotEngagedCommunication(message);
+                            try
+                            {
+                                SendRecipientNotEngagedCommunication(message);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
                         }
                         else
                         {
@@ -172,15 +182,24 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                 message.Status = PaystreamMessageStatus.HoldPayment;
                             else
                                 message.Status = PaystreamMessageStatus.ProcessingPayment;
-
-                            SendRecipientReceiptCommunication(message);
+                            try
+                            {
+                                SendRecipientReceiptCommunication(message);
+                            }
+                            catch (Exception ex)
+                            { }
                         }
                     }
                     else
                     {
                         message.Status = PaystreamMessageStatus.NotifiedPayment;
 
-                        SendRecipientNotRegisteredCommunication(message);
+                        try
+                        {
+                            SendRecipientNotRegisteredCommunication(message);
+                        }
+                        catch (Exception ex)
+                        { }
                     }
 
                     ctx.SaveChanges();
@@ -192,7 +211,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     var innerException = ex.InnerException;
                     while (innerException !=  null)
                     {
-                        _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Occurred Executing Post Payment Message Task. Inner Exception: {0}. Stack Trace: {1}", innerException.Message, innerException.StackTrace));
+                        _logger.Log(LogLevel.Error, String.Format("Inner Exception Occurred Executing Post Payment Message Task. Inner Exception: {0}. Stack Trace: {1}", innerException.Message, innerException.StackTrace));
                         innerException = innerException.InnerException;
                     }
                 }

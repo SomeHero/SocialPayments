@@ -26,8 +26,7 @@ namespace SocialPayments.DomainServices
                 MobileNumber = mobileNumber,
                 Message = message,
                 SMSStatus = smsStatus,
-                CreateDate = System.DateTime.Now,
-                SentDate = sentDate
+                CreateDate = System.DateTime.Now
             });
 
             _ctx.SaveChanges();

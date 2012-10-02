@@ -137,7 +137,7 @@ namespace SocialPayments.DomainServices
         }
         public Message AddMessage(string apiKey, string senderId, string recipientId, string recipientUri, string senderAccountId, double amount, string comments, string messageType,
              double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin,
-            string associatedRequestId, string deliveryMethod, double deliveryFeeAmount)
+            string associatedRequestId, string deliveryMethod)
         {
             _logger.Log(LogLevel.Info, String.Format("Adding a Message. {0} to {1} with {2}", senderId, recipientUri, senderAccountId));
 
@@ -162,6 +162,8 @@ namespace SocialPayments.DomainServices
                 
                 MessageType type = MessageType.Payment;
                 PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPayment;
+                DeliveryMethod methodOfDelivery = DeliveryMethod.Standard;
+                double deliveryFeeAmount = 0.0;
 
                 if (messageType.ToUpper() == "PAYMENT")
                 {
@@ -183,6 +185,11 @@ namespace SocialPayments.DomainServices
                 {
                     type = MessageType.Donation;
                     status = PaystreamMessageStatus.SubmittedDonation;
+                }
+
+                if (deliveryMethod.ToUpper() == "EXPRESS")
+                {
+                    methodOfDelivery = DeliveryMethod.Express;
                 }
 
 
@@ -281,6 +288,11 @@ namespace SocialPayments.DomainServices
                 }
                 //TODO: confirm amount is within payment limits (maybe)
 
+                if (methodOfDelivery == DeliveryMethod.Express && amount > sender.ExpressDeliveryFreeThreshold)
+                {
+                    deliveryFeeAmount = sender.ExpressDeliveryFeePercentage * amount;
+                }
+
                 //Add message
                 Domain.Message messageItem = ctx.Messages.Add(new Message()
                     {
@@ -309,8 +321,8 @@ namespace SocialPayments.DomainServices
                         recipientHasSeen = false,
                         PaymentRequest = associatedRequest,
                         senderHasSeen = true,
-                        deliveryMethod = DeliveryMethod.Standard,
-                        deliveryFeeAmount = deliveryFeeAmount,
+                        deliveryMethod = methodOfDelivery,
+                        deliveryFeeAmount = deliveryFeeAmount
                     });
 
                 ctx.SaveChanges();
@@ -325,7 +337,7 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "Payment", latitude, longitude, recipientFirstName,
-                       recipientLastName, recipientImageUri, securityPin, "", deliveryMethod, 0);
+                       recipientLastName, recipientImageUri, securityPin, "", deliveryMethod);
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -343,7 +355,7 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 Domain.Message message = AddMessage(apiKey, senderId, "", recientUri, senderAccountId, amount, comments, "PaymentRequest", latitude, longitude, recipientFirstName,
-                    recipientLastName, recipientImageUri, securityPin, "", "Standard", 0);
+                    recipientLastName, recipientImageUri, securityPin, "", "Standard");
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -508,7 +520,7 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 Domain.Message message = AddMessage(apiKey, senderId, organizationId, organizationName, senderAccountId, amount, comments,
-                    "Donation", 0.0, 0.0, "", "", "", securityPin, "", "Standard", 0);
+                    "Donation", 0.0, 0.0, "", "", "", securityPin, "", "Standard");
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
@@ -579,7 +591,7 @@ namespace SocialPayments.DomainServices
 
                 var paymentMessage = AddMessage(message.ApiKey.ToString(), userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
                                          message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
-                                         message.Id.ToString(), "Standard", 0);
+                                         message.Id.ToString(), "Standard");
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
