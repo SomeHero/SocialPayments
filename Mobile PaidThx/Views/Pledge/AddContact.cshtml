@@ -11,13 +11,14 @@
     </div>
     <div data-role="content">
         <div class="pad">
-            <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+            <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
+         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
         @foreach (var alphaGroup in Model.SortedContacts)
         {
                 <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                <li class="contact">
+                <li class="contact removable">
                 @using(Html.BeginForm()) {
                     @Html.Hidden("recipientUri", "fb_" + @friend.id)
                     @Html.Hidden("recipientType", "facebook")

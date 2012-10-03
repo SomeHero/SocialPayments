@@ -1,53 +1,124 @@
 ﻿@model Mobile_PaidThx.Models.SendModels.AddContactSendModel
 @{
     ViewBag.Title = "AddContactSend";
+    ViewBag.PageID = "send-contact-select-page";
+    ViewBag.Classes = "page";
 }
-<<<<<<< HEAD
-<div data-role="page" id="send-contact-select-page" data-add-back-btn="true" @TempData["DataUrl"]>
-=======
-<div data-role="page" id="send-contact-select-page" class="full" data-add-back-btn="true">
->>>>>>> upstream/development
- @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+ 
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
-            Enter Recipient</h1>
+            Send To:</h1>
+            <a href="@Url.Content("~/Send")"  class="hd-btn-left btn-back">Back</a>
     </div>
 
     <div data-role="content">
           <div class="pad">
-        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
-                   
+         <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
+        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
+               
+                    <li data-role="list-divider">Test Users</li>
+            
+<<<<<<< HEAD
+                   <li class="contact removable">
+=======
+                   <li class="contact contact-select">
+>>>>>>> upstream/development
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+1@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 1");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 1</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    <div class="clear"></div>
+                    </li>
+                        
+<<<<<<< HEAD
+                   <li class="contact removable">
+=======
+                   <li class="contact contact-select">
+>>>>>>> upstream/development
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+2@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 2");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 2</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    <div class="clear"></div>
+                    </li>    
+                        
+<<<<<<< HEAD
+                   <li class="contact removable">
+=======
+                   <li class="contact contact-select">
+>>>>>>> upstream/development
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+3@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 3");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 3</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    <div class="clear"></div>
+                    </li>
         @foreach (var alphaGroup in Model.SortedContacts)
         {
             <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                    <li>
-                    <a class="contact-recipient-uri" recipient-uri="fb_@friend.id" recipient-type="facebook" recipient-name="@friend.name">
-                        <img src="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
-                        @friend.name
-                    </a>
+                   <li class="contact contact-select removable">
+                    @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "fb_" + @friend.id)
+                        @Html.Hidden("recipientType", "facebook")
+                        @Html.Hidden("recipientName", @friend.name);
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
+                            <h2 class="heading">@friend.name</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    <div class="clear"></div>
                     </li>
             }
             }
-                    <li id="no-results">
-                    <a id="new-recipient-uri" class="send-recipient-uri" recipient-type="new" recipient-uri="">
+            <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Contacts Found</li>
+                    <li id="contact-no-results" class="contact-no-results-item">
+                    @using(Html.BeginForm()) {
+                    @Html.Hidden("recipientUri", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-uri"}})
+                    @Html.Hidden("recipientType", "new", new Dictionary<string, object> {{ "id", "contact-new-recipient-type"}})
+                    @Html.Hidden("recipientName", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-name"}});
+                    <a id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
                         <img src="@Url.Content("~/Content/images/avatar.png")" />
-                        <span id="results-header">
-                        No matches found 
-                        </span>
-                        <br />
-                        <span id="results-description">
-                        Continue type or check entry
-                       </span>
+                        <h2 id="results-header" class="heading">
+                        No contacts...yet
+                        </h2>
+                         <h4 id="results-description" class="subheading">
+                        Type a new email or phone # above
+                       </h4>
                    </a>
-                    </li>
+                        }
+               </li>
+               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
                 </ul>
             </div>
     </div>
-    
+</div>
+@section PageScripts
+{
 <script id="meCodeItem" type="text/x-jquery-tmpl">
-    <li>
+
+    <li class="mecode-recipient">
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
             <img src="http://graph.facebook.com/1/picture" />
             ${meCode}
@@ -55,151 +126,62 @@
      </li>
 </script>
 ​
-    <script language="javascript">
+    <script type="text/javascript">
 
         //wait to do event binding until the page is being initialized
-        var meCodeSearchController = (function ($, undefined) {
-            var pub = {},
-            $this = $(this);
 
-            pub.init = function () {
+        $("document").ready(function () {
 
-                //When news updated, display items in list
-                $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
-                    displayMeCodes(meCodes);
-                });
-            };
-
-            pub.searchAndDisplayMeCodes = function () {
-                //Starting loading animation
-                $.mobile.showPageLoadingMsg();
-
-                //Get news and add success callback using then
-                searchByMeCode(function () {
-                    //Stop loading animation on success
-                    $.mobile.hidePageLoadingMsg();
-                });
-            };
-
-            function searchByMeCode(callback) {
-                //Get news via ajax and return jqXhr
-                $.ajax({
-                    url: "http://23.21.203.171/api/internal/api/Users/searchbymecode/$jam",
-                    dataType: "json",
-                    success: function (data, textStatus, xhr) {
-                        //Publish that news has been updated & allow
-                        //the 2 subscribers to update the UI content
-                        $this.trigger("meCodes.updated", data);
-                        if (callback) callback(data);
-                    }
-                });
-            }
-
-            function displayMeCodes(meCodes) {
-                //cache the list-view element for later use
-                var $listview = $(this).find('[data-role="listview"]');
-
-                //Empty current list
-                $listview.empty();
-
-                //Use template to create items & add to list
-                $("#meCodeItem").tmpl(meCodes.foundUsers).appendTo($("#contactsList"));
-
-                //Call the listview jQuery UI Widget after adding 
-                //items to the list allowing correct rendering
-                $("#contactsList").listview("refresh");
-            }
-
-            return pub;
-        } (jQuery));
-        $("#send-contact-select-page").unbind('pageshow').bind('pageshow', function () {
+            $(this).find("img.lazy").lazyload();
 
             //cache the list-view element for later use
             var $listview = $(this).find('[data-role="listview"]');
-            meCodeSearchController.init();
+
+            webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
+            contactsSearchController.init($("#send-contact-select-page"));
 
             //delegate event binding since the search widget is added dynamically
             //bind to the `keyup` event so we can check the value of the input after the user types
-            $(this).delegate('input[data-type="search"]', 'keyup', function () {
+            $('input[data-type="search"]').bind('keyup', function () {
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
 
                 if (searchVal.substring(0, 1) == '$') {
+
                     if (searchVal.length > 3) {
-                        meCodeSearchController.searchAndDisplayMeCodes();
+                        $("#me-codes-divider").show();
+                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
+                    } else {
+                        $("#me-codes-divider").hide();
+                        contactsSearchController.clearMeCodes();
                     }
                 }
                 else {
+                    $("#me-codes-divider").hide();
+                    contactsSearchController.clearMeCodes();
+
+
                     //check to see if there are any visible list-items that are not the `#no-results` element
-                    if ($listview.children(':visible').not('#no-results').length === 0) {
+                    if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
+                        contactsSearchController.showNoResults(searchVal);
 
-                        //if none are found then fadeIn the `#no-results` element
-                        $('#no-results').fadeIn(500);
-                        if (isValidEmailAddress(searchVal)) {
-                            $("#results-header").text(searchVal);
-                            $("#results-description").text("New Email Recipient");
-                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                        } else if (isValidPhoneNumber(searchVal)) {
-                            $("#results-header").text(searchVal);
-                            $("#results-description").text("New Phone Recipient");
-                            $("#new-recipient-uri").attr('recipient-uri', searchVal);
-                        }
-                        else {
-                            $("#results-header").text("No matches found");
-                            $("#results-description").text("Continue type or check entry");
-                            $("#recipient-uri").val('');
-                        }
                     } else {
-
                         //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                        $('#no-results').fadeOut(250);
+                        contactsSearchController.hideNoResults(searchVal);
                     }
                 }
             });
-            $(".contact-recipient-uri").die("click").live("click", function () {
+            $listview.on("click", ".contact-recipient-uri", function(event) {
 
-                var recipientUri = $(this).attr('recipient-uri');
-                var recipientName = $(this).attr('recipient-name');
-                var recipientType = $(this).attr('recipient-type');
-
-                var model = {
-                    RecipientUri: recipientUri,
-                    RecipientName: recipientName,
-                    RecipientType: recipientType
-                };
-
-                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
-                    data: model,
-                    dataUrl: getBaseURL() + 'Send/Index',
-                    reverse: true,
-                    transition: 'slide',
-                    type: 'post'
-                });
+                $(this).parents("form:first").submit();
 
             });
-            $("#new-recipient-uri").die("click").live("click", function () {
-
-                var recipientUri = $(this).attr('recipient-uri');
-                var recipientName = $(this).attr('recipient-uri');
-                var recipientType = $(this).attr('recipient-type');
-
-                var model = {
-                    RecipientUri: recipientUri,
-                    RecipientName: recipientName,
-                    RecipientType: recipientType
-                };
-
-                $.mobile.changePage(getBaseURL() + 'Send/AddContactSend', {
-                    data: model,
-                    dataUrl: getBaseURL() + 'Send/Index',
-                    reverse: true,
-                    transition: 'slide',
-                    type: 'post'
-                });
-
+            $listview.on("click", ".contact-new-recipient", function (event) {
+                if($(this).attr('data-uri-valid') == '1')
+                    $(this).parents("form:first").submit();
             });
-
         });
         
 </script>
-</div>
+}
+
