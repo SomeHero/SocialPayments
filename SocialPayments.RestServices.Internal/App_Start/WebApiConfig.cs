@@ -248,12 +248,19 @@ namespace SocialPayments
             );
 
             config.Routes.MapHttpRoute(
-    name: "PaymentAccounts",
-    routeTemplate: "api/users/{userId}/PaymentAccounts",
-    defaults: new { controller = "UserPaymentAccounts", action = "Post" },
-       constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+                name: "PaymentAccounts",
+                routeTemplate: "api/users/{userId}/PaymentAccounts",
+                defaults: new { controller = "UserPaymentAccounts", action = "Post" },
+                   constraints: new { httpMethod = new HttpMethodConstraint("POST") }
             
-);
+            );
+            config.Routes.MapHttpRoute(
+                name: "DeletePaymentAccount",
+                routeTemplate: "api/users/{userId}/PaymentAccounts/{id}",
+                defaults: new { controller = "UserPaymentAccounts", action = "Delete" },
+                   constraints: new { httpMethod = new HttpMethodConstraint("DELETE") }
+
+            );
 
             config.Routes.MapHttpRoute(
                 name: "AddUserPaymentAccounts",

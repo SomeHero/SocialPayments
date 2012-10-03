@@ -208,7 +208,7 @@ namespace SocialPayments.DomainServices
 
             }
         }
-        public void SetPreferredReceiveAccount(string userId, string paymentAccountId, string securityPin)
+        public void  SetPreferredReceiveAccount(string userId, string paymentAccountId, string securityPin)
         {
             using (var _ctx = new Context())
             {
