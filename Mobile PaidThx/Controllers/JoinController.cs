@@ -197,7 +197,7 @@ namespace Mobile_PaidThx.Controllers
             if(isNewUser)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
             else
-                return RedirectToAction("Index", "Paystream", new RouteValueDictionary() { });
+                return RedirectToAction("Index", "Dashboard", new RouteValueDictionary() { });
             
         }
         /// <summary>
