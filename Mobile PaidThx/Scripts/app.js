@@ -552,7 +552,6 @@ var pinswipeResizeController = (function ($, undefined) {
 //LOAD
 $(document).ready(function(){
 
-
     //BACK BUTTONS
 
     $('.btn-back.history').live('click', function () {

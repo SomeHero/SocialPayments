@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Donate To:";
     ViewBag.PageID = "donate-add-contact-page";
-    ViewBag.Classes = "page full";
+    ViewBag.Classes = "page";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes" data-dom-cache="true"  >
 
@@ -21,14 +21,14 @@
                     <li data-role="list-divider">@alphaGroup.Key</li>
                     foreach (var nonprofit in alphaGroup.Value)
                     {
-                    <li class="contact">
+                    <li class="contact contact-select">
                    @using (Html.BeginForm())
                    {
                        @Html.Hidden("recipientId", @nonprofit.Id)
                        @Html.Hidden("recipientName", @nonprofit.Name)
                        @Html.Hidden("recipientImageUrl", "");
                        @Html.Hidden("recipientType", "NonProfit");
-                       <a class="contact-organization">
+                       <a class="contact-organization contact-image">
                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
                            @if (nonprofit.HasInfo)
                            {
@@ -41,6 +41,7 @@
                            }
                        </a>
                    }
+                   <div class="clear"></div>
                     </li>
                     }
                 }

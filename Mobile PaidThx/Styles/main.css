@@ -283,7 +283,7 @@ background-image: linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998
 /*++++++++++++++++++++++++++++++FORM FIELDS+++++++++++++++++++++++++++*/
 
 span.form-holder {
-background: #F6F6F6;
+background: #f1f1f2;
 padding: 3px 5px;
 display: block;
 border-radius: 5px;
@@ -769,6 +769,48 @@ height:80px;
 {
   border-color:#48b201;  
   height:100px;
+}
+
+p.pledge
+{
+ border-top:1px solid #cccccc;
+ padding-top:20px;   
+ margin-top:30px;
+}
+
+li.contact-select
+{
+ -webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+border: 1px solid #CCC;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color: white;
+background-image: none;
+-moz-box-shadow: 1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px white;
+box-shadow: 1px 1px 0px 0px white;   
+list-style-type:none;
+margin-bottom:10px;
+padding:10px;
+cursor:pointer;
+}
+
+.list-thumbnail
+{
+border:1px solid #fff;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+-moz-box-shadow:    1px 1px 2px 0px #a3a3a3;
+-webkit-box-shadow: 1px 1px 2px 0px #a3a3a3;
+box-shadow:         1px 1px 2px 0px #a3a3a3;
+position: static;
+margin:0 10px 0 0;  
+float:left;
 }
 
 /* ==========================================================================
@@ -1287,6 +1329,41 @@ border-style: solid;
     height:0px;
 }
 
+#payment-type-group
+{
+ text-align:center;
+ height:40px; 
+ line-height:40px; 
+ margin-bottom:4px; 
+}
+.input_hidden {
+    position: absolute;
+    left: -9999px;
+}
+.ps-filter-label
+{
+    display:inline-block;
+    width:20%;
+ padding:0;
+ cursor:pointer;   
+ font-size:12px;
+ font-weight:bold;
+ line-height:30px; 
+  
+}
+.ps-filter-label.selected
+{
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color:#65be0f; 
+box-shadow:    1px 1px 0px 0px #fff;
+				-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;
+color:#ffffff;
+text-shadow:none;
+}
 
 /* ==========================================================================
    SETTINGS
