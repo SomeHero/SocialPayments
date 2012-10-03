@@ -46,13 +46,13 @@
                     <div class="editor-field">
                        <span class="form-holder">  @Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" }, { "pattern", "[0-9]*" } })</span>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" class="cs-radio-holder">
                         <div data-role="controlgroup" data-type="horizontal">
-                            <input type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
-                            <label for="radio-choice-1">
+                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
+                            <label class="cs-radio-label selected" for="radio-choice-1">
                                 Checking</label>
-                            <input type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
-                            <label for="radio-choice-2">
+                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
+                            <label class="cs-radio-label" for="radio-choice-2">
                                 Savings</label>
                         </div>
                     </div>
@@ -79,9 +79,11 @@
 
             $(document).ready(function () {
 
-                if (isAndroid) {
-                    //do something if android
-                }
+                $('.cs-radio').addClass('input_hidden');
+                $('.cs-radio-label').click(function (event) {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
 
             });
     </script>

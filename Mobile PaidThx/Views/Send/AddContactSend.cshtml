@@ -19,7 +19,7 @@
                
                     <li data-role="list-divider">Test Users</li>
             
-                   <li class="contact removable">
+                   <li class="contact removable contact-select">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+1@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -30,9 +30,10 @@
                             <h4 class="subheading">Facebook Friend</h4>
                         </a>
                     }
+                    <div class="clear"></div>
                     </li>
                         
-                   <li class="contact removable">
+                   <li class="contact removable contact-select">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+2@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -43,9 +44,10 @@
                             <h4 class="subheading">Facebook Friend</h4>
                         </a>
                     }
+                    <div class="clear"></div>
                     </li>    
                         
-                   <li class="contact removable">
+                   <li class="contact removable contact-select">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+3@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -56,6 +58,7 @@
                             <h4 class="subheading">Facebook Friend</h4>
                         </a>
                     }
+                    <div class="clear"></div>
                     </li>
         @foreach (var alphaGroup in Model.SortedContacts)
         {
@@ -73,6 +76,7 @@
                             <h4 class="subheading">Facebook Friend</h4>
                         </a>
                     }
+                    <div class="clear"></div>
                     </li>
             }
             }
