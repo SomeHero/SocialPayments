@@ -19,7 +19,7 @@
                
                     <li data-role="list-divider">Test Users</li>
             
-                   <li class="contact">
+                   <li class="contact removable">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+1@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -32,7 +32,7 @@
                     }
                     </li>
                         
-                   <li class="contact">
+                   <li class="contact removable">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+2@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -45,7 +45,7 @@
                     }
                     </li>    
                         
-                   <li class="contact">
+                   <li class="contact removable">
                      @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "demo+3@paidthx.com")
                         @Html.Hidden("recipientType", "email")
@@ -62,7 +62,7 @@
             <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                   <li class="contact contact-select">
+                   <li class="contact contact-select removable">
                     @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")

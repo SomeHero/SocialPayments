@@ -14,14 +14,15 @@
       
         
           <div class="pad">
-          <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+           <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
+        <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
                 @foreach (var alphaGroup in Model.SortedNonProfits)
                 {
                     <li data-role="list-divider">@alphaGroup.Key</li>
                     foreach (var nonprofit in alphaGroup.Value)
                     {
-                    <li class="contact contact-select">
+                    <li class="contact contact-select removable">
                    @using (Html.BeginForm())
                    {
                        @Html.Hidden("recipientId", @nonprofit.Id)
