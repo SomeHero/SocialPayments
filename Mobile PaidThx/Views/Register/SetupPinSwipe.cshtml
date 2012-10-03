@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "SetupPinSwipe";
+    ViewBag.PageID = "setup-pin-swipe";
+}
+
+<div  id="@ViewBag.PageID" class="modally" >
+     <div data-role="header" data-position="fixed" class="header-pdthx" >
+	    <h1>Create PIN</h1>
+    </div>
+    <div data-role="content">
+        <div class="top-panel">
+        @if(!String.IsNullOrEmpty(TempData["Message"].ToString()))
+        {
+            <p class="error">@TempData["Message"]</p>
+           }else{
+    <text> <p>Create a security pin by swiping your finger to connect at least 4 pins below.</p></text>
+        }
+</div>
+    <div class="pad">
+    
+</div>
+        @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
+        {
+         <div>
+            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
+
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+            
+         </div>
+        }
+        
+  <div id="resizerHack">
+        
+
+
+        </div>
+        </div>
+</div>
+@section PageScripts
+{       
+<script type="text/javascript">
+    $(document).ready(function () {
+        pinswipeResizeController.resizePINs();
+    });
+</script>
+}
+      

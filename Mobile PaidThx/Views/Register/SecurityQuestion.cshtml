@@ -1,0 +1,25 @@
+﻿@model Mobile_PaidThx.Models.SecurityQuestionModel
+@{
+    ViewBag.Title = "SecurityQuestion";
+}
+<div  id="personalize-page" class="modally" >
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+	    <h1>Security Question</h1>
+    </div>
+    <div data-role="content">
+    <div class="top-panel">
+   
+    <p>For security purposes, select and answer a security question below. </p></div>
+    <div class="pad">
+     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+    
+        @using (Html.BeginForm("SecurityQuestion", "Register", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
+        {
+            @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "pop" } })
+            @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })
+            <br />
+            <button type="submit" class="pd-btn green">Complete Set Up</button>
+        }
+        </div>
+    </div>
+</div>

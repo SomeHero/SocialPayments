@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "dogood-page";
+    ViewBag.Classes = "page ";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
+        <h1>Do Good</h1>
+       <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
+        <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
+    </div>
+  
+    <div data-role="content">
+        <div class="pad">
+            <p class="instructions">Make a donation or
+                gift to a non-profit organization. As always, 100% of your generosity goes to the
+                organization.</p> 
+                <a href="@Url.Content("~/Donate")" class="pd-btn maroon">
+                       Give to a Cause
+                      </a>
+       
+        
+
+            <p class="instructions pledge">Accept pledges and
+                charitable donations on behalf of your organization wherever you may be with just
+                an e-mail or phone #.</p> <a href="@Url.Content("~/Pledge")" class="pd-btn blue" >
+                        Accept a Pledge</a>
+
+     </div>
+    </div>
+</div>

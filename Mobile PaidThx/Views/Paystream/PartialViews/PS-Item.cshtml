@@ -1,0 +1,98 @@
+﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
+    <li class="removable paystreamLi {{if direction == "In"}}in{{/if}} {{if direction == "Out"}}out{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if !recipientSeen}}new{{/if}}">
+        <a href="#" class="paystreamItem" messageId="${Id}">
+
+<img width="50" height="50" class="rounded ps-image" src="{{if direction == "In"}}
+${senderImageUri}
+        {{/if}}
+        {{if direction == "Out"}}
+${recipientImageUri}
+        {{/if}}" alt="Image" />
+
+<h2 class="ps-other-party"> 
+        {{if direction == "In"}}
+${senderName}
+        {{/if}}
+        {{if direction == "Out"}}
+${recipientName}
+        {{/if}}
+
+        <br><span class="ps-message">
+          {{if comments != "No comments" && comments != ""}}                                             
+ <text>"${comments}"</text>
+ {{else}}
+No message
+ {{/if}}
+</span>  
+<br><span class="ps-datetime">                                               
+${XDate(createDate).toString("ddd MMM d, yyyy")}
+</span>  
+
+</h2>
+
+                              
+<div class="ps-details">
+<div class="left">
+
+<span class="ps-type">
+ {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+               Request In
+                {{else messageType == "Payment"}}
+                Money In
+                {{else messageType == "Donation"}}
+                Donation In
+                {{else messageType == "Pledge"}}
+                Pledge
+                {{/if}}
+{{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                Request Out
+                {{else messageType == "Payment"}}
+                Money Out
+                {{else messageType == "Donation"}}
+                Donation
+                {{else messageType == "Pledge"}}
+                Pledge
+                {{/if}}
+            {{/if}}
+</span>
+<span class="ps-status">
+&nbsp;|&nbsp;&nbsp;${messageStatus}
+</span>
+<span class="ps-dummy">
+&nbsp;
+</span>
+</div>
+<div class="right">
+<span class="ps-amount">
+ {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+               -
+                {{else messageType == "Payment"}}
+                +
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "Pledge"}}
+                &#9829;
+                {{/if}}
+{{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                +
+                {{else messageType == "Payment"}}
+                -
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "Pledge"}}
+                &#9829;
+                {{/if}}
+            {{/if}}$${amount.toFixed(2)}
+</span>
+</div>
+<div class="clear">
+</div>
+</div>             
+
+        </a>
+     </li>
+</script>

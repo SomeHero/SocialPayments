@@ -1,0 +1,35 @@
+﻿@model Mobile_PaidThx.Models.MobileDeviceVerificationModel
+@{
+    ViewBag.Title = "Validate your Mobile Device";
+}
+<script src="@Url.Content("~/Scripts/verify-mobiledevice.js")" type="text/javascript"></script>
+<div id="container" >
+    <dl id="main-tabs" class="tabs contained">
+        <dd>
+            @if (Model.Payment != null)
+            {
+                <text>
+                    <a href="#simpleContained1" class="active">You have money!</a>
+                </text>
+            }
+            else
+            {
+                 <text>
+                    <a href="#simpleContained1" class="active">Register</a>
+                </text>
+            }
+        </dd>
+        <dd>
+            <a href="#simpleContained2">What is PaidThx?</a></dd>
+    </dl>
+    <div id="content-container">
+        <ul class="tabs-content contained">
+            <li class="active" id="simpleContained1Tab">
+                @{Html.RenderPartial("PartialViews/ValidateMobileDevice", Model);}
+            </li>
+            <li id="simpleContained2Tab">
+                @{Html.RenderPartial("../Home/PartialViews/About");}
+            </li>
+        </ul>
+    </div>
+</div>

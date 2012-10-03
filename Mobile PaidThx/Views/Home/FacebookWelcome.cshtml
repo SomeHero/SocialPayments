@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Welcome to Facebook";
+}
+<div id="container">
+    <div id="header">
+    <dl id="main-tabs" class="tabs contained" data-role="listview">
+        <dd>
+            <a href="#simpleContained1" class="active">Send $</a></dd>
+        <dd>
+            <a href="#simpleContained1">Send $</a></dd>
+        <dd>
+            <a href="#simpleContained2">Request $</a></dd>
+        <dd>
+            <a href="#simpleContained3">Paystream</a></dd>
+        <dd>
+            <a href="#simpleContained4" class="tab-settings"></a></dd>
+    </dl>
+    </div>
+    <div id="content-container">
+        <ul class="tabs-content contained">
+            <li id="simpleContained1Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/FacebookWelcome");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained1Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/SendMoney");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained2Tab">
+                <div id="main-container">
+                    @{Html.RenderPartial("PartialViews/RequestMoney");}
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li  class="active" id="simpleContained3Tab">
+                <div id="main-container3">
+                    @{Html.RenderPartial("PartialViews/SubNav", Model);}                    
+                    @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+            <li id="simpleContained4Tab">
+                <div id="main-container">
+                     @{Html.RenderPartial("../Profile/PartialViews/SubNav", Model.ProfileModel, new ViewDataDictionary());}                    
+                     @{Html.RenderPartial("_footer");}
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

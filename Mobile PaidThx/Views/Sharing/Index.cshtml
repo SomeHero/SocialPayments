@@ -1,0 +1,30 @@
+﻿@model Mobile_PaidThx.Models.NotificationModels.NotificationModel
+@{
+    ViewBag.Title = "Sharing";
+}
+<div  id=sharing-page"   >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Sharing</h1>
+            <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back history">Back</a>
+    </div>
+    <div data-role="content" style="margin: 15px; background-color: #ffffff;">
+        @foreach (var subject in Model.NotificationSubjects)
+        {
+            @subject.Description
+            <ul data-role="listview" data-inset="true" class"sliders">
+            @foreach (var item in subject.NotificationItems)
+            {
+            <li>
+                <div data-role="fieldcontain">
+                <label for="@item.ConfigurationKey">@item.Description</label>
+                @Html.DropDownList(item.ConfigurationKey, new SelectList(item.Options, "Value", "Key", item.SelectedValue), new Dictionary<string, object>  { { "id", item.ConfigurationKey }, { "class", "sharing-item" },  { "data-role", "slider" }, { "data-theme", "b" }})
+                </div>
+                </li>
+           
+            }
+            </ul>
+        }
+    </div>
+</div>

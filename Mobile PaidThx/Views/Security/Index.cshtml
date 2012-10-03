@@ -1,0 +1,36 @@
+﻿@model Mobile_PaidThx.Models.SecurityModels.SecurityPreferencesModel
+@{
+    ViewBag.Title = "Index";
+}
+<div  id="security-page"  >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Security</h1>
+            <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+            
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <!--Rate PaidThx ( won't be used this version )-->
+                    <!-- Separate Set -->
+                    <!-- User Agreement -->
+                    <a href="@Url.Content("~/Security/ChangePassword")" data-prefetch data-transition="slide">
+                    Change Password </a></li>
+                @if (Model.SetupSecurityPin)
+                {
+                <li>
+                    <!-- Sign Out -->
+                    <a  href="@Url.Content("~/Security/ChangeSecurityPin")" data-prefetch data-transition="slide">
+                    Change Security Pin </a></li>
+                <li>
+                    <!-- Sign Out -->
+                    <a  href="@Url.Content("~/Security/ForgotSecurityPin")" data-prefetch data-transition="slide">
+                    Forgot Security Pin</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

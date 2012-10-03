@@ -1,0 +1,44 @@
+﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
+@{
+    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.PageID = "donate-pinswipe-page";
+}
+
+<div  id="@ViewBag.PageID" >
+        @Html.ValidationSummary()
+       
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+       <h1>
+            Confirm</h1>
+            <a href="@Url.Content("~/Donate")"  class="hd-btn-left btn-back history">Back</a>
+    </div>
+  
+    <div data-role="content">
+        <div class="top-panel">
+         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+            <text>Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName</text>
+        </div>
+              <div class="pad">
+        @using (Html.BeginForm("PopupPinswipe", "Donate", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+
+        }
+    </div>
+    </div>
+    <div id="resizerHack">
+    </div>
+
+</div>
+@section PageScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pinswipeResizeController.resizePINs();
+        });
+    </script>
+}

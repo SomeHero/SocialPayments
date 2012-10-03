@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>PaidThx | @ViewBag.Title </title>
+        <meta name="description" content="The PaidThx Mobile App - Best Viewed on a Mobile Device">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="cleartype" content="on">
+
+        <!-- not yet
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="">
+        <link rel="apple-touch-icon-precomposed" href="">
+        <link rel="shortcut icon" href="">-->
+
+        <link rel="icon" type="image/png" href="@Url.Content("~/Content/images/favicon.png")">
+
+        <!-- For iOS web apps. Delete if not needed. -->
+        <!--
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        -->
+
+        <!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
+        <!--
+        <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+        -->
+
+        <!-- ++++++++++++++++++++++ STYLESHEETS ++++++++++++++++++++++ -->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/normalize.css")">
+
+        
+        <!-- LIBS -->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/qtip2/jquery.qtip.min.css")">
+
+        <!-- CUSTOM -->
+        <!--<link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/app.css?ver=0.11")" />-->
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/patternlock.css")"  />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Styles/main.css")" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans|Droid+Sans" />
+        
+        @RenderSection("PageStyles", required: false)
+
+        <!-- ++++++++++++++++++++++ HEAD SCRIPTS ++++++++++++++++++++++ -->
+
+        <!-- PLUGINS LIBS -->
+        
+    <script type="text/javascript" src="@Url.Content("~/Scripts/modernizr-2.6.1.min.js")"></script>
+
+        <!-- ++++++++++++++++++++++ FACEBOOK ++++++++++++++++++++++ -->
+    <script type="text/javascript">
+                if (window.location.hash == '#_=_') {
+                    window.location.hash = '';
+                }
+    </script>
+
+    @RenderSection("HeadScripts", required: false)
+    </head>
+    <body>
+
+    @RenderBody()
+
+
+    <!-- end body -->
+
+    <!--JQUERY-->
+    <!-- <script>        window.jQuery || document.write('<script src="@Url.Content("~/Scripts/jquery-1.7.1.js")"><\/script>')</script>-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
+    <!--JQUERY PLUGINS-->
+    <script type="text/javascript"src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.json-2.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.placeholder.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.tmpl.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.lazyload.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Libs/qtip2/jquery.qtip.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/iso8601.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/xdate.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/helper.js")"></script>
+
+    <!--CUSTOM SCRIPTS-->
+    <script type="text/javascript" src="@Url.Content("~/Scripts/patternlock.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
+    
+
+    <!-- Google Analytics - Hard Coded Dev -->
+        <script>
+            var _gaq = [["_setAccount", "UA-30208011-2"], ["_trackPageview"]];
+            (function (d, t) {
+                var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
+                g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+                s.parentNode.insertBefore(g, s)
+            } (document, "script"));
+        </script>
+
+    @RenderSection("PageScripts", required: false)
+
+    </body>
+    </html>

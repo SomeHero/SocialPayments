@@ -1,0 +1,36 @@
+﻿@model Mobile_PaidThx.Models.SecurityModels.ForgotSecurityPinModel
+@{
+    ViewBag.Title = "Forgot PIN";
+    ViewBag.PageID = "forgotsecuritypin-page";
+}
+
+<div  id="@ViewBag.PageID"  >
+        
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Forgot PIN</h1>
+            <a href="@Url.Content("~/Security")"  class="hd-btn-left btn-back">Back</a>
+    </div>
+    <div data-role="content">
+      <div class="top-panel">
+        <p>Answer your security question below to reset your security PIN.</p>
+        </div>
+    <div class="pad">
+      
+     @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "data-ajax", "false" }  }))
+         {   
+        @Html.ValidationSummary()
+
+        <p>@Model.SecurityQuestion</p>
+        <p>
+            @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Security Question Answer" } })
+        </p>
+                 <p>
+            <button type="submit" id="changepassword-submit" data-theme="f" data-icon="check" data-iconpos="right">
+                Submit</button>
+
+        </p>
+         }
+    </div>
+    </div>
+</div>

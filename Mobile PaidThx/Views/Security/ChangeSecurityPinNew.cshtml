@@ -1,0 +1,43 @@
+﻿@model Mobile_PaidThx.Models.SecurityModels.ConfirmSecurityPinModel
+@{
+    ViewBag.Title = "Confirm Security PIN";
+    ViewBag.PageID = "confirmsecuritypin-page";
+}
+
+<div  id="@ViewBag.PageID"   >
+        
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Confirm</h1>
+    </div>
+    <div data-role="content">
+    <div class="top-panel">
+   
+        <p>Now swipe a new security pin.</p></div>
+    <div class="pad">
+    @Html.ValidationSummary()
+      
+                
+        @using (Html.BeginForm("ChangeSecurityPinNew", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
+        {       
+            <div>
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none"  />
+        </div>
+        }
+        </div>
+    </div>
+      <div id="resizerHack">
+        
+
+
+        </div>
+</div>
+@section PageScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pinswipeResizeController.resizePINs();
+        });
+</script>
+}

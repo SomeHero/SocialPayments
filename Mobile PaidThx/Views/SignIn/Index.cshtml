@@ -1,0 +1,55 @@
+﻿@model Mobile_PaidThx.Models.SignInModels.SignInModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "page-signin";
+    ViewBag.Classes = "page ";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>Sign In</h1>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+            @if (TempData["Message"] != null)
+            {
+                <text>
+                    <div class="validation-summary-errors">
+                        <ul>
+                            <li>@TempData["Message"]</li>
+                        </ul>
+
+                    </div>
+                </text>
+            }
+            
+            @Html.ValidationSummary()
+            <button type="button" id="signin-facebook-submit" class="pd-btn fb" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
+                Sign in with Facebook
+            </button>
+            <div style="margin-bottom:25px"></div>
+            <h5>
+                Or Sign in with Email or Phone #</h5>
+            <div id="signin-form">
+                @using (Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
+                {       
+                    <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address or Phone #"
+                        name="Email" /></span>
+
+                    <span class="form-holder"><input type="password" id="password" class="required" placeholder="Password" name="Password" /></span>
+                    <button type="submit" id="signin-submit" class="pd-btn green">
+                      Sign In</button>
+
+                }
+            </div>
+            <div id="main-body-sub-links" >
+                <p style="text-align: center">
+                    <a href="@Url.Content("~/Account/ForgotPassword")"  data-ajax="false">Forgot password?</a></p>
+                <p style="text-align: center">
+                    New? <a href="@Url.Content("~/Join")"  data-ajax="false">Join Now</a>,
+                    It's Free!
+                </p>
+            </div>
+        </div>
+    </div>
+     </div>

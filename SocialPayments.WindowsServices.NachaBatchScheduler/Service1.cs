@@ -32,22 +32,22 @@ namespace SocialPayments.WindowsServices.NachaBatchScheduler
             ISchedulerFactory schedFact = new StdSchedulerFactory();
 
             IScheduler sched = schedFact.GetScheduler();
-            Context ctx = new Context();
+            //Context ctx = new Context();
 
             //Get Holiday Calendar Days to Not Generate NACHA File
-            HolidayCalendar cal = new HolidayCalendar();
-            var calendar = ctx.Calendars.FirstOrDefault(c => c.CalendarCode == "NACHAHolidayCalendar");
-            foreach (var calendarDate in calendar.CalendarDates)
-            {
-                cal.AddExcludedDate(calendarDate.SelectedDate);
-            }
-            sched.AddCalendar("myHolidays", cal, true, true);
+            //HolidayCalendar cal = new HolidayCalendar();
+            //var calendar = ctx.Calendars.FirstOrDefault(c => c.CalendarCode == "NACHAHolidayCalendar");
+            //foreach (var calendarDate in calendar.CalendarDates)
+            //{
+            //    cal.AddExcludedDate(calendarDate.SelectedDate);
+            //}
+            //sched.AddCalendar("myHolidays", cal, true, true);
 
             JobDetail jobDetail = new JobDetail("myJob", null, typeof(CreateNachaFileJob));
 
             //Setup trigger for NACHA file generation at 8:00 PM
            //Trigger trigger = TriggerUtils.MakeImmediateTrigger(100, new TimeSpan(0, 20, 0));
-           Trigger trigger = TriggerUtils.MakeDailyTrigger(22, 00);
+           Trigger trigger = TriggerUtils.MakeDailyTrigger(22, 30);
 
             trigger.StartTimeUtc = DateTime.UtcNow;
             trigger.Name = "myTrigger2";

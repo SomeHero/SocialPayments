@@ -1,0 +1,143 @@
+﻿@model Mobile_PaidThx.Models.JoinModels.JoinModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "page-join";
+    ViewBag.Classes = "page ";
+    
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+             @if (Model.Message != null)
+             {
+                 if (Model.Message.MessageType == "Payment")
+                 {
+                    <text>You Have Money!</text>
+                 }
+                 if (Model.Message.MessageType == "PaymentRequest")
+                 {
+                    <text>You Have a Pending Request!</text>
+                 }
+                 if (Model.Message.MessageType == "AcceptPledge")
+                 {
+                 <text>Thanks for your pledge!</text>
+                 }
+
+             }
+             else
+             {<text>Join</text>}</h1>
+             </div>
+    <div data-role="content">
+        <div class="pad">
+        <!--TESTING
+         <div id="pay-in" class="aui">
+                <div class="paystream-aui">
+                    <img class="sender" src="../../Content/images/avatar.png" width="50" />
+                    <h4 class="aui-message"><span class="sender">Example Sender&nbsp;</span>sent you  $25.56</span>.</h4>
+                    <div class="clear"></div>
+                </div>
+
+                <span class="bubble">For that rousing game of charades you started last week.</span>​
+
+                </div>
+                -->
+            @if (Model.Message != null)
+            {
+                if (Model.Message.MessageType == "Payment")
+                {
+                <text>
+
+                 <div id="pay-in" class="aui">
+                <div class="paystream-aui">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <div class="clear"></div>
+                </div>
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
+                 {
+                <span class="bubble">@Model.Message.Comments - join PaidThx to claim your money.</span>​
+                 }
+                </div>
+                </text>
+                }
+                if (Model.Message.MessageType == "PaymentRequest")
+                {
+                <text>
+
+                 <div id="pay-in" class="aui">
+                <div class="paystream-aui">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>requests @String.Format("{0:C}", Model.Message.Amount) from you.</h4>
+                    <div class="clear"></div>
+                </div>
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
+                 {
+                <span class="bubble">@Model.Message.Comments - join PaidThx to send money.</span>​
+                 }
+                </div>
+                </text>
+                }
+                if (Model.Message.MessageType == "AcceptPledge")
+                {
+                <text>
+
+                 <div id="pay-in" class="aui">
+                <div class="paystream-aui">
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <h4 class="aui-message">You pledged @String.Format("{0:C}", Model.Message.Amount) to <span class="sender">@Model.Message.Sender</span>.</h4>
+                    <div class="clear"></div>
+                </div>
+                 @if (!String.IsNullOrEmpty(Model.Message.Comments))
+                 {
+                <span class="bubble">@Model.Message.Comments - join PaidThx to complete your donation.</span>​
+                 }
+                </div>
+                </text>
+                }
+            }
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
+                Join with Facebook</button>
+            <h5 style="margin-top:25px" id="form-marker">
+                Or join with your Email Address</h5>
+                @Html.ValidationSummary()
+             
+            <div id="registration-form">
+                @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
+                {
+                    <span class="form-holder"><input type="email" id="email" class="email required" placeholder="Enter Your Email Address"
+                        name="email" value="@Model.UserName" /></span>
+                    <span class="form-holder"> <input type="password" class="required passwrdvalidator reveal" id="password" placeholder="Create a Password"
+                        name="password" /></span>
+                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" class="required pwmatch reveal" type="password" placeholder="Confirm Your Password"
+                        name="confirmPassword" /></span>
+                <button type="submit" id="register-submit" class="pd-btn green">
+                Join with Email</button>
+                  <div id="pass" class="hidden">
+	<ul class="pass-help">
+		<li id="letter" class="invalid"><strong>1 letter (a-z)</strong> &nbsp;</li>
+		<li id="capital" class="invalid"><strong>1 capital (A-Z)</strong> &nbsp;</li>
+		<li id="number" class="invalid"><strong>1 number (0-9)</strong> &nbsp;</li>
+		<li id="length" class="invalid"><strong>6+ characters</strong></li>
+	</ul>
+     </div>
+                }
+            </div>
+            <div id="main-body-sub-links">
+                <p style="text-align: center">
+                    Already a member? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
+                        In</a></p>
+            </div>
+        </div>
+
+    </div>
+    <div data-role="footer"> 
+	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
+</div> 
+            
+    </div>
+
+    @section PageScripts{
+    <script type="text/javascript">
+
+    </script>
+    }

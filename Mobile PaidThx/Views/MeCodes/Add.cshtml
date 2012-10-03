@@ -1,0 +1,57 @@
+﻿@model Mobile_PaidThx.Models.MeCodesModels.AddMeCodeModel
+@{
+    ViewBag.Title = "Add ME Code";
+    ViewBag.PageID = "add-mecode-paypoint-page";
+    ViewBag.Classes = "page page settings";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Add ME Code</h1>
+            <a href="@Url.Content("~/MeCodes")"  class="hd-btn-left btn-back">Back</a>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+         @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" 
+                required /></p>
+            <p>
+             <button type="submit" id="btn-add-mecode" class="pd-btn green">
+                  Add ME Code </button></p>
+         }
+        </div>
+    </div>
+</div>
+@section PageScripts 
+{
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $('#txtMeCode').focus();
+
+             var currentMeCode = "";
+             $(this).delegate('#txtMeCode', 'keydown', function () {
+
+                 if (event.keyCode == '52') {
+                     event.preventDefault();
+                     return;
+                 }
+             });
+             $(this).delegate('#txtMeCode', 'keyup', function () {
+
+                 currentMeCode = $(this).val();
+
+                 if (currentMeCode.charAt(0) != '$')
+                     currentMeCode = '$' + currentMeCode;
+
+                 $(this).val(currentMeCode);
+                 event.preventDefault();
+             });
+
+         });
+    </script>
+}
+}

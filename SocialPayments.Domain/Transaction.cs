@@ -9,17 +9,15 @@ namespace SocialPayments.Domain
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid MessageId { get; set; }
-        [ForeignKey("MessageId")]
-        public virtual Message Message { get; set; }
-        public Guid FromAccountId { get; set; }
-        [ForeignKey("FromAccountId")]
-        public virtual PaymentAccount FromAccount
+        public string NameOnAccount { get; set; }
+        public string RoutingNumber { get; set; }
+        public string AccountNumber { get; set; }
+        public int AccountTypeId { get; set; }
+        public AccountType AccountType 
         {
-            get;
-            set;
+            get { return (AccountType)AccountTypeId; }
+            set { AccountTypeId = (int)AccountType; }
         }
-
         public double Amount { get; set; }
         public int TransactionStatusId { get; set; }
         public TransactionStatus Status
@@ -34,12 +32,6 @@ namespace SocialPayments.Domain
             get { return (TransactionType)TransactionTypeId; }
             set { TransactionTypeId = (int)value; }
         }
-        public int TransactionCategoryId { get; set; }
-        public TransactionCategory Category
-        {
-            get { return (TransactionCategory)TransactionCategoryId; }
-            set { TransactionCategoryId = (int)value; }
-        }
         public int StandardEntryClassValue { get; set; }
         public StandardEntryClass StandardEntryClass
         {
@@ -52,17 +44,19 @@ namespace SocialPayments.Domain
             get { return (PaymentChannelType)PaymentChannelTypeValue; }
             set { PaymentChannelTypeValue = (int)value; }
         }
+        public string IndividualIdentifier { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? SentDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
-        public Guid TransactionBatchId { get; set; }
+        public DateTime? ReturnedDate { get; set; }
 
+        public Guid? TransactionBatchId { get; set; }
         [ForeignKey("TransactionBatchId")]
         public virtual TransactionBatch TransactionBatch { get; set; }
 
-        public Guid UserId { get; set; }
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public Guid? PaymentId { get; set; }
+        [ForeignKey("PaymentId")]
+        public virtual Payment Payment {get; set; }
 
     }
 }

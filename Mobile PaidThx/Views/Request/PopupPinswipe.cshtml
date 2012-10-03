@@ -1,0 +1,53 @@
+﻿@model Mobile_PaidThx.Models.RequestModels.PinSwipeModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "request-popup-pin-swipe-page";
+    ViewBag.Classes = "page";
+}
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Confirm</h1>
+            <a href="@Url.Content("~/Request")"  class="hd-btn-left btn-back history">Cancel</a>
+    </div>
+  
+    <div data-role="content">
+        <div class="top-panel">
+         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        {
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+        }
+        @if(!String.IsNullOrEmpty(Model.RecipientName))
+        {
+            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName.</text>
+        } 
+        else
+        {
+            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
+        }     
+        </div>
+        <div class="pad">
+        
+        @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        {       
+            <div style="margin-top:15px">
+            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
+            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
+        </div>
+        }
+    </div>
+      </div>
+  <div id="resizerHack">
+        
+        
+        </div>
+</div>
+@section PageScripts
+{
+<script type="text/javascript">
+    $(document).ready(function() {
+        pinswipeResizeController.resizePINs();
+    });
+</script>
+}

@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "AmountToSendView";
+}
+<div  id="donate-amount-to-send-page" class="modally" data-dom-cache="true"   >
+ 
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            How Much?</h1>
+    </div>
+
+    <div data-role="content">
+    <div class="pad">
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
+    {
+<<<<<<< HEAD
+        <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+        <span class="button-holder go-button-holder">
+            <button id="gobtn-send2" type="submit" class="btn-jq go-button" data-theme="f">
+            Go
+        </button>
+
+        </span>
+        <div style="clear:both;"></div>
+    }
+=======
+            
+            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" class="btn-howmuch-amount" />
+             <span class="button-holder go-button-holder"><button id="gobtn-send2" type="button" class="go-button" data-theme="f">
+                Go
+            </button></span>
+            <div style="clear:both;"></div>
+>>>>>>> upstream/development
+        <br />
+    @using (Html.BeginForm("AmountToSend", "Donate", FormMethod.Post))
+    {
+        <div class="quicksend-title">
+            QUICK SEND AMOUNTS</div>
+        <div class="quicksend">
+            <button id="onedollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="1" data-amount="1">
+                $1</button>
+            <button id="fivedollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="5" data-amount="5">
+                $5</button>
+            <button id="tendollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="10" data-amount="10">
+                $10</button>
+            <button id="twentydollarbtnsend" name="Amount" type="submit" class="quickaddbtn-style" value="20" data-amount="20">
+                $20</button>
+        </div>
+    }
+    </div>
+    </div>
+</div>
+    @section PageScripts
+    {
+     <script type="text/javascript">
+         //wait to do event binding until the page is being initialized
+<<<<<<< HEAD
+         $(document).ready(function () {
+=======
+         $(document).delegate('[]', 'pageinit', function () {
+>>>>>>> upstream/development
+
+             var currentAmount = "0.00";
+
+             $(this).on('keydown', '#customAmount', function () {
+                 if (event.shiftKey) {
+                     event.preventDefault();
+                     return;
+                 }
+                 if (event.keyCode == 46 || event.keyCode == 8) {
+                     currentAmount = currentAmount.substring(0, currentAmount.length - 1);
+
+                     currentAmount = currentAmount.replace('.', '');
+                     currentAmount = currentAmount.replace(',', '');
+
+                     if (currentAmount.length < 3)
+                         currentAmount = '0' + currentAmount;
+
+                     //number before the decimal point
+                     num = currentAmount.substring(0, currentAmount.length - 2);
+                     //number after the decimal point
+                     dec = currentAmount.substring(currentAmount.length - 2);
+
+                     //connect both parts while comma-ing the first half
+                     currentAmount = num + "." + dec;
+
+                     $(this).val(currentAmount);
+                     event.preventDefault();
+
+                     return;
+                 }
+                 else {
+                     if (event.keyCode < 95) {
+                         if (event.keyCode < 48 || event.keyCode > 57) {
+                             event.preventDefault();
+                             return;
+                         }
+                     }
+                     else {
+                         if (event.keyCode < 96 || event.keyCode > 105) {
+                             event.preventDefault();
+                             return;
+                         }
+                     }
+                 }
+                 currentAmount = currentAmount + String.fromCharCode(event.keyCode);
+
+                 if (currentAmount.charAt(0) == '0')
+                     currentAmount = currentAmount.slice(1);
+
+                 currentAmount = currentAmount.replace('.', '');
+                 currentAmount = currentAmount.replace(',', '');
+
+                 //number before the decimal point
+                 num = currentAmount.substring(0, currentAmount.length - 2);
+                 //number after the decimal point
+                 dec = currentAmount.substring(currentAmount.length - 2);
+
+                 //connect both parts while comma-ing the first half
+                 currentAmount = num + "." + dec;
+
+                 $(this).val(currentAmount);
+                 event.preventDefault();
+             });
+         });
+    </script>
+    }
+

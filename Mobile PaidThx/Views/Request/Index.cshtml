@@ -1,0 +1,94 @@
+﻿@model Mobile_PaidThx.Models.RequestModels.RequestMoneyModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PageID = "request-page";
+    ViewBag.Classes = "page";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    
+    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx"  >
+        <h1>Request</h1>
+        <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
+        <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
+    </div>
+    <div data-role="content">
+        <div class="pad">
+            @Html.ValidationSummary()
+
+ 
+ <a href="@Url.Content("~/Request/AddContactRequest")" class="a-recipient" data-prefetch data-transition="slide">
+                <div id="btn-recipient" class="btn-sends">
+                        @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
+                        {
+                            <img class="img-recipient" src="@Model.RecipientImageUrl" alt="@Model.RecipientName" />
+                        }
+                        else
+                        {
+                         if (!String.IsNullOrEmpty(Model.RecipientName))
+                         {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/avatar-active.png")" alt="Recipient" />
+                         }
+                         else
+                         {
+                         <img class="img-recipient" src="@Url.Content("~/Content/images/avatar.png")" alt="Recipient" />
+                         }
+                        }
+                        <div class="recipient-txt">
+                        
+                              @if (!String.IsNullOrEmpty(Model.RecipientName))
+                              {
+                                    <text><h2 class="heading">@Model.RecipientName</h2>
+                                  <h4 class="subheading">@Model.RecipientUri</h4></text>
+                              }
+                              else
+                              {
+                                    <text><h2 class="heading">Select Recipient</h2>
+                                  <h4 class="subheading">Select friend, email, or phone</h4></text>
+                              }
+                                              </div>  
+                                              <div class="clear"></div> 
+                                              
+                                              <span class="arrow-rt">&nbsp;</span>       
+                    </div></a>
+                <a href="@Url.Content("~/Request/AmountToRequest")" class="a-amount" data-prefetch data-transition="slide">
+                    <div id="btn-amount" data-role="none" type="button" class="btn-sends">
+                          @if (Model.Amount > 0)
+                          {
+                            <img class="img-amount" src="@Url.Content("~/Content/images/money-active.png")" alt="Amount" />
+                          }
+                          else
+                          {
+                         <img class="img-amount" src="@Url.Content("~/Content/images/money.png")" alt="Amount" />
+                          }
+                        <div class="amount-txt">
+                           @if (Model.Amount > 0)
+                           {
+                                    <text>
+                                    <h2 class="thenumber">@string.Format("{0:n2}", Model.Amount)</h2>
+                                    </text>
+                           }
+                           else
+                           {
+                                    <text><h2 class="heading">Enter Amount</h2>
+                                    <h4 class="subheading">How much to send</h4>
+                                    </text>
+                           }
+                                    </div>
+                                    <div class="clear"></div> 
+                                    <span class="arrow-rt">&nbsp;</span>       
+                    </div>
+                </a>
+
+ 
+                    <textarea id="txtComments-Request" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
+      
+            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+            {
+                <p>
+                    <button type="submit" id="request-money" class="pd-btn green">
+                        <span>Request Money</span></button>
+                </p>
+            }
+        </div>
+    </div>
+</div>

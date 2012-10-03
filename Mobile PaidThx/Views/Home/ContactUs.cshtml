@@ -1,0 +1,30 @@
+﻿@model Mobile_PaidThx.Models.HomeModel
+@{
+    ViewBag.Title = "Contact Us";
+}
+<div id="container">
+    <dl id="main-tabs" class="tabs contained">
+        <dd>
+            <a href="#simpleContained1">What is PaidThx?</a></dd>
+        <dd>
+            <a href="#simpleContained2" class="active">Contact Us</a></dd>
+        <dd>
+            <a href="#simpleContained3">Privacy</a></dd>
+    </dl>
+    <div id="content-container">
+        <ul class="tabs-content contained">
+            <li id="simpleContained1Tab">
+                @{Html.RenderPartial("PartialViews/About");}
+                @{Html.RenderPartial("_footer");}
+                </li>
+            <li class="active" id="simpleContained2Tab">
+                @{Html.RenderPartial("PartialViews/ContactUs", Model.ContactUsModel);}
+                @{Html.RenderPartial("_footer");}
+                </li>
+            <li id="simpleContained3Tab">
+                @{Html.RenderPartial("PartialViews/PrivacyPolicy");}
+                @{Html.RenderPartial("_footer");}
+                </li>
+        </ul>
+    </div>
+</div>

@@ -21,18 +21,20 @@ namespace SocialPayments.DomainServices
         private ApplicationService _applicationService;
         private EmailLogService _emailLogService;
 
+        public EmailService() : this(new Context()) { } 
+
         public EmailService(IDbContext context)
         {
             _ctx = context;
             _logger = LogManager.GetCurrentClassLogger();
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _emailLogService = new EmailLogService(_ctx);
         }
         public EmailService(IDbContext context, Logger logger)
         {
             _ctx = context;
             _logger = logger;
-            _applicationService = new ApplicationService(_ctx);
+            _applicationService = new ApplicationService();
             _emailLogService = new EmailLogService(_ctx);
         }
         public EmailService(IDbContext context, Logger logger, ApplicationService applicationService, EmailLogService emailLogService)
@@ -49,16 +51,37 @@ namespace SocialPayments.DomainServices
             string elasticEmailUrl = @"https://api.elasticemail.com/mailer/send";
             string elasticEmailUserName = "notify@paidthx.com";
             string elasticEmailApiKey = "20a00674-374b-4190-81ee-8fb96798a69c";
-            string elasticEmailPost = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
+            string elasticEmailPostWithSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
+            string elasticEmailPostWithoutSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&template={3}{4}";
 
             StringBuilder mergeFields = new StringBuilder();
-            foreach(var item in replacementElements) {
-                mergeFields.Append("&");
-                mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+
+            if (replacementElements != null)
+            {
+                foreach (var item in replacementElements)
+                {
+                    if (item.Key != null && item.Value != null)
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Merge Fields {0} = {1}", item.Key.ToUpper(), item.Value));
+
+                        mergeFields.Append("&");
+                        mergeFields.Append(String.Format("merge_{0}={1}", item.Key.ToUpper(), item.Value));
+                    }
+                }
             }
-            
-            string requestBody = String.Format(elasticEmailPost, elasticEmailUserName, elasticEmailApiKey,
-                toEmailAddress, emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+
+            string requestBody;
+
+            if (!String.IsNullOrEmpty(emailSubject))
+            {
+                requestBody = String.Format(elasticEmailPostWithSubject, elasticEmailUserName, elasticEmailApiKey,
+                HttpUtility.UrlEncode(toEmailAddress), emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+            }
+            else
+            {
+                requestBody = String.Format(elasticEmailPostWithoutSubject, elasticEmailUserName, elasticEmailApiKey,
+                     HttpUtility.UrlEncode(toEmailAddress), HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+            }
 
             // Create new HTTP request.
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(elasticEmailUrl);
@@ -79,7 +102,7 @@ namespace SocialPayments.DomainServices
         }
         public bool SendEmail(Guid apiKey, string fromAddress, string toAddress, string subject, string body)
         {
-            _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}; +", apiKey, toAddress, fromAddress));
+            _logger.Log(LogLevel.Info, String.Format("{0} - Send Email to {1} from {2}", apiKey, toAddress, fromAddress));
             
             //Create Email Log
             var application = _applicationService.GetApplication(apiKey.ToString());

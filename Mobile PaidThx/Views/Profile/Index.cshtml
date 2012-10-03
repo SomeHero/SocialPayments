@@ -1,0 +1,43 @@
+﻿@model Mobile_PaidThx.Models.PreferencesModels.ProfileModel
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div  id="preferences-profile-page">
+    
+    <div class="header-pdthx" >
+        <h1>
+            Me</h1>
+            <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back history">Back</a>
+    </div>
+    <div data-role="content">
+    <div class="pad">
+        
+            @foreach (var profileSection in Model.ProfileSections)
+            { 
+                <h5>@profileSection.SectionHeader</h5>
+                <ul data-role="listview" data-inset="true">
+                @foreach (var profileItem in profileSection.ProfileItems)
+                {
+                    string value = "";
+                    var attribute = Model.User.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
+                    if (attribute != null)
+                    {
+                        value = attribute.AttributeValue;
+                    }
+                    
+                    <li data-role="fieldcontain">
+                    <label for="@profileItem.Id">@profileItem.Label</label>
+                    @switch (profileItem.ItemType)
+                    {
+                        case "ShortText":
+                            <text><input type="text" name="@profileItem.Id" value="@value" /></text>
+                            break;
+                    }
+                    </li>
+                } 
+                </ul>
+            }
+        </div>
+    </div>
+</div>

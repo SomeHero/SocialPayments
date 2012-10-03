@@ -1,0 +1,71 @@
+﻿@model Mobile_PaidThx.Models.PledgeModels.AddCauseModel
+@{
+    ViewBag.Title = "Select Your Cause";
+    ViewBag.PageID = "pledge-add-cause";
+    ViewBag.Classes = "page page full";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+
+    <div data-role="header" class="header-pdthx" >
+        <h1>
+            Select Non Profit</h1>
+            <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back history">Back</a>
+    </div>
+    <div data-role="content">
+      
+          <div class="pad">
+         <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
+        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+
+        @foreach (var alphaGroup in Model.SortedNonProfits)
+        {
+            <li data-role="list-divider">@alphaGroup.Key</li>
+            foreach (var nonprofit in alphaGroup.Value)
+            {
+            <li class="contact removable">
+                @using (Html.BeginForm())
+                   {
+                       @Html.Hidden("recipientId", @nonprofit.Id)
+                       @Html.Hidden("recipientName", @nonprofit.Name)
+                       @Html.Hidden("recipientImageUrl", "");
+                       @Html.Hidden("recipientType", "NonProfit");
+            <a class="organization-pledge">
+                <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
+                    @if (nonprofit.HasInfo)
+                    {
+                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
+                    }
+                    <h2 class="heading">@nonprofit.Name</h2>
+                       @if (!String.IsNullOrEmpty(nonprofit.Slogan))
+                        {
+                            <h4 class="subheading">"@nonprofit.Slogan"</h4>
+                        }
+            </a>
+                }
+            </li>
+            }
+        }
+        </ul>
+        </div>
+</div>
+@section PageScripts
+{
+    <script language="javascript">
+    //wait to do event binding until the page is being initialized
+    $(document).ready(function () {
+
+        $(this).find("img.lazy").lazyload();
+
+        //cache the list-view element for later use
+        var $listview = $(this).find('[data-role="listview"]');
+
+        $listview.on("click", ".organization-pledge", function (event) {
+
+            $(this).parents("form:first").submit();
+
+        });
+
+    });
+        
+</script>
+}

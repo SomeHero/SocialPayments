@@ -1,0 +1,164 @@
+﻿@model Mobile_PaidThx.Models.BankAccountModels.VerifyAccountModel
+@{
+    ViewBag.Title = "Add Payment Account";
+}
+<div  id="bankaccounts-add-page" >
+    
+    <div data-role="header" data-position="fixed" class="header-pdthx" >
+        <h1>
+            Verify Account</h1>
+            <a href="@Url.Content("~/BankAccounts")"  class="hd-btn-left btn-back history">Back</a>
+    </div>
+    <div data-role="content" class="panel main-body">
+        <div class="pad">
+         @using (Html.BeginForm("VerifyAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         {
+            @Html.ValidationSummary()
+            <p>
+                @Html.TextBoxFor(m => m.Amount1, new Dictionary<string, object>() { { "id", "depositAmount1" }, { "placeholder", "Amount 1 (ex: $0.45)" } })
+            </p>
+             <p>
+                @Html.TextBoxFor(m => m.Amount2, new Dictionary<string, object>() { { "id", "depositAmount2" }, { "placeholder", "Amount 2 (ex: $0.76)" } })
+            </p>
+            <p>
+                <button type="submit" id="btn-update-account" data-theme="f" data-icon="check" data-iconpos="right"
+                    class="pd-btn green">
+                    Verify Amounts</button></p>
+         }
+        </div>
+    </div>
+</div>
+@section PageScripts
+{
+    <script language="javascript">
+        //wait to do event binding until the page is being initialized
+        $(document).delegate('[data-role="page"]', 'pageinit', function () {
+
+            var depositAmount1 = "0.00";
+            var depositAmount2 = "0.00";
+
+            $(this).delegate('#depositAmount1', 'keydown', function () {
+                if (event.shiftKey) {
+                    event.preventDefault();
+                    return;
+                }
+                if (event.keyCode == 46 || event.keyCode == 8) {
+                    depositAmount1 = depositAmount1.substring(0, depositAmount1.length - 1);
+
+                    depositAmount1 = depositAmount1.replace('.', '');
+                    currentAmount = depositAmount1.replace(',', '');
+
+                    if (depositAmount1.length < 3)
+                        depositAmount1 = '0' + depositAmount1;
+
+                    //number before the decimal point
+                    num = depositAmount1.substring(0, depositAmount1.length - 2);
+                    //number after the decimal point
+                    dec = depositAmount1.substring(depositAmount1.length - 2);
+
+                    //connect both parts while comma-ing the first half
+                    depositAmount1 = num + "." + dec;
+
+                    $(this).val(depositAmount1);
+                    event.preventDefault();
+
+                    return;
+                }
+                else {
+                    if (event.keyCode < 95) {
+                        if (event.keyCode < 48 || event.keyCode > 57) {
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                    else {
+                        if (event.keyCode < 96 || event.keyCode > 105) {
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                }
+                depositAmount1 = depositAmount1 + String.fromCharCode(event.keyCode);
+
+                if (depositAmount1.charAt(0) == '0')
+                    depositAmount1 = depositAmount1.slice(1);
+
+                depositAmount1 = depositAmount1.replace('.', '');
+                depositAmount1 = depositAmount1.replace(',', '');
+
+                //number before the decimal point
+                num = depositAmount1.substring(0, depositAmount1.length - 2);
+                //number after the decimal point
+                dec = depositAmount1.substring(depositAmount1.length - 2);
+
+                //connect both parts while comma-ing the first half
+                depositAmount1 = num + "." + dec;
+
+                $(this).val(depositAmount1);
+                event.preventDefault();
+            });
+
+            $(this).delegate('#depositAmount2', 'keydown', function () {
+                if (event.shiftKey) {
+                    event.preventDefault();
+                    return;
+                }
+                if (event.keyCode == 46 || event.keyCode == 8) {
+                    depositAmount2 = depositAmount2.substring(0, depositAmount2.length - 1);
+
+                    depositAmount2 = depositAmount2.replace('.', '');
+                    depositAmount2 = depositAmount2.replace(',', '');
+
+                    if (depositAmount2.length < 3)
+                        depositAmount2 = '0' + currentAmount;
+
+                    //number before the decimal point
+                    num = depositAmount2.substring(0, currentAmount.length - 2);
+                    //number after the decimal point
+                    dec = depositAmount2.substring(currentAmount.length - 2);
+
+                    //connect both parts while comma-ing the first half
+                    depositAmount2 = num + "." + dec;
+
+                    $(this).val(depositAmount2);
+                    event.preventDefault();
+
+                    return;
+                }
+                else {
+                    if (event.keyCode < 95) {
+                        if (event.keyCode < 48 || event.keyCode > 57) {
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                    else {
+                        if (event.keyCode < 96 || event.keyCode > 105) {
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                }
+                depositAmount2 = depositAmount2 + String.fromCharCode(event.keyCode);
+
+                if (depositAmount2.charAt(0) == '0')
+                    depositAmount2 = depositAmount2.slice(1);
+
+                depositAmount2 = depositAmount2.replace('.', '');
+                depositAmount2 = depositAmount2.replace(',', '');
+
+                //number before the decimal point
+                num = depositAmount2.substring(0, depositAmount2.length - 2);
+                //number after the decimal point
+                dec = depositAmount2.substring(depositAmount2.length - 2);
+
+                //connect both parts while comma-ing the first half
+                depositAmount2 = num + "." + dec;
+
+                $(this).val(depositAmount2);
+                event.preventDefault();
+            });
+        });
+    </script>
+}
+}

@@ -4,184 +4,245 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using SocialPayments.RestServices.Internal.Models;
-using SocialPayments.DataLayer;
 using SocialPayments.Domain;
+using SocialPayments.DomainServices;
 using System.Net;
 using NLog;
+using SocialPayments.DomainServices.CustomExceptions;
 
 namespace SocialPayments.RestServices.Internal.Controllers
 {
     public class ApplicationsController : ApiController
     {
-        private Context _ctx = new Context();
         private Logger _logger = LogManager.GetCurrentClassLogger();
 
-        // GET /api/applications
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET /api/applications/5
-        public HttpResponseMessage<ApplicationModels.ApplicationResponse> Get(String id)
+        [HttpGet]
+        public HttpResponseMessage Get(String id)
         {
+            var applicationServices = new DomainServices.ApplicationService();
+            var profileServices = new DomainServices.ProfileServices();
 
-            DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService(_ctx);
-
-            Guid apiKey;
-
-            Guid.TryParse(id, out apiKey);
-
-            if (apiKey == null)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Unable to parse Guid {0}", id));
-
-                return new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-            }
-
-            Application application;
+            Domain.Application application = null;
+            List<Domain.ProfileSection> profileSections = null;
+            HttpResponseMessage response = null;
 
             try
             {
-                application = applicationService.GetApplication(apiKey.ToString());
+                application = applicationServices.GetApplication(id);
+
+                if (application == null)
+                    throw new NotFoundException(String.Format("Application {0} Not Found", id));
+
+                profileSections = profileServices.GetProfileSections();
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
+            
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled exception getting application {0}. {1}", id, ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                var response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.InternalServerError);
-                response.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return response;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
+            
             }
-
-            if (application == null)
-            {
-                var response = new HttpResponseMessage<ApplicationModels.ApplicationResponse>(HttpStatusCode.BadRequest);
-                response.ReasonPhrase = "Invalid Application";
-
-                return response;
-            }
-
-            //TODO: check to make sure passed in id is the calling application
-
-            return new HttpResponseMessage<ApplicationModels.ApplicationResponse>(new ApplicationModels.ApplicationResponse()
+            
+            return Request.CreateResponse<ApplicationModels.ApplicationResponse>(HttpStatusCode.OK, new ApplicationModels.ApplicationResponse()
             {
                 apiKey = application.ApiKey.ToString(),
                 id = application.ApiKey.ToString(),
                 isActive = application.IsActive,
-                url = application.Url
-            }, HttpStatusCode.OK);
+                url = application.Url,
+                ConfigurationVariables = application.ConfigurationValues.Select(c => new ApplicationModels.ApplicationConfigurationResponse() {
+                    ApiKey = c.ApiKey.ToString(),
+                    ConfigurationKey = c.ConfigurationKey,
+                    ConfigurationValue = c.ConfigurationValue,
+                    ConfigurationType = c.ConfigurationType,
+                    Id = c.Id
+                }).ToList(),
+                ProfileSections = profileSections.Select(a => new ApplicationModels.ProfileSectionResponse() {
+                    Id = a.Id,
+                    SectionHeader = a.SectionHeader,
+                    SortOrder = a.SortOrder,
+                    ProfileItems = a.ProfileItems.Select(i  => new ApplicationModels.ProfileItemResponse() {
+                        Id = i.Id,
+                        Label = i.Label,
+                        SortOrder = i.SortOrder,
+                        UserAttributeId =  i.UserAttribute.Id,
+                        Points = i.UserAttribute.Points,
+                        ItemType = i.ProfileItemType.ToString(),
+                        SelectOptionHeader = (i.SelectOptionHeader != null ? i.SelectOptionHeader : ""),
+                        SelectOptionDescription = (i.SelectOptionDescription != null ? i.SelectOptionDescription : ""),
+                        SelectOptions = i.SelectOptions
+                            .OrderBy(s => s.SortOrder)
+                            .Select(s => s.OptionValue).ToList()
+                    })
+                    .OrderBy(i => i.SortOrder)
+                    .ToList()
+                }).ToList()
+            });
         }
 
         // POST /api/applications
+        [HttpPost]
         public HttpResponseMessage Post(ApplicationModels.SubmitApplicationRequest request)
         {
-            DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService(_ctx);
-            Domain.Application application;
+            DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
+            HttpResponseMessage response = null;
 
             try
             {
-                application = applicationService.AddApplication(request.name, request.url, request.isActive);
+                applicationServices.AddApplication(request.name, request.url, request.isActive);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
+
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Adding Application {0}.  Exception {1}.", request.name, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled exception adding application. {0}", ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Adding Application {0}.  Exception {1}. Stack Trace {2}", request.name, ex.Message, ex.StackTrace));
 
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
+            
             }
 
-            return new HttpResponseMessage(HttpStatusCode.Created);
+            response = Request.CreateResponse(HttpStatusCode.Created);
+
+            return response;
         }
 
         // PUT /api/applications/5
+        [HttpPut]
         public HttpResponseMessage Put(String id, ApplicationModels.UpdateApplicationRequest request)
         {
-            DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService(_ctx);
-
-            Guid apiKey;
-
-            Guid.TryParse(id, out apiKey);
-
-            if(apiKey == null)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Exception Updating Application.  ApiKey {0} could not be parsed as a GUID.", id));
-
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                message.ReasonPhrase = "Invalid ApiKey.  Cannot be parsed to GUID.";
-
-                return message;
-            }
-
-            Application application = null;
+            DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
+            Domain.Application application = null;
+            HttpResponseMessage response = null;
 
             try
             {
-                application = applicationService.GetApplication(id);
-            }
-            catch(Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application.  Application with the API Key {0} not found. {0}", id, ex.Message));
+                application = applicationServices.GetApplication(id);
 
-                var message = new HttpResponseMessage(HttpStatusCode.NotFound);
-                message.ReasonPhrase = "Application Resource Not Found.";
-
-                return message;
-            }
-
-
-            try
-            {
-                application.IsActive = request.isActive;
                 application.ApplicationName = request.name;
                 application.Url = request.url;
+                application.IsActive = request.isActive;
 
-                applicationService.UpdateApplication(application);
+                applicationServices.UpdateApplication(application);
+
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Updating Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception updating application {0}. {1}", id, ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Updating Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = ex.Message;
+                var error = new HttpError(ex.Message);
 
-                return message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            return response;
         }
 
         // DELETE /api/applications/5
+        [HttpDelete]
         public HttpResponseMessage Delete(string id)
         {
-            DomainServices.ApplicationService applicationService = new DomainServices.ApplicationService(_ctx);
-
-            Guid apiKey;
-
-            Guid.TryParse(id, out apiKey);
-
-            if(apiKey == null)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application.  ApiKey could not be parsed as a GUID. {0}", id));
-
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                message.ReasonPhrase = "Invalid ApiKey.  Cannot be parsed to GUID.";
-
-                return message;
-            }
+            DomainServices.ApplicationService applicationServices = new DomainServices.ApplicationService();
+            Domain.Application application = null;
+            HttpResponseMessage response = null;
 
             try
             {
-                applicationService.DeleteApplication(apiKey);
+                application = applicationServices.GetApplication(id);
+
+                if(application == null)
+                    throw new NotFoundException(String.Format("Invalid Application {0}", id));
+
+                applicationServices.DeleteApplication(id);
+
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Deleting Application {0}.  Exception {1}.", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application. {0}", ex.Message));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Deleting Application {0}.  Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                var error = new HttpError(ex.Message);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, error);
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            response = Request.CreateResponse(HttpStatusCode.OK);
+
+            return response;
         }
     }
 }
