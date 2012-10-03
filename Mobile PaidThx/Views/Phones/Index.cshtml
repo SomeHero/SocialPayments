@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Phone #s";
     ViewBag.PageID = "phone-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
         
@@ -13,7 +13,7 @@
     </div>
     <div data-role="content">
     <div class="pad">
-        <ul data-role="listview" data-inset="true">
+        <ul class="panel-container">
             @foreach (var payPoint in Model.PayPoints)
             { 
             <li class="settings phone" >
@@ -32,7 +32,7 @@
             </li>
             }
         </ul>
-        <ul data-role="listview" data-inset="true">
+        <ul class="panel-container">
             <li class="settings add">
                 <a href="@Url.Content("~/Phones/Add")">
                     Add Phone Number</a>
