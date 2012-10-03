@@ -39,8 +39,17 @@ a:visited {
 a:hover {
     color: #06e;
 }
-
-
+h2.section-header
+{
+ font-weight:bold;
+ color:#666666;
+ font-size:12px;   
+ text-transform:uppercase;
+}
+h2.section-header:not(:first-child) {
+    margin-top:20px;
+    
+}
 
 /* ++++++++++++++++++ERRORS++++++++++++++++ */
 
@@ -334,6 +343,50 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
  padding:0;   
 }
 
+/*+++++++++++++++++++++++++++TOGGLE+++++++++++++++++++++++*/
+/* Container */
+.switch {
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  width: 105px;
+  height: 30px;
+  vertical-align: middle;
+}
+/* Background image */
+.switch .background {
+  background: url('../Content/images/switch-background.png');
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 161px;
+  height: 30px;
+}
+/* Mask */
+.switch .mask {
+  background: url('../Content/images/switch-mask.png');
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 105px;
+  height: 30px;
+}
+li.toggler
+{
+ padding:10px !important;   
+}
+.toggle-holder
+{
+ float:right;   
+}
+.toggle-name
+{
+ font-size:14pt;
+ font-weight:bold;   
+}
 /*+++++++++++++++++++++++++++LAYOUT ELEMENTS+++++++++++++++++++++++*/
 
 div.page{

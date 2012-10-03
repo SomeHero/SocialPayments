@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Controllers
             var subjectKeys = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("ReceiveMoney", "When I Receive Money"),
-                new KeyValuePair<string, string>("ReceiveRequest", "When I Request a Request"),
+                new KeyValuePair<string, string>("ReceiveRequest", "When I Receive Requests"),
                 new KeyValuePair<string, string>("RequestMoney", "When I Request Money"),
                 new KeyValuePair<string, string>("SendMoney", "When I Send Money")
             };
