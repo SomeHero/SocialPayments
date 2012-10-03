@@ -430,6 +430,7 @@
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
     <Content Include="Libs\qtip2\jquery.qtip.min.js" />
     <Content Include="Scripts\helper.js" />
+    <Content Include="Scripts\jQuery.dPassword.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.6.1.min.js" />
     <Content Include="Scripts\plugins.js" />
@@ -517,6 +518,7 @@
     <Content Include="Content\images\tab-send-30x30-active.png" />
     <Content Include="Content\images\tab-send-30x30.png" />
     <Content Include="Scripts\xdate.js" />
+    <Content Include="Styles\zebra_transform.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
