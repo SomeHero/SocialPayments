@@ -16,7 +16,7 @@
             @TempData["Message"]
 
             <!-- Edit Profile -->
-            <ul data-role="listview" data-inset="true">
+            <ul class="panel-container">
                 <li class="settings" id="socials">
                 @if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
                 {

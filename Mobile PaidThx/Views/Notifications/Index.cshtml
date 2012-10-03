@@ -16,7 +16,7 @@
         @foreach (var subject in Model.NotificationSubjects)
         {
             <h2 class="section-header">@subject.Description</h2>
-            <ul data-role="listview" class="sliders" data-inset="true">
+            <ul class="panel-container">
             @foreach (var item in subject.NotificationItems)
             {
                 <text>
@@ -24,7 +24,7 @@
                 
                 <label for="@item.ConfigurationKey" class="toggle-name">@item.Description</label>
                 <div class="toggle-holder">
-                <input type="checkbox" class="switch" name="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0")
+                <input type="checkbox" class="switch-cb" name="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0")
                                                                                                                 {<text> checked="checked"</text>}  />
                 
                                                                                                                                                                                        
@@ -46,39 +46,65 @@
 
 }
 @section PageScripts{
-<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.easing.1.3.js")"></script>
-
 <script type="text/javascript">
-    $(document).ready(function() {
-  // Iterate over checkboxes
-  $("input[type=checkbox].switch").each(function() {
-    // Insert mark-up for switch
-    $(this).before(
+    $(document).ready(function () {
+        // Iterate over checkboxes
+        $("input[type=checkbox].switch-cb").each(function () {
+            // Insert mark-up for switch
+            $(this).before(
       '<span class="switch">' +
       '<span class="mask" /><span class="background" />' +
       '</span>'
     );
-    // Hide checkbox
-    $(this).hide();
+            // Hide checkbox
+            $(this).hide();
 
-    // Set inital state
-    if (!$(this)[0].checked) {
-        $(this).prev().find(".background").css({ left: "-56px" });
-    }
-}); // End each()
+            // Set inital state
+            if (!$(this).prop('checked')) {
+                $(this).prev().find(".background").css({ left: "-56px" });
+            }
+        }); // End each()
 
-// Toggle switch when clicked
-$("span.switch").click(function () {
-    // If on, slide switch off
-    if ($(this).next()[0].checked) {
-        $(this).find(".background").animate({ left: "-56px" }, 200);
-        // Otherwise, slide switch on
-    } else {
-        $(this).find(".background").animate({ left: "0px" }, 200);
-    }
-    // Toggle state of checkbox
-    $(this).next()[0].checked = !$(this).next()[0].checked;
-});
-}); // End 
+        // Toggle switch when clicked
+        $("span.switch").click(function (event) {
+            // Define vars
+            var key, value;
+
+            key = $(this).attr('id');
+
+            // If on, slide switch off
+            if ($(this).parent().find(".switch-cb").prop('checked')) {
+                $(this).find(".background").animate({ left: "-56px" }, 200);
+                $(this).parent().find(".switch-cb").attr('checked', false);
+                value = "off";
+            } else {
+                $(this).find(".background").animate({ left: "0px" }, 200);
+                $(this).parent().find(".switch-cb").attr('checked', true);
+                value = "on";
+            }
+
+            var requestModel = {
+                Key: key,
+                Value: value
+            };
+
+            var getBaseURL = function () {
+                return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+            }
+            var jsonData = $.toJSON(requestModel);
+            var serviceUrl = getBaseURL() + 'Notifications/Index';
+
+            $.ajax({
+                type: 'POST',
+                url: serviceUrl,
+                data: jsonData,
+                contentType: "application/json",
+                dataType: "json",
+                processData: false
+            });
+
+        });
+
+    });     // End 
 </script>
 }

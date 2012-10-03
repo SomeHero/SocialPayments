@@ -15,14 +15,15 @@
     <div data-role="content">
         <div class="pad">
             <!-- Edit Profile -->
-            <ul  class="" data-role="listview" data-inset="true">
+            <ul  class="panel-container">
                 <li class="settings" id="profile"><a href="@Url.Content("~/Profile")" data-prefetch  data-transition="slide">
                     <h2 class="heading">Edit Profile</h2>
                     <h4 class="subheading">Update your information</h4>
                     </a>
                     </li>
             </ul>
-            <ul  class="setting-group" data-role="listview" data-inset="true">
+             <h2 class="section-header">FUNDING SOURCES</h2>
+            <ul  class="panel-container">
                 <li class="settings" id="banks">
                     <!-- Bank Account -->
                    <a href="@Url.Content("~/BankAccounts")" data-prefetch data-transition="slide">
@@ -32,32 +33,34 @@
                      
                      </a></li>
             </ul>
-            <ul class="setting-group" data-role="listview" data-inset="true">
+            <h2 class="section-header">LINKED PAYPOINTS | <a href="#">WHAT?</a></h2>
+            <ul class="panel-container">
                 <li class="settings" id="emails">
                     <!-- Separate Set -->
                     <!-- Email Accounts -->
-                    <a href="@Url.Content("~/Emails")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/Emails")">
                                    <h2 class="heading"> Emails </h2>
                     <h4 class="subheading">Add/manage email accounts</h4> </a></li>
                 <li class="settings" id="socials">
                     <!-- Social Networks -->
-                    <a href="@Url.Content("~/SocialNetworks")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/SocialNetworks")">
                                    <h2 class="heading"> Social Networks </h2>
                     <h4 class="subheading">Add/manage social accounts</h4></a></li>
                 <li class="settings" id="phones">
                     <!-- Phones -->
-                    <a href="@Url.Content("~/Phones")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/Phones")">
                            <h2 class="heading"> Phones </h2>
                     <h4 class="subheading">Add/manage linked phone numbers</h4></a></li>
                 <!--ME Codes -->
                 <li class="settings" id="mecodes">
-                <a href="@Url.Content("~/MeCodes")" data-prefetch  data-transition="slide">
+                <a href="@Url.Content("~/MeCodes")">
                         <h2 class="heading"> ME Codes </h2>
                     <h4 class="subheading">Add/manage Mobile Exchange codes</h4></a></li>
             </ul>
-            <ul  class="setting-group" data-role="listview" data-inset="true">
+            <h2 class="section-header">YOUR SETTINGS</h2>
+            <ul  class="panel-container">
                 <li class="settings" id="notifications">
-                    <a href="@Url.Content("~/Notifications")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/Notifications")">
                    <h2 class="heading"> Notifications </h2>
                     <h4 class="subheading">How and when we update you</h4>
                     </a> </li>
@@ -68,34 +71,39 @@
                     </a>
                 </li>-->
                 <li class="settings" id="security">
-                <a href="@Url.Content("~/Security")" data-prefetch data-transition="slide">
+                <a href="@Url.Content("~/Security")">
                    <h2 class="heading"> Security & Privacy </h2>
                     <h4 class="subheading">Change password or security options</h4>
                      </a>
                 </li>
             </ul>
-            <ul  class="setting-group" data-role="listview" data-inset="true">
+            <h2 class="section-header">HELP &amp; FEEDBACK</h2>
+            <ul  class="panel-container">
                 <li class="settings" id="help">
                     <!-- Separate Set -->
                     <!-- Help -->
-                    <a href="@Url.Content("~/Help")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/Help")" >
                                      <h2 class="heading"> Help </h2>
                     <h4 class="subheading">Issues? Contact us or view FAQs</h4>
                       </a></li>
             </ul>
-            <ul  class="setting-group" data-role="listview" data-inset="true">
+            <h2 class="section-header">LEGAL MUMBO JUMBO</h2>
+            <ul  class="panel-container">
                 <li class="settings" id="useragreement">
                     <!--Rate PaidThx ( won't be used this version )-->
                     <!-- Separate Set -->
                     <!-- User Agreement -->
-                    <a href="@Url.Content("~/UserAgreement")" data-prefetch data-transition="slide">
+                    <a href="@Url.Content("~/UserAgreement")">
                                         <h2 class="heading">User Agreement</h2>
                     <h4 class="subheading">Terms or Service, Security & Privacy</h4>
                     </a>
                     </li>
+                    </ul>
+                    <h2 class="section-header">UNTIL NEXT TIME!</h2>
+                    <ul  class="panel-container">
                 <li class="settings" id="signout">
                     <!-- Sign Out -->
-                    <a href="@Url.Content("~/Preferences/SignOut")" data-transition="pop">
+                    <a href="@Url.Content("~/Preferences/SignOut")">
                     <h2 class="heading">Sign Out</h2>
                     <h4 class="subheading">Log out of PaidThx</h4>
                     </a></li>
