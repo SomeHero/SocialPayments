@@ -543,7 +543,12 @@ var pinswipeResizeController = (function ($, undefined) {
         $('.patternlockcontainer > div').css('height', (divwidth));
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
-        $(".patternlockcontainer > div").css("left", ($(window).width() - $(".patternlockcontainer > div").width()) / 2 + $(window).scrollLeft() + "px");
+        $('.patternlockcontainer > div').css("left", ($(window).width() - $('.patternlockcontainer > div').width()) / 2 + $(window).scrollLeft() + "px");
+        $('#pinHolder').animate({
+            opacity: 1
+        }, 200, function () {
+            // PINSWIPE READY
+        });
     };
 
     return pub;

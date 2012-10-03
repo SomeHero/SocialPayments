@@ -353,6 +353,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
   width: 105px;
   height: 30px;
   vertical-align: middle;
+   -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
 }
 /* Background image */
 .switch .background {
@@ -363,6 +366,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
   left: 0;
   width: 161px;
   height: 30px;
+   -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
 }
 /* Mask */
 .switch .mask {
@@ -373,6 +379,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
   left: 0;
   width: 105px;
   height: 30px;
+   -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px ;
 }
 li.toggler
 {
@@ -759,6 +768,11 @@ zoom: 1;
 /* ==========================================================================
    PAGES: SEND/REQUEST/DONATE/PLEDGE
    ========================================================================== */
+.hider
+{
+ opacity:0;   
+}
+
 .a-recipient, .a-amount {
 border: 1px solid #CCC;
 -webkit-border-radius: 5px;
@@ -786,6 +800,11 @@ text-decoration:none;
 {
  margin-top:10px;   
 }
+.on-pledge
+{
+ margin-top:10px;   
+}
+
 .img-recipient, .img-amount
 {
  float:left;  
@@ -1472,24 +1491,61 @@ text-shadow:none;
 
 ul.setting-group
 {
-padding-top:20px;    
+   
+}
+
+.panel-container
+{
+ -moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;   
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+border:1px solid #cccccc;
+background-color:#ffffff;
+margin-bottom:10px;
+display:block;
+}
+.panel-container > li, .panel-container > div
+{ 
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+}
+
+.panel-container > li:first-child
+{
+-webkit-border-radius: 5px 5px 0 0;
+-moz-border-radius: 5px 5px 0 0;
+border-radius: 5px  5px 0 0; 
+}
+.panel-container > li:last-child
+{
+    -webkit-border-bottom-right-radius:5px;
+-webkit-border-bottom-left-radius:5px;
+-moz-border-bottom-right-radius: 5px;
+-moz-border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;  
+border-bottom-left-radius: 5px;    
+}
+
+.panel-container > li:not(:first-child)
+{
+ border-top:1px solid #f1f1f2; 
+}
+.panel-container > li:not(:last-child)
+{
+  border-bottom:1px solid #cccccc;     
 }
 
 li.settings {
 background-repeat: no-repeat;
 background-position: 10px 50%;
 list-style-type:none;
-border:1px solid #cccccc;
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
 background-color:#ffffff;
 font-size:10pt;
-margin-bottom:10px;
 display:block;
--moz-box-shadow:    1px 1px 0px 0px #fff;
--webkit-box-shadow: 1px 1px 0px 0px #fff;
-box-shadow:         1px 1px 0px 0px #fff;
 padding:0 10px 0 0;
 }
 

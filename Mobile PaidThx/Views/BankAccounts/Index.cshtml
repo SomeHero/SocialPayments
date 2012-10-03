@@ -9,7 +9,7 @@
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
 
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div data-role="header" class="header-pdthx" >
     
         <h1>
             Bank Accounts</h1>
@@ -21,7 +21,7 @@
         @Html.ValidationSummary()
         <h5>
             Your Linked Accounts</h5>
-        <ul data-role="listview" data-inset="true">
+        <ul class="panel-container">
             @foreach (var bankAccount in Model.PaymentAccounts)
             {             
                 <li class="settings bank"><a href="@Url.Content("~/BankAccounts/Edit/" + bankAccount.PaymentAccountId)">
@@ -41,7 +41,7 @@
                 </a></li>
             }
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul class="panel-container">
             <li class="settings add">
                 <a href="@Url.Content("~/BankAccounts/Add")">
                     Add an Account
