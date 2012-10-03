@@ -498,29 +498,29 @@ var contactsSearchController = (function ($, undefined) {
         //if none are found then fadeIn the `#no-results` element
         if (!$page.find("#contact-no-results").is(":visible")) {
             $page.find("#contact-no-results").toggle();
-            $page.find("#contactsList").listview("refresh");
         }
         if (!$page.find("#contact-no-results-divider").is(":visible")) {
             $page.find("#contact-no-results-divider").toggle();
-            $page.find("#contactsList").listview("refresh");
         }
-
         if (validationController.isValidEmailAddress(searchVal)) {
             $page.find("#results-header").text(searchVal);
             $page.find("#results-description").text("New Email Recipient");
-            $page.find("#contact-new-recipient-uri").attr('recipient-uri', searchVal);
-            $page.find("#contact-new-recipient-uri").attr('recipient-name', searchVal);
+            $page.find("#contact-new-recipient-uri").val(searchVal);
+            $page.find("#contact-new-recipient-name").val(searchVal);
+            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '1');
         } else if (validationController.isValidPhoneNumber(searchVal)) {
             $page.find("#results-header").text(searchVal);
             $page.find("#results-description").text("New Phone Recipient");
-            $page.find("#contact-new-recipient-uri").attr('recipient-uri', searchVal);
-            $page.find("#contact-new-recipient-uri").attr('recipient-name', searchVal);
+            $page.find("#contact-new-recipient-uri").val(searchVal);
+            $page.find("#contact-new-recipient-name").val(searchVal);
+            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '1');
         }
         else {
             $page.find("#results-header").text("No matches found");
             $page.find("#results-description").text("Continue type or check entry");
-            $page.find("#contact-recipient-uri").val('');
-            $page.find("#contact-new-recipient-uri").attr('recipient-name', '');
+            $page.find("#contact-new-recipient-uri").val('');
+            $page.find("#contact-new-recipient-uri").val('');
+            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '0');
         }
     }
     function hideNoResults(searchVal) {
