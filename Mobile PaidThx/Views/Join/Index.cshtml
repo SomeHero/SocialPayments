@@ -106,9 +106,9 @@
                 {
                     <span class="form-holder"><input type="email" id="email" class="email required" placeholder="Enter Your Email Address"
                         name="email" value="@Model.UserName" /></span>
-                    <span class="form-holder"> <input type="password" class="required passwrdvalidator" id="password" placeholder="Create a Password"
+                    <span class="form-holder"> <input type="password" class="required passwrdvalidator reveal" id="password" placeholder="Create a Password"
                         name="password" /></span>
-                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" class="required pwmatch" type="password" placeholder="Confirm Your Password"
+                    <span class="form-holder" id="confirmPasswordHolder"><input id="confirmPassword" class="required pwmatch reveal" type="password" placeholder="Confirm Your Password"
                         name="confirmPassword" /></span>
                 <button type="submit" id="register-submit" class="pd-btn green">
                 Join with Email</button>
@@ -136,3 +136,8 @@
             
     </div>
 
+    @section PageScripts{
+    <script type="text/javascript">
+
+    </script>
+    }
