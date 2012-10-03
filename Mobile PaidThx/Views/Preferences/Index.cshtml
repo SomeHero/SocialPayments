@@ -15,14 +15,14 @@
     <div data-role="content">
         <div class="pad">
             <!-- Edit Profile -->
-            <ul data-role="listview" data-inset="true">
+            <ul  class="" data-role="listview" data-inset="true">
                 <li class="settings" id="profile"><a href="@Url.Content("~/Profile")" data-prefetch  data-transition="slide">
                     <h2 class="heading">Edit Profile</h2>
                     <h4 class="subheading">Update your information</h4>
                     </a>
                     </li>
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul  class="setting-group" data-role="listview" data-inset="true">
                 <li class="settings" id="banks">
                     <!-- Bank Account -->
                    <a href="@Url.Content("~/BankAccounts")" data-prefetch data-transition="slide">
@@ -32,7 +32,7 @@
                      
                      </a></li>
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul class="setting-group" data-role="listview" data-inset="true">
                 <li class="settings" id="emails">
                     <!-- Separate Set -->
                     <!-- Email Accounts -->
@@ -55,18 +55,18 @@
                         <h2 class="heading"> ME Codes </h2>
                     <h4 class="subheading">Add/manage Mobile Exchange codes</h4></a></li>
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul  class="setting-group" data-role="listview" data-inset="true">
                 <li class="settings" id="notifications">
                     <a href="@Url.Content("~/Notifications")" data-prefetch data-transition="slide">
                    <h2 class="heading"> Notifications </h2>
                     <h4 class="subheading">How and when we update you</h4>
                     </a> </li>
-                <li class="settings" id="sharing">
+                <!--<li class="settings" id="sharing">
                     <a href="@Url.Content("~/Sharing")" data-prefetch data-transition="slide">
                    <h2 class="heading"> Sharing </h2>
                     <h4 class="subheading">How and when you share</h4>
                     </a>
-                </li>
+                </li>-->
                 <li class="settings" id="security">
                 <a href="@Url.Content("~/Security")" data-prefetch data-transition="slide">
                    <h2 class="heading"> Security & Privacy </h2>
@@ -74,7 +74,7 @@
                      </a>
                 </li>
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul  class="setting-group" data-role="listview" data-inset="true">
                 <li class="settings" id="help">
                     <!-- Separate Set -->
                     <!-- Help -->
@@ -83,7 +83,7 @@
                     <h4 class="subheading">Issues? Contact us or view FAQs</h4>
                       </a></li>
             </ul>
-            <ul data-role="listview" data-inset="true">
+            <ul  class="setting-group" data-role="listview" data-inset="true">
                 <li class="settings" id="useragreement">
                     <!--Rate PaidThx ( won't be used this version )-->
                     <!-- Separate Set -->
