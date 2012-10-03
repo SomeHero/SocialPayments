@@ -9,16 +9,14 @@
     
     <div data-role="header" data-position="fixed" class="header-pdthx" >
         <h1>
-            Account Details</h1>
+            Details</h1>
             <a href="@Url.Content("~/BankAccounts")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div data-role="content">
         <div class="top-panel">
             <p>
-                To enable sending payment from this account, please verify it. <a href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
-                    <button type="button" id="btn-verify-account" data-theme="b" data-icon="gear" data-iconpos="right"
-                        class="pd-btn orange">
-                        Verify Account</button>
+                To enable sending payment from this account, please verify it. <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
+                        Verify Account
                 </a>
             </p>
         </div>
