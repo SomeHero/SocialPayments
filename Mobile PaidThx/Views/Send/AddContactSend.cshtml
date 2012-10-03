@@ -14,8 +14,50 @@
 
     <div data-role="content">
           <div class="pad">
+         <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
         <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
-                   
+               
+            <li class="contact">
+                    <li data-role="list-divider">Test Users</li>
+            
+                   <li class="contact">
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+1@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 1");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 1</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    </li>
+                        
+                   <li class="contact">
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+2@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 2");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 2</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    </li>    
+                        
+                   <li class="contact">
+                     @using(Html.BeginForm()) {
+                        @Html.Hidden("recipientUri", "demo+3@paidthx.com")
+                        @Html.Hidden("recipientType", "email")
+                        @Html.Hidden("recipientName", "Demo PaidTHx 3");
+                        <a class="contact-recipient-uri">
+                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
+                            <h2 class="heading">Demo 3</h2>
+                            <h4 class="subheading">Facebook Friend</h4>
+                        </a>
+                    }
+                    </li>
         @foreach (var alphaGroup in Model.SortedContacts)
         {
             <li data-role="list-divider">@alphaGroup.Key</li>
@@ -37,7 +79,11 @@
             }
             <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Contacts Found</li>
                     <li id="contact-no-results" class="contact-no-results-item">
-                    <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
+                    @using(Html.BeginForm()) {
+                    @Html.Hidden("recipientUri", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-uri"}})
+                    @Html.Hidden("recipientType", "new", new Dictionary<string, object> {{ "id", "contact-new-recipient-type"}})
+                    @Html.Hidden("recipientName", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-name"}});
+                    <a id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
                         <img src="@Url.Content("~/Content/images/avatar.png")" />
                         <h2 id="results-header" class="heading">
                         No contacts...yet
@@ -46,6 +92,7 @@
                         Type a new email or phone # above
                        </h4>
                    </a>
+                        }
                </li>
                <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
                 </ul>
@@ -114,7 +161,10 @@
                 $(this).parents("form:first").submit();
 
             });
-
+            $listview.on("click", ".contact-new-recipient", function (event) {
+                if($(this).attr('data-uri-valid') == '1')
+                    $(this).parents("form:first").submit();
+            });
         });
         
 </script>
