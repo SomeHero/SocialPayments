@@ -11,7 +11,7 @@
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div data-role="content">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+        <div class="pad">
 
             @TempData["Message"]
 
@@ -43,8 +43,7 @@
 </div>
 @section PageScripts
 {
-        <script language="javascript">
-            //wait to do event binding until the page is being initialized
+        <script type="text/javascript">
             //wait to do event binding until the page is being initialized
             var socialNeworkController = (function ($, undefined) {
                 var pub = {},

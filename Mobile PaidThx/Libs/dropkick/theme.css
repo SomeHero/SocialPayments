@@ -1,0 +1,70 @@
+/**
+Ryan's Dropkick Theme
+ *
+ */
+
+/* Container */
+.dk_container 
+{
+    float:none;
+    -webkit-background-clip: border-box;
+-webkit-background-origin: padding-box;
+-webkit-background-size: auto;
+-webkit-font-smoothing: antialiased;
+background-clip: border-box;
+background-size: auto;    
+    }
+a {}
+
+/* Toggle */
+.dk_toggle 
+{
+border:1px solid #cccccc;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color:#ffffff;
+font-size:10pt;
+margin-bottom:10px;
+display:block;
+-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;
+padding:20px 0;
+width:100% !important;
+-webkit-background-clip: border-box;
+-webkit-background-origin: padding-box;
+-webkit-background-size: auto;
+-webkit-font-smoothing: antialiased;
+background-clip: border-box;
+background-size: auto;  
+background-position: 96% center;  
+    }
+   
+   .dk_toggle span{
+    margin-left: 20px;
+   }
+   
+  .dk_mytheme .dk_toggle:hover {}
+
+/* Focus State */
+.dk_mytheme.dk_focus,
+.dk_mytheme:focus {}
+  .dk_mytheme.dk_focus .dk_toggle {}
+  
+/* Open State */
+.dk_mytheme.dk_open {}
+  .dk_mytheme.dk_open .dk_toggle {}
+
+/* Options Menu */
+ .dk_options {}
+.dk_options a {padding: 20px;}
+ .dk_options a:hover,
+.dk_option_current a {padding: 20px;}
+
+/* Inner options */
+.dk_mytheme .dk_options_inner {}
+
+/* Set a width property here */
+.dk_mytheme .dk_options_inner,
+.dk_mytheme.dk_touch .dk_options {}

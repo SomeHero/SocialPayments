@@ -1,9 +1,5 @@
 /*
- * HTML5 Boilerplate
- *
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
+Ryan's HTML5 Bolierplate + Custom Styles for PaidThx
  */
 
 /* ==========================================================================
@@ -330,7 +326,13 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
 	border-color:#48b201;	
 }
 
+/*+++++++++++++++++++++++++++CUSTOM FORM ELEMENTS+++++++++++++++++++++++*/
 
+.select-holder
+{
+ margin:0;
+ padding:0;   
+}
 
 /*+++++++++++++++++++++++++++LAYOUT ELEMENTS+++++++++++++++++++++++*/
 
@@ -1414,6 +1416,11 @@ text-shadow:none;
 /* ==========================================================================
    SETTINGS
    ========================================================================== */
+
+ul.setting-group
+{
+padding-top:20px;    
+}
 
 li.settings {
 background-repeat: no-repeat;
