@@ -62,6 +62,18 @@ background-position: 96% center;
  .dk_options a:hover,
 .dk_option_current a {padding: 20px;}
 
+.dk_options a:hover, .dk_option_current a {
+background-color: #48b201;
+border-bottom-color: #225500;
+color: white;
+text-decoration: none;
+text-shadow: 1px 1px 0 #225500;
+}
+a:hover {
+color: #06E;
+}
+
+
 /* Inner options */
 .dk_mytheme .dk_options_inner {}
 

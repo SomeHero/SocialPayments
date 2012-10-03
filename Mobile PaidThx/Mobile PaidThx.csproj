@@ -407,6 +407,8 @@
     <Content Include="Content\images\sub-nav-requests-icon-active.gif" />
     <Content Include="Content\images\sub-nav-requests-icon.gif" />
     <Content Include="Content\images\subnav-active-background.gif" />
+    <Content Include="Content\images\switch-background.png" />
+    <Content Include="Content\images\switch-mask.png" />
     <Content Include="Content\images\tab-dogood-30x30-active.png" />
     <Content Include="Content\images\tab-dogood-30x30.png" />
     <Content Include="Content\images\tab-home-30x30-active.png" />
@@ -435,6 +437,7 @@
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
     <Content Include="Libs\qtip2\jquery.qtip.min.js" />
     <Content Include="Scripts\helper.js" />
+    <Content Include="Scripts\jquery.easing.1.3.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.6.1.min.js" />
     <Content Include="Scripts\plugins.js" />
