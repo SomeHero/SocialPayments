@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AddContactSend";
     ViewBag.PageID = "send-contact-select-page";
-    ViewBag.Classes = "page page full";
+    ViewBag.Classes = "page";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
  
@@ -21,7 +21,7 @@
             <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                   <li class="contact">
+                   <li class="contact contact-select">
                     @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")
