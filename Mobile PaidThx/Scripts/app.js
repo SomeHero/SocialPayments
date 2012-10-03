@@ -549,7 +549,11 @@ var pinswipeResizeController = (function ($, undefined) {
     return pub;
 } (jQuery));
 
-//LOAD
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $(document).ready(function(){
 
     //BACK BUTTONS
@@ -569,10 +573,7 @@ $(window).bind('resize', function (event) {
             var content_height = $('div.page').height(),
             header_height = $('div.header-pdthx').height(),
             window_height = $(this).height();
-
-            if (content_height < (window_height)) {
-                $('div.page').css('min-height', (window_height));
-            }
+            $('div.page').css('min-height', (window_height));
             event.stopImmediatePropagation();
         }).trigger('resize');
 
