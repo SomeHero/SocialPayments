@@ -49,16 +49,35 @@
             </li>
             </ul>
             <h5>Sending Account</h5>
+            <div class="select-holder">
             @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
             {     
-                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount" })
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount", @class = "select-custom" })
             }
+            </div>
             <h5>Receiving Account</h5>
+            <div class="select-holder">
             @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
             { 
-                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount" })
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount", @class = "select-custom" })
             }
+            </div>
     </div>
     </div>
 </div>
 </div>
+
+@section PageStyles{
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/dropkick/dropkick.css")">
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/dropkick/theme.css")">
+}
+@section PageScripts{
+
+<script type="text/javascript" src="@Url.Content("~/Libs/dropkick/jquery.dropkick-1.0.0.js")"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select-custom').dropkick();
+});
+</script>
+}

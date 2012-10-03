@@ -425,6 +425,11 @@
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
     <Content Include="Content\images\video.png" />
+    <Content Include="Libs\dropkick\theme.css" />
+    <Content Include="Libs\dropkick\dropkick.css" />
+    <Content Include="Libs\dropkick\images\dk_arrows.png" />
+    <Content Include="Libs\dropkick\images\dk_arrows_white.png" />
+    <Content Include="Libs\dropkick\jquery.dropkick-1.0.0.js" />
     <Content Include="Libs\qtip2\jquery.qtip.css" />
     <Content Include="Libs\qtip2\jquery.qtip.js" />
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
