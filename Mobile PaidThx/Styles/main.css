@@ -283,7 +283,7 @@ background-image: linear-gradient( #4A6BB0 /*{d-bup-background-start}*/, #3B5998
 /*++++++++++++++++++++++++++++++FORM FIELDS+++++++++++++++++++++++++++*/
 
 span.form-holder {
-background: #f1f1f2;
+background: #eeeeee;
 padding: 3px 5px;
 display: block;
 border-radius: 5px;
@@ -295,6 +295,7 @@ box-shadow: 0px 1px 4px rgba(0, 0, 0, .3) ;
  -moz-border-radius: 5px;
 -webkit-border-radius: 5px;
 border-radius: 5px ;
+border:1px solid #ffffff;
 }
 
 input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
@@ -458,6 +459,7 @@ text-align: center;
  border-bottom:1px solid #cccccc;  
  padding:14px;
  background-color:#f8f8f8;
+ font-size:12px;
 }
 
 .top-panel p
@@ -511,8 +513,46 @@ img.grow90
 /* ==========================================================================
    PAGES: SET UP: PERSONALIZE
    ========================================================================== */
+   
+   /* ==========================================================================
+   PAGES: ADD ACCOUNT
+   ========================================================================== */
+.cs-radio-holder
+{
+   width:100%;
+   text-align:center;
+   line-height:30px;
+   height:30px; 
+   margin:10px 0 20px;
+}
+.cs-radio-label
+{
+    display:inline-block;
+    width:49%;
+ padding:0;
+ cursor:pointer;   
+ font-size:12px;
+ font-weight:bold;
+ line-height:30px; 
+  -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-color:#f1f1f2; 
+box-shadow:    1px 1px 0px 0px #fff;
+-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+}
+.cs-radio-label.selected
+{
 
-
+background-color:#65be0f; 
+box-shadow:    1px 1px 0px 0px #fff;
+				-moz-box-shadow:    1px 1px 0px 0px #fff;
+-webkit-box-shadow: 1px 1px 0px 0px #fff;
+box-shadow:         1px 1px 0px 0px #fff;
+color:#ffffff;
+text-shadow:none;
+}
 /* ==========================================================================
    PAGES: HOME (DASHBOARD)
    ========================================================================== */
@@ -729,7 +769,13 @@ height: 19px;
 -webkit-box-shadow: 0px 1px 0 rgba(255, 255, 255, .4) /*{global-icon-shadow}*/;
 box-shadow: 0px 1px 0 rgba(255, 255, 255, .4) /*{global-icon-shadow}*/;
 }
-
+.thenumber
+{
+font-size: 26pt;
+padding-top: 4px !important;
+ color:#231f20;   
+ margin:0;
+}
 #txtComments, #txtComments-Request, #txtComments-Donate 
 {
 -webkit-box-sizing: border-box;
@@ -1343,24 +1389,24 @@ border-style: solid;
 .ps-filter-label
 {
     display:inline-block;
-    width:20%;
+    width:24%;
  padding:0;
  cursor:pointer;   
  font-size:12px;
  font-weight:bold;
  line-height:30px; 
-  
+ -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+ 
 }
 .ps-filter-label.selected
 {
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
+
 background-color:#65be0f; 
 box-shadow:    1px 1px 0px 0px #fff;
-				-moz-box-shadow:    1px 1px 0px 0px #fff;
+-moz-box-shadow:    1px 1px 0px 0px #fff;
 -webkit-box-shadow: 1px 1px 0px 0px #fff;
-box-shadow:         1px 1px 0px 0px #fff;
 color:#ffffff;
 text-shadow:none;
 }
