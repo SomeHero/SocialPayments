@@ -537,13 +537,12 @@ var pinswipeResizeController = (function ($, undefined) {
     var pub = {},
     $this = $(this);
     pub.resizePINs = function () {
-        $(".hackstyle").remove();
         var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
         divwidth = widthy * .95;
         $('.patternlockcontainer > div').css('height', (divwidth));
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
-        $('.patternlockcontainer > div').css("left", ($(window).width() - $('.patternlockcontainer > div').width()) / 2 + $(window).scrollLeft() + "px");
+        $('.patternlockcontainer > div').css("left", ($('div#pinHolder').width() - $('.patternlockcontainer > div').width()) / 2) ;
         $('#pinHolder').animate({
             opacity: 1
         }, 200, function () {
@@ -559,7 +558,7 @@ var pinswipeResizeController = (function ($, undefined) {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-$(document).ready(function(){
+$(document).ready(function () {
 
     //BACK BUTTONS
 
@@ -567,20 +566,22 @@ $(document).ready(function(){
         history.back(); return false;
     });
 
+    //hide empty top panels
+    $('.top-panel:empty').hide();
 
-$(window).bind('resize', function (event) {
-    //resize PINs on window resize
+    $(window).bind('resize', function (event) {
+        //resize PINs on window resize
         pinswipeResizeController.resizePINs();
     });
 
-//my attempt to recreate jquery mobile full page
-        $(window).bind('resize', function (event) {
-            var content_height = $('div.page').height(),
+    //my attempt to recreate jquery mobile full page
+    $(window).bind('resize', function (event) {
+        var content_height = $('div.page').height(),
             header_height = $('div.header-pdthx').height(),
             window_height = $(this).height();
-            $('div.page').css('min-height', (window_height));
-            event.stopImmediatePropagation();
-        }).trigger('resize');
+        $('div.page').css('min-height', (window_height));
+        event.stopImmediatePropagation();
+    }).trigger('resize');
 
     //add center to jquery object
     $.fn.center = function () {
@@ -593,7 +594,7 @@ $(window).bind('resize', function (event) {
         return false;
     });
 
- 
+
 
 
     //Create all custom rules

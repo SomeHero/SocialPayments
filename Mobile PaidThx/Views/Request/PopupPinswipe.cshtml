@@ -1,18 +1,18 @@
 ﻿@model Mobile_PaidThx.Models.RequestModels.PinSwipeModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Request | Confirm Your Request";
     ViewBag.PageID = "request-popup-pin-swipe-page";
     ViewBag.Classes = "page";
 }
 <div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Confirm</h1>
             <a href="@Url.Content("~/Request")"  class="hd-btn-left btn-back history">Cancel</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel">
          @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
@@ -38,10 +38,6 @@
         }
     </div>
       </div>
-  <div id="resizerHack">
-        
-        
-        </div>
 </div>
 @section PageScripts
 {

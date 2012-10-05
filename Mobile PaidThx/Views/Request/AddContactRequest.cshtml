@@ -1,17 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.RequestModels.AddContactRequestModel
 @{
-    ViewBag.Title = "AddContactRequest";
+    ViewBag.Title = "Request From Whom?";
     ViewBag.PageID = "request-contact-select-page";
-    ViewBag.Classes = "page page full";
+    ViewBag.Classes = "page full";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
   
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
             Request From:</h1>
              <a href="@Url.Content("~/Request")"  class="hd-btn-left btn-back history">Back</a>
     </div>
-    <div data-role="content" class="content">
+    <div class="pd-content">
         <div class="pad">
           <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
         <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
@@ -52,7 +52,7 @@
                    </a>
                         }
                </li>
-               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
+               <li id="me-codes-divider" class="list-divider"></li>
                 </ul>
             </div>
         </div>

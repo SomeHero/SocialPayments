@@ -1,17 +1,18 @@
 ﻿@model Mobile_PaidThx.Models.PaystreamModels.PinSwipeRequestModel
 @{
-    ViewBag.Title = "Paystream";
-    ViewBag.PageId = "paystream-index";
+    ViewBag.Title = "Confirm";
+    ViewBag.PageID = "paystream-confirm";
+    ViewBag.Classes = "page";
 }
-<div  id="paystream-pinswipe-page"  data-back-btn-text="Cancel" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
             Confirm</h1>
             <a href="@Url.Content("~/Paystream")"  class="hd-btn-left btn-back history">Back</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel" id="swipe-to-confirm">
         @if (Model.PaystreamAction == "CancelPayment")
         {
@@ -35,43 +36,21 @@
        
         @using (Html.BeginForm("PopupPinswipe", "Paystream", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
-            <div style="margin-top:15px">
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
         }
     </div>
       
-  <div id="resizerHack">
-  </div>
 </div>
 </div>
 @section PageScripts
 {
 <script type="text/javascript">
-        $("#paystream-pinswipe-page").unbind('pageshow').bind('pageshow', function () {
-
-        });
-</script>
-
-<script type="text/javascript">
     $(document).ready(function () {
-
-        function resizePIN() {
-
-            $(".hackstyle").remove();
-            var widthy = $(window).width();
-            divwidth = widthy * .93;
-
-            $("#resizerHack").append("<div class=\"hackstyle\"><style>div.patternlocklinesdiagonalcontainer { height:" + divwidth + "px ;}div.patternlocklinesverticalcontainer { height:" + divwidth + "px ;}div.patternlocklineshorizontalcontainer { height:" + divwidth + "px ;}div.patternlockbuttoncontainer { height:" + divwidth + "px ;}</div>")
-
-        };
-
-        resizePIN();
-
-        $(window).resize(function () {
-            resizePIN();
-        });
+        pinswipeResizeController.resizePINs();
     });
 </script>
+
 }

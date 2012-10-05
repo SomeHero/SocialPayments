@@ -1,15 +1,19 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.SecurityPreferencesModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Security";
+    ViewBag.PageID = "security-page";
+    ViewBag.Classes = "page settings";
 }
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
 <div  id="security-page"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Security</h1>
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
+    <div class="top-panel"></div>
         <div class="pad">
             
             <ul data-role="listview" data-inset="true">

@@ -6,51 +6,68 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
-        <h1>Email Details</h1>
+    <div class="header-pdthx" >
+        <h1>Details</h1>
         <a href="@Url.Content("~/Emails")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content" class="panel main-body">
+    <div class="pd-content">
+     <div class="top-panel">
+    <p>
+
+    @{
+        if (Model.EmailAddress.Verified)
+        {
+        <text>
+        <b>@Model.EmailAddress.Uri</b> is verified, you will receive all payments sent to this email.  Pretty cool.
+        </text>
+        }
+        else
+        {
+         <text>
+         <b>@Model.EmailAddress.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Verify Email" below and follow the instructions in the email you will receive.
+        </text>
+        }
+    }
+                
+            </p>
+    
+    </div>
+
         <div class="pad">
+       
         <ul class="panel-container">
-            <li class="settings email static">
+            <li class="settings email nolink">
+            <a>
                    <h2>@Model.EmailAddress.Uri
                    </h2>
-                   <h4>
+                   
                    @if (Model.EmailAddress.Verified)
                    {
-                    <text>Verified</text>
+                    <text><h4 class="verified">Verified</h4></text>
                    }
                    else
                    {
-                        <text>Not Verified</text>
+                        <text><h4 class="unverified">Not Verified</h4></text>
                    }
-                    </h4>
+               </a>    
             </li>
             </ul>
             @Html.ValidationSummary()
              @if (!Model.EmailAddress.Verified)
                    {
                     <text>
-                    <div class="alert">
-                <p>To enable sending payment from this account, please verify it.
-                <a href="#">
-                <button type="button" id="btn-verify-account" data-theme="b" data-icon="refresh" data-iconpos="right" class="pd-btn blue">
+                <button type="button" id="btn-verify-account" class="pd-btn blue">
                   Resend Verify Email</button>
 
-                </a>
-                </p>
-                </div></text>
+                </text>
                    }
  
-            <p>
             @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
-                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="pd-btn red">
+                <button type="submit" id="btn-remove-email" class="pd-btn red">
                    Remove Email</button>
             }
-            </p>
             </div>
     </div>
 </div>

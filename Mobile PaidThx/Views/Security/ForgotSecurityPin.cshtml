@@ -2,16 +2,16 @@
 @{
     ViewBag.Title = "Forgot PIN";
     ViewBag.PageID = "forgotsecuritypin-page";
+    ViewBag.Classes = "page";
 }
-
-<div  id="@ViewBag.PageID"  >
-        
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+       
+    <div class="header-pdthx" >
         <h1>
             Forgot PIN</h1>
             <a href="@Url.Content("~/Security")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
       <div class="top-panel">
         <p>Answer your security question below to reset your security PIN.</p>
         </div>

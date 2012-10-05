@@ -4,14 +4,14 @@
     ViewBag.PageID = "pledge-page";
     ViewBag.Classes = "page";
 }
-<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
 
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>Accept Pledge</h1>
         <a href="@Url.Content("~/DoGood")"  class="hd-btn-left btn-back">Back</a>
     </div>
 
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
            @Html.ValidationSummary()
        @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))

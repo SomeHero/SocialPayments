@@ -1,15 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "About PaidThx";
     ViewBag.PageID = "page-about";
     ViewBag.Classes = "page ";
 }
-<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes">
     
-    <div data-role="header" data-position="fixed" class="nav-pdthx" >
-        <h1>About PaidThx</h1>
-    @{Html.RenderPartial("WelcomeMenuTop", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
+    <div class="header-pdthx" >
+        <h1>About</h1>
+        <a href="@Url.Content("~/Home")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
 
      <!-- SLIDER -->
@@ -19,31 +19,30 @@
                         <li>
                         <div class="video-holder">
                <a class="video-link fancybox.iframe"  title="PaidThx" href="http://www.youtube.com/v/-bFf3yi7cNM?fs=1&amp;autoplay=1&rel=0"><img alt="Video" class="grow90 video" src="@Url.Content("~/Content/images/video.png")" /></a></div>
-               <h3>ABOUT PAIDTHX</h3>
-                          <p>PaidThx is here to help you send &amp; receive money, free and easy.  Watch the video above or swipe to learn more.</p>
+                          <p class="intro">PaidThx is here to help you send &amp; receive money, free and easy.  Watch the video above or swipe to learn more.</p>
                         </li>
                         <li>
                         <div class="icon-holder">
                <img alt="Send Money" class="grow80" src="@Url.Content("~/Content/images/send-icon-big.png")" /></div>
-                           <h3>SEND MONEY</h3>
+                           <h3 class="about-heading">SEND MONEY</h3>
                             <p>With PaidThx - sending money to a friend, family member or even an organization or business is simple and free.</p>
                         </li>
                         <li>
                         <div class="icon-holder">
                <img alt="Request Money" class="grow80" src="@Url.Content("~/Content/images/request-icon-big.png")" /></div>
-						 <h3>REQUEST MONEY</h3>
+						 <h3 class="about-heading">REQUEST MONEY</h3>
                             <p>Friends still owe you money from weeks ago?  Send them a request using PaidThx - no more excuses.</p>
                         </li>
                         <li>
                         <div class="icon-holder">
                <img alt="Do Good" class="grow80" src="@Url.Content("~/Content/images/dogood-icon-big.png")" /></div>
-						 <h3>DO GOOD</h3>
+						 <h3 class="about-heading">DO GOOD</h3>
                             <p>Now you can give wherever you are.  And 100% of your generosity goes directly to the organizations you support.</p>
                             </li>
                         <li>
                         <div class="icon-holder">
                <img alt="Activity" class="grow80" src="@Url.Content("~/Content/images/activity-icon-big.png")" /></div>
-						  <h3>KEEP TABS</h3>
+						  <h3 class="about-heading">KEEP TABS</h3>
                             <p>The PaidThx Paystream is the news feed for your personal finances.  View recent activity, send reminders, and more.</p>
                         </li>
                         
@@ -54,7 +53,7 @@
         </div>
     </div>
     
-       <div data-role="footer"> 
+       <div class="footer-pdthx"> 
 	<h4>For even more info, visit our <a title="Learn More" target="_blank" href="https://paidthx.zendesk.com/forums">FAQs</a></h4> 
 </div> 
     @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
@@ -63,15 +62,24 @@
 
 <!-- FLEXSLIDER -->
         <link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/flexslider/flexslider.css")" />
-
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-buttons.css")">
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-thumbs.css")">
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox.css")">
     }
 
 
 
     @section PageScripts{
 
-<script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.flexslider-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Scripts/flexslider/jquery.fitvid.js")"></script>
+<!-- FancyBox -->
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-buttons.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-thumbs.js")"></script>
+        <script src="@Url.Content("~/Libs/fancybox/js/jquery.easing-1.3.pack.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.mousewheel-3.0.6.pack.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Libs/flexslider/jquery.flexslider-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Libs/flexslider/jquery.fitvid.js")"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -139,9 +147,9 @@
 
             // Carousel Options
             //itemWidth: 0,                   //{NEW} Integer: Box-model width of individual carousel items, including horizontal borders and padding.
-            itemMargin: 40,                  //{NEW} Integer: Margin between carousel items.
-            minItems: 0,                    //{NEW} Integer: Minimum number of carousel items that should be visible. Items will resize fluidly when below this.
-            //maxItems: 0,                    //{NEW} Integer: Maxmimum number of carousel items that should be visible. Items will resize fluidly when above this limit.
+            itemMargin: 60,                  //{NEW} Integer: Margin between carousel items.
+            minItems: 1,                    //{NEW} Integer: Minimum number of carousel items that should be visible. Items will resize fluidly when below this.
+            maxItems: 1,                    //{NEW} Integer: Maxmimum number of carousel items that should be visible. Items will resize fluidly when above this limit.
             move: 0,                        //{NEW} Integer: Number of carousel items that should move on animation. If 0, slider will move all visible items.
 
             // Callback API

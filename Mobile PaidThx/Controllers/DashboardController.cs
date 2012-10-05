@@ -26,7 +26,11 @@ namespace Mobile_PaidThx.Controllers
 
             return View("Index", new DashboardModels.DashboardModel()
             {
-                UserName = user.senderName
+                UserName = user.senderName,
+                UserPic = user.imageUrl,
+                UserNewActivity = user.newMessageCount,
+                UserProfileComplete = user.upperLimit
+
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
