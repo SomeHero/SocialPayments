@@ -1,0 +1,9 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.PaystreamDetailModel
+@{
+    ViewBag.Title = "Item Detail";
+    ViewBag.PageID = "paystream-detail";
+    ViewBag.Classes = "page full";
+}
+<div id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    @Model.amount
+</div>

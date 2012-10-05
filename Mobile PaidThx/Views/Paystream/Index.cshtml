@@ -32,6 +32,8 @@
                     Other</label>
             </fieldset>
             </div>
+             @using(Html.BeginForm("Details", "Paystream", null, FormMethod.Get)) {
+             @Html.Hidden("messageId", "") 
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
                 <li id="paystream-no-results-divider" class="paystream-no-results-item" data-role="list-divider" style="display:none;">No Results Found</li>
                 <li id="paystream-no-results" class="paystream-no-results-item" style="display: none;">
@@ -44,6 +46,7 @@
                         <a href="#">+ More Results</a>
                 </li>
             </ul>
+             }
             <ul>
 
             </ul>
@@ -122,10 +125,13 @@
 
                 });
             });
-            $('.paystreamItem').die('click').live('click', function () {
+            $listview.on("click", ".paystreamItem", function(event) {
                 var messageId = $(this).attr("messageId");
+                var $form = $(this).parents("form:first");
 
-                paystreamController.displayPaystreamDetail(messageId);
+                $('input[name=messageId]').val(messageId);
+                $form.submit();
+
             });
             $('.closePaystreamItem').die('click').live('click', function () {
                 paystreamController.closeDetailDialog(function () { });
