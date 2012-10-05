@@ -18,10 +18,7 @@
         @Html.ValidationSummary()
         @using (Html.BeginForm("SetPreferredReceiveAccountPinSwipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
-            <div id="pinHolder" class="hider">
-            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" />
-        </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
     </div>
 </div>
