@@ -547,6 +547,31 @@ var pinswipeResizeController = (function ($, undefined) {
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $(document).ready(function () {
 
+    //APPEND LOADING DEAL TO PAGE ELEMENT
+
+    var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
+
+    $('div.page').append($loadingguy);
+
+    $(this).ajaxStop(function () {
+        $('#page-loader').stop().animate({
+            opacity: .5
+        }, 300, function () {
+       $('#page-loader').hide();
+        });
+    });
+    $(this).ajaxStart(function () {
+        $('#page-loader').css("opacity", ".5");
+        $('#page-loader').show().stop().animate({
+            opacity: 1
+        }, 300, function () {
+
+        });
+    });
+    //HIDE PRELOADER WHEN PAGES LOAD
+    $('.loader-holder-full').fadeOut();
+
+
     //BACK BUTTONS
 
     $('.btn-back.history').live('click', function () {
@@ -612,6 +637,8 @@ $(document).ready(function () {
         if ($("form.validateMe").length > 0) {
             $("form.validateMe").validate({
                 submitHandler: function (form) {
+                    //SHOW PRELOADER
+                    $('.loader-holder-full').fadeIn();
                     form.submit();
                 },
                 invalidHandler: function (form, validator) {
