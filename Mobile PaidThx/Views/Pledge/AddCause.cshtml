@@ -22,7 +22,7 @@
             <li class="list-divider">@alphaGroup.Key</li>
             foreach (var nonprofit in alphaGroup.Value)
             {
-            <li class="contact removable">
+            <li class="contact contact-select removable">
                 @using (Html.BeginForm())
                    {
                        @Html.Hidden("recipientId", @nonprofit.Id)
@@ -42,6 +42,7 @@
                         }
             </a>
                 }
+                <div class="clear"></div>
             </li>
             }
         }

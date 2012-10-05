@@ -16,23 +16,22 @@
     <div class="top-panel"></div>
         <div class="pad">
             
-            <ul data-role="listview" data-inset="true">
-                <li>
-                    <!--Rate PaidThx ( won't be used this version )-->
-                    <!-- Separate Set -->
-                    <!-- User Agreement -->
-                    <a href="@Url.Content("~/Security/ChangePassword")" data-prefetch data-transition="slide">
-                    Change Password </a></li>
+            <ul class="panel-container">
+                <li class="settings noicon">
+                    <a href="@Url.Content("~/Security/ChangePassword")"  >
+                    <h2 class="heading">Change Password</h2>
+                    <h4 class="subheading">Do it regularly, stay secure</h4>
+                     </a></li>
                 @if (Model.SetupSecurityPin)
                 {
-                <li>
-                    <!-- Sign Out -->
-                    <a  href="@Url.Content("~/Security/ChangeSecurityPin")" data-prefetch data-transition="slide">
-                    Change Security Pin </a></li>
-                <li>
-                    <!-- Sign Out -->
-                    <a  href="@Url.Content("~/Security/ForgotSecurityPin")" data-prefetch data-transition="slide">
-                    Forgot Security Pin</a></li>
+                <li class="settings noicon">
+                    <a  href="@Url.Content("~/Security/ChangeSecurityPin")"  >
+                    <h2 class="heading">Change Security PIN</h2>
+                    <h4 class="subheading">Make it even more complex this time</h4></a></li>
+                <li class="settings noicon">
+                    <a  href="@Url.Content("~/Security/ForgotSecurityPin")"  >
+                   <h2 class="heading">Forgot Pinswipe</h2>
+                    <h4 class="subheading">No problem, we'll get you sorted</h4></a></li>
                 }
             </ul>
         </div>

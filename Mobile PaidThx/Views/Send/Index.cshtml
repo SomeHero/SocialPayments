@@ -15,7 +15,7 @@
     <div class="pad">
         @Html.ValidationSummary()
      
-            <a href="@Url.Content("~/Send/AddContactSend")" class="a-recipient" data-prefetch data-transition="slide">
+            <a href="@Url.Content("~/Send/AddContactSend")" class="a-recipient"  >
                 <div id="btn-recipient" class="btn-sends">
                         @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
@@ -49,7 +49,7 @@
                                               
                                               <span class="arrow-rt">&nbsp;</span>       
                     </div></a>
-                <a href="@Url.Content("~/Send/AmountToSend")" class="a-amount" data-prefetch data-transition="slide">
+                <a href="@Url.Content("~/Send/AmountToSend")" class="a-amount"  >
                     <div id="btn-amount" data-role="none" type="button" class="btn-sends">
                           @if (Model.Amount > 0)
                           {
