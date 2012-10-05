@@ -23,10 +23,7 @@
     </div>
         @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
-        <div id="pinHolder" class="hider">
-            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-         </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
         
     </div>
