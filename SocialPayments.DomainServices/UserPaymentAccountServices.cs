@@ -27,7 +27,10 @@ namespace SocialPayments.DomainServices
                 if (String.IsNullOrEmpty(securityQuestionAnswer))
                     throw new CustomExceptions.BadRequestException("Security Question Answer is Required");
 
-                //TODO: validate routing number
+                bool isRoutingNumberValid = paymentAccountService.VerifyRoutingNumber(routingNumber);
+
+                if (!isRoutingNumberValid)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Routing Number.  Please Check the Number and Try Again"));
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
 
@@ -100,7 +103,11 @@ namespace SocialPayments.DomainServices
 
                     throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
-                //TODO: validate routing number
+
+                bool isRoutingNumberValid = paymentAccountService.VerifyRoutingNumber(routingNumber);
+
+                if (!isRoutingNumberValid)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Routing Number.  Please Check the Number and Try Again"));
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
 

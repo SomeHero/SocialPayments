@@ -207,5 +207,14 @@ namespace SocialPayments.DomainServices
                 return true;
             }
         }
+        public bool VerifyRoutingNumber(String routingNumber)
+        {
+            bool results = false;
+
+            FedACHService fedACHService = new FedACHService();
+
+            FedACHList fedACHList = new FedACHList();
+            return fedACHService.getACHByRoutingNumber(routingNumber, out fedACHList);
+        }
     }
 }

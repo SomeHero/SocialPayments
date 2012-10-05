@@ -1213,19 +1213,26 @@ namespace SocialPayments.DomainServices
         {
             _logger.Log(LogLevel.Info, String.Format("Getting UserName {0}", sender.UserId));
 
-            if (!String.IsNullOrEmpty(sender.FirstName) || !String.IsNullOrEmpty(sender.LastName))
+            if (!String.IsNullOrEmpty(sender.FirstName) && !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;
+            else if (!String.IsNullOrEmpty(sender.FirstName))
+                return sender.FirstName;
+            else if (!String.IsNullOrEmpty(sender.LastName))
+                return sender.LastName;
+            else
+            {
+                if (!String.IsNullOrEmpty(sender.SenderName))
+                    return sender.SenderName;
 
-            if (!String.IsNullOrEmpty(sender.SenderName))
-                return sender.SenderName;
+                if (!String.IsNullOrEmpty(sender.MobileNumber))
+                    return formattingServices.FormatMobileNumber(sender.MobileNumber);
 
-            if (!String.IsNullOrEmpty(sender.MobileNumber))
-                return formattingServices.FormatMobileNumber(sender.MobileNumber);
-
-            if (!String.IsNullOrEmpty(sender.EmailAddress))
-                return sender.EmailAddress;
+                if (!String.IsNullOrEmpty(sender.EmailAddress))
+                    return sender.EmailAddress;
+            }
 
             return "PaidThx User";
+
 
 
         }
