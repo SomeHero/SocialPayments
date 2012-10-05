@@ -1,36 +1,32 @@
 ﻿@model Mobile_PaidThx.Models.PledgeModels.PinSwipeModel
 @{
-    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.Title = "Pledge | Confirm Pledge";
     ViewBag.PageID = "confirm-pin-swipe-pledge";
+    ViewBag.Classes = "page";
 }
-<div  id="@ViewBag.PageID" >
-    
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+   
+    <div class="header-pdthx" >
         <h1>
             Confirm</h1>
              <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back history">Cancel</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
     <div class="top-panel">
             Swipe your security PIN to confirm.</div>
+            @Html.ValidationSummary()
     <div class="pad">
      
-        @Html.ValidationSummary()
+        
       
         @using (Html.BeginForm("PopupPinswipe", "Pledge", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
-            <div>
-            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-        </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
     </div>
     </div>
-<div id="resizerHack">
-        
-        
-</div>
+
     @section PageScripts
     {
 <script type="text/javascript">

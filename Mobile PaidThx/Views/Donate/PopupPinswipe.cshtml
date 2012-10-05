@@ -1,36 +1,33 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.PinSwipeModel
 @{
-    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.Title = "Confirm Donation";
     ViewBag.PageID = "donate-pinswipe-page";
+    ViewBag.Classes = "page ";
 }
-
-<div  id="@ViewBag.PageID" >
-        @Html.ValidationSummary()
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+        
        
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
        <h1>
             Confirm</h1>
             <a href="@Url.Content("~/Donate")"  class="hd-btn-left btn-back history">Back</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel">
          @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
             <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
         }
-            <text>Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName</text>
+        Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName
         </div>
+        @Html.ValidationSummary()
               <div class="pad">
         @using (Html.BeginForm("PopupPinswipe", "Donate", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
-        {       
-            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-
+        {
+            Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
     </div>
-    </div>
-    <div id="resizerHack">
     </div>
 
 </div>

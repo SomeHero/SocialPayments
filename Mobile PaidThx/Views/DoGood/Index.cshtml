@@ -1,17 +1,17 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Do Good";
     ViewBag.PageID = "dogood-page";
     ViewBag.Classes = "page ";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
 
-    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>Do Good</h1>
        <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
         <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
             <p class="instructions">Make a donation or
                 gift to a non-profit organization. As always, 100% of your generosity goes to the

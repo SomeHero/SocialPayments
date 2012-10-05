@@ -1,15 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.NotificationModels.NotificationModel
 @{
     ViewBag.Title = "Sharing";
+    ViewBag.PageID = "sharing-page";
+    ViewBag.Classes = "page";
 }
-<div  id=sharing-page"   >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Sharing</h1>
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back history">Back</a>
     </div>
-    <div data-role="content" style="margin: 15px; background-color: #ffffff;">
+    <div class="pd-content">
         @foreach (var subject in Model.NotificationSubjects)
         {
             @subject.Description

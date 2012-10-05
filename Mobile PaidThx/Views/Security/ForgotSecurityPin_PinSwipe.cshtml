@@ -1,35 +1,30 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.ChangeSecurityPinModel
-
 @{
-    ViewBag.Title = "Change PIN";
+    ViewBag.Title = "Create a New PIN";
     ViewBag.PageID = "forgotsecuritypin-pinswipe-page";
+    ViewBag.Classes = "page";
 }
-
-<div  id="@ViewBag.PageID"  >
-        
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+       
+    <div class="header-pdthx" >
         <h1>
             New PIN</h1>
             <a href="@Url.Content("~/Security/ForgotSecurityPin")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
     @Html.ValidationSummary()
       
         @using (Html.BeginForm("ForgotSecurityPin_PinSwipe", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
-            <div>
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit"  data-role="none" />
         </div>
         }
     </div>
     </div>
-       <div id="resizerHack">
-        
 
-
-        </div>
 <script type="text/javascript">
     $(document).ready(function() {
         pinswipeResizeController.resizePINs();

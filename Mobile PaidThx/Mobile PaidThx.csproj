@@ -432,10 +432,24 @@
     <Content Include="Libs\dropkick\images\dk_arrows.png" />
     <Content Include="Libs\dropkick\images\dk_arrows_white.png" />
     <Content Include="Libs\dropkick\jquery.dropkick-1.0.0.js" />
+    <Content Include="Libs\fancybox\css\jquery.fancybox-buttons.css" />
+    <Content Include="Libs\fancybox\css\jquery.fancybox-thumbs.css" />
+    <Content Include="Libs\fancybox\css\jquery.fancybox.css" />
+    <Content Include="Libs\fancybox\images\blank.gif" />
+    <Content Include="Libs\fancybox\images\fancybox_buttons.png" />
+    <Content Include="Libs\fancybox\images\fancybox_loading.gif" />
+    <Content Include="Libs\fancybox\images\fancybox_sprite.png" />
+    <Content Include="Libs\fancybox\js\jquery.easing-1.3.pack.js" />
+    <Content Include="Libs\fancybox\js\jquery.fancybox-buttons.js" />
+    <Content Include="Libs\fancybox\js\jquery.fancybox-thumbs.js" />
+    <Content Include="Libs\fancybox\js\jquery.fancybox.js" />
+    <Content Include="Libs\fancybox\js\jquery.fancybox.pack.js" />
+    <Content Include="Libs\fancybox\js\jquery.mousewheel-3.0.6.pack.js" />
     <Content Include="Libs\qtip2\jquery.qtip.css" />
     <Content Include="Libs\qtip2\jquery.qtip.js" />
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
     <Content Include="Libs\qtip2\jquery.qtip.min.js" />
+    <Content Include="Scripts\amounttosend.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\jquery.easing.1.3.js" />
     <Content Include="Scripts\main.js" />
@@ -553,6 +567,9 @@
     </Content>
     <Content Include="Views\Help\index.cshtml" />
     <Content Include="Views\Privacy\Index.cshtml" />
+    <Content Include="Content\images\linkActive.png" />
+    <Content Include="Content\images\linkInActive.png" />
+    <Content Include="Content\images\socialFacebookIcon.png" />
     <None Include="Properties\PublishProfiles\Beta.pubxml" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
@@ -658,6 +675,9 @@
     <Content Include="Views\Shared\WelcomeMenuTop.cshtml" />
     <Content Include="Views\Shared\LoggedInMenuTop.cshtml" />
     <Content Include="Views\Shared\LoggedInMenu.cshtml" />
+    <Content Include="Views\Shared\SelectAmount.cshtml" />
+    <Content Include="Views\Shared\QuickAdds.cshtml" />
+    <Content Include="Views\Shared\SecurityPIN.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

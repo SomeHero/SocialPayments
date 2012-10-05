@@ -2,16 +2,16 @@
 @{
     ViewBag.Title = "Notifications";
     ViewBag.PageID = "notifications-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"   >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx"  >
+    <div class="header-pdthx"  >
         <h1>
             Notifications</h1>
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
         @foreach (var subject in Model.NotificationSubjects)
         {
@@ -24,10 +24,8 @@
                 
                 <label for="@item.ConfigurationKey" class="toggle-name">@item.Description</label>
                 <div class="toggle-holder">
-                <input type="checkbox" class="switch-cb" name="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0")
-                                                                                                                {<text> checked="checked"</text>}  />
-                
-                                                                                                                                                                                       
+                <input type="checkbox" class="switch-cb" name="@item.ConfigurationKey" data-key="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0"){<text> checked="checked"</text>}  />
+                                                                                                                                                                        
 </div>
                 <div class="clear"></div>
                 </li>
@@ -70,17 +68,17 @@
             // Define vars
             var key, value;
 
-            key = $(this).attr('id');
+            key = $(this).parent().find('.switch-cb').attr('data-key');
 
             // If on, slide switch off
             if ($(this).parent().find(".switch-cb").prop('checked')) {
                 $(this).find(".background").animate({ left: "-56px" }, 200);
                 $(this).parent().find(".switch-cb").attr('checked', false);
-                value = "off";
+                value = "0";
             } else {
                 $(this).find(".background").animate({ left: "0px" }, 200);
                 $(this).parent().find(".switch-cb").attr('checked', true);
-                value = "on";
+                value = "1";
             }
 
             var requestModel = {
@@ -105,6 +103,6 @@
 
         });
 
-    });     // End 
+    });      // End 
 </script>
 }

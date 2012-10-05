@@ -2,16 +2,16 @@
 @{
     ViewBag.Title = "Add Phone";
     ViewBag.PageID = "add-phone-paypoint-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
             Add Phone</h1>
             <a href="@Url.Content("~/Phones")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
          @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
@@ -20,7 +20,7 @@
                 <input type="text" id="txtPhoneNumber" name="PhoneNumber" placeholder="Phone Number"
                 required /></p>
             <p>
-              <button type="submit" id="btn-add-phone" data-theme="f" data-icon="check" data-iconpos="right" class="btn-jq">
+              <button type="submit" id="btn-add-phone" class="pd-btn green">
                    Add Phone Number</button></p>
          }
         </div>

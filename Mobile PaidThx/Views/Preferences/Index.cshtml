@@ -1,18 +1,18 @@
 ﻿@{
     ViewBag.Title = "Index";
     ViewBag.PageID = "preferences-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
     TempData["DataUrl"] = "data-url=/mobile/Preferences";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
              
         <h1>
             Settings</h1>
         <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
             <!-- Edit Profile -->
             <ul  class="panel-container">

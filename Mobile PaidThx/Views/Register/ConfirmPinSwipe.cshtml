@@ -1,37 +1,34 @@
 ﻿@{
-    ViewBag.Title = "ConfirmPinSwipe";
+    ViewBag.Title = "Confirm PIN";
     ViewBag.PageID = "confirm-pin-swipe-setup";
+    ViewBag.Classes = "page";
 }
-
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
 
 <div  id="@ViewBag.PageID" class="modally" >
-     <div data-role="header" data-position="fixed" class="header-pdthx" >
+     <div class="header-pdthx" >
 	    <h1>Confirm PIN</h1>
     </div>
-     <div data-role="content">
+     <div class="pd-content">
      <div class="top-panel">
    
-    <p>Swipe your security pin again below to confirm.</p></div>
+    <p>Swipe your security pin again below to confirm.</p>
+    
+    </div>
+    @Html.ValidationSummary();
      <div class="pad">
-     @Html.ValidationSummary(true, "Personalize was unsuccessful. Please correct the errors and try again.")
+     
     
 
     </div>
         @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
-        <div id="anchor">
-            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-         </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
         
     </div>
 </div>
 
-<div id="resizerHack">
-        
-        
-</div>
 @section PageScripts {
 <script type="text/javascript">
     $(document).ready(function() {

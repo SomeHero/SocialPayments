@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "SetupPinSwipe";
+    ViewBag.Title = "Link Bank Account";
     ViewBag.PageID = "setup-pin-swipe";
+    ViewBag.Classes = "page";
 }
-
-<div  id="@ViewBag.PageID" class="modally" >
-     <div data-role="header" data-position="fixed" class="header-pdthx" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+     <div class="header-pdthx" >
 	    <h1>Create PIN</h1>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel">
         @if(!String.IsNullOrEmpty(TempData["Message"].ToString()))
         {
@@ -21,19 +21,9 @@
 </div>
         @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
-         <div>
-            <input type="password" id="patternlock" name="PinCode" class="patternlock" />
-
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-            
-         </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
         
-  <div id="resizerHack">
-        
-
-
-        </div>
         </div>
 </div>
 @section PageScripts

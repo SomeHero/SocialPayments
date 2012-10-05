@@ -1,18 +1,19 @@
 ﻿@model Mobile_PaidThx.Models.DonateModels.DonateMoneyModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Donate";
     ViewBag.PageID = "donate-page";
     ViewBag.Classes = "page ";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>Donate</h1>
         <a href="@Url.Content("~/DoGood")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
+    @Html.ValidationSummary()
     <div class="pad">
-        @Html.ValidationSummary()
+        
         @using (Html.BeginForm("Index", "Donate", FormMethod.Post))
         {
             

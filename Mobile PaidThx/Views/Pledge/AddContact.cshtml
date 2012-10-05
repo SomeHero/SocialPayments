@@ -1,21 +1,23 @@
 ﻿@model Mobile_PaidThx.Models.PledgeModels.AddContactModel
 @{
-    ViewBag.Title = "AddContactSend";
+    ViewBag.Title = "Select Donor";
+    ViewBag.PageID = "pledge-contact-select-page";
+    ViewBag.Classes = "page";
 }
-<div  id="pledge-contact-select-page"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes">
     
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
             Enter Recipient</h1>
             <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back history">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
             <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
          <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
         @foreach (var alphaGroup in Model.SortedContacts)
         {
-                <li data-role="list-divider">@alphaGroup.Key</li>
+                <li class="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
                 <li class="contact removable">
@@ -32,8 +34,8 @@
                 </li>
             }
         }
-         <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
-         <li id="contact-no-results" class="contact-no-results-item">
+        
+         <li id="contact-no-results" class="contact-no-results-item contact-select">
             <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
                 <img src="@Url.Content("~/Content/images/avatar.png")" />
                 <span id="results-header">
