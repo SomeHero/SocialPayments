@@ -821,6 +821,11 @@ zoom: 1;
    PAGES: SEND/REQUEST/DONATE/PLEDGE
    ========================================================================== */
    
+   #contactsList
+   {
+   margin-top:20px;    
+   }
+   
    .quicksend
    {
     text-align:center;
@@ -1062,6 +1067,11 @@ padding:10px;
 cursor:pointer;
 }
 
+.contact-select h2
+{
+padding-top: 4px;  
+}
+
 .list-thumbnail
 {
 border:1px solid #fff;
@@ -1080,7 +1090,10 @@ float:left;
    PAGES: PAYSTREAM
    ========================================================================== */
 
-
+.filter-holder
+{
+ padding: 0 10px;   
+}
 .list-divider, ul#paystreamList li.list-divider
 {
 -webkit-border-radius: 5px;
@@ -1782,8 +1795,17 @@ padding:10px 0px 10px 60px;
 display:block;
 text-decoration:none;
 background-image: none;
+cursor:default; 
 }
-li.settings.nolink a h2
+.nolink a
+{
+display:block;
+text-decoration:none;
+background-image: none;
+cursor:default;    
+}
+
+li.settings.nolink a h2, .nolink a h2
 {
 color:#231f20;
 }

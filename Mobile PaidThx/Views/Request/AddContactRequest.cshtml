@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Request From Whom?";
     ViewBag.PageID = "request-contact-select-page";
-    ViewBag.Classes = "page full";
+    ViewBag.Classes = "page";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
   
@@ -13,14 +13,14 @@
     </div>
     <div class="pd-content">
         <div class="pad">
-          <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
+          <input type="text" data-type="search" placeholder="Type a new email, phone #, or ME Code" class="ui-input-text ui-body-c"/>
         <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
         @foreach (var alphaGroup in Model.SortedContacts)
         {
             <li data-role="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                    <li class="contact removable">
+                    <li class="contact contact-select removable">
                     @using(Html.BeginForm()) {
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")
@@ -34,15 +34,14 @@
                     </li>
             }
         }
-         <li id="contact-no-results-divider" class="contact-no-results-item" data-role="list-divider">No Results Found</li>
-         <li id="contact-no-results" class="contact-no-results-item">
-                     <li id="contact-no-results" class="contact-no-results-item">
+        
+                     <li id="contact-no-results" class="contact-no-results-item contact-select nolink">
                     @using(Html.BeginForm()) {
                     @Html.Hidden("recipientUri", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-uri"}})
                     @Html.Hidden("recipientType", "new", new Dictionary<string, object> {{ "id", "contact-new-recipient-type"}})
                     @Html.Hidden("recipientName", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-name"}});
-                    <a id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
-                        <img src="@Url.Content("~/Content/images/avatar.png")" />
+                    <a href="#" id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
+                        <img class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
                         <h2 id="results-header" class="heading">
                         No contacts...yet
                         </h2>
@@ -51,6 +50,7 @@
                        </h4>
                    </a>
                         }
+                        <div class="clear"></div>
                </li>
                <li id="me-codes-divider" class="list-divider"></li>
                 </ul>
@@ -60,7 +60,7 @@
 @section PageScripts
 {
         <script id="meCodeItem" type="text/x-jquery-tmpl">
-    <li>
+    <li class="contact-select">
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
             <img src="http://graph.facebook.com/1/picture" />
             ${meCode}

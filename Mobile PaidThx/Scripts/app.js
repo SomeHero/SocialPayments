@@ -287,28 +287,21 @@ var paystreamController = (function ($, undefined) {
         };
         //$("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
 
-        //Call the listview jQuery UI Widget after adding 
-        //$("#paystreamList").listview("refresh");
-
-
     }
     function showMoreResults() {
         $listview.find(".more-results").show();
-        //$listview.listview("refresh");
     }
     function hideMoreResults() {
         $listview.find(".more-results").hide();
-       // $listview.listview("refresh");
     }
     function showNoResults() {
         $listview.find("#paystream-no-results-divider").show();
         $listview.find("#paystream-no-results").show();
-        //$listview.listview("refresh");
     }
     function hideNoResults() {
         $listview.find("#paystream-no-results-divider").hide();
         $listview.find("#paystream-no-results").hide();
-        //$listview.listview("refresh");
+
     }
     function openOffersDialog(transactionId, callback) {
         var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId;
@@ -325,8 +318,6 @@ var paystreamController = (function ($, undefined) {
                     $('#popup').css('display', 'block');
                     $('#popup').animate({ 'left': '10px' }, 300);
                 });
-
-                //$("#popup").page();
 
                 if (callback) callback(data);
             },
@@ -415,7 +406,8 @@ var contactsSearchController = (function ($, undefined) {
     pub.init = function (page) {
         $page = page;
         hideMeCodes();
-        hideNoResults();
+
+        //hideNoResults();
 
         //When news updated, display items in list
         $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
@@ -424,13 +416,8 @@ var contactsSearchController = (function ($, undefined) {
     };
 
     pub.searchAndDisplayMeCodes = function (searchValue, type) {
-        //Starting loading animation
-        $.mobile.showPageLoadingMsg();
-
         //Get news and add success callback using then
         searchByMeCode(searchValue, type, function () {
-            //Stop loading animation on success
-            $.mobile.hidePageLoadingMsg();
         });
     };
     pub.clearMeCodes = function (searchValue) {
