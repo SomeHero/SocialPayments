@@ -1,6 +1,6 @@
 ﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
     <li class="removable paystreamLi {{if direction == "In"}}in{{/if}} {{if direction == "Out"}}out{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if !recipientSeen}}new{{/if}}">
-        <a  class="paystreamItem" messageId="${Id}">
+        <a  class="paystreamItem showloader" messageId="${Id}">
 
 <img width="50" height="50" class="rounded ps-image" src="{{if direction == "In"}}
 ${senderImageUri}
