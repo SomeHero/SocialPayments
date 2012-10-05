@@ -197,12 +197,8 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 try
                 {
-                    userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
 
-                    if (userPayPoint == null)
-                        throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
-
-                    userServices.SendEmailVerificationLink(userPayPoint);
+                    userServices.SendEmailVerificationLink(userId, model.UserPayPointId);
                 }
                 catch (NotFoundException ex)
                 {
