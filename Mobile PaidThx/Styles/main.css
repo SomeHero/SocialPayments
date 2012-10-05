@@ -358,7 +358,7 @@ font-size:16px;
  left:0px;
  z-index:3000;
  background-color:#ffffff;
- opacity:.5;
+ opacity:.8;
 }
 
 .loader-holder-full
@@ -905,6 +905,7 @@ box-shadow:none;
 -webkit-box-shadow: none;
 -moz-box-shadow: none;
 -o-box-shadow: none;
+min-height:280px;
 zoom: 1;
 }
 .about-heading
