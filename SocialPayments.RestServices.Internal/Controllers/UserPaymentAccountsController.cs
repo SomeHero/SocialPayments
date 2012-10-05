@@ -334,6 +334,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPut]
         public HttpResponseMessage Put(string userId, string id, AccountModels.UpdateAccountRequest request)
         {
+            _logger.Log(LogLevel.Info, String.Format("Updating Payment Account {0} for User {1}", id, userId));
+
             var userPaymentAccountServices = new DomainServices.UserPaymentAccountServices();
 
             try

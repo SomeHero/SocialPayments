@@ -122,6 +122,48 @@ namespace Mobile_PaidThx.Controllers
 
             return View(model);
         }
+        public ActionResult Details(String messageId)
+        {
+            try
+            {
+                var messageService = new Services.MessageServices();
+                var message = messageService.GetMessage(messageId);
+
+                return View(new PaystreamModels.PaystreamDetailModel
+                {
+                    amount = message.amount,
+                    comments = message.comments,
+                    createDate = message.createDate,
+                    direction = message.direction,
+                    Id = message.Id,
+                    isAcceptable = message.isAcceptable,
+                    isCancellable = message.isCancellable,
+                    isExpressable = message.isExpressable,
+                    isRejectable = message.isRejectable,
+                    isRemindable = message.isRemindable,
+                    lastUpdatedDate = message.lastUpdatedDate,
+                    latitude = message.latitude,
+                    longitutde = message.longitutde,
+                    messageStatus = message.messageStatus,
+                    messageType = message.messageType,
+                    recipient = message.recipient,
+                    recipientName = message.recipientName,
+                    recipientSeen = message.recipientSeen,
+                    recipientUri = message.recipientUri,
+                    recipientUriType = message.recipientUriType,
+                    senderName = message.senderName,
+                    senderSeen = message.senderSeen,
+                    senderUri = message.senderUri,
+                    transactionImageUri = message.transactionImageUri
+                });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View();
+        }
 
     }
 }

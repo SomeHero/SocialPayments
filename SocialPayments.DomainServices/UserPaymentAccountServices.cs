@@ -27,7 +27,10 @@ namespace SocialPayments.DomainServices
                 if (String.IsNullOrEmpty(securityQuestionAnswer))
                     throw new CustomExceptions.BadRequestException("Security Question Answer is Required");
 
-                //TODO: validate routing number
+                bool isRoutingNumberValid = paymentAccountService.VerifyRoutingNumber(routingNumber);
+
+                if (!isRoutingNumberValid)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Routing Number.  Please Check the Number and Try Again"));
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
 
@@ -100,7 +103,11 @@ namespace SocialPayments.DomainServices
 
                     throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
-                //TODO: validate routing number
+
+                bool isRoutingNumberValid = paymentAccountService.VerifyRoutingNumber(routingNumber);
+
+                if (!isRoutingNumberValid)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Routing Number.  Please Check the Number and Try Again"));
 
                 Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
 
@@ -199,8 +206,22 @@ namespace SocialPayments.DomainServices
                 if (paymentAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment Account {0} Not Found", paymentAccountId));
 
-                if (!(securityService.Encrypt(securityPin).Equals(user.SecurityPin)))
-                    throw new CustomExceptions.BadRequestException("Unable to Change Preferred Send Account. Security Pin Invalid");
+                if (!securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
 
                 user.PreferredSendAccount = paymentAccount;
 
@@ -226,8 +247,22 @@ namespace SocialPayments.DomainServices
                 if (paymentAccount == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Payment Account {0} Not Found", paymentAccountId));
 
-                if (!(securityService.Encrypt(securityPin).Equals(user.SecurityPin)))
-                    throw new CustomExceptions.BadRequestException("Unable to Change Preferred Send Account. Security Pin Invalid");
+                if (!securityService.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        _ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    _ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
 
                 user.PreferredReceiveAccount = paymentAccount;
 
@@ -303,7 +338,7 @@ namespace SocialPayments.DomainServices
                 if (paymentAccountGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment Account {0} Not Found", paymentAccountId));
 
-                var userAccount = user.PaymentAccounts.FirstOrDefault(p => p.Id == paymentAccountGuid);
+                var userAccount = _ctx.PaymentAccounts.FirstOrDefault(p => p.Id == paymentAccountGuid && p.UserId == user.UserId);
 
                 if (userAccount == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment Account {0} Not Found", paymentAccountId));

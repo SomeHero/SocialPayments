@@ -19,14 +19,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage ValidateRoutingNumber(RoutingNumberModels.ValidateRoutingNumberRequest request)
         {
+            var paymentAccountService = new DomainServices.PaymentAccountService();
             bool results = false;
 
             try
             {
-                FedACHService fedACHService = new FedACHService();
-
-                FedACHList fedACHList = new FedACHList();
-                results = fedACHService.getACHByRoutingNumber(request.RoutingNumber, out fedACHList);
+                results = paymentAccountService.VerifyRoutingNumber(request.RoutingNumber);
             }
             catch (NotFoundException ex)
             {

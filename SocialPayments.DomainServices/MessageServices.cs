@@ -820,6 +820,8 @@ namespace SocialPayments.DomainServices
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
+                        .Include("Payment")
+                        .Include("PaymentRequest")
                         .Where(m => m.SenderId == userGuid || m.RecipientId.Value == userGuid)
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -835,6 +837,8 @@ namespace SocialPayments.DomainServices
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
+                        .Include("Payment")
+                        .Include("PaymentRequest")
                         .Where(m => m.SenderId == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -850,6 +854,8 @@ namespace SocialPayments.DomainServices
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
+                        .Include("Payment")
+                        .Include("PaymentRequest")
                         .Where(m => m.RecipientId.Value == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -865,6 +871,8 @@ namespace SocialPayments.DomainServices
                     messages = ctx.Messages
                         .Include("Recipient")
                         .Include("Sender")
+                        .Include("Payment")
+                        .Include("PaymentRequest")
                         .Where(m => (m.SenderId == userGuid || m.RecipientId.Value == userGuid) && m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
