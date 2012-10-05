@@ -125,8 +125,22 @@ namespace SocialPayments.DomainServices
 
             foreach (var message in messages)
             {
-                message.Recipient = user;
-                message.Status = PaystreamMessageStatus.ProcessingPayment;
+                switch (message.MessageType)
+                {
+                    case MessageType.Payment:
+                        message.Recipient = user;
+                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+
+                        break;
+                    case MessageType.PaymentRequest:
+                        message.Recipient = user;
+
+                        break;
+                    default:
+                        message.Recipient = user;
+
+                        break;
+                }
             }
 
             _ctx.SaveChanges();
@@ -173,7 +187,6 @@ namespace SocialPayments.DomainServices
                                 User = user
                             });
 
-                            SendEmailVerificationLink(messagePayPoint);
                         }
 
                         break;
@@ -190,13 +203,13 @@ namespace SocialPayments.DomainServices
                                 User = user
                             });
 
-                            SendMobileVerificationCode(messagePayPoint);
                         }
                         break;
                 }
 
 
                 _ctx.SaveChanges();
+
             }
 
             Task.Factory.StartNew(() =>
@@ -554,7 +567,7 @@ namespace SocialPayments.DomainServices
                     if (user.SecurityQuestion == null)
                     {
 
-                        user.PasswordFailuresSinceLastSuccess = 0; 
+                        user.PasswordFailuresSinceLastSuccess = 0;
                         user.PinCodeFailuresSinceLastSuccess = 0;
                         user.IsLockedOut = false;
 
@@ -1057,46 +1070,71 @@ namespace SocialPayments.DomainServices
             }
 
         }
-        public void SendEmailVerificationLink(UserPayPoint userPayPoint)
+        public void SendEmailVerificationLink(string userId, string userPayPointId)
         {
-            DomainServices.UserService userService = new DomainServices.UserService(_ctx);
-            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.ValidationService validateService = new ValidationService();
-            DomainServices.CommunicationService communicationService = new CommunicationService();
-
-            string name = formattingService.FormatUserName(userPayPoint.User);
-            DateTime expiresDate = System.DateTime.Now.AddHours(3);
-
-            var verification = _ctx.UserPayPointVerifications.Add(
-                new UserPayPointVerification()
-                {
-                    Id = Guid.NewGuid(),
-                    CreateDate = System.DateTime.Now,
-                    UserPayPoint = userPayPoint,
-                    VerificationCode = "",
-                    ExpirationDate = System.DateTime.Now.AddDays(30)
-                });
-            _ctx.SaveChanges();
-
-            string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
-
-            try
+            using (var ctx = new Context())
             {
-                var communicationTemplate = communicationService.GetCommunicationTemplate("Email_Added_Email");
+                DomainServices.UserService userService = new DomainServices.UserService(_ctx);
+                DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+                DomainServices.ValidationService validateService = new ValidationService();
+                DomainServices.CommunicationService communicationService = new CommunicationService();
 
-                //FIRST_NAME, LAST_NAME, EMAIL_ADDED, LINK_EMAIL_VERIFY
-                emailService.SendEmail(userPayPoint.URI, "Your email has been added", communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                Guid userGuid;
+                Guid userPayPointGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if(userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                var user = ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                Guid.TryParse(userPayPointId, out userPayPointGuid);
+
+                if(userPayPointGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Pay Point {0} Not Valid", userPayPointId));
+
+                var userPayPoint = ctx.UserPayPoints
+                    .FirstOrDefault(p => p.UserId == userGuid && p.Id == userPayPointGuid);
+
+                if (userPayPoint == null)
+                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", userPayPointId));
+
+                string name = formattingService.FormatUserName(user);
+                DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+                var verification = ctx.UserPayPointVerifications.Add(
+                    new UserPayPointVerification()
+                    {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        UserPayPoint = userPayPoint,
+                        VerificationCode = "",
+                        ExpirationDate = System.DateTime.Now.AddDays(30)
+                    });
+                ctx.SaveChanges();
+
+                string link = String.Format("{0}verify_paypoint/{1}", ConfigurationManager.AppSettings["MobileWebSetURL"], verification.Id);
+
+                try
                 {
+                    var communicationTemplate = communicationService.GetCommunicationTemplate("Email_Added_Email");
+
+                    //FIRST_NAME, LAST_NAME, EMAIL_ADDED, LINK_EMAIL_VERIFY
+                    emailService.SendEmail(userPayPoint.URI, "Your email has been added", communicationTemplate.Template, new List<KeyValuePair<string, string>>()
+                    {
                         new KeyValuePair<string, string>("FIRST_NAME", userService.GetSenderName(userPayPoint.User)),
                         new KeyValuePair<string, string>("LAST_NAME", ""),
                         new KeyValuePair<string, string>("EMAIL_ADDED",  userPayPoint.URI),
                         new KeyValuePair<string, string>("LINK_EMAIL_VERIFY",  link)                            
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+                }
             }
         }
 

@@ -100,7 +100,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting Message {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
-
+                 
                 var error = new HttpError(ex.Message);
                 error["ErrorCode"] = ex.ErrorCode;
 

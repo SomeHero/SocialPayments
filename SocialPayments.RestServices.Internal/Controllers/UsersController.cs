@@ -628,7 +628,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 if (!(validateService.IsEmailAddress(request.userName) || validateService.IsPhoneNumber(request.userName)))
                     throw new SocialPayments.DomainServices.CustomExceptions.BadRequestException("You must enter a valid email address or mobile #.");
 
-                userService.SendResetPasswordLink(request.apiKey, request.userName);
+                userService.SendResetPasswordLink(ApiKey.ToString(), request.userName);
             }
             catch (NotFoundException ex)
             {

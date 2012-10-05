@@ -59,7 +59,7 @@ namespace SocialPayments.DomainServices.UserProcessing
                 string activationLink = "";
 
                 Domain.UserPayPointVerification payPointVerification;
-
+                
                 var userPayPoint = user.PayPoints.FirstOrDefault(p => p.URI == user.EmailAddress);
 
                 if (userPayPoint != null)
