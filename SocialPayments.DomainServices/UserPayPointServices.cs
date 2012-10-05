@@ -73,7 +73,7 @@ namespace SocialPayments.DomainServices
                 _ctx.SaveChanges();
 
                 if (payPointType.Name == "EmailAddress")
-                    userService.SendEmailVerificationLink(userPayPoint);
+                    userService.SendEmailVerificationLink(userId, userPayPoint.Id.ToString());
                 else if (payPointType.Name == "Phone")
                     userService.SendMobileVerificationCode(userPayPoint);
 

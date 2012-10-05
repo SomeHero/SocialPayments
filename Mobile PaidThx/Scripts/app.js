@@ -470,8 +470,8 @@ var contactsSearchController = (function ($, undefined) {
 
         //Call the listview jQuery UI Widget after adding 
         //items to the list allowing correct rendering
-        if (newMeCodes)
-            $("#contactsList").listview("refresh");
+        //if (newMeCodes)
+           // $("#contactsList").listview("refresh");
     }
     function clearMeCodes() {
         $("#contactsList .mecode-recipient").remove();

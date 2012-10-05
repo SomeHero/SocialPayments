@@ -183,7 +183,6 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class ForgotPasswordRequest
         {
-            public string apiKey { get; set; }
             public string userName { get; set; }
         }
         public class LinkFacebookRequest
