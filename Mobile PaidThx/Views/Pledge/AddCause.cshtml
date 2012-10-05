@@ -1,17 +1,17 @@
 ﻿@model Mobile_PaidThx.Models.PledgeModels.AddCauseModel
 @{
-    ViewBag.Title = "Select Your Cause";
+    ViewBag.Title = "Select Cause";
     ViewBag.PageID = "pledge-add-cause";
-    ViewBag.Classes = "page page full";
+    ViewBag.Classes = "page";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
 
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
             Select Non Profit</h1>
             <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back history">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
       
           <div class="pad">
          <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
@@ -19,7 +19,7 @@
 
         @foreach (var alphaGroup in Model.SortedNonProfits)
         {
-            <li data-role="list-divider">@alphaGroup.Key</li>
+            <li class="list-divider">@alphaGroup.Key</li>
             foreach (var nonprofit in alphaGroup.Value)
             {
             <li class="contact removable">

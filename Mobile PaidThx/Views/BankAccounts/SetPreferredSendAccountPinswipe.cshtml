@@ -1,24 +1,26 @@
-﻿<script>
-    function submitform() {
-        alert("You entered " + document.getElementById("patternlock").value);
-        return true;
-    }
-</script>
-<div  id="bankaccounts-pinswipe-page">
+﻿@{
+    ViewBag.Title = "Confirm Change Preferred Send Account";
+    ViewBag.PageID = "bankaccounts-set-send-pinswipe-page";
+    ViewBag.Classes = "page";
+}
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
  
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Confirm</h1>
     </div>
   
-    <div data-role="content">
-        @Html.ValidationSummary()
+    <div class="pd-content">
+    <div class="top-panel"></div>
+    @Html.ValidationSummary()
+    <div class="pad">
         @using (Html.BeginForm("SetPreferredSendAccountPinSwipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
-            <div style="margin-top:15px">
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" />
         </div>
         }
     </div>
+</div>
 </div>

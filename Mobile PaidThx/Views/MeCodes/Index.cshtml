@@ -6,13 +6,27 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
         
-    <div data-role="header" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1>
-            Me Codes</h1>
+            ME Codes</h1>
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
-    <div class="pad">
+    <div class="pd-content">
+   
+    <div class="top-panel">
+    @if (Model.PayPoints.Count < 1){
+        
+    <text>Mobile Exchange Codes (affectionately called ME Codes) are public codes that you can share with others instead of using your email address or phone number.  Whenever someone sends money to one of your ME Codes, it comes directly to you.  <br /><br /><a href="#">Learn More</a> or create your first ME Code below.</text>
+        
+        }else{                                                                                                                                                                                                                                        
+    
+    <text><b>You are using @Model.PayPoints.Count of your 3 available ME Codes.</b></text> 
+
+        }                                                                                                                                                                                                                                                                             
+       </div>  
+        <div class="pad">
+         @if (Model.PayPoints.Count > 0)
+         {                                                                                                                                                                                                                                                                              
         <ul class="panel-container">
             @foreach (var payPoint in Model.PayPoints)
             { 
@@ -25,12 +39,12 @@
             </li>
             }
         </ul>
+         }
         <ul class="panel-container">
             <li class="settings add">
                <a href="@Url.Content("~/MeCodes/Add")">                   
-                    Add Me Code</a>
+                    Create ME Code</a>
             </li>
         </ul>
     </div>
     </div>
-</div>

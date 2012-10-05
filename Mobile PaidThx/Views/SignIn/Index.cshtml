@@ -1,15 +1,15 @@
 ﻿@model Mobile_PaidThx.Models.SignInModels.SignInModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Sign In";
     ViewBag.PageID = "page-signin";
     ViewBag.Classes = "page ";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>Sign In</h1>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
             @if (TempData["Message"] != null)
             {

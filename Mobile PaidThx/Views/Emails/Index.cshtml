@@ -6,11 +6,11 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>Email Accounts</h1>
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
             <ul class="panel-container">
                 @foreach (var payPoint in Model.PayPoints)
@@ -18,7 +18,7 @@
                     <li class="settings email">
                         <a href="@Url.Content("~/Emails/Details/" + payPoint.Id)">
                             <h2>@payPoint.Uri</h2>
-                            <h4>
+                            <h4 class="@{ if(payPoint.Verified){<text>verified</text>}else{<text>unverified</text>}}">
                                 @if (payPoint.Verified)
                                 {
                                     <text>Verified</text>

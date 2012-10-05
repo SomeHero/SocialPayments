@@ -1,23 +1,23 @@
 ﻿@model Mobile_PaidThx.Models.SendModels.AddContactSendModel
 @{
-    ViewBag.Title = "AddContactSend";
+    ViewBag.Title = "Send | Send To Whom?";
     ViewBag.PageID = "send-contact-select-page";
     ViewBag.Classes = "page";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
  
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Send To:</h1>
             <a href="@Url.Content("~/Send")"  class="hd-btn-left btn-back">Back</a>
     </div>
 
-    <div data-role="content">
+    <div class="pd-content">
           <div class="pad">
          <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
         <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
                
-                    <li data-role="list-divider">Test Users</li>
+                    <li class="list-divider">Test Users</li>
             
                    <li class="contact removable contact-select">
                      @using(Html.BeginForm()) {

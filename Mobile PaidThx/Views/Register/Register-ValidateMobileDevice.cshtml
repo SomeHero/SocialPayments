@@ -1,7 +1,9 @@
 ﻿@{
-    ViewBag.Title = "ValidateMobileDevice";
+    ViewBag.Title = "Validate Device";
+    ViewBag.PageID = "validate-device-page";
+    ViewBag.Classes = "page";
 }
-<script src="@Url.Content("~/Scripts/verify-mobiledevice.js")" type="text/javascript"></script>
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
 <input type="hidden" id="userId" name="UserId" value="" />
 <input type="hidden" id="mobileNumber" name="MobileNumber" value="" />
 <div id="container">
@@ -22,3 +24,7 @@
         </ul>
     </div>
 </div>
+@section PageScripts{
+
+<script src="@Url.Content("~/Scripts/verify-mobiledevice.js")" type="text/javascript"></script>
+}
