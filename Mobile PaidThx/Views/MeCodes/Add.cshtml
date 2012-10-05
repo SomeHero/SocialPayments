@@ -2,23 +2,28 @@
 @{
     ViewBag.Title = "Add ME Code";
     ViewBag.PageID = "add-mecode-paypoint-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Add ME Code</h1>
             <a href="@Url.Content("~/MeCodes")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content" class="panel main-body">
-        <div style="margin: 5px; padding: 10px; background-color: #FFFFFF">
+    <div class="pd-content">
+        
+         <div class="top-panel">
+    <p>
+    Create a unique Mobile Exchange code below.  Like the #hashtags of money, ME Codes always start with a dollar sign "$".  <br /><span class="example">Examples: $payryannow, $newyearseveparty, etc."</span>
+    </p>
+    </div>
+    <div class="pad">
          @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
             @Html.ValidationSummary()
-            <p>
-                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" 
-                required /></p>
+
+                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" required />
             <p>
              <button type="submit" id="btn-add-mecode" class="pd-btn green">
                   Add ME Code </button></p>
@@ -30,6 +35,13 @@
 {
      <script type="text/javascript">
          $(document).ready(function () {
+             currentMeCode = $('#txtMeCode').val();
+
+             if (currentMeCode.charAt(0) != '$')
+                 currentMeCode = '$' + currentMeCode;
+
+             $(this).val(currentMeCode);
+
              $('#txtMeCode').focus();
 
              var currentMeCode = "";

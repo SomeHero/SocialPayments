@@ -7,15 +7,15 @@
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Details</h1>
             <a href="@Url.Content("~/BankAccounts")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel">
             <p>
-                To enable sending payment from this account, please verify it. <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
+                To enable sending payments from this bank account, please verify it. <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
                         Verify Account
                 </a>
             </p>
@@ -40,9 +40,9 @@
                 <fieldset data-role="controlgroup" data-type="horizontal">
                     @foreach (var radioItem in Model.AccountTypeOptions)
                     {
-                        <label for="@radioItem.Text">
+                        <label class="cs-radio-label @radioItem.Selected" for="@radioItem.Text">
                             @radioItem.Text</label>
-                        @Html.RadioButtonFor(model => model.AccountType, radioItem.Value, new { @id = @radioItem.Text })
+                        @Html.RadioButtonFor(model => model.AccountType, radioItem.Value, new { @id = @radioItem.Text, @class="cs-radio" })
                     }
                 </fieldset>
             </div>
@@ -64,3 +64,18 @@
     </div>
     </div>
 </div>
+
+@section PageScripts
+{
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('.cs-radio').addClass('input_hidden');
+                $('.cs-radio-label').click(function (event) {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+
+            });
+    </script>
+}

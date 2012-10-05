@@ -7,20 +7,29 @@
 }
 
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
-    
-
-    <div data-role="header" class="header-pdthx" >
-    
+    <div  class="header-pdthx" >
         <h1>
             Bank Accounts</h1>
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
-    <div class="pad">
- <div id="accounts-list">
+    <div class="pd-content">
+   
+     <div class="top-panel">
+    @if (Model.PaymentAccounts.Count < 1)
+    {
+        
+    <text>No bank account yet?  Well how do you expect to send and receive money with PaidThx?  Add a bank below - it is a snap.</text>
+        
+        }else{                                                                                                                                                                                                                                        
+    
+    <text>Manage or add new bank accounts &amp; select your sending and receiving accounts below.</text> 
+
+        }                                                                                                                                                                                                                                                                             
+       </div> 
         @Html.ValidationSummary()
-        <h5>
-            Your Linked Accounts</h5>
+    <div class="pad">
+ 
+        <h2 class="section-header">Your Linked Accounts</h2>
         <ul class="panel-container">
             @foreach (var bankAccount in Model.PaymentAccounts)
             {             
@@ -35,7 +44,7 @@
                               
                               }
                               </h2> 
-                        <h4>@bankAccount.Status</h4>
+                        <h4 class="@bankAccount.Status">@bankAccount.Status</h4>
                         
                     </span>
                 </a></li>
@@ -48,14 +57,14 @@
                 </a>
             </li>
             </ul>
-            <h5>Sending Account</h5>
+            <h2 class="section-header">Sending Account:</h2>
             <div class="select-holder">
             @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
             {     
                 @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount", @class = "select-custom" })
             }
             </div>
-            <h5>Receiving Account</h5>
+            <h2 class="section-header">Receiving Account</h2>
             <div class="select-holder">
             @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
             { 
@@ -64,7 +73,6 @@
             </div>
     </div>
     </div>
-</div>
 </div>
 
 @section PageStyles{

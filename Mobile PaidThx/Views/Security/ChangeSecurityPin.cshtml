@@ -1,17 +1,16 @@
 ﻿@model Mobile_PaidThx.Models.SecurityModels.ChangeSecurityPinModel
 @{
-    ViewBag.Title = "Change Security PIN";
-    ViewBag.PageID = "changesecuritypin-page";
+    ViewBag.Title = "Security | Change Security PIN";
+    ViewBag.PageID = "change-security-pin-page";
+    ViewBag.Classes = "page";
 }
-
-<div  id="@ViewBag.PageID"  >
-        
-    <div data-role="header" class="header-pdthx" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
+    <div  class="header-pdthx" >
         <h1>
             Change PIN</h1>
             <a href="@Url.Content("~/Security")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="top-panel">
    
         <p>To change your security pin, first swipe your current pin.</p></div>
@@ -20,7 +19,7 @@
           
         @using (Html.BeginForm("ChangeSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
         {       
-            <div>
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
@@ -28,11 +27,6 @@
         </div>
     </div>
 
-     <div id="resizerHack">
-        
-
-
-        </div>
 </div>
 @section PageScripts 
 {

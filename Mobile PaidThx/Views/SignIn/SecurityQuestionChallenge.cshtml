@@ -1,14 +1,15 @@
 ﻿@model Mobile_PaidThx.Models.SignInModels.SecurityQuestionChallengeModel
 @{
-    ViewBag.Title = "SecurityQuestion";
+    ViewBag.Title = "Security Question";
+    ViewBag.PageID = "security-question-page";
+    ViewBag.Classes = "page";
 }
-<div  id="personalize-page" class="modally" >
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes"   >
+    <div class="header-pdthx" >
 	    <h1>Account Locked</h1>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="top-panel">
-   
     <p>Your account has been locked.  Please provide the answer to the question below to unlock your account.</p></div>
     <div class="pad">
      @Html.ValidationSummary()

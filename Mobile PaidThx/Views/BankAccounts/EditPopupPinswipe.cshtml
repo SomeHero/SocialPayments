@@ -1,24 +1,24 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Confirm Request Money";
     ViewBag.PageID = "request-popup-pin-swipe-page";
     ViewBag.Classes = "page";
 }
 <div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Confirm</h1>
             <a href="@Url.Content("~/BankAccounts")"  class="hd-btn-left btn-back">Cancel</a>
     </div>
   
-    <div data-role="content">
+    <div class="pd-content">
         <div class="top-panel">
 
         </div>
         @Html.ValidationSummary()
         @using (Html.BeginForm("EditPopupPinswipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
-            <div style="margin-top:15px">
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" class="" id="pinswipesubmit" data-role="none" />
         </div>

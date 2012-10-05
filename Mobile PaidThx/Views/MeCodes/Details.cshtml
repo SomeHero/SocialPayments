@@ -2,28 +2,42 @@
 @{
     ViewBag.Title = "ME Code Details";
     ViewBag.PageID = "mecode-details-page";
-    ViewBag.Classes = "page page settings";
+    ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
-           ME Code Details</h1>
+          Details</h1>
            <a href="@Url.Content("~/MeCodes")"  class="hd-btn-left btn-back">Back</a>
     </div>
-    <div data-role="content" class="panel main-body">
+    <div class="pd-content">
+
+    @Html.ValidationSummary()
         <div class="pad">
-         
-            @Html.ValidationSummary()
-            <p>
-                You have completed setup of the pay point and can now receive funds to this MeCode.  You can remove this pay point from your account by clicking
-                "Remove this PayPoint".  However, you will no longer be able to receive funds sent to this MeCode until you re-link this pay point to your account.
-            </p>
+          <ul class="panel-container">
+            <li class="settings mecode nolink">
+            <a>
+                   <h2>@Model.MeCode.Uri
+                   </h2>
+                   
+                   @if (Model.MeCode.Verified)
+                   {
+                    <text><h4 class="verified">Active</h4></text>
+                   }
+                   else
+                   {
+                        <text><h4 class="unverified">Not Verified</h4></text>
+                   }
+               </a>    
+            </li>
+            </ul>
+            
             <p>
             @using (Html.BeginForm("Delete", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.MeCode.Id" />
-                <button type="submit" id="btn-remove-email" data-theme="e" data-icon="delete" data-iconpos="right" class="pd-btn red">
+                <button type="submit" id="btn-remove-email" class="pd-btn red">
                    Remove ME Code</button>
             }
             </p>

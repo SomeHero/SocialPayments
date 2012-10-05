@@ -2,22 +2,22 @@
 @{
     ViewBag.Title = "Change PIN";
     ViewBag.PageID = "forgotsecuritypin-pinswipe-confirm-page";
+    ViewBag.Classes = "page";
 }
-
-<div  id="@ViewBag.PageID"  >
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
         
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
             Confirm</h1>
             <a href="@Url.Content("~/ForgotSecurityPin")"  class="hd-btn-left btn-back history">Cancel</a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
     @Html.ValidationSummary()
       
         @using (Html.BeginForm("ForgotSecurityPin_PinSwipeConfirm", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
-            <div>
+            <div id="pinHolder" class="hider">
             <input type="password" id="patternlock" name="Pincode" class="patternlock" />
             <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
         </div>
@@ -25,14 +25,13 @@
     </div>
     </div>
 
-         <div id="resizerHack">
-        
 
+</div>
 
-        </div>
+@section PageScripts{
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         pinswipeResizeController.resizePINs();
     });
 </script>
-</div>
+}

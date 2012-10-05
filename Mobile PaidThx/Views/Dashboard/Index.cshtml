@@ -6,24 +6,31 @@
 }
 <div id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
-    <div data-role="header" data-id="navpersist" data-position="fixed" class="header-pdthx" >
+    <div  class="header-pdthx" >
         <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
        <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
     </div>
-    <div data-role="content">
+    <div class="pd-content">
     <div class="pad">
-         
                     <!-- Profile -->
                     <a href="@Url.Content("~/Profile")" class="profile-area">
+                    @{
+                        if (Model.UserPic != "" && Model.UserPic != null && Model.UserPic != "null")
+                        {
+                            <img class="ps-image" src="@Model.UserPic" alt="@Model.UserName" />
+                        }
+                        else
+                        {
                      <img class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
+                        }
+                        
+                        }
                     <div class="profile-section">
-                   
-                   
-                     <div class="txt-flt">
+                    <div class="txt-flt">
                     <h2 class="heading"> @Model.UserName </h2>
-                    <h4 class="subheading">Profile: <span class="percent">50% Complete</span></h4> 
+                    <h4 class="subheading">Profile: <span class="percent">60% Complete</span></h4> 
                     <div class="progress-bar">
-    <div class="profile-complete" style="width:50%">
+    <div class="profile-complete" style="width:60%">
         &nbsp;
     </div>
 </div>
@@ -40,7 +47,13 @@
      <a href="@Url.Content("~/Paystream")" id="nav-panel-paystream" class="nav-item top-left">
       <img class="hm-icon" src="@Url.Content("~/Content/images/icn-stream-bg.png")" alt="Paystream" /><br />
      ACTIVITY
-     <div id="new-items">3</div>
+     @{
+         if(Model.UserNewActivity > 0){
+          <div id="new-items">@Model.UserNewActivity</div>   
+         }
+             
+     }
+     
      </a>
      <a href="@Url.Content("~/DoGood")" id="nav-panel-dogood" class="nav-item top-right">
      <img class="hm-icon" src="@Url.Content("~/Content/images/icn-dogood-bg.png")" alt="Do Good" /><br />

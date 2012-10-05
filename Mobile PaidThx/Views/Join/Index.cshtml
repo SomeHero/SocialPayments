@@ -1,12 +1,12 @@
 ﻿@model Mobile_PaidThx.Models.JoinModels.JoinModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Join PaidThx";
     ViewBag.PageID = "page-join";
     ViewBag.Classes = "page ";
     
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
-    <div data-role="header" data-position="fixed" class="header-pdthx" >
+    <div class="header-pdthx" >
         <h1>
              @if (Model.Message != null)
              {
@@ -27,7 +27,7 @@
              else
              {<text>Join</text>}</h1>
              </div>
-    <div data-role="content">
+    <div class="pd-content">
         <div class="pad">
         <!--TESTING
          <div id="pay-in" class="aui">
@@ -130,7 +130,7 @@
         </div>
 
     </div>
-    <div data-role="footer"> 
+    <div class="footer-pdthx"> 
 	<h4>Learn About PaidThx <a title="Learn More" href="@Url.Content("~/About")">Here</a></h4> 
 </div> 
             
