@@ -266,3 +266,8 @@ function findPos(obj) {
         return [curleft, curtop];
     }
 }
+
+
+$(document).ready(function () {
+    pinswipeResizeController.resizePINs();
+});

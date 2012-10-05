@@ -4,12 +4,11 @@
     ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
-<div  id="help-page"  >
-  
+ 
     <div class="header-pdthx"  >
         <h1>
             Help</h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+        <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content" style="height: 100%; width: 100%">
         <object type="text/html" style="height: 100%; width: 100%" data="http://paidthx.zendesk.com/mobile/home">

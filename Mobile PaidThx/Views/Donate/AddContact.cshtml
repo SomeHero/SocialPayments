@@ -19,7 +19,7 @@
 
                 @foreach (var alphaGroup in Model.SortedNonProfits)
                 {
-                    <li data-role="list-divider">@alphaGroup.Key</li>
+                    <li class="list-divider">@alphaGroup.Key</li>
                     foreach (var nonprofit in alphaGroup.Value)
                     {
                     <li class="contact contact-select removable">
