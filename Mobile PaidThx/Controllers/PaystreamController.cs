@@ -154,7 +154,9 @@ namespace Mobile_PaidThx.Controllers
                     senderName = message.senderName,
                     senderSeen = message.senderSeen,
                     senderUri = message.senderUri,
-                    transactionImageUri = message.transactionImageUri
+                    transactionImageUri = message.transactionImageUri,
+                    senderImageUri = message.senderImageUri,
+                    recipientImageUri = message.recipientImageUri
                 });
             }
             catch (Exception ex)

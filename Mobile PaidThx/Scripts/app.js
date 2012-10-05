@@ -563,6 +563,13 @@ $(document).ready(function () {
     window.addEventListener("orientationchange", hideAddressBar);
 
 
+    //SHOW LOADER FOR LONG LOAD EVENTS
+    $('.showloader').die().live("click", function () {
+        //HIDE PRELOADER WHEN PAGES LOAD
+        $('.loader-holder-full').fadeIn();
+    
+     });
+
     //APPEND LOADING DEAL TO PAGE ELEMENT
 
     var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
