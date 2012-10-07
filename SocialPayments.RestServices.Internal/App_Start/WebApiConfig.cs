@@ -40,6 +40,12 @@ namespace SocialPayments
                defaults: new { controller = "Batch", action = "BatchTransactions" }
             );
             config.Routes.MapHttpRoute(
+               name: "SignUpKeySMSListner",
+               routeTemplate: "api/MobileNumberSignUpKeySMSListenerController",
+               defaults: new { controller = "MobileNumberSignUpKeySMSListenerController", action = "Post" },
+               constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            );
+            config.Routes.MapHttpRoute(
                name: "PaystreamMessagesPost",
                routeTemplate: "api/paystreammessages",
                defaults: new { controller = "PaystreamMessages", action = "Post" },
