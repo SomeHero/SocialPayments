@@ -547,6 +547,29 @@ var pinswipeResizeController = (function ($, undefined) {
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $(document).ready(function () {
 
+
+    //ATTEMPT TO SCROLL PAST ADDRESS BAR
+    function hideAddressBar() {
+        if (!window.location.hash) {
+            if (document.height < window.outerHeight) {
+                $('div.page').css("min-height", (window.outerHeight + 50) + 'px');
+            }
+
+            setTimeout(function () { window.scrollTo(0, 1); }, 50);
+        }
+    }
+
+    window.addEventListener("load", function () { if (!window.pageYOffset) { hideAddressBar(); } });
+    window.addEventListener("orientationchange", hideAddressBar);
+
+
+    //SHOW LOADER FOR LONG LOAD EVENTS
+    $('.showloader').die().live("click", function () {
+        //HIDE PRELOADER WHEN PAGES LOAD
+        $('.loader-holder-full').fadeIn();
+    
+     });
+
     //APPEND LOADING DEAL TO PAGE ELEMENT
 
     var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
@@ -555,13 +578,13 @@ $(document).ready(function () {
 
     $(this).ajaxStop(function () {
         $('#page-loader').stop().animate({
-            opacity: .5
+            opacity: .7
         }, 300, function () {
        $('#page-loader').hide();
         });
     });
     $(this).ajaxStart(function () {
-        $('#page-loader').css("opacity", ".5");
+        $('#page-loader').css("opacity", ".7");
         $('#page-loader').show().stop().animate({
             opacity: 1
         }, 300, function () {
@@ -589,11 +612,10 @@ $(document).ready(function () {
     //my attempt to recreate jquery mobile full page
     $(window).bind('resize', function (event) {
         var content_height = $('div.page').height(),
-            header_height = $('div.header-pdthx').height(),
             window_height = $(this).height();
         $('div.page').css('min-height', (window_height));
         event.stopImmediatePropagation();
-    }).trigger('resize');
+    });
 
     //add center to jquery object
     $.fn.center = function () {

@@ -4,6 +4,11 @@
     ViewBag.PageID = "paystream-detail";
     ViewBag.Classes = "page full";
 }
+<<<<<<< HEAD
+<div id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    @Model.amount
+   
+=======
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
     
     <div class="header-pdthx">
@@ -213,4 +218,5 @@ if( Model.messageType == "PaymentRequest"){
 
         </div>
         </div>
+>>>>>>> upstream/development
 </div>
