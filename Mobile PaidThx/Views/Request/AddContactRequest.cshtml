@@ -59,7 +59,8 @@
 </div>
 @section PageScripts
 {
-        <script id="meCodeItem" type="text/x-jquery-tmpl">
+
+<script id="meCodeItem" type="text/x-jquery-tmpl">
     <li class="contact-select">
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
             <img src="http://graph.facebook.com/1/picture" />
@@ -68,8 +69,7 @@
      </li>
 </script>
         
-    <script language="javascript">
-        //wait to do event binding until the page is being initialized
+    <script type="text/javascript">
         $(document).ready(function () {
 
             $(this).find("img.lazy").lazyload();
@@ -79,8 +79,6 @@
 
             contactsSearchController.init($("#request-contact-select-page"));
 
-            //delegate event binding since the search widget is added dynamically
-            //bind to the `keyup` event so we can check the value of the input after the user types
             $('input[data-type="search"]').bind('keyup', function () {
 
                 var searchVal = $(this).delegate('input[data-type="search"]').val();
@@ -99,7 +97,6 @@
                     $("#me-codes-divider").hide();
                     contactsSearchController.clearMeCodes();
 
-
                     //check to see if there are any visible list-items that are not the `#no-results` element
                     if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
                         contactsSearchController.showNoResults(searchVal);
@@ -110,11 +107,13 @@
                     }
                 }
             });
+
             $listview.on("click", ".contact-recipient-uri", function (event) {
 
                 $(this).parents("form:first").submit();
 
             });
+
             $listview.on("click", ".contact-new-recipient", function (event) {
                 if ($(this).attr('data-uri-valid') == '1')
                     $(this).parents("form:first").submit();
