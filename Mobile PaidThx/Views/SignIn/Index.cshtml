@@ -10,8 +10,8 @@
         <h1>Sign In</h1>
     </div>
     <div class="pd-content">
-        <div class="pad">
-            @if (TempData["Message"] != null)
+     @Html.ValidationSummary()
+        @if (TempData["Message"] != null)
             {
                 <text>
                     <div class="validation-summary-errors">
@@ -23,7 +23,9 @@
                 </text>
             }
             
-            @Html.ValidationSummary()
+        <div class="pad">
+         
+           
             <button type="button" id="signin-facebook-submit" class="pd-btn fb" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
                 Sign in with Facebook
             </button>

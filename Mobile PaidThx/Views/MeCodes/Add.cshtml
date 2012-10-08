@@ -18,10 +18,11 @@
     Create a unique Mobile Exchange code below.  Like the #hashtags of money, ME Codes always start with a dollar sign "$".  <br /><span class="example">Examples: $payryannow, $newyearseveparty, etc."</span>
     </p>
     </div>
+    @Html.ValidationSummary()
     <div class="pad">
          @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
-            @Html.ValidationSummary()
+            
 
                 <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" required />
             <p>

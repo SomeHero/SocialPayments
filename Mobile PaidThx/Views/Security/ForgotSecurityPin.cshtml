@@ -15,11 +15,12 @@
       <div class="top-panel">
         <p>Answer your security question below to reset your security PIN.</p>
         </div>
+        @Html.ValidationSummary()
     <div class="pad">
       
      @using (Html.BeginForm("ForgotSecurityPin", "Security", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide" }, { "data-ajax", "false" }  }))
          {   
-        @Html.ValidationSummary()
+ 
 
         <p>@Model.SecurityQuestion</p>
         <p>

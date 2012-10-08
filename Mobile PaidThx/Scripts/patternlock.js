@@ -1,13 +1,3 @@
-// 9-dot patternlock
-// V1.01 beta
-// ©2011 - Steffest
-
-//This is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-//it comes WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-
-// History
-// 2011/04/11: initial version
-// 2011/04/12: small bugfix: @PiRho_be dragging outside the patternlock and releasing won't end the pattern: added document.onmouseup event
 
 
 function generatePincode() {
@@ -266,8 +256,3 @@ function findPos(obj) {
         return [curleft, curtop];
     }
 }
-
-
-$(document).ready(function () {
-    pinswipeResizeController.resizePINs();
-});

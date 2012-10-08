@@ -16,10 +16,12 @@
 
         </div>
         @Html.ValidationSummary()
+        <div class="pad">
         @using (Html.BeginForm("EditPopupPinswipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
+        </div>
     </div>
 </div>
 @section PageScripts

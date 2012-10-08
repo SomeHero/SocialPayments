@@ -15,8 +15,8 @@
     <div class="top-panel">
    
         <p>Now swipe a new security pin.</p></div>
+        @Html.ValidationSummary()
     <div class="pad">
-    @Html.ValidationSummary()
       
                 
         @using (Html.BeginForm("ChangeSecurityPinNew", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slideup" } }))
