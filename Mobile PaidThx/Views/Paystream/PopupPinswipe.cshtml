@@ -31,8 +31,8 @@
             <text>@String.Format("You are about to reject the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
         }
         </div>
-    <div class="pad">
         @Html.ValidationSummary()
+    <div class="pad">
        
         @using (Html.BeginForm("PopupPinswipe", "Paystream", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       

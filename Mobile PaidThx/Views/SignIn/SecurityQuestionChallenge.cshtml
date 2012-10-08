@@ -11,8 +11,9 @@
     <div class="pd-content">
     <div class="top-panel">
     <p>Your account has been locked.  Please provide the answer to the question below to unlock your account.</p></div>
+    @Html.ValidationSummary()
     <div class="pad">
-     @Html.ValidationSummary()
+     
     
         @using (Html.BeginForm("SecurityQuestionChallenge", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {

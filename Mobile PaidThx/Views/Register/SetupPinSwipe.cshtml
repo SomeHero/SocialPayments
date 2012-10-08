@@ -18,12 +18,12 @@
 </div>
     <div class="pad">
     
-</div>
+
         @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
-        
+        </div>
         </div>
 </div>
 @section PageScripts

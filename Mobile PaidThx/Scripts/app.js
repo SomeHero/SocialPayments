@@ -529,11 +529,12 @@ var pinswipeResizeController = (function ($, undefined) {
         $('.patternlockcontainer > div').css('height', (divwidth));
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
-        $('.patternlockcontainer > div').css("left", ($('div#pinHolder').width() - $('.patternlockcontainer > div').width()) / 2) ;
+        $('.patternlockcontainer > div').css("left", ($('div#pinHolder').width() - $('.patternlockcontainer > div').width()) / 2);
+        $('.patternlockcontainer').css("opacity", "1");
         $('#pinHolder').animate({
             opacity: 1
-        }, 200, function () {
-            // PINSWIPE READY
+        }, 500, function () {
+            $('patternlockcontainer').fadeIn();
         });
     };
 

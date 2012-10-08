@@ -32,7 +32,7 @@
             </p>
     
     </div>
-
+    @Html.ValidationSummary()
         <div class="pad">
        
         <ul class="panel-container">
@@ -52,7 +52,6 @@
                </a>    
             </li>
             </ul>
-            @Html.ValidationSummary()
              @if (!Model.EmailAddress.Verified)
                    {
                     <text>
