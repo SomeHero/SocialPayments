@@ -12,8 +12,8 @@
     </div>
 
     <div class="pd-content">
+    @Html.ValidationSummary()
     <div class="pad">
-           @Html.ValidationSummary()
        @using (Html.BeginForm("Index", "Pledge", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
        {
 

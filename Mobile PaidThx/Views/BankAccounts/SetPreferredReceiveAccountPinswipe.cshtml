@@ -14,8 +14,8 @@
     <div class="top-panel">
     
     </div>
+    @Html.ValidationSummary()
     <div class="pad">
-        @Html.ValidationSummary()
         @using (Html.BeginForm("SetPreferredReceiveAccountPinSwipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
