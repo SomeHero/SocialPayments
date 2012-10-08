@@ -21,6 +21,8 @@ var webServicesController = (function ($, undefined) {
 
     return pub;
 } (jQuery));
+
+//FORMATTING CONTROLLER
 var formattingController = (function($, undefined) {
     var pub = {},
     $this = $(this);
@@ -31,6 +33,8 @@ var formattingController = (function($, undefined) {
 
     return pub;
 } (jQuery));
+
+//VALIDATION CONTROLLER
 var validationController = (function ($, undefined) {
     var pub = {},
     $this = $(this);
@@ -55,14 +59,15 @@ var validationController = (function ($, undefined) {
     return pub;
 } (jQuery));
 
+//HELPERS
 var isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
 var isiPhone = /iphone/i.test(navigator.userAgent.toLowerCase());
-var totalErrors = 0;
+
 jQuery.expr[':'].focus = function( elem ) {
   return elem === document.activeElement && ( elem.type || elem.href );
 };
 
-
+//PAYSTREAM CONTROLLER
 var paystreamController = (function ($, undefined) {
     var pub = {},
         userId = "",
@@ -89,24 +94,24 @@ var paystreamController = (function ($, undefined) {
         $this.unbind("paystream.updated").bind("paystream.updated", function (e, paystreamItems) {
             displayPaystream(paystreamItems, false);
 
-            if (totalRecords > displayedRecords)
+            if (totalRecords > displayedRecords) {
                 showMoreResults();
-            else
+            } else {
                 hideMoreResults();
+            }
         });
+
         $this.unbind("paystream.added").bind("paystream.added", function (e, paystreamItems) {
             displayPaystream(paystreamItems, true);
-            if (totalRecords > displayedRecords)
+            if (totalRecords > displayedRecords) {
                 showMoreResults();
-            else
+            } else {
                 hideMoreResults();
+            }
         });
     };
 
     pub.searchAndDisplayPaystream = function (theType, callback) {
-        //Starting loading animation
-        //$.mobile.showPageLoadingMsg("Loading Paystream");
-
         displayedRecords = 0;
         page = 0;
         skip = 0;
@@ -117,62 +122,49 @@ var paystreamController = (function ($, undefined) {
         searchPayStream(function () {
             //Stop loading animation on success
             $this.trigger("paystream.updated", items);
-            if (displayedRecords == 0)
+            if (displayedRecords == 0) {
                 showNoResults();
-            else
+            } else {
                 hideNoResults();
-
-            //$.mobile.hidePageLoadingMsg();
-            if (callback)
+            }
+            if (callback) {
                 callback();
+            }
         });
     };
 
     pub.getAndDisplayMoreItems = function () {
-        //Starting loading animation
-        //$.mobile.showPageLoadingMsg();
-
         //Get news and add success callback using then
         searchPayStream(function () {
             //Stop loading animation on success
             $this.trigger("paystream.added", items);
-            //$.mobile.hidePageLoadingMsg();
         });
     };
 
     pub.displayPaystreamDetail = function (id) {
-        //Starting loading animation
-        //$.mobile.showPageLoadingMsg();
-
         //Get news and add success callback using then
         openOffersDialog(id, function () {
-            //Stop loading animation on success
-            //$.mobile.hidePageLoadingMsg();
         });
     };
     pub.closeDetailDialog = function () {
-        //Starting loading animation
-        //$.mobile.showPageLoadingMsg();
-
         //Get news and add success callback using then
         closeDetailDialog(function () {
-            //Stop loading animation on success
-            //$.mobile.hidePageLoadingMsg();
         });
     };
-    pub.showNoResults = function(val) {
+    pub.showNoResults = function (val) {
         showNoResults();
-    }
+    };
     pub.hideNoResults = function (val) {
         hideNoResults();
-    }
+    };
     pub.showMoreResults = function () {
-        if(totalRecords > displayedRecords)
+        if (totalRecords > displayedRecords) {
             showMoreResults();
-    },
+        }
+    };
     pub.hideMoreResults = function () {
         hideMoreResults();
-    },
+    };
     pub.cancelPayment = function (id) {
         showPinSwipe("CancelPayment", id);
     };
@@ -206,7 +198,9 @@ var paystreamController = (function ($, undefined) {
             dataType: "json",
             error: function (data, textStatus, xhr) {
                 alert(textStatus);
-                if(callback) callback(data);
+                if (callback) {
+                    callback(data);
+                }
             },
             success: function (data, textStatus, xhr) {
 
@@ -218,7 +212,9 @@ var paystreamController = (function ($, undefined) {
                 page += 1;
                 items = data.Results;
 
-                if (callback) callback(data);
+                if (callback) {
+                    callback(data);
+                }
             }
         });
 
@@ -226,8 +222,9 @@ var paystreamController = (function ($, undefined) {
 
     function displayPaystream(paystreamItems, append) {
         //Empty current list
-        if (!append) 
+        if (!append) {
             $listview.find(".removable").remove();
+        }
 
         var today = new XDate();
         var yesterday = today.clone().addDays(-1);
@@ -272,7 +269,7 @@ var paystreamController = (function ($, undefined) {
             } else if (createDateMonth == lastMonth && createDateYear == lastMonthYear) {
                 headerText = "Last Month";
             } else {
-                headerText = createDate.toString("MMMM") + " " + createDate.toString("yyyy")
+                headerText = createDate.toString("MMMM") + " " + createDate.toString("yyyy");
             }
 
 
@@ -284,9 +281,7 @@ var paystreamController = (function ($, undefined) {
 
             $("#paystreamItem").tmpl($(items).get(i)).insertBefore($listview.find(".more-results"));
 
-        };
-        //$("#paystreamItem").tmpl(items).appendTo($("#paystreamList"));
-
+        }
     }
     function showMoreResults() {
         $listview.find(".more-results").show();
@@ -319,7 +314,9 @@ var paystreamController = (function ($, undefined) {
                     $('#popup').animate({ 'left': '10px' }, 300);
                 });
 
-                if (callback) callback(data);
+                if (callback) {
+                    callback(data);
+                }
             },
             error: function (objRequest, next, errorThrown) {
                 alert(next);
@@ -336,9 +333,12 @@ var paystreamController = (function ($, undefined) {
             $('#popup').css('left', '100%');
             $('#overlay').fadeOut('fast');
 
-            if (callback) callback();
+            if (callback) {
+                callback();
+            }
         });
-    };
+    }
+
     function closeOffersDialog(prospectElementID) {
         $(function ($) {
             $(document).ready(function () {
@@ -351,52 +351,61 @@ var paystreamController = (function ($, undefined) {
             });
         });
     }
+
     function cancelPayment(messageId, callback) {
         $.ajax({
             url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/cancel_payment",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
-                if (callback)
+                if (callback) {
                     callback(data);
+                }
             }
         });
     }
+
     function cancelRequest(messageId, callback) {
         $.ajax({
             url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/cancel_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
-                if (callback)
+                if (callback) {
                     callback(data);
+                }
             }
         });
     }
+
     function acceptRequest(messageId, callback) {
         $.ajax({
             url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/accept_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
-                if (callback)
+                if (callback) {
                     callback(data);
+                }
             }
         });
     }
+
     function rejectRequest(messageId, callback) {
         $.ajax({
             url: webServicesController.getWebServicesBaseUrl() + "PaystreamMessages/" + messageId + "/reject_request",
             dataType: "json",
             type: "POST",
             success: function (data, textStatus, xhr) {
-                if (callback)
+                if (callback) {
                     callback(data);
+                }
             }
         });
     }
     return pub;
 } (jQuery));
+
 var contactsSearchController = (function ($, undefined) {
     var pub = {},
     $page = $("#send-contact-select-page");
@@ -407,16 +416,13 @@ var contactsSearchController = (function ($, undefined) {
         $page = page;
         hideMeCodes();
 
-        //hideNoResults();
-
-        //When news updated, display items in list
-        $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+    //When news updated, display items in list
+    $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
             displayMeCodes(meCodes);
         });
     };
-
     pub.searchAndDisplayMeCodes = function (searchValue, type) {
-        //Get news and add success callback using then
+    //Get news and add success callback using then
         searchByMeCode(searchValue, type, function () {
         });
     };
@@ -428,23 +434,23 @@ var contactsSearchController = (function ($, undefined) {
     };
     pub.hideNoResults = function (searchVal) {
         hideNoResults(searchVal);
-    }
+    };
 
     function searchByMeCode(searchValue, type, callback) {
-        //Get news via ajax and return jqXhr
         var serviceUrl = webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue;
 
-        if (type)
+        if (type) {
             serviceUrl = serviceUrl + "?type=" + type;
+        }
 
         $.ajax({
             url: serviceUrl,
             dataType: "json",
             success: function (data, textStatus, xhr) {
-                //Publish that news has been updated & allow
-                //the 2 subscribers to update the UI content
                 $this.trigger("meCodes.updated", data);
-                if (callback) callback(data);
+                if (callback) {
+                    callback(data);
+                }
             }
         });
     }
@@ -467,11 +473,6 @@ var contactsSearchController = (function ($, undefined) {
         else {
             clearMeCodes();
         }
-
-        //Call the listview jQuery UI Widget after adding 
-        //items to the list allowing correct rendering
-        //if (newMeCodes)
-           // $("#contactsList").listview("refresh");
     }
     function clearMeCodes() {
         $("#contactsList .mecode-recipient").remove();
@@ -525,7 +526,7 @@ var pinswipeResizeController = (function ($, undefined) {
     $this = $(this);
     pub.resizePINs = function () {
         var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
-        divwidth = widthy * .95;
+        divwidth = widthy * 0.95;
         $('.patternlockcontainer > div').css('height', (divwidth));
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
@@ -541,6 +542,26 @@ var pinswipeResizeController = (function ($, undefined) {
     return pub;
 } (jQuery));
 
+//DATE CONTROLLER
+function getDateNow(){
+   var now = moment();
+   return now;
+} 
+
+//HIDING PHONE BROWSER ADDRESS BAR
+
+function hideAddressBar() {
+    if (!window.location.hash) {
+        if (document.height < window.outerHeight) {
+            document.body.style.height = (window.outerHeight + 50) + 'px';
+        }
+
+        setTimeout(function () { window.scrollTo(0, 1); }, 50);
+    }
+}
+
+window.addEventListener("load", function () { if (!window.pageYOffset) { hideAddressBar(); } });
+window.addEventListener("orientationchange", hideAddressBar);
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -548,56 +569,50 @@ var pinswipeResizeController = (function ($, undefined) {
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $(document).ready(function () {
 
+//FORMAT MOMENT CALENDAR SETTINGS
+    moment.calendar = {
+        lastDay: '[Yesterday at] LT',
+        sameDay: '[Today at] LT',
+        nextDay: '[Tomorrow at] LT',
+        lastWeek: '[last] dddd [at] LT',
+        nextWeek: 'dddd [at] LT',
+        sameElse: 'L [at] LT'
+    };
 
-    //ATTEMPT TO SCROLL PAST ADDRESS BAR
-    function hideAddressBar() {
-        if (!window.location.hash) {
-            if (document.height < window.outerHeight) {
-                $('div.page').css("min-height", (window.outerHeight + 50) + 'px');
-            }
-
-            setTimeout(function () { window.scrollTo(0, 1); }, 50);
-        }
-    }
-
-    window.addEventListener("load", function () { if (!window.pageYOffset) { hideAddressBar(); } });
-    window.addEventListener("orientationchange", hideAddressBar);
-
+   
 
     //SHOW LOADER FOR LONG LOAD EVENTS
     $('.showloader').die().live("click", function () {
         //HIDE PRELOADER WHEN PAGES LOAD
         $('.loader-holder-full').fadeIn();
-    
-     });
 
-    //APPEND LOADING DEAL TO PAGE ELEMENT
+    });
 
+    //AJAX LOADER
     var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
 
     $('div.page').append($loadingguy);
 
     $(this).ajaxStop(function () {
         $('#page-loader').stop().animate({
-            opacity: .7
+            opacity: 0.7
         }, 300, function () {
-       $('#page-loader').hide();
+            $('#page-loader').hide();
         });
     });
     $(this).ajaxStart(function () {
-        $('#page-loader').css("opacity", ".7");
+        $('#page-loader').css("opacity", "0.7");
         $('#page-loader').show().stop().animate({
             opacity: 1
         }, 300, function () {
 
         });
     });
+
     //HIDE PRELOADER WHEN PAGES LOAD
     $('.loader-holder-full').fadeOut();
 
-
     //BACK BUTTONS
-
     $('.btn-back.history').live('click', function () {
         history.back(); return false;
     });
@@ -606,24 +621,24 @@ $(document).ready(function () {
     $('.top-panel:empty').hide();
 
     $(window).bind('resize', function (event) {
+
         //resize PINs on window resize
         pinswipeResizeController.resizePINs();
-    });
 
-    //my attempt to recreate jquery mobile full page
-    $(window).bind('resize', function (event) {
+        //my attempt to recreate jquery mobile full page
         var content_height = $('div.page').height(),
             window_height = $(this).height();
         $('div.page').css('min-height', (window_height));
         event.stopImmediatePropagation();
-    });
+
+    }).trigger("resize");
 
     //add center to jquery object
     $.fn.center = function () {
         this.css("position", "absolute");
         this.css("left", ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + "px");
         return this;
-    }
+    };
 
     $('form').bind('firstinvalid', function (e) {
         return false;
@@ -669,18 +684,6 @@ $(document).ready(function () {
 
                 },
                 showErrors: function (errorMap, errorList) {
-                    /*
-                    if (errorList.length) {
-                    var s = errorList.shift();
-                    var n = [];
-                    n.push(s);
-                    this.errorList = n;
-                    }
-                    totalErrors = errorList.length;
-                    if (errorList.length) {
-                    this.errorList = errorList.reverse();
-                    }
-                    */
                     this.defaultShowErrors();
                 },
                 onkeyup: false,
@@ -709,7 +712,7 @@ $(document).ready(function () {
 
                     $(formm).find(':input').each(function () {
                         formElements.push();
-                    })
+                    });
 
                     // Check we have a valid error message
                     if (!error.is(':empty')) {

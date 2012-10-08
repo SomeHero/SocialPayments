@@ -18,7 +18,7 @@
     
         @using (Html.BeginForm("SecurityQuestion", "Register", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {
-            @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "pop" } })
+            @Html.DropDownList("SecurityQuestionId", new SelectList(Model.SecurityQuestions, "Id", "Question", Model.SecurityQuestionId), new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "class", "select-custom" } })
             @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })
             <br />
             <button type="submit" class="pd-btn green">Complete Set Up</button>
@@ -26,3 +26,18 @@
         </div>
     </div>
 </div>
+
+@section PageStyles{
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/dropkick/dropkick.css")">
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Libs/dropkick/theme.css")">
+}
+@section PageScripts{
+
+<script type="text/javascript" src="@Url.Content("~/Libs/dropkick/jquery.dropkick-1.0.0.js")"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.select-custom').dropkick();
+    });
+</script>
+}
