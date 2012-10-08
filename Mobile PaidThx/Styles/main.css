@@ -184,18 +184,22 @@ word-wrap: break-word;
 }
 
 .heading, li.settings h2 {
-font-size: 14pt;
+font-size: 12pt;
 font-weight: bold;
-margin-bottom: 0px;
-margin-top: 3px;
+margin: 0px;
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
 }
 
 .subheading, li.settings h4 {
 font-size: 12px;
 font-weight: normal;
 color: #8F8F8F;
-margin-top: 0px;
-margin-bottom: 2px;
+margin: 0px;
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
 }
 
 .example
@@ -941,7 +945,7 @@ zoom: 1;
    
    .quickaddbtn-style
    {
-    width:24%; 
+    width:23.8%; 
     padding:10px;
     font-weight:bold;  
    }
@@ -1090,6 +1094,9 @@ a img.img-recipient, a img.img-amount
 .a-recipient h2, .a-amount h2 {
 margin-top: 0px;
 padding-top: 6px;
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
 }
 .a-recipient .arrow-rt, .a-amount .arrow-rt {
 position: absolute;
@@ -1186,7 +1193,10 @@ cursor:pointer;
 
 .contact-select h2
 {
-padding-top: 4px;  
+padding-top: 7px;  
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
 }
 
 .list-thumbnail
@@ -1336,7 +1346,21 @@ font-size:10pt;
 font-weight:normal;
 color:#5b5b5b;
 font-family:Helvetica, Arial, sans-serif;
+display:block;
+margin:0px;
 }
+
+/* Details */
+ul#paystreamList span.ps-datetime{
+font-size:8pt;
+font-weight:bold;
+color:#a3a3a3;
+font-family:Helvetica, Arial, sans-serif;
+font-style:italic;
+display:block;
+margin:0px;
+}
+
 
 img.ps-image
 {
@@ -1365,14 +1389,6 @@ border-radius: 5px;
 box-shadow:         1px 1px 2px 0px #a3a3a3;
 position: static;
 margin:0;
-}
-/* Details */
-ul#paystreamList span.ps-datetime{
-font-size:8pt;
-font-weight:bold;
-color:#a3a3a3;
-font-family:Helvetica, Arial, sans-serif;
-font-style:italic;
 }
 
 /* Details */
@@ -1804,7 +1820,7 @@ border-style: solid;
 .ps-filter-label
 {
     display:inline-block;
-    width:24%;
+    width:23.5%;
  padding:0;
  cursor:pointer;   
  font-size:12px;
@@ -1918,6 +1934,15 @@ text-decoration:none;
 background-image: none;
 cursor:default; 
 }
+
+li.settings h2, li.settings h4
+{
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+padding-right:10px;    
+}
+
 .nolink a
 {
 display:block;
