@@ -426,6 +426,10 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\images\User1.jpg" />
+    <Content Include="Content\images\User2.jpg" />
+    <Content Include="Content\images\User3.jpg" />
+    <Content Include="Content\images\User4.jpg" />
     <Content Include="Content\images\video.png" />
     <Content Include="Libs\dropkick\theme.css" />
     <Content Include="Libs\dropkick\dropkick.css" />

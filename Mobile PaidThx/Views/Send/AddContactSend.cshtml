@@ -21,43 +21,45 @@
             
                    <li class="contact removable contact-select">
                      @using(Html.BeginForm()) {
-                        @Html.Hidden("recipientUri", "demo+1@paidthx.com")
+                        @Html.Hidden("recipientUri", "ryan+demo@paidthx.com")
                         @Html.Hidden("recipientType", "email")
-                        @Html.Hidden("recipientName", "Demo PaidTHx 1");
+                        @Html.Hidden("recipientName", "Ryan of PaidThx");
                         <a class="contact-recipient-uri">
-                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
-                            <h2 class="heading">Demo 1</h2>
-                            <h4 class="subheading">Facebook Friend</h4>
+                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/user1.jpg")" />
+                            <h2 class="heading">Ryan of PaidThx</h2>
+                            <h4 class="subheading">ryan@paidthx.com</h4>
                         </a>
-                    }
+                     }
                     <div class="clear"></div>
                     </li>
                         
                    <li class="contact removable contact-select">
-                     @using(Html.BeginForm()) {
-                        @Html.Hidden("recipientUri", "demo+2@paidthx.com")
+                     @using (Html.BeginForm())
+                     {
+                        @Html.Hidden("recipientUri", "james+demo@paidthx.com")
                         @Html.Hidden("recipientType", "email")
-                        @Html.Hidden("recipientName", "Demo PaidTHx 2");
+                        @Html.Hidden("recipientName", "James of PaidThx");
                         <a class="contact-recipient-uri">
-                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
-                            <h2 class="heading">Demo 2</h2>
-                            <h4 class="subheading">Facebook Friend</h4>
+                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/user2.jpg")" />
+                            <h2 class="heading">James of PaidThx</h2>
+                            <h4 class="subheading">james@paidthx.com</h4>
                         </a>
-                    }
+                     }
                     <div class="clear"></div>
                     </li>    
                         
                    <li class="contact removable contact-select">
-                     @using(Html.BeginForm()) {
-                        @Html.Hidden("recipientUri", "demo+3@paidthx.com")
+                     @using (Html.BeginForm())
+                     {
+                        @Html.Hidden("recipientUri", "thomas+demo@paidthx.com")
                         @Html.Hidden("recipientType", "email")
-                        @Html.Hidden("recipientName", "Demo PaidTHx 3");
+                        @Html.Hidden("recipientName", "Thomas of PaidThx");
                         <a class="contact-recipient-uri">
-                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" />
-                            <h2 class="heading">Demo 3</h2>
-                            <h4 class="subheading">Facebook Friend</h4>
+                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/user4.jpg")" />
+                            <h2 class="heading">Thomas of PaidThx</h2>
+                            <h4 class="subheading">thomas@paidthx.com</h4>
                         </a>
-                    }
+                     }
                     <div class="clear"></div>
                     </li>
         @foreach (var alphaGroup in Model.SortedContacts)
@@ -66,12 +68,13 @@
             foreach (var friend in alphaGroup.Value)
             {
                    <li class="contact contact-select removable">
-                    @using(Html.BeginForm()) {
+                    @using (Html.BeginForm())
+                    {
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")
                         @Html.Hidden("recipientName", @friend.name);
                         <a class="contact-recipient-uri">
-                            <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
+                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
                             <h2 class="heading">@friend.name</h2>
                             <h4 class="subheading">Facebook Friend</h4>
                         </a>
@@ -79,14 +82,15 @@
                     <div class="clear"></div>
                     </li>
             }
-            }
+        }
                     <li id="contact-no-results" class="contact-no-results-item contact-select">
-                    @using(Html.BeginForm()) {
-                    @Html.Hidden("recipientUri", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-uri"}})
-                    @Html.Hidden("recipientType", "new", new Dictionary<string, object> {{ "id", "contact-new-recipient-type"}})
-                    @Html.Hidden("recipientName", "", new Dictionary<string, object> {{ "id", "contact-new-recipient-name"}});
+                    @using (Html.BeginForm())
+                    {
+                    @Html.Hidden("recipientUri", "", new Dictionary<string, object> { { "id", "contact-new-recipient-uri" } })
+                    @Html.Hidden("recipientType", "new", new Dictionary<string, object> { { "id", "contact-new-recipient-type" } })
+                    @Html.Hidden("recipientName", "", new Dictionary<string, object> { { "id", "contact-new-recipient-name" } });
                     <a id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
-                        <img class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
+                        <img width="50" height="50" class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
                         <h2 id="results-header" class="heading">
                         No contacts...yet
                         </h2>
@@ -94,7 +98,7 @@
                         Type a new email or phone # above
                        </h4>
                    </a>
-                        }
+                    }
                         <div class="clear"></div>
                </li>
                <li id="me-codes-divider" data-role="list-divider">Me Codes</li>

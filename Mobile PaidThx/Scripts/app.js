@@ -227,7 +227,10 @@ var paystreamController = (function ($, undefined) {
         }
 
         var today = new XDate();
+        //var today = moment();
         var yesterday = today.clone().addDays(-1);
+        //var yesterday = today.subtract('days', 1);
+        var thisWeek = today.clone().getWeek();
         var thisWeek = today.clone().getWeek();
         var thisWeekYear = today.clone().getYear();
         var lastWeek = thisWeek - 1;
