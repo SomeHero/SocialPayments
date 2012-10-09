@@ -36,12 +36,14 @@ namespace SocialPayments.DataLayer
         public IDbSet<NotificationType> NotificationTypes { get; set; }
         public IDbSet<PayPointType> PayPointTypes { get; set; }
         public IDbSet<UserPayPoint> UserPayPoints { get; set; }
+        public IDbSet<UserPayPointHistory> UserPayPointHistory { get; set; }
         public IDbSet<UserNotification> UserNotificationConfigurations { get; set; }
         public IDbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
         public IDbSet<UserConfiguration> UserConfigurations { get; set; }
         public IDbSet<SocialNetwork> SocialNetworks { get; set; }
         public IDbSet<UserSocialNetwork> UserSocialNetworks { get; set; }
         public IDbSet<ProfileSection> ProfileSections { get; set; }
+        public IDbSet<ProfileItem> ProfileItems { get; set; }
         public IDbSet<Merchant> Merchants { get; set; }
         public IDbSet<PasswordResetAttempt> PasswordResetAttempts { get; set; }
         public IDbSet<UserPayPointVerification> UserPayPointVerifications { get; set; }

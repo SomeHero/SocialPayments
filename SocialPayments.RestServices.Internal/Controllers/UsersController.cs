@@ -365,9 +365,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-        /*
+
         // POST /api/users/{id}/upload_member_image
-        public Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
+        public async Task<HttpResponseMessage> UploadMemberImage([FromUri] string id)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -376,26 +376,19 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     Request.CreateResponse(HttpStatusCode.UnsupportedMediaType));
             }
 
+            if(!Directory.Exists(String.Format(@"{0}\{1}", @"c:\memberImages", id)))
+                Directory.CreateDirectory(String.Format(@"{0}\{1}", @"c:\memberImages", id));
+
             var provider = new RenamingMultipartFormDataStreamProvider(String.Format(@"{0}\{1}", @"c:\memberImages", id));
 
-            // Read the form data and return an async task.
-            var task = Request.Content.ReadAsMultipartAsync(provider).
-                ContinueWith<HttpResponseMessage>(readTask =>
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                foreach(MultipartFileData file in provider.FileData)
                 {
-                    if (readTask.IsFaulted || readTask.IsCanceled)
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Exception Occurred Reading Image");
-                    }
 
-                    var fileName = "";
-                    // This illustrates how to get the file names.
-                    foreach (var file in provider.BodyPartFileNames)
-                    {
-                        _logger.Log(LogLevel.Info, "Client file name: " + file.Key);
-                        _logger.Log(LogLevel.Info, "Server file path: " + file.Value);
-
-                        fileName = file.Value;
-                    }
+                    var fileName = file.LocalFileName;
 
                     string bucketName = ConfigurationManager.AppSettings["MemberImagesBucketName"];
 
@@ -422,15 +415,20 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         _logger.Log(LogLevel.Error, String.Format("Unable to upload member image to S3. {0}", ex.Message));
                     }
 
-                    return Request.CreateResponse<FileUploadResponse>(HttpStatusCode.Created,
+                    return Request.CreateResponse<FileUploadResponse>(HttpStatusCode.OK,
                         new FileUploadResponse()
                         {
                             ImageUrl = String.Format("http://memberimages.paidthx.com/{0}/image1.png", id)
                         });
-                });
+                };
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
 
-            return task;
-        }*/
+            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Unable to upload image");
+        }
         // PUT /api/user/5
         public void Put(int id, string value)
         {

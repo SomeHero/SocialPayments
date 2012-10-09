@@ -10,18 +10,18 @@ namespace SocialPayments
     {
         public static void Register(HttpConfiguration config)
         {
-
+            config.Routes.MapHttpRoute(
+               name: "LinkSocialNetworks",
+               routeTemplate: "api/users/{userId}/socialnetworks",
+               defaults: new { controller = "UserSocialNetworks", action = "LinkSocialNetwork" },
+               constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            );
             config.Routes.MapHttpRoute(
                name: "UnlinkSocialNetwork",
                routeTemplate: "api/users/{userId}/SocialNetworks/unlink",
-               defaults: new { controller = "UserSocialNetworks", action = "UnlinkSocialNetwork" }
-            );
-            config.Routes.MapHttpRoute(
-               name: "SocialNetworks",
-               routeTemplate: "api/users/{userId}/socialnetworks",
-               defaults: new { controller = "UserSocialNetworks" }
-            );
-
+               defaults: new { controller = "UserSocialNetworks", action = "UnlinkSocialNetwork" },
+               constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+             );
             config.Routes.MapHttpRoute(
                 name: "ValidateRoutingNumber",
                 routeTemplate: "api/routingnumber/validate",
@@ -218,7 +218,8 @@ namespace SocialPayments
             config.Routes.MapHttpRoute(
                 name: "UploadMemberImage",
                 routeTemplate: "api/users/{id}/upload_member_image",
-                defaults: new { controller = "Users", action = "UploadMemberImage" }
+                defaults: new { controller = "Users", action = "UploadMemberImage" },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
             );
             config.Routes.MapHttpRoute(
                 name: "ChangePassword",

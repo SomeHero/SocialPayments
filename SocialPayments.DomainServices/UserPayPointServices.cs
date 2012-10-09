@@ -70,6 +70,27 @@ namespace SocialPayments.DomainServices
                     Verified = false
                 });
 
+                var messages = _ctx.Messages
+                    .Where(m => m.RecipientUri == uri && (m.StatusValue.Equals((int)Domain.PaystreamMessageStatus.SubmittedRequest)
+                        || m.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedRequest)
+                        || m.StatusValue.Equals((int)Domain.PaystreamMessageStatus.SubmittedPayment)
+                        || m.StatusValue.Equals((int)Domain.PaystreamMessageStatus.NotifiedPayment)));
+
+                foreach(var message in messages)
+                {
+                    message.Recipient = user;
+
+                    switch (message.MessageType)
+                    {
+                        case Domain.MessageType.Payment:
+                            message.Status = Domain.PaystreamMessageStatus.ProcessingPayment;
+                            break;
+                        case Domain.MessageType.PaymentRequest:
+                            message.Status = Domain.PaystreamMessageStatus.PendingRequest;
+                            break;
+                    }
+                }
+
                 _ctx.SaveChanges();
 
                 if (payPointType.Name == "EmailAddress")
@@ -189,7 +210,16 @@ namespace SocialPayments.DomainServices
                 if (userPayPoint == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Pay Point {0} Not Found", userPayPointId));
 
-                userPayPoint.IsActive = false;
+                var userPayPointHistory = _ctx.UserPayPointHistory.Add(new Domain.UserPayPointHistory()
+                {
+                    Id = Guid.NewGuid(),
+                    PayPointURI = userPayPoint.URI,
+                    StartDate = userPayPoint.CreateDate,
+                    EndDate = System.DateTime.Now,
+                    UserId = userPayPoint.UserId
+                });
+
+                _ctx.UserPayPoints.Remove(userPayPoint);
 
                 _ctx.SaveChanges();
             }
