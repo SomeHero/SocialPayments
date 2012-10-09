@@ -12,10 +12,10 @@
             <a href="@Url.Content("~/Phones")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+    @Html.ValidationSummary()
         <div class="pad">
          @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
-            @Html.ValidationSummary()
             <p>
                 <input type="text" id="txtPhoneNumber" name="PhoneNumber" placeholder="Phone Number"
                 required /></p>

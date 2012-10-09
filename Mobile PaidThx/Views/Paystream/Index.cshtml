@@ -35,8 +35,8 @@
              @using(Html.BeginForm("Details", "Paystream", null, FormMethod.Get)) {
              @Html.Hidden("messageId", "") 
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
-                <li id="paystream-no-results-divider" class="paystream-no-results-item" data-role="list-divider" style="display:none;">No Results Found</li>
-                <li id="paystream-no-results" class="paystream-no-results-item" style="display: none;">
+                <li id="paystream-no-results-divider" class="paystream-no-results-item list-divider" style="display:none;">No Results Found</li>
+                <li id="paystream-no-results" class="paystream-no-results-item contact-select" style="display: none;">
                     <img src="@Url.Content("~/Content/images/avatar.png")" />
                     <h2>
                         You haven't sent or received any money.  Get started...</h2>
@@ -52,9 +52,7 @@
             </ul>
         </div>
     </div>
-    <script id="paystreamHeader" type="text/x-jquery-tmpl">
-        <li data-role="list-divider" class="removable list-divider"><span class="heading-text">${groupHeading}</span></li>
-    </script>
+
     @{Html.RenderPartial("LoggedInMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 4, HeaderText = "Paystream" }); }
     <div id="popup" class="paystream-dialog">
     </div>
@@ -68,6 +66,10 @@
 }
 @section PageScripts
 {
+    <script id="paystreamHeader" type="text/x-jquery-tmpl">
+        <li data-role="list-divider" class="removable list-divider"><span class="heading-text">${groupHeading}</span></li>
+    </script>
+
 
     @{Html.RenderPartial("PartialViews/PS-Item");}
     @{Html.RenderPartial("PartialViews/PS-Message");}
@@ -76,109 +78,101 @@
 
 
 <script type="text/javascript">
-        $(document).ready(function () {
+    $(document).ready(function () {
+        $('.ps-filter').addClass('input_hidden');
+        $('.ps-filter-label').click(function (event) {
+            $(this).addClass('selected').siblings().removeClass('selected');
+        });
 
-            $('.ps-filter').addClass('input_hidden');
-            $('.ps-filter-label').click(function (event) {
-                $(this).addClass('selected').siblings().removeClass('selected');
+        webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
+        $("#@ViewBag.PageID .ui-listview-filter").hide();
+
+        $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
+            $("#@ViewBag.PageID .ui-listview-filter").toggle();
+        });
+
+        //cache the list-view element for later use
+        var $listview = $(this).find('[data-role="listview"]');
+
+        paystreamController.init('@Model.UserId');
+        paystreamController.searchAndDisplayPaystream('all');
+
+        $('.more-results a').die('click').live('click', function () {
+            paystreamController.getAndDisplayMoreItems();
+        });
+        $('#paystream-all').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('all', function () {
             });
-
-
-            webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
-            $("#@ViewBag.PageID .ui-listview-filter").hide();
-
-            $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
-                $("#@ViewBag.PageID .ui-listview-filter").toggle();
-            });
-
-            //$("#paystreamList").listview('option', 'filterCallback', function (text, searchValue, item) {
-            //    return text.toString().toLowerCase().indexOf(searchValue) === -1;
-            //});
-
-            //cache the list-view element for later use
-            var $listview = $(this).find('[data-role="listview"]');
-
-            paystreamController.init('@Model.UserId');
-            paystreamController.searchAndDisplayPaystream('all');
-
-            $('.more-results a').die('click').live('click', function () {
-                paystreamController.getAndDisplayMoreItems();
-            });
-            $('#paystream-all').die('change').live('change', function () {
-
-                paystreamController.searchAndDisplayPaystream('all', function () {
-
-                });
-            });
-            $('#paystream-sent').die('change').live('change', function () {
-                paystreamController.searchAndDisplayPaystream('sent', function () {
-
-                });
-            });
-            $('#paystream-received').die('change').live('change', function () {
-                paystreamController.searchAndDisplayPaystream('received', function () {
-
-                });
-            });
-            $('#paystream-other').die('change').live('change', function () {
-                paystreamController.searchAndDisplayPaystream('other', function () {
-
-                });
-            });
-            $listview.on("click", ".paystreamItem", function(event) {
-                var messageId = $(this).attr("messageId");
-                var $form = $(this).parents("form:first");
-
-                $('input[name=messageId]').val(messageId);
-                $form.submit();
+        });
+        $('#paystream-sent').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('sent', function () {
 
             });
-            $('.closePaystreamItem').die('click').live('click', function () {
-                paystreamController.closeDetailDialog(function () { });
-            });
-            $('.cancel-payment').die('click').live('click', function () {
-                var messageId = $(this).attr("messageId");
+        });
+        $('#paystream-received').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('received', function () {
 
-                paystreamController.cancelPayment(messageId);
             });
-            $('.send-reminder-payment').die('click').live('click', function () {
-                alert('sending reminder');
-            });
-            $('.cancel-payment-request').die('click').live('click', function () {
-                var messageId = $(this).attr("messageId");
+        });
+        $('#paystream-other').die('change').live('change', function () {
+            paystreamController.searchAndDisplayPaystream('other', function () {
 
-                paystreamController.cancelRequest(messageId);
             });
-            $('.send-reminder-payment-request').die('click').live('click', function () {
-                alert('sending reminder');
-            });
-            $('.accept-payment-request').die('click').live('click', function () {
-                var messageId = $(this).attr("messageId");
+        });
+        $listview.on("click", ".paystreamItem", function (event) {
+            var messageId = $(this).attr("messageId");
+            var $form = $(this).parents("form:first");
 
-                paystreamController.acceptRequest(messageId);
-            });
-            $('.reject-payment-request').die('click').live('click', function () {
-                var messageId = $(this).attr("messageId");
-
-                paystreamController.rejectRequest(messageId);
-            });
-            //delegate event binding since the search widget is added dynamically
-            //bind to the `keyup` event so we can check the value of the input after the user types
-            $(this).delegate('input[data-type="search"]', 'keyup', function () {
-
-                var searchVal = $(this).delegate('input[data-type="search"]').val();
-
-                //check to see if there are any visible list-items that are not the `#no-results` element
-                if ($listview.children('.paystreamLi:visible').length === 0) {
-                    paystreamController.showNoResults(searchVal);
-                    paystreamController.hideMoreResults();
-                } else {
-                    //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                    paystreamController.hideNoResults(searchVal);
-                    paystreamController.showMoreResults();
-                }
-            });
+            $('input[name=messageId]').val(messageId);
+            $form.submit();
 
         });
+        $('.closePaystreamItem').die('click').live('click', function () {
+            paystreamController.closeDetailDialog(function () { });
+        });
+        $('.cancel-payment').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.cancelPayment(messageId);
+        });
+        $('.send-reminder-payment').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.cancel-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.cancelRequest(messageId);
+        });
+        $('.send-reminder-payment-request').die('click').live('click', function () {
+            alert('sending reminder');
+        });
+        $('.accept-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.acceptRequest(messageId);
+        });
+        $('.reject-payment-request').die('click').live('click', function () {
+            var messageId = $(this).attr("messageId");
+
+            paystreamController.rejectRequest(messageId);
+        });
+        //delegate event binding since the search widget is added dynamically
+        //bind to the `keyup` event so we can check the value of the input after the user types
+        $(this).delegate('input[data-type="search"]', 'keyup', function () {
+
+            var searchVal = $(this).delegate('input[data-type="search"]').val();
+
+            //check to see if there are any visible list-items that are not the `#no-results` element
+            if ($listview.children('.paystreamLi:visible').length === 0) {
+                paystreamController.showNoResults(searchVal);
+                paystreamController.hideMoreResults();
+            } else {
+                //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
+                paystreamController.hideNoResults(searchVal);
+                paystreamController.showMoreResults();
+            }
+        });
+
+    });
     </script>
    }

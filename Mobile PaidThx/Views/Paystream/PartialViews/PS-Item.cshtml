@@ -16,16 +16,20 @@ ${senderName}
         {{if direction == "Out"}}
 ${recipientName}
         {{/if}}
-
-        <br><span class="ps-message">
+<span class="ps-message">
           {{if comments != "No comments" && comments != ""}}                                             
  <text>"${comments}"</text>
  {{else}}
 No message
  {{/if}}
 </span>  
-<br><span class="ps-datetime">                                               
-${XDate(createDate).toString("ddd MMM d, yyyy")}
+<span class="ps-datetime">
+{{if moment(createDate).diff(getDateNow(), 'days') > 0 }}
+ ${moment(createDate).calendar()}
+ {{else}}         
+ ${moment(createDate).fromNow()}                                   
+
+ {{/if}}
 </span>  
 
 </h2>

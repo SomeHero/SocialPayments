@@ -28,6 +28,7 @@
              {<text>Join</text>}</h1>
              </div>
     <div class="pd-content">
+    @Html.ValidationSummary()
         <div class="pad">
         <!--TESTING
          <div id="pay-in" class="aui">
@@ -99,7 +100,6 @@
                 Join with Facebook</button>
             <h5 style="margin-top:25px" id="form-marker">
                 Or join with your Email Address</h5>
-                @Html.ValidationSummary()
              
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))

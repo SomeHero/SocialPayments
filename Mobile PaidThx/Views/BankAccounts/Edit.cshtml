@@ -20,8 +20,9 @@
                 </a>
             </p>
         </div>
-        <div class="pad">
         @Html.ValidationSummary()
+        <div class="pad">
+        
         @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" }}))
         {
             <p>

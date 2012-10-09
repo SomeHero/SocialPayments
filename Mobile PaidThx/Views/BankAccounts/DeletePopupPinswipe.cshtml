@@ -12,9 +12,10 @@
     </div>
   
     <div class="pd-content">
-        @Html.ValidationSummary()
+        
         <div class="top-panel">
             Enter Pinswipe</div>
+            @Html.ValidationSummary()
 <div class="pad">
         @using (Html.BeginForm("DeletePopupPinswipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
         {       

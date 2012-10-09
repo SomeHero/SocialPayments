@@ -12,8 +12,8 @@
         <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
     </div>
     <div class="pd-content">
+    @Html.ValidationSummary()
         <div class="pad">
-            @Html.ValidationSummary()
 
  
  <a href="@Url.Content("~/Request/AddContactRequest")" class="a-recipient"  >

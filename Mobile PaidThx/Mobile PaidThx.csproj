@@ -242,10 +242,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.html" />
-    <Content Include="apple-touch-icon-114x114-precomposed.png" />
-    <Content Include="apple-touch-icon-57x57-precomposed.png" />
-    <Content Include="apple-touch-icon-72x72-precomposed.png" />
-    <Content Include="apple-touch-icon-precomposed.png" />
+    <Content Include="apple-touch-icon-114.png" />
+    <Content Include="apple-touch-icon-144.png" />
+    <Content Include="apple-touch-icon-57.png" />
+    <Content Include="apple-touch-icon-72.png" />
     <Content Include="apple-touch-icon.png" />
     <Content Include="bg-texture.png" />
     <Content Include="Content\btn-settings.png" />
