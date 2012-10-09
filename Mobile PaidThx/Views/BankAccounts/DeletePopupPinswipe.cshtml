@@ -17,7 +17,7 @@
             Enter Pinswipe</div>
             @Html.ValidationSummary()
 <div class="pad">
-        @using (Html.BeginForm("DeletePopupPinswipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        @using (Html.BeginForm("DeletePopupPinswipe", "BankAccounts", FormMethod.Post, new Dictionary<string, object> {{  "id", "pinSwipeForm"}, { "class", "validateMe"  } }))
         {       
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }

@@ -29,7 +29,7 @@
         </div>
         <div class="pad">
         
-        @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{  "id", "pinSwipeForm"}, { "class", "validateMe"  } }))
         {       
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }

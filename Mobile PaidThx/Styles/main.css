@@ -11,7 +11,7 @@ button,
 input,
 select,
 textarea {
-    color: #222;
+    color: #231f20;
 }
 
 body {
@@ -31,6 +31,16 @@ overflow-x:hidden;
 /* ++++++++++++++++++TYPOGRAPHY++++++++++++++++ */
 a {
     color: #0084b4;
+    -ms-transition: color .25s linear;
+    -o-transition: color .25s linear;
+    -moz-transition: color .25s linear;
+    -webkit-transition: color .25s linear;
+    transition: color .25s linear;
+    -ms-transition: border-color .25s linear;
+    -o-transition: border-color .25s linear;
+    -moz-transition: border-color .25s linear;
+    -webkit-transition: border-color .25s linear;
+    transition: border-color .25s linear;
 }
 
 a:visited {
@@ -38,8 +48,13 @@ a:visited {
 }
 
 a:hover {
-    color: #06e;
+    color: #00839d;
 }
+
+a:active {
+    color: #48b201;
+}
+
 h2.section-header
 {
  font-weight:bold;
@@ -531,6 +546,9 @@ margin: 0px auto; /*for development purposes */
 border-left:1px solid #cccccc;
 border-right:1px solid #cccccc;
 position:relative;
+-webkit-transition: height .1s ease;
+       -moz-transition: height .1s ease;
+            transition: height .1s ease;
 }
 
 /* ++++++++++++++++ HEADER +++++++++++++ */
@@ -932,6 +950,16 @@ zoom: 1;
    PAGES: SEND/REQUEST/DONATE/PLEDGE
    ========================================================================== */
    
+   #contactList
+   {
+   margin-top:20px;    
+   }
+   
+      #contactList li a
+   {
+   text-decoration:none;
+   }
+   
    #contactsList
    {
    margin-top:20px;    
@@ -957,7 +985,11 @@ zoom: 1;
     line-height:53px;
     width:66%;
     float:left;   
+    padding:0 10px;
+    margin:0;
+    font-weight:bold;
    }
+   
    .btn-the-go
    {
     width:20%;
@@ -1061,6 +1093,10 @@ white-space: nowrap;
 padding-right: 30px;
 text-decoration:none;
 }
+.a-recipient:hover, .a-amount:hover
+{
+ border-color:#8c8c8c; 
+}
 .a-recipient:active, .a-amount:active
 {
  border-color:#48b201; 
@@ -1085,7 +1121,7 @@ border-radius: 5px;
 -moz-box-shadow:    1px 1px 2px 0px #a3a3a3;
 -webkit-box-shadow: 1px 1px 2px 0px #a3a3a3;
 box-shadow:         1px 1px 2px 0px #a3a3a3;
-margin:0 10px 0 0; 
+margin:0 13px 0 0; 
 }
 a img.img-recipient, a img.img-amount
 {
@@ -1157,7 +1193,12 @@ height:70px;
             outline:none;
 }
 
-#txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus
+#txtComments:hover, #txtComments-Request:hover, #txtComments-Donate:hover
+{
+  border-color:#8c8c8c;  
+}
+
+#txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus, #txtComments:active, #txtComments-Request:active, #txtComments-Donate:active
 {
   border-color:#48b201;  
   height:100px;
@@ -1326,8 +1367,13 @@ padding:10px;
 text-decoration:none;
 font-family:Helvetica, Arial, sans-serif;
 margin-top:0;
+cursor:pointer;
 }
-
+ul#paystreamList li a.paystreamItem:hover
+{
+  border-color:#8c8c8c;  
+}
+    
 /* OTHER PARTY */
 ul#paystreamList li a.paystreamItem h2.ps-other-party{
 margin:0;
@@ -1336,8 +1382,10 @@ font-weight:bold;
 color:#231f20;
 font-family:Helvetica, Arial, sans-serif;
 text-decoration:none;
-float:left;
-margin-left:12px;
+margin:0px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
 }
 
 /* MESSAGE */
@@ -1348,6 +1396,9 @@ color:#5b5b5b;
 font-family:Helvetica, Arial, sans-serif;
 display:block;
 margin:0px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
 }
 
 /* Details */
@@ -1359,6 +1410,9 @@ font-family:Helvetica, Arial, sans-serif;
 font-style:italic;
 display:block;
 margin:0px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
 }
 
 
@@ -1389,6 +1443,10 @@ border-radius: 5px;
 box-shadow:         1px 1px 2px 0px #a3a3a3;
 position: static;
 margin:0;
+}
+ul#paystreamList img.ps-image
+{
+    margin-right:12px;
 }
 
 /* Details */
@@ -1453,6 +1511,9 @@ color:#48b201;
 ul#paystreamList li.in.payment span.ps-type{
 color:#48b201;
 }
+ul#paystreamList li.in.payment a:hover, ul#paystreamList li.in.payment a:active{
+border-color:#48b201;
+}
 
 /* PAYMENT OUT */
 ul#paystreamList li.out.payment.new{
@@ -1463,6 +1524,9 @@ color:#00839d;
 }
 ul#paystreamList li.out.payment span.ps-type{
 color:#00839d;
+}
+ul#paystreamList li.out.payment a:hover, ul#paystreamList li.out.payment a:active{
+border-color:#00839d;
 }
 
 /* REQUEST OUT */
@@ -1475,6 +1539,9 @@ color:#bcd52f;
 ul#paystreamList li.out.request span.ps-type{
 color:#bcd52f;
 }
+ul#paystreamList li.out.request a:hover, ul#paystreamList li.out.request a:active{
+border-color:#bcd52f;
+}
 
 /* REQUEST IN */
 ul#paystreamList li.in.request.new{
@@ -1485,6 +1552,9 @@ color:#cb4201;
 }
 ul#paystreamList li.in.request span.ps-type{
 color:#cb4201;
+}
+ul#paystreamList li.in.request a:hover, ul#paystreamList li.in.request a:active{
+border-color:#cb4201;
 }
 
 /* Donation */
@@ -1497,7 +1567,9 @@ color:#ea385c;
 ul#paystreamList li.donation span.ps-type{
 color:#ea385c;
 }
-
+ul#paystreamList li.donation a:hover, ul#paystreamList li.donation a:active{
+border-color:#ea385c;
+}
 
 
 /* ==========================================================================
@@ -1615,9 +1687,7 @@ background-position:center top;
 background-repeat:no-repeat;
 float:right;
 }
-.paystreamDetail div.t-panel .ex-checkbox:hover{
-background-position:center -40px;
-}
+
 .paystreamDetail div.t-panel .divider{
 color:#cccccc;
 margin:10px 0;
@@ -2133,11 +2203,6 @@ textarea[contenteditable] {
     position: absolute;
     width: 1px;
 }
-
-/*
- * Extends the .visuallyhidden class to allow the element to be focusable
- * when navigated to via the keyboard: h5bp.com/p
- */
 
 .visuallyhidden.focusable:active,
 .visuallyhidden.focusable:focus {

@@ -20,7 +20,7 @@
      
         
       
-        @using (Html.BeginForm("PopupPinswipe", "Pledge", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        @using (Html.BeginForm("PopupPinswipe", "Pledge", FormMethod.Post, new Dictionary<string, object> {{  "id", "pinSwipeForm"}, { "class", "validateMe"  } }))
         {       
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }

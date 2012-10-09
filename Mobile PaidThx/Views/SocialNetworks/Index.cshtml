@@ -24,7 +24,7 @@
                 
                if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
                 {
-                               <li class="settings unlinked" id="facebook">
+                <li class="settings unlinked" id="facebook">
                     <!-- Facebook -->
                     <a href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SocialNetworks/LinkFacebookAccount/&scope=email&state=", Model.FBState)'>
                     <h2 class="heading"> Facebook </h2>

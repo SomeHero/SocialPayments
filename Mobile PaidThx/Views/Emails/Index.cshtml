@@ -11,6 +11,17 @@
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+    <div class="top-panel">
+    @if (Model.PayPoints.Count < 1){
+        
+    <text>Link your email addresses to claim all payments sent to them. Click "Add Email" below to add your first one. </text>
+        
+        }else{                                                                                                                                                                                                                                        
+    
+    <text>Manage your linked email addresses or add new emails here.  Be sure to verify each email. </text> 
+
+        }     
+    </div>
         <div class="pad">
             <ul class="panel-container">
                 @foreach (var payPoint in Model.PayPoints)
@@ -36,7 +47,7 @@
                 <li class="settings add">
 
 
-                    <a href="@Url.Content("~/Emails/Add")">Add Email Address</a></li>
+                    <a href="@Url.Content("~/Emails/Add")">Add Email</a></li>
             </ul>
         </div>
     </div>

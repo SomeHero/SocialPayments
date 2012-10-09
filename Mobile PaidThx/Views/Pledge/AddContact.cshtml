@@ -26,7 +26,7 @@
                     @Html.Hidden("recipientType", "facebook")
                     @Html.Hidden("recipientName", @friend.name);
                     <a class="contact-recipient-uri">
-                        <img class="list-thumbnail lazy"  src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
+                        <img width="50" height="50" class="list-thumbnail lazy"  src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
                         <h2 class="heading">@friend.name</h2>
                         <h4 class="subheading">Facebook Friend</h4>
                     </a>
@@ -37,7 +37,7 @@
         
          <li id="contact-no-results" class="contact-no-results-item contact-select">
             <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
-                <img src="@Url.Content("~/Content/images/avatar.png")" />
+                <img width="50" height="50" src="@Url.Content("~/Content/images/avatar.png")" />
                 <span id="results-header">
                 No matches found 
                 </span>
@@ -57,7 +57,7 @@
     <script id="meCodeItem" type="text/x-jquery-tmpl">
     <li>
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
-            <img src="http://graph.facebook.com/1/picture" />
+            <img width="50" height="50" src="http://graph.facebook.com/1/picture" />
             ${meCode}
         </a>
      </li>

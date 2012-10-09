@@ -426,6 +426,10 @@
     <Content Include="Content\images\tab_settings_inactive.gif" />
     <Content Include="Content\images\thought-arrow-up.png" />
     <Content Include="Content\images\add-icon.png" />
+    <Content Include="Content\images\User1.jpg" />
+    <Content Include="Content\images\User2.jpg" />
+    <Content Include="Content\images\User3.jpg" />
+    <Content Include="Content\images\User4.jpg" />
     <Content Include="Content\images\video.png" />
     <Content Include="Libs\dropkick\theme.css" />
     <Content Include="Libs\dropkick\dropkick.css" />
@@ -450,6 +454,7 @@
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
     <Content Include="Libs\qtip2\jquery.qtip.min.js" />
     <Content Include="Scripts\amounttosend.js" />
+    <Content Include="Scripts\contactselection.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\jquery.easing.1.3.js" />
     <Content Include="Scripts\modernizr-2.6.1.min.js" />
@@ -678,6 +683,7 @@
     <Content Include="Views\Shared\QuickAdds.cshtml" />
     <Content Include="Views\Shared\SecurityPIN.cshtml" />
     <Content Include="Views\Paystream\Details.cshtml" />
+    <Content Include="Views\Shared\ContactSelection.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
