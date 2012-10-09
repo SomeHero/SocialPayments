@@ -26,7 +26,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             Domain.Application application = null;
             List<Domain.ProfileSection> profileSections = null;
-            HttpResponseMessage response = null;
 
             try
             {
