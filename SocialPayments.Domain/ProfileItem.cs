@@ -31,5 +31,6 @@ namespace SocialPayments.Domain
         public string SelectOptionHeader { get; set; }
         public string SelectOptionDescription { get; set; }
         public virtual List<ProfileItemSelectOption> SelectOptions { get; set; }
+        public bool IsActive { get; set; }
     }
 }
