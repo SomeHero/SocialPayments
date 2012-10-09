@@ -17,11 +17,11 @@
                     @{
                         if (Model.UserPic != "" && Model.UserPic != null && Model.UserPic != "null")
                         {
-                            <img class="ps-image" src="@Model.UserPic" alt="@Model.UserName" />
+                            <img width="50" height="50" class="ps-image" src="@Model.UserPic" alt="@Model.UserName" />
                         }
                         else
                         {
-                     <img class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
+                     <img width="50" height="50" class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
                         }
                         
                         }

@@ -15,12 +15,9 @@
     @Html.ValidationSummary()
     <div class="pad">
       
-        @using (Html.BeginForm("ForgotSecurityPin_PinSwipeConfirm", "Security", FormMethod.Post, new Dictionary<string, object> {{ "id", "pinSwipeForm"}, { "data-transition", "slide-up" } }))
+        @using (Html.BeginForm("ForgotSecurityPin_PinSwipeConfirm", "Security", FormMethod.Post, new Dictionary<string, object> {{  "id", "pinSwipeForm"}, { "class", "validateMe"  } }))
         {       
-            <div id="pinHolder" class="hider">
-            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-        </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
     </div>
     </div>

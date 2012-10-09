@@ -35,8 +35,8 @@
              @using(Html.BeginForm("Details", "Paystream", null, FormMethod.Get)) {
              @Html.Hidden("messageId", "") 
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
-                <li id="paystream-no-results-divider" class="paystream-no-results-item list-divider" style="display:none;">No Results Found</li>
-                <li id="paystream-no-results" class="paystream-no-results-item contact-select" style="display: none;">
+                <li id="paystream-no-results-divider" class="paystream-no-results-item list-divider" style="display:none;">No Payments Found</li>
+                <li id="paystream-no-results" class="contact-select" style="display: none;">
                     <img src="@Url.Content("~/Content/images/avatar.png")" />
                     <h2>
                         You haven't sent or received any money.  Get started...</h2>
