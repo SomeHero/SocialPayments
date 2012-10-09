@@ -14,9 +14,16 @@
 
     <div class="pd-content">
           <div class="pad">
-         <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
-        <ul data-role="listview" id="contactsList" class="ui-listview" data-filter="true" data-filter-placeholder="Type a New Phone #/Email or Search">
-               
+     @if (Model.SortedContacts.Count < 1)
+        {
+        <input type="text" id="contactNew" data-type="search" placeholder="Email, phone, or ME Code" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        else
+        {
+        <input type="text" id="contactSearch" data-type="search" placeholder="Search contacts or add new" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+
+        <ul id="contactList" data-role="listview" class="ui-listview">    
                     <li class="list-divider">Test Users</li>
             
                    <li class="contact removable contact-select">
@@ -83,97 +90,28 @@
                     </li>
             }
         }
-                    <li id="contact-no-results" class="contact-no-results-item contact-select">
-                    @using (Html.BeginForm())
-                    {
-                    @Html.Hidden("recipientUri", "", new Dictionary<string, object> { { "id", "contact-new-recipient-uri" } })
-                    @Html.Hidden("recipientType", "new", new Dictionary<string, object> { { "id", "contact-new-recipient-type" } })
-                    @Html.Hidden("recipientName", "", new Dictionary<string, object> { { "id", "contact-new-recipient-name" } });
-                    <a id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
-                        <img width="50" height="50" class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
-                        <h2 id="results-header" class="heading">
-                        No contacts...yet
-                        </h2>
-                         <h4 id="results-description" class="subheading">
-                        Type a new email or phone # above
-                       </h4>
-                   </a>
-                    }
-                        <div class="clear"></div>
-               </li>
-               <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
                 </ul>
+
+
+               @{
+                   Html.RenderPartial("~/Views/Shared/ContactSelection.cshtml");   
+               }
+
             </div>
     </div>
 </div>
 @section PageScripts
 {
-<script id="meCodeItem" type="text/x-jquery-tmpl">
 
-    <li class="mecode-recipient">
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li class="contact-select me-code-recipient">
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
-            <img src="http://graph.facebook.com/1/picture" />
+            <img width="50" height="50" src="http://graph.facebook.com/1/picture" />
             ${meCode}
         </a>
      </li>
 </script>
-​
-    <script type="text/javascript">
 
-        //wait to do event binding until the page is being initialized
-
-        $("document").ready(function () {
-
-            $(this).find("img.lazy").lazyload();
-
-            //cache the list-view element for later use
-            var $listview = $(this).find('[data-role="listview"]');
-
-            webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
-            contactsSearchController.init($("#send-contact-select-page"));
-
-            //delegate event binding since the search widget is added dynamically
-            //bind to the `keyup` event so we can check the value of the input after the user types
-            $('input[data-type="search"]').bind('keyup', function () {
-
-                var searchVal = $(this).delegate('input[data-type="search"]').val();
-
-                if (searchVal.substring(0, 1) == '$') {
-
-                    if (searchVal.length > 3) {
-                        $("#me-codes-divider").show();
-                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
-                    } else {
-                        $("#me-codes-divider").hide();
-                        contactsSearchController.clearMeCodes();
-                    }
-                }
-                else {
-                    $("#me-codes-divider").hide();
-                    contactsSearchController.clearMeCodes();
-
-
-                    //check to see if there are any visible list-items that are not the `#no-results` element
-                    if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
-                        contactsSearchController.showNoResults(searchVal);
-
-                    } else {
-                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                        contactsSearchController.hideNoResults(searchVal);
-                    }
-                }
-            });
-            $listview.on("click", ".contact-recipient-uri", function(event) {
-
-                $(this).parents("form:first").submit();
-
-            });
-            $listview.on("click", ".contact-new-recipient", function (event) {
-                if($(this).attr('data-uri-valid') == '1')
-                    $(this).parents("form:first").submit();
-            });
-        });
-        
-</script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/contactselection.js")"></script>
 }
 

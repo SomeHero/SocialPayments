@@ -1,3 +1,26 @@
+//add center to jquery object
+$.fn.center = function () {
+    this.css("position", "absolute");
+    this.css("left", ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + "px");
+    return this;
+};
+
+$('form').bind('firstinvalid', function (e) {
+    return false;
+});
+
+//add moveTo to jquery object
+(function ($) {
+    $.fn.moveTo = function (selector) {
+        return this.each(function () {
+            var cl = $(this).clone();
+            $(cl).appendTo(selector);
+            //$(this).remove();
+        });
+    };
+})(jQuery);
+
+
 var webServicesController = (function ($, undefined) {
     var pub = {},
     webServicesBaseUrl = "",
@@ -313,8 +336,8 @@ var paystreamController = (function ($, undefined) {
                 $("#detailTemplate").tmpl(data).appendTo("#popup");
                 $('#popup').css('display', 'block');
                 $('#overlay').fadeIn('fast', function () {
-                    $('#popup').css('display', 'block');
-                    $('#popup').animate({ 'left': '10px' }, 300);
+                $('#popup').css('display', 'block');
+                $('#popup').animate({ 'left': '10px' }, 300);
                 });
 
                 if (callback) {
@@ -335,7 +358,6 @@ var paystreamController = (function ($, undefined) {
             $('#popup').css('position', 'fixed');
             $('#popup').css('left', '100%');
             $('#overlay').fadeOut('fast');
-
             if (callback) {
                 callback();
             }
@@ -411,30 +433,27 @@ var paystreamController = (function ($, undefined) {
 
 var contactsSearchController = (function ($, undefined) {
     var pub = {},
-    $page = $("#send-contact-select-page");
-    foundMeCodes = new Array(),
+    foundMeCodes = [],
     $this = $(this);
 
-    pub.init = function (page) {
-        $page = page;
-        hideMeCodes();
-
-    //When news updated, display items in list
-    $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
+    pub.init = function () {
+        $this.unbind("meCodes.updated").bind("meCodes.updated", function (e, meCodes) {
             displayMeCodes(meCodes);
         });
     };
     pub.searchAndDisplayMeCodes = function (searchValue, type) {
-    //Get news and add success callback using then
         searchByMeCode(searchValue, type, function () {
         });
     };
+
     pub.clearMeCodes = function (searchValue) {
         clearMeCodes();
     };
+
     pub.showNoResults = function (searchVal) {
         updateNoResults(searchVal);
     };
+
     pub.hideNoResults = function (searchVal) {
         hideNoResults(searchVal);
     };
@@ -459,10 +478,11 @@ var contactsSearchController = (function ($, undefined) {
     }
 
     function displayMeCodes(meCodes) {
-        //cache the list-view element for later use
-        var $listview = $("#contactsList");
-        var newMeCodes = new Array();
+        //cache contact list element for later use
+        var $contactList = $("#contactList");
+        var newMeCodes = [];
 
+        //Did we get some matching me codes back?
         if (meCodes) {
             $.each(meCodes.foundUsers, function (index, value) {
                 if (!($.inArray(value.meCode, foundMeCodes) > -1)) {
@@ -470,53 +490,59 @@ var contactsSearchController = (function ($, undefined) {
                     foundMeCodes.push(value.meCode);
                 }
             });
+
+            //Remove ME Code Search Item
+            $("#contactList #me-code-search-item").remove();
             //Use template to create items & add to list
-            $("#meCodeItem").tmpl(newMeCodes).insertAfter($("#contactsList #me-codes-divider"));
+            $("#meCodeItem").tmpl(newMeCodes).insertAfter($("#contactList #me-codes-divider"));
         }
         else {
+        //Remove ME Code Search Item
+            $("#contactList #me-code-search-item").remove();
+
+        //Add ME Code NONE Item
+            $("#listItemHolder #me-code-none-item").moveTo("#contactList");
             clearMeCodes();
         }
     }
     function clearMeCodes() {
-        $("#contactsList .mecode-recipient").remove();
-        foundMeCodes = new Array();
+        $("#contactList .me-code-recipient").remove();
+        foundMeCodes = [];
     }
     function hideMeCodes() {
-        $page.find("#me-codes-divider").hide();
-        $page.find(".me-codes-receipient").hide();
+        $("#contactList #me-codes-divider").remove();
+        $("#contactList #me-code-search-item").remove();
+        $("#contactList .me-code-recipient").remove();
     }
     function updateNoResults(searchVal) {
-        //if none are found then fadeIn the `#no-results` element
-        if (!$page.find("#contact-no-results").is(":visible")) {
-            $page.find("#contact-no-results").toggle();
-        }
-        if (!$page.find("#contact-no-results-divider").is(":visible")) {
-            $page.find("#contact-no-results-divider").toggle();
-        }
         if (validationController.isValidEmailAddress(searchVal)) {
-            $page.find("#results-header").text(searchVal);
-            $page.find("#results-description").text("New Email Recipient");
-            $page.find("#contact-new-recipient-uri").val(searchVal);
-            $page.find("#contact-new-recipient-name").val(searchVal);
-            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '1');
+            $("#contactList #search-item #results-header").text(searchVal);
+            $("#contactList #search-item #results-description").text("New Email Recipient");
+            $("#contactList #search-item #contact-new-recipient-uri").val(searchVal);
+            $("#contactList #search-item #contact-new-recipient-name").val(searchVal);
+            $("#contactList #search-item #contact-new-recipient-link").attr('data-uri-valid', '1');
+            //Remove NoLink Class
+            $("#contactList #search-item").removeClass("nolink");
         } else if (validationController.isValidPhoneNumber(searchVal)) {
-            $page.find("#results-header").text(searchVal);
-            $page.find("#results-description").text("New Phone Recipient");
-            $page.find("#contact-new-recipient-uri").val(searchVal);
-            $page.find("#contact-new-recipient-name").val(searchVal);
-            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '1');
-        }
-        else {
-            $page.find("#results-header").text("No matches found");
-            $page.find("#results-description").text("Continue type or check entry");
-            $page.find("#contact-new-recipient-uri").val('');
-            $page.find("#contact-new-recipient-uri").val('');
-            $page.find("#contact-new-recipient-link").attr('data-uri-valid', '0');
+            $("#contactList #search-item #results-header").text(searchVal);
+            $("#contactList #search-item #results-description").text("New Phone Recipient");
+            $("#contactList #search-item #contact-new-recipient-uri").val(searchVal);
+            $("#contactList #search-item #contact-new-recipient-name").val(searchVal);
+            $("#contactList #search-item #contact-new-recipient-link").attr('data-uri-valid', '1');
+            //Remove NoLink Class
+            $("#contactList #search-item").removeClass("nolink");
+        } else {
+            $("#contactList #search-item #results-header").text("Keep typing...");
+            $("#contactList #search-item #results-description").text("to add new phone or email");
+            $("#contactList #search-item #contact-new-recipient-uri").val('');
+            $("#contactList #search-item #contact-new-recipient-name").val('');
+            $("#contactList #search-item #contact-new-recipient-link").attr('data-uri-valid', '0');
+            //Remove NoLink Class
+            $("#contactList #search-item").addClass("nolink");
         }
     }
     function hideNoResults(searchVal) {
-        $page.find("#contact-no-results-divider").fadeOut(250);
-        $page.find("#contact-no-results").fadeOut(250);
+
     }
 
     return pub;
@@ -528,17 +554,19 @@ var pinswipeResizeController = (function ($, undefined) {
     var pub = {},
     $this = $(this);
     pub.resizePINs = function () {
-        var widthy = $(".patternlockcontainer").width(); //replaces $(window).width();
+        var widthy = $(".patternlockcontainer").width(); 
         divwidth = widthy * 0.95;
         $('.patternlockcontainer > div').css('height', (divwidth));
         $('.patternlockcontainer > div').css('width', (divwidth));
         $(".patternlockcontainer > div").css("position", "absolute");
         $('.patternlockcontainer > div').css("left", ($('div#pinHolder').width() - $('.patternlockcontainer > div').width()) / 2);
-        $('.patternlockcontainer').css("opacity", "1");
+        $('.patternlockcontainer').css("opacity", "0");
         $('#pinHolder').animate({
             opacity: 1
         }, 500, function () {
-            $('patternlockcontainer').fadeIn();
+            $('.patternlockcontainer').fadeIn(400,function(){
+        $('.patternlockcontainer').css("opacity", "1");
+});
         });
     };
 
@@ -555,8 +583,8 @@ function getDateNow(){
 
 function hideAddressBar() {
     if (!window.location.hash) {
-        if (document.height < window.outerHeight) {
-            document.body.style.height = (window.outerHeight + 50) + 'px';
+        if (document.height < $(window).height()) {
+            $('div.page').css("min-height", ($(window).height() + 50) + 'px');
         }
 
         setTimeout(function () { window.scrollTo(0, 1); }, 50);
@@ -631,22 +659,10 @@ $(document).ready(function () {
         //my attempt to recreate jquery mobile full page
         var content_height = $('div.page').height(),
             window_height = $(this).height();
-        $('div.page').css('min-height', (window_height));
+        $('div.page').css('min-height', (window_height + 50));
         event.stopImmediatePropagation();
 
     }).trigger("resize");
-
-    //add center to jquery object
-    $.fn.center = function () {
-        this.css("position", "absolute");
-        this.css("left", ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + "px");
-        return this;
-    };
-
-    $('form').bind('firstinvalid', function (e) {
-        return false;
-    });
-
 
 
 

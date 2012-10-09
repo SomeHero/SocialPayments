@@ -14,8 +14,15 @@
       
         
           <div class="pad">
-           <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
-        <ul id="contactsList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+     @if (Model.SortedNonProfits.Count < 1)
+        {
+        <input type="text" id="orgNew" data-type="search" placeholder="Type ME Code" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        else
+        {
+        <input type="text" id="orgSearch" data-type="search" placeholder="Search non-profits" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        <ul id="contactList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
                 @foreach (var alphaGroup in Model.SortedNonProfits)
                 {
@@ -46,20 +53,15 @@
                     </li>
                     }
                 }
-                <li id="contact-no-results" class="contact-no-results-item">
-                    <img width="50" height="50" src="@Url.Content("~/Content/images/avatar.png")" />
-                    <span id="results-header">No matches found 
-                    </span>
-                    <br />
-                    <span id="results-description">Please check entry
-                    </span>
-                </li>
-                <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
-
             </ul>
+                      @{
+                   Html.RenderPartial("~/Views/Shared/ContactSelection.cshtml");   
+               }
         </div>
     </div>
-    @section PageScripts {
+ @section PageScripts
+{
+
         <script id="meCodeItem" type="text/x-jquery-tmpl">
             <li>
                 <a class="contact-organization" recipient-id="${userId}" recipient-uri="${meCode}" recipient-type="meCode" organization-name="${meCode}">
@@ -68,50 +70,12 @@
                 </a>
             </li>
         </script>
-        <script language="javascript">
-            //wait to do event binding until the page is being initialized
-            $(document).ready(function () {
 
-                $(this).find("img.lazy").lazyload();
+<script type="text/javascript" src="@Url.Content("~/Scripts/contactselection.js")"></script>
 
-                //cache the list-view element for later use
-                var $listview = $(this).find('[data-role="listview"]');
-
-                contactsSearchController.init($("#donate-add-contact"));
-
-                //delegate event binding since the search widget is added dynamically
-                //bind to the `keyup` event so we can check the value of the input after the user types
-                $('input[data-type="search"]').bind('keyup', function () {
-
-                    var searchVal = $(this).delegate('input[data-type="search"]').val();
-
-                    if (searchVal.substring(0, 1) == '$') {
-
-                        if (searchVal.length > 3) {
-                            $("#me-codes-divider").show();
-                            contactsSearchController.searchAndDisplayMeCodes(searchVal, 'non-profits');
-                        } else {
-                            $("#me-codes-divider").hide();
-                            contactsSearchController.clearMeCodes();
-                        }
-                    }
-                    else {
-                        $("#me-codes-divider").hide();
-                        contactsSearchController.clearMeCodes();
-
-
-                        //check to see if there are any visible list-items that are not the `#no-results` element
-                        if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
-                            contactsSearchController.showNoResults(searchVal);
-
-                        } else {
-                            //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                            contactsSearchController.hideNoResults(searchVal);
-                        }
-                    }
-                });
-
-                $listview.on("click", ".contact-organization", function (event) {
+<script type="text/javascript">
+    $(document).ready(function () {
+                $('#contactList').on("click", ".contact-organization", function (event) {
 
                     $(this).parents("form:first").submit();
 
