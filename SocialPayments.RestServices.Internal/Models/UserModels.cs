@@ -316,6 +316,11 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public string AttributeValue { get; set; }
         }
+        public class UpdateUserAttributeResponse
+        {
+            public string AttributeKey { get; set; }
+            public string AttributeValue { get; set; }
+        }
         public class ValidatePayPointRequest
         {
             public Guid PayPointVerificationId { get; set; }

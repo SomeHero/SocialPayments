@@ -422,6 +422,24 @@ namespace SocialPayments.DomainServices
 
                     throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
+                var nextOldestBankAccount = user.PaymentAccounts
+                    .Where(p => p.Id != userAccount.Id && p.IsActive)
+                    .OrderByDescending(p => p.CreateDate);
+
+                if (userAccount.Id == user.PreferredSendAccount.Id)
+                {
+                    if(nextOldestBankAccount == null)
+                        user.PreferredSendAccount = null;
+                    else
+                        user.PreferredSendAccount = nextOldestBankAccount.FirstOrDefault();
+                }
+                if (userAccount.Id == user.PreferredReceiveAccount.Id)
+                {
+                    if (nextOldestBankAccount == null)
+                        user.PreferredReceiveAccount = null;
+                    else 
+                        user.PreferredReceiveAccount = nextOldestBankAccount.FirstOrDefault();
+                }
                 userAccount.IsActive = false;
                 userAccount.LastUpdatedDate = System.DateTime.Now;
 

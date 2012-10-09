@@ -54,7 +54,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, new UserModels.UpdateUserAttributeResponse()
+            {
+                AttributeKey = id,
+                AttributeValue = request.AttributeValue
+            });
 
         }
     }

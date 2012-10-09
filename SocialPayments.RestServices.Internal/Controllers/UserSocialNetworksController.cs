@@ -16,7 +16,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         
          // POST /api/users/{userId}/SocialNetworks
         [HttpPost]
-        public HttpResponseMessage Post(string userId, UserModels.AddUserSocialNetworkRequest request)
+        public HttpResponseMessage LinkSocialNetwork(string userId, UserModels.AddUserSocialNetworkRequest request)
         {
             var userSocialNetworkServices = new DomainServices.UserSocialNetworkServices();
 

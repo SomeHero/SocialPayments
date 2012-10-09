@@ -134,6 +134,7 @@ namespace SocialPayments.DomainServices
                         break;
                     case MessageType.PaymentRequest:
                         message.Recipient = user;
+                        message.Status = PaystreamMessageStatus.PendingRequest;
 
                         break;
                     default:
@@ -462,28 +463,30 @@ namespace SocialPayments.DomainServices
                 user.LastName = lastName;
                 user.ImageUrl = imageUrl;
 
-                var firstNameAttribute = user.UserAttributes
-                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "FirstName");
+                var firstNameAttribute = ctx.UserAttributes
+                    .FirstOrDefault(a => a.AttributeName == "FirstName");
 
                 if (firstNameAttribute != null)
                 {
                     user.UserAttributes.Add(new UserAttributeValue()
                     {
                         id = Guid.NewGuid(),
-                        UserAttributeId = firstNameAttribute.UserAttribute.Id,
+                        UserId  = user.UserId,
+                        UserAttributeId = firstNameAttribute.Id,
                         AttributeValue = firstName
                     });
                 }
 
-                var lastNameAttribute = user.UserAttributes
-                    .FirstOrDefault(a => a.UserAttribute.AttributeName == "LastName");
+                var lastNameAttribute = ctx.UserAttributes
+                    .FirstOrDefault(a => a.AttributeName == "LastName");
 
                 if (lastNameAttribute != null)
                 {
                     user.UserAttributes.Add(new UserAttributeValue()
                     {
                         id = Guid.NewGuid(),
-                        UserAttributeId = lastNameAttribute.UserId,
+                        UserId = user.UserId,
+                        UserAttributeId = lastNameAttribute.Id,
                         AttributeValue = lastName
                     });
                 }
