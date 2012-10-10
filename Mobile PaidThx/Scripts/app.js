@@ -563,8 +563,10 @@ var pinswipeResizeController = (function ($, undefined) {
         $('.patternlockcontainer').css("opacity", "0");
         $('#pinHolder').animate({
             opacity: 1
+        }, 200, function () {
+        $('.patternlockcontainer').animate({
+            opacity: 1
         }, 500, function () {
-            $('.patternlockcontainer').fadeIn(400,function(){
         $('.patternlockcontainer').css("opacity", "1");
 });
         });
