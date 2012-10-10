@@ -126,8 +126,13 @@ namespace Mobile_PaidThx.Controllers
         {
             try
             {
-                var messageService = new Services.MessageServices();
-                var message = messageService.GetMessage(messageId);
+                if (Session["UserId"] == null)
+                    return RedirectToAction("Index", "SignIn", null);
+
+                var userId = Session["UserId"].ToString();
+
+                var messageService = new Services.PaystreamMessageServices();
+                var message = messageService.GetMessage(userId, messageId);
 
                 return View(new PaystreamModels.PaystreamDetailModel
                 {

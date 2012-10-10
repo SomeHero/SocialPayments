@@ -1732,6 +1732,7 @@ border:1px solid #cccccc;
 border-radius: 5px;
 background-color:#ffffff;
 padding:10px;
+position:relative;
 }
 
 .paystreamDetail img.psd-image{
@@ -1748,25 +1749,33 @@ margin:0;
 
 .paystreamDetail .whathappened-content
 {
-float:left;
 margin:0 0 0 12px;
 font-weight:bold;
 font-size:10pt;
 color:#231f20;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
 }
 
 .ps-detail-textpad
 {
     padding-right:60px;
     text-overflow: ellipsis;
+    overflow:hidden;
+    whitespace:nowrap;
+    padding-left: 42px;
 }
 .paystreamDetail img.psd-image.sender{
-float:left;
-margin-right:12px;
+position: absolute;
+top: 10px;
+left: 10px;
 }
 
 .paystreamDetail img.psd-image.recipient{
-float:right;
+position: absolute;
+top: 10px;
+right: 10px;
 }
 
 .paystreamDetail div.whathappened .psd-type{

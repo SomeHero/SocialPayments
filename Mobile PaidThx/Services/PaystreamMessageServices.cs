@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services.CustomExceptions;
+using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Services
 {
@@ -18,6 +19,7 @@ namespace Mobile_PaidThx.Services
         private string _cancelRequestUrl = "{0}/paystreammessages/{1}/cancel_request";
         private string _acceptPaymentRequestUrl = "{0}/paystreammessages/{1}/accept_request";
         private string _rejectPaymentRequestUrl = "{0}/paystreammessages/{1}/reject_request";
+        private string _messageServicesBaseUrl = "{0}/Users/{1}/PaystreamMessages/{2}";
 
 
         public void SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string deliveryMethod)
@@ -81,6 +83,22 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
+        }
+        public MessageModels.MessageResponse GetMessage(string userId, string messageId)
+        {
+            var serviceUrl = String.Format(_messageServicesBaseUrl, _webServicesBaseUrl, userId, messageId);
+            var js = new JavaScriptSerializer();
+
+            var response = Get(serviceUrl);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
+            return js.Deserialize<MessageModels.MessageResponse>(response.JsonResponse);
         }
         public void CancelRequest(string apiKey, string messageId, string userId, string securityPin)
         {

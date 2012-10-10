@@ -12,14 +12,11 @@
             <a href="@Url.Content("~/Paystream")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
-    <div class="top-panel">
-    
-    </div>
     @Html.ValidationSummary()
         <div class="pad">
 
         
-<div class="paystreamDetail @{ if (Model.messageType == "Payment"){<text>payment</text>} if( Model.messageType == "PaymentRequest"){<text>request</text>} if( Model.messageType == "Donation"){<text>donation</text>} if (Model.direction == "Out"){<text>out</text>} if(Model.direction == "In"){<text>in</text>} }">
+<div class="paystreamDetail @{ if (Model.messageType == "Payment"){<text>payment </text>} if( Model.messageType == "PaymentRequest"){<text>request </text>} if( Model.messageType == "Donation"){<text>donation </text>} if (Model.direction == "Out"){<text>out </text>} if(Model.direction == "In"){<text>in </text>} }">
 <div class="whathappened">
 <h2 class="psd-type">
     @{
@@ -32,20 +29,22 @@
     <text>Request Received</text>
        }else if(Model.messageType == "PaymentRequest" && Model.direction == "Out"){
     <text>Request Sent</text>
+    }else if(Model.messageType == "Donation" && Model.direction == "Out"){
+    <text>Donation</text>
     }
     }
     </h2>
 <div class="whathappened-details">
 
 @{
-    if( Model.messageType == "Payment" && Model.direction == "In"){
+    if ( Model.messageType == "Payment" && Model.direction == "In"){
         <text>
     <img width="40" height="40" class="psd-image sender" src="@Model." alt="Sender" /> 
 <div class="ps-detail-textpad">
     <p class="whathappened-content">
     <span class="lbl-sender">@Model.senderName</span><br> 
 sent you <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
-<span class="lbl-date">on @DateTime.Parse(Model.createDate).ToString("ddd, MMM d, yy");</span>
+<span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -58,7 +57,7 @@ sent you <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span>
     <p class="whathappened-content">
     <span class="lbl-sender">You</span> sent <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 to <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">on @DateTime.Parse(Model.createDate).ToString("ddd, MMM d, yy");</span>
+<br><span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -71,7 +70,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <p class="whathappened-content">
  <span class="lbl-sender">@Model.senderName</span><br> 
 requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
-<span class="lbl-date">on @DateTime.Parse(Model.createDate).ToString("ddd, MMM d, yy");</span>
+<span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -84,7 +83,7 @@ requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 from <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">on @DateTime.Parse(Model.createDate).ToString("ddd, MMM d, yy");</span>
+<br><span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -97,7 +96,7 @@ from <span class="lbl-recipient">@Model.recipientName</span>
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> donated <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 to <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">on @DateTime.Parse(Model.createDate).ToString("ddd, MMM d, yy");</span>
+<br><span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -214,3 +213,27 @@ if( Model.messageType == "PaymentRequest"){
         </div>
         </div>
 </div>
+
+@section PageScripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var date = $("span.lbl-date").text();
+        var parsedate = "";
+
+        if (moment(date).diff(getDateNow(), 'hours') < -6) {
+
+            parsedate = moment(date).calendar();
+
+        } else {
+
+            parsedate = moment(date).fromNow();
+
+        }
+
+        $("span.lbl-date").text(parsedate);
+
+    });
+</script>
+
+}
