@@ -37,10 +37,14 @@
             <ul id="paystreamList" data-role="listview" data-filter="true" data-filter-placeholder="Search Paystream">
                 <li id="paystream-no-results-divider" class="paystream-no-results-item list-divider" style="display:none;">No Payments Found</li>
                 <li id="paystream-no-results" class="contact-select" style="display: none;">
-                    <img src="@Url.Content("~/Content/images/avatar.png")" />
-                    <h2>
-                        You haven't sent or received any money.  Get started...</h2>
-
+                 <a  class="paystreamItem showloader" href="@Url.Content("~/Send")">
+                    <img width="50" height="50" class="rounded ps-image" src="@Url.Content("~/Content/images/avatar.png")" />
+                    <h2 class="heading">
+                        No payments...yet</h2>
+                        <h4 class="subheading">Click here to send your first</h4>
+                        <div class="clear"></div>
+                        </a>
+                        
                  </li>
                 <li class="more-results" style="display: none;">
                         <a href="#">+ More Results</a>

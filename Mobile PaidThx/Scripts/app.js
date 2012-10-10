@@ -616,9 +616,7 @@ $(document).ready(function () {
 
     //SHOW LOADER FOR LONG LOAD EVENTS
     $('.showloader').die().live("click", function () {
-        //HIDE PRELOADER WHEN PAGES LOAD
         $('.loader-holder-full').fadeIn();
-
     });
 
     //AJAX LOADER

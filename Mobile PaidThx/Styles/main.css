@@ -1498,6 +1498,9 @@ font-family:Helvetica, Arial, sans-serif;
 
 .clear{
 clear:both;
+margin:0;
+padding:0;
+line-height:0;
 }
 
 /*  TYPES */
@@ -1758,6 +1761,11 @@ text-overflow: ellipsis;
 overflow: hidden;
 }
 
+.instructions
+{
+    font-size:13px;
+}
+
 .ps-detail-textpad
 {
     padding-right:60px;
@@ -1799,7 +1807,7 @@ text-shadow:none;
 }
 
 /* ------------- PAYMENT OUT ------------- */
-.paystreamDetail.out.payment .lbl-amount{
+.paystreamDetail.out.payment .lbl-amount, .lbl-amount.out.payment{
 color:#00839d;
 }
 
@@ -1809,7 +1817,7 @@ text-shadow:none;
 }
 
 /* ------------- REQUEST OUT ------------- */
-.paystreamDetail.out.request .lbl-amount{
+.paystreamDetail.out.request .lbl-amount,  .lbl-amount.out.request{
 color:#bcd52f;
 }
 
@@ -1819,7 +1827,7 @@ text-shadow:none;
 }
 
 /* ------------- REQUEST IN ------------- */
-.paystreamDetail.in.request .lbl-amount{
+.paystreamDetail.in.request .lbl-amount {
 color:#cb4201;
 }
 
@@ -1829,7 +1837,7 @@ text-shadow:none;
 }
 
 /* ------------- Donation ------------- */
-.paystreamDetail.donation .lbl-amount{
+.paystreamDetail.donation .lbl-amount, .lbl-amount.out.donation{
 color:#ea385c;
 }
 

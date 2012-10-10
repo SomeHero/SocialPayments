@@ -14,18 +14,19 @@
   
     <div class="pd-content">
         <div class="top-panel">
-         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+        @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
-            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" class="ps-image" style="margin-right:12px;" /></text>
         }
         @if(!String.IsNullOrEmpty(Model.RecipientName))
         {
-            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName.</text>
+            <text>Please swipe your security pin to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientName.</b></text>
         } 
         else
         {
-            <text>Please swipe your security pin to confirm your request of @String.Format("{0:C}", Model.Amount) to @Model.RecipientUri.</text>
+            <text>Please swipe your security pin to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientUri</b>.</text>
         }     
+        <div class="clear"></div>
         </div>
         <div class="pad">
         
