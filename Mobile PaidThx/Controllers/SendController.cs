@@ -360,7 +360,8 @@ namespace Mobile_PaidThx.Controllers
                 }
             }
             else
-                return View(model);
+            
+            return View(model);
 
             TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
