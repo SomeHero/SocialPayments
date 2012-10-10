@@ -15,11 +15,11 @@
   
     <div class="pd-content">
         <div class="top-panel">
-         @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
+ @if(!String.IsNullOrEmpty(Model.RecipientImageUrl))
         {
-            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" /></text>
+            <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" class="ps-image" style="margin-right:12px;" /></text>
         }
-        Please swipe your security pin to confirm your donation of @String.Format("{0:C}", Model.Amount) to @Model.RecipientName
+        Please swipe your security pin to confirm your donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.RecipientName</b>
         </div>
         @Html.ValidationSummary()
               <div class="pad">

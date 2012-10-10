@@ -17,7 +17,7 @@
         @using (Html.BeginForm("Index", "Donate", FormMethod.Post))
         {
             
- <a href="@Url.Content("~/Donate/AddContact")" class="a-recipient"  >
+ <a href="@Url.Content("~/Donate/AddContact")" class="a-recipient showloader"  >
                 <div id="btn-recipient" class="btn-sends">
                         @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
