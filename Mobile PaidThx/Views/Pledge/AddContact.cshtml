@@ -56,10 +56,16 @@
 
 <script id="meCodeItem" type="text/x-jquery-tmpl">
     <li class="contact-select me-code-recipient">
+    <form method="post" action="@Url.Content("~/Pledge/AddContact")">
+  
+                        <input type="hidden" name="recipientUri" value="${meCode}" />  
+                        <input type="hidden" name="recipientType" value=meCode /> 
+                        <input type="hidden" name="recipientName" value="${meCode}" /> 
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
             <img width="50" height="50" src="@Url.Content("~/Content/images/icon-settings-mecode-40x40.png")" style="margin-right: 8px;" />
             ${meCode}
         </a>
+        </form>
      </li>
 </script>
 

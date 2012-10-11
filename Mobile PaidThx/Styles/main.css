@@ -950,6 +950,10 @@ zoom: 1;
    PAGES: SEND/REQUEST/DONATE/PLEDGE
    ========================================================================== */
    
+   .contact-recipient-uri
+   {
+       display:block;
+   }
    .me-code-recipient
    {
        font-size:18pt;
