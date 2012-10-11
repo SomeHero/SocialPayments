@@ -95,7 +95,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             foreach (var payPoint in user.PayPoints)
             {
-                if (validationServices.IsPhoneNumber(payPoint.URI))
+                if(payPoint.PayPointTypeId == 2 && validationServices.IsPhoneNumber(payPoint.URI))
                     payPoint.URI = formattingService.FormatMobileNumber(payPoint.URI);
             }
 

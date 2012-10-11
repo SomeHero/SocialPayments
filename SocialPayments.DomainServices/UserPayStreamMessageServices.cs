@@ -54,7 +54,9 @@ namespace SocialPayments.DomainServices
 
                 var message = ctx.Messages
                     .Include("Recipient")
+                    .Include("Recipient.Merchant")
                     .Include("Sender")
+                    .Include("Sender.Merchant")
                     .Include("Payment")
                     .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageGuid);
@@ -67,52 +69,40 @@ namespace SocialPayments.DomainServices
 
                 ctx.SaveChanges();
 
-                URIType senderUriType = URIType.MECode;
-                URIType recipientUriType = URIType.MECode;
-
-                string senderName = "";
-                string recipientName = "";
-
-                    senderUriType = URIType.MECode;
-                    recipientUriType = URIType.MECode;
-
-                    senderUriType = userServices.GetURIType(message.SenderUri);
-                    recipientUriType = userServices.GetURIType(message.RecipientUri);
-
-                    if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
-                        senderName = message.Sender.FirstName + " " + message.Sender.LastName;
-                    else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
-                        senderName = message.senderFirstName + " " + message.Sender.LastName;
-                    else
-                        senderName = (senderUriType == URIType.MobileNumber ? formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
-
-                    if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
-                        recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
-                    else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
-                        recipientName = message.recipientFirstName + " " + message.recipientLastName;
-                    else
-                        recipientName = (recipientUriType == URIType.MobileNumber ? formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
-
-                    message.SenderName = senderName;
-                    message.RecipientName = recipientName;
-                    message.Direction = "In";
-
-                    if (message.SenderId == user.UserId)
-                        message.Direction = "Out";
-
-
-                    if (message.Direction == "In")
+                message.SenderName = userServices.GetSenderName(message.Sender);
+                if (message.Recipient != null)
+                    message.RecipientName = userServices.GetSenderName(message.Recipient);
+                else
+                {
+                    if (validationServices.IsPhoneNumber(message.RecipientUri))
                     {
-                        if (message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
-                            message.TransactionImageUrl = message.Sender.ImageUrl;
+                        message.RecipientUri = formattingServices.FormatMobileNumber(message.RecipientUri);
+                        message.RecipientName = message.RecipientUri;
                     }
+                    else if (validationServices.IsFacebookAccount(message.RecipientUri))
+                        message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
                     else
-                    {
-                        if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
-                            message.TransactionImageUrl = message.Recipient.ImageUrl;
-                        else
-                            message.TransactionImageUrl = message.recipientImageUri;
-                    }
+                        message.RecipientName = message.RecipientUri;  
+                }
+
+                message.Direction = "In";
+
+                if (message.SenderId == user.UserId)
+                    message.Direction = "Out";
+
+
+                if (message.Direction == "In")
+                {
+                    if (message.Sender != null && !String.IsNullOrEmpty(message.Sender.ImageUrl))
+                        message.TransactionImageUrl = message.Sender.ImageUrl;
+                }
+                else
+                {
+                    if (message.Recipient != null && !String.IsNullOrEmpty(message.Recipient.ImageUrl))
+                        message.TransactionImageUrl = message.Recipient.ImageUrl;
+                    else
+                        message.TransactionImageUrl = message.recipientImageUri;
+                }
                 
                 return message;
 
