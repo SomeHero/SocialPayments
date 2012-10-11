@@ -38,14 +38,10 @@
                        @Html.Hidden("recipientType", "NonProfit");
                        <a class="contact-organization contact-image">
                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
-                           @if (nonprofit.HasInfo)
-                           {
-                               <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
-                           }
                            <h2 class="heading">@nonprofit.Name</h2>
                            @if (!String.IsNullOrEmpty(nonprofit.Slogan))
                            {
-                               <h4 class="subheading">"@nonprofit.Slogan"</h4>
+                               <h4 class="subheading">@nonprofit.Slogan</h4>
                            }
                        </a>
                    }
@@ -71,7 +67,7 @@
             </li>
         </script>
 
-<script type="text/javascript" src="@Url.Content("~/Scripts/contactselection.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/causeselection.js")"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
