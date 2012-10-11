@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+//cause selection
+    $('#contactList').on("click", ".contact-organization", function (event) {
+
+        $(this).parents("form:first").submit();
+
+    });
+
     //LAZY LOAD
     $(this).find("img.lazy").lazyload();
 
@@ -36,8 +43,7 @@ $(document).ready(function () {
 
             //Yes - ME CODES
             $("#listItemHolder #me-codes-divider").moveTo("#contactList");
-            //Move Search Helper
-            $("#listItemHolder #me-code-search-item").moveTo("#contactList");
+           
 
             if (searchVal.length > 3) {
                 //LONG ENOUGH TO LOOK
@@ -51,6 +57,8 @@ $(document).ready(function () {
             } else {
                 //STILL NOT LONG ENOUGH TO LOOK
                 contactsSearchController.clearMeCodes();
+                //Move Search Helper
+                $("#listItemHolder #me-code-search-item").moveTo("#contactList");
             }
 
 

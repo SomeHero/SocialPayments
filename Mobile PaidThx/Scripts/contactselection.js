@@ -5,7 +5,8 @@ $(document).ready(function () {
 
     //Load no contacts if none there to start
     if ($("#contactList li").length < 1) {
-    $("#listItemHolder #contact-no-results").moveTo("#contactList");
+        $("#listItemHolder #contact-no-results").moveTo("#contactList");
+        $("#listItemHolder #facebook").moveTo("#contactList");
     }
 
     //cache the lists for later use
@@ -41,9 +42,7 @@ $(document).ready(function () {
 
             //Yes - ME CODES
             $("#listItemHolder #me-codes-divider").moveTo("#contactList");
-            //Move Search Helper
-            $("#listItemHolder #me-code-search-item").moveTo("#contactList");
-
+            
             if (searchVal.length > 3) {
                 //LONG ENOUGH TO LOOK
                 contactsSearchController.searchAndDisplayMeCodes(searchVal);
@@ -56,6 +55,8 @@ $(document).ready(function () {
             } else {
                 //STILL NOT LONG ENOUGH TO LOOK
                 contactsSearchController.clearMeCodes();
+                //Move Search Helper
+                $("#listItemHolder #me-code-search-item").moveTo("#contactList");
             }
 
 
