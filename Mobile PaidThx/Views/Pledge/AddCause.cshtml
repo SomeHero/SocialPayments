@@ -59,27 +59,16 @@
 @section PageScripts
 {
 
-        <script id="meCodeItem" type="text/x-jquery-tmpl">
-            <li>
-                <a class="contact-organization" recipient-id="${userId}" recipient-uri="${meCode}" recipient-type="meCode" organization-name="${meCode}">
-                    <img src="http://graph.facebook.com/1/picture" />
-                    ${meCode}
-                </a>
-            </li>
-        </script>
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li class="contact-select me-code-recipient">
+        <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
+            <img width="50" height="50" src="@Url.Content("~/Content/images/icon-settings-mecode-40x40.png")" style="margin-right: 8px;" />
+            ${meCode}
+        </a>
+     </li>
+</script>
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/causeselection.js")"></script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#contactList').on("click", ".contact-organization", function (event) {
-
-            $(this).parents("form:first").submit();
-
-        });
-
-    });
-
-        </script>
     }
 
