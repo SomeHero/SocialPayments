@@ -469,7 +469,8 @@ var contactsSearchController = (function ($, undefined) {
             url: serviceUrl,
             dataType: "json",
             success: function (data, textStatus, xhr) {
-                $this.trigger("meCodes.updated", data);
+                //$(document).trigger("meCodes.updated", data);
+                displayMeCodes(data);
                 if (callback) {
                     callback(data);
                 }
@@ -483,12 +484,12 @@ var contactsSearchController = (function ($, undefined) {
         var newMeCodes = [];
 
         //Did we get some matching me codes back?
-        if (meCodes) {
+        if (meCodes.foundUsers.length > 0) {
             $.each(meCodes.foundUsers, function (index, value) {
-                if (!($.inArray(value.meCode, foundMeCodes) > -1)) {
+                //if (!($.inArray(value.meCode, foundMeCodes) > -1)) {
                     newMeCodes.push(value);
                     foundMeCodes.push(value.meCode);
-                }
+                //}
             });
 
             //Remove ME Code Search Item
@@ -497,10 +498,10 @@ var contactsSearchController = (function ($, undefined) {
             $("#meCodeItem").tmpl(newMeCodes).insertAfter($("#contactList #me-codes-divider"));
         }
         else {
-        //Remove ME Code Search Item
+            //Remove ME Code Search Item
             $("#contactList #me-code-search-item").remove();
 
-        //Add ME Code NONE Item
+            //Add ME Code NONE Item
             $("#listItemHolder #me-code-none-item").moveTo("#contactList");
             clearMeCodes();
         }
