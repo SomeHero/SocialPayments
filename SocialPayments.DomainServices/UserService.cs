@@ -1216,6 +1216,9 @@ namespace SocialPayments.DomainServices
         {
             _logger.Log(LogLevel.Info, String.Format("Getting UserName {0}", sender.UserId));
 
+            if (sender.Merchant != null)
+                return sender.Merchant.Name;
+
             if (!String.IsNullOrEmpty(sender.FirstName) && !String.IsNullOrEmpty(sender.LastName))
                 return sender.FirstName + " " + sender.LastName;
             else if (!String.IsNullOrEmpty(sender.FirstName))

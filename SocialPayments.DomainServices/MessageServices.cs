@@ -937,44 +937,39 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                var userService = new UserService(ctx);
+                var validationServices = new DomainServices.ValidationService();
+                var formattingServices = new DomainServices.FormattingServices();
+
                 var messages = ctx.Messages
-                    .Include("Recipient")
+                  .Include("Recipient")
+                    .Include("Recipient.Merchant")
                     .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
                     .Include("PaymentRequest")
                     .Where(m => m.SenderId == userId || m.RecipientId.Value == userId)
                     .OrderByDescending(m => m.CreateDate)
                     .ToList<Message>();
 
-                URIType senderUriType = URIType.MECode;
-                URIType recipientUriType = URIType.MECode;
-
-                string senderName = "";
-                string recipientName = "";
-
                 foreach (var message in messages)
                 {
-                    senderUriType = URIType.MECode;
-                    recipientUriType = URIType.MECode;
-
-                    senderUriType = GetURIType(message.SenderUri);
-                    recipientUriType = GetURIType(message.RecipientUri);
-
-                    if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
-                        senderName = message.Sender.FirstName + " " + message.Sender.LastName;
-                    else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
-                        senderName = message.senderFirstName + " " + message.Sender.LastName;
+                    message.SenderName = userService.GetSenderName(message.Sender);
+                    if (message.Recipient != null)
+                        message.RecipientName = userService.GetSenderName(message.Recipient);
                     else
-                        senderName = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
+                    {
+                        if (validationServices.IsPhoneNumber(message.RecipientUri))
+                        {
+                            message.RecipientUri = formattingServices.FormatMobileNumber(message.RecipientUri);
+                            message.RecipientName = message.RecipientUri;
+                        }
+                        else if (validationServices.IsFacebookAccount(message.RecipientUri))
+                            message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
+                        else
+                            message.RecipientName = message.RecipientUri;                  
+                    }
 
-                    if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
-                        recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
-                    else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
-                        recipientName = message.recipientFirstName + " " + message.recipientLastName;
-                    else
-                        recipientName = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
-
-                    message.SenderName = senderName;
-                    message.RecipientName = recipientName;
                     message.Direction = "In";
 
                     if (message.SenderId.Equals(userId))
@@ -1014,6 +1009,7 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
                 var formattingServices = new DomainServices.FormattingServices();
+                var validationServices = new DomainServices.ValidationService();
 
                 var message = ctx.Messages
                     .Include("Recipient")
@@ -1033,10 +1029,15 @@ namespace SocialPayments.DomainServices
                     message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
                 else
                 {
-                    if (recipientUriType == URIType.MobileNumber)
-                        message.RecipientName = formattingServices.FormatMobileNumber(message.RecipientUri);
-                    else
+                    if (validationServices.IsPhoneNumber(message.RecipientUri))
+                    {
+                        message.RecipientUri = formattingServices.FormatMobileNumber(message.RecipientUri);
                         message.RecipientName = message.RecipientUri;
+                    }
+                    else if (validationServices.IsFacebookAccount(message.RecipientUri))
+                        message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
+                    else
+                        message.RecipientName = message.RecipientUri;   
                 }
                 message.TransactionImageUrl = message.Sender.ImageUrl;
 
