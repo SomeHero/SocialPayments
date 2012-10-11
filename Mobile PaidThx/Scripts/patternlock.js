@@ -221,7 +221,9 @@ var patternlock = {
             if (this.autoSubmit) {
                 var dosubmit = true;
                 if (dosubmit) {
+                    $('.loader-holder-full').fadeIn();
                     document.getElementById("pinSwipeForm").submit();
+
                 }
             }
         }
