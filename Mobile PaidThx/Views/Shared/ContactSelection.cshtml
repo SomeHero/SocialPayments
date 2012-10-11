@@ -1,6 +1,9 @@
-﻿
+﻿<ul id="searchListHolder" class="hidden">
+      
+               </ul>
+
                 <ul id="listItemHolder" class="hidden">
-                   <li id="search-item" class="contact-select nolink">
+                   <li id="search-item" class="contact-select nolink searchHelper">
                     @using (Html.BeginForm())
                     {
                     @Html.Hidden("recipientUri", "", new Dictionary<string, object> { { "id", "contact-new-recipient-uri" } })
@@ -14,7 +17,7 @@
                     }
                    <div class="clear"></div>
                </li>
-               <li id="contact-no-results" class="contact-no-results-item contact-select nolink">
+               <li id="contact-no-results" class="contact-no-results-item contact-select nolink searchHelper">
                     <a href="#" id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
                     <img width="50" height="50" class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
                     <h2 id="no-results-header" class="heading">No contacts...yet</h2>
@@ -22,7 +25,7 @@
                    </a>
                    <div class="clear"></div>
                </li>
-               <li class="settings unlinked" id="facebook">
+               <li class="settings unlinked searchHelper" id="facebook">
                     <!-- Facebook -->
                     <a href='#'>
                     <h2 class="heading"> Link Your Facebook </h2>
@@ -39,7 +42,7 @@
                    </a>
                    <div class="clear"></div>
                </li>
-                      <li id="me-code-none-item" class="contact-no-results-item contact-select nolink">
+                      <li id="me-code-none-item" class="contact-no-results-item contact-select nolink searchHelper">
                     <a href="#" id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
                     <img width="50" height="50" class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
                     <h2 id="no-results-header" class="heading">No Matching ME Codes</h2>

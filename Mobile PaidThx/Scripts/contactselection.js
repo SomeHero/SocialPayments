@@ -1,84 +1,124 @@
-        $(document).ready(function () {
+$(document).ready(function () {
 
-            //LAZY LOAD
-            $(this).find("img.lazy").lazyload();
+    //LAZY LOAD
+    $(this).find("img.lazy").lazyload();
 
-            //cache the lists for later use
-            var contactlist = $("#contactList");
+    //cache the lists for later use
+    var contactlist = $("#contactList");
 
-            $('.contact-top-input').bind('keyup', function () {
+    $('.contact-top-input').bind('keyup', function (e) {
 
-                //Runs every time user types in field
+        //Remove all helper items
+        $("#contactList .searchHelper").remove();
 
-                //Empty the contact list element
-                $("#contactList").empty();
 
-                //Get search string
-                var searchVal = $('.contact-top-input').val();
+        //check if already moved
+        if (itemsMovedController.isMoved()) {
+            //moved
+        } else {
 
-                //Are we looking for me codes?
-                if (searchVal.substring(0, 1) == '$') {
+            //move all remaining contacts to the searchList
+            $("#contactList li").moveTo("#searchListHolder");
+            itemsMovedController.updateMoved();
 
-                    //Yes - ME CODES
-                    $("#listItemHolder #me-codes-divider").moveTo("#contactList");
-                    //Move Search Helper
-                    $("#listItemHolder #me-code-search-item").moveTo("#contactList");
+        }
 
-                    if (searchVal.length > 3) {
-                        //LONG ENOUGH TO LOOK
-                        contactsSearchController.searchAndDisplayMeCodes(searchVal);
-                    } else if (searchVal.length < 1) {
-                        //BACKED DOWN TO NOTHING
-                        $("#contactList #me-code-search-item").remove();
-                        $("#contactList #me-codes-divider").remove();
-                        $("#listItemHolder #contact-no-results").moveTo("#contactList");
-                        contactsSearchController.clearMeCodes();
+        //empty the contact list element
+        $("#contactList").empty();
+
+        //get search string
+        var searchVal = $('.contact-top-input').val();
+
+        // +++++++++++++++++++++++++ME CODE SECTION+++++++++++++++++++++++++
+
+        //Are we looking for me codes?
+        if (searchVal.substring(0, 1) == '$') {
+
+            //Yes - ME CODES
+            $("#listItemHolder #me-codes-divider").moveTo("#contactList");
+            //Move Search Helper
+            $("#listItemHolder #me-code-search-item").moveTo("#contactList");
+
+            if (searchVal.length > 3) {
+                //LONG ENOUGH TO LOOK
+                contactsSearchController.searchAndDisplayMeCodes(searchVal);
+            } else if (searchVal.length < 1) {
+                //BACKED DOWN TO NOTHING
+                $("#contactList #me-code-search-item").remove();
+                $("#contactList #me-codes-divider").remove();
+                $("#listItemHolder #contact-no-results").moveTo("#contactList");
+                contactsSearchController.clearMeCodes();
+            } else {
+                //STILL NOT LONG ENOUGH TO LOOK
+                contactsSearchController.clearMeCodes();
+            }
+
+
+            // +++++++++++++++++++++++++SEARCHING/ADDING NEW AREA +++++++++++++++++++++++++
+        }
+        else {
+
+            //reset filter within search area
+            $("#searchListHolder li").show().removeClass("filteredOut").addClass("notFiltered");
+
+            //Is there at least 1 character being searched?
+            if (searchVal.length > 0) {
+
+                //Yes - check to see if any items in contact list
+                if (!$("#searchListHolder li").length) {
+
+                    //no there are not contacts in the list
+                    $("#listItemHolder #search-item").moveTo("#contactList");
+
+                    //yes there are contacts in the list
+                } else {
+                    //we have contacts to search through, let's filter
+                    var filter = searchVal;
+
+                    //filter them out
+                    $("#searchListHolder").find("li:icontains(" + filter + ")").show().removeClass("filteredOut").addClass("notFiltered");
+                    $("#searchListHolder").find("li:not(:icontains(" + filter + "))").hide().removeClass("notFiltered").addClass("filteredOut");
+
+                    //are any filtered list items visible?
+                    if ($("#searchListHolder li.notFiltered").length > 0) {
+                        $("#searchListHolder li.notFiltered").moveTo("#contactList");
+                        //hide all list dividers
+                        $("#contactList li.list-divider").hide().removeClass("notFiltered").addClass("filteredOut");
                     } else {
-                        //STILL NOT LONG ENOUGH TO LOOK
-                        contactsSearchController.clearMeCodes();
-                    }
-                }
-                else {
-
-                    //NO ME CODES - WE ARE SEARCHING OR ADDING NEW
-
-                    //Is there at least 1 character being searched?
-                    if (searchVal.length > 0) {
-
-                        //Yes - check to see if any items in list (will be empty now..but used for filtering)
-                        if (!$("#contactList li").length) {
-                            $("#listItemHolder #search-item").moveTo("#contactList");
-                            contactsSearchController.showNoResults(searchVal);
-                        } else {
-                            contactsSearchController.hideNoResults(searchVal);
-                            $("#contactList #search-item").remove();
-                        }
-
-                    } else {
-                        $("#listItemHolder #contact-no-results").moveTo("#contactList");
-                        $("#contactList #search-item").remove();
-                    }
-
-                    //check to see if there is anything left in our contact list
-                    if (!$("#contactList li").length) {
+                        $("#listItemHolder #search-item").moveTo("#contactList");
                         contactsSearchController.showNoResults(searchVal);
-
-                    } else {
-                        contactsSearchController.hideNoResults(searchVal);
                     }
+
+
+
                 }
-            });
 
-            contactlist.on("click", ".contact-recipient-uri", function (event) {
+            } else {
 
-                $(this).parents("form:first").submit();
-
-            });
-
-            contactlist.on("click", ".contact-new-recipient", function (event) {
-                if ($(this).attr('data-uri-valid') == '1') {
-                    $(this).parents("form:first").submit();
+                //no there is not at least 1 character being searched
+                //are any filtered list items visible?
+                if ($("#searchListHolder li.notFiltered").length > 0) {
+                    $("#searchListHolder li").moveTo("#contactList");
+                    //show all list dividers
+                    $("#contactList li.list-divider").show().removeClass("filteredOut").addClass("notFiltered");
+                } else {
+                    $("#listItemHolder #search-item").moveTo("#contactList");
                 }
-            });
-        });
+            }
+
+        }
+    });
+
+    contactlist.on("click", ".contact-recipient-uri", function (event) {
+
+        $(this).parents("form:first").submit();
+
+    });
+
+    contactlist.on("click", ".contact-new-recipient", function (event) {
+        if ($(this).attr('data-uri-valid') == '1') {
+            $(this).parents("form:first").submit();
+        }
+    });
+});
         
