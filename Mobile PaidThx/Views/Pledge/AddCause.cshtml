@@ -14,8 +14,16 @@
     <div class="pd-content">
       
           <div class="pad">
-         <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
-        <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+      <div class="pad">
+     @if (Model.SortedNonProfits.Count < 1)
+        {
+        <input type="text" id="orgNew" data-type="search" placeholder="Type ME Code" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        else
+        {
+        <input type="text" id="orgSearch" data-type="search" placeholder="Search non-profits" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        <ul id="contactList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
 
         @foreach (var alphaGroup in Model.SortedNonProfits)
         {
@@ -29,16 +37,12 @@
                        @Html.Hidden("recipientName", @nonprofit.Name)
                        @Html.Hidden("recipientImageUrl", "");
                        @Html.Hidden("recipientType", "NonProfit");
-            <a class="organization-pledge">
+            <a class="organization-pledge contact-organization">
                 <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
-                    @if (nonprofit.HasInfo)
-                    {
-                        <img style="float:right" src="@Url.Content("~/Content/images/btn_info_active.png")" />
-                    }
-                    <h2 class="heading">@nonprofit.Name</h2>
+                              <h2 class="heading">@nonprofit.Name</h2>
                        @if (!String.IsNullOrEmpty(nonprofit.Slogan))
                         {
-                            <h4 class="subheading">"@nonprofit.Slogan"</h4>
+                            <h4 class="subheading">@nonprofit.Slogan</h4>
                         }
             </a>
                 }
@@ -47,26 +51,35 @@
             }
         }
         </ul>
+                 @{
+                   Html.RenderPartial("~/Views/Shared/ContactSelection.cshtml");   
+               }
         </div>
 </div>
 @section PageScripts
 {
-    <script language="javascript">
-    //wait to do event binding until the page is being initialized
+
+        <script id="meCodeItem" type="text/x-jquery-tmpl">
+            <li>
+                <a class="contact-organization" recipient-id="${userId}" recipient-uri="${meCode}" recipient-type="meCode" organization-name="${meCode}">
+                    <img src="http://graph.facebook.com/1/picture" />
+                    ${meCode}
+                </a>
+            </li>
+        </script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/causeselection.js")"></script>
+
+<script type="text/javascript">
     $(document).ready(function () {
-
-        $(this).find("img.lazy").lazyload();
-
-        //cache the list-view element for later use
-        var $listview = $(this).find('[data-role="listview"]');
-
-        $listview.on("click", ".organization-pledge", function (event) {
+        $('#contactList').on("click", ".contact-organization", function (event) {
 
             $(this).parents("form:first").submit();
 
         });
 
     });
-        
-</script>
-}
+
+        </script>
+    }
+

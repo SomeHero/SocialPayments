@@ -3,11 +3,6 @@ $(document).ready(function () {
     //LAZY LOAD
     $(this).find("img.lazy").lazyload();
 
-    //Load no contacts if none there to start
-    if ($("#contactList li").length < 1) {
-    $("#listItemHolder #contact-no-results").moveTo("#contactList");
-    }
-
     //cache the lists for later use
     var contactlist = $("#contactList");
 
@@ -74,7 +69,6 @@ $(document).ready(function () {
 
                     //no there are not contacts in the list
                     $("#listItemHolder #search-item").moveTo("#contactList");
-                    contactsSearchController.showNoResults(searchVal);
 
                     //yes there are contacts in the list
                 } else {
@@ -91,8 +85,8 @@ $(document).ready(function () {
                         //hide all list dividers
                         $("#contactList li.list-divider").hide().removeClass("notFiltered").addClass("filteredOut");
                     } else {
-                        $("#listItemHolder #search-item").moveTo("#contactList");
-                        contactsSearchController.showNoResults(searchVal);
+                        $("#listItemHolder #cause-no-results").moveTo("#contactList");
+                       
                     }
 
 
@@ -108,7 +102,7 @@ $(document).ready(function () {
                     //show all list dividers
                     $("#contactList li.list-divider").show().removeClass("filteredOut").addClass("notFiltered");
                 } else {
-                    $("#listItemHolder #search-item").moveTo("#contactList");
+                    $("#listItemHolder #cause-no-results").moveTo("#contactList");
                 }
             }
 
