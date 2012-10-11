@@ -145,7 +145,7 @@ namespace SocialPayments.DomainServices
 
                 foreach (var payPoint in payPoints)
                 {
-                    if (validationService.IsPhoneNumber(payPoint.URI))
+                    if (payPoint.PayPointTypeId == 2 && validationService.IsPhoneNumber(payPoint.URI))
                         payPoint.URI = formattingServices.FormatMobileNumber(payPoint.URI);
                 }
 
@@ -171,7 +171,7 @@ namespace SocialPayments.DomainServices
                     .Include("Type")
                     .FirstOrDefault(p => p.UserId == user.UserId && p.Id == payPointId);
 
-                if (validationService.IsPhoneNumber(payPoint.URI))
+                if (payPoint.PayPointTypeId == 2 && validationService.IsPhoneNumber(payPoint.URI))
                     payPoint.URI = formattingServices.FormatMobileNumber(payPoint.URI);
 
                 return payPoint;

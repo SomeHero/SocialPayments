@@ -96,7 +96,9 @@
     <!--CUSTOM SCRIPTS-->
     <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
     
-
+    <script>
+        webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]');
+    </script>
     <!-- Google Analytics - Hard Coded Dev -->
         <script>
             var _gaq = [["_setAccount", "UA-30208011-2"], ["_trackPageview"]];

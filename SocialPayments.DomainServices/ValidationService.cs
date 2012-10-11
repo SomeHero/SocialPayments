@@ -53,12 +53,18 @@ namespace SocialPayments.DomainServices
 
         public bool IsPhoneNumber(string uri)
         {
+            if (uri.Length >= 3 && uri.Substring(0, 3).Equals("fb_"))
+                return false;
+
             string patternStrict = "[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}";
             Regex reStrict = new Regex(patternStrict);
             return reStrict.IsMatch(Regex.Replace(uri, "[^0-9]", ""));           
         }
         public bool IsMECode(string uri)
         {
+            if (String.IsNullOrEmpty(uri))
+                return false;
+
             return uri[0].Equals('$');
         }
 

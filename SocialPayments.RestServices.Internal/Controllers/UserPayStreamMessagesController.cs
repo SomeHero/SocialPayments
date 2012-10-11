@@ -135,6 +135,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Get(string userId)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+            var messageServices = new DomainServices.MessageServices();
+
             List<Domain.Message> messages = null;
             
             try 
@@ -174,6 +176,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() : m.Status.GetSenderMessageStatus()),
                 messageType = m.MessageType.ToString(),
                 recipientUri = m.RecipientUri,
+                recipientUriType = messageServices.GetURIType(m.RecipientUri).ToString(),
                 senderUri = m.SenderUri,
                 direction = m.Direction,
                 latitude = m.Latitude,
@@ -200,6 +203,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Get(string userId, string id)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+            var messageService = new DomainServices.MessageServices();
             Domain.Message message = null;
 
             try
@@ -239,6 +243,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 messageStatus = (message.Direction == "In" ? message.Status.GetRecipientMessageStatus() : message.Status.GetSenderMessageStatus()),
                 messageType = message.MessageType.ToString(),
                 recipientUri = message.RecipientUri,
+                recipientUriType = messageService.GetURIType(message.RecipientUri).ToString(),
                 senderUri = message.SenderUri,
                 direction = message.Direction,
                 latitude = message.Latitude,
