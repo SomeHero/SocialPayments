@@ -13,14 +13,23 @@
     </div>
     <div class="pd-content">
         <div class="pad">
-            <input type="text" data-type="search" class="ui-input-text ui-body-c"/>
-         <ul data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Email Address, Phone #, MeCode or Friend's Name">
+         @if (Model.SortedContacts.Count < 1)
+        {
+        <input type="text" id="contactNew" data-type="search" placeholder="Email, phone, or ME Code" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+        else
+        {
+        <input type="text" id="contactSearch" data-type="search" placeholder="Search contacts or add new" class="contact-top-input ui-input-text ui-body-c"/>
+        }
+
+        <ul id="contactList" data-role="listview" class="ui-listview">
+
         @foreach (var alphaGroup in Model.SortedContacts)
         {
                 <li class="list-divider">@alphaGroup.Key</li>
             foreach (var friend in alphaGroup.Value)
             {
-                <li class="contact removable">
+                <li class="contact contact-select removable">
                 @using(Html.BeginForm()) {
                     @Html.Hidden("recipientUri", "fb_" + @friend.id)
                     @Html.Hidden("recipientType", "facebook")
@@ -31,88 +40,29 @@
                         <h4 class="subheading">Facebook Friend</h4>
                     </a>
                 }
+                <div class="clear"></div>
                 </li>
             }
         }
-        
-         <li id="contact-no-results" class="contact-no-results-item contact-select">
-            <a id="contact-new-recipient-uri" class="contact-recipient-uri" recipient-type="new" recipient-uri="">
-                <img width="50" height="50" src="@Url.Content("~/Content/images/avatar.png")" />
-                <span id="results-header">
-                No matches found 
-                </span>
-                <br />
-                <span id="results-description">
-                Continue type or check entry
-                </span>
-            </a>
-        </li>
-        <li id="me-codes-divider" data-role="list-divider">Me Codes</li>
         </ul>
+                 @{
+                   Html.RenderPartial("~/Views/Shared/ContactSelection.cshtml");   
+               }
     </div>
     </div>
     </div>
 @section PageScripts
 {
-    <script id="meCodeItem" type="text/x-jquery-tmpl">
-    <li>
+
+<script id="meCodeItem" type="text/x-jquery-tmpl">
+    <li class="contact-select me-code-recipient">
         <a class="contact-recipient-uri" recipient-uri="${meCode}" recipient-type="meCode" recipient-name="${meCode}">
             <img width="50" height="50" src="http://graph.facebook.com/1/picture" />
             ${meCode}
         </a>
      </li>
 </script>
-        
-    <script language="javascript">
-        //wait to do event binding until the page is being initialized
-        $(document).ready(function () {
 
-            $(this).find("img.lazy").lazyload();
-
-            //cache the list-view element for later use
-            var $listview = $(this).find('[data-role="listview"]');
-
-            contactsSearchController.init($("#pledge-contact-select-page"));
-
-            //delegate event binding since the search widget is added dynamically
-            //bind to the `keyup` event so we can check the value of the input after the user types
-            $('input[data-type="search"]').bind('keyup', function () {
-
-                var searchVal = $(this).delegate('input[data-type="search"]').val();
-
-                if (searchVal.substring(0, 1) == '$') {
-
-                    if (searchVal.length > 3) {
-                        $("#me-codes-divider").show();
-                        contactsSearchController.searchAndDisplayMeCodes(searchVal, 'non-profits');
-                    } else {
-                        $("#me-codes-divider").hide();
-                        contactsSearchController.clearMeCodes();
-                    }
-                }
-                else {
-                    $("#me-codes-divider").hide();
-                    contactsSearchController.clearMeCodes();
-
-
-                    //check to see if there are any visible list-items that are not the `#no-results` element
-                    if ($listview.children(':visible').not('.contact-no-results-item').length === 0) {
-                        contactsSearchController.showNoResults(searchVal);
-
-                    } else {
-                        //if results are found then fadeOut the `#no-results` element which has no effect if it's already hidden
-                        contactsSearchController.hideNoResults(searchVal);
-                    }
-                }
-            });
-            $listview.on("click", ".contact-recipient-uri", function (event) {
-
-                $(this).parents("form:first").submit();
-
-            });
-
-        });
-        
-    </script>
-
+<script type="text/javascript" src="@Url.Content("~/Scripts/contactselection.js")"></script>
 }
+
