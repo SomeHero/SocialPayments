@@ -575,6 +575,24 @@ var pinswipeResizeController = (function ($, undefined) {
     return pub;
 } (jQuery));
 
+
+//GLOBAL MOVED VAR
+
+var itemsMovedController = (function ($, undefined) {
+    var pub = {},
+    $this = $(this);
+    pub.moved = false;
+    pub.isMoved = function () {
+        return pub.moved;
+    };
+    pub.updateMoved = function () {
+        pub.moved = true;
+    };
+
+    return pub;
+} (jQuery));
+
+
 //DATE CONTROLLER
 function getDateNow(){
    var now = moment();
@@ -601,6 +619,16 @@ window.addEventListener("orientationchange", hideAddressBar);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $(document).ready(function () {
+
+    //Make contains expression case agnostic
+    jQuery.expr[':'].contains = function (a, i, m) {
+        return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+    };
+
+    jQuery.expr[':'].icontains = function (a, i, m) {
+        return jQuery(a).text().toUpperCase()
+      .indexOf(m[3].toUpperCase()) >= 0;
+    };
 
 //FORMAT MOMENT CALENDAR SETTINGS
     moment.calendar = {
