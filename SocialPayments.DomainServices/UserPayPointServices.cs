@@ -255,6 +255,20 @@ namespace SocialPayments.DomainServices
                     VerifiedDate = System.DateTime.UtcNow
                 });
 
+                var mobileNumberAttribute = ctx.UserAttributes
+                   .FirstOrDefault(a => a.AttributeName == "phoneUserAttribute");
+
+                if (mobileNumberAttribute != null)
+                {
+                    user.UserAttributes.Add(new Domain.UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserId = user.UserId,
+                        UserAttributeId = mobileNumberAttribute.Id,
+                        AttributeValue = mobileNumber
+                    });
+                }
+
                 ctx.SaveChanges();
 
             }
