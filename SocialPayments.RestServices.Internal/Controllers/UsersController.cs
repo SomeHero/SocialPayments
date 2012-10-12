@@ -277,13 +277,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             User user;
 
             //validate that email address is not already user
-            user = _userService.FindUserByEmailAddress(request.userName);
-
-            if (user != null)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Sorry, {0} belongs to an existing account.", request.userName));
-            }
-
+           
             //if(!String.IsNullOrEmpty(mobileNumber))
             //{
             //    user = _userService.FindUserByMobileNumber(mobileNumber);
@@ -300,6 +294,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
             try
             {
                 _logger.Log(LogLevel.Info, String.Format("Adding user {0}", request.userName));
+
+                user = _userService.FindUserByEmailAddress(request.userName);
+
+                if (user != null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Sorry, {0} belongs to an existing account.", request.userName));
+                }
 
                 user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken, "", request.messageId);

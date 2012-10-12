@@ -78,6 +78,7 @@ namespace SocialPayments.DomainServices
                     },
                 DeviceToken = (!String.IsNullOrEmpty(deviceToken) ? deviceToken : null)
             });
+            user.UserAttributes = new Collection<UserAttributeValue>();
 
             Domain.PayPointType payPointType;
 
@@ -97,6 +98,21 @@ namespace SocialPayments.DomainServices
                     Type = payPointType,
                     Verified = false
                 });
+
+
+                var emailAddressAttribute = _ctx.UserAttributes
+                    .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
+
+                if (emailAddressAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserId = user.UserId,
+                        UserAttributeId = emailAddressAttribute.Id,
+                        AttributeValue = emailAddress
+                    });
+                }
             }
 
             if (!String.IsNullOrEmpty(mobileNumber))
@@ -117,6 +133,20 @@ namespace SocialPayments.DomainServices
                     IsActive = true,
                     Verified = false
                 });
+
+                var mobileNumberAttribute = _ctx.UserAttributes
+                    .FirstOrDefault(a => a.AttributeName == "phoneUserAttribute");
+
+                if (mobileNumberAttribute != null)
+                {
+                    user.UserAttributes.Add(new UserAttributeValue()
+                    {
+                        id = Guid.NewGuid(),
+                        UserId = user.UserId,
+                        UserAttributeId = mobileNumberAttribute.Id,
+                        AttributeValue = mobileNumber
+                    });
+                }
             }
             var messages = _ctx.Messages
                 .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
