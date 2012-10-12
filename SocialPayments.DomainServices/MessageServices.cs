@@ -734,19 +734,24 @@ namespace SocialPayments.DomainServices
                     {
                         Guid.TryParse(messageId, out messageGuid);
 
-                        if(messageGuid == null)
+                        if (messageGuid == null)
+                            throw new Exception(String.Format("GUID not found for {0}", messageId));
+
+                        messageSeen = _ctx.Messages.Select(m => m).FirstOrDefault(m => m.Id == messageGuid);
+
+                        if (messageSeen == null)
                             throw new Exception(String.Format("Message {0} Not Found", messageId));
 
-                        messageSeen = user.Messages.FirstOrDefault(m => m.Id == messageGuid);
-
-                        if (messageSeen.Recipient == user)
+                        if (messageSeen.RecipientId.Equals(user.UserId))
                             messageSeen.recipientHasSeen = true;
-                        else if (messageSeen.Sender == user)
+                        else if (messageSeen.SenderId.Equals(user.UserId))
                             messageSeen.senderHasSeen = true;
+
+                        _ctx.SaveChanges();
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(LogLevel.Warn, "Unable to update message seen for {0}. {1}", messageSeen.Id, ex.Message);
+                        _logger.Log(LogLevel.Error, "Unable to update message seen for {0}. {1}", messageId, ex.Message);
                     }
                 }
 
