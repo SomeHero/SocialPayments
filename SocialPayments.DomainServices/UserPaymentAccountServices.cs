@@ -82,10 +82,31 @@ namespace SocialPayments.DomainServices
                 var paymentAccountService = new DomainServices.PaymentAccountService(ctx);
                 Domain.PaymentAccount paymentAccount = null;
 
+                Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
+
+                if (accountTypeName.ToUpper() == "CHECKING")
+                    accountType = Domain.PaymentAccountType.Checking;
+                else if (accountTypeName.ToUpper() == "SAVINGS")
+                    accountType = Domain.PaymentAccountType.Savings;
+
                 var user = userService.GetUserById(userId);
 
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
+
+                var encryptedRoutingNumber = securityServices.Encrypt(routingNumber);
+                var encryptedAccountNumber =  securityServices.Encrypt(accountNumber);
+
+                //check to see if user has already added an payment account with matching routing #, account # and account type
+                var duplicateAccount = ctx.PaymentAccounts
+                    .FirstOrDefault(p => p.RoutingNumber == encryptedRoutingNumber &&
+                        p.AccountNumber == encryptedAccountNumber
+                        && p.PaymentAccountTypeId.Equals((int)accountType)
+                        && p.UserId == user.UserId
+                        && p.IsActive);
+
+                if (duplicateAccount != null)
+                    throw new CustomExceptions.BadRequestException("You have already created this payment account");
 
                 if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
                 {
@@ -108,13 +129,6 @@ namespace SocialPayments.DomainServices
 
                 if (!isRoutingNumberValid)
                     throw new CustomExceptions.BadRequestException(String.Format("Invalid Routing Number.  Please Check the Number and Try Again"));
-
-                Domain.PaymentAccountType accountType = Domain.PaymentAccountType.Checking;
-
-                if (accountTypeName.ToUpper() == "CHECKING")
-                    accountType = Domain.PaymentAccountType.Checking;
-                else if (accountTypeName.ToUpper() == "SAVINGS")
-                    accountType = Domain.PaymentAccountType.Savings;
 
                 if (nickName == null || nickName == "")
                 {
