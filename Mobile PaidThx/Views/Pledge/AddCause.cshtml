@@ -34,9 +34,9 @@
                 @using (Html.BeginForm())
                    {
                        @Html.Hidden("recipientId", @nonprofit.Id)
-                       @Html.Hidden("recipientName", @nonprofit.Name)
-                       @Html.Hidden("recipientImageUrl", "");
-                       @Html.Hidden("recipientType", "NonProfit");
+                       @Html.Hidden("pledgeToName", @nonprofit.Name)
+                       @Html.Hidden("pledgeToImageUrl", @nonprofit.ImageUri);
+                       @Html.Hidden("pledgeToType", "NonProfit");
             <a class="organization-pledge contact-organization">
                 <img class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
                               <h2 class="heading">@nonprofit.Name</h2>

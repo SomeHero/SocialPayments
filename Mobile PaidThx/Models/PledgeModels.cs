@@ -11,8 +11,11 @@ namespace Mobile_PaidThx.Models
         public class PledgeMoneyModel
         {
             public String RecipientId { get; set; }
+            public String PledgeToName { get; set; }
+            public String PledgeToImageUrl { get; set; }
             public String RecipientName { get; set; }
             public String RecipientUri { get; set; }
+            public String RecipientImageUri { get; set; }
             public Double Amount { get; set; }
             public String Comments { get; set; }
             public String Pincode { get; set; }
@@ -22,12 +25,16 @@ namespace Mobile_PaidThx.Models
             public SortedDictionary<string, List<OrganizationModels.OrganizationModel>> SortedNonProfits { get; set; }
             public List<OrganizationModels.OrganizationModel> NonProfits { get; set; }
             public String RecipientId { get; set; }
-            public String RecipientName { get; set; }
+            public String PledgeToName { get; set; }
+            public String PledgeToImageUrl { get; set; }
+
         }
         public class AddContactModel
         {
             public SortedDictionary<string, List<FacebookModels.Friend>> SortedContacts { get; set; }
             public String RecipientUri { get; set; }
+            public String RecipientName { get; set; }
+            public String RecipientImageUrl { get; set; }
         }
         public class SelectAmountModel
         {
