@@ -228,7 +228,17 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult PopupPinswipe()
         {
-            return View();
+            var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+  
+            return View(new PledgeModels.PinSwipeModel()
+            {
+                RecipientName = pledgeInformation.RecipientName,
+                RecipientUri = pledgeInformation.RecipientUri,
+                PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                PledgeToName = pledgeInformation.PledgeToName,
+                Amount = pledgeInformation.Amount,
+                RecipientImageUrl = pledgeInformation.RecipientImageUrl
+            });
         }
 
         [HttpPost]

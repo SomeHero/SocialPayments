@@ -16,7 +16,7 @@
                  }
                  if (Model.Message.MessageType == "PaymentRequest")
                  {
-                    <text>You Have a Pending Request!</text>
+                    <text>You Have a Request!</text>
                  }
                  if (Model.Message.MessageType == "AcceptPledge")
                  {
@@ -50,7 +50,7 @@
 
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
-                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" height="50" />
                     <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
                     <div class="clear"></div>
                 </div>

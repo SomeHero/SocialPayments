@@ -20,6 +20,7 @@
             <text><img src="@Model.RecipientImageUrl" alt="@Model.RecipientName" class="ps-image" style="margin-right:12px;" /></text>
         }
         Please swipe your security pin to confirm your donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.RecipientName</b>
+       <div class="clear"></div>
         </div>
         @Html.ValidationSummary()
               <div class="pad">
@@ -27,6 +28,7 @@
         {
             Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
+        
     </div>
     </div>
 
