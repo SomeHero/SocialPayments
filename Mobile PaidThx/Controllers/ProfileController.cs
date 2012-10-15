@@ -24,7 +24,20 @@ namespace Mobile_PaidThx.Controllers
         {
             logger.Log(LogLevel.Info, String.Format("Displaying Profile View"));
 
-            return View();
+            if (Session["User"] == null)
+                return RedirectToAction("Index", "SignIn", null);
+             
+            if (Session["Application"] == null)
+                 return RedirectToAction("Index", "SignIn", null);
+
+            var user = (UserModels.UserResponse)Session["User"];
+            var application = (ApplicationResponse)Session["Application"];
+
+            return View(new PreferencesModels.ProfileModel()
+            {
+                ProfileSections = application.ProfileSections,
+                User = user
+            });
         }
         [HttpPost]
         public ActionResult Index(UpdateProfileModel model)
