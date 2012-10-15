@@ -3,9 +3,7 @@
     ViewBag.PageID = "confirm-pin-swipe-setup";
     ViewBag.Classes = "page";
 }
-<div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
-
-<div  id="@ViewBag.PageID" class="modally" >
+<div id="@ViewBag.PageID" class="@ViewBag.Classes">
      <div class="header-pdthx" >
 	    <h1>Confirm PIN</h1>
     </div>
@@ -15,7 +13,7 @@
     <p>Swipe your security pin again below to confirm.</p>
     
     </div>
-    @Html.ValidationSummary();
+    @Html.ValidationSummary()
      <div class="pad">
          @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
@@ -24,8 +22,7 @@ Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
     
 
     </div>
-    
-        
+   
     </div>
 </div>
 
