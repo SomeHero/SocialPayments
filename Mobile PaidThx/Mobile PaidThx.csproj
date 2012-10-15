@@ -269,6 +269,7 @@
     <Content Include="Content\images\btn-qs-fb-63x63.png" />
     <Content Include="Content\images\btn-qs-phone-63x63.png" />
     <Content Include="Content\images\btn-quickadd.png" />
+    <Content Include="Content\images\btn-search.png" />
     <Content Include="Content\images\btn-settings.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />

@@ -628,12 +628,22 @@ background-repeat:no-repeat;
 background-position:center left; 
 }
 
-.btn-settings
+.header-pdthx .btn-settings
 {
  height:28px;  
  width:32px;
  top:9px;
  background-image: url('../Content/images/btn-settings.png');
+background-repeat:no-repeat;
+background-position:center left; 
+}
+
+.header-pdthx .btn-search
+{
+ height:22px;  
+ width:18px;
+ top:12px;
+ background-image: url('../Content/images/btn-search.png');
 background-repeat:no-repeat;
 background-position:center left; 
 }
