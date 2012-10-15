@@ -78,6 +78,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     })
                 });
         }
+
         [HttpGet]
         public HttpResponseMessage Get(Guid id)
         {
@@ -95,7 +96,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting Message {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
-           
             }
             catch (BadRequestException ex)
             {
