@@ -16,9 +16,7 @@
         
             @foreach (var profileSection in Model.ProfileSections)
             { 
-                <h5>@profileSection.SectionHeader</h5>
-                <ul data-role="listview" data-inset="true">
-                @foreach (var profileItem in profileSection.ProfileItems)
+                foreach (var profileItem in profileSection.ProfileItems)
                 {
                     string value = "";
                     var attribute = Model.User.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
@@ -27,17 +25,16 @@
                         value = attribute.AttributeValue;
                     }
                     
-                    <li data-role="fieldcontain">
                     <label for="@profileItem.Id">@profileItem.Label</label>
-                    @switch (profileItem.ItemType)
+                    switch (profileItem.ItemType)
                     {
                         case "ShortText":
-                            <text><input type="text" name="@profileItem.Id" value="@value" /></text>
+                            <text><span class="form-holder"> <input type="text" placeholder="@profileItem.Label" name="@profileItem.Id" value="@value" /></span></text>
                             break;
                     }
-                    </li>
+       
                 } 
-                </ul>
+
             }
         </div>
     </div>

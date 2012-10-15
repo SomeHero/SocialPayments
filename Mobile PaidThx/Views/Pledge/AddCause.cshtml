@@ -19,9 +19,9 @@
         }
         else
         {
-        <input type="text" id="orgSearch" data-type="search" placeholder="Search non-profits" class="contact-top-input ui-input-text ui-body-c"/>
+        <input type="text" id="orgSearch" data-type="search" placeholder="Search non-profits" class="contact-top-input ui-input-text search-icon"/>
         }
-        <ul id="contactList" data-role="listview" class="ui-listview" data-filter="true" data-filter-placeholder="Type Name of Non Profit">
+        <ul id="contactList" data-role="listview" class="ui-listview" data-filter="true" >
 
         @foreach (var alphaGroup in Model.SortedNonProfits)
         {

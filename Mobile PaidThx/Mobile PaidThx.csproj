@@ -359,6 +359,7 @@
     <Content Include="Content\images\org_wwf.png" />
     <Content Include="Content\images\org_zta.png" />
     <Content Include="Content\images\request-icon-big.png" />
+    <Content Include="Content\images\search-icon.png" />
     <Content Include="Content\images\send-icon-big.png" />
     <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\icons\settingsIcon.png" />
@@ -688,7 +689,9 @@
     <Content Include="Views\Shared\ContactSelection.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\VerifyPayPoint.cshtml" />
-    <Content Include="Views\Account\FogotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
