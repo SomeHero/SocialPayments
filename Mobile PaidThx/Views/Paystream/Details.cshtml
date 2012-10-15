@@ -32,6 +32,7 @@
     }else if(Model.messageType == "Donation" && Model.direction == "Out"){
     <text>Donation</text>
     }
+    
     }
     </h2>
 <div class="whathappened-details">
@@ -68,7 +69,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" />
     <div class="ps-detail-textpad"> 
     <p class="whathappened-content">
- <span class="lbl-sender">@Model.senderName</span><br> 
+ <span class="lbl-sender">@Model.senderName</span><br /> 
 requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 <span class="lbl-date">@Model.createDate</span>
 </p>
@@ -83,7 +84,7 @@ requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 from <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">@Model.createDate</span>
+<br /><span class="lbl-date">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -91,7 +92,7 @@ from <span class="lbl-recipient">@Model.recipientName</span>
 </text>
     }else if( Model.messageType == "Donation" && Model.direction == "Out"){
         <text>
-    <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender">
+    <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" />
     <div class="ps-detail-textpad">
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> donated <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
@@ -103,6 +104,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
     </text>
     }
+    
     }
 
 <div class="clear"></div>
@@ -126,7 +128,6 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     
         if (Model.messageType == "Payment")
         {
-<text>
  <div class="t-panel">
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
@@ -134,77 +135,67 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 @{
             if (Model.isExpressable)
             {
- <text>
 <hr class="divider" />
 <div class="d-left">
 <h2 class="d-head express">Express It</h2>
 <h4 class="d-subhead">Est. Arrival: 06/10/12</h4>
 </div>
 <div class="clear"></div>
-</text>
             }
         }
 </div>
 </div>
-</text>
     }
     
     } 
 
 @{
-if( Model.messageType == "Payment"){
- if( Model.isRemindable ){
+    if (Model.messageType == "Payment" && Model.isRemindable)
+    {
      <text>
      <button type="button" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
         Send Reminder
      </button>
      </text>
-    }
-}
-    if( Model.messageType == "PaymentRequest"){
- if( Model.isRemindable ){
+    }else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
+    {
      <text>
      <button type="button" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
         Send Reminder
      </button>
      </text>
+    
     }
-}
-if( Model.messageType == "PaymentRequest"){
-    if( Model.isAcceptable ){
-        <text>
+
+    if (Model.messageType == "PaymentRequest" && Model.isAcceptable)
+    {<text>
      <button type="button" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
         Accept & Pay
      </button>
      </text>
     }
-}
-if( Model.messageType == "PaymentRequest"){
-    if( Model.isRejectable){
-        <text>
+    if (Model.messageType == "PaymentRequest" && Model.isRejectable){
+
+     <text>
      <button type="button" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
         Reject Request
      </button>
      </text>
     }
-}
-if( Model.messageType == "Payment"){
-if( Model.isCancellable ){
+    
+    if( Model.messageType == "Payment" && Model.isCancellable){
     <text>
      <button type="button" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
         Cancel
      </button>
      </text>
-    }
-}
-if( Model.messageType == "PaymentRequest"){
-    if( Model.isCancellable ){
+    }else if (Model.messageType == "PaymentRequest" && Model.isCancellable){
+
     <text> <button type="button" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
         Cancel
      </button>
      </text>
     }
-}
 }
     </div>
 

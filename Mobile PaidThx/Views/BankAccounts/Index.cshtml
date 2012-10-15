@@ -57,6 +57,8 @@
                 </a>
             </li>
             </ul>
+            @if (Model.PaymentAccounts.Count > 1)
+            {
             <h2 class="section-header">Sending Account:</h2>
             <div class="select-holder">
             @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
@@ -71,6 +73,7 @@
                 @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount", @class = "select-custom" })
             }
             </div>
+            }
     </div>
     </div>
 </div>

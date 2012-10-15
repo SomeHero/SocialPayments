@@ -17,14 +17,14 @@
     </div>
     @Html.ValidationSummary();
      <div class="pad">
-     
-    
-
-    </div>
-        @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
+         @using (Html.BeginForm("ConfirmPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
 Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
+    
+
+    </div>
+    
         
     </div>
 </div>

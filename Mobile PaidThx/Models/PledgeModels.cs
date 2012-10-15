@@ -43,6 +43,12 @@ namespace Mobile_PaidThx.Models
         public class PinSwipeModel
         {
             public string Pincode { get; set; }
+            public String RecipientUri { get; set; }
+            public String PledgeToName { get; set; }
+            public String PledgeToImageUrl { get; set; }
+            public String RecipientName { get; set; }
+            public String RecipientImageUrl { get; set; }
+            public double Amount { get; set; }
         }
     }
 }
