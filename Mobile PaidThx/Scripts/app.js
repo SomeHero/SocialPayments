@@ -5,10 +5,6 @@ $.fn.center = function () {
     return this;
 };
 
-$('form').bind('firstinvalid', function (e) {
-    return false;
-});
-
 //add moveTo to jquery object
 (function ($) {
     $.fn.moveTo = function (selector) {
