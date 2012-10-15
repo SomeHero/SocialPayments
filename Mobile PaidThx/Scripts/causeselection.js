@@ -8,7 +8,13 @@ $(document).ready(function () {
     });
 
     //LAZY LOAD
-    $(this).find("img.lazy").lazyload();
+    $("#contactList").find("img.lazy").lazyload();
+
+    //Load no contacts if none there to start
+    if ($("#contactList li").length < 1) {
+        $("#listItemHolder #contact-no-results").moveTo("#contactList");
+        $("#listItemHolder #facebook").moveTo("#contactList");
+    }
 
     //cache the lists for later use
     var contactlist = $("#contactList");
@@ -113,6 +119,16 @@ $(document).ready(function () {
                     $("#listItemHolder #cause-no-results").moveTo("#contactList");
                 }
             }
+
+            //LAZY LOAD
+            $("#contactList").find("img.lazy").lazyload();
+
+            //HIDE LOADING
+            $('#page-loader').stop().animate({
+                opacity: 0.7
+            }, 300, function () {
+                $('#page-loader').hide();
+            });
 
         }
     });

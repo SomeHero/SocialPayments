@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //LAZY LOAD
-    $(this).find("img.lazy").lazyload();
+    $("#contactList").find("img.lazy").lazyload();
 
     //Load no contacts if none there to start
     if ($("#contactList li").length < 1) {
@@ -13,6 +13,14 @@ $(document).ready(function () {
     var contactlist = $("#contactList");
 
     $('.contact-top-input').bind('keyup', function (e) {
+
+    //show loading
+        $('#page-loader').css("opacity", "0.7");
+        $('#page-loader').show().stop().animate({
+            opacity: 1
+        }, 300, function () {
+
+        });
 
         //Remove all helper items
         $("#contactList .searchHelper").remove();
@@ -113,6 +121,15 @@ $(document).ready(function () {
                 }
             }
 
+            //LAZY LOAD
+            $("#contactList").find("img.lazy").lazyload();
+            
+            //HIDE LOADING
+            $('#page-loader').stop().animate({
+                opacity: 0.7
+            }, 300, function () {
+                $('#page-loader').hide();
+            });
         }
     });
 
