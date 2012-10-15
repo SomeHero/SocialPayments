@@ -378,7 +378,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                bankAccountServices.SetSendAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredReceiveAccount"].ToString(), model.PinCode);
+                bankAccountServices.SetReceiveAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredReceiveAccount"].ToString(), model.PinCode);
             }
             catch (Exception ex)
             {
