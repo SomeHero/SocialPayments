@@ -400,13 +400,13 @@ namespace SocialPayments.DataLayer
                         ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
-                        Label = "Phone",
+                        Label = "Contact Phone",
                         SortOrder = 3,
                         UserAttribute = phoneUserAttribute,
                         ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
-                        Label = "Email",
+                        Label = "Contact Email",
                         SortOrder = 4,
                         UserAttribute = emailUserAttribute,
                         ProfileItemType = ProfileItemType.ShortText
@@ -462,7 +462,7 @@ namespace SocialPayments.DataLayer
                         ProfileItemType = ProfileItemType.ShortText
                     },
                     new ProfileItem() {
-                        Label = "Zip",
+                        Label = "Zip Code",
                         SortOrder = 4,
                         UserAttribute = zipCodeUserAttribute,
                         ProfileItemType = ProfileItemType.ShortText
