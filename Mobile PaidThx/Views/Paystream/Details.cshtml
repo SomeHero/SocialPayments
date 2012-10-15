@@ -163,52 +163,78 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     if (Model.messageType == "Payment" && Model.isRemindable)
     {
      <text>
-     <button type="button" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "SendPaymentReminder") 
+     <button type="submit" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
         Send Reminder
      </button>
+     }
      </text>
     }
     else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
     {
      <text>
-     <button type="button" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
+      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "SendPaymentRequestReminder") 
+     <button type="submit" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
         Send Reminder
      </button>
+      }
      </text>
     
     }
 
     if (Model.messageType == "PaymentRequest" && Model.isAcceptable)
-    {<text>
-     <button type="button" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
+    {
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "AcceptRequest") 
+     <button type="submit" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
         Accept & Pay
      </button>
+     }
      </text>
     }
     if (Model.messageType == "PaymentRequest" && Model.isRejectable)
     {
 
      <text>
-     <button type="button" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "RejectRequest") 
+     <button type="submit" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
         Reject Request
      </button>
+     }
      </text>
     }
 
     if (Model.messageType == "Payment" && Model.isCancellable)
     {
     <text>
-     <button type="button" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "CancelPayment") 
+     <button type="submit" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
         Cancel
      </button>
+     }
      </text>
     }
     else if (Model.messageType == "PaymentRequest" && Model.isCancellable)
     {
 
-    <text> <button type="button" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
+    <text> 
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "CancelRequest") 
+    <button type="submit" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
         Cancel
      </button>
+     }
      </text>
     }
 }
@@ -227,7 +253,6 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 
 <script type="text/javascript">
     $(document).ready(function () {
-
         var date = $("span.lbl-date").text();
         var parsedate = "";
         if (moment(date).diff(getDateNow(), 'hours') < -6) {
