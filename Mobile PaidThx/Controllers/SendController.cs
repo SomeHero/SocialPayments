@@ -51,11 +51,13 @@ namespace Mobile_PaidThx.Controllers
             ModelState.Clear();
 
             var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
-
+            
             if(String.IsNullOrEmpty(sendInformation.RecipientUri))
                 ModelState.AddModelError("", "Recipient is required");
             if(sendInformation.Amount == 0)
                 ModelState.AddModelError("", "Amount must be greater than $0.00");
+
+            sendInformation.Comments = model.Comments;
 
             if (!ModelState.IsValid)
             {
