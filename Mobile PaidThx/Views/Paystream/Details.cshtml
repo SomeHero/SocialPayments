@@ -40,7 +40,7 @@
 @{
     if ( Model.messageType == "Payment" && Model.direction == "In"){
         <text>
-    <img width="40" height="40" class="psd-image sender" src="@Model." alt="Sender" /> 
+    <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" /> 
 <div class="ps-detail-textpad">
     <p class="whathappened-content">
     <span class="lbl-sender">@Model.senderName</span><br> 
@@ -115,6 +115,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     {                                               
  <text><span class="bubble">"@Model.comments"</span></text>
     }
+    
     }
 
 <div class="t-panel">
@@ -125,29 +126,38 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 
     @{
-    
-        if (Model.messageType == "Payment")
+        if (Model.messageType == "Payment" && Model.isExpressable)
         {
+            <text>
  <div class="t-panel">
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
 <span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
-@{
-            if (Model.isExpressable)
-            {
 <hr class="divider" />
 <div class="d-left">
 <h2 class="d-head express">Express It</h2>
 <h4 class="d-subhead">Est. Arrival: 06/10/12</h4>
 </div>
 <div class="clear"></div>
-            }
+
+            </div>
+            </div>
+        </text>
+        
+        }else if (Model.messageType == "Payment" && !Model.isExpressable)
+        {
+            <text>
+ <div class="t-panel">
+<h2 class="t-panel-heading">Delivery</h2>
+<div class="t-panel-details">
+<span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
+            </div>
+            </div>
+        </text>
+        
         }
-</div>
-</div>
+
     }
-    
-    } 
 
 @{
     if (Model.messageType == "Payment" && Model.isRemindable)
@@ -157,7 +167,8 @@ to <span class="lbl-recipient">@Model.recipientName</span>
         Send Reminder
      </button>
      </text>
-    }else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
     {
      <text>
      <button type="button" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
@@ -174,7 +185,8 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      </button>
      </text>
     }
-    if (Model.messageType == "PaymentRequest" && Model.isRejectable){
+    if (Model.messageType == "PaymentRequest" && Model.isRejectable)
+    {
 
      <text>
      <button type="button" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
@@ -182,14 +194,17 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      </button>
      </text>
     }
-    
-    if( Model.messageType == "Payment" && Model.isCancellable){
+
+    if (Model.messageType == "Payment" && Model.isCancellable)
+    {
     <text>
      <button type="button" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
         Cancel
      </button>
      </text>
-    }else if (Model.messageType == "PaymentRequest" && Model.isCancellable){
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.isCancellable)
+    {
 
     <text> <button type="button" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
         Cancel
@@ -206,21 +221,19 @@ to <span class="lbl-recipient">@Model.recipientName</span>
         </div>
 </div>
 
+
+@*
 @section PageScripts{
+
 <script type="text/javascript">
     $(document).ready(function () {
 
         var date = $("span.lbl-date").text();
         var parsedate = "";
-
         if (moment(date).diff(getDateNow(), 'hours') < -6) {
-
             parsedate = moment(date).calendar();
-
         } else {
-
             parsedate = moment(date).fromNow();
-
         }
 
         $("span.lbl-date").text(parsedate);
@@ -229,3 +242,4 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </script>
 
 }
+*@
