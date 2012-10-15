@@ -36,14 +36,23 @@
                     required value="@Model.RoutingNumber" /></p>
             <p>
                 <input type="text" id="txtAccountNumber" name="AccountNumber" placeholder="Account Number"
-                    required value="@Model.AccountNumber" /></p>
+                    required value="@Model.AccountNumber" /></p> 
             <div data-role="fieldcontain">
                 <fieldset data-role="controlgroup" data-type="horizontal">
                     @foreach (var radioItem in Model.AccountTypeOptions)
                     {
-                        <label class="cs-radio-label @radioItem.Selected" for="@radioItem.Text">
-                            @radioItem.Text</label>
-                        @Html.RadioButtonFor(model => model.AccountType, radioItem.Value, new { @id = @radioItem.Text, @class="cs-radio" })
+                        if (Model.AccountType == radioItem.Value)
+                        {
+                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-@radioItem.Value" value="@radioItem.Value" checked="checked" />
+                            <label class="cs-radio-label selected" for="radio-choice-@radioItem.Value">
+                                @radioItem.Text</label>
+                        }
+                        else
+                        {
+                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-@radioItem.Value" value="@radioItem.Value" />
+                            <label class="cs-radio-label" for="radio-choice-@radioItem.Value">
+                                @radioItem.Text</label>
+                        }
                     }
                 </fieldset>
             </div>
