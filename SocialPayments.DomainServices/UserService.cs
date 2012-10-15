@@ -816,6 +816,12 @@ namespace SocialPayments.DomainServices
 
                     isNewUser = true;
 
+                    user = _ctx.Users
+                        .FirstOrDefault(u => u.EmailAddress.Equals(emailAddress));
+
+                    if (user != null)
+                        emailAddress = "";
+
                     user = AddUser(apiKey, "fb_" + accountId, "tempPassword", emailAddress, deviceToken, "", messageId);
 
                     user.FacebookUser = new FBUser()
