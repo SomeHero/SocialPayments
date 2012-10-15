@@ -33,6 +33,7 @@
                 @using(Html.BeginForm()) {
                     @Html.Hidden("recipientUri", "fb_" + @friend.id)
                     @Html.Hidden("recipientType", "facebook")
+                    @Html.Hidden("recipientImageUrl", @String.Format("http://graph.facebook.com/{0}/picture", friend.id))
                     @Html.Hidden("recipientName", @friend.name);
                     <a class="contact-recipient-uri">
                         <img width="50" height="50" class="list-thumbnail lazy"  src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture", friend.id)" />
