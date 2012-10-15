@@ -129,7 +129,6 @@ namespace Mobile_PaidThx.Controllers
             donateInformation.RecipientName= model.RecipientName;
             donateInformation.RecipientImageUrl = model.RecipientImageUrl;
 
-            TempData["DataUrl"] = "data-url=/mobile/Donate";
 
             Session["DonateInformation"] = donateInformation;
 
@@ -361,7 +360,13 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new DonateModels.PinSwipeModel()
+                    {
+                        RecipientId = donateInformation.RecipientId,
+                        RecipientName = donateInformation.RecipientName,
+                        RecipientImageUrl = donateInformation.RecipientImageUrl,
+                        Amount = donateInformation.Amount
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -369,13 +374,25 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new DonateModels.PinSwipeModel()
+                    {
+                        RecipientId = donateInformation.RecipientId,
+                        RecipientName = donateInformation.RecipientName,
+                        RecipientImageUrl = donateInformation.RecipientImageUrl,
+                        Amount = donateInformation.Amount
+                    });
                 }
             }
             else
-                return View(model);
-
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+            {
+                return View(new DonateModels.PinSwipeModel()
+                {
+                    RecipientId = donateInformation.RecipientId,
+                    RecipientName = donateInformation.RecipientName,
+                    RecipientImageUrl = donateInformation.RecipientImageUrl,
+                    Amount = donateInformation.Amount
+                });
+            }
 
             Session["DonateInformation"] = null;
 

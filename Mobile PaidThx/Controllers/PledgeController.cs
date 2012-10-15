@@ -21,6 +21,8 @@ namespace Mobile_PaidThx.Controllers
         private class PledgeInformation
         {
             public string RecipientId { get; set; }
+            public string PledgeToName { get; set; }
+            public string PledgeToImageUrl { get; set; }
             public string RecipientName { get; set; }
             public string RecipientUri { get; set; }
             public string RecipientImageUrl { get; set; }
@@ -30,15 +32,16 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            TempData["DataUrl"] = "data-url=/mobile/Pledge";
-
             var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
 
             return View(new PledgeModels.PledgeMoneyModel
             {
                 RecipientId = pledgeInformation.RecipientId,
+                PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                PledgeToName = pledgeInformation.PledgeToName,
                 RecipientName = pledgeInformation.RecipientName,
                 RecipientUri = pledgeInformation.RecipientUri,
+                RecipientImageUri = pledgeInformation.RecipientImageUrl,
                 Amount = pledgeInformation.Amount,
                 Comments = pledgeInformation.Comments
             });
@@ -63,8 +66,11 @@ namespace Mobile_PaidThx.Controllers
                 return View(new PledgeModels.PledgeMoneyModel()
                 {
                     RecipientId = pledgeInformation.RecipientId,
+                    PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                    PledgeToName = pledgeInformation.PledgeToName,
                     RecipientName = pledgeInformation.RecipientName,
                     RecipientUri = pledgeInformation.RecipientUri,
+                    RecipientImageUri = pledgeInformation.RecipientImageUrl,
                     Amount = pledgeInformation.Amount,
                     Comments = pledgeInformation.Comments
                 });
@@ -120,8 +126,6 @@ namespace Mobile_PaidThx.Controllers
                 NonProfits = nonProfits,
             };
 
-            TempData["DataUrl"] = "data-url=/mobile/Pledge/AddCause";
-
             return View(model);
         }
         [HttpPost]
@@ -130,24 +134,25 @@ namespace Mobile_PaidThx.Controllers
             var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
 
             pledgeInformation.RecipientId = model.RecipientId;
-            pledgeInformation.RecipientName = model.RecipientName;
+            pledgeInformation.PledgeToName = model.PledgeToName;
+            pledgeInformation.PledgeToImageUrl = model.PledgeToImageUrl;
 
             Session["PledgeInformation"] = pledgeInformation;
-            TempData["DataUrl"] = "data-url=/mobile/Pledge";
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
                 RecipientId = pledgeInformation.RecipientId,
+                PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                PledgeToName = pledgeInformation.PledgeToName,
                 RecipientName = pledgeInformation.RecipientName,
                 RecipientUri = pledgeInformation.RecipientUri,
+                RecipientImageUri = pledgeInformation.RecipientImageUrl,
                 Amount = pledgeInformation.Amount,
                 Comments = pledgeInformation.Comments
             });
         }
         public ActionResult AddContact()
         {
-            TempData["DataUrl"] = "data-url=/mobile/Pledge/AddContact";
-
             if (Session["Friends"] == null)
                 Session["Friends"] = new List<FacebookModels.Friend>();
 
@@ -177,24 +182,27 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult AddContact(PledgeModels.AddContactModel model)
         {
             var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
+            
             pledgeInformation.RecipientUri = model.RecipientUri;
+            pledgeInformation.RecipientName = model.RecipientName;
+            pledgeInformation.RecipientImageUrl = model.RecipientImageUrl;
 
-            TempData["DataUrl"] = "data-url=/mobile/Pledge";
             Session["PledgeInformation"] = pledgeInformation;
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
                 RecipientId = pledgeInformation.RecipientId,
+                PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                PledgeToName = pledgeInformation.PledgeToName,
                 RecipientName = pledgeInformation.RecipientName,
                 RecipientUri = pledgeInformation.RecipientUri,
+                RecipientImageUri = pledgeInformation.RecipientImageUrl,
                 Amount = pledgeInformation.Amount,
                 Comments = pledgeInformation.Comments
             });
         }
         public ActionResult AmountToSend()
         {
-            TempData["DataUrl"] = "data-url=/mobile/Pledge/AmountToSend";
-
             return View();
         }
 
@@ -204,14 +212,16 @@ namespace Mobile_PaidThx.Controllers
             var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
             pledgeInformation.Amount = model.Amount;
 
-            TempData["DataUrl"] = "data-url=/Pledge";
             Session["PledgeInformation"] = pledgeInformation;
 
             return View("Index", new PledgeModels.PledgeMoneyModel()
             {
                 RecipientId = pledgeInformation.RecipientId,
+                PledgeToImageUrl = pledgeInformation.PledgeToImageUrl,
+                PledgeToName = pledgeInformation.PledgeToName,
                 RecipientName = pledgeInformation.RecipientName,
                 RecipientUri = pledgeInformation.RecipientUri,
+                RecipientImageUri = pledgeInformation.RecipientImageUrl,
                 Amount = pledgeInformation.Amount,
                 Comments = pledgeInformation.Comments
             });
@@ -269,8 +279,6 @@ namespace Mobile_PaidThx.Controllers
             }
             else
                 return View(model);
-
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             Session["PledgeInformation"] = null;
 

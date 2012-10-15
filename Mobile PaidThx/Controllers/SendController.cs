@@ -266,7 +266,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View("Index", new SendModels.SendMoneyModel()
             {
-                RecipientUri = sendInformation.RecipientImageUrl,
+                RecipientUri = sendInformation.RecipientUri,
                 RecipientName = sendInformation.RecipientName,
                 RecipientImageUrl = sendInformation.RecipientImageUrl,
                 Amount = sendInformation.Amount,
@@ -292,7 +292,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View("Index", new SendModels.SendMoneyModel()
                 {
-                    RecipientUri = sendInformation.RecipientImageUrl,
+                    RecipientUri = sendInformation.RecipientUri,
                     RecipientName = sendInformation.RecipientName,
                     RecipientImageUrl = sendInformation.RecipientImageUrl,
                     Amount = sendInformation.Amount,
@@ -324,7 +324,7 @@ namespace Mobile_PaidThx.Controllers
 
             var userId = Session["UserId"].ToString();
             var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
-           
+
             if (ModelState.IsValid)
             {
                 try
@@ -348,7 +348,13 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new SendModels.PinSwipModel()
+                    {
+                        RecipientUri = sendInformation.RecipientUri,
+                        RecipientName = sendInformation.RecipientName,
+                        RecipientImageUrl = sendInformation.RecipientImageUrl,
+                        Amount = sendInformation.Amount
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -356,14 +362,25 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new SendModels.PinSwipModel()
+                    {
+                        RecipientUri = sendInformation.RecipientUri,
+                        RecipientName = sendInformation.RecipientName,
+                        RecipientImageUrl = sendInformation.RecipientImageUrl,
+                        Amount = sendInformation.Amount
+                    });
                 }
             }
             else
-            
-            return View(model);
-
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
+            {
+                return View(new SendModels.PinSwipModel()
+                {
+                    RecipientUri = sendInformation.RecipientUri,
+                    RecipientName = sendInformation.RecipientName,
+                    RecipientImageUrl = sendInformation.RecipientImageUrl,
+                    Amount = sendInformation.Amount
+                });
+            }
 
             Session["SendInformation"] = null;
 

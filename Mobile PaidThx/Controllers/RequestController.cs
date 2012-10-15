@@ -339,7 +339,13 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new RequestModels.PinSwipeModel()
+                    {
+                        RecipientUri = requestInformation.RecipientUri,
+                        RecipientName = requestInformation.RecipientName,
+                        RecipientImageUrl = requestInformation.RecipientImageUrl,
+                        Amount = requestInformation.Amount
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -347,13 +353,26 @@ namespace Mobile_PaidThx.Controllers
 
                     ModelState.AddModelError("", ex.Message);
 
-                    return View(model);
+                    return View(new RequestModels.PinSwipeModel()
+                    {
+                        RecipientUri = requestInformation.RecipientUri,
+                        RecipientName = requestInformation.RecipientName,
+                        RecipientImageUrl = requestInformation.RecipientImageUrl,
+                        Amount = requestInformation.Amount
+                    });
                 }
             }
             else
-                return View(model);
+            {
+                return View(new RequestModels.PinSwipeModel()
+                {
+                    RecipientUri = requestInformation.RecipientUri,
+                    RecipientName = requestInformation.RecipientName,
+                    RecipientImageUrl = requestInformation.RecipientImageUrl,
+                    Amount = requestInformation.Amount
+                });
+            }
 
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
 
             Session["RequestInformation"] = null;
 

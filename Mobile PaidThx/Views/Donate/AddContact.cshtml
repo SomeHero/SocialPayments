@@ -34,7 +34,7 @@
                    {
                        @Html.Hidden("recipientId", @nonprofit.Id)
                        @Html.Hidden("recipientName", @nonprofit.Name)
-                       @Html.Hidden("recipientImageUrl", "");
+                       @Html.Hidden("recipientImageUrl", @nonprofit.ImageUri);
                        @Html.Hidden("recipientType", "NonProfit");
                        <a class="contact-organization contact-image">
                            <img width="50" height="50" class="list-thumbnail lazy" src="@Url.Content("~/Content/images/npo.png")" data-original="@nonprofit.ImageUri" />
