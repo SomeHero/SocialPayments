@@ -165,7 +165,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      <text>
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "SendPaymentReminder") 
+     @Html.Hidden("paystreamAction", "SendPaymentReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
         Send Reminder
      </button>
@@ -177,7 +177,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      <text>
       @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "SendPaymentRequestReminder") 
+     @Html.Hidden("paystreamAction", "SendPaymentRequestReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
         Send Reminder
      </button>
@@ -191,7 +191,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      <text>
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "AcceptRequest") 
+     @Html.Hidden("paystreamAction", "AcceptRequest") 
      <button type="submit" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
         Accept & Pay
      </button>
@@ -204,7 +204,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      <text>
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "RejectRequest") 
+     @Html.Hidden("paystreamAction", "RejectRequest") 
      <button type="submit" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
         Reject Request
      </button>
@@ -217,7 +217,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <text>
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "CancelPayment") 
+     @Html.Hidden("paystreamAction", "CancelPayment") 
      <button type="submit" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
         Cancel
      </button>
@@ -230,7 +230,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <text> 
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("action", "CancelRequest") 
+     @Html.Hidden("paystreamAction", "CancelRequest") 
     <button type="submit" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
         Cancel
      </button>
