@@ -26,9 +26,9 @@ namespace SocialPayments.DomainServices
         private DomainServices.FormattingServices _formattingServices = new DomainServices.FormattingServices();
 
         public MessageServices()
-        {}
+        { }
 
-        public Message AcceptPledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments, 
+        public Message AcceptPledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments,
             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
             Guid applicationGuid;
@@ -45,12 +45,12 @@ namespace SocialPayments.DomainServices
             Guid.TryParse(originatorId, out originatorGuid);
             Guid.TryParse(organizationId, out organizationGuid);
 
-            Domain.MessageType  type = MessageType.AcceptPledge;
+            Domain.MessageType type = MessageType.AcceptPledge;
             Domain.PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPledge;
 
             using (var ctx = new Context())
             {
-               
+
                 if (applicationGuid == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
@@ -61,7 +61,7 @@ namespace SocialPayments.DomainServices
 
                 originator = ctx.Users.FirstOrDefault(u => u.UserId == originatorGuid);
 
-                if(originator == null)
+                if (originator == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Orriginator of Pledge {0} Not Found", originatorId));
 
                 //Check is SENDER is LOCKED OUT
@@ -131,7 +131,7 @@ namespace SocialPayments.DomainServices
                 });
 
                 return messageItem;
-            
+
             }
 
         }
@@ -157,9 +157,9 @@ namespace SocialPayments.DomainServices
                 if (!(messageType.ToUpper() == "PAYMENT" || messageType.ToUpper() == "PAYMENTREQUEST" || messageType.ToUpper() == "PLEDGE" || messageType.ToUpper() == "DONATION"))
                     throw new BadRequestException("Invalid Message Type.  Message Type must be Payment, PaymentRequest, Pledge or Donation");
 
-                if(!(deliveryMethod.ToUpper() == "STANDARD" || deliveryMethod.ToUpper() == "EXPRESS"))
+                if (!(deliveryMethod.ToUpper() == "STANDARD" || deliveryMethod.ToUpper() == "EXPRESS"))
                     throw new BadRequestException("Delivery Method Must be Standard or Express");
-                
+
                 MessageType type = MessageType.Payment;
                 PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPayment;
                 DeliveryMethod methodOfDelivery = DeliveryMethod.Standard;
@@ -196,7 +196,7 @@ namespace SocialPayments.DomainServices
                 //Validate the specified APIKEY is Valid
                 Guid.TryParse(apiKey, out applicationGuid);
 
-                if(applicationGuid == null)
+                if (applicationGuid == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
                 Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
@@ -387,16 +387,16 @@ namespace SocialPayments.DomainServices
 
                 Domain.Message message = null;
                 Domain.User user = null;
-                
+
                 Guid.TryParse(userId, out userGuid);
 
-                if(userGuid == null)
+                if (userGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
 
                 user = _ctx.Users
                     .FirstOrDefault(u => u.UserId == userGuid);
 
-                if(user == null)
+                if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
 
                 Guid.TryParse(id, out messageId);
@@ -407,7 +407,7 @@ namespace SocialPayments.DomainServices
                 message = _ctx.Messages
                     .FirstOrDefault(m => m.Id == messageId && m.SenderId == user.UserId);
 
-                if(message == null)
+                if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Payment {0} Not Found", id));
 
                 if (message.Status != PaystreamMessageStatus.SubmittedPayment && message.Status != PaystreamMessageStatus.NotifiedPayment && message.Status != PaystreamMessageStatus.ProcessingPayment)
@@ -487,7 +487,7 @@ namespace SocialPayments.DomainServices
 
                 if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.PendingRequest || message.Status == PaystreamMessageStatus.NotifiedRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Request {0} Cannot be Cancelled.  Invalid State", id));
-                
+
                 if (!_securityService.Encrypt(securityPin).Equals(user.SecurityPin))
                 {
                     user.PinCodeFailuresSinceLastSuccess += 1;
@@ -531,11 +531,11 @@ namespace SocialPayments.DomainServices
 
                 return message;
             }
-        
+
         }
         public void AcceptPaymentRequest(string id, string userId, string paymentAccountId, string securityPin)
         {
-            using(var ctx = new Context())
+            using (var ctx = new Context())
             {
                 var securityServices = new DomainServices.SecurityService();
 
@@ -609,14 +609,14 @@ namespace SocialPayments.DomainServices
             {
                 DomainServices.UserService userService = new DomainServices.UserService();
                 Dictionary<string, User> matchedUsers = new Dictionary<string, User>();
-                
+
                 foreach (string uri in recipientUris)
                 {
                     UserPayPoint userPayPoint = ctx.UserPayPoints
                         .Include("User")
                         .FirstOrDefault(p => p.URI == uri);
 
-                    if (userPayPoint != null  && userPayPoint.User != null)
+                    if (userPayPoint != null && userPayPoint.User != null)
                     {
 
                         string firstName = userPayPoint.User.FirstName;
@@ -804,6 +804,10 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                var userService = new UserService(ctx);
+                var validationServices = new DomainServices.ValidationService();
+                var formattingServices = new DomainServices.FormattingServices();
+
                 Guid userGuid;
 
                 Guid.TryParse(userId, out userGuid);
@@ -823,27 +827,31 @@ namespace SocialPayments.DomainServices
                         .Count();
 
                     messages = ctx.Messages
-                        .Include("Recipient")
-                        .Include("Sender")
-                        .Include("Payment")
-                        .Include("PaymentRequest")
+                  .Include("Recipient")
+                    .Include("Recipient.Merchant")
+                    .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
+                    .Include("PaymentRequest")
                         .Where(m => m.SenderId == userGuid || m.RecipientId.Value == userGuid)
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
                         .Take(take)
                         .ToList<Message>();
                 }
-                else if(type.ToUpper() == "SENT")
+                else if (type.ToUpper() == "SENT")
                 {
                     totalRecords = ctx.Messages
                         .Where(m => m.SenderId == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .Count();
 
                     messages = ctx.Messages
-                        .Include("Recipient")
-                        .Include("Sender")
-                        .Include("Payment")
-                        .Include("PaymentRequest")
+                  .Include("Recipient")
+                    .Include("Recipient.Merchant")
+                    .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
+                    .Include("PaymentRequest")
                         .Where(m => m.SenderId == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -857,10 +865,12 @@ namespace SocialPayments.DomainServices
                         .Count();
 
                     messages = ctx.Messages
-                        .Include("Recipient")
-                        .Include("Sender")
-                        .Include("Payment")
-                        .Include("PaymentRequest")
+                  .Include("Recipient")
+                    .Include("Recipient.Merchant")
+                    .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
+                    .Include("PaymentRequest")
                         .Where(m => m.RecipientId.Value == userGuid && (m.MessageTypeValue.Equals((int)MessageType.Payment) || m.MessageTypeValue.Equals((int)MessageType.Donation)))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -872,12 +882,14 @@ namespace SocialPayments.DomainServices
                     totalRecords = ctx.Messages
                         .Where(m => (m.SenderId == userGuid || m.RecipientId.Value == userGuid) && m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
                         .Count();
-                    
+
                     messages = ctx.Messages
-                        .Include("Recipient")
-                        .Include("Sender")
-                        .Include("Payment")
-                        .Include("PaymentRequest")
+                  .Include("Recipient")
+                    .Include("Recipient.Merchant")
+                    .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
+                    .Include("PaymentRequest")
                         .Where(m => (m.SenderId == userGuid || m.RecipientId.Value == userGuid) && m.MessageTypeValue.Equals((int)Domain.MessageType.PaymentRequest))
                         .OrderByDescending(m => m.CreateDate)
                         .Skip(skip)
@@ -885,36 +897,24 @@ namespace SocialPayments.DomainServices
                         .ToList<Message>();
                 }
 
-                URIType senderUriType = URIType.MECode;
-                URIType recipientUriType = URIType.MECode;
-
-                string senderName = "";
-                string recipientName = "";
-
                 foreach (var message in messages)
                 {
-                    senderUriType = URIType.MECode;
-                    recipientUriType = URIType.MECode;
-
-                    senderUriType = GetURIType(message.SenderUri);
-                    recipientUriType = GetURIType(message.RecipientUri);
-
-                    if (!String.IsNullOrEmpty(message.Sender.FirstName) || !String.IsNullOrEmpty(message.Sender.LastName))
-                        senderName = message.Sender.FirstName + " " + message.Sender.LastName;
-                    else if (!String.IsNullOrEmpty(message.senderFirstName) || !String.IsNullOrEmpty(message.senderLastName))
-                        senderName = message.senderFirstName + " " + message.Sender.LastName;
+                    message.SenderName = userService.GetSenderName(message.Sender);
+                    if (message.Recipient != null)
+                        message.RecipientName = userService.GetSenderName(message.Recipient);
                     else
-                        senderName = (senderUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.SenderUri) : message.SenderUri);
+                    {
+                        if (validationServices.IsPhoneNumber(message.RecipientUri))
+                        {
+                            message.RecipientUri = formattingServices.FormatMobileNumber(message.RecipientUri);
+                            message.RecipientName = message.RecipientUri;
+                        }
+                        else if (validationServices.IsFacebookAccount(message.RecipientUri))
+                            message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
+                        else
+                            message.RecipientName = message.RecipientUri;
+                    }
 
-                    if (message.Recipient != null && (!String.IsNullOrEmpty(message.Recipient.FirstName) || !String.IsNullOrEmpty(message.Recipient.LastName)))
-                        recipientName = message.Recipient.FirstName + " " + message.Recipient.LastName;
-                    else if (!String.IsNullOrEmpty(message.recipientFirstName) || !String.IsNullOrEmpty(message.recipientLastName))
-                        recipientName = message.recipientFirstName + " " + message.recipientLastName;
-                    else
-                        recipientName = (recipientUriType == URIType.MobileNumber ? _formattingServices.FormatMobileNumber(message.RecipientUri) : message.RecipientUri);
-
-                    message.SenderName = senderName;
-                    message.RecipientName = recipientName;
                     message.Direction = "In";
 
                     if (message.SenderId.Equals(userGuid))
@@ -972,7 +972,7 @@ namespace SocialPayments.DomainServices
                         else if (validationServices.IsFacebookAccount(message.RecipientUri))
                             message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
                         else
-                            message.RecipientName = message.RecipientUri;                  
+                            message.RecipientName = message.RecipientUri;
                     }
 
                     message.Direction = "In";
@@ -1028,7 +1028,7 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
 
-                if(message.Sender != null)
+                if (message.Sender != null)
                     message.SenderName = _formattingServices.FormatUserName(message.Sender);
                 if (message.Recipient != null)
                     message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
@@ -1042,7 +1042,7 @@ namespace SocialPayments.DomainServices
                     else if (validationServices.IsFacebookAccount(message.RecipientUri))
                         message.RecipientName = message.recipientFirstName + " " + message.recipientLastName;
                     else
-                        message.RecipientName = message.RecipientUri;   
+                        message.RecipientName = message.RecipientUri;
                 }
                 message.TransactionImageUrl = message.Sender.ImageUrl;
 
@@ -1272,11 +1272,11 @@ namespace SocialPayments.DomainServices
                     .Include("PaymentAccounts")
                     .FirstOrDefault(u => u.UserId == userGuid);
 
-                if(user == null)
+                if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
 
                 var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
-                
+
                 count = ctx.Messages.Count(m => (
                         (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))
                         || (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.SubmittedPayment))
