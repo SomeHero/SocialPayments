@@ -14,6 +14,8 @@
     <div class="pd-content">
     @Html.ValidationSummary()
     <div class="pad">
+        @using (Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+         {
         
      
             <a href="@Url.Content("~/Send/AddContactSend")" class="a-recipient"  >
@@ -82,8 +84,7 @@
      
                 <textarea id="txtComments" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
      
-         @using (Html.BeginForm("Index", "Send", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
-         {
+         
             <p>
                 <button type="submit" id="sendmoney2" class="pd-btn green" data-theme="f">
                     <span>Send Money</span></button>
