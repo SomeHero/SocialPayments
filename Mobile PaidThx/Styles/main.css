@@ -55,12 +55,26 @@ a:active {
     color: #48b201;
 }
 
-h2.section-header
+h2.section-header, .or
 {
  font-weight:bold;
  color:#666666;
  font-size:12px;   
  text-transform:uppercase;
+ position:relative;
+}
+
+.or
+{
+ text-align:center;   
+}
+
+h2.section-header a.info-helper
+{
+ position:absolute;
+ right:0px;
+ top:50%;
+ margin-top:-8px;   
 }
 
 label
