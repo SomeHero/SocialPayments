@@ -29,9 +29,9 @@ namespace Mobile_PaidThx.Controllers
 
             var configTypes = new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>("EmailMessage", "Email Message"),
-                new KeyValuePair<string, string>("PushNotification", "Push Notification"),
-                new KeyValuePair<string, string>("TextMessage", "Text Message")
+                new KeyValuePair<string, string>("EmailMessage", "Email"),
+                new KeyValuePair<string, string>("TextMessage", "Text")//,
+                //new KeyValuePair<string, string>("PushNotification", "In App")
             };
 
             var configSubjects = new List<NotificationModels.NotificationSubject>();
