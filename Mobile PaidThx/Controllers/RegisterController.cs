@@ -85,7 +85,7 @@ namespace Mobile_PaidThx.Controllers
             if (TempData["NameOnAccount"] != null)
                 nameOnAccount = TempData["NameOnAccount"].ToString();
 
-            Session["UserSetupReturnUrl"] = null;
+            //Session["UserSetupReturnUrl"] = null;
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -311,8 +311,6 @@ namespace Mobile_PaidThx.Controllers
             }
             else
             {
-                TempData["DataUrl"] = "data-url=/mobile/Paystream";
-
                 return RedirectToAction("Index", "Paystream");
             }
         }

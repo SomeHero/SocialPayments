@@ -35,11 +35,12 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult ChangePassword(SecurityModels.ChangePasswordModel model)
         {
             var userService = new Services.UserServices();
-            UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
             
             if (Session["User"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
+            var user = (UserModels.UserResponse)Session["User"];
+            
             if (String.IsNullOrEmpty(model.NewPassword) || String.IsNullOrEmpty(model.NewPasswordConfirmation))
             {
                 ModelState.AddModelError("", "New Password and New Password Confirm are required");

@@ -49,12 +49,24 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
+            if (Session["User"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            var user = (UserModels.UserResponse)Session["User"];
+            
             var requestInformation = (Session["RequestInformation"] != null ? (RequestInformation)Session["RequestInformation"] : new RequestInformation());
 
             if (String.IsNullOrEmpty(requestInformation.RecipientUri))
                 ModelState.AddModelError("", "Recipient is required");
             if (requestInformation.Amount == 0)
                 ModelState.AddModelError("", "Amount must be greater than $0.00");
+
+            if (user.bankAccounts.Count == 0)
+            {
+                Session["UserSetupReturnUrl"] = "/mobile/Request/PopupPinSwipe";
+
+                return RedirectToAction("SetupACHAccount", "Register", new RouteValueDictionary() { });
+            }
 
             if (!ModelState.IsValid)
             {
