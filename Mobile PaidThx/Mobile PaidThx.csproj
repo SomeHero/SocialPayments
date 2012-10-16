@@ -269,6 +269,7 @@
     <Content Include="Content\images\btn-qs-fb-63x63.png" />
     <Content Include="Content\images\btn-qs-phone-63x63.png" />
     <Content Include="Content\images\btn-quickadd.png" />
+    <Content Include="Content\images\btn-search.png" />
     <Content Include="Content\images\btn-settings.png" />
     <Content Include="Content\images\btn_info_active.png" />
     <Content Include="Content\images\btn_info_inactive.png" />
@@ -358,6 +359,7 @@
     <Content Include="Content\images\org_wwf.png" />
     <Content Include="Content\images\org_zta.png" />
     <Content Include="Content\images\request-icon-big.png" />
+    <Content Include="Content\images\search-icon.png" />
     <Content Include="Content\images\send-icon-big.png" />
     <Content Include="Content\images\signinIcon.png" />
     <Content Include="Content\images\icons\settingsIcon.png" />
@@ -449,6 +451,7 @@
     <Content Include="Libs\fancybox\js\jquery.fancybox.js" />
     <Content Include="Libs\fancybox\js\jquery.fancybox.pack.js" />
     <Content Include="Libs\fancybox\js\jquery.mousewheel-3.0.6.pack.js" />
+    <Content Include="Libs\flexslider\images\bg_direction_nav.png" />
     <Content Include="Libs\qtip2\jquery.qtip.css" />
     <Content Include="Libs\qtip2\jquery.qtip.js" />
     <Content Include="Libs\qtip2\jquery.qtip.min.css" />
@@ -687,7 +690,9 @@
     <Content Include="Views\Shared\ContactSelection.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\VerifyPayPoint.cshtml" />
-    <Content Include="Views\Account\FogotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />

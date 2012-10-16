@@ -1,9 +1,9 @@
 ﻿            <!-- <img class="img-amount select" src="@Url.Content("~/Content/images/money-active.png")" alt="Amount" /> -->
-            <div id="gobtn-send2" type="button" class="btn-money">
+            <div id="dolla" type="button" class="btn-money">
                 $
             </div>
 
-            <input type="text" id="customAmount" placeholder="0.00" name="Amount" pattern="[0-9]*" />
+            <input type="text" id="customAmount" placeholder="0.00" name="Amount" />
             
             <button id="gobtn-send2" type="submit" class="btn-the-go">
                 Go
@@ -12,3 +12,9 @@
             
             <div style="clear:both;">
             </div>
+
+            <script type="text/javascript">
+                if (isiPhone) {
+                    $('#customAmount').attr("pattern", "[0-9]*");
+                }
+            </script>

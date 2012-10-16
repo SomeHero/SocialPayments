@@ -20,7 +20,7 @@
         }
         else
         {
-        <input type="text" id="contactSearch" data-type="search" placeholder="Search contacts or add new" class="contact-top-input ui-input-text ui-body-c"/>
+        <input type="text" id="contactSearch" data-type="search" placeholder="Search or type new" class="contact-top-input ui-input-text search-icon"/>
         }
 
         <ul id="contactList" data-role="listview" class="ui-listview">
@@ -57,7 +57,8 @@
                         @Html.Hidden("recipientUri", "fb_" + @friend.id)
                         @Html.Hidden("recipientType", "facebook")
                         @Html.Hidden("recipientName", @friend.name);
-                    <a class="contact-recipient-uri">
+                        @Html.Hidden("recipientImageUri", @String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id))
+                        <a class="contact-recipient-uri">
                         <img class="list-thumbnail lazy" width="50" height="50" src="@Url.Content("~/Content/images/avatar.png")" data-original="@String.Format("http://graph.facebook.com/{0}/picture?type=square", friend.id)" />
                         <h2 class="heading">@friend.name</h2>
                         <h4 class="subheading">Facebook Friend</h4>

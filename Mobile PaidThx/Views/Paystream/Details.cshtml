@@ -31,8 +31,9 @@
     <text>Request Sent</text>
     }else if(Model.messageType == "Donation" && Model.direction == "Out"){
     <text>Donation</text>
+    }else if(Model.messageType == "AcceptPledge" && Model.direction == "In"){
+    <text>Pledge</text>
     }
-    
     }
     </h2>
 <div class="whathappened-details">
@@ -40,7 +41,7 @@
 @{
     if ( Model.messageType == "Payment" && Model.direction == "In"){
         <text>
-    <img width="40" height="40" class="psd-image sender" src="@Model." alt="Sender" /> 
+    <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" /> 
 <div class="ps-detail-textpad">
     <p class="whathappened-content">
     <span class="lbl-sender">@Model.senderName</span><br> 
@@ -103,6 +104,19 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
     </text>
+    }else if( Model.messageType == "AcceptPledge" && Model.direction == "In"){
+        <text>
+    <img width="40" height="40" class="psd-image sender" src="@Model.recipientImageUri" alt="Sender" />
+    <div class="ps-detail-textpad">
+    <p class="whathappened-content">
+   <span class="lbl-sender">You</span> pledged <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
+to <span class="lbl-recipient">@Model.senderName</span>
+<br><span class="lbl-date">@Model.createDate</span>
+</p>
+<div class="clear"></div>
+</div>
+<img width="40" height="40" class="psd-image recipient" src="@Model.senderImageUri" alt="Recipient" />
+    </text>
     }
     
     }
@@ -111,10 +125,11 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 </div>
 @{
-    if (Model.comments != "No Comments" && Model.comments != "")
+    if (Model.comments.ToLower() != "no comments" && Model.comments != "")
     {                                               
  <text><span class="bubble">"@Model.comments"</span></text>
     }
+    
     }
 
 <div class="t-panel">
@@ -125,75 +140,141 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 
     @{
-    
-        if (Model.messageType == "Payment")
+        if (Model.messageType == "Payment" && Model.isExpressable)
         {
+            <text>
  <div class="t-panel">
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
 <span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
-@{
-            if (Model.isExpressable)
-            {
 <hr class="divider" />
 <div class="d-left">
 <h2 class="d-head express">Express It</h2>
 <h4 class="d-subhead">Est. Arrival: 06/10/12</h4>
 </div>
 <div class="clear"></div>
-            }
+
+            </div>
+            </div>
+        </text>
+        
+        }else if (Model.messageType == "Payment" && !Model.isExpressable)
+        {
+            <text>
+ <div class="t-panel">
+<h2 class="t-panel-heading">Delivery</h2>
+<div class="t-panel-details">
+<span class="lbl-status">Standard</span> - Est. Arrival: 06/10/12
+            </div>
+            </div>
+        </text>
+        
         }
-</div>
-</div>
+
     }
-    
-    } 
 
 @{
     if (Model.messageType == "Payment" && Model.isRemindable)
     {
      <text>
-     <button type="button" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "SendPaymentReminder") 
+     <button type="submit" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
         Send Reminder
      </button>
+     }
      </text>
-    }else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
     {
      <text>
-     <button type="button" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
+      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "SendPaymentRequestReminder") 
+     <button type="submit" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
         Send Reminder
      </button>
+      }
      </text>
     
     }
 
     if (Model.messageType == "PaymentRequest" && Model.isAcceptable)
-    {<text>
-     <button type="button" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
+    {
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "AcceptRequest") 
+     <button type="submit" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
         Accept & Pay
      </button>
+     }
      </text>
     }
-    if (Model.messageType == "PaymentRequest" && Model.isRejectable){
+    if (Model.messageType == "PaymentRequest" && Model.isRejectable)
+    {
 
      <text>
-     <button type="button" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "RejectRequest") 
+     <button type="submit" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
         Reject Request
      </button>
+     }
      </text>
     }
-    
-    if( Model.messageType == "Payment" && Model.isCancellable){
-    <text>
-     <button type="button" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
-        Cancel
-     </button>
-     </text>
-    }else if (Model.messageType == "PaymentRequest" && Model.isCancellable){
 
-    <text> <button type="button" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
+    if (Model.messageType == "Payment" && Model.isCancellable)
+    {
+    <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "CancelPayment") 
+     <button type="submit" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
         Cancel
      </button>
+     }
+     </text>
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.isCancellable)
+    {
+
+    <text> 
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "CancelRequest") 
+    <button type="submit" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
+        Cancel
+     </button>
+     }
+     </text>
+    
+    }
+        if (Model.messageType == "AcceptPledge" && Model.isAcceptable)
+    {
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "AcceptPledge") 
+     <button type="submit" class="pd-btn green accept accept-payment-request">
+        Complete Donation
+     </button>
+     }
+     </text>
+    }
+    if (Model.messageType == "AcceptPledge" && Model.isRejectable)
+    {
+
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "RejectPledge") 
+     <button type="submit" class="pd-btn red reject reject-payment-request">
+        Cancel Pledge
+     </button>
+     }
      </text>
     }
 }
@@ -206,21 +287,18 @@ to <span class="lbl-recipient">@Model.recipientName</span>
         </div>
 </div>
 
+
+@*
 @section PageScripts{
+
 <script type="text/javascript">
     $(document).ready(function () {
-
         var date = $("span.lbl-date").text();
         var parsedate = "";
-
         if (moment(date).diff(getDateNow(), 'hours') < -6) {
-
             parsedate = moment(date).calendar();
-
         } else {
-
             parsedate = moment(date).fromNow();
-
         }
 
         $("span.lbl-date").text(parsedate);
@@ -229,3 +307,4 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </script>
 
 }
+*@

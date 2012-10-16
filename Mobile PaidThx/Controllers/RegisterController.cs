@@ -85,7 +85,7 @@ namespace Mobile_PaidThx.Controllers
             if (TempData["NameOnAccount"] != null)
                 nameOnAccount = TempData["NameOnAccount"].ToString();
 
-            Session["UserSetupReturnUrl"] = null;
+            //Session["UserSetupReturnUrl"] = null;
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -180,13 +180,21 @@ namespace Mobile_PaidThx.Controllers
         {
             TempData["Message"] = "";
 
-            TempData["DataUrl"] = "data-url=/mobile/Register/SetupPinSwipe";
 
             return View();
         }
         [HttpPost]
         public ActionResult SetupPinSwipe(SetupPinSwipeModel model)
         {
+            TempData["Message"] = "";
+            
+            if (model.PinCode.Length < 4)
+            {
+                ModelState.AddModelError("", "You must connect 4 dots to create your security pin.  Try again.");
+
+                return View();
+            }
+
             Session["PinCode"] = model.PinCode;
             return RedirectToAction("ConfirmPinSwipe");
         }
@@ -201,7 +209,7 @@ namespace Mobile_PaidThx.Controllers
 
             if (firstPinCode != model.PinCode)
             {
-                TempData["Message"] = "Your confirmation did not match your first PIN, please create a new PIN and try again.";
+                TempData["Message"] = "Your confirmation did not match your first security pin swipe, let's try starting over with your first swipe again.";
 
                 return View("SetupPinSwipe");
             }
@@ -303,8 +311,6 @@ namespace Mobile_PaidThx.Controllers
             }
             else
             {
-                TempData["DataUrl"] = "data-url=/mobile/Paystream";
-
                 return RedirectToAction("Index", "Paystream");
             }
         }

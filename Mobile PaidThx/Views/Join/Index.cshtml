@@ -25,7 +25,7 @@
 
              }
              else
-             {<text>Join</text>}</h1>
+             {<text>Join PaidThx</text>}</h1>
              </div>
     <div class="pd-content">
     @Html.ValidationSummary()
@@ -50,13 +50,14 @@
 
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
-                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" height="50" />
-                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>sent you @String.Format("{0:C}", Model.Message.Amount).</h4>
+                    <img class="sender ps-image left-image" src="@Model.Message.SenderImageUrl" width="50" height="50" />
+                    <span class="aui-message">    <span class="lbl-sender">@Model.Message.Sender</span>
+sent you <span class="lbl-amount payment in">$@string.Format("{0:n2}", Model.Message.Amount)</span> with PaidThx.</span>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
                  {
-                <span class="bubble">@Model.Message.Comments - join PaidThx to claim your money.</span>​
+                <span class="bubble">@Model.Message.Comments - <b>join PaidThx to claim your money</b>.</span>​
                  }
                 </div>
                 </text>
@@ -65,15 +66,16 @@
                 {
                 <text>
 
-                 <div id="pay-in" class="aui">
+                 <div id="pay-in ps-image left-image" class="aui">
                 <div class="paystream-aui">
-                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message"><span class="sender">@Model.Message.Sender&nbsp;</span>requests @String.Format("{0:C}", Model.Message.Amount) from you.</h4>
+                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" height="50" />
+                    <span class="aui-message">   <span class="lbl-sender">@Model.Message.Sender</span><br /> 
+requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Message.Amount)</span> with PaidThx.</span>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
                  {
-                <span class="bubble">@Model.Message.Comments - join PaidThx to send money.</span>​
+                <span class="bubble">@Model.Message.Comments - <b>join PaidThx to send this payment</b>.</span>​
                  }
                 </div>
                 </text>
@@ -84,13 +86,13 @@
 
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
-                    <img class="sender" src="@Model.Message.SenderImageUrl" width="50" />
-                    <h4 class="aui-message">You pledged @String.Format("{0:C}", Model.Message.Amount) to <span class="sender">@Model.Message.Sender</span>.</h4>
+                    <img class="sender ps-image left-image" src="@Model.Message.SenderImageUrl" width="50" height="50" />
+                    <span class="aui-message">   You pledged <span class="lbl-amount donation out">$@string.Format("{0:n2}", Model.Message.Amount)</span> to <span class="lbl-sender">@Model.Message.Sender</span> with PaidThx.</span>
                     <div class="clear"></div>
                 </div>
                  @if (!String.IsNullOrEmpty(Model.Message.Comments))
                  {
-                <span class="bubble">@Model.Message.Comments - join PaidThx to complete your donation.</span>​
+                <span class="bubble">@Model.Message.Comments - <b>join PaidThx to complete your donation</b>.</span>​
                  }
                 </div>
                 </text>
@@ -98,9 +100,15 @@
             }
                 <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
                 Join with Facebook</button>
-            <h5 style="margin-top:25px" id="form-marker">
-                Or join with your Email Address</h5>
-             
+           <!-- <h5 style="margin-top:25px" id="form-marker">
+                Or join with your Email Address</h5>-->
+                <div style="margin-bottom:20px"></div>
+                <div class="or">OR</div>
+             <div style="margin-bottom:20px"></div>
+             <button type="submit" id="join-reveal-button" class="pd-btn blue hide">
+                Join with Email</button>
+
+                <div id="email-reveal-form">
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
                 {
@@ -112,6 +120,7 @@
                         name="confirmPassword" /></span>
                 <button type="submit" id="register-submit" class="pd-btn green">
                 Join with Email</button>
+                   
                   <div id="pass" class="hidden">
 	<ul class="pass-help">
 		<li id="letter" class="invalid"><strong>1 letter (a-z)</strong> &nbsp;</li>
@@ -122,6 +131,7 @@
      </div>
                 }
             </div>
+             </div>
             <div id="main-body-sub-links">
                 <p style="text-align: center">
                     Already a member? <a href="@Url.Content("~/SignIn")" data-ajax="false">Sign
@@ -138,6 +148,19 @@
 
     @section PageScripts{
     <script type="text/javascript">
+        $(document).ready(function () {
 
+            //show email reveal button
+            $("#join-reveal-button").show();
+
+           //hide form
+            $("#email-reveal-form").hide();
+
+            $("#join-reveal-button").click(function () {
+                $("#email-reveal-form").show();
+                $("#join-reveal-button").hide();
+            });
+
+        });
     </script>
     }

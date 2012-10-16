@@ -61,16 +61,16 @@
             {
             <h2 class="section-header">Sending Account:</h2>
             <div class="select-holder">
-            @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            @using (Html.BeginForm("SetPreferredSendAccount", "BankAccounts", FormMethod.Post))
             {     
-                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredSendAccount", @class = "select-custom" })
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredSendAccountId), new { @id = "ddlPreferredSendAccount", @class = "select-custom" })
             }
             </div>
             <h2 class="section-header">Receiving Account</h2>
             <div class="select-holder">
-            @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" } }))
+            @using (Html.BeginForm("SetPreferredReceiveAccount", "BankAccounts", FormMethod.Post))
             { 
-                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { onchange = "this.form.submit();", @id = "ddlPreferredReceiveAccount", @class = "select-custom" })
+                @Html.DropDownList("PaymentAccountId", new SelectList(Model.PaymentAccounts, "PaymentAccountId", "Nickname", Model.PreferredReceiveAccountId), new { @id = "ddlPreferredReceiveAccount", @class = "select-custom" })
             }
             </div>
             }
@@ -88,7 +88,11 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('.select-custom').dropkick();
+    $('.select-custom').dropkick({
+        change: function(value, label) {
+            $(this).parents('form:first').submit();
+        }
+    });
 });
 </script>
 }

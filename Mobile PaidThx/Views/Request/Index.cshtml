@@ -14,9 +14,9 @@
     <div class="pd-content">
     @Html.ValidationSummary()
         <div class="pad">
-
- 
- <a href="@Url.Content("~/Request/AddContactRequest")" class="a-recipient"  >
+            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
+            {
+                <a href="@Url.Content("~/Request/AddContactRequest")" class="a-recipient"  >
                 <div id="btn-recipient" class="btn-sends">
                         @if (!String.IsNullOrEmpty(Model.RecipientImageUrl))
                         {
@@ -80,10 +80,8 @@
                 </a>
 
  
-                    <textarea id="txtComments-Request" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
+                    <textarea id="txtComments-Request" name="Comments" rows="10" cols="100" placeholder="For what? Add a message..."></textarea>
       
-            @using (Html.BeginForm("Index", "Request", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slideup" } }))
-            {
                 <p>
                     <button type="submit" id="request-money" class="pd-btn green">
                         <span>Request Money</span></button>

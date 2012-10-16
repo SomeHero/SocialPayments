@@ -53,7 +53,7 @@ $(document).ready(function () {
 
             if (searchVal.length > 3) {
                 //LONG ENOUGH TO LOOK
-                contactsSearchController.searchAndDisplayMeCodes(searchVal);
+                contactsSearchController.searchAndDisplayMeCodes(searchVal, "Non-Profits");
             } else if (searchVal.length < 1) {
                 //BACKED DOWN TO NOTHING
                 $("#contactList #me-code-search-item").remove();

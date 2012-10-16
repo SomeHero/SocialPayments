@@ -150,7 +150,8 @@ namespace SocialPayments.DomainServices
             }
             var messages = _ctx.Messages
                 .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
-                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)))
+                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)
+                    || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPledge)))
                     .ToList();
 
             foreach (var message in messages)
@@ -167,6 +168,12 @@ namespace SocialPayments.DomainServices
                         message.Status = PaystreamMessageStatus.PendingRequest;
 
                         break;
+                    case MessageType.AcceptPledge:
+                        message.Recipient = user;
+                        message.Status = PaystreamMessageStatus.PendingPledge;
+
+                        break;
+
                     default:
                         message.Recipient = user;
 

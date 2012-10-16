@@ -58,9 +58,19 @@ namespace SocialPayments
            );
 
             config.Routes.MapHttpRoute(
+                name: "Pledge",
+                routeTemplate: "api/paystreammessages/pledge",
+                defaults: new { controller = "PaystreamMessages", action = "Pledge" }
+            );
+            config.Routes.MapHttpRoute(
                 name: "AcceptPledge",
                 routeTemplate: "api/paystreammessages/accept_pledge",
                 defaults: new { controller = "PaystreamMessages", action = "AcceptPledge" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "RejectPledge",
+                routeTemplate: "api/paystreammessages/reject_pledge",
+                defaults: new { controller = "PaystreamMessages", action = "RejectPledge" }
             );
             config.Routes.MapHttpRoute(
                 name: "CancelPayment",

@@ -55,13 +55,36 @@ a:active {
     color: #48b201;
 }
 
-h2.section-header
+h2.section-header, .or
+{
+ font-weight:bold;
+ color:#666666;
+ font-size:12px;   
+ text-transform:uppercase;
+ position:relative;
+}
+
+.or
+{
+ text-align:center;   
+}
+
+h2.section-header a.info-helper
+{
+ position:absolute;
+ right:0px;
+ top:50%;
+ margin-top:-8px;   
+}
+
+label
 {
  font-weight:bold;
  color:#666666;
  font-size:12px;   
  text-transform:uppercase;
 }
+
 h2.section-header:not(:first-child) {
     margin-top:30px;
     
@@ -225,6 +248,12 @@ overflow: hidden;
 /* ==========================================================================
    Ryan's custom styles
    ========================================================================== */
+
+
+.hide
+{
+ display:none;   
+}
 
 /* ++++++++++++++++++++BUTTONS++++++++++++++++++ */
 .pd-btn
@@ -622,12 +651,22 @@ background-repeat:no-repeat;
 background-position:center left; 
 }
 
-.btn-settings
+.header-pdthx .btn-settings
 {
  height:28px;  
  width:32px;
  top:9px;
  background-image: url('../Content/images/btn-settings.png');
+background-repeat:no-repeat;
+background-position:center left; 
+}
+
+.header-pdthx .btn-search
+{
+ height:22px;  
+ width:18px;
+ top:12px;
+ background-image: url('../Content/images/btn-search.png');
 background-repeat:no-repeat;
 background-position:center left; 
 }
@@ -728,11 +767,16 @@ img.grow90
 /*+++++++++++++++++++++++++++ PAGES +++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-
 /* ==========================================================================
-   PAGES: JOIN
-   ========================================================================== */
- 
+   PAGES: PROFILE
+   ========================================================================== */ 
+   
+
+.pad > h5:first-child
+{
+margin-top:0;
+padding-top:0;
+}
 
 /* ==========================================================================
    PAGES: SIGN IN
@@ -947,8 +991,32 @@ zoom: 1;
 }   
 
 /* ==========================================================================
+   PAGES: JOIN
+   ========================================================================== */
+   
+   .aui-message
+   {
+    font-weight:bold;
+    font-size:12pt;   
+   }
+   
+   .left-image, img.ps-image.left-image
+   {
+    margin-right:12px;   
+   }
+   
+/* ==========================================================================
    PAGES: SEND/REQUEST/DONATE/PLEDGE
    ========================================================================== */
+   
+   .contact-top-input.search-icon
+   {
+       background-color:#ffffff;
+      background-image: url(../Content/images/search-icon.png);
+background-repeat: no-repeat;
+background-position:98% center; 
+   }
+   
    
    .contact-recipient-uri
    {
@@ -1806,7 +1874,7 @@ margin:0;
 }
 
 /* ------------- PAYMENT IN ------------- */
-.paystreamDetail.in.payment .lbl-amount{
+.paystreamDetail.in.payment .lbl-amount, .lbl-amount.in.payment{
 color:#48b201;
 }
 

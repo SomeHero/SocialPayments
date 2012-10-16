@@ -22,7 +22,7 @@ namespace Mobile_PaidThx.Services
     public class UserPaymentAccountServices : ServicesBase
     {
         private string _setupACHAccountServiceUrl = "{0}Users/{1}/PaymentAccounts";
-        private string _setPreferredReceiveAccountUrl = "{0}Users/{1}/PaymentAccounts/set_preferred_received_account";
+        private string _setPreferredReceiveAccountUrl = "{0}Users/{1}/PaymentAccounts/set_preferred_receive_account";
         private string _setPreferredSendAccountUrl = "{0}Users/{1}/PaymentAccounts/set_preferred_send_account";
         private string _addACHAccountUrl = "{0}Users/{1}/PaymentAccounts/add_account";
         private string _editACHAccountUrl = "{0}Users/{1}/PaymentAccounts/{2}";

@@ -8,18 +8,18 @@
     
     <div  class="header-pdthx" >
         <h1>
-            Enter Recipient</h1>
+            Pledge From:</h1>
             <a href="@Url.Content("~/Pledge")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
         <div class="pad">
          @if (Model.SortedContacts.Count < 1)
         {
-        <input type="text" id="contactNew" data-type="search" placeholder="Email, phone, or ME Code" class="contact-top-input ui-input-text ui-body-c"/>
+        <input type="text" id="contactNew" data-type="search" placeholder="Email, phone, or ME Code" class="contact-top-input ui-input-text"/>
         }
         else
         {
-        <input type="text" id="contactSearch" data-type="search" placeholder="Search contacts or add new" class="contact-top-input ui-input-text ui-body-c"/>
+        <input type="text" id="contactSearch" data-type="search" placeholder="Search or type new" class="contact-top-input ui-input-text search-icon"/>
         }
 
         <ul id="contactList" data-role="listview" class="ui-listview">

@@ -47,6 +47,18 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
+            if (Session["User"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            var user = (UserModels.UserResponse)Session["User"];
+
+            if (user.bankAccounts.Count == 0)
+            {
+                Session["UserSetupReturnUrl"] = "/mobile/Donate/PopupPinSwipe";
+
+                return RedirectToAction("SetupACHAccount", "Register", new RouteValueDictionary() { });
+            }
+
             var donateInformation = (Session["DonateInformation"] != null ? (DonateInformation)Session["DonateInformation"] : new DonateInformation());
 
             if (String.IsNullOrEmpty(donateInformation.RecipientId))

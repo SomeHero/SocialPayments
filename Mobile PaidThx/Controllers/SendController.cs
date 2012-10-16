@@ -21,6 +21,8 @@ namespace Mobile_PaidThx.Controllers
         {
             public string RecipientUri { get; set; }
             public string RecipientName { get; set; }
+            public string RecipientFirstName { get; set; }
+            public string RecipientLastName { get; set; }
             public string RecipientImageUrl { get; set; }
             public double Amount { get; set; }
             public string Comments { get; set; }
@@ -50,6 +52,11 @@ namespace Mobile_PaidThx.Controllers
         {
             ModelState.Clear();
 
+            if (Session["User"] == null)
+                return RedirectToAction("SignIn", "Account", null);
+
+            var user = (UserModels.UserResponse)Session["User"];
+            
             var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
             
             if(String.IsNullOrEmpty(sendInformation.RecipientUri))
@@ -58,6 +65,13 @@ namespace Mobile_PaidThx.Controllers
                 ModelState.AddModelError("", "Amount must be greater than $0.00");
 
             sendInformation.Comments = model.Comments;
+
+            if (user.bankAccounts.Count == 0)
+            {
+                Session["UserSetupReturnUrl"] = "/mobile/Send/PopupPinSwipe";
+
+                return RedirectToAction("SetupACHAccount", "Register", new RouteValueDictionary() { });
+            }
 
             if (!ModelState.IsValid)
             {
@@ -78,8 +92,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult SetupACHAccount()
         {
             //_logger.Log(LogLevel.Info, String.Format("Displaying SetupACHAccount View"));
-            
-            TempData["DataUrl"] = "data-url=/mobile/SetupACHAccount";
 
             return View("SetupACHAccount", new SetupACHAccountModel()
             {
@@ -256,6 +268,20 @@ namespace Mobile_PaidThx.Controllers
             sendInformation.RecipientUri= model.RecipientUri;
             sendInformation.RecipientName = model.RecipientName;
 
+            if (model.RecipientType.ToLower() == "facebook")
+            {
+                if (model.RecipientName.Contains(' '))
+                {
+                    sendInformation.RecipientFirstName = model.RecipientName.Substring(0, model.RecipientName.IndexOf(' '));
+                    sendInformation.RecipientLastName = model.RecipientName.Substring(model.RecipientName.IndexOf(' ') + 1);
+                }
+                else
+                {
+                    sendInformation.RecipientFirstName = model.RecipientName;
+                    sendInformation.RecipientLastName = "";
+                }
+            }
+
             TempData["DataUrl"] = "data-url=/mobile/Send";
 
             string imageUrl = "";
@@ -334,7 +360,8 @@ namespace Mobile_PaidThx.Controllers
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
                     paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, sendInformation.RecipientUri, model.Pincode,
-                        sendInformation.Amount, sendInformation.Comments, "Payment", "0", "0", "", "", "", "Standard");
+                        sendInformation.Amount, sendInformation.Comments, "Payment", "0", "0", sendInformation.RecipientFirstName, sendInformation.RecipientLastName, sendInformation.RecipientImageUrl,
+                        "Standard");
                 }
                 catch (ErrorException ex)
                 {
