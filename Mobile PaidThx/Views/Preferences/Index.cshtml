@@ -33,7 +33,7 @@
                      
                      </a></li>
             </ul>
-            <h2 class="section-header">LINKED PAYPOINTS | <a href="#">WHAT?</a></h2>
+            <h2 class="section-header">LINKED PAYPOINTS <a class="info-helper" title="About Paypoints" tip="Paypoints are ways that people can pay you.  Some people know your email address or phone number, some friends you only know through facebook, still other folks you'd rather not know any of that, so they'll use a ME Code." href="#">WHAT?</a></h2>
             <ul class="panel-container">
                 <li class="settings" id="emails">
                     <!-- Separate Set -->
@@ -112,3 +112,37 @@
         </div>
     </div>
 </div>
+@section PageScripts
+{
+<script type="text/javascript">
+    $('.info-helper').qtip({
+        content: {
+        text: function(api) {
+				return $(this).attr('tip');
+			},
+            title: {
+			text: function(api) {
+				return $(this).attr('title');
+			},
+            button: true
+		}
+    },
+    position: {
+        my: 'bottom right',
+        at: 'top right'
+    },
+    style: {
+        classes: 'ui-tooltip-shadow ui-tooltip-rounded ui-tooltip-tipsy'
+    }, 
+    show: {
+        event: 'click'
+    },
+    hide: {
+        event: 'unfocus'
+    }
+
+
+    });
+
+</script>
+}
