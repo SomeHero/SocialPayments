@@ -43,7 +43,7 @@
                    
                    @if (Model.EmailAddress.Verified)
                    {
-                    <text><h4 class="verified">Verified</h4></text>
+                        <text><h4 class="verified">Verified</h4></text>
                    }
                    else
                    {
@@ -53,15 +53,19 @@
             </li>
             </ul>
              @if (!Model.EmailAddress.Verified)
-                   {
-                    <text>
-                <button type="button" id="btn-verify-account" class="pd-btn blue">
+             {
+                using (Html.BeginForm("ResendVerification", "Emails", FormMethod.Post))
+                {
+                <text>
+                <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
+                <button type="submit" id="btn-verify-account" class="pd-btn blue">
                   Resend Email</button>
-
                 </text>
-                   }
+                }
+                    
+              }
  
-            @using (Html.BeginForm("Delete", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+            @using (Html.BeginForm("Delete", "Emails", FormMethod.Post))
             {
                 <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
                 <button type="submit" id="btn-remove-email" class="pd-btn red">
