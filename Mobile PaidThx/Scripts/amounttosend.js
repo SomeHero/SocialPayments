@@ -1,4 +1,3 @@
-//wait to do event binding until the page is being initialized
 $(document).ready(function () {
 
     var currentAmount = "0.00";

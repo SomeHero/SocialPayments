@@ -14,13 +14,13 @@
     </div>
     <div class="pd-content">
     <div class="top-panel">
-    
+    We sent 2 small payments into this bank account a little while back.  Please log into your online banking, find the two payments from PaidThx, and enter those amounts into the fields below.
     </div>
      @Html.ValidationSummary()
         <div class="pad">
          @using (Html.BeginForm("VerifyAccount", "BankAccounts", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
          {
-            @Html.ValidationSummary()
+  
             <p>
                 @Html.TextBoxFor(m => m.Amount1, new Dictionary<string, object>() { { "id", "depositAmount1" }, { "placeholder", "Amount 1 (ex: $0.45)" } })
             </p>

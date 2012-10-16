@@ -216,7 +216,7 @@ var paystreamController = (function ($, undefined) {
             url: webServicesController.getWebServicesBaseUrl() + "Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
             dataType: "json",
             error: function (data, textStatus, xhr) {
-                alert(textStatus);
+               //hiding for now alert(textStatus);
                 if (callback) {
                     callback(data);
                 }
@@ -341,7 +341,7 @@ var paystreamController = (function ($, undefined) {
                 }
             },
             error: function (objRequest, next, errorThrown) {
-                alert(next);
+                //hiding for now alert(next);
                 $("#error-block").appendTo(next);
             }
         });
