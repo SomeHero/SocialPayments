@@ -206,6 +206,7 @@ namespace Mobile_PaidThx.Controllers
         {
             var faceBookServices = new FacebookServices();
             var userServices = new UserServices();
+            var applicationServices = new ApplicationServices();
 
             var redirect = String.Format(fbTokenRedirectURL, "SignIn/SignInWithFacebook/");
 
@@ -292,11 +293,37 @@ namespace Mobile_PaidThx.Controllers
                     Message = null
                 });
             }
+            ApplicationResponse application;
 
-            Session["UserId"] = facebookSignInResponse.userId;
-            Session["User"] = userResponse;
+            try
+            {
+                application = applicationServices.GetApplication(_apiKey);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
+
+                return View(new SignInModels.SignInModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
+
+            Session["UserId"] = userResponse.userId;
+            Session["Application"] = application;
             Session["Friends"] = friends;
 
+            if (userResponse.isLockedOut)
+            {
+                
+                TempData["SecurityQuestion"] = userResponse.securityQuestion;
+                return RedirectToAction("SecurityQuestionChallenge");
+            }
+
+            Session["User"] = userResponse;
+          
             if (isNewUser)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
             else
