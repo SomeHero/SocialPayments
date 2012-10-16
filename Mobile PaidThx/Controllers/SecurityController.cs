@@ -40,6 +40,13 @@ namespace Mobile_PaidThx.Controllers
             if (Session["User"] == null)
                 return RedirectToAction("SignIn", "Account", null);
 
+            if (String.IsNullOrEmpty(model.NewPassword) || String.IsNullOrEmpty(model.NewPasswordConfirmation))
+            {
+                ModelState.AddModelError("", "New Password and New Password Confirm are required");
+
+                return View();
+            }
+
             if (model.NewPassword != model.NewPasswordConfirmation)
             {
                 ModelState.AddModelError("", "New Passwords Don't Match");
