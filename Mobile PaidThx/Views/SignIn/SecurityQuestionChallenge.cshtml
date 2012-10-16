@@ -19,8 +19,8 @@
         {
             @Html.HiddenFor(m => m.SecurityQuestion)
             <p>@Model.SecurityQuestion</p>
-             @Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })
-           <button type="submit" class="btn-jq" data-theme="f" data-icon="check" data-iconpos="right">Submit</button>
+               <span class="form-holder">@Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })</span>
+           <button type="submit" class="pd-btn green">Submit</button>
         }
         </div>
     </div>
