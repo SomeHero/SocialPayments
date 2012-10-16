@@ -16,8 +16,8 @@
     <text> <p>Create a security pin by swiping your finger to connect at least 4 pins below.</p></text>
         }
 </div>
+    @Html.ValidationSummary()
     <div class="pad">
-    
 
         @using (Html.BeginForm("SetupPinSwipe", "Register", FormMethod.Post, new Dictionary<string, object>{{ "id", "pinSwipeForm"}, { "data-transition", "slideup" }}))
         {
