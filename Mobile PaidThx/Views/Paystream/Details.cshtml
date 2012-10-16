@@ -31,8 +31,9 @@
     <text>Request Sent</text>
     }else if(Model.messageType == "Donation" && Model.direction == "Out"){
     <text>Donation</text>
+    }else if(Model.messageType == "AcceptPledge" && Model.direction == "In"){
+    <text>Pledge</text>
     }
-    
     }
     </h2>
 <div class="whathappened-details">
@@ -103,6 +104,19 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
     </text>
+    }else if( Model.messageType == "AcceptPledge" && Model.direction == "In"){
+        <text>
+    <img width="40" height="40" class="psd-image sender" src="@Model.recipientImageUri" alt="Sender" />
+    <div class="ps-detail-textpad">
+    <p class="whathappened-content">
+   <span class="lbl-sender">You</span> pledged <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
+to <span class="lbl-recipient">@Model.senderName</span>
+<br><span class="lbl-date">@Model.createDate</span>
+</p>
+<div class="clear"></div>
+</div>
+<img width="40" height="40" class="psd-image recipient" src="@Model.senderImageUri" alt="Recipient" />
+    </text>
     }
     
     }
@@ -111,7 +125,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 </div>
 @{
-    if (Model.comments != "No Comments" && Model.comments != "")
+    if (Model.comments.ToLower() != "no comments" && Model.comments != "")
     {                                               
  <text><span class="bubble">"@Model.comments"</span></text>
     }
@@ -233,6 +247,32 @@ to <span class="lbl-recipient">@Model.recipientName</span>
      @Html.Hidden("paystreamAction", "CancelRequest") 
     <button type="submit" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
         Cancel
+     </button>
+     }
+     </text>
+    
+    }
+        if (Model.messageType == "AcceptPledge" && Model.isAcceptable)
+    {
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "AcceptPledge") 
+     <button type="submit" class="pd-btn green accept accept-payment-request">
+        Complete Donation
+     </button>
+     }
+     </text>
+    }
+    if (Model.messageType == "AcceptPledge" && Model.isRejectable)
+    {
+
+     <text>
+     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @Html.Hidden("messageId", @Model.Id) 
+     @Html.Hidden("paystreamAction", "RejectPledge") 
+     <button type="submit" class="pd-btn red reject reject-payment-request">
+        Cancel Pledge
      </button>
      }
      </text>

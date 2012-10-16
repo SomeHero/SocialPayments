@@ -216,6 +216,7 @@
     <Compile Include="Interfaces\ISMSService.cs" />
     <Compile Include="MarketingServices.cs" />
     <Compile Include="MerchantServices.cs" />
+    <Compile Include="MessageProcessing\AcceptedPledgeMessageTask.cs" />
     <Compile Include="MessageProcessing\AcceptedRequestMessageTask.cs" />
     <Compile Include="MessageProcessing\CancelledPaymentMessageTask.cs" />
     <Compile Include="MessageProcessing\CompletedPaymentMessageTask.cs" />

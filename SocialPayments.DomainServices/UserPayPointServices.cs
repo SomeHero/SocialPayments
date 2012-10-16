@@ -30,6 +30,7 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", userId));
 
                 var payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == payPointTypeName);
+                var verified = false;
 
                 if (payPointType == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Pay Point Type {0} not found", uri));
@@ -48,6 +49,8 @@ namespace SocialPayments.DomainServices
                 }
                 if (payPointType.Name == "MeCode")
                 {
+                    verified = true;
+
                     if (!validationService.IsMECode(uri))
                         throw new CustomExceptions.BadRequestException(String.Format("{0} is not a valid Me Code", unformattedUri));
                 }
@@ -67,7 +70,7 @@ namespace SocialPayments.DomainServices
                     IsActive = true,
                     URI = uri,
                     Type = payPointType,
-                    Verified = false
+                    Verified = verified
                 });
 
                 var messages = _ctx.Messages

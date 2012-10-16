@@ -27,8 +27,78 @@ namespace SocialPayments.DomainServices
 
         public MessageServices()
         { }
+        public void AcceptPledge(string id, string userId, string paymentAccountId, string securityPin)
+        {
+            using (var ctx = new Context())
+            {
+                var securityServices = new DomainServices.SecurityService();
 
-        public Message AcceptPledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments,
+                Guid messageId;
+                Guid userGuid;
+
+                Domain.Message message = null;
+                Domain.User user = null;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                Guid.TryParse(id, out messageId);
+
+                if (messageId == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
+
+                message = ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId && m.RecipientId == user.UserId);
+
+                if (message == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
+
+
+                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge))
+                    throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Pledge {0}.  Invalid State {1}.", id, message.Status));
+
+                Domain.PaymentAccount paymentAccount = null;
+                Guid paymentAccountGuid;
+
+                Guid.TryParse(paymentAccountId, out paymentAccountGuid);
+
+                if (paymentAccountGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
+
+                paymentAccount = ctx.PaymentAccounts.FirstOrDefault(a => a.Id == paymentAccountGuid);
+
+
+                if (paymentAccount == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Invalid Payment Account {0}", paymentAccountId));
+
+
+                message.Status = PaystreamMessageStatus.AcceptedRequest;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                var paymentMessage = AddMessage(message.ApiKey.ToString(), userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
+                                         message.Amount, message.Comments, "Donatation", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
+                                         message.Id.ToString(), "Standard");
+
+                //kick off background taskes to lookup recipient, send emails, and bath transactions
+                Task.Factory.StartNew(() =>
+                {
+                    AcceptedRequestMessageTask task = new AcceptedRequestMessageTask();
+                    task.Execute(message.Id);
+
+                });
+            }
+
+        }
+        
+        public Message Pledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments,
             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {
             Guid applicationGuid;
@@ -258,6 +328,13 @@ namespace SocialPayments.DomainServices
                 {
                     URIType recipientUriType = GetURIType(recipientUri);
 
+                    if(recipientUriType == URIType.EmailAddress)
+                    {
+                        var payPoint = sender.PayPoints.FirstOrDefault(p=>p.URI == recipientUri);
+
+                        if(payPoint != null)
+                            throw new CustomExceptions.BadRequestException(String.Format("Sender {0} and Recipient {1} have the same pay points. Unable to Process.", senderId, recipientUri));
+                    }
                     if (recipientUriType == URIType.MobileNumber)
                         recipientUri = formattingServices.RemoveFormattingFromMobileNumber(recipientUri);
 
@@ -270,6 +347,8 @@ namespace SocialPayments.DomainServices
                         throw new CustomExceptions.BadRequestException(String.Format("Sender {0} and Recipient {1} have the same pay points. Unable to Process.", senderId, recipientUri));
                     }
                 }
+
+                
 
                 //VALIDATE the SENDER PAYMENT ACCOUNT
                 PaymentAccount senderAccount = GetAccount(sender, senderAccountId);
@@ -1015,23 +1094,20 @@ namespace SocialPayments.DomainServices
             {
                 var formattingServices = new DomainServices.FormattingServices();
                 var validationServices = new DomainServices.ValidationService();
+                var userService = new DomainServices.UserService();
 
                 var message = ctx.Messages
-                    .Include("Recipient")
+                   .Include("Recipient")
+                    .Include("Recipient.Merchant")
                     .Include("Sender")
+                    .Include("Sender.Merchant")
+                    .Include("Payment")
                     .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageId);
 
-                URIType senderUriType = GetURIType(message.SenderUri);
-                URIType recipientUriType = GetURIType(message.RecipientUri);
-
-                if (message == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Message {0} Not Found", messageId));
-
-                if (message.Sender != null)
-                    message.SenderName = _formattingServices.FormatUserName(message.Sender);
+                message.SenderName = userService.GetSenderName(message.Sender);
                 if (message.Recipient != null)
-                    message.RecipientName = _formattingServices.FormatUserName(message.Recipient);
+                    message.RecipientName = userService.GetSenderName(message.Recipient);
                 else
                 {
                     if (validationServices.IsPhoneNumber(message.RecipientUri))

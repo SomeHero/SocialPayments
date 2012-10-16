@@ -67,6 +67,13 @@ namespace Mobile_PaidThx.Controllers
                     case "RejectRequest":
                         paystreamMessageServices.RejectPaymentRequest("", message.Id.ToString(), user.userId.ToString(), model.Pincode);
                         break;
+                    case "AcceptPledge":
+                        paystreamMessageServices.AcceptPledgeRequest("", user.userId.ToString(), model.Pincode, user.preferredReceiveAccountId,
+                            message.Id.ToString());
+                        break;
+                    case "RejectPledge":
+                        paystreamMessageServices.RejectPaymentRequest("", message.Id.ToString(), user.userId.ToString(), model.Pincode);
+                        break;
                     default:
                         throw new Exception(String.Format("Invalid Action {0}", paystreamAction));
 
