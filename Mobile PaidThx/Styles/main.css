@@ -90,6 +90,11 @@ h2.section-header:not(:first-child) {
     
 }
 
+.red
+{
+ color: #EC3F41;   
+}
+
 /* ++++++++++++++++++ERRORS++++++++++++++++ */
 
 
@@ -546,9 +551,14 @@ li.toggler
 }
 .toggle-name
 {
- font-size:14pt;
- font-weight:bold;   
+font-size:13px;
+display: block;
+float: left;
+margin-top: 6px; 
+margin-bottom: 6px;   
+font-weight:bold;     
 }
+ 
 /*+++++++++++++++++++++++++++LAYOUT ELEMENTS+++++++++++++++++++++++*/
 
 div.page{
@@ -2009,6 +2019,8 @@ text-shadow:none;
 /* ==========================================================================
    SETTINGS
    ========================================================================== */
+
+
 
 ul.setting-group
 {

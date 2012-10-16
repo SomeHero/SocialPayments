@@ -24,7 +24,7 @@
                 
                 <label for="@item.ConfigurationKey" class="toggle-name">@item.Description</label>
                 <div class="toggle-holder">
-                <input type="checkbox" class="switch-cb" name="@item.ConfigurationKey" data-key="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0"){<text> checked="checked"</text>}  />
+                <input type="checkbox" class="switch-cb invisible" name="@item.ConfigurationKey" data-key="@item.ConfigurationKey" id="@item.ConfigurationKey" @if (item.SelectedValue != "0"){<text> checked="checked"</text>}  />
                                                                                                                                                                         
 </div>
                 <div class="clear"></div>
@@ -46,6 +46,7 @@
 @section PageScripts{
 <script type="text/javascript">
     $(document).ready(function () {
+
         // Iterate over checkboxes
         $("input[type=checkbox].switch-cb").each(function () {
             // Insert mark-up for switch
