@@ -14,11 +14,13 @@ namespace Mobile_PaidThx.Services
     {
         private string _paystreamMessageUrl = "{0}PaystreamMessages";
         private string _donateMessageUrl = "{0}PaystreamMessages/donate";
-        private string _pledgeMessageUrl = "{0}/PaystreamMessages/accept_pledge";
+        private string _pledgeMessageUrl = "{0}/PaystreamMessages/pledge";
         private string _cancelPaymentUrl = "{0}/paystreammessages/{1}/cancel_payment";
         private string _cancelRequestUrl = "{0}/paystreammessages/{1}/cancel_request";
         private string _acceptPaymentRequestUrl = "{0}/paystreammessages/{1}/accept_request";
         private string _rejectPaymentRequestUrl = "{0}/paystreammessages/{1}/reject_request";
+        private string _acceptPledgeRequestUrl = "{0}/paystreammessages/{1}/accept_pledge";
+        private string _rejectPledgeRequestUrl = "{0}/paystreammessages/{1}/reject_pledge";
         private string _messageServicesBaseUrl = "{0}/Users/{1}/PaystreamMessages/{2}";
 
 
@@ -145,6 +147,44 @@ namespace Mobile_PaidThx.Services
                 securityPin = securityPin
             });
             var response = Post(String.Format(_rejectPaymentRequestUrl, _webServicesBaseUrl, messageId), json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+        }
+        public void AcceptPledgeRequest(string apiKey, string userId, string securityPin, string paymentAccountId, string messageId)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                userId = userId,
+                securityPin = securityPin,
+                paymentAccountId = paymentAccountId
+            });
+
+            var response = Post(String.Format(_acceptPledgeRequestUrl, _webServicesBaseUrl, messageId), json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+        }
+        public void RejectPledgeRequest(string apiKey, string messageId, string userId, string securityPin)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                userId = userId,
+                securityPin = securityPin
+            });
+            var response = Post(String.Format(_rejectPledgeRequestUrl, _webServicesBaseUrl, messageId), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {

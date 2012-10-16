@@ -22,6 +22,7 @@ namespace Mobile_PaidThx.Models
             public SortedDictionary<string, List<FacebookModels.Friend>> SortedContacts { get; set; }
             public String RecipientUri { get; set; }
             public String RecipientName { get; set; }
+            public String RecipientType { get; set; }
             public String RecipientImageUrl { get; set; }
         }
         public class AmountToSendModel

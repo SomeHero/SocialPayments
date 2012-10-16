@@ -21,6 +21,8 @@ namespace Mobile_PaidThx.Controllers
         {
             public string RecipientUri { get; set; }
             public string RecipientName { get; set; }
+            public string RecipientFirstName { get; set; }
+            public string RecipientLastName { get; set; }
             public string RecipientImageUrl { get; set; }
             public double Amount { get; set; }
             public string Comments { get; set; }
@@ -266,6 +268,20 @@ namespace Mobile_PaidThx.Controllers
             sendInformation.RecipientUri= model.RecipientUri;
             sendInformation.RecipientName = model.RecipientName;
 
+            if (model.RecipientType.ToLower() == "facebook")
+            {
+                if (model.RecipientName.Contains(' '))
+                {
+                    sendInformation.RecipientFirstName = model.RecipientName.Substring(0, model.RecipientName.IndexOf(' '));
+                    sendInformation.RecipientLastName = model.RecipientName.Substring(model.RecipientName.IndexOf(' ') + 1);
+                }
+                else
+                {
+                    sendInformation.RecipientFirstName = model.RecipientName;
+                    sendInformation.RecipientLastName = "";
+                }
+            }
+
             TempData["DataUrl"] = "data-url=/mobile/Send";
 
             string imageUrl = "";
@@ -344,7 +360,8 @@ namespace Mobile_PaidThx.Controllers
                     UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
                     var paystreamMessageServices = new PaystreamMessageServices();
                     paystreamMessageServices.SendMoney(_apiKey, userId, "", user.userName, user.preferredPaymentAccountId, sendInformation.RecipientUri, model.Pincode,
-                        sendInformation.Amount, sendInformation.Comments, "Payment", "0", "0", "", "", "", "Standard");
+                        sendInformation.Amount, sendInformation.Comments, "Payment", "0", "0", sendInformation.RecipientFirstName, sendInformation.RecipientLastName, sendInformation.RecipientImageUrl,
+                        "Standard");
                 }
                 catch (ErrorException ex)
                 {

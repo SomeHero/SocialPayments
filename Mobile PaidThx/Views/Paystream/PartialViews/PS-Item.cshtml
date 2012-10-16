@@ -45,7 +45,7 @@ No message
                 Money In
                 {{else messageType == "Donation"}}
                 Donation In
-                {{else messageType == "Pledge"}}
+                {{else messageType == "AcceptPledge"}}
                 Pledge
                 {{/if}}
 {{else direction == "Out"}}
@@ -55,7 +55,7 @@ No message
                 Money Out
                 {{else messageType == "Donation"}}
                 Donation
-                {{else messageType == "Pledge"}}
+                {{else messageType == "AcceptPledge"}}
                 Pledge
                 {{/if}}
             {{/if}}
@@ -76,7 +76,7 @@ No message
                 +
                 {{else messageType == "Donation"}}
                 &#9829;
-                {{else messageType == "Pledge"}}
+                {{else messageType == "AcceptPledge"}}
                 &#9829;
                 {{/if}}
 {{else direction == "Out"}}
@@ -86,7 +86,7 @@ No message
                 -
                 {{else messageType == "Donation"}}
                 &#9829;
-                {{else messageType == "Pledge"}}
+                {{else messageType == "AcceptPledge"}}
                 &#9829;
                 {{/if}}
             {{/if}}$${amount.toFixed(2)}

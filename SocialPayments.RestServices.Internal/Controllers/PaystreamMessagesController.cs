@@ -243,9 +243,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
 
         }
-        // POST /api/message/accept_pledge
+        // POST /api/message/pledge
         [HttpPost]
-        public HttpResponseMessage AcceptPledge(MessageModels.SubmitPledgeRequest request)
+        public HttpResponseMessage Pledge(MessageModels.SubmitPledgeRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.onBehalfOfId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
 
@@ -254,7 +254,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                message = _messageServices.AcceptPledge(request.apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
+                message = _messageServices.Pledge(request.apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
                     request.comments, request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientLastName,
                     request.securityPin);
             }
@@ -515,6 +515,45 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
 
             _logger.Log(LogLevel.Info, String.Format("Accept Payment Request Complete {0}", id));
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+        // POST /api/paystreammessages/{id}/accept_pledge
+        [HttpPost]
+        public HttpResponseMessage AcceptPledgeRequest(string id, MessageModels.AcceptPaymentRequestModel request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Accept Pledge Request Started {0}", id));
+
+            var messageServices = new DomainServices.MessageServices();
+
+            try
+            {
+                messageServices.AcceptPledge(id, request.userId, request.paymentAccountId, request.securityPin);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Accepting Pledge {0}. Exception {1}", id, ex.Message));
+
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Accepting Pledge {0}. Exception {1}", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Accepting Pledge {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            _logger.Log(LogLevel.Info, String.Format("Accept Pledge Complete {0}", id));
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
