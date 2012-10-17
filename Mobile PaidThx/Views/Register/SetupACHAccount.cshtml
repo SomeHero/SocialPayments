@@ -74,7 +74,7 @@
     
 <div id="help" class="lightbox" style="display:none;padding:10px;">
 
-<h4 class="lb-title">Getting Started</h4>
+<h4 class="lb-title">LINK YOUR BANK</h4>
 <p>
 PaidThx works directly with your bank account.  To link an account, you'll need the <b>Routing</b> and <b>Account Number</b>.
 </p>
@@ -136,7 +136,13 @@ You can find this info on the <b>bottom of a check</b>, within your <b>online ba
                     }
                 });
 
-                $('#btn-help').trigger('click');
+                if ($('.validation-summary-errors').is(':visible')) {
+                   //do nothing for now
+                } else {
+                    $('#btn-help').trigger('click');
+                }
+
+                
 
                 $('#btn-gotit').click(function (event) {
                     $.fancybox.close(false);
