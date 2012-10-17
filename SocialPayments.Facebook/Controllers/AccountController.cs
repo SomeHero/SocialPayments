@@ -11,7 +11,6 @@ namespace SocialPayments.Facebook.Controllers
 {
     public class AccountController : Controller
     {
-
         //
         // GET: /Account/LogOn
 

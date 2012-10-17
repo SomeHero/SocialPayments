@@ -21,16 +21,16 @@
                         }
                         else
                         {
-                     <img width="50" height="50" class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
+                            <img width="50" height="50" class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
                         }
                         
-                        }
+                    }
                     <div class="profile-section">
                     <div class="txt-flt">
                     <h2 class="heading"> @Model.UserName </h2>
-                    <h4 class="subheading">Profile: <span class="percent">60% Complete</span></h4> 
+                    <h4 class="subheading">Profile: <span class="percent">@Model.UserProfileComplete% Complete</span></h4> 
                     <div class="progress-bar">
-    <div class="profile-complete" style="width:60%">
+    <div class="profile-complete" style="width:@Model.UserProfileComplete%">
         &nbsp;
     </div>
 </div>

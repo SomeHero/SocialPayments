@@ -43,6 +43,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult Personalize(PersonalizeModel model)
         {
