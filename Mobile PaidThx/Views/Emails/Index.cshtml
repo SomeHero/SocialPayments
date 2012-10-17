@@ -11,6 +11,8 @@
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+    @Html.ValidationSummary()
+    @TempData["Message"]
     <div class="top-panel">
     @if (Model.PayPoints.Count < 1){
         

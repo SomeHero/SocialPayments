@@ -96,7 +96,37 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public ActionResult ResendVerification(EmailsModels.ResendEmailVerificationModel model)
+        {
+            var user = (UserModels.UserResponse)Session["User"];
+            var meCode = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);
 
+            var service = new UserPayPointServices();
+
+            try
+            {
+                service.ResendEmailVerificationLink(user.userId.ToString(), meCode.Id);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Details",
+                    new EmailsModels.DetailsEmailModel()
+                    {
+                        EmailAddress = meCode
+                    });
+            }
+
+            TempData["Message"] = String.Format("A verification email was sent to {0}.  Please check your email and complete verifying this pay point.", meCode.Uri);
+
+            return View("Details",
+                    new EmailsModels.DetailsEmailModel()
+                    {
+                        EmailAddress = meCode
+                    });
+        }
 
     }
 }
