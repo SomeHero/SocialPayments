@@ -148,6 +148,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
                 Id = userPayPoint.Id.ToString()
             });
         }
+
         // POST /api/users/{userId}/PayPoints/resend_verification_code
         public HttpResponseMessage ResendVerificationCode(string userId, UserModels.ResendVerificationCodeRequest model)
         {
@@ -161,7 +162,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 if (userPayPoint == null)
                     throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
-                    
+                   
                 userServices.SendMobileVerificationCode(userPayPoint);
             }
             catch (NotFoundException ex)
@@ -197,7 +198,6 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
                 try
                 {
-
                     userServices.SendEmailVerificationLink(userId, model.UserPayPointId);
                 }
                 catch (NotFoundException ex)

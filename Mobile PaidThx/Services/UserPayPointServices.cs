@@ -14,6 +14,7 @@ namespace Mobile_PaidThx.Services
     {
         private string _getPayPointsUrl = "{0}Users/{1}/paypoints";
         private string _deletePaypointUrl = "{0}Users/{1}/paypoints/{2}";
+        private string _resendVerificationUrl = "{0}Users/{1}/paypoints/resend_verification_code";
         private string _addPaypointUrl = "{0}Users/{1}/paypoints";
         private string _resendEmailVerificationLinkUrl = "{0}Users/{1}/PayPoints/resend_email_verification_link";
         private string _resendPhoneVerificationCodeUrl = "{0}Users/{1}/PayPoints/resend_verification_code";
@@ -34,6 +35,7 @@ namespace Mobile_PaidThx.Services
 
             return js.Deserialize<List<UserModels.UserPayPointResponse>>(response.JsonResponse);
         }
+
         public void AddPaypoint(String userId, String uri, String type)
         {
             var serviceUrl = String.Format(_addPaypointUrl, _webServicesBaseUrl, userId);
@@ -53,7 +55,6 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
-
         }
 
 
@@ -71,6 +72,7 @@ namespace Mobile_PaidThx.Services
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
         }
+
         public void ResendEmailVerificationLink(String userId, String payPointId)
         {
             var serviceUrl = String.Format(_resendEmailVerificationLinkUrl, _webServicesBaseUrl, userId);
@@ -91,6 +93,7 @@ namespace Mobile_PaidThx.Services
             }
 
         }
+
         public void ResendPhoneVerificationCode(String userId, String payPointId)
         {
             var serviceUrl = String.Format(_resendPhoneVerificationCodeUrl, _webServicesBaseUrl, userId);
@@ -109,7 +112,6 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
-
         }
     }
 }

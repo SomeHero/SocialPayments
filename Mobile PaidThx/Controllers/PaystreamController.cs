@@ -18,7 +18,7 @@ namespace Mobile_PaidThx.Controllers
     public class PaystreamController : Controller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
- 
+
         public ActionResult PopupPinSwipe(string paystreamAction, string messageId)
         {
             var userId = Session["UserId"].ToString();

@@ -100,5 +100,26 @@ namespace Mobile_PaidThx.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult ResendPhoneVerification(PhonesModels.DeletePhonesModel model)
+        {
+            var user = (UserModels.UserResponse)Session["User"];
+            var service = new UserPayPointServices();
+
+            try
+            {
+                service.ResendPhoneVerificationCode(user.userId.ToString(), model.PayPointId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
+            }
+
+            user.userPayPoints = service.GetPayPoints(user.userId.ToString());
+
+            return RedirectToAction("Index");
+        }
     }
 }

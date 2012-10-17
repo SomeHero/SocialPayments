@@ -54,14 +54,16 @@
         </ul>
             
 
-             @{
+           @{
                  if (!Model.PhoneNumber.Verified)
                  {
-                            <button type="button" id="btn-verify-account" class="pd-btn blue">
-                  Resend Text</button>
-
+                     @using (Html.BeginForm("ResendVerification", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+                     {
+                         <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                         <button type="submit" id="btn-verify-account" class="pd-btn blue">Resend Text</button>
+                     }
                  }
-              }
+            }
 
             @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {

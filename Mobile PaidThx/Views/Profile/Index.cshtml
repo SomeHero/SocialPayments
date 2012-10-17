@@ -15,7 +15,7 @@
     <div class="pad">
         
             @foreach (var profileSection in Model.ProfileSections)
-            { 
+            {
                 foreach (var profileItem in profileSection.ProfileItems)
                 {
                     string value = "";
@@ -32,7 +32,6 @@
                             <text><span class="form-holder"> <input type="text" placeholder="@profileItem.Label" name="@profileItem.Id" data-attribute-id="@profileItem.Id" data-key="@profileItem.UserAttributeId" value="@value" class="profile-item" /></span></text>
                             break;
                     }
-       
                 } 
 
             }
