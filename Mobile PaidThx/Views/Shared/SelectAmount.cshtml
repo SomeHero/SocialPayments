@@ -14,7 +14,9 @@
             </div>
 
             <script type="text/javascript">
-                if (isiPhone) {
-                    $('#customAmount').attr("pattern", "[0-9]*");
-                }
+                $(document).ready(function () {
+                    if (isiPhone) {
+                        $('#customAmount').attr("pattern", "[0-9]*");
+                    }
+                });
             </script>
