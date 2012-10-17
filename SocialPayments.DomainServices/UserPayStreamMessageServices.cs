@@ -5,6 +5,7 @@ using System.Text;
 using SocialPayments.DataLayer;
 using SocialPayments.Domain;
 using System.Data.Entity;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices
 {
@@ -106,6 +107,61 @@ namespace SocialPayments.DomainServices
                 
                 return message;
 
+            }
+        }
+        public void SendReminder(string userId, string messageId, string reminderMessage)
+        {
+            using (var ctx = new Context())
+            {
+                var userServices = new DomainServices.UserService(ctx);
+                var validationServices = new DomainServices.ValidationService();
+                var formattingServices = new DomainServices.FormattingServices();
+                var emailService = new DomainServices.EmailService();
+                var smsService = new DomainServices.SMSService();
+                var facebookServices = new DomainServices.FacebookServices();
+
+                
+                var message = GetPayStreamMessage(userId, messageId);
+
+                var recipientUriType = userServices.GetURIType(message.RecipientUri);
+                var fromAddress = ConfigurationManager.AppSettings["fromEmailAddress"];
+                var senderName = userServices.GetSenderName(message.Sender);
+
+                switch (recipientUriType)
+                {
+                    case URIType.EmailAddress:
+                        
+                        emailService.SendEmail(message.ApiKey, fromAddress, message.RecipientUri, String.Format("Reminder from {0}", senderName, reminderMessage), reminderMessage);
+
+                        break;
+
+                    case URIType.MobileNumber:
+                        smsService.SendSMS(message.ApiKey, message.RecipientUri, reminderMessage);
+
+                        break;
+                    case URIType.MECode:
+
+                        var meCode = ctx.UserPayPoints.FirstOrDefault(p => p.URI == message.RecipientUri);
+
+                        if (meCode == null)
+                            throw new CustomExceptions.BadRequestException(String.Format("Unable to find MeCode {0}", message.RecipientUri));
+
+                        if (!String.IsNullOrEmpty(meCode.User.EmailAddress))
+                        {
+                            emailService.SendEmail(message.ApiKey, fromAddress, message.RecipientUri, String.Format("Reminder from {0}", senderName, reminderMessage), reminderMessage);
+                        }
+                        if (!String.IsNullOrEmpty(meCode.User.MobileNumber))
+                        {
+                            smsService.SendSMS(message.ApiKey, message.RecipientUri, reminderMessage);
+                        }
+
+
+                        break;
+                    case URIType.FacebookAccount:
+                        facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.RecipientUri, reminderMessage, "");
+                            
+                        break;
+                }
             }
         }
     }

@@ -274,6 +274,7 @@
     <Compile Include="Models\TransactionBatchModels.cs" />
     <Compile Include="Models\TransactionModels.cs" />
     <Compile Include="Models\UserModels.cs" />
+    <Compile Include="Models\UserPaystreamModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

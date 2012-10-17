@@ -331,6 +331,12 @@ defaults: new { controller = "UserPaymentAccounts", action = "UploadCheckImage" 
                 defaults: new { controller = "UserPayStreamMessages" }
             );
             config.Routes.MapHttpRoute(
+                name: "SendReminder",
+                routeTemplate: "api/users/{userId}/PayStreamMessages/send_reminder",
+                defaults: new { controller = "UserPayStreamMessages", action = "SendReminder" },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+            );
+            config.Routes.MapHttpRoute(
                 name: "UserPayStreamMessage",
                 routeTemplate: "api/users/{userId}/PayStreamMessages/{id}",
                 defaults: new { controller = "UserPayStreamMessages" }

@@ -59,13 +59,9 @@ namespace Mobile_PaidThx.Models
     }
     public class UpdateProfileModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string SenderName { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Zip { get; set; }
+        public string AttributeId { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 
     public class CompleteProfileModel
