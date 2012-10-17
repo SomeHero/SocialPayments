@@ -62,7 +62,7 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
 
 
-                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge))
+                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge  || message.Status == PaystreamMessageStatus.PendingPledge))
                     throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Pledge {0}.  Invalid State {1}.", id, message.Status));
 
                 Domain.PaymentAccount paymentAccount = null;
@@ -84,7 +84,7 @@ namespace SocialPayments.DomainServices
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 var paymentMessage = AddMessage(message.ApiKey.ToString(), userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
-                                         message.Amount, message.Comments, "Donatation", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
+                                         message.Amount, message.Comments, "Donation", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
                                          message.Id.ToString(), "Standard");
 
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
@@ -97,7 +97,66 @@ namespace SocialPayments.DomainServices
             }
 
         }
-        
+        public void RejectPledgeRequest(string id, string userId, string securityPin)
+        {
+            using (var ctx = new Context())
+            {
+                var securityServices = new DomainServices.SecurityService();
+
+                Guid messageId;
+                Guid userGuid;
+
+                Domain.Message message = null;
+                Domain.User user = null;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                user = ctx.Users
+                    .FirstOrDefault(u => u.UserId == userGuid);
+
+                if (user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Found", id));
+
+                Guid.TryParse(id, out messageId);
+
+                if (messageId == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
+
+                message = ctx.Messages
+                    .FirstOrDefault(m => m.Id == messageId && m.RecipientId == user.UserId);
+
+                if (message == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
+
+                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge || message.Status == PaystreamMessageStatus.PendingPledge))
+                    throw new CustomExceptions.BadRequestException(String.Format("Unable to Reject Pledge {0}.  Invalid State {1}.", id, message.Status));
+
+                if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    ctx.SaveChanges();
+
+                    throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
+                }
+                message.Status = PaystreamMessageStatus.RejectedPledge;
+                message.LastUpdatedDate = System.DateTime.Now;
+
+                ctx.SaveChanges();
+
+            }
+        }
         public Message Pledge(string apiKey, string originatorId, string organizationId, string recipientUri, double amount, string comments,
             double latitude, double longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string securityPin)
         {

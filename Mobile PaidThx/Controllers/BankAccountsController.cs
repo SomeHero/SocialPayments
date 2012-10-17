@@ -345,6 +345,22 @@ namespace Mobile_PaidThx.Controllers
             {
                 bankAccountServices.SetSendAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredSendAccount"].ToString(), model.PinCode);
             }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+            }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
@@ -379,6 +395,22 @@ namespace Mobile_PaidThx.Controllers
             try
             {
                 bankAccountServices.SetReceiveAccount(_apiKey, user.userId.ToString(), Session["ChangedPreferredReceiveAccount"].ToString(), model.PinCode);
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session["User"] = null;
+                    Session["UserId"] = null;
+
+                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
+                    return RedirectToAction("Index", "SignIn");
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
             }
             catch (Exception ex)
             {

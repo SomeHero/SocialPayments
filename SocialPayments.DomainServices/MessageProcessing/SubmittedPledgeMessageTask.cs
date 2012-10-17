@@ -136,7 +136,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
             if (!String.IsNullOrEmpty(message.Recipient.EmailAddress))
             {
 
-                _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient - Not Registered"));
+                _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient - Engaged"));
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Pledge_Receipt_Email");
 
@@ -164,7 +164,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                             new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
-                            new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
+                            new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
                             new KeyValuePair<string, string>("ORGANIZATION_PHOTO_URL", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
                             new KeyValuePair<string, string>("ORGANIZATION", message.Sender.Merchant.Name),
                             new KeyValuePair<string, string>("ORGANIZATION_CONTENT", "ORGANIZATION CONTENT WOULD GO HERE"),

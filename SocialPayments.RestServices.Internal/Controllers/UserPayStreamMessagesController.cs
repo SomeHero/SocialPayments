@@ -60,7 +60,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     amount = m.Amount,
                     comments = (!String.IsNullOrEmpty(m.Comments) ? String.Format("{0}", m.Comments) : "No comments"),
-                    createDate = m.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                    createDate = m.CreateDate.ToString("YYYY-MM-DDTHH:mm:ss.sssZ"),
                     Id = m.Id,
                     //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                     messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() : m.Status.GetSenderMessageStatus()),
@@ -237,7 +237,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 amount = message.Amount,
                 comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
-                createDate = message.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                createDate = message.CreateDate.ToString("YYYY-MM-DDTHH:mm:ss.sssZ"),
                 Id = message.Id,
                 //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                 messageStatus = (message.Direction == "In" ? message.Status.GetRecipientMessageStatus() : message.Status.GetSenderMessageStatus()),

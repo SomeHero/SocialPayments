@@ -59,7 +59,7 @@ namespace Mobile_PaidThx.Controllers
                     Amount = payment.amount,
                     Comments = payment.comments,
                     MobileNumber = payment.recipientUri,
-                    Sender = payment.,
+                    Sender = payment.senderName,
                     SenderImageUrl = payment.transactionImageUri
                 }
             });
