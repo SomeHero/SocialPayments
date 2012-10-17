@@ -11,8 +11,7 @@
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
-    @Html.ValidationSummary()
-    @TempData["Message"]
+    
     <div class="top-panel">
     @if (Model.PayPoints.Count < 1){
         
@@ -24,6 +23,8 @@
 
         }     
     </div>
+    @Html.ValidationSummary()
+    @TempData["Message"]
         <div class="pad">
             <ul class="panel-container">
                 @foreach (var payPoint in Model.PayPoints)

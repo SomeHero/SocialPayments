@@ -8,7 +8,7 @@
     
     <div class="header-pdthx">
         <h1>
-            Send Reminder</h1>
+            Reminder</h1>
             <a href="@Url.Content("~/Paystream/Details?MessageId=" + @Model.MessageId)"  class="hd-btn-left btn-back">Cancel</a>
     </div>
 <div class="pd-content">
@@ -17,11 +17,11 @@
          @using (Html.BeginForm("SendReminder", "Paystream", FormMethod.Post))
          {
             @Html.HiddenFor(m => m.MessageId)
-            <textarea id="txtReminder" name="ReminderMessage" rows="10" cols="100" placeholder="Remind your friend to pay up"></textarea>
+            <textarea id="txtReminder" name="ReminderMessage" rows="10" cols="100" placeholder="Write a personal note reminding your friend about this payment or request..."></textarea>
 
             <p>
-                <button type="submit" id="send-reminder-button" class="pd-btn green" data-theme="f">
-                    <span>Send Reminder</span></button>
+                <button type="submit" id="send-reminder-button" class="pd-btn green">
+                    Send Reminder</button>
             </p>
          }
         </div>
