@@ -56,7 +56,7 @@
        <div class="footer-pdthx"> 
 	<h4>For even more info, visit our <a title="Learn More" target="_blank" href="https://paidthx.zendesk.com/forums">FAQs</a></h4> 
 </div> 
-    @{Html.RenderPartial("WelcomeMenu", new Mobile_PaidThx.Models.MenuModel() { SelectedTabIndex = 3, HeaderText = "About" }); }
+</div>
 
     @section PageStyles{
 
@@ -94,7 +94,14 @@
                     aspectRatio: true,
 					closeClick	: false,
 					openEffect	: 'elastic',
-					closeEffect: 'elastic'
+					closeEffect: 'elastic',
+                    helpers: {
+                        overlay: {
+                            css: {
+                                'background': 'rgba(255, 255, 255, 0.99)'
+                            }
+                        }
+                    }
 				});
      
 
@@ -166,6 +173,5 @@
     });
 </script>
 }
-</div>
 
 
