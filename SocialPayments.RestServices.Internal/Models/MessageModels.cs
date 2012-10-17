@@ -119,6 +119,12 @@ namespace SocialPayments.RestServices.Internal.Models
             public bool isLockedOut { get; set; }
             public int numberOfPinCodeFailures { get; set; }
         }
+        public class AcceptPledgeRequestModel
+        {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+            public string paymentAccountId { get; set; }
+        }
         public class AcceptPaymentRequestModel
         {
             public string userId { get; set; }
@@ -131,6 +137,11 @@ namespace SocialPayments.RestServices.Internal.Models
             public string securityPin { get; set; }
         }
         public class CancelPaymentRequestRequestModel 
+        {
+            public string userId { get; set; }
+            public string securityPin { get; set; }
+        }
+        public class RejectPledgeRequestModel
         {
             public string userId { get; set; }
             public string securityPin { get; set; }

@@ -11,10 +11,15 @@
         <a href="@Url.Content("~/Emails")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
-     <div class="top-panel">
+    <div class="top-panel">
     <p>
 
     @{
+        if(TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
+        {
+            @TempData["Message"]
+        }
+    else {
         if (Model.EmailAddress.Verified)
         {
         <text>
@@ -26,6 +31,7 @@
          <text>
          <b>@Model.EmailAddress.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Email" below and follow the instructions in the email you will receive.
         </text>
+        }
         }
     }
                 
@@ -59,7 +65,7 @@
                 <text>
                 <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
                 <button type="submit" id="btn-verify-account" class="pd-btn blue">
-                  Resend Email</button>
+                  Resend Activation Email</button>
                 </text>
                 }
                     

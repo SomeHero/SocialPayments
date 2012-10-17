@@ -218,7 +218,7 @@ to <span class="lbl-recipient">@Model.senderName</span>
      <text>
      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
-     @Html.Hidden("paystreamAction", "RejectRequest") 
+     @Html.Hidden("paystreamAction", "RejectPledge") 
      <button type="submit" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
         Reject Request
      </button>

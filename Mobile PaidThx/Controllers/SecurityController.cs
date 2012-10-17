@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using Mobile_PaidThx.CustomAttributes;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services.CustomExceptions;
 using Mobile_PaidThx.Services.ResponseModels;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class SecurityController : Controller
     {
         //
@@ -16,9 +19,6 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            if (Session["User"] == null)
-                return RedirectToAction("Index", "SignIn");
-
             var user = (UserModels.UserResponse)Session["User"];
 
             return View(new SecurityModels.SecurityPreferencesModel()
@@ -35,9 +35,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult ChangePassword(SecurityModels.ChangePasswordModel model)
         {
             var userService = new Services.UserServices();
-            
-            if (Session["User"] == null)
-                return RedirectToAction("SignIn", "Account", null);
 
             var user = (UserModels.UserResponse)Session["User"];
             
@@ -63,12 +60,12 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -141,9 +138,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult ForgotSecurityPin()
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-
-            if (Session["User"] == null)
-                return RedirectToAction("SignIn", "Account", null);
 
             return View(new SecurityModels.ForgotSecurityPinModel()
             {

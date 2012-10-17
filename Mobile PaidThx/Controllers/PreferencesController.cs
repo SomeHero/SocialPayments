@@ -8,9 +8,11 @@ using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Models;
 using System.Web.Security;
 using NLog;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class PreferencesController : Controller
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();

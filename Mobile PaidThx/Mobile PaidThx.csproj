@@ -179,6 +179,7 @@
     <Compile Include="Controllers\SignInController.cs" />
     <Compile Include="Controllers\SocialNetworksController.cs" />
     <Compile Include="Controllers\UserAgreementController.cs" />
+    <Compile Include="CustomAttributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
