@@ -105,10 +105,10 @@ requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Me
                 <div style="margin-bottom:20px"></div>
                 <div class="or"> - &nbsp;OR&nbsp; -</div>
              <div style="margin-bottom:20px"></div>
-             <button type="submit" id="join-reveal-button" class="pd-btn blue hide">
+             <button type="submit" id="join-reveal-button" class="pd-btn blue">
                 Join with Email</button>
 
-                <div id="email-reveal-form">
+                <div id="email-reveal-form" class="hide">
             <div id="registration-form">
                 @using (Html.BeginForm("Index", "Join", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "data-transition", "slideup" }, { "class", "validateMe" } }))
                 {
@@ -150,11 +150,10 @@ requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Me
     <script type="text/javascript">
         $(document).ready(function () {
 
-            //show email reveal button
-            $("#join-reveal-button").show();
-
-           //hide form
-            $("#email-reveal-form").hide();
+            if ($('.validation-summary-errors').is(':visible')) {
+                //show form
+                $("#email-reveal-form").show();
+            }
 
             $("#join-reveal-button").click(function () {
                 $("#email-reveal-form").show();

@@ -10,6 +10,7 @@
         <h1>
             Add Account</h1>
             <a href="@Url.Content("~/BankAccounts")"  class="hd-btn-left btn-back">Back</a>
+                        <a href="#help" id="btn-help" class="hd-btn-right fancybox">Help?</a>
     </div>
     <div class="pd-content">
     @Html.ValidationSummary()
@@ -50,20 +51,85 @@
         </div>
     </div>
 
+    <div id="help" class="lightbox" style="display:none;padding:10px;">
+
+<h4 class="lb-title">LINK YOUR BANK</h4>
+<p>
+PaidThx works directly with your bank account.  To link an account, you'll need the <b>Routing</b> and <b>Account Number</b>.
+</p>
+<br />
+<div class="icon-holder">
+ <img alt="Example Check" class="grow" src="@Url.Content("~/Content/images/samplecheck.png")" />
 </div>
+<p>
+<br />
+You can find this info on the <b>bottom of a check</b>, within your <b>online banking</b>, or you can <b>call your bank</b>.
+<br />
+</p>
+ <p>
+                <button type="button" id="btn-gotit" class="pd-btn blue">
+                   OK, Got It!</button></p>
+</div>​
+
+</div>
+
+  @section PageStyles{
+
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-buttons.css")">
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-thumbs.css")">
+        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox.css")">
+    }
+
 @section PageScripts
 {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#txtNameOnAccount').focus();
-        });
-        //wait to do event binding until the page is being initialized
-        $(document).on("pageshow", "#bankaccounts-add-page", function () {
-            $.validator.addMethod("accountmatch", function (value) {
-                return value == $("#AccountNumber").val();
-            }, "Confirm Account Number must match Account Number");
 
-            $("#frmSubmit").validate();
-        });
+<!-- FancyBox -->
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-buttons.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-thumbs.js")"></script>
+        <script src="@Url.Content("~/Libs/fancybox/js/jquery.easing-1.3.pack.js")"></script>
+		<script src="@Url.Content("~/Libs/fancybox/js/jquery.mousewheel-3.0.6.pack.js")"></script>
+
+
+        <script type="text/javascript">
+            var getBaseURL = function () {
+                return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+            }
+
+            $(document).ready(function () {
+
+                $('#txtNameOnAccount').focus();
+
+                $(".fancybox").fancybox({
+                    maxWidth: 700,
+                    width: '98%',
+                    autoWidth: true,
+                    autoHeight: true,
+                    scrolling: 'no',
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    minHeight: '360px',
+                    helpers: {
+                        overlay: {
+                            css: {
+                                'background': 'rgba(255, 255, 255, 0.99)'
+                            }
+                        }
+                    }
+                });
+
+
+                $('#btn-gotit').click(function (event) {
+                    $.fancybox.close(false);
+                });
+
+
+                $('.cs-radio').addClass('input_hidden');
+                $('.cs-radio-label').click(function (event) {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+
+            });
     </script>
 }
