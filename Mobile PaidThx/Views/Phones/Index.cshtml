@@ -12,6 +12,17 @@
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+     <div class="top-panel">
+    @if (Model.PayPoints.Count < 1){
+        
+    <text>Link your phone numbers to claim all payments sent to them. Click "Add Phone" below to add your first one. </text>
+        
+        }else{                                                                                                                                                                                                                                        
+    
+    <text>Manage your linked phone numbers or add new phones here.  Be sure to verify each phone number. </text> 
+
+        }     
+    </div>
     <div class="pad">
         <ul class="panel-container">
             @foreach (var payPoint in Model.PayPoints)
@@ -36,7 +47,7 @@
         <ul class="panel-container">
             <li class="settings add">
                 <a href="@Url.Content("~/Phones/Add")">
-                    Add Phone Number</a>
+                    Add Phone</a>
             </li>
         </ul>
     </div>
