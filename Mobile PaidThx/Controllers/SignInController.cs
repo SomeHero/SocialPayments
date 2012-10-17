@@ -30,6 +30,9 @@ namespace Mobile_PaidThx.Controllers
             if (Session["SignInFBState"] == null)
                 Session["SignInFBState"] = RandomString(8, false);
 
+            if(Request.QueryString["Message"] == "AccountLocked")
+                TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+
             return View(new SignInModels.SignInModel()
             {
                 FBState = Session["SignInFBState"].ToString()
@@ -67,82 +70,13 @@ namespace Mobile_PaidThx.Controllers
                 if (validateResponse.isLockedOut)
                 {
                     Session["UserId"] = validateResponse.userId;
+                    Session["ReturnUrl"] = returnUrl;
 
                     TempData["SecurityQuestion"] = validateResponse.securityQuestion;
                     return RedirectToAction("SecurityQuestionChallenge");
                 }
 
-                UserModels.UserResponse user;
-
-                try
-                {
-                    user = userService.GetUser(validateResponse.userId);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-
-                    _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
-
-                    return View(new SignInModels.SignInModel()
-                    {
-                        FBState = Session["SignInFBState"].ToString()
-                    });
-                }
-
-                FormsAuthentication.SetAuthCookie(model.Email, false);
-
-                ApplicationResponse application;
-
-                try
-                {
-                    application = applicationServices.GetApplication(_apiKey);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-
-                    _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
-
-                    return View(new SignInModels.SignInModel()
-                    {
-                        FBState = Session["SignInFBState"].ToString()
-                    });
-                }
-
-                var facebookServices = new FacebookServices();
-                foreach (var socialNetwork in user.userSocialNetworks)
-                {
-                    if (socialNetwork.SocialNetwork == "Facebook")
-                        Session["Friends"] = facebookServices.GetFriendsList(socialNetwork.SocialNetworkUserToken);
-
-                }
-
-                Session["Application"] = application;
-                Session["UserId"] = validateResponse.userId;
-                Session["User"] = user;
-
-                if (String.IsNullOrEmpty(user.firstName) || String.IsNullOrEmpty(user.lastName))
-                {
-                    return RedirectToAction("Personalize", "Register");
-                }
-                else if (user.bankAccounts.Count() == 0)
-                {
-                    if (!String.IsNullOrEmpty(user.firstName) && !String.IsNullOrEmpty(user.lastName))
-                        TempData["NameOnAccount"] = user.firstName + " " + user.lastName;
-
-                    return RedirectToAction("SetupACHAccount", "Register");
-                }
-
-                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                {
-                    return Redirect(returnUrl);
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Dashboard", new RouteValueDictionary() { });
-                }
+                return CompleteSignIn(validateResponse.userId, returnUrl);
             }
             else
             {
@@ -155,6 +89,7 @@ namespace Mobile_PaidThx.Controllers
                 FBState = Session["SignInFBState"].ToString()
             });
         }
+
         public ActionResult SecurityQuestionChallenge()
         {
             return View(new SignInModels.SecurityQuestionChallengeModel()
@@ -168,12 +103,11 @@ namespace Mobile_PaidThx.Controllers
             var userSecurityQuestionService = new UserSecurityQuestionService();
             var userService = new UserServices();
 
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index");
-
             var userId = Session["UserId"].ToString();
+            var returnUrl = (Session["ReturnUrl"] != null ? Session["ReturnUrl"].ToString() : "");
+
             bool results = false;
-            UserModels.UserResponse user = null;
+           
             try
             {
                 results = userSecurityQuestionService.ValidateSecurityQuestion(userId, model.SecurityQuestionAnswer);
@@ -185,11 +119,7 @@ namespace Mobile_PaidThx.Controllers
                     return View(model);
                 }
 
-                user = userService.GetUser(userId);
-
-                Session["User"] = user;
-
-                return RedirectToAction("Index", "Paystream");
+                return CompleteSignIn(userId, returnUrl);
 
             }
             catch (Exception ex)
@@ -198,8 +128,6 @@ namespace Mobile_PaidThx.Controllers
 
                 return View(model);
             }
-
-            return View(model);
 
         }
         public ActionResult SignInWithFacebook(string state, string code)
@@ -293,6 +221,48 @@ namespace Mobile_PaidThx.Controllers
                     Message = null
                 });
             }
+            
+            Session["Friends"] = friends;
+
+            if (userResponse.isLockedOut)
+            {
+                Session["UserId"] = userResponse.userId;
+                Session["ReturnUrl"] = "";
+
+                TempData["SecurityQuestion"] = userResponse.securityQuestion;
+                
+                return RedirectToAction("SecurityQuestionChallenge");
+            }
+
+            return CompleteSignIn(userResponse.userId.ToString(), "");
+
+        }
+
+        private ActionResult CompleteSignIn(string userId, string returnUrl)
+        {
+            var userService = new UserServices();
+            var applicationServices = new ApplicationServices();
+
+            UserModels.UserResponse user;
+
+            try
+            {
+                user = userService.GetUser(userId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting User. Exception: {0}. StackTrace: {1}", ex.Message, ex.StackTrace));
+
+                return View(new SignInModels.SignInModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
+
+            FormsAuthentication.SetAuthCookie(user.emailAddress, false);
+
             ApplicationResponse application;
 
             try
@@ -311,26 +281,41 @@ namespace Mobile_PaidThx.Controllers
                 });
             }
 
-            Session["UserId"] = userResponse.userId;
-            Session["Application"] = application;
-            Session["Friends"] = friends;
-
-            if (userResponse.isLockedOut)
+            var facebookServices = new FacebookServices();
+            foreach (var socialNetwork in user.userSocialNetworks)
             {
-                
-                TempData["SecurityQuestion"] = userResponse.securityQuestion;
-                return RedirectToAction("SecurityQuestionChallenge");
+                if (socialNetwork.SocialNetwork == "Facebook")
+                    Session["Friends"] = facebookServices.GetFriendsList(socialNetwork.SocialNetworkUserToken);
+
             }
 
-            Session["User"] = userResponse;
-          
-            if (isNewUser)
-                return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
+            Session["Application"] = application;
+            Session["UserId"] = user.userId;
+            Session["User"] = user;
+
+            if (String.IsNullOrEmpty(user.firstName) || String.IsNullOrEmpty(user.lastName))
+            {
+                return RedirectToAction("Personalize", "Register");
+            }
+            else if (user.bankAccounts.Count() == 0)
+            {
+                if (!String.IsNullOrEmpty(user.firstName) && !String.IsNullOrEmpty(user.lastName))
+                    TempData["NameOnAccount"] = user.firstName + " " + user.lastName;
+
+                return RedirectToAction("SetupACHAccount", "Register");
+            }
+
+            if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+            {
+                return Redirect(returnUrl);
+            }
             else
+            {
                 return RedirectToAction("Index", "Dashboard", new RouteValueDictionary() { });
-
+            }
         }
-
+        
         /// <summary>
         /// Generates a random string with the given length
         /// </summary>

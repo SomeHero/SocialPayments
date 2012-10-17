@@ -15,6 +15,8 @@ namespace Mobile_PaidThx.Services
         private string _getPayPointsUrl = "{0}Users/{1}/paypoints";
         private string _deletePaypointUrl = "{0}Users/{1}/paypoints/{2}";
         private string _addPaypointUrl = "{0}Users/{1}/paypoints";
+        private string _resendEmailVerificationLinkUrl = "{0}Users/{1}/PayPoints/resend_email_verification_link";
+        private string _resendPhoneVerificationCodeUrl = "{0}Users/{1}/PayPoints/resend_verification_code";
 
         public List<UserModels.UserPayPointResponse> GetPayPoints(string userId)
         {
@@ -68,6 +70,46 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
+        }
+        public void ResendEmailVerificationLink(String userId, String payPointId)
+        {
+            var serviceUrl = String.Format(_resendEmailVerificationLinkUrl, _webServicesBaseUrl, userId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                UserPayPointId = payPointId
+            });
+
+            var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
+        }
+        public void ResendPhoneVerificationCode(String userId, String payPointId)
+        {
+            var serviceUrl = String.Format(_resendPhoneVerificationCodeUrl, _webServicesBaseUrl, userId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                UserPayPointId = payPointId
+            });
+
+            var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
         }
     }
 }
