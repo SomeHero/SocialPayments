@@ -48,7 +48,7 @@
              var currentMeCode = "";
              $(this).delegate('#txtMeCode', 'keydown', function () {
 
-                 if (event.keyCode == '52') {
+                 if (event.shiftKey && event.keyCode == '52') {
                      event.preventDefault();
                      return;
                  }
