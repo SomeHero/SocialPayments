@@ -166,6 +166,57 @@ namespace Mobile_PaidThx.Controllers
 
             return View();
         }
+        public ActionResult SendReminder(String messageId)
+        {
+            return View(new PaystreamModels.SendReminder()
+            {
+                MessageId = messageId,
+                UriType = "EmailAddress"
+            });
+        }
+        [HttpPost]
+        public ActionResult SendReminder(PaystreamModels.SendReminderPostModel model)
+        {
+            var userId = Session["UserId"].ToString();
+            var payStreamServices = new Services.PaystreamMessageServices();
 
+            try
+            {
+                payStreamServices.SendReminder(userId, model.MessageId, model.ReminderMessage);
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session.Clear();
+                    Session.Abandon();
+
+                    FormsAuthentication.SignOut();
+
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View(new PaystreamModels.SendReminder()
+                {
+                    MessageId = model.MessageId,
+                    UriType = "EmailAddress"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View(new PaystreamModels.SendReminder()
+                {
+                    MessageId = model.MessageId,
+                    UriType = "EmailAddress"
+                });
+            }
+
+            return RedirectToAction("Index"); 
+        }
     }
 }

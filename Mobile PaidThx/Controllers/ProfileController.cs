@@ -36,54 +36,38 @@ namespace Mobile_PaidThx.Controllers
             });
         }
         [HttpPost]
-        public ActionResult Index(UpdateProfileModel model)
+        public void Index(UpdateProfileModel model)
         {
-            logger.Log(LogLevel.Info, String.Format("Updating Profile"));
+            logger.Log(LogLevel.Info, String.Format("Updating Profile {0}:{1}", model.Key, model.Value));
+            
+            var userAttributeServices = new UserAttributeServices();
+            var user = (UserModels.UserResponse)Session["User"];
 
-            return View();
-            //using (var ctx = new Context())
-            //{
-            //    var userId = (Guid)Session["UserId"];
+            try
+            {
+                userAttributeServices.UpdateConfigurationSetting(user.userId.ToString(), model.Key, model.Value);
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Error, String.Format("Exception Updating User Configuration Variable. Exception: {0}", ex.Message));
+            }
 
-            //    if (Session["UserId"] == null)
-            //        return RedirectToAction("SignIn", "Account", null);
+            Guid attributeGuid;
+            Guid.TryParse(model.Key, out attributeGuid);
 
-            //    var user = ctx.Users.FirstOrDefault(u => u.UserId == userId);
+            var userAttribute = user.userAttributes.FirstOrDefault(a => a.AttributeId == attributeGuid);
 
-            //    if (Session["User"] == null)
-            //        return RedirectToAction("SignIn", "Account", null);
+            if (userAttribute == null)
+            {
+                user.userAttributes.Add(new UserModels.UserAttribute()
+                {
+                    AttributeId = attributeGuid,
+                    AttributeValue = model.Value
+                });
+            }
+            else
+                userAttribute.AttributeValue = model.Value;
 
-
-            //    if (user == null)
-            //    {
-            //        logger.Log(LogLevel.Error, String.Format("Invalid User."));
-
-            //        return RedirectToAction("SignIn", "Account", null);
-            //    }
-
-            //    var editUser = ctx.Users.FirstOrDefault(u => u.UserId == userId);
-
-            //    if (editUser == null)
-            //    {
-            //        logger.Log(LogLevel.Error, String.Format("Invalid User."));
-
-            //        return RedirectToAction("SignIn", "Account", null);
-            //    }
-
-            //    user.FirstName = model.FirstName;
-            //    user.LastName = model.LastName;
-            //    user.SenderName = model.SenderName;
-            //    user.Address = model.Address;
-            //    user.City = model.City;
-            //    user.State = model.State;
-            //    user.Zip = model.Zip;
-
-            //    ctx.SaveChanges();
-
-            //    Session["User"] = editUser;
-
-            //    return RedirectToAction("Index");
-            //}
         }
     }
 }

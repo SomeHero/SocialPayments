@@ -29,7 +29,7 @@
                     {
                         case "ShortText":
                             <label for="@profileItem.Id">@profileItem.Label</label>
-                            <text><span class="form-holder"> <input type="text" placeholder="@profileItem.Label" name="@profileItem.Id" value="@value" /></span></text>
+                            <text><span class="form-holder"> <input type="text" placeholder="@profileItem.Label" name="@profileItem.Id" data-attribute-id="@profileItem.Id" data-key="@profileItem.UserAttributeId" value="@value" class="profile-item" /></span></text>
                             break;
                     }
        
@@ -39,3 +39,48 @@
         </div>
     </div>
 </div>
+
+@section PageStyles{
+
+}
+@section PageScripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+
+       
+
+        // Toggle switch when clicked
+        $("#@ViewBag.PageID").delegate(".profile-item", "change", function (event) {
+            // Define vars
+            var key, value;
+
+            key = $(this).attr('data-key');
+            value = $(this).val();
+            attributeId = $(this).attr('data-attribute-id');
+
+            var requestModel = {
+                AttributeId: attributeId,
+                Key: key,
+                Value: value
+            };
+
+            var getBaseURL = function () {
+                return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+            }
+            var jsonData = $.toJSON(requestModel);
+            var serviceUrl = getBaseURL() + 'Profile/Index';
+
+            $.ajax({
+                type: 'POST',
+                url: serviceUrl,
+                data: jsonData,
+                contentType: "application/json",
+                dataType: "json",
+                processData: false
+            });
+
+        });
+
+    });      // End 
+</script>
+}

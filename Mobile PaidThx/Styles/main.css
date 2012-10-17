@@ -64,9 +64,9 @@ h2.section-header, .or
  position:relative;
 }
 
-.or
+div.or
 {
- text-align:center;   
+ text-align:center !important;   
 }
 
 h2.section-header a.info-helper
@@ -76,13 +76,37 @@ h2.section-header a.info-helper
  top:50%;
  margin-top:-8px;   
 }
-
+.remindme
+{
+ text-align:center;
+ font-weight:bold;
+ font-size:12px;
+ text-transform:uppercase;   
+}
 label
 {
  font-weight:bold;
  color:#666666;
  font-size:12px;   
  text-transform:uppercase;
+}
+.lb-title
+{
+ font-weight:bold;
+ color:#666666;
+ font-size:14px;   
+ text-transform:uppercase; 
+ text-align:center;  
+ margin:0;
+}
+.lightbox
+{
+ font-size:12px;   
+}
+
+label.error
+{
+ text-transform:none;   
 }
 
 h2.section-header:not(:first-child) {

@@ -89,6 +89,40 @@ namespace SocialPayments.RestServices.Internal.Controllers
             });
 
         }
+        // GET /api/Users/{userId}/PaystreamMessages/send_reminser
+        [HttpPost]
+        public HttpResponseMessage SendReminder(string userId, UserPayStreamModels.SendReminderModel model)
+        {
+            var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+
+            try
+            {
+                userPayStreamMessageServices.SendReminder(userId, model.MessageId, model.ReminderMessage);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}.", userId, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Getting User Paystream Messages Paged for User {0}.  Exception {1}. Stack Trace {2}", userId, ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
         private bool IsAcceptable(Domain.Message message)
         {
             if (message.Direction == "In")

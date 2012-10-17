@@ -19,7 +19,10 @@ using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
- 
+<<<<<<< HEAD
+    //[CustomAuthorize]
+=======
+>>>>>>> upstream/development
     public class RegisterController : PaidThxBaseController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -43,7 +46,6 @@ namespace Mobile_PaidThx.Controllers
 
             return View(model);
         }
-
         [HttpPost]
         public ActionResult Personalize(PersonalizeModel model)
         {

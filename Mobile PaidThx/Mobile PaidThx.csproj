@@ -233,6 +233,7 @@
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
+    <Compile Include="Services\UserAttributeServices.cs" />
     <Compile Include="Services\UserConfigurationServices.cs" />
     <Compile Include="Services\UserPaymentAccountServices.cs" />
     <Compile Include="Services\UserPayPointServices.cs" />
@@ -360,6 +361,7 @@
     <Content Include="Content\images\org_wwf.png" />
     <Content Include="Content\images\org_zta.png" />
     <Content Include="Content\images\request-icon-big.png" />
+    <Content Include="Content\images\samplecheck.png" />
     <Content Include="Content\images\search-icon.png" />
     <Content Include="Content\images\send-icon-big.png" />
     <Content Include="Content\images\signinIcon.png" />
@@ -694,6 +696,7 @@
     <Content Include="Views\Account\ForgotPassword.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Paystream\SendReminder.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
