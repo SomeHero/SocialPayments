@@ -26,7 +26,7 @@ namespace SocialPayments.DomainServices
                 if (userAttributeGuid == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Invalid User Attribute {0} Specified", userAttributeId));
 
-                var userAttribute = user.UserAttributes.FirstOrDefault(a => a.UserAttributeId.Equals(userAttributeId));
+                var userAttribute = user.UserAttributes.FirstOrDefault(a => a.UserAttributeId.Equals(userAttributeGuid));
 
                 if (userAttribute == null)
                 {

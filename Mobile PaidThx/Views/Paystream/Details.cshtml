@@ -177,7 +177,7 @@ to <span class="lbl-recipient">@Model.senderName</span>
     if (Model.messageType == "Payment" && Model.isRemindable)
     {
      <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using(Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "SendPaymentReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
@@ -189,7 +189,7 @@ to <span class="lbl-recipient">@Model.senderName</span>
     else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
     {
      <text>
-      @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+      @using(Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get)) {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "SendPaymentRequestReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">

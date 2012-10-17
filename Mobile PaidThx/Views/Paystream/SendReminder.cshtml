@@ -1,0 +1,29 @@
+﻿@model Mobile_PaidThx.Models.PaystreamModels.SendReminder
+@{
+    ViewBag.Title = "Send Reminder";
+    ViewBag.PageID = "paystream-send-reminder";
+    ViewBag.Classes = "page";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    
+    <div class="header-pdthx">
+        <h1>
+            Send Reminder</h1>
+            <a href="@Url.Content("~/Paystream/Details?MessageId=" + @Model.MessageId)"  class="hd-btn-left btn-back">Cancel</a>
+    </div>
+<div class="pd-content">
+    @Html.ValidationSummary()
+    <div class="pad">
+         @using (Html.BeginForm("SendReminder", "Paystream", FormMethod.Post))
+         {
+            @Html.HiddenFor(m => m.MessageId)
+            <textarea id="txtReminder" name="ReminderMessage" rows="10" cols="100" placeholder="Remind your friend to pay up"></textarea>
+
+            <p>
+                <button type="submit" id="send-reminder-button" class="pd-btn green" data-theme="f">
+                    <span>Send Reminder</span></button>
+            </p>
+         }
+        </div>
+    </div>
+</div>

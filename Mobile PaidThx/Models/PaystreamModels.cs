@@ -56,5 +56,15 @@ namespace Mobile_PaidThx.Models
         {
             public string Pincode { get; set; }
         }
+        public class SendReminder
+        {
+            public string MessageId { get; set; }
+            public string UriType { get; set; }
+        }
+        public class SendReminderPostModel
+        {
+            public string MessageId { get; set; }
+            public string ReminderMessage { get; set; }
+        }
     }
 }

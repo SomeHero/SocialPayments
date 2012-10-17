@@ -22,6 +22,7 @@ namespace Mobile_PaidThx.Services
         private string _acceptPledgeRequestUrl = "{0}/paystreammessages/{1}/accept_pledge";
         private string _rejectPledgeRequestUrl = "{0}/paystreammessages/{1}/reject_pledge";
         private string _messageServicesBaseUrl = "{0}/Users/{1}/PaystreamMessages/{2}";
+        private string _sendReminderBaseUrl = "{0}/Users/{1}/PaystreamMessages/send_reminder";
 
 
         public void SendMoney(string apiKey, string senderId, string recipientId, string senderUri, string senderAccountId, string recipientUri, string securityPin, double amount, string comments, string messageType, string latitude, string longitude, string recipientFirstName, string recipientLastName, string recipientImageUri, string deliveryMethod)
@@ -252,6 +253,25 @@ namespace Mobile_PaidThx.Services
             var response = Post(String.Format(_donateMessageUrl, _webServicesBaseUrl), json);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Created)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+        }
+        public void SendReminder(string userId, string messageId, string reminderMessage)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                messageId = messageId,
+                reminderMessage = reminderMessage
+            });
+
+            var response = Post(String.Format(_sendReminderBaseUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
 
