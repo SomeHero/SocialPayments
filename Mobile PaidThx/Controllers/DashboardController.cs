@@ -22,14 +22,31 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index(string messageId)
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            var application = (ApplicationResponse)Session["Application"];
 
+            // Find percentage of profile completed
+            double numItems = 0.0;
+            double numItemsComplete = 0.0;
+
+            foreach (var profileSection in application.ProfileSections)
+            {
+                foreach (var profileItem in profileSection.ProfileItems)
+                {
+                    var attribute = user.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
+                    
+                    if (attribute != null )
+                        numItems++;
+                    if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
+                        numItemsComplete++;
+                }
+            }
+            
             return View("Index", new DashboardModels.DashboardModel()
             {
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
                 UserNewActivity = user.newMessageCount + user.pendingMessageCount,
-                UserProfileComplete = user.upperLimit
-
+                UserProfileComplete = Math.Round((double)(numItemsComplete/numItems)*100)
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
