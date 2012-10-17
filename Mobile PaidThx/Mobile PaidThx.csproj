@@ -233,6 +233,7 @@
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
     <Compile Include="Services\ResponseModels\UserModels.cs" />
+    <Compile Include="Services\UserAttributeServices.cs" />
     <Compile Include="Services\UserConfigurationServices.cs" />
     <Compile Include="Services\UserPaymentAccountServices.cs" />
     <Compile Include="Services\UserPayPointServices.cs" />
