@@ -9,18 +9,18 @@ using System.Globalization;
 using System.Web.Routing;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services.CustomExceptions;
+using Mobile_PaidThx.CustomAttributes;
+using System.Web.Security;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class PaystreamController : Controller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
  
         public ActionResult PopupPinSwipe(string paystreamAction, string messageId)
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn");
-
             var userId = Session["UserId"].ToString();
 
             var messageService = new Services.UserPayStreamMessageServices();
@@ -40,10 +40,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult PopupPinSwipe(Mobile_PaidThx.Models.PaystreamModels.PinSwipeModel model)
         {
             var paystreamMessageServices = new Services.PaystreamMessageServices();
-
-            
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
 
             var user = (UserModels.UserResponse)Session["User"];
 
@@ -83,12 +79,12 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -117,11 +113,6 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult Index(String searchString)
         {
-            TempData["DataUrl"] = "data-url=/mobile/Paystream";
-
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-
             var model = new PaystreamModels.PaystreamModel()
             {
                 UserId = Session["UserId"].ToString()
@@ -133,9 +124,6 @@ namespace Mobile_PaidThx.Controllers
         {
             try
             {
-                if (Session["UserId"] == null)
-                    return RedirectToAction("Index", "SignIn", null);
-
                 var userId = Session["UserId"].ToString();
 
                 var messageService = new Services.PaystreamMessageServices();

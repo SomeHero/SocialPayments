@@ -7,9 +7,11 @@ using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services;
 using NLog;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class NotificationsController : Controller
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();

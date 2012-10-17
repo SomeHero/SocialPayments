@@ -12,9 +12,11 @@ using System.Web.Script.Serialization;
 using System.Web.Routing;
 using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class ProfileController : PaidThxBaseController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -23,12 +25,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index()
         {
             logger.Log(LogLevel.Info, String.Format("Displaying Profile View"));
-
-            if (Session["User"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-             
-            if (Session["Application"] == null)
-                 return RedirectToAction("Index", "SignIn", null);
 
             var user = (UserModels.UserResponse)Session["User"];
             var application = (ApplicationResponse)Session["Application"];

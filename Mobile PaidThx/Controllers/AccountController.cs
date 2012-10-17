@@ -209,7 +209,7 @@ namespace Mobile_PaidThx.Controllers
             Session.Clear();
             Session.Abandon();
 
-            return RedirectToAction("SignIn", "Account");
+            return RedirectToAction("Index", "SignIn");
         }
 
         public ActionResult ResetPassword(string id)

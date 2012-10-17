@@ -8,9 +8,12 @@ using Mobile_PaidThx.Models;
 using NLog;
 using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Services.CustomExceptions;
+using Mobile_PaidThx.CustomAttributes;
+using System.Web.Security;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class BankAccountsController : Controller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -19,8 +22,6 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index()
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
-            if (Session["User"] == null)
-             return RedirectToAction("Index", "SignIn", null);
 
             var model = new BankAccountModels.BankAccountsModel();
             model.PaymentAccounts = new List<BankAccountModel>();
@@ -46,24 +47,16 @@ namespace Mobile_PaidThx.Controllers
 
             }
 
-            TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
-
-
             return View(model);
         }
 
         public ActionResult Add()
         {
-            if (Session["User"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-
             var user = (UserModels.UserResponse)Session["User"];
 
             string nameOnAccount = "";
             if (!String.IsNullOrEmpty(user.firstName) || !String.IsNullOrEmpty(user.lastName))
                 nameOnAccount = user.firstName + " " + user.lastName;
-
-            TempData["DataUrl"] = "data-url=/mobile/BankAccounts/Add";
 
             return View(new BankAccountModels.AddPaymentAccountModel()
             {
@@ -80,9 +73,6 @@ namespace Mobile_PaidThx.Controllers
         {
             try
             {
-                if (Session["User"] == null)
-                    return RedirectToAction("Index", "SignIn", null);
-
                 var user = (UserModels.UserResponse)Session["User"];
 
                 var routingNumberServices = new RoutingNumberServices();
@@ -141,12 +131,13 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -163,8 +154,6 @@ namespace Mobile_PaidThx.Controllers
 
             user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
 
-            TempData["DataUrl"] = "data-url=/mobile/BankAccounts";
-
             return RedirectToAction("Index");
         }
         public ActionResult SetupACHAccountComplete()
@@ -173,8 +162,6 @@ namespace Mobile_PaidThx.Controllers
             var bankAccountServices = new Services.UserPaymentAccountServices();
             
             user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
-
-            TempData["DataUrl"] = "data-url=/mobile/BankAccounts/SetupACHAccountComplete";
 
             return RedirectToAction("Index");
         }
@@ -257,12 +244,13 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -299,12 +287,13 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -349,12 +338,12 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
                 }
 
                 ModelState.AddModelError("", ex.Message);
@@ -400,12 +389,13 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (ex.ErrorCode == 1001)
                 {
-                    Session["User"] = null;
-                    Session["UserId"] = null;
+                    Session.Clear();
+                    Session.Abandon();
 
-                    TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                    FormsAuthentication.SignOut();
 
-                    return RedirectToAction("Index", "SignIn");
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                
                 }
 
                 ModelState.AddModelError("", ex.Message);

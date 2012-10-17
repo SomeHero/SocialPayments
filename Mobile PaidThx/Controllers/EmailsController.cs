@@ -6,9 +6,11 @@ using System.Web.Mvc;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class EmailsController : Controller
     {
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";

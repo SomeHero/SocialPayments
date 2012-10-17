@@ -25,10 +25,10 @@
                         value = attribute.AttributeValue;
                     }
                     
-                    <label for="@profileItem.Id">@profileItem.Label</label>
                     switch (profileItem.ItemType)
                     {
                         case "ShortText":
+                            <label for="@profileItem.Id">@profileItem.Label</label>
                             <text><span class="form-holder"> <input type="text" placeholder="@profileItem.Label" name="@profileItem.Id" value="@value" /></span></text>
                             break;
                     }

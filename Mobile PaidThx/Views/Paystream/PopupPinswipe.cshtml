@@ -97,19 +97,17 @@
         }
         @if (Model.PaystreamAction == "RejectPledge")
         {
-            <text>@String.Format("Swipe your security PIN to reject the pledge of {0:C} from {1}.", Model.Message.amount, Model.Message.recipientName)</text>
-            
             if (!String.IsNullOrEmpty(Model.Message.senderImageUri))
             {
             <text><img src="@Model.Message.senderImageUri" alt="@Model.Message.senderName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
             }
             if (!String.IsNullOrEmpty(Model.Message.senderName))
             {
-            <text>Please swipe your security pin to <b class="red">reject</b> your pledge of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            <text>Please swipe your security pin to <b class="red">cancel</b> your pledge of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
             }
             else
             {
-             <text>Please swipe your security pin to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
+             <text>Please swipe your security pin to <b class="red">cancel</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
             }
         }
         <div class="clear"></div>

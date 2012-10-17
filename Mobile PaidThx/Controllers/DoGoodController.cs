@@ -9,9 +9,11 @@ using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class DoGoodController : Controller
     {
 
@@ -54,9 +56,6 @@ namespace Mobile_PaidThx.Controllers
 
             var userId = Session["UserId"].ToString();
 
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-
             _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 
             if (ModelState.IsValid)
@@ -86,9 +85,6 @@ namespace Mobile_PaidThx.Controllers
             _logger.Log(LogLevel.Debug, String.Format("Payment Request Posted to {0} of {1} with Comments {2}", model.Organization, model.Amount, model.Comments));
 
             var userId = Session["UserId"].ToString();
-
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
 
             _logger.Log(LogLevel.Debug, String.Format("Found user and payment account"));
 

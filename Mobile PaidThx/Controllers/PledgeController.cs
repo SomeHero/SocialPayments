@@ -9,9 +9,12 @@ using Mobile_PaidThx.Services;
 using NLog;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services.CustomExceptions;
+using Mobile_PaidThx.CustomAttributes;
+using System.Web.Security;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class PledgeController : Controller
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -60,6 +63,7 @@ namespace Mobile_PaidThx.Controllers
                 ModelState.AddModelError("", "Recipient is required");
             if (pledgeInformation.Amount== 0)
                 ModelState.AddModelError("", "Amount must be greater than $0.00");
+            pledgeInformation.Comments = model.Comments;
 
             if (!ModelState.IsValid)
             {
@@ -246,9 +250,6 @@ namespace Mobile_PaidThx.Controllers
         {
             //logger.Log(LogLevel.Debug, String.Format("Send Money Posted to {0} of {1} with Comments {2}", model.RecipientUri, model.Amount, model.Comments));
 
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-
             var userId = Session["UserId"].ToString();
             var pledgeInformation = (Session["PledgeInformation"] != null ? (PledgeInformation)Session["PledgeInformation"] : new PledgeInformation());
 
@@ -266,12 +267,12 @@ namespace Mobile_PaidThx.Controllers
                 {
                     if (ex.ErrorCode == 1001)
                     {
-                        Session["User"] = null;
-                        Session["UserId"] = null;
+                        Session.Clear();
+                        Session.Abandon();
 
-                        TempData["Message"] = "This Account is Locked.  Please Sign In to Unlock Account.";
+                        FormsAuthentication.SignOut();
 
-                        return RedirectToAction("Index", "SignIn");
+                        return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
                     }
 
                     ModelState.AddModelError("", ex.Message);

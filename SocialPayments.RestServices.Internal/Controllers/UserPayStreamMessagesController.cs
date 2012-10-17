@@ -23,6 +23,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage GetPaged(string userId, string type, int take, int skip, int page, int pageSize)
         {
             var messageServices = new DomainServices.MessageServices();
+            var formattingServices = new DomainServices.FormattingServices();
+
             List<Domain.Message> messages = null;
             int totalRecords = 0;
 
@@ -60,7 +62,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                 {
                     amount = m.Amount,
                     comments = (!String.IsNullOrEmpty(m.Comments) ? String.Format("{0}", m.Comments) : "No comments"),
-                    createDate = m.CreateDate.ToString("YYYY-MM-DDTHH:mm:ss.sssZ"),
+                    createDate = formattingServices.FormatDateTimeForJSON(m.CreateDate),
                     Id = m.Id,
                     //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                     messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() : m.Status.GetSenderMessageStatus()),

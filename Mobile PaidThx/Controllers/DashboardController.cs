@@ -9,9 +9,11 @@ using Mobile_PaidThx.Controllers.Base;
 using System.Text;
 using System.Net.Mail;
 using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class DashboardController : PaidThxBaseController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -19,9 +21,6 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index(string messageId)
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("SignIn", "Account", null);
-
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
 
             return View("Index", new DashboardModels.DashboardModel()
