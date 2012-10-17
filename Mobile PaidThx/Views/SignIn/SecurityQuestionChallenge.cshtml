@@ -18,7 +18,7 @@
         @using (Html.BeginForm("SecurityQuestionChallenge", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
         {
             @Html.HiddenFor(m => m.SecurityQuestion)
-            <p>@Model.SecurityQuestion</p>
+            <p><b>Q:</b> @Model.SecurityQuestion</p>
                <span class="form-holder">@Html.TextBoxFor(m => m.SecurityQuestionAnswer, new Dictionary<string, object>() { { "placeholder", "Answer" }, { "class", "required" } })</span>
            <button type="submit" class="pd-btn green">Submit</button>
         }
