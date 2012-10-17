@@ -24,5 +24,9 @@ namespace Mobile_PaidThx.Models
         {
             public String PayPointId { get; set; }
         }
+        public class ResendEmailVerificationModel
+        {
+            public String PayPointId { get; set; }
+        }
     }
 }

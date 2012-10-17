@@ -6,9 +6,11 @@ using System.Web.Mvc;
 using Mobile_PaidThx.Models;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class PhonesController : Controller
     {
         private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
@@ -99,14 +101,14 @@ namespace Mobile_PaidThx.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResendVerification(PhonesModels.DeletePhonesModel model)
+        public ActionResult ResendPhoneVerification(PhonesModels.DeletePhonesModel model)
         {
             var user = (UserModels.UserResponse)Session["User"];
             var service = new UserPayPointServices();
 
             try
             {
-                service.ResendVerification(_apiKey, user.userId.ToString(), model.PayPointId);
+                service.ResendPhoneVerificationCode(user.userId.ToString(), model.PayPointId);
             }
             catch (Exception ex)
             {

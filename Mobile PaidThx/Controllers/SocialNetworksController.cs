@@ -12,10 +12,12 @@ using System.Web.Security;
 using System.Web.Routing;
 using System.Configuration;
 using System.Text;
+using Mobile_PaidThx.CustomAttributes;
 
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class SocialNetworksController : Controller
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -25,9 +27,6 @@ namespace Mobile_PaidThx.Controllers
 
         public ActionResult Index()
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-            
             var userService = new Services.UserServices();
             
             var user = userService.GetUser(Session["UserId"].ToString());
@@ -44,9 +43,7 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult LinkFacebookAccount(string state, string code)
         {
-              if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-              if (Session["FBState"] == null)
+            if (Session["FBState"] == null)
                   return RedirectToAction("Index");
 
             var userService = new Services.UserServices();
@@ -101,17 +98,11 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult UnlinkFacebookAccount()
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("Index", "SignIn", null);
-
             var userService = new Services.UserServices();
             var faceBookServices = new FacebookServices();
             var userSocialNetworkServices = new UserSocialNetworkServices();
 
             var user = userService.GetUser(Session["UserId"].ToString());
-
-            if(user == null)
-                return RedirectToAction("Index", "SignIn", null);
 
             try
             {

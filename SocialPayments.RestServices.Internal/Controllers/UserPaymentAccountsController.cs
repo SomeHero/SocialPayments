@@ -171,13 +171,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 var error = new HttpError(ex.Message);
 
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, error);
             }
             catch (BadRequestException ex)
             {
                 _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Setting Preferred Receive Account {0} for User {1}.  Exception {2}.", request.PaymentAccountId, userId, ex.Message));
 
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }
             catch (Exception ex)
             {

@@ -16,30 +16,108 @@
         <div class="top-panel" id="swipe-to-confirm">
         @if (Model.PaystreamAction == "CancelPayment")
         {
-                <text>@String.Format("You are about to cancel your payment of {0:C} to {1}.  To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+            if (!String.IsNullOrEmpty(Model.Message.recipientImageUri))
+            {
+            <text><img src="@Model.Message.recipientImageUri" alt="@Model.Message.recipientName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.recipientName))
+            {
+            <text>Please swipe your security pin to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
+            }
+            else
+            {
+            <text>Please swipe your security pin to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
+            }
+
         }
         @if (Model.PaystreamAction == "CancelRequest")
         {
-            <text>@String.Format("You are about to cancel your request for {0:C} from {1}.  To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+
+            if (!String.IsNullOrEmpty(Model.Message.recipientImageUri))
+            {
+            <text><img src="@Model.Message.recipientImageUri" alt="@Model.Message.recipientName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.recipientName))
+            {
+            <text>Please swipe your security pin to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
+            }
+            else
+            {
+            <text>Please swipe your security pin to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
+            }
         }
         @if (Model.PaystreamAction == "AcceptRequest")
         {
-            <text>@String.Format("You are about to accept the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+
+            if (!String.IsNullOrEmpty(Model.Message.senderImageUri))
+            {
+            <text><img src="@Model.Message.senderImageUri" alt="@Model.Message.senderName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.senderName))
+            {
+            <text>Please swipe your security pin to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            }
+            else
+            {
+             <text>Please swipe your security pin to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
+            }
         }
         @if (Model.PaystreamAction == "RejectRequest")
         {
-            <text>@String.Format("You are about to reject the request for {0:C} to {1}.   To confirm this action please swipe your security pin below.", Model.Message.amount, Model.Message.recipientName)</text>
+            <text>@String.Format("Swipe your security PIN to reject the request of {0:C} from {1}.", Model.Message.amount, Model.Message.recipientName)</text>
+            
+            if (!String.IsNullOrEmpty(Model.Message.senderImageUri))
+            {
+            <text><img src="@Model.Message.senderImageUri" alt="@Model.Message.senderName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.senderName))
+            {
+            <text>Please swipe your security pin to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderName</b>.</text>
+            }
+            else
+            {
+             <text>Please swipe your security pin to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
+            }
         }
+        @if (Model.PaystreamAction == "AcceptPledge")
+        {
+
+            if (!String.IsNullOrEmpty(Model.Message.senderImageUri))
+            {
+            <text><img src="@Model.Message.senderImageUri" alt="@Model.Message.senderName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.senderName))
+            {
+            <text>Please swipe your security pin to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            }
+            else
+            {
+             <text>Please swipe your security pin to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
+            }
+        }
+        @if (Model.PaystreamAction == "RejectPledge")
+        {
+            if (!String.IsNullOrEmpty(Model.Message.senderImageUri))
+            {
+            <text><img src="@Model.Message.senderImageUri" alt="@Model.Message.senderName" width="50" height="50" class="ps-image" style="margin-right:12px;" /></text>
+            }
+            if (!String.IsNullOrEmpty(Model.Message.senderName))
+            {
+            <text>Please swipe your security pin to <b class="red">cancel</b> your pledge of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            }
+            else
+            {
+             <text>Please swipe your security pin to <b class="red">cancel</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
+            }
+        }
+        <div class="clear"></div>
         </div>
         @Html.ValidationSummary()
     <div class="pad">
        
         @using (Html.BeginForm("PopupPinswipe", "Paystream", FormMethod.Post, new Dictionary<string, object> { { "id", "pinSwipeForm" }, { "data-transition", "slide-up" } }))
         {       
-            <div id="pinHolder" class="hider">
-            <input type="password" id="patternlock" name="Pincode" class="patternlock" />
-            <input type="submit" value="login" id="pinswipesubmit" data-role="none" />
-        </div>
+Html.RenderPartial("~/Views/Shared/SecurityPIN.cshtml");
         }
     </div>
       

@@ -16,6 +16,8 @@ namespace Mobile_PaidThx.Services
         private string _deletePaypointUrl = "{0}Users/{1}/paypoints/{2}";
         private string _resendVerificationUrl = "{0}Users/{1}/paypoints/resend_verification_code";
         private string _addPaypointUrl = "{0}Users/{1}/paypoints";
+        private string _resendEmailVerificationLinkUrl = "{0}Users/{1}/PayPoints/resend_email_verification_link";
+        private string _resendPhoneVerificationCodeUrl = "{0}Users/{1}/PayPoints/resend_verification_code";
 
         public List<UserModels.UserPayPointResponse> GetPayPoints(string userId)
         {
@@ -71,19 +73,40 @@ namespace Mobile_PaidThx.Services
             }
         }
 
-        public void ResendVerification(string apiKey, string userId, string paypointId)
+        public void ResendEmailVerificationLink(String userId, String payPointId)
         {
-            var serviceUrl = String.Format(_resendVerificationUrl, _webServicesBaseUrl, userId);
+            var serviceUrl = String.Format(_resendEmailVerificationLinkUrl, _webServicesBaseUrl, userId);
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             var json = js.Serialize(new
             {
-                UserPayPointId = paypointId
+                UserPayPointId = payPointId
             });
 
             var response = Post(serviceUrl, json);
 
-            if (response.StatusCode != HttpStatusCode.Created)
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
+        }
+
+        public void ResendPhoneVerificationCode(String userId, String payPointId)
+        {
+            var serviceUrl = String.Format(_resendPhoneVerificationCodeUrl, _webServicesBaseUrl, userId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                UserPayPointId = payPointId
+            });
+
+            var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
 

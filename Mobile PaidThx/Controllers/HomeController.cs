@@ -9,9 +9,11 @@ using Mobile_PaidThx.Controllers.Base;
 using System.Text;
 using System.Net.Mail;
 using Mobile_PaidThx.Services;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class HomeController : PaidThxBaseController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();

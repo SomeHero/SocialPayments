@@ -15,9 +15,11 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Services.ResponseModels;
+using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
+    [CustomAuthorize]
     public class RegisterController : PaidThxBaseController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
@@ -41,6 +43,7 @@ namespace Mobile_PaidThx.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult Personalize(PersonalizeModel model)
         {
@@ -78,8 +81,6 @@ namespace Mobile_PaidThx.Controllers
             if (Session["Payment"] != null)
                 paymentModel = (MessageModel)Session["Payment"];
 
-            TempData["DataUrl"] = "data-url=\"/Register/SetupACHAccount\"";
-
             string nameOnAccount = "";
 
             if (TempData["NameOnAccount"] != null)
@@ -113,9 +114,6 @@ namespace Mobile_PaidThx.Controllers
         }
         public ActionResult SkipACHSetup()
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("SignIn");
-
             var userServices = new Services.UserServices();
             var applicationServices = new Services.ApplicationServices();
             var userId = Session["UserId"].ToString();
@@ -240,10 +238,6 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult SecurityQuestion(SecurityQuestionModel model)
         {
-            if (Session["UserId"] == null)
-                return RedirectToAction("SignIn");
-
-
             var achAccountModel = (SetupACHAccountModel)Session["ACHAccountModel"];
             var pinCode = (string)Session["PinCode"];
 

@@ -520,7 +520,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         }
         // POST /api/paystreammessages/{id}/accept_pledge
         [HttpPost]
-        public HttpResponseMessage AcceptPledgeRequest(string id, MessageModels.AcceptPaymentRequestModel request)
+        public HttpResponseMessage AcceptPledgeRequest(string id, MessageModels.AcceptPledgeRequestModel request)
         {
             _logger.Log(LogLevel.Info, String.Format("Accept Pledge Request Started {0}", id));
 
@@ -557,6 +557,45 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+        // POST /api/paystreammessages/{id}/reject_pledge
+        [HttpPost]
+        public HttpResponseMessage RejectPledgeRequest(string id, MessageModels.RejectPledgeRequestModel request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Reject Pledge Request Started {0}", id));
+
+            var messageServices = new DomainServices.MessageServices();
+
+            try
+            {
+                messageServices.RejectPledgeRequest(id, request.userId, request.securityPin);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Rejecting Pledge Request {0}. Exception {1}", id, ex.Message));
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Rejecting Pledge Request {0}. Exception {1}", id, ex.Message));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Rejecting Pledge Request {0}. Exception {1}. Stack Trace {2}", id, ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            _logger.Log(LogLevel.Info, String.Format("Reject Pledge Request Complete {0}", id));
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+        
         // POST /api/paystreammessages/{id}/reject_request
         [HttpPost]
         public HttpResponseMessage RejectPaymentRequest(string id, MessageModels.RejectPaymentRequestModel request)
