@@ -27,25 +27,7 @@
 
          @{
              
-             if (Model.SortedContacts.Count < 1)
-             {
-              <li id="contact-no-results" class="contact-no-results-item contact-select nolink">
-                    <a href="#" id="contact-new-recipient-link" class="contact-new-recipient" data-uri-valid="0">
-                    <img width="50" height="50" class="list-thumbnail" src="@Url.Content("~/Content/images/avatar.png")" />
-                    <h2 id="no-results-header" class="heading">No contacts...yet</h2>
-                    <h4 id="no-results-description" class="subheading">Type a new email or phone # above</h4>
-                   </a>
-                   <div class="clear"></div>
-               </li>
-               <li class="settings unlinked panel-container" id="facebook">
-                    <!-- Facebook -->
-                    <a href='#'>
-                    <h2 class="heading"> Link Facebook </h2>
-                    <h4 class="subheading">Send to your friends!</h4> </a>
-                    </li>
-             }
-             else
-             {
+           
                  foreach (var alphaGroup in Model.SortedContacts)
                  {
             <li class="list-divider">@alphaGroup.Key</li>
@@ -67,7 +49,6 @@
                     <div class="clear"></div>
                     </li>
                      }
-                 }
              }
          
          }

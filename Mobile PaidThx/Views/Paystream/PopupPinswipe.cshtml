@@ -22,11 +22,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.recipientName))
             {
-            <text>Please swipe your security pin to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
             }
             else
             {
-            <text>Please swipe your security pin to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">cancel</b> your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
             }
 
         }
@@ -39,11 +39,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.recipientName))
             {
-            <text>Please swipe your security pin to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientName</b>.</text>
             }
             else
             {
-            <text>Please swipe your security pin to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">cancel</b> your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.recipientUri</b>.</text>
             }
         }
         @if (Model.PaystreamAction == "AcceptRequest")
@@ -55,11 +55,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.senderName))
             {
-            <text>Please swipe your security pin to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            <text>Please swipe your security PIN to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
             }
             else
             {
-             <text>Please swipe your security pin to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
+             <text>Please swipe your security PIN to confirm your payment of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
             }
         }
         @if (Model.PaystreamAction == "RejectRequest")
@@ -72,11 +72,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.senderName))
             {
-            <text>Please swipe your security pin to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderName</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderName</b>.</text>
             }
             else
             {
-             <text>Please swipe your security pin to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
+             <text>Please swipe your security PIN to <b class="red">reject</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
             }
         }
         @if (Model.PaystreamAction == "AcceptPledge")
@@ -88,11 +88,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.senderName))
             {
-            <text>Please swipe your security pin to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            <text>Please swipe your security PIN to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
             }
             else
             {
-             <text>Please swipe your security pin to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
+             <text>Please swipe your security PIN to confirm your donation of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderUri</b>.</text>
             }
         }
         @if (Model.PaystreamAction == "RejectPledge")
@@ -103,11 +103,11 @@
             }
             if (!String.IsNullOrEmpty(Model.Message.senderName))
             {
-            <text>Please swipe your security pin to <b class="red">cancel</b> your pledge of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
+            <text>Please swipe your security PIN to <b class="red">cancel</b> your pledge of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> to <b>@Model.Message.senderName</b>.</text>
             }
             else
             {
-             <text>Please swipe your security pin to <b class="red">cancel</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
+             <text>Please swipe your security PIN to <b class="red">cancel</b> the request of <span class="lbl-amount payment out"><b>@String.Format("{0:C}", Model.Message.amount)</b></span> from <b>@Model.Message.senderUri</b>.</text>
             }
         }
         <div class="clear"></div>
