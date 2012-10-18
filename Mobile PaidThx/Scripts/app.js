@@ -696,16 +696,16 @@ $(document).ready(function () {
     //Validate Password
     $.validator.addMethod("passwrdvalidator", function (value) {
         return (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$/).test(value);
-    });
+    }, "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number");
 
-    //Confirm Account
+    //Confirm PW
     $.validator.addMethod("pwmatch", function (value) {
         return value == $("#registration-form #password").val();
     }, "Please enter the same password as above");
 
-    //Confirm Account
-    $.validator.addMethod("pwmatchreset", function (value) {
-        return value == $("txtNewPassword").val();
+    //Generic Match
+    $.validator.addMethod("matcher", function (value) {
+        return value == $(".matchee").val();
     }, "Please enter the same password as above");
 
     //Confirm Account
@@ -741,7 +741,7 @@ $(document).ready(function () {
                 messages: {
                     password: {
                         required: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number.",
-                        passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number."
+                        passwrdvalidator: "Password must contain: 6+ characters, at least 1 uppercase letter, and 1 number"
                     },
                     confirmPassword: {
                         required: "Please confirm your password",
