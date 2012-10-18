@@ -1831,6 +1831,11 @@ font-size:10pt;
 padding:10px;
 }
 
+.paystreamDetail div.t-panel-details.status
+{
+ text-align:center;
+ text-transform:uppercase;   
+}
 .paystreamDetail .ui-btn
 {
 margin-top:20px;
