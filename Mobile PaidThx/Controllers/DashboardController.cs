@@ -34,7 +34,6 @@ namespace Mobile_PaidThx.Controllers
                 {
                     var attribute = user.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
 
-
                     if (profileItem.ItemType == "ShortText")
                     {
                         numItems++;
@@ -50,7 +49,7 @@ namespace Mobile_PaidThx.Controllers
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
                 UserNewActivity = user.newMessageCount + user.pendingMessageCount,
-                UserProfileComplete = Math.Round((double)(numItemsComplete/numItems)*100)
+                UserProfileComplete = Math.Round(((double)(numItemsComplete/numItems)*100.0))
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
