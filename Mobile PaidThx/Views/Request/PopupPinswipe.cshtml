@@ -20,11 +20,11 @@
         }
         @if(!String.IsNullOrEmpty(Model.RecipientName))
         {
-            <text>Please swipe your security pin to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientName.</b></text>
+            <text>Please swipe your security PIN to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientName.</b></text>
         } 
         else
         {
-            <text>Please swipe your security pin to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientUri</b>.</text>
+            <text>Please swipe your security PIN to confirm your request of <span class="lbl-amount request out"><b>@String.Format("{0:C}", Model.Amount)</b></span> from <b>@Model.RecipientUri</b>.</text>
         }     
         <div class="clear"></div>
         </div>

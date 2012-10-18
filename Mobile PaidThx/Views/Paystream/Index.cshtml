@@ -91,17 +91,13 @@
         webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]')
         $("#@ViewBag.PageID .ui-listview-filter").hide();
 
-        $("#@ViewBag.PageID #search-control").unbind().bind('click', function () {
-            $("#@ViewBag.PageID .ui-listview-filter").toggle();
-        });
-
         //cache the list-view element for later use
         var $listview = $(this).find('[data-role="listview"]');
 
         paystreamController.init('@Model.UserId');
         paystreamController.searchAndDisplayPaystream('all');
 
-        $('.more-results a').die('click').live('click', function () {
+        $('.more-results').die('click').live('click', function () {
             paystreamController.getAndDisplayMoreItems();
         });
         $('#paystream-all').die('change').live('change', function () {

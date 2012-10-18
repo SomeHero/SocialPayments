@@ -157,7 +157,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 if (model.PinCode != Session["ChangeSecurityPin_NewPinCode"].ToString())
                 {
-                    ModelState.AddModelError("", "Your security pins don't match.  Try Again");
+                    ModelState.AddModelError("", "Your security PINs don't match.  Try Again");
 
                     return RedirectToAction("ChangeSecurityPinNew");
                 }

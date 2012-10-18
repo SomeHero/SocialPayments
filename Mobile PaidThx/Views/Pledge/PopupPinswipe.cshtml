@@ -20,11 +20,11 @@
         }
         @if(!String.IsNullOrEmpty(Model.RecipientName))
         {
-            <text>Please swipe your security pin to confirm  <b>@Model.RecipientName</b>'s donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.PledgeToName</b>.</text>
+            <text>Please swipe your security PIN to confirm  <b>@Model.RecipientName</b>'s donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.PledgeToName</b>.</text>
         } 
         else
         {
-            <text>Please swipe your security pin to confirm <b>@Model.RecipientUri</b>'s donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.PledgeToName</b>.</text>
+            <text>Please swipe your security PIN to confirm <b>@Model.RecipientUri</b>'s donation of <span class="lbl-amount donation out"><b>@String.Format("{0:C}", Model.Amount)</b></span> to <b>@Model.PledgeToName</b>.</text>
         }     
         <div class="clear"></div>
         </div>
