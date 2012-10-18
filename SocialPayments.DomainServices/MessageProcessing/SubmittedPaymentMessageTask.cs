@@ -241,14 +241,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 try
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
-
+                    DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                     _emailServices.SendEmail(message.Recipient.EmailAddress, String.Format("{0} sent you {1} using PaidThx", _senderName, message.Amount),
                                         communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                                 {
                                     new KeyValuePair<string, string>("REC_SENDER", _senderName),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                     new KeyValuePair<string, string>("LINK_ENGAGE",  _mobileWebSiteEngageURl),
@@ -259,7 +260,10 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
                 }
             }
-            if (message.Recipient.FacebookUser != null)
+
+            var recipientSocialNetworkAccount = message.Recipient.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+            if (recipientSocialNetworkAccount != null)
             {
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_NotEngaged_Facebook");
                     
@@ -267,8 +271,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
                 }
@@ -312,6 +319,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     //Payment Registered Recipient
                     try
                     {
+                        DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                         _emailServices.SendEmail(message.Recipient.EmailAddress, String.Format("{0} sent you {1:C} using PaidThx", _senderName, message.Amount),
                             communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                                     {
@@ -320,7 +329,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                         new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
                                         new KeyValuePair<string, string>("rec_sender", _senderName),
                                         new KeyValuePair<string, string>("rec_sender_photo_url", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                         new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                         new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                         new KeyValuePair<string, string>("link_registration", message.shortUrl),
@@ -333,17 +342,23 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     }
                 }
             }
-            if (message.Recipient.FacebookUser != null)
+
+            var recipientSocialNetworkAccount = message.Recipient.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+            if (recipientSocialNetworkAccount != null)
             {
                 try
                 {
                     var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_Receipt_Facebook");
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
-
                 }
                 catch (Exception ex)
                 {
@@ -386,7 +401,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         _logger.Log(LogLevel.Error, String.Format("Exception Pushing IOS Notification. {0}", ex.Message));
                     }
                 }
-
             }*/
 
             if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
@@ -455,7 +469,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient (Recipient is not an registered user)."));
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_NotRegistered_Email");
-
+                DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                 var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
                 var subject = String.Format("{0} sent you {1:C} using PaidThx{2}", _senderName, message.Amount, comment);
 
@@ -465,7 +480,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                         new KeyValuePair<string, string>("REC_SENDER", _senderName),
                                         new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                         new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}", createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                         new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                         new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                         new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
@@ -482,17 +497,31 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.RecipientUri.Substring(3),
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, message.RecipientUri.Substring(3)));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, message.RecipientUri.Substring(3),
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
 
-                    client.Post(String.Format("/{0}/feed", message.Recipient.FacebookUser.FBUserID), args);
+                    client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
                 }
                 catch (Exception ex)
                 {
                     _logger.Log(LogLevel.Error, ex.Message);
                 }
             }
+        }
+        private static DateTime ConvertToLocalTime(DateTime utcDate, string timeZoneId)
+        {
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            DateTime createDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZoneInfo);
+
+            if (timeZoneInfo.IsDaylightSavingTime(createDate))
+                createDate = createDate.AddHours(-1);
+
+            return createDate;
         }
     }
 }

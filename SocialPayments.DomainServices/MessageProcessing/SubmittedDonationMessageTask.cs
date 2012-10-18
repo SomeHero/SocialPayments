@@ -98,5 +98,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
             }
         }
+        private static DateTime ConvertToLocalTime(DateTime utcDate, string timeZoneId)
+        {
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            DateTime createDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZoneInfo);
+
+            if (timeZoneInfo.IsDaylightSavingTime(createDate))
+                createDate = createDate.AddHours(-1);
+
+            return createDate;
+        }
     }
 }

@@ -90,7 +90,7 @@ namespace SocialPayments.DomainServices
             if (input == null)
                 return "";
 
-            return input.Value.ToString("ddd MMM dd HH:mm:ss zzz yyyy");
+            return input.Value.ToString("o");
         }
     }
 }

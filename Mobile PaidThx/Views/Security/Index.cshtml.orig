@@ -13,20 +13,24 @@
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+<<<<<<< HEAD
     <div class="top-panel">
     Here you can change your password or security PIN, or reset your PIN.
-  
+    </div>
+=======
+   <div class="top-panel">
+            <p>
 
-     
-
-       </div>
-                  @{
+                @{
                     if (TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
                     {
                     @TempData["Message"]
                     }
                 }
 
+            </p>
+       </div>
+>>>>>>> upstream/development
         <div class="pad">
             
             <ul class="panel-container">

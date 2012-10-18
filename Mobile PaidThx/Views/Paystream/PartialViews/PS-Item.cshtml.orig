@@ -1,0 +1,118 @@
+﻿<script id="paystreamItem" type="text/x-jquery-tmpl">
+    <li class="removable paystreamLi {{if direction == "In"}}in{{/if}} {{if direction == "Out"}}out{{/if}} {{if messageType == "PaymentRequest"}}request{{/if}} {{if messageType == "Payment"}}payment{{/if}} {{if messageType == "Donation"}}donation{{/if}} {{if !recipientSeen}}new{{/if}}">
+        <a  class="paystreamItem showloader" messageId="${Id}">
+
+<img width="50" height="50" class="rounded ps-image" src="{{if direction == "In"}}
+${senderImageUri}
+        {{/if}}
+        {{if direction == "Out"}}
+${recipientImageUri}
+        {{/if}}" alt="Image" />
+
+<h2 class="ps-other-party"> 
+        {{if direction == "In"}}
+${senderName}
+        {{/if}}
+        {{if direction == "Out"}}
+${recipientName}
+        {{/if}}
+<span class="ps-message">
+          {{if comments != "No comments" && comments != ""}}                                             
+ <text>"${comments}"</text>
+ {{else}}
+No message
+ {{/if}}
+</span>  
+<span class="ps-datetime">
+<<<<<<< HEAD
+{{if moment.utc(createDate).local().diff(datetimenow, 'hours') < -6 }}
+
+{{if datetimenow.isDST() }}
+ ${moment.utc(createDate).subtract("hours", 1).local().calendar()}    
+  {{else}}  
+ ${moment.utc(createDate).local().calendar()} 
+    {{/if}}   
+ {{else}}  
+    {{if datetimenow.isDST() }}
+${moment.utc(createDate).subtract("hours", 1).local().fromNow()}   
+  {{else}}  
+${moment.utc(createDate).local().fromNow()} 
+    {{/if}}                                  
+=======
+{$(moment.local()}
+{{if moment(createDate).diff(getDateNow(), 'hours') < -6 }}
+ ${moment(createDate).calendar()}
+ {{else}}         
+ ${moment(createDate).fromNow()}                                   
+>>>>>>> upstream/development
+ {{/if}}
+</span>  
+
+</h2>
+
+                              
+<div class="ps-details">
+<div class="left">
+
+<span class="ps-type">
+ {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+               Request In
+                {{else messageType == "Payment"}}
+                Money In
+                {{else messageType == "Donation"}}
+                Donation In
+                {{else messageType == "AcceptPledge"}}
+                Pledge
+                {{/if}}
+{{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                Request Out
+                {{else messageType == "Payment"}}
+                Money Out
+                {{else messageType == "Donation"}}
+                Donation
+                {{else messageType == "AcceptPledge"}}
+                Pledge
+                {{/if}}
+            {{/if}}
+</span>
+<span class="ps-status">
+&nbsp;|&nbsp;&nbsp;${messageStatus}
+</span>
+<span class="ps-dummy">
+&nbsp;
+</span>
+</div>
+<div class="right">
+<span class="ps-amount">
+ {{if direction == "In"}}
+                {{if messageType == "PaymentRequest"}}
+               -
+                {{else messageType == "Payment"}}
+                +
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "AcceptPledge"}}
+                &#9829;
+                {{/if}}
+{{else direction == "Out"}}
+                {{if messageType == "PaymentRequest"}}
+                +
+                {{else messageType == "Payment"}}
+                -
+                {{else messageType == "Donation"}}
+                &#9829;
+                {{else messageType == "AcceptPledge"}}
+                &#9829;
+                {{/if}}
+            {{/if}}$${amount.toFixed(2)}
+</span>
+</div>
+<div class="clear">
+</div>
+</div>             
+
+        </a>
+     </li>
+</script>

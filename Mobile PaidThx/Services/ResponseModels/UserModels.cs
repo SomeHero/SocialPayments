@@ -138,5 +138,9 @@ namespace Mobile_PaidThx.Services.ResponseModels
             public bool HasSecurityQuestion { get; set; }
             public string UserId { get; set; }
         }
+        public class ValidateSecurityPinResponse
+        {
+            public bool IsValid { get; set; }
+        }
     }
 }
