@@ -33,11 +33,14 @@ namespace Mobile_PaidThx.Controllers
                 foreach (var profileItem in profileSection.ProfileItems)
                 {
                     var attribute = user.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
-                    
-                    if (attribute != null )
+
+                    if (profileItem.ItemType == "ShortText")
+                    {
                         numItems++;
-                    if (attribute != null && !String.IsNullOrEmpty(attribute.AttributeValue))
-                        numItemsComplete++;
+
+                        if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
+                            numItemsComplete++;
+                    }
                 }
             }
             
@@ -46,7 +49,7 @@ namespace Mobile_PaidThx.Controllers
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
                 UserNewActivity = user.numberOfPaystreamUpdates,
-                UserProfileComplete = Math.Round((double)(numItemsComplete/numItems)*100)
+                UserProfileComplete = Math.Round(((double)(numItemsComplete/numItems)*100.0))
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
