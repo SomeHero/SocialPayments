@@ -13,6 +13,16 @@
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+    <div class="top-panel">
+    @if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
+    {
+    <text>Here you can link your social networks (just Facebook for now, others coming soon).  Linking your social networks allows you to send money to your social contacts.  Click below to link your Facebook account.</text>
+    }
+    else
+    {
+    <text>Linking your social networks allows you to send money to your social contacts.  Your Facebook account is already linked, so exchanging money with friends should be a snap now.</text>
+    }
+        </div>
         <div class="pad">
 
             @TempData["Message"]
@@ -22,17 +32,17 @@
                 
                 @{
                 
-               if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
-                {
+                    if (Model.UserSocialNetworks.FirstOrDefault(u => u.Name == "Facebook") == null)
+                    {
                 <li class="settings unlinked" id="facebook">
                     <!-- Facebook -->
                     <a href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SocialNetworks/LinkFacebookAccount/&scope=email&state=", Model.FBState)'>
                     <h2 class="heading"> Facebook </h2>
                     <h4 class="subheading">Send to your friends! Click to link.</h4> </a>
                     </li>
-                }
-               else
-               {
+                    }
+                    else
+                    {
                     <li class="settings linked" id="facebook">
                     <!-- Facebook Not Linked -->
                     <a href='#'>
