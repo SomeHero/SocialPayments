@@ -273,7 +273,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
 
-                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
 
                     _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
@@ -354,7 +354,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
 
-                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
 
                     _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
@@ -499,7 +499,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
 
-                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, message.RecipientUri.Substring(3)));
+                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, message.RecipientUri.Substring(3)));
 
                     _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, message.RecipientUri.Substring(3),
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
