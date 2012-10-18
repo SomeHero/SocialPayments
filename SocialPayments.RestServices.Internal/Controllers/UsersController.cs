@@ -998,6 +998,46 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
         }
 
+        //POST /api/users/{userId}/validate_security_pin
+        [HttpPost]
+        public HttpResponseMessage ValidateSecurityPin(string userId, UserModels.ValidateSecurityPinRequest request)
+        {
+            _logger.Log(LogLevel.Info, String.Format("Validating Security Pin for User {0}", userId));
+
+            var userService = new DomainServices.UserService();
+            bool valid = false;
+            try
+            {
+                valid = userService.ValidateSecurityPin(userId, request.SecurityPin);
+            }
+            catch (NotFoundException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Not Found Exception Validating Security Pin. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                _logger.Log(LogLevel.Warn, String.Format("Bad Request Exception Validating Security Pin. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+                var error = new HttpError(ex.Message);
+                error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Validating Security Pin. Exception {0}. Stack Trace {1}", ex.Message, ex.StackTrace));
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, new UserModels.ValidateSecurityPinResponse()
+            {
+                IsValid = valid
+            });
+
+        }
         //POST /api/users/signin_withfacebook
         [HttpPost]
         public HttpResponseMessage SignInWithFacebook(UserModels.FacebookSignInRequest request)

@@ -99,6 +99,82 @@ namespace Mobile_PaidThx.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public ActionResult ResendVerificationCode(PhonesModels.ResendVerificationCodeModel model)
+        {
+            var user = (UserModels.UserResponse)Session["User"];
+            var phoneNumber = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);
 
+            var userPayPointServices = new UserPayPointServices();
+            try
+            {
+                userPayPointServices.ResendPhoneVerificationCode(user.userId.ToString(), phoneNumber.Id);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View("Details", new PhonesModels.DetailsPhonesModels()
+                    {
+                        PhoneNumber = phoneNumber
+                    });
+            }
+
+            TempData["Message"] = String.Format("We just sent a text message to {0} with an activation code needed to verify your ownership of this pay point. Once you receive the text message, click the Verify Pay Point button and complete verification.", phoneNumber.Uri);
+
+            return View("Details", new PhonesModels.DetailsPhonesModels()
+            {
+                PhoneNumber = phoneNumber
+            });
+        }
+        public ActionResult VerifyPhone(string PayPointId)
+        {
+            return View(new PhonesModels.VerifyPhoneModel()
+            {
+                PayPointId = PayPointId,
+                VerificationCode = ""
+            });
+        }
+        [HttpPost]
+        public ActionResult VerifyPhone(PhonesModels.VerifyPhoneModel model)
+        {
+            var user = (UserModels.UserResponse)Session["User"];
+            var phoneNumber = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);
+
+            var userPayPointServices = new UserPayPointServices();
+            bool verified = false;
+
+            try
+            {
+                verified = userPayPointServices.VerifyMobilePayPoint(user.userId.ToString(), model.PayPointId, model.VerificationCode);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View(model);
+            
+            }
+            if (verified)
+            {
+                TempData["Message"] = String.Format("You've successfully verified {0} and can begin to send and receive money at this mobile #", phoneNumber.Uri);
+
+                user.userPayPoints = userPayPointServices.GetPayPoints(user.userId.ToString());
+                phoneNumber = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);
+
+                return View("Details", new PhonesModels.DetailsPhonesModels()
+                {
+                    PhoneNumber = phoneNumber
+                });
+            }
+            else
+            {
+                ModelState.AddModelError("", "The verification code you entered does not match our records.  Try again");
+
+                return View(model);
+            }
+
+        }
+     
     }
 }

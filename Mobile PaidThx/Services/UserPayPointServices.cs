@@ -16,7 +16,8 @@ namespace Mobile_PaidThx.Services
         private string _deletePaypointUrl = "{0}Users/{1}/paypoints/{2}";
         private string _addPaypointUrl = "{0}Users/{1}/paypoints";
         private string _resendEmailVerificationLinkUrl = "{0}Users/{1}/PayPoints/resend_email_verification_link";
-        private string _resendPhoneVerificationCodeUrl = "{0}Users/{1}/PayPoints/resend_verification_code";
+        private string _resendPhoneVerificationCodeUrl = "{0}Users/{1}/PayPoints/resend_mobile_verification_code";
+        private string _verifyMobilePayPointUrl = "{0}Users/{1}/PayPoints/{2}/verify_mobile_paypoint";
 
         public List<UserModels.UserPayPointResponse> GetPayPoints(string userId)
         {
@@ -109,6 +110,31 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
+
+        }
+        public bool VerifyMobilePayPoint(String userId, String payPointId, String verificationCode)
+        {
+            var serviceUrl = String.Format(_verifyMobilePayPointUrl, _webServicesBaseUrl, userId, payPointId);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                VerificationCode = verificationCode
+            });
+
+            var response = Post(serviceUrl, json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+           
+            }
+
+            var verifyMobilePayPointResponse = js.Deserialize<UserPayPointResponseModels.VerifyMobilePayPointResponseModel>(response.JsonResponse);
+
+            return verifyMobilePayPointResponse.Verified;
 
         }
     }

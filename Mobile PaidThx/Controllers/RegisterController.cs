@@ -150,6 +150,9 @@ namespace Mobile_PaidThx.Controllers
             Session["UserId"] = user.userId;
             Session["User"] = user;
 
+            FormsAuthentication.SetAuthCookie(user.emailAddress, false);
+
+            
             string returnUrl = (Session["UserSetupReturnUrl"] != null ? Session["UserSetupReturnUrl"].ToString() : "");
 
             if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
@@ -293,6 +296,8 @@ namespace Mobile_PaidThx.Controllers
             Session["Application"] = application;
             Session["UserId"] = user.userId;
             Session["User"] = user;
+
+            FormsAuthentication.SetAuthCookie(user.emailAddress, false);
 
             string returnUrl = (Session["UserSetupReturnUrl"] != null ? Session["UserSetupReturnUrl"].ToString() : "");
 

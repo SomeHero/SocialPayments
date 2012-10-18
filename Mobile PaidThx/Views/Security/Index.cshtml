@@ -13,7 +13,18 @@
             <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
-    <div class="top-panel"></div>
+   <div class="top-panel">
+            <p>
+
+                @{
+                    if (TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
+                    {
+                    @TempData["Message"]
+                    }
+                }
+
+            </p>
+       </div>
         <div class="pad">
             
             <ul class="panel-container">

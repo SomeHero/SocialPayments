@@ -157,12 +157,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
             try
             {
-                userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
-
-                if (userPayPoint == null)
-                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
-                    
-                userServices.SendMobileVerificationCode(userPayPoint);
+                userServices.SendMobileVerificationCode(userId, model.UserPayPointId);
             }
             catch (NotFoundException ex)
             {
@@ -181,7 +176,7 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Resending Verification Code {0} for User {1}.  Exception {1}. Stack Trace {2}", model.UserPayPointId, userId, ex.Message, ex.StackTrace));
+                _logger.Log(LogLevel.Error, String.Format("Unhandled Exception Resending Verification Code {0} for User {1}.  Exception {2}. Stack Trace {3}", model.UserPayPointId, userId, ex.Message, ex.StackTrace));
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message);
             }

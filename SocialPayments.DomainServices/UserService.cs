@@ -89,16 +89,21 @@ namespace SocialPayments.DomainServices
 
             if (!String.IsNullOrEmpty(emailAddress))
             {
-                user.PayPoints.Add(new UserPayPoint()
-                {
-                    Id = Guid.NewGuid(),
-                    CreateDate = System.DateTime.Now,
-                    IsActive = true,
-                    URI = emailAddress,
-                    Type = payPointType,
-                    Verified = false
-                });
+                var userPayPoint = _ctx.UserPayPoints
+                    .FirstOrDefault(p => p.URI == emailAddress);
 
+                if (userPayPoint == null)
+                {
+                    user.PayPoints.Add(new UserPayPoint()
+                    {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        IsActive = true,
+                        URI = emailAddress,
+                        Type = payPointType,
+                        Verified = false
+                    });
+                }
 
                 var emailAddressAttribute = _ctx.UserAttributes
                     .FirstOrDefault(a => a.AttributeName == "emailUserAttribute");
@@ -123,16 +128,22 @@ namespace SocialPayments.DomainServices
                 if (payPointType == null)
                     throw new Exception("Pay Point Type Phone Not Found");
 
-                user.PayPoints.Add(new UserPayPoint()
-                {
-                    CreateDate = System.DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    Type = payPointType,
-                    URI = userName,
-                    User = user,
-                    IsActive = true,
-                    Verified = false
-                });
+                 var userPayPoint = _ctx.UserPayPoints
+                    .FirstOrDefault(p => p.URI == mobileNumber);
+
+                 if (userPayPoint == null)
+                 {
+                     user.PayPoints.Add(new UserPayPoint()
+                     {
+                         CreateDate = System.DateTime.Now,
+                         Id = Guid.NewGuid(),
+                         Type = payPointType,
+                         URI = userName,
+                         User = user,
+                         IsActive = true,
+                         Verified = false
+                     });
+                 }
 
                 var mobileNumberAttribute = _ctx.UserAttributes
                     .FirstOrDefault(a => a.AttributeName == "phoneUserAttribute");
@@ -665,7 +676,9 @@ namespace SocialPayments.DomainServices
                 if (userPayPointGuid == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", userPayPointId));
 
-                var payPointVerification = ctx.UserPayPointVerifications.FirstOrDefault(p => p.UserPayPointId == userPayPointGuid && p.UserPayPoint.UserId == userGuid &&
+                var payPointVerification = ctx.UserPayPointVerifications
+                    .OrderByDescending(p => p.CreateDate)
+                    .FirstOrDefault(p => p.UserPayPointId == userPayPointGuid && p.UserPayPoint.UserId == userGuid &&
                     p.Confirmed == false);
 
                 if (payPointVerification == null)
@@ -859,6 +872,7 @@ namespace SocialPayments.DomainServices
 
                     user.DeviceToken = deviceToken;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
+
                     if (user.FacebookUser != null)
                     {
                         user.FacebookUser.OAuthToken = oAuthToken;
@@ -873,6 +887,23 @@ namespace SocialPayments.DomainServices
                             TokenExpiration = tokenExpiration,
                             OAuthToken = oAuthToken
                         };
+                    }
+
+                    var userSocialNetwork = user.UserSocialNetworks
+                        .FirstOrDefault(u => u.SocialNetwork.Equals(socialNetwork));
+
+                    if(userSocialNetwork != null)
+                    {
+                        userSocialNetwork.UserAccessToken = oAuthToken;
+                    } 
+                    else
+                    {
+                        user.UserSocialNetworks.Add(new UserSocialNetwork() {
+                            EnableSharing = true,
+                            SocialNetwork = socialNetwork,
+                            UserNetworkId = accountId,
+                            UserAccessToken = oAuthToken
+                        });
                     }
                 }
 
@@ -1069,52 +1100,75 @@ namespace SocialPayments.DomainServices
 
             emailService.SendEmail(application.ApiKey, ConfigurationManager.AppSettings["fromEmailAddress"], user.EmailAddress, "How to reset your PaidThx password", body.ToString());
         }
-        public void SendMobileVerificationCode(UserPayPoint userPayPoint)
+        public void SendMobileVerificationCode(string userId, string userPayPointId)
         {
-            DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
-            DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
-            DomainServices.ValidationService validateService = new ValidationService();
-            DomainServices.SMSService smsService = new DomainServices.SMSService(_ctx);
-            DomainServices.CommunicationService communicationServices = new DomainServices.CommunicationService(_ctx);
+            using (var ctx = new Context())
+            {
+                DomainServices.EmailService emailService = new DomainServices.EmailService(_ctx);
+                DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
+                DomainServices.ValidationService validateService = new ValidationService();
+                DomainServices.SMSService smsService = new DomainServices.SMSService(_ctx);
+                DomainServices.CommunicationService communicationServices = new DomainServices.CommunicationService(_ctx);
 
-            string name = formattingService.FormatUserName(userPayPoint.User);
-            Guid passwordResetGuid = Guid.NewGuid();
-            DateTime expiresDate = System.DateTime.Now.AddHours(3);
+                Guid userGuid;
+                Guid userPayPointGuid; 
 
-            var random = new Random();
-            int first = random.Next(10);
-            int second = random.Next(10);
-            int third = random.Next(10);
-            int forth = random.Next(10);
+                Guid.TryParse(userId, out userGuid);
 
-            string verificationCode = String.Format("{0}{1}{2}{3}", first, second, third, forth);
+                if (userGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("User {0} Not Valid", userId));
 
-            var verification = _ctx.UserPayPointVerifications.Add(
-                new UserPayPointVerification()
+                Guid.TryParse(userPayPointId, out userPayPointGuid);
+
+                if(userPayPointGuid == null)
+                    throw new CustomExceptions.BadRequestException(String.Format("Pay Point {0} Not Valid", userPayPointId));
+
+                var userPayPoint = ctx.UserPayPoints.FirstOrDefault(
+                    p => p.Id == userPayPointGuid  && p.UserId == userGuid);
+
+                if (userPayPoint == null)
+                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", userPayPointId));
+                   
+                string name = formattingService.FormatUserName(userPayPoint.User);
+                Guid passwordResetGuid = Guid.NewGuid();
+                DateTime expiresDate = System.DateTime.Now.AddHours(3);
+
+                var random = new Random();
+                int first = random.Next(10);
+                int second = random.Next(10);
+                int third = random.Next(10);
+                int forth = random.Next(10);
+
+                string verificationCode = String.Format("{0}{1}{2}{3}", first, second, third, forth);
+
+                var verification = ctx.UserPayPointVerifications.Add(
+                    new UserPayPointVerification()
+                    {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        UserPayPoint = userPayPoint,
+                        VerificationCode = verificationCode,
+                        ExpirationDate = System.DateTime.Now.AddDays(30),
+                        Confirmed = false
+                    });
+                
+                ctx.SaveChanges();
+
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    CreateDate = System.DateTime.Now,
-                    UserPayPoint = userPayPoint,
-                    VerificationCode = verificationCode,
-                    ExpirationDate = System.DateTime.Now.AddDays(30)
-                });
-            _ctx.SaveChanges();
+                    var communicationTemplate = communicationServices.GetCommunicationTemplate("Phone_Added_SMS");
+                    var link = String.Format(_mobileVerificationBaseUrl, verification.Id);
 
-            try
-            {
-                var communicationTemplate = communicationServices.GetCommunicationTemplate("Phone_Added_SMS");
-                var link = String.Format(_mobileVerificationBaseUrl, verification.Id);
-
-                //{0} - Link to verification screen
-                //{1} - Phone verification code
-                smsService.SendSMS(verification.UserPayPoint.User.ApiKey, verification.UserPayPoint.URI, String.Format(communicationTemplate.Template,
-                    link, verificationCode));
+                    //{0} - Link to verification screen
+                    //{1} - Phone verification code
+                    smsService.SendSMS(verification.UserPayPoint.User.ApiKey, verification.UserPayPoint.URI, String.Format(communicationTemplate.Template,
+                        link, verificationCode));
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, String.Format("Exception Sending Email Verification Link to {0}. {1}", userPayPoint.URI, ex.Message));
-            }
-
         }
         public void SendEmailVerificationLink(string userId, string userPayPointId)
         {
@@ -1284,6 +1338,45 @@ namespace SocialPayments.DomainServices
 
 
 
+        }
+        public bool ValidateSecurityPin(string userId, string securityPin)
+        {
+            using (var ctx = new Context())
+            {
+                var securityServices = new DomainServices.SecurityService();
+
+                Guid userGuid;
+
+                Guid.TryParse(userId, out userGuid);
+
+                if (userGuid == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                var user = ctx.Users
+                    .FirstOrDefault(u => u.UserId.Equals(userGuid));
+
+                if(user == null)
+                    throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
+
+                if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
+                {
+                    user.PinCodeFailuresSinceLastSuccess += 1;
+
+                    if (user.PinCodeFailuresSinceLastSuccess > 2)
+                    {
+                        user.IsLockedOut = true;
+                        ctx.SaveChanges();
+
+                        throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid. Sender {0} is Locked out", user.UserId), 1001);
+                    }
+
+                    ctx.SaveChanges();
+
+                    return false;
+                }
+
+                return true;
+            }
         }
         public URIType GetURIType(string uri)
         {

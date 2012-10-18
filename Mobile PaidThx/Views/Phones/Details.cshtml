@@ -5,69 +5,86 @@
     ViewBag.Classes = "page settings";
 }
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
-    
-    <div class="header-pdthx" >
-        <h1>
-            Details</h1>
-            <a href="@Url.Content("~/Phones")"  class="hd-btn-left btn-back">Back</a>
+
+    <div class="header-pdthx">
+        <h1>Details</h1>
+        <a href="@Url.Content("~/Phones")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
-    <div class="top-panel">
-    <p>
+        <div class="top-panel">
+            <p>
 
-    @{
-        if (Model.PhoneNumber.Verified)
-        {
-        <text>
-        <b>@Model.PhoneNumber.Uri</b> is verified, you will receive all payments sent to this number.  Awesome.
-        </text>
-        }
-        else
-        {
-         <text>
-         <b>@Model.PhoneNumber.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Text" below and follow the instructions in the text you will receive.
-        </text>
-        }
-    }
-                
-            </p>
-    
-    </div>
-    @Html.ValidationSummary()
-        <div class="pad">
-        
-         <ul class="panel-container">
-            <li class="settings phone nolink" >
-            <a href="#">
-                    <h2>@Model.PhoneNumber.Uri</h2>
-                    @if (Model.PhoneNumber.Verified)
+                @{
+                    if (TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
                     {
-                        <text><h4 class="verified">Verified</h4></text>
+                    @TempData["Message"]
                     }
                     else
                     {
-                        <text><h4 class="unverified">Not Verified</h4></text>
+                        if (Model.PhoneNumber.Verified)
+                        {
+                    <text>
+                    <b>@Model.PhoneNumber.Uri</b> is verified, you will receive all payments sent to this number.  Awesome.
+        </text>
+                        }
+                        else
+                        {
+                    <text>
+                    <b>@Model.PhoneNumber.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Text" below and follow the instructions in the text you will receive.
+        </text>
+                        }
                     }
-                    </h4>
+                }
+
+            </p>
+
+        </div>
+        @Html.ValidationSummary()
+        <div class="pad">
+
+            <ul class="panel-container">
+                <li class="settings phone nolink">
+                    <a href="#">
+                        <h2>@Model.PhoneNumber.Uri</h2>
+                        @if (Model.PhoneNumber.Verified)
+                        {
+                            <text><h4 class="verified">Verified</h4></text>
+                        }
+                        else
+                        {
+                            <text><h4 class="unverified">Not Verified</h4></text>
+                        }
+                        </h4>
                     </a>
-            </li>
-        </ul>
-            
+                </li>
+            </ul>
 
-             @{
-                 if (!Model.PhoneNumber.Verified)
-                 {
-                            <button type="button" id="btn-verify-account" class="pd-btn blue">
-                  Resend Text</button>
 
-                 }
-              }
+            @{
+                if (!Model.PhoneNumber.Verified)
+                {
+                    using (Html.BeginForm("ResendVerificationCode", "Phones", FormMethod.Post))
+                    {
+                <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                <button type="submit" id="btn-resend-verification-code" class="pd-btn blue">
+                    Resend Verification Code</button>
+                    }
+
+                    using (Html.BeginForm("VerifyPhone", "Phones", FormMethod.Get))
+                    {
+                        <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                        <button type="submit" id="btn-verify-phone" class="pd-btn red">
+                            Verify Pay Point</button>
+                    }
+
+                }
+            }
 
             @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
-                 <button type="submit" id="btn-remove-email" class="pd-btn red">
-                   Remove Phone</button>
+                <button type="submit" id="btn-remove-email" class="pd-btn red">
+                    Remove Phone</button>
             }
 
         </div>

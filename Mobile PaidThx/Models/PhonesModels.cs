@@ -24,5 +24,14 @@ namespace Mobile_PaidThx.Models
         {
             public String PayPointId { get; set; }
         }
+        public class ResendVerificationCodeModel
+        {
+            public String PayPointId { get; set; }
+        }
+        public class VerifyPhoneModel
+        {
+            public String PayPointId { get; set; }
+            public String VerificationCode { get; set; }
+        }
     }
 }

@@ -229,6 +229,7 @@
     <Compile Include="Services\ResponseModels\SecurityQuestionModels.cs" />
     <Compile Include="Services\ResponseModels\ServiceResponse.cs" />
     <Compile Include="Services\ResponseModels\UserConfigurationModels.cs" />
+    <Compile Include="Services\ResponseModels\UserPayPointResponseModels.cs" />
     <Compile Include="Services\RoutingNumberServices.cs" />
     <Compile Include="Services\SecurityQuestionServices.cs" />
     <Compile Include="Services\ServicesBase.cs" />
@@ -696,6 +697,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Paystream\SendReminder.cshtml" />
+    <Content Include="Views\Phones\VerifyPhone.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.WebHost.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.Http.SelfHost.dll" />
