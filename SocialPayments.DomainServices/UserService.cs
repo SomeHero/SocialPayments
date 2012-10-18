@@ -40,11 +40,8 @@ namespace SocialPayments.DomainServices
         {
             _ctx = context;
         }
-        public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken)
-        {
-            return AddUser(apiKey, userName, password, emailAddress, deviceToken, "", "");
-        }
-        public User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
+        
+        private User AddUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
             string mobileNumber, string messageId)
         {
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
@@ -256,22 +253,10 @@ namespace SocialPayments.DomainServices
                         break;
                 }
 
-
                 _ctx.SaveChanges();
 
             }
 
-            Task.Factory.StartNew(() =>
-            {
-                _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
-
-                SubmittedUserTask userTask = new SubmittedUserTask();
-                userTask.Execute(user.UserId);
-
-            }).ContinueWith(task =>
-            {
-                _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
-            });
             return user;
         }
         public void ChangePassword(string userId, string currentPassword, string newPassword)
@@ -509,7 +494,8 @@ namespace SocialPayments.DomainServices
 
                 user.FirstName = firstName;
                 user.LastName = lastName;
-                user.ImageUrl = imageUrl;
+                if(!String.IsNullOrEmpty(imageUrl))
+                    user.ImageUrl = imageUrl;
 
                 var firstNameAttribute = ctx.UserAttributes
                     .FirstOrDefault(a => a.AttributeName == "FirstName");
@@ -811,6 +797,25 @@ namespace SocialPayments.DomainServices
 
             return user;
         }
+        public User RegisterUser(Guid apiKey, string userName, string password, string emailAddress, string deviceToken,
+            string mobileNumber, string messageId)
+        {
+            var user = AddUser(apiKey, userName, password, emailAddress, deviceToken, mobileNumber, messageId);
+
+            Task.Factory.StartNew(() =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
+
+                SubmittedUserTask userTask = new SubmittedUserTask();
+                userTask.Execute(user.UserId);
+
+            }).ContinueWith(task =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
+            });
+
+            return user;
+        }
         public User SignInWithFacebook(Guid apiKey, string accountId, string emailAddress, string firstName, string lastName,
             string deviceToken, string oAuthToken, DateTime tokenExpiration, string messageId, out bool isNewUser)
         {
@@ -865,6 +870,20 @@ namespace SocialPayments.DomainServices
                     user.LastName = lastName;
                     user.ImageUrl = String.Format(_fbImageUrlFormat, accountId);
 
+                    _ctx.SaveChanges();
+
+                    Task.Factory.StartNew(() =>
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
+
+                        SubmittedUserTask userTask = new SubmittedUserTask();
+                        userTask.Execute(user.UserId);
+
+                    }).ContinueWith(task =>
+                    {
+                        _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
+                    });
+
                 }
                 else
                 {
@@ -905,9 +924,9 @@ namespace SocialPayments.DomainServices
                             UserAccessToken = oAuthToken
                         });
                     }
-                }
 
-                _ctx.SaveChanges();
+                    _ctx.SaveChanges();
+                }
 
             }
             catch (DbEntityValidationException dbEx)
@@ -928,6 +947,18 @@ namespace SocialPayments.DomainServices
 
                 throw ex;
             }
+
+            Task.Factory.StartNew(() =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
+
+                SubmittedUserTask userTask = new SubmittedUserTask();
+                userTask.Execute(user.UserId);
+
+            }).ContinueWith(task =>
+            {
+                _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
+            });
 
             return user;
         }

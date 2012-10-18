@@ -302,7 +302,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Sorry, {0} belongs to an existing account.", request.userName));
                 }
 
-                user = _userService.AddUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
+                user = _userService.RegisterUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
                     request.deviceToken, "", request.messageId);
             }
             catch (Exception ex)
