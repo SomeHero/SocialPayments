@@ -33,11 +33,15 @@ namespace Mobile_PaidThx.Controllers
                 foreach (var profileItem in profileSection.ProfileItems)
                 {
                     var attribute = user.userAttributes.FirstOrDefault(u => u.AttributeId == profileItem.UserAttributeId);
-                    
-                    if (attribute != null )
+
+
+                    if (profileItem.ItemType == "ShortText")
+                    {
                         numItems++;
-                    if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
-                        numItemsComplete++;
+
+                        if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
+                            numItemsComplete++;
+                    }
                 }
             }
             
