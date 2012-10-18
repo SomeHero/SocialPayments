@@ -293,15 +293,16 @@ to <span class="lbl-recipient">@Model.senderName</span>
 <script type="text/javascript">
     $(document).ready(function () {
         var date = $("span.lbl-date").text();
-        alert(date);
         var parsedate = "";
         if (datetimenow.isDST()) {
-            moment.utc(date).subtract("hours", 1).local().format('MMM D, h:mm a \'YY ');
+            parsedate = moment.utc(date).subtract("hours", 1).local().format("MMM D, h:mma YYYY");
         } else {
-            moment.utc(date).local().format('MMM D, h:mm a \'YY ');
+            parsedate = moment.utc(date).local().format("MMM D, h:mma YYYY");
         }
         $("span.lbl-date").text(parsedate);
-        $("span.lbl-date").fadeIn();
+        $("span.lbl-date").css("visibility", "visible");
+        $("span.lbl-date").show();
+        
     });
 </script>
 

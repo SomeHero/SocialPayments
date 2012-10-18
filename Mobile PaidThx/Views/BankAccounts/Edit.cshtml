@@ -14,11 +14,18 @@
     </div>
     <div class="pd-content">
         <div class="top-panel">
+        @if (1 == 0)
+        {
             <p>
                 To enable sending payments from this bank account, please verify it. <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
                         Verify Account
                 </a>
             </p>
+        }
+        else
+        {
+        <text>This bank account has been automatically verified for you, our esteemed BETA user.  You will be able to send and receive payments from this account.</text>
+        }
         </div>
         @Html.ValidationSummary()
         <div class="pad">
