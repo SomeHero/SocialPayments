@@ -38,7 +38,7 @@ namespace Mobile_PaidThx.Controllers
                     {
                         numItems++;
 
-                        if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
+                        if (attribute != null && !String.IsNullOrEmpty(attribute.AttributeValue))
                             numItemsComplete++;
                     }
                 }
