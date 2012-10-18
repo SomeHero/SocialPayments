@@ -188,7 +188,7 @@ namespace Mobile_PaidThx.Controllers
             
             if (model.PinCode.Length < 4)
             {
-                ModelState.AddModelError("", "You must connect 4 dots to create your security pin.  Try again.");
+                ModelState.AddModelError("", "You must connect 4 dots to create your security PIN.  Try again.");
 
                 return View();
             }
@@ -207,7 +207,7 @@ namespace Mobile_PaidThx.Controllers
 
             if (firstPinCode != model.PinCode)
             {
-                TempData["Message"] = "Your confirmation did not match your first security pin swipe, let's try starting over with your first swipe again.";
+                TempData["Message"] = "Your confirmation did not match your first security PIN, let's try starting over with your first swipe again.";
 
                 return View("SetupPinSwipe");
             }

@@ -22,17 +22,17 @@
     @{
         
     if (Model.messageType == "Payment" && Model.direction == "In"){
-    <text>Payment Received</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Payment Received &nbsp;&nbsp;&nbsp; &#8594;</text>
         }else if(Model.messageType == "Payment" && Model.direction == "Out"){
-    <text>Payment Sent</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Payment Sent &nbsp;&nbsp;&nbsp; &#8594;</text>
        }else if(Model.messageType == "PaymentRequest" && Model.direction == "In"){
-    <text>Request Received</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Request Received &nbsp;&nbsp;&nbsp; &#8594;</text>
        }else if(Model.messageType == "PaymentRequest" && Model.direction == "Out"){
-    <text>Request Sent</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Request Sent &nbsp;&nbsp;&nbsp; &#8594;</text>
     }else if(Model.messageType == "Donation" && Model.direction == "Out"){
-    <text>Donation</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Donation &nbsp;&nbsp;&nbsp; &#8594;</text>
     }else if(Model.messageType == "AcceptPledge" && Model.direction == "In"){
-    <text>Pledge</text>
+    <text>&#8594; &nbsp;&nbsp;&nbsp; Pledge &nbsp;&nbsp;&nbsp; &#8594;</text>
     }
     }
     </h2>
@@ -46,7 +46,7 @@
     <p class="whathappened-content">
     <span class="lbl-sender">@Model.senderName</span><br> 
 sent you <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
-<span class="lbl-date">@Model.createDate</span>
+<span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -59,7 +59,7 @@ sent you <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span>
     <p class="whathappened-content">
     <span class="lbl-sender">You</span> sent <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 to <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">@Model.createDate</span>
+<br><span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -72,7 +72,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <p class="whathappened-content">
  <span class="lbl-sender">@Model.senderName</span><br /> 
 requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
-<span class="lbl-date">@Model.createDate</span>
+<span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -85,7 +85,7 @@ requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 from <span class="lbl-recipient">@Model.recipientName</span>
-<br /><span class="lbl-date">@Model.createDate</span>
+<br /><span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -98,7 +98,7 @@ from <span class="lbl-recipient">@Model.recipientName</span>
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> donated <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 to <span class="lbl-recipient">@Model.recipientName</span>
-<br><span class="lbl-date">@Model.createDate</span>
+<br><span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -111,7 +111,7 @@ to <span class="lbl-recipient">@Model.recipientName</span>
     <p class="whathappened-content">
    <span class="lbl-sender">You</span> pledged <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span><br>
 to <span class="lbl-recipient">@Model.senderName</span>
-<br><span class="lbl-date">@Model.createDate</span>
+<br><span class="lbl-date invisible">@Model.createDate</span>
 </p>
 <div class="clear"></div>
 </div>
@@ -288,23 +288,22 @@ to <span class="lbl-recipient">@Model.senderName</span>
 </div>
 
 
-@*
 @section PageScripts{
 
 <script type="text/javascript">
     $(document).ready(function () {
         var date = $("span.lbl-date").text();
+        alert(date);
         var parsedate = "";
-        if (moment(date).diff(getDateNow(), 'hours') < -6) {
-            parsedate = moment(date).calendar();
+        if (datetimenow.isDST()) {
+            moment.utc(date).subtract("hours", 1).local().format('MMM D, h:mm a \'YY ');
         } else {
-            parsedate = moment(date).fromNow();
+            moment.utc(date).local().format('MMM D, h:mm a \'YY ');
         }
-
         $("span.lbl-date").text(parsedate);
-
+        $("span.lbl-date").fadeIn();
     });
 </script>
 
 }
-*@
+

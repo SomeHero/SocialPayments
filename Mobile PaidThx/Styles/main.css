@@ -575,14 +575,18 @@ li.toggler
 .toggle-holder
 {
  float:right;   
+ -moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px;
 }
+
 .toggle-name
 {
 font-size:13px;
 display: block;
 float: left;
-margin-top: 6px; 
-margin-bottom: 6px;   
+margin-top: 7px; 
+margin-bottom: 7px;   
 font-weight:bold;     
 }
  

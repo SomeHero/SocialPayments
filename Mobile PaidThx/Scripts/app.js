@@ -153,7 +153,7 @@ var paystreamController = (function ($, undefined) {
     };
 
     pub.getAndDisplayMoreItems = function () {
-        //Get news and add success callback using then
+        //Get more items
         searchPayStream(function () {
             //Stop loading animation on success
             $this.trigger("paystream.added", items);
@@ -245,27 +245,24 @@ var paystreamController = (function ($, undefined) {
             $listview.find(".removable").remove();
         }
 
-        var today = new XDate();
-        //var today = moment();
-        var yesterday = today.clone().addDays(-1);
-        //var yesterday = today.subtract('days', 1);
-        var thisWeek = today.clone().getWeek();
-        var thisWeek = today.clone().getWeek();
-        var thisWeekYear = today.clone().getYear();
+        var today = moment().format('DDD');
+        var yesterday = today - 1;
+        var thisWeek = moment().format('w'); 
+        var thisWeekYear = moment().format('YYYY');
         var lastWeek = thisWeek - 1;
         var lastWeekYear = thisWeekYear;
         if (lastWeek == 0) {
             lastWeek = 53;
             lastWeekYear -= 1;
         }
-        var thisMonth = today.getMonth();
+        var thisMonth = moment().format('M'); 
         var lastMonth = thisMonth - 1;
-        var thisMonthYear = today.getYear();
+        var thisMonthYear = moment().format('YYYY');
         if (lastMonth == 0) {
             lastMonth = 12;
             thisMonthYear -= 1;
         }
-        var thisYear = today.getYear();
+        var thisYear = moment().format('YYYY');
 
         var headerText = "";
         //Use template to create items & add to list
@@ -273,14 +270,14 @@ var paystreamController = (function ($, undefined) {
             var header = {};
             header.groupHeading = "";
 
-            var createDate = new XDate(Date.parse($(items).get(i).createDate));
-            var createDateWeek = createDate.getWeek();
-            var createDateMonth = createDate.getMonth();
-            var createDateYear = createDate.getYear();
+            var createDate = moment($(items).get(i).createDate).format('DDD');
+            var createDateWeek = moment($(items).get(i).createDate).format('w');
+            var createDateMonth = moment($(items).get(i).createDate).format('M');
+            var createDateYear = moment($(items).get(i).createDate).format('YYYY');
 
-            if (createDate.getMonth() == today.getMonth() && createDate.getDate() == today.getDate() && createDate.getYear() == today.getYear()) {
+            if (createDateMonth == thisMonth && createDate == today && createDateYear == thisYear) {
                 headerText = "Today";
-            } else if (createDate.getMonth() == today.getMonth() && createDate.getDate() == yesterday.getDate() && yesterday.getYear() == yesterday.getYear()) {
+            } else if (createDateMonth == thisMonth && createDate == yesterday && createDateYear == moment().subtract('days', 1).format('YYYY')) {
                 headerText = "Yesterday";
             } else if (createDateWeek == thisWeek && createDateYear == thisWeekYear) {
                 headerText = "This Week";
@@ -291,7 +288,7 @@ var paystreamController = (function ($, undefined) {
             } else if (createDateMonth == lastMonth && createDateYear == lastMonthYear) {
                 headerText = "Last Month";
             } else {
-                headerText = createDate.toString("MMMM") + " " + createDate.toString("yyyy");
+                headerText = createDate.format('ddd, MMM Do, h:mm a');
             }
 
 
@@ -594,7 +591,9 @@ var itemsMovedController = (function ($, undefined) {
 function getDateNow(){
    var now = moment();
    return now;
-} 
+}
+
+var datetimenow = moment();
 
 //HIDING PHONE BROWSER ADDRESS BAR
 

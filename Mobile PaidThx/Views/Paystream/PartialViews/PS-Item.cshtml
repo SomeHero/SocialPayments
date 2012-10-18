@@ -24,10 +24,19 @@ No message
  {{/if}}
 </span>  
 <span class="ps-datetime">
-{{if moment(createDate).diff(getDateNow(), 'hours') < -6 }}
- ${moment(createDate).calendar()}
- {{else}}         
- ${moment(createDate).fromNow()}                                   
+{{if moment.utc(createDate).local().diff(datetimenow, 'hours') < -6 }}
+
+{{if datetimenow.isDST() }}
+ ${moment.utc(createDate).subtract("hours", 1).local().calendar()}    
+  {{else}}  
+ ${moment.utc(createDate).local().calendar()} 
+    {{/if}}   
+ {{else}}  
+    {{if datetimenow.isDST() }}
+${moment.utc(createDate).subtract("hours", 1).local().fromNow()}   
+  {{else}}  
+${moment.utc(createDate).local().fromNow()} 
+    {{/if}}                                  
  {{/if}}
 </span>  
 
