@@ -26,6 +26,7 @@ background-repeat: repeat;
 background-attachment: fixed;
 text-shadow: 1px 1px 0 white;
 overflow-x:hidden;
+font-family: Helvetica, Arial, sans-serif;
 }
 
 /* ++++++++++++++++++TYPOGRAPHY++++++++++++++++ */
@@ -64,9 +65,11 @@ h2.section-header, .or
  position:relative;
 }
 
-.or
+div.or
 {
- text-align:center;   
+ text-align:center !important;   
+ margin-top:20px;
+ margin-bottom:20px;
 }
 
 h2.section-header a.info-helper
@@ -76,13 +79,37 @@ h2.section-header a.info-helper
  top:50%;
  margin-top:-8px;   
 }
-
+.remindme
+{
+ text-align:center;
+ font-weight:bold;
+ font-size:12px;
+ text-transform:uppercase;   
+}
 label
 {
  font-weight:bold;
  color:#666666;
  font-size:12px;   
  text-transform:uppercase;
+}
+.lb-title
+{
+ font-weight:bold;
+ color:#666666;
+ font-size:14px;   
+ text-transform:uppercase; 
+ text-align:center;  
+ margin:0;
+}
+.lightbox
+{
+ font-size:12px;   
+}
+
+label.error
+{
+ text-transform:none;   
 }
 
 h2.section-header:not(:first-child) {
@@ -130,7 +157,7 @@ background:url(../Content/images/bullet_red.png) no-repeat 0 50%;
 	padding-left:22px;
 	line-height:24px;
 	color:#ec3f41;
-	font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
+	font-family: Helvetica, Arial, sans-serif;
 	font-size:12px;
 	margin:0;
 	list-style-type:none;
@@ -150,7 +177,7 @@ background:url(../Content/images/bullet_red.png) no-repeat 0 50%;
 background-color:#f2f2f2; 
   color:#ec3f41;
   font-weight:bold;
-  font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .error
@@ -159,7 +186,7 @@ background-color:transparent;
 }
 
 .ui-tooltip.tip-error .ui-tooltip-content{
-   font-family: "Trebuchet MS", Verdana, "Verdana Ref", sans serif;
+   font-family: Helvetica, Arial, sans-serif;
 	font-size:13px;
 	padding:9px;
 }
@@ -1245,7 +1272,7 @@ padding-top: 3px !important;
  color:#231f20;   
  margin:0;
 }
-#txtComments, #txtComments-Request, #txtComments-Donate 
+#txtComments, #txtComments-Request, #txtComments-Donate, #txtReminder, textarea 
 {
 -webkit-box-sizing: border-box;
 -moz-box-sizing: border-box;
@@ -1280,12 +1307,12 @@ height:70px;
             outline:none;
 }
 
-#txtComments:hover, #txtComments-Request:hover, #txtComments-Donate:hover
+#txtComments:hover, #txtComments-Request:hover, #txtComments-Donate:hover, #txtReminder:hover, textarea:hover
 {
   border-color:#8c8c8c;  
 }
 
-#txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus, #txtComments:active, #txtComments-Request:active, #txtComments-Donate:active
+#txtComments:focus, #txtComments-Request:focus, #txtComments-Donate:focus, #txtComments:active, #txtComments-Request:active, #txtComments-Donate:active, #txtReminder:active
 {
   border-color:#48b201;  
   height:100px;

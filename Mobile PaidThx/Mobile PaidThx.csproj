@@ -362,6 +362,7 @@
     <Content Include="Content\images\org_wwf.png" />
     <Content Include="Content\images\org_zta.png" />
     <Content Include="Content\images\request-icon-big.png" />
+    <Content Include="Content\images\samplecheck.png" />
     <Content Include="Content\images\search-icon.png" />
     <Content Include="Content\images\send-icon-big.png" />
     <Content Include="Content\images\signinIcon.png" />

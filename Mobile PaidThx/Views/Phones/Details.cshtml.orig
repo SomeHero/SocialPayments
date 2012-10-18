@@ -76,7 +76,20 @@
                         <button type="submit" id="btn-verify-phone" class="pd-btn red">
                             Verify Pay Point</button>
                     }
+
+<<<<<<< HEAD
                 }
+=======
+           @{
+                 if (!Model.PhoneNumber.Verified)
+                 {
+                     @using (Html.BeginForm("ResendVerification", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+                     {
+                         <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                         <button type="submit" id="btn-verify-account" class="pd-btn blue">Resend Text</button>
+                     }
+                 }
+>>>>>>> upstream/development
             }
 
             @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))

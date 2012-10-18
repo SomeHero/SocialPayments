@@ -49,10 +49,11 @@ namespace SocialPayments.DomainServices
             _logger.Log(LogLevel.Info, String.Format("{0} - Sending Email to {1} using Template {2}", "", toEmailAddress, templateName));
             
             string elasticEmailUrl = @"https://api.elasticemail.com/mailer/send";
+            string elasticEmailSenderName = "PaidThx";
             string elasticEmailUserName = "notify@paidthx.com";
             string elasticEmailApiKey = "20a00674-374b-4190-81ee-8fb96798a69c";
-            string elasticEmailPostWithSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&subject={3}&template={4}{5}";
-            string elasticEmailPostWithoutSubject = "username={0}&api_key={1}&from={0}&from_name={0}&to={2}&template={3}{4}";
+            string elasticEmailPostWithSubject = "username={0}&api_key={1}&from={0}&from_name={6}&to={2}&subject={3}&template={4}{5}";
+            string elasticEmailPostWithoutSubject = "username={0}&api_key={1}&from={0}&from_name={5}&to={2}&template={3}{4}";
 
             StringBuilder mergeFields = new StringBuilder();
 
@@ -75,12 +76,12 @@ namespace SocialPayments.DomainServices
             if (!String.IsNullOrEmpty(emailSubject))
             {
                 requestBody = String.Format(elasticEmailPostWithSubject, elasticEmailUserName, elasticEmailApiKey,
-                HttpUtility.UrlEncode(toEmailAddress), emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+                HttpUtility.UrlEncode(toEmailAddress), emailSubject, HttpUtility.UrlEncode(templateName), mergeFields.ToString(), elasticEmailSenderName);
             }
             else
             {
                 requestBody = String.Format(elasticEmailPostWithoutSubject, elasticEmailUserName, elasticEmailApiKey,
-                     HttpUtility.UrlEncode(toEmailAddress), HttpUtility.UrlEncode(templateName), mergeFields.ToString());
+                     HttpUtility.UrlEncode(toEmailAddress), HttpUtility.UrlEncode(templateName), mergeFields.ToString(), elasticEmailSenderName);
             }
 
             // Create new HTTP request.

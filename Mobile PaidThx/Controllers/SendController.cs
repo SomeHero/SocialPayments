@@ -58,9 +58,9 @@ namespace Mobile_PaidThx.Controllers
             var sendInformation = (Session["SendInformation"] != null ? (SendInformation)Session["SendInformation"] : new SendInformation());
             
             if(String.IsNullOrEmpty(sendInformation.RecipientUri))
-                ModelState.AddModelError("", "Recipient is required");
+                ModelState.AddModelError("", "Select a recipient");
             if(sendInformation.Amount == 0)
-                ModelState.AddModelError("", "Amount must be greater than $0.00");
+                ModelState.AddModelError("", "Enter amount to send (more than $0)");
 
             sendInformation.Comments = model.Comments;
 

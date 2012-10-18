@@ -12,6 +12,11 @@
             <a href="@Url.Content("~/Emails")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+    <div class="top-panel">
+    <p>
+    Add your new email below.  You'll be sent a verification email.  Simply click the link in the email to verify and you'll claim all payments to your email.
+    </p>
+    </div>
     @Html.ValidationSummary()
         <div class="pad">
          @using (Html.BeginForm("Add", "Emails", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))

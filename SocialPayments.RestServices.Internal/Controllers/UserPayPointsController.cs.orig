@@ -158,7 +158,16 @@ namespace SocialPayments.RestServices.Internal.Controllers.Controllers
 
             try
             {
+<<<<<<< HEAD
                 userServices.SendMobileVerificationCode(userId, model.UserPayPointId);
+=======
+                userPayPoint = userPayPointService.GetUserPayPoint(userId, model.UserPayPointId);
+
+                if (userPayPoint == null)
+                    throw new SocialPayments.DomainServices.CustomExceptions.NotFoundException(String.Format("User Pay Point {0} Not Found", model.UserPayPointId));
+                   
+                userServices.SendMobileVerificationCode(userPayPoint);
+>>>>>>> upstream/development
             }
             catch (NotFoundException ex)
             {

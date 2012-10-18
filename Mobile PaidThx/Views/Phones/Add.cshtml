@@ -12,6 +12,11 @@
             <a href="@Url.Content("~/Phones")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
+        <div class="top-panel">
+    <p>
+    Add a phone number below.  You'll be sent a verification text.  Simply click the link in the text to verify and you'll claim all payments to your phone number.
+    </p>
+    </div>
     @Html.ValidationSummary()
         <div class="pad">
          @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))

@@ -267,11 +267,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 try
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
- 
+
+
                     _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
-
                 }
                 catch (Exception ex)
                 {
@@ -279,6 +279,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
             }
         }
+
         private void SendRecipientReceiptCommunication(Domain.Message message)
         {
             //Send SMS Message to recipient

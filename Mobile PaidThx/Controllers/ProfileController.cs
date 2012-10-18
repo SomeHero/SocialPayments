@@ -67,7 +67,6 @@ namespace Mobile_PaidThx.Controllers
             }
             else
                 userAttribute.AttributeValue = model.Value;
-
         }
     }
 }

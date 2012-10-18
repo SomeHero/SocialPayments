@@ -13,7 +13,7 @@ using Mobile_PaidThx.CustomAttributes;
 
 namespace Mobile_PaidThx.Controllers
 {
-    [CustomAuthorize]
+    
     public class HomeController : PaidThxBaseController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
