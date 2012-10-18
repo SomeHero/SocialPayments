@@ -1,0 +1,33 @@
+﻿@model Mobile_PaidThx.Models.PhonesModels.VerifyPhoneModel
+@{
+    ViewBag.Title = "Verify Mobile Number";
+    ViewBag.PageID = "phones-verify";
+    ViewBag.Classes = "page";
+}
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    
+    <div class="header-pdthx">
+        <h1>
+            Verify Mobile Number</h1>
+            <a href="@Url.Content("~/Phones/Details?PayPointId=" + @Model.PayPointId)"  class="hd-btn-left btn-back">Cancel</a>
+    </div>
+    <div class="pd-content">
+    <div class="top-panel">
+    We sent a text message with a verification code to this mobile number.  Please find the verification code and enter it in the text box below.
+    </div>
+    @Html.ValidationSummary()
+    <div class="pad">
+         @using (Html.BeginForm("VerifyPhone", "Phones", FormMethod.Post))
+         {
+            @Html.HiddenFor(m => m.PayPointId)
+             <p>
+            @Html.TextBoxFor(m => m.VerificationCode, new Dictionary<string, object>() { { "id", "verificationCode" }, { "placeholder", "Verification Code from Text Message" } })
+            </p>
+            <p>
+                <button type="submit" id="send-reminder-button" class="pd-btn green" data-theme="f">
+                    <span>Submit</span></button>
+            </p>
+         }
+        </div>
+    </div>
+</div>

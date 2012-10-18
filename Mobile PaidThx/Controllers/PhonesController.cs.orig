@@ -152,6 +152,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
 
+<<<<<<< HEAD
                 return View(model);
             
             }
@@ -170,12 +171,7 @@ namespace Mobile_PaidThx.Controllers
             else
             {
                 ModelState.AddModelError("", "The verification code you entered does not match our records.  Try again");
-
-                return View(model);
-            }
-
-        }
-     
+=======
         [HttpPost]
         public ActionResult ResendPhoneVerification(PhonesModels.DeletePhonesModel model)
         {
@@ -189,13 +185,19 @@ namespace Mobile_PaidThx.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
+>>>>>>> upstream/development
 
                 return View(model);
             }
 
+<<<<<<< HEAD
+        }
+     
+=======
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());
 
             return RedirectToAction("Index");
         }
+>>>>>>> upstream/development
     }
 }

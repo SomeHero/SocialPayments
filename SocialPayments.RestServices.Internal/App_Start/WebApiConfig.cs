@@ -216,10 +216,15 @@ namespace SocialPayments
                 defaults: new { controller = "UserPayPoint" }
             );
             config.Routes.MapHttpRoute(
-    name: "UserPayPointsWithType",
-    routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
-    defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type = RouteParameter.Optional }
-);
+                name: "UserValidateSecurityPin",
+                routeTemplate: "api/users/{userId}/validate_security_pin",
+                defaults: new { controller = "Users", action = "ValidateSecurityPin" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "UserPayPointsWithType",
+                routeTemplate: "api/users/{userId}/PayPoints/{id}/{type}",
+                defaults: new { controller = "UserPayPoint", id = RouteParameter.Optional, type = RouteParameter.Optional }
+            );
             config.Routes.MapHttpRoute(
                 name: "UserMECodes",
                 routeTemplate: "api/users/{userId}/mecodes/{id}",

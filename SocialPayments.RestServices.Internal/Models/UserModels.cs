@@ -333,5 +333,13 @@ namespace SocialPayments.RestServices.Internal.Models
         {
             public bool Verified { get; set; }
         }
+        public class ValidateSecurityPinRequest
+        {
+            public string SecurityPin { get; set; }
+        }
+        public class ValidateSecurityPinResponse
+        {
+            public bool IsValid { get; set; }
+        }
     }
 }

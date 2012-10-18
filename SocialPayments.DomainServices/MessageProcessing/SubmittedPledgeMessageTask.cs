@@ -139,7 +139,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 _logger.Log(LogLevel.Info, String.Format("Send Email to Recipient - Engaged"));
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Pledge_Receipt_Email");
-
+                DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                 try
                 {
                     if (communicationTemplate != null)
@@ -161,7 +162,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                             new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                             new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
-                            new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                            new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                             new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                             new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
@@ -270,6 +271,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 try
                 {
+                    DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
                     var subject = String.Format("Thank you for your generous donation of  {0:C} to {1}! To complete your donation, visit {2} and add a bank account. -{3}", 
                         message.Amount, message.Sender.Merchant.Name, _mobileWebSiteUrl, "Pledge Taker");
@@ -289,7 +292,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
-                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),      
                                     new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
@@ -366,6 +369,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     if (communicationTemplate != null)
                     {
+                        DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                         emailSubject = String.Format("Thank you for your generous gift of {0:C} to {1}! To complete your donation, visit {2}. -{3}",
                             message.Amount, message.Sender.Merchant.Name, message.shortUrl, "Pledge Taker");
 
@@ -384,7 +389,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     new KeyValuePair<string, string>("REC_SENDER", message.Sender.Merchant.Name),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Originator.ImageUrl != null ? message.Originator.ImageUrl : _defaultAvatarImage)),
-                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                     new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
@@ -455,6 +460,16 @@ namespace SocialPayments.DomainServices.MessageProcessing
             //{
             //    _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
             //}
+        }
+        private static DateTime ConvertToLocalTime(DateTime utcDate, string timeZoneId)
+        {
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            DateTime createDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZoneInfo);
+
+            if (timeZoneInfo.IsDaylightSavingTime(createDate))
+                createDate = createDate.AddHours(-1);
+
+            return createDate;
         }
     }
 }

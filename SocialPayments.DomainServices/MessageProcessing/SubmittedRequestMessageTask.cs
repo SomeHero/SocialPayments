@@ -148,6 +148,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         emailSubject = String.Format("{0} requested {1:C} from you using PaidThx.", senderName, message.Amount);
 
+                        DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                         //REC_SENDER, 
                         //REC_AMOUNT, 
                         //REC_SENDER_PHOTO_URL, 
@@ -160,7 +162,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                             new KeyValuePair<string, string>("REC_SENDER", senderName),
                             new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                             new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                            new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                            new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}", createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                             new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                             new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                             new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
@@ -237,6 +239,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Request_NotEngaged_Email");
 
+                DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                 try
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
@@ -248,7 +252,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                     new KeyValuePair<string, string>("REC_SENDER", senderName),
                                     new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                     new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                    new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                     new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                     new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                     new KeyValuePair<string, string>("LINK_ENGAGE",  _mobileWebSiteEngageURl),
@@ -325,6 +329,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         emailSubject = String.Format("{0} requested {1:C} from you using PaidThx.", senderName, message.Amount);
 
+                        DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
+                        
                         //REC_SENDER, 
                         //REC_AMOUNT, 
                         //REC_SENDER_PHOTO_URL, 
@@ -337,7 +343,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                         new KeyValuePair<string, string>("REC_SENDER", senderName),
                                         new KeyValuePair<string, string>("REC_AMOUNT", String.Format("{0:C}", message.Amount)),
                                         new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL",  (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",message.CreateDate.ToString("dddd, MMMM dd"), message.CreateDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}",createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
                                         new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                         new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
                                         new KeyValuePair<string, string>("LINK_REGISTRATION", message.shortUrl),
@@ -369,6 +375,17 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
 
             }
+        }
+
+        private static DateTime ConvertToLocalTime(DateTime utcDate, string timeZoneId)
+        {
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            DateTime createDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZoneInfo);
+
+            if (timeZoneInfo.IsDaylightSavingTime(createDate))
+                createDate = createDate.AddHours(-1);
+
+            return createDate;
         }
         private void SendSenderReceiptCommunication(Domain.Message message)
         {
