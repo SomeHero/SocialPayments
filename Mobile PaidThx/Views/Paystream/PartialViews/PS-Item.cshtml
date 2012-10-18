@@ -24,11 +24,12 @@ No message
  {{/if}}
 </span>  
 <span class="ps-datetime">
-{$(moment.local()}
-{{if moment(createDate).diff(getDateNow(), 'hours') < -6 }}
- ${moment(createDate).calendar()}
+
+{{if moment(createDate).local().diff(getDateNow(), 'hours') < -6 }}
+    {$moment(moment.local()).local()}
+ ${moment(createDate).local().calendar()}
  {{else}}         
- ${moment(createDate).fromNow()}                                   
+ ${moment(moment(createDate)).local().fromNow()}                                   
  {{/if}}
 </span>  
 

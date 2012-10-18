@@ -171,6 +171,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Get(string userId)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+            var formattingServices = new DomainServices.FormattingServices();
             var messageServices = new DomainServices.MessageServices();
 
             List<Domain.Message> messages = null;
@@ -206,7 +207,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 amount = m.Amount,
                 comments = (!String.IsNullOrEmpty(m.Comments) ? String.Format("{0}", m.Comments) : "No comments"),
-                createDate = m.CreateDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
+                createDate = formattingServices.FormatDateTimeForJSON(m.CreateDate),
                 Id = m.Id,
                 //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                 messageStatus = (m.Direction == "In" ? m.Status.GetRecipientMessageStatus() : m.Status.GetSenderMessageStatus()),
@@ -239,6 +240,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage Get(string userId, string id)
         {
             var userPayStreamMessageServices = new DomainServices.UserPayStreamMessageServices();
+            var formattingServices = new DomainServices.FormattingServices();
             var messageService = new DomainServices.MessageServices();
             Domain.Message message = null;
 
@@ -273,7 +275,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 amount = message.Amount,
                 comments = (!String.IsNullOrEmpty(message.Comments) ? String.Format("{0}", message.Comments) : "No comments"),
-                createDate = message.CreateDate.ToString("YYYY-MM-DDTHH:mm:ss.sssZ"),
+                createDate = formattingServices.FormatDateTimeForJSON(message.CreateDate),
                 Id = message.Id,
                 //lastUpdatedDate =  m.LastUpdatedDate.ToString("ddd MMM dd HH:mm:ss zzz yyyy"),
                 messageStatus = (message.Direction == "In" ? message.Status.GetRecipientMessageStatus() : message.Status.GetSenderMessageStatus()),
