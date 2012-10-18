@@ -48,7 +48,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
-                UserNewActivity = user.newMessageCount + user.pendingMessageCount,
+                UserNewActivity = user.numberOfPaystreamUpdates,
                 UserProfileComplete = Math.Round(((double)(numItemsComplete/numItems)*100.0))
             });
 

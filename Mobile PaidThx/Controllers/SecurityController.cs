@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Mobile_PaidThx.CustomAttributes;
 using Mobile_PaidThx.Models;
+using Mobile_PaidThx.Services;
 using Mobile_PaidThx.Services.CustomExceptions;
 using Mobile_PaidThx.Services.ResponseModels;
 
@@ -88,6 +89,45 @@ namespace Mobile_PaidThx.Controllers
         [HttpPost]
         public ActionResult ChangeSecurityPin(SecurityModels.ChangeSecurityPinModel model)
         {
+            var userServices = new UserServices();
+            var user = (UserModels.UserResponse)Session["User"];
+            var isValid = false;
+
+            try
+            {
+                isValid = userServices.ValidateSecurityPin(user.userId.ToString(), model.PinCode);
+            }
+            catch (ErrorException ex)
+            {
+                if (ex.ErrorCode == 1001)
+                {
+                    Session.Clear();
+                    Session.Abandon();
+
+                    FormsAuthentication.SignOut();
+
+                    return RedirectToAction("Index", "SignIn", new { message = "AccountLocked" });
+                }
+
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                return View();
+            }
+
+            if (!isValid)
+            {
+                ModelState.AddModelError("", "The security pin you swiped does not match our records.  Try swiping your current security pin again.");
+
+                return View();
+            }
+
             Session["ChangeSecurityPin_CurrentPinCode"] = model.PinCode;
 
             return RedirectToAction("ChangeSecurityPinNew");
@@ -132,6 +172,7 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
 
+            TempData["Message"] = "Your securiry pin was successfully changed.";
 
             return RedirectToAction("Index");
         }

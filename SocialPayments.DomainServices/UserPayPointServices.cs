@@ -99,7 +99,7 @@ namespace SocialPayments.DomainServices
                 if (payPointType.Name == "EmailAddress")
                     userService.SendEmailVerificationLink(userId, userPayPoint.Id.ToString());
                 else if (payPointType.Name == "Phone")
-                    userService.SendMobileVerificationCode(userPayPoint);
+                    userService.SendMobileVerificationCode(userId, userPayPoint.Id.ToString());
 
 
                 return userPayPoint;
