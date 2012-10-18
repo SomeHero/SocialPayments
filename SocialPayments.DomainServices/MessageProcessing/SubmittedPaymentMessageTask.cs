@@ -259,7 +259,10 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     _logger.Log(LogLevel.Error, String.Format("Unhandled exception sending email to recipient {0}", ex.Message));
                 }
             }
-            if (message.Recipient.FacebookUser != null)
+
+            var recipientSocialNetworkAccount = message.Recipient.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+            if (recipientSocialNetworkAccount != null)
             {
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_NotEngaged_Facebook");
                     
@@ -267,8 +270,11 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
+                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
                 }
@@ -333,17 +339,23 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     }
                 }
             }
-            if (message.Recipient.FacebookUser != null)
+
+            var recipientSocialNetworkAccount = message.Recipient.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+            if (recipientSocialNetworkAccount != null)
             {
                 try
                 {
                     var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_Receipt_Facebook");
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
-
                 }
                 catch (Exception ex)
                 {
@@ -386,7 +398,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         _logger.Log(LogLevel.Error, String.Format("Exception Pushing IOS Notification. {0}", ex.Message));
                     }
                 }
-
             }*/
 
             if (!String.IsNullOrEmpty(message.Recipient.DeviceToken))
@@ -482,11 +493,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.RecipientUri.Substring(3),
+                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+
+                    _logger.Log(LogLevel.Info, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+
+                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, message.RecipientUri.Substring(3),
                         String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
                         message.shortUrl);
 
-                    client.Post(String.Format("/{0}/feed", message.Recipient.FacebookUser.FBUserID), args);
+                    client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
                 }
                 catch (Exception ex)
                 {
