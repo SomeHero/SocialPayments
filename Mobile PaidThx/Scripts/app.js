@@ -703,6 +703,10 @@ $(document).ready(function () {
         return value == $("#registration-form #password").val();
     }, "Please enter the same password as above");
 
+    //Confirm Account
+    $.validator.addMethod("pwmatchreset", function (value) {
+        return value == $("txtNewPassword").val();
+    }, "Please enter the same password as above");
 
     //Confirm Account
     $.validator.addMethod("accountmatch", function (value) {
