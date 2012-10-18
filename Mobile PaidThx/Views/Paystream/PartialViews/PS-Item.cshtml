@@ -24,6 +24,7 @@ No message
  {{/if}}
 </span>  
 <span class="ps-datetime">
+{$(moment.local()}
 {{if moment(createDate).diff(getDateNow(), 'hours') < -6 }}
  ${moment(createDate).calendar()}
  {{else}}         

@@ -28,6 +28,7 @@ namespace Mobile_PaidThx.Services
         private string _getMeCodesUrl = "{0}Users/{1}/mecodes";
         private string _userServicesResetPasswordUrl = "{0}Users/reset_password";
         private string _userServicesResetSecurityPinUrl = "{0}Users/{1}/setup_securitypin";
+        private string _validateSecurityPinUrl = "{0}Users/{1}/validate_security_pin";
 
         public UserModels.UserResponse GetUser(string userId)
         {
@@ -60,6 +61,7 @@ namespace Mobile_PaidThx.Services
                 lastName = lastName,
                 emailAddress = emailAddress,
                 deviceToken = deviceToken,
+                oAuthToken = oAuthToken,
                 tokenExpiration = tokenExpiration,
                 messageId = messageId
             });
@@ -289,6 +291,29 @@ namespace Mobile_PaidThx.Services
 
                 throw new ErrorException(error.Message, error.ErrorCode);
             }
+        }
+        public bool ValidateSecurityPin(string userId, string securityPin)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            var json = js.Serialize(new
+            {
+                SecurityPin = securityPin
+            });
+
+            var response = Post(String.Format(_validateSecurityPinUrl, _webServicesBaseUrl, userId), json);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = js.Deserialize<ErrorModels.ErrorModel>(response.JsonResponse);
+
+                throw new ErrorException(error.Message, error.ErrorCode);
+            }
+
+            var validateSecurityPinResponse = js.Deserialize<UserModels.ValidateSecurityPinResponse>(response.JsonResponse);
+
+            return validateSecurityPinResponse.IsValid;
+
         }
 
     }

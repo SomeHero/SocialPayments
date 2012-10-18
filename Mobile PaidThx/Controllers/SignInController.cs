@@ -178,11 +178,9 @@ namespace Mobile_PaidThx.Controllers
 
                 ModelState.AddModelError("", ex.Message);
 
-                return View("Index", new JoinModels.JoinModel()
+                return View("Index", new SignInModels.SignInModel()
                 {
-                    UserName = "",
-                    FBState = Session["SignInFBState"].ToString(),
-                    Message = null
+                    FBState = Session["SignInFBState"].ToString()
                 });
             }
 
@@ -214,11 +212,9 @@ namespace Mobile_PaidThx.Controllers
 
                 ModelState.AddModelError("", ex.Message);
 
-                return View("Index", new JoinModels.JoinModel()
+                return View("Index", new SignInModels.SignInModel()
                 {
-                    UserName = "",
-                    FBState = Session["SignInFBState"].ToString(),
-                    Message = null
+                    FBState = Session["SignInFBState"].ToString()
                 });
             }
             
