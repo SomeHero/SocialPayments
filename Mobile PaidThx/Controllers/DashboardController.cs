@@ -36,7 +36,7 @@ namespace Mobile_PaidThx.Controllers
                     
                     if (attribute != null )
                         numItems++;
-                    if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
+                    if (attribute != null && !String.IsNullOrEmpty(attribute.AttributeValue))
                         numItemsComplete++;
                 }
             }
@@ -45,7 +45,7 @@ namespace Mobile_PaidThx.Controllers
             {
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
-                UserNewActivity = user.newMessageCount + user.pendingMessageCount,
+                UserNewActivity = user.numberOfPaystreamUpdates,
                 UserProfileComplete = Math.Round((double)(numItemsComplete/numItems)*100)
             });
 
