@@ -611,6 +611,45 @@ window.addEventListener("load", function () { if (!window.pageYOffset) { hideAdd
 window.addEventListener("orientationchange", hideAddressBar);
 
 
+
+ //CONFIRMATION MESSAGE
+function confirmAlert(message) {
+
+ //AJAX LOADER
+    var $confirmalert = $('<div class="alert-holder"><a name="confirm-scroll" id="scroll-target"></a><div id="confirm-alert" class="confirm alert">' + message + '</div></div>');
+
+    if ($('.validation-summary-errors').is(':visible')) {
+        //do nothing
+    } else {
+
+        if ($('.top-panel').is(':visible')) {
+            $($confirmalert).insertAfter($('div.page .pd-content .top-panel'));
+        } else {
+        $('div.page .pd-content').prepend($($confirmalert));
+    }
+    $('html,body').animate({ scrollTop: $("#scroll-target").offset().top }, 'fast');
+
+    setTimeout(function () {
+
+    $('.alert-holder').animate({
+            height: 'toggle',
+            opacity: 'toggle'
+        }, 300, 'swing', function () {
+            $('.alert-holder').remove();
+        });
+    }, 2000);
+    }
+
+}
+
+
+    
+
+
+
+
+
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

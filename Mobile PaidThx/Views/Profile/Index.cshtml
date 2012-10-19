@@ -38,6 +38,9 @@
                 } 
 
             }
+
+            <button type="button" class="pd-btn green confirmer">
+                   Confirm Changes</button>
         </div>
     </div>
 </div>
@@ -49,7 +52,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-       
+        $(".confirmer").click(function () {
+            confirmAlert("Profile Updated");
+        });
 
         // Toggle switch when clicked
         $("#@ViewBag.PageID").delegate(".profile-item", "change", function (event) {
@@ -83,6 +88,6 @@
 
         });
 
-    });      // End 
+    });       // End 
 </script>
 }

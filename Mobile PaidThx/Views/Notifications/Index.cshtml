@@ -34,6 +34,8 @@
             }
             </ul>
         }
+        <button type="button" class="pd-btn green confirmer">
+                   Confirm Changes</button>
     </div>
     </div>
 </div>
@@ -46,6 +48,10 @@
 @section PageScripts{
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $(".confirmer").click(function () {
+            confirmAlert("Notifications Updated");
+        });
 
         // Iterate over checkboxes
         $("input[type=checkbox].switch-cb").each(function () {
