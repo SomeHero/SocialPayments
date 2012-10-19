@@ -144,6 +144,21 @@ background-color:#f2f2f2;
   
 }
 
+.confirm.alert
+{
+border: 1px solid #48b201;
+color: #48b201;
+text-align:center;
+font-weight:bold;
+font-size:12px;
+margin: 0px;
+padding: 10px;
+-moz-border-radius: 0px;
+-webkit-border-radius: 0px;
+border-radius: 0px;
+background-color:#f2f2f2;    
+}
+
 .validation-summary-errors ul {
  margin: 0;
  padding: 0;
