@@ -258,9 +258,10 @@ var paystreamController = (function ($, undefined) {
         var thisMonth = moment().format('M'); 
         var lastMonth = thisMonth - 1;
         var thisMonthYear = moment().format('YYYY');
+        var lastMonthYear = thisMonthYear;
         if (lastMonth == 0) {
             lastMonth = 12;
-            thisMonthYear -= 1;
+            lastMonthYear -= 1;
         }
         var thisYear = moment().format('YYYY');
 
