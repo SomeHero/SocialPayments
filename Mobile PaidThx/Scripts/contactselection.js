@@ -12,7 +12,7 @@ $(document).ready(function () {
     //cache the lists for later use
     var contactlist = $("#contactList");
 
-    $('.contact-top-input').bind('keyup', function (e) {
+    $('.contact-top-input').on('keyup', function (e) {
 
     //show loading
         $('#page-loader').css("opacity", "0.7");
