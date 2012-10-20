@@ -270,10 +270,10 @@ var paystreamController = (function ($, undefined) {
             var header = {};
             header.groupHeading = "";
 
-            var createDate = moment($(items).get(i).createDate).format('DDD');
-            var createDateWeek = moment($(items).get(i).createDate).format('w');
-            var createDateMonth = moment($(items).get(i).createDate).format('M');
-            var createDateYear = moment($(items).get(i).createDate).format('YYYY');
+            var createDate = moment.utc($(items).get(i).createDate).local().format('DDD');
+            var createDateWeek = moment.utc($(items).get(i).createDate).local().format('w');
+            var createDateMonth = moment.utc($(items).get(i).createDate).local().format('M');
+            var createDateYear = moment.utc($(items).get(i).createDate).local().format('YYYY');
 
             if (createDateMonth == thisMonth && createDate == today && createDateYear == thisYear) {
                 headerText = "Today";
