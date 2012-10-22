@@ -19,10 +19,10 @@
     </div>
     @Html.ValidationSummary()
         <div class="pad">
-         @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         @using (Html.BeginForm("Add", "Phones", FormMethod.Post, new Dictionary<string, object> { { "class", "validateMe" }, { "data-ajax", "false" } }))
          {
             <p>
-                <input type="text" id="txtPhoneNumber" name="PhoneNumber" placeholder="Phone Number"
+                <input type="text" id="txtPhoneNumber" class="required phone" minLength="10" name="PhoneNumber" placeholder="Phone Number"
                 required /></p>
             <p>
               <button type="submit" id="btn-add-phone" class="pd-btn green">
