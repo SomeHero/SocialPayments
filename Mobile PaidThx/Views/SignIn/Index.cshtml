@@ -35,12 +35,12 @@
             <div id="signin-form">
                 @using (Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
                 {       
-                    <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address or Phone #"
+                    <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address"
                         name="Email" /></span>
 
                     <span class="form-holder"><input type="password" id="password" class="required" placeholder="Password" name="Password" /></span>
                     <button type="submit" id="signin-submit" class="pd-btn green">
-                      Sign In</button>
+                      Sign In with Email</button>
 
                 }
             </div>
