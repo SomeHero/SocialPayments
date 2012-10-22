@@ -5,6 +5,7 @@ $.fn.center = function () {
     return this;
 };
 
+
 //add moveTo to jquery object
 (function ($) {
     $.fn.moveTo = function (selector) {
@@ -616,7 +617,6 @@ window.addEventListener("orientationchange", hideAddressBar);
  //CONFIRMATION MESSAGE
 function confirmAlert(message) {
 
- //AJAX LOADER
     var $confirmalert = $('<div class="alert-holder"><a name="confirm-scroll" id="scroll-target"></a><div id="confirm-alert" class="confirm alert">' + message + '</div></div>');
 
     if ($('.validation-summary-errors').is(':visible')) {
@@ -638,14 +638,43 @@ function confirmAlert(message) {
         }, 300, 'swing', function () {
             $('.alert-holder').remove();
         });
-    }, 2000);
+    }, 5000);
     }
 
 }
 
 
-    
+//LOADING FUNCTIONS
+function showFullLoader(message) {
+    if (message) {
+        $(".the-loading-text").text(message);
+    } else {
+        $(".the-loading-text").text("WORKING");
+    }
+$('.loader-holder-full').fadeIn();
+}
 
+function showAJAXLoader(message) {
+    if (message) {
+        $(".aj-loading-text").text(message);
+    } else {
+        //do nothing
+    }
+    $('#page-loader').css("opacity", "0.7");
+    $('#page-loader').show().stop().animate({
+        opacity: 1
+    }, 300, function () {
+
+    });
+}
+
+function hideAJAXLoader() {
+    $('#page-loader').stop().animate({
+        opacity: 0.7
+    }, 300, function () {
+        $('#page-loader').hide();
+    });
+}
 
 
 
@@ -678,13 +707,14 @@ $(document).ready(function () {
 
    
 
-    //SHOW LOADER FOR LONG LOAD EVENTS
+    //SHOW GENERIC LOADER FOR LONG LOAD EVENTS
     $('.showloader').die().live("click", function () {
         $('.loader-holder-full').fadeIn();
     });
 
+
     //AJAX LOADER
-    var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
+    var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /><br><span class="aj-loading-text"></span></div></div>');
 
     $('div.page').append($loadingguy);
 

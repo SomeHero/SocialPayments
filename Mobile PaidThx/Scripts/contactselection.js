@@ -123,13 +123,13 @@ $(document).ready(function () {
 
             //LAZY LOAD
             $("#contactList").find("img.lazy").lazyload();
-            
             //HIDE LOADING
             $('#page-loader').stop().animate({
                 opacity: 0.7
             }, 300, function () {
                 $('#page-loader').hide();
             });
+           
         }
     });
 

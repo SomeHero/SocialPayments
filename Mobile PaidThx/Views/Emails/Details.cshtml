@@ -15,11 +15,7 @@
     <p>
 
     @{
-        if(TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
-        {
-            @TempData["Message"]
-        }
-    else {
+       
         if (Model.EmailAddress.Verified)
         {
         <text>
@@ -32,11 +28,26 @@
          <b>@Model.EmailAddress.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Email" below and follow the instructions in the email you will receive.
         </text>
         }
-        }
+
     }
                 
             </p>
     
+     @if (!Model.EmailAddress.Verified)
+             {
+         
+          <div class="btn-divider"></div>
+                 using (Html.BeginForm("ResendVerification", "Emails", FormMethod.Post))
+                 {
+                <text>
+                <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
+                <button type="submit" id="btn-verify-account" class="pd-btn blue">
+                  Resend Email</button>
+                </text>
+                 }
+
+             }
+              
     </div>
     @Html.ValidationSummary()
         <div class="pad">
@@ -44,8 +55,7 @@
         <ul class="panel-container">
             <li class="settings email nolink">
             <a>
-                   <h2>@Model.EmailAddress.Uri
-                   </h2>
+                   <h2>@Model.EmailAddress.Uri</h2>
                    
                    @if (Model.EmailAddress.Verified)
                    {
@@ -58,18 +68,7 @@
                </a>    
             </li>
             </ul>
-             @if (!Model.EmailAddress.Verified)
-             {
-                using (Html.BeginForm("ResendVerification", "Emails", FormMethod.Post))
-                {
-                <text>
-                <input type="hidden" name="PayPointId" value="@Model.EmailAddress.Id" />
-                <button type="submit" id="btn-verify-account" class="pd-btn blue">
-                  Resend Activation Email</button>
-                </text>
-                }
-                    
-              }
+            
  
             @using (Html.BeginForm("Delete", "Emails", FormMethod.Post))
             {
@@ -80,3 +79,20 @@
             </div>
     </div>
 </div>
+@section PageScripts{
+
+
+    @{
+        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Verification Email Sent - Please Check Your Email");
+            });
+       </script>
+       </text>
+        }
+    }
+
+}

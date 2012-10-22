@@ -15,12 +15,7 @@
             <p>
 
                 @{
-                    if (TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
-                    {
-                    @TempData["Message"]
-                    }
-                    else
-                    {
+                    
                         if (Model.PhoneNumber.Verified)
                         {
                     <text>
@@ -30,13 +25,34 @@
                         else
                         {
                     <text>
-                    <b>@Model.PhoneNumber.Uri</b> is not verified, to start receiving payments to this number, please click "Resend Text" below and follow the instructions in the text you will receive.
+                    <b>@Model.PhoneNumber.Uri</b> is not verified.  We sent you a text with a verification code.  Click the "Verify" button below and enter that code in the box.  If you did not receive the text, click "Resend Code".
         </text>
                         }
                     }
-                }
 
             </p>
+            
+             @{
+                if (!Model.PhoneNumber.Verified)
+                {
+                    <div class="btn-divider"></div>
+                    using (Html.BeginForm("ResendVerificationCode", "Phones", FormMethod.Post))
+                    {
+                <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                <button type="submit" style="width:48%; float:left;" id="btn-resend-verification-code" class="pd-btn blue">
+                    Resend Code</button>
+                    }
+
+                    using (Html.BeginForm("VerifyPhone", "Phones", FormMethod.Get))
+                    {
+                        <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
+                        <button type="submit"  style="width:48%; float:right;" id="btn-verify-phone" class="pd-btn green">
+                            Verify</button>
+                    }
+                }
+                <div class="clear"></div>
+            }
+           
 
         </div>
         @Html.ValidationSummary()
@@ -58,27 +74,7 @@
                     </a>
                 </li>
             </ul>
-
-
-            @{
-                if (!Model.PhoneNumber.Verified)
-                {
-                    using (Html.BeginForm("ResendVerificationCode", "Phones", FormMethod.Post))
-                    {
-                <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
-                <button type="submit" id="btn-resend-verification-code" class="pd-btn blue">
-                    Resend Verification Code</button>
-                    }
-
-                    using (Html.BeginForm("VerifyPhone", "Phones", FormMethod.Get))
-                    {
-                        <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
-                        <button type="submit" id="btn-verify-phone" class="pd-btn red">
-                            Verify Pay Point</button>
-                    }
-                }
-            }
-
+            
             @using (Html.BeginForm("Delete", "Phones", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
             {
                 <input type="hidden" name="PayPointId" value="@Model.PhoneNumber.Id" />
@@ -89,3 +85,21 @@
         </div>
     </div>
 </div>
+
+@section PageScripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#btn-resend-verification-code").click(function () {
+            showFullLoader("Sending Text");
+        });
+
+
+
+
+    });
+
+    </script>
+
+    }
