@@ -5,6 +5,7 @@ $.fn.center = function () {
     return this;
 };
 
+
 //add moveTo to jquery object
 (function ($) {
     $.fn.moveTo = function (selector) {
@@ -258,9 +259,10 @@ var paystreamController = (function ($, undefined) {
         var thisMonth = moment().format('M'); 
         var lastMonth = thisMonth - 1;
         var thisMonthYear = moment().format('YYYY');
+        var lastMonthYear = thisMonthYear;
         if (lastMonth == 0) {
             lastMonth = 12;
-            thisMonthYear -= 1;
+            lastMonthYear -= 1;
         }
         var thisYear = moment().format('YYYY');
 
@@ -270,10 +272,10 @@ var paystreamController = (function ($, undefined) {
             var header = {};
             header.groupHeading = "";
 
-            var createDate = moment($(items).get(i).createDate).format('DDD');
-            var createDateWeek = moment($(items).get(i).createDate).format('w');
-            var createDateMonth = moment($(items).get(i).createDate).format('M');
-            var createDateYear = moment($(items).get(i).createDate).format('YYYY');
+            var createDate = moment.utc($(items).get(i).createDate).local().format('DDD');
+            var createDateWeek = moment.utc($(items).get(i).createDate).local().format('w');
+            var createDateMonth = moment.utc($(items).get(i).createDate).local().format('M');
+            var createDateYear = moment.utc($(items).get(i).createDate).local().format('YYYY');
 
             if (createDateMonth == thisMonth && createDate == today && createDateYear == thisYear) {
                 headerText = "Today";
@@ -611,6 +613,73 @@ window.addEventListener("load", function () { if (!window.pageYOffset) { hideAdd
 window.addEventListener("orientationchange", hideAddressBar);
 
 
+
+ //CONFIRMATION MESSAGE
+function confirmAlert(message) {
+
+    var $confirmalert = $('<div class="alert-holder"><a name="confirm-scroll" id="scroll-target"></a><div id="confirm-alert" class="confirm alert">' + message + '</div></div>');
+
+    if ($('.validation-summary-errors').is(':visible')) {
+        //do nothing
+    } else {
+
+        if ($('.top-panel').is(':visible')) {
+            $($confirmalert).insertAfter($('div.page .pd-content .top-panel'));
+        } else {
+        $('div.page .pd-content').prepend($($confirmalert));
+    }
+    $('html,body').animate({ scrollTop: $("#scroll-target").offset().top }, 'fast');
+
+    setTimeout(function () {
+
+    $('.alert-holder').animate({
+            height: 'toggle',
+            opacity: 'toggle'
+        }, 300, 'swing', function () {
+            $('.alert-holder').remove();
+        });
+    }, 5000);
+    }
+
+}
+
+
+//LOADING FUNCTIONS
+function showFullLoader(message) {
+    if (message) {
+        $(".the-loading-text").text(message);
+    } else {
+        $(".the-loading-text").text("WORKING");
+    }
+$('.loader-holder-full').fadeIn();
+}
+
+function showAJAXLoader(message) {
+    if (message) {
+        $(".aj-loading-text").text(message);
+    } else {
+        //do nothing
+    }
+    $('#page-loader').css("opacity", "0.7");
+    $('#page-loader').show().stop().animate({
+        opacity: 1
+    }, 300, function () {
+
+    });
+}
+
+function hideAJAXLoader() {
+    $('#page-loader').stop().animate({
+        opacity: 0.7
+    }, 300, function () {
+        $('#page-loader').hide();
+    });
+}
+
+
+
+
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //LOAD ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -638,7 +707,7 @@ $(document).ready(function () {
 
    
 
-    //SHOW LOADER FOR LONG LOAD EVENTS
+    //SHOW GENERIC LOADER FOR LONG LOAD EVENTS
     $('.showloader').die().live("click", function () {
         $('.loader-holder-full').fadeIn();
     });
@@ -691,6 +760,9 @@ $(document).ready(function () {
 
 
     //Create all custom rules
+    $.validator.addMethod('phone', function (value) {
+        return /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/.test(value);
+    }, 'Please enter a valid 10 digit phone number');
 
     //Validate Password
     $.validator.addMethod("passwrdvalidator", function (value) {

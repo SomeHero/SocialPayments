@@ -20,11 +20,11 @@
     </div>
     @Html.ValidationSummary()
     <div class="pad">
-         @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "slide-up" }, { "data-ajax", "false" } }))
+         @using (Html.BeginForm("Add", "MeCodes", FormMethod.Post, new Dictionary<string, object> { { "class", "validateMe" }, { "data-ajax", "false" } }))
          {
             
 
-                <input type="text" id="txtMeCode" name="MECode" placeholder="$ME Code" required />
+                <input type="text" id="txtMeCode" name="MECode" class="required" minLength="2" placeholder="$ME Code" required />
             <p>
              <button type="submit" id="btn-add-mecode" class="pd-btn green">
                   Add ME Code </button></p>

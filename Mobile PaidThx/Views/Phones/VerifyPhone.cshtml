@@ -8,8 +8,8 @@
     
     <div class="header-pdthx">
         <h1>
-            Verify Mobile Number</h1>
-            <a href="@Url.Content("~/Phones/Details?PayPointId=" + @Model.PayPointId)"  class="hd-btn-left btn-back">Cancel</a>
+            Verify</h1>
+            <a href="@Url.Content("~/Phones/Details?Id=" + @Model.PayPointId)"  class="hd-btn-left btn-back">Cancel</a>
     </div>
     <div class="pd-content">
     <div class="top-panel">
@@ -21,13 +21,32 @@
          {
             @Html.HiddenFor(m => m.PayPointId)
              <p>
-            @Html.TextBoxFor(m => m.VerificationCode, new Dictionary<string, object>() { { "id", "verificationCode" }, { "placeholder", "Verification Code from Text Message" } })
+            @Html.TextBoxFor(m => m.VerificationCode, new Dictionary<string, object>() { { "id", "verificationCode" }, { "placeholder", "4 Digit Code" } })
             </p>
             <p>
-                <button type="submit" id="send-reminder-button" class="pd-btn green" data-theme="f">
-                    <span>Submit</span></button>
+                <button type="submit" id="send-reminder-button" class="pd-btn green">
+                    <span>Verify</span></button>
             </p>
          }
         </div>
     </div>
 </div>
+
+
+@section PageScripts{
+
+
+    @{
+        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Verification Text Sent Again");
+            });
+       </script>
+       </text>
+        }
+    }
+
+}

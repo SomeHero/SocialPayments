@@ -1,22 +1,25 @@
-﻿﻿@{
-    ViewBag.Title = "Verify Email Address";
+﻿@{
+    ViewBag.Title = "Verify Paypoint";
+    ViewBag.PageID = "paypoint-verify";
+    ViewBag.Classes = "page";
 }
 
-<div data-role="page" id="page-join">
-    @{ Html.RenderPartial("TitleBar"); }
-    <div data-role="header" data-position="fixed" class="header-pdthx" data-theme="c">
+<div  id="@ViewBag.PageID" class="@ViewBag.Classes" >
+    <div class="header-pdthx">
         <h1>
-           <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
-       <!--<a href="./Preferences" id="btn-settings" class="top-button ui-btn-right"></a>-->
+           Verified</h1>
+       <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back history">Home</a>
     </div>
-    <div data-role="content" class="content-margin">
+    <div class="pd-content">
+    <div class="pad">
         @if (ViewBag.Confirmed)
         {
-            <text>Thanks. You have successfully verified this pay point and can now begin to receive funds using this pay point.</text>
+            <text>Thanks. You have successfully verified this paypoint and can now begin to receive funds.</text>
         }
         else
         {
             @ViewBag.Message
         }
+        </div>
     </div>
 </div>

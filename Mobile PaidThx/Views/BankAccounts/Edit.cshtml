@@ -17,7 +17,9 @@
         @if (1 == 0)
         {
             <p>
-                To enable sending payments from this bank account, please verify it. <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
+                To enable sending payments from this bank account, please verify it. 
+                <div class="btn-divider"></div>
+                <a class="pd-btn blue" href="@Url.Content("~/BankAccounts/VerifyAccount/" + @Model.PaymentAccountId)">
                         Verify Account
                 </a>
             </p>
