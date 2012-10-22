@@ -4,7 +4,46 @@
     ViewBag.PageID = "page-join";
     ViewBag.Classes = "page ";
     
-}
+    }
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function () {
+        // init the FB JS SDK
+        FB.init({
+            appId: '332189543469634', // App ID from the App Dashboard
+            channelUrl: '//dev.paidthx.com/channel.html', // Channel File for x-domain communication
+            status: true, // check the login status upon init?
+            cookie: true, // set sessions cookies to allow your server to access the session?
+            xfbml: true  // parse XFBML tags on this page?
+        });
+
+        // Additional initialization code such as adding Event Listeners goes here
+        FB.getLoginStatus(function (response) {
+            if (response.status === 'connected') {
+                var uid = response.authResponse.userID;
+
+                if (uid === '@Model.Message.RecipientUri') {
+                    $("#claimPayment").show();
+                } else {
+                    $("#notAuthorized").show();
+                }
+            }
+            else {
+                $("#notLoggedIn").show();
+            }
+        });
+    };
+
+    // Load the SDK's source Asynchronously
+    (function (d) {
+        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        ref.parentNode.insertBefore(js, ref);
+    }(document));
+
+</script>
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     <div class="header-pdthx" >
         <h1>
@@ -42,6 +81,13 @@
 
                 </div>
                 -->
+            <div id="notLoggedIn" style="display: none;">
+                You're not logged in
+            </div>
+            <div id="notAuthorized" style="display: none;">
+                You're not authorized
+            </div>
+            <div id="claimPayment" style="display: none;">
             @if (Model.Message != null)
             {
                 if (Model.Message.MessageType == "Payment")
@@ -98,6 +144,7 @@ requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Me
                 </text>
                 }
             }
+            </div>
                 <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
                 Join with Facebook</button>
            <!-- <h5 style="margin-top:25px" id="form-marker">
@@ -148,6 +195,7 @@ requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Me
 
     @section PageScripts{
     <script type="text/javascript">
+
         $(document).ready(function () {
 
             if ($('.validation-summary-errors').is(':visible')) {

@@ -33,6 +33,11 @@ namespace SocialPayments
                routeTemplate: "api/batches/{batchId}/transactions",
                defaults: new { controller = "BatchTransactions" }
            );
+            config.Routes.MapHttpRoute(
+               name: "BatchTransactionsPaged",
+               routeTemplate: "api/batches/{batchId}/transactions/GetPaged",
+               defaults: new { controller = "BatchTransactions", action = "GetPaged" }
+            );
 
             config.Routes.MapHttpRoute(
                name: "BatchServices",

@@ -64,7 +64,7 @@ namespace SocialPayments.DomainServices
                                            TotalNumberOfDeposits = 0,
                                            TotalWithdrawalAmount = 0,
                                            TotalNumberOfWithdrawals = 0,
-                                           Transactions = new Collection<Transaction>()
+                                           Transactions = new List<Transaction>()
                                        });
             }
         }
@@ -89,7 +89,7 @@ namespace SocialPayments.DomainServices
                         TotalNumberOfDeposits = 0,
                         TotalWithdrawalAmount = 0,
                         TotalNumberOfWithdrawals = 0,
-                        Transactions = new Collection<Transaction>()
+                        Transactions = new List<Transaction>()
                     });
 
                 ctx.SaveChanges();

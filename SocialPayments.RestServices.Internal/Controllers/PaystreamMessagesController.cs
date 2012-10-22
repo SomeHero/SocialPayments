@@ -212,6 +212,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return Request.CreateResponse(HttpStatusCode.Created);
         }
         [HttpPost]
+        // POST /api/users/{userId}/paystreammessages/{id/express_payment
         public HttpResponseMessage ExpressPayment(string userId, string id, MessageModels.ExpressPaymentRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Express Payment Started Sender: {0} Message: {1} Sender Account: {2}", userId, id, request.sendAccountId));

@@ -1160,6 +1160,8 @@ namespace SocialPayments.DomainServices
                     .Include("Recipient.Merchant")
                     .Include("Sender")
                     .Include("Sender.Merchant")
+                    .Include("Sender.FacebookUser")
+                    .Include("Sender.UserSocialNetworks")
                     .Include("Payment")
                     .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageId);

@@ -163,9 +163,7 @@
     <Compile Include="Controllers\JoinController.cs" />
     <Compile Include="Controllers\MeCodesController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
-    <Compile Include="Controllers\PaystreamController.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Controllers\PaystreamController.cs" />
     <Compile Include="Controllers\PhonesController.cs" />
     <Compile Include="Controllers\PledgeController.cs" />
     <Compile Include="Controllers\PreferencesController.cs" />
@@ -582,6 +580,9 @@
     <Content Include="Content\images\linkActive.png" />
     <Content Include="Content\images\linkInActive.png" />
     <Content Include="Content\images\socialFacebookIcon.png" />
+    <Content Include="Controllers\DashboardController.cs.orig" />
+    <Content Include="Controllers\PhonesController.cs.orig" />
+    <Content Include="Controllers\RegisterController.cs.orig" />
     <None Include="Properties\PublishProfiles\Beta.pubxml" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />

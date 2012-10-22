@@ -68,6 +68,8 @@ namespace Mobile_PaidThx.Models
         }
         public class MessageModel
         {
+            public string Id { get; set; }
+            public string RecipientUri { get; set; }
             public string MessageType { get; set; }
             public string Sender { get; set; }
             public string MobileNumber { get; set; }

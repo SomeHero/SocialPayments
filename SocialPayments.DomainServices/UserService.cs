@@ -948,18 +948,6 @@ namespace SocialPayments.DomainServices
                 throw ex;
             }
 
-            Task.Factory.StartNew(() =>
-            {
-                _logger.Log(LogLevel.Info, String.Format("Started Summitted User Task. {0}", user.UserName));
-
-                SubmittedUserTask userTask = new SubmittedUserTask();
-                userTask.Execute(user.UserId);
-
-            }).ContinueWith(task =>
-            {
-                _logger.Log(LogLevel.Info, String.Format("Completed Summitted User Task. {0}", user.UserName));
-            });
-
             return user;
         }
 
