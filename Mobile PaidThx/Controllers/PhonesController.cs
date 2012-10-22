@@ -64,6 +64,9 @@ namespace Mobile_PaidThx.Controllers
 
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());
 
+
+            TempData["Success"] = String.Format("added");
+
             return RedirectToAction("Index");
         }
 
@@ -120,11 +123,12 @@ namespace Mobile_PaidThx.Controllers
                     });
             }
 
-            TempData["Message"] = String.Format("We just sent a text message to {0} with an activation code needed to verify your ownership of this pay point. Once you receive the text message, click the Verify Pay Point button and complete verification.", phoneNumber.Uri);
+            TempData["Success"] = String.Format("resent");
 
-            return View("Details", new PhonesModels.DetailsPhonesModels()
+            return View("VerifyPhone", new PhonesModels.VerifyPhoneModel()
             {
-                PhoneNumber = phoneNumber
+                PayPointId = phoneNumber.Id,
+                VerificationCode = ""
             });
         }
         public ActionResult VerifyPhone(string PayPointId)

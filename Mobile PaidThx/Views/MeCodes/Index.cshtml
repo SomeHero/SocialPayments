@@ -48,3 +48,21 @@
         </ul>
     </div>
     </div>
+
+    @section PageScripts{
+
+
+    @{
+        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+
+        <text>
+        <script type="text/javascript">
+        $(document).ready(function () {
+        confirmAlert("New ME Code Added & Ready to Use");
+          });
+       </script>
+       </text>
+        }
+    }
+
+}

@@ -62,6 +62,8 @@ namespace Mobile_PaidThx.Controllers
 
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());
 
+            TempData["Success"] = String.Format("added");
+
             return RedirectToAction("Index");
         }
         public ActionResult Details(string id)
@@ -119,7 +121,7 @@ namespace Mobile_PaidThx.Controllers
                     });
             }
 
-            TempData["Message"] = String.Format("A verification email was sent to {0}.  Please check your email and complete verifying this pay point.", meCode.Uri);
+            TempData["Success"] = String.Format("A verification email was sent to this email. Please check your email and click on the link.");
 
             return View("Details",
                     new EmailsModels.DetailsEmailModel()
