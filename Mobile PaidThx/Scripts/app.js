@@ -712,9 +712,8 @@ $(document).ready(function () {
         $('.loader-holder-full').fadeIn();
     });
 
-
     //AJAX LOADER
-    var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /><br><span class="aj-loading-text"></span></div></div>');
+    var $loadingguy = $('<div id="page-mask"></div><div id="page-loader"><div class="loader"><img src="/mobile/Content/images/ajax-loader.gif")" alt="loader" /></div></div>');
 
     $('div.page').append($loadingguy);
 
@@ -761,6 +760,9 @@ $(document).ready(function () {
 
 
     //Create all custom rules
+    $.validator.addMethod('phone', function (value) {
+        return /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/.test(value);
+    }, 'Please enter a valid 10 digit phone number');
 
     //Validate Password
     $.validator.addMethod("passwrdvalidator", function (value) {
