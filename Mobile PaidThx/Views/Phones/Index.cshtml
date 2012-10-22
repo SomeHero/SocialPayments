@@ -53,3 +53,21 @@
     </div>
     </div>
 </div>
+
+@section PageScripts{
+
+
+    @{
+        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+
+        <text>
+        <script type="text/javascript">
+        $(document).ready(function () {
+        confirmAlert("New Phone Added - Please Verify");
+          });
+       </script>
+       </text>
+        }
+    }
+
+}

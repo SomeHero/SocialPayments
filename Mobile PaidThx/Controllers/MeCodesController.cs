@@ -63,6 +63,8 @@ namespace Mobile_PaidThx.Controllers
 
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());
 
+            TempData["Success"] = String.Format("added");
+
             return RedirectToAction("Index");
         }
 
