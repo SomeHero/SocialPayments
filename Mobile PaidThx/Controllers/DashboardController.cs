@@ -10,6 +10,7 @@ using System.Text;
 using System.Net.Mail;
 using Mobile_PaidThx.Services.ResponseModels;
 using Mobile_PaidThx.CustomAttributes;
+using Mobile_PaidThx.Services;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -22,8 +23,11 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult Index(string messageId)
         {
             UserModels.UserResponse user = (UserModels.UserResponse)Session["User"];
+            MessageModels.MessageResponse message = null;
+            
             var application = (ApplicationResponse)Session["Application"];
-
+            var messageServices = new MessageServices();
+            
             // Find percentage of profile completed
             double numItems = 0.0;
             double numItemsComplete = 0.0;
@@ -43,13 +47,31 @@ namespace Mobile_PaidThx.Controllers
                     }
                 }
             }
-            
+
+            bool showPendingPayment = false;
+            if (Session["MessageId"] != null)
+            {
+                message = messageServices.GetMessage(Session["MessageId"].ToString());
+
+                if (message.recipientUri != user.userName)
+                    showPendingPayment = true;
+            }
+
             return View("Index", new DashboardModels.DashboardModel()
             {
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
                 UserNewActivity = user.numberOfPaystreamUpdates,
-                UserProfileComplete = Math.Round(((double)(numItemsComplete/numItems)*100.0))
+                UserProfileComplete = Math.Round(((double)(numItemsComplete / numItems) * 100.0)),
+                PendingMessage = (message != null && showPendingPayment ? new DashboardModels.PendingMessage()
+                {
+                    Amount = message.amount,
+                    CurrentUriType = user.userName,
+                    CurrentUserName = user.userName,
+                    MessageType = message.messageType,
+                    RecipientUri = message.recipientUri,
+                    RecipientUriType = message.recipientUriType
+                } : null)
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)

@@ -11,7 +11,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
     public class BatchController : ApiController
     {
 
-        //POST /api/batches/BatchServices/batch_transactions
+        //POST /api/Batch/batch_transactions
         [HttpPost]
         public HttpResponseMessage BatchTransactions()
         {
@@ -63,6 +63,27 @@ namespace SocialPayments.RestServices.Internal.Controllers
             });
 
             return response;
+        }
+        //POST /api/Batch/sent_to_bank
+        [HttpPost]
+        public HttpResponseMessage SentToBank(BatchModels.UpdateBatchStatusRequest request)
+        {
+            var transactionBatchServices = new DomainServices.TransactionBatchService();
+            var formattingServices = new DomainServices.FormattingServices();
+
+            try
+            {
+                transactionBatchServices.UpdateBatchTransactionsToSentToBank(request.BatchId);
+            }
+            catch (Exception ex)
+            {
+                var error = new HttpError(ex.Message);
+                //error["ErrorCode"] = ex.ErrorCode;
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

@@ -59,6 +59,8 @@ namespace SocialPayments.DomainServices
                     .Include("Sender")
                     .Include("Sender.Merchant")
                     .Include("Payment")
+                    .Include("Payment.RecipientAccount")
+                    .Include("Payment.SenderAccount")
                     .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageGuid);
 

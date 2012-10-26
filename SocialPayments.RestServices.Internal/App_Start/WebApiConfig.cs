@@ -27,18 +27,33 @@ namespace SocialPayments
                 routeTemplate: "api/routingnumber/validate",
                 defaults: new { controller = "RoutingNumber", action = "ValidateRoutingNumber" }
             );
-
+            config.Routes.MapHttpRoute(
+               name: "GetTransactions",
+               routeTemplate: "api/transactions",
+               defaults: new { controller = "Transactions" }
+            );
             config.Routes.MapHttpRoute(
                name: "BatchTransactions",
                routeTemplate: "api/batches/{batchId}/transactions",
                defaults: new { controller = "BatchTransactions" }
            );
+            config.Routes.MapHttpRoute(
+               name: "BatchTransactionsPaged",
+               routeTemplate: "api/batches/{batchId}/transactions/GetPaged",
+               defaults: new { controller = "BatchTransactions", action = "GetPaged" }
+            );
 
             config.Routes.MapHttpRoute(
                name: "BatchServices",
                routeTemplate: "api/batch/batch_transactions",
                defaults: new { controller = "Batch", action = "BatchTransactions" }
             );
+            config.Routes.MapHttpRoute(
+               name: "BatchServices_SentToBak",
+               routeTemplate: "api/batch/sent_to_bank",
+               defaults: new { controller = "Batch", action = "SentToBank" },
+               constraints: new { httpMethod = new HttpMethodConstraint("POST") }
+           );
             config.Routes.MapHttpRoute(
                name: "SignUpKeySMSListner",
                routeTemplate: "api/MobileNumberSignUpKeySMSListenerController",

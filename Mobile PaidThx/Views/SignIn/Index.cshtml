@@ -26,7 +26,7 @@
         <div class="pad">
          
            
-            <button type="button" id="signin-facebook-submit" class="pd-btn fb" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email&state=", Model.FBState)'">
+            <button type="button" id="signin-facebook-submit" class="pd-btn fb" onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "SignIn/SignInWithFacebook/&scope=email,read_friendlists,publish_stream&state=", Model.FBState)'">
                 Sign in with Facebook
             </button>
             <div class="or"> - &nbsp;OR&nbsp; -</div>
@@ -35,7 +35,7 @@
             <div id="signin-form">
                 @using (Html.BeginForm("Index", "SignIn", FormMethod.Post, new Dictionary<string, object> { { "data-transition", "pop" }, { "class", "validateMe" } }))
                 {       
-                    <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address or Phone #"
+                    <span class="form-holder"><input type="email" id="username" class="required" placeholder="Email Address"
                         name="Email" /></span>
 
                     <span class="form-holder"><input type="password" id="password" class="required" placeholder="Password" name="Password" /></span>

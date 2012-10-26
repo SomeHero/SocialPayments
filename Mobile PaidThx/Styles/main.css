@@ -2270,7 +2270,7 @@ color:#231f20;
             font-size:14pt;
             font-weight:bold;
         }
-        li.settings#facebook
+        li.settings#facebook,  li.settings#facebook
         {
             background-image: url(../Content/images/socialFacebookIcon.png);
         }

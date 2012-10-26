@@ -28,6 +28,9 @@
         }     
         <div class="clear"></div>
         </div>
+
+        @Html.ValidationSummary()
+    
         <div class="pad">
         
         @using (Html.BeginForm("PopupPinswipe", "Request", FormMethod.Post, new Dictionary<string, object> {{  "id", "pinSwipeForm"}, { "class", "validateMe"  } }))

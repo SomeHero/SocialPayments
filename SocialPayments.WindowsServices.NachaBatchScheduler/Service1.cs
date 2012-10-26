@@ -12,6 +12,7 @@ using Quartz;
 using Quartz.Impl;
 using SocialPayments.BatchFileServices.NachaBatchFile;
 using SocialPayments.DataLayer;
+using SocialPayments.WindowsServices.NachaBatchScheduler.CustomConfigurationSectons;
 
 namespace SocialPayments.WindowsServices.NachaBatchScheduler
 {
@@ -27,6 +28,8 @@ namespace SocialPayments.WindowsServices.NachaBatchScheduler
         protected override void OnStart(string[] args)
         {
             logger.Log(LogLevel.Info, String.Format("Starting NACHA File Processor"));
+
+            var jobScheduling = JobSchedulingProviderSection.Current;
 
             // construct a scheduler factory
             ISchedulerFactory schedFact = new StdSchedulerFactory();
@@ -44,13 +47,20 @@ namespace SocialPayments.WindowsServices.NachaBatchScheduler
             //sched.AddCalendar("myHolidays", cal, true, true);
 
             JobDetail jobDetail = new JobDetail("myJob", null, typeof(CreateNachaFileJob));
+            Trigger trigger = null;
 
-            //Setup trigger for NACHA file generation at 8:00 PM
-           //Trigger trigger = TriggerUtils.MakeImmediateTrigger(100, new TimeSpan(0, 20, 0));
-           Trigger trigger = TriggerUtils.MakeDailyTrigger(22, 30);
+            if (jobScheduling.Type == "Immediate")
+            {
+                //Setup trigger for NACHA file generation at 8:00 PM
+                trigger = TriggerUtils.MakeImmediateTrigger(jobScheduling.RepeatCount, new TimeSpan(jobScheduling.HourInternal, jobScheduling.MinuteInterval, jobScheduling.SecondInterval));
+            }
+            if (jobScheduling.Type == "Daily")
+            {
+                trigger = TriggerUtils.MakeDailyTrigger(jobScheduling.Hour, jobScheduling.Minutes);
+            }
 
             trigger.StartTimeUtc = DateTime.UtcNow;
-            trigger.Name = "myTrigger2";
+            trigger.Name = "myTrigger";
             //trigger.CalendarName = "myHolidays";
             sched.ScheduleJob(jobDetail, trigger);
 

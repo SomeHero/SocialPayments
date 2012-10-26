@@ -716,11 +716,11 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                     int recipientType = -1;
 
-                    _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+                    _logger.Log(LogLevel.Debug, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
 
                     if (msg.RecipientUri.Substring(0, 3).Equals("fb_"))
                     {
-                        _logger.Log(LogLevel.Error, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
+                        _logger.Log(LogLevel.Debug, "First: {0} Last: {1} Name: {2}", msg.recipientFirstName, msg.recipientLastName, msg.RecipientName);
 
                         if (msg.Recipient != null)
                         {
@@ -751,7 +751,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     {
                         if (msg.RecipientId == null)
                         {
-                            _logger.Log(LogLevel.Error, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
+                            _logger.Log(LogLevel.Debug, "RecipientURI: {0} isFacebookRecipient? {1}", msg.RecipientUri, msg.RecipientUri.Substring(0, 3).Equals("fb_") ? "YES" : "NO");
 
                             recipName = msg.RecipientUri;
 
@@ -1060,7 +1060,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                _logger.Log(LogLevel.Error, String.Format("Exception Signing in With Facebook Account {0}. Exception: {1} Stack Trace: {2}", request.accountId,
+                    ex.Message, ex.StackTrace));
 
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
