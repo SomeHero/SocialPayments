@@ -62,7 +62,7 @@ namespace SocialPayments.DomainServices
                     throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
 
 
-                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge  || message.Status == PaystreamMessageStatus.PendingPledge))
+                if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.NotifiedRequest  || message.Status == PaystreamMessageStatus.PendingRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Unable to Accept Pledge {0}.  Invalid State {1}.", id, message.Status));
 
                 Domain.PaymentAccount paymentAccount = null;
@@ -90,8 +90,8 @@ namespace SocialPayments.DomainServices
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
                 {
-                    AcceptedRequestMessageTask task = new AcceptedRequestMessageTask();
-                    task.Execute(message.Id);
+                    SubmittedDonationMessageTask task = new SubmittedDonationMessageTask();
+                    task.Execute(paymentMessage.Id);
 
                 });
             }
@@ -131,7 +131,7 @@ namespace SocialPayments.DomainServices
                 if (message == null)
                     throw new CustomExceptions.NotFoundException(String.Format("Pledge {0} Not Found", id));
 
-                if (!(message.Status == PaystreamMessageStatus.SubmittedPledge || message.Status == PaystreamMessageStatus.NotifiedPledge || message.Status == PaystreamMessageStatus.PendingPledge))
+                if (!(message.Status == PaystreamMessageStatus.SubmittedRequest || message.Status == PaystreamMessageStatus.NotifiedRequest || message.Status == PaystreamMessageStatus.PendingRequest))
                     throw new CustomExceptions.BadRequestException(String.Format("Unable to Reject Pledge {0}.  Invalid State {1}.", id, message.Status));
 
                 if (!securityServices.Encrypt(securityPin).Equals(user.SecurityPin))
@@ -150,7 +150,7 @@ namespace SocialPayments.DomainServices
 
                     throw new CustomExceptions.BadRequestException(String.Format("Security Pin Invalid."));
                 }
-                message.Status = PaystreamMessageStatus.RejectedPledge;
+                message.Status = PaystreamMessageStatus.RejectedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
                 ctx.SaveChanges();
@@ -175,15 +175,15 @@ namespace SocialPayments.DomainServices
             Guid.TryParse(organizationId, out organizationGuid);
 
             Domain.MessageType type = MessageType.AcceptPledge;
-            Domain.PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedPledge;
+            Domain.PaystreamMessageStatus status = PaystreamMessageStatus.SubmittedRequest;
 
             using (var ctx = new Context())
             {
 
-                if (applicationGuid == null)
-                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+                //if (applicationGuid == null)
+                 //   throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
-                Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
+                Application application = ctx.Applications.First();
 
                 if (application == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
@@ -227,7 +227,6 @@ namespace SocialPayments.DomainServices
                 {
                     Amount = amount,
                     Application = application,
-                    ApiKey = application.ApiKey,
                     Comments = comments,
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
@@ -308,12 +307,12 @@ namespace SocialPayments.DomainServices
                 if (messageType.ToUpper() == "PLEDGE")
                 {
                     type = MessageType.AcceptPledge;
-                    status = PaystreamMessageStatus.SubmittedPledge;
+                    status = PaystreamMessageStatus.SubmittedRequest;
                 }
                 if (messageType.ToUpper() == "DONATION")
                 {
                     type = MessageType.Donation;
-                    status = PaystreamMessageStatus.SubmittedDonation;
+                    status = PaystreamMessageStatus.SubmittedPayment;
                 }
 
                 if (deliveryMethod.ToUpper() == "EXPRESS")
@@ -323,12 +322,12 @@ namespace SocialPayments.DomainServices
 
 
                 //Validate the specified APIKEY is Valid
-                Guid.TryParse(apiKey, out applicationGuid);
+               // Guid.TryParse(apiKey, out applicationGuid);
 
-                if (applicationGuid == null)
-                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+               // if (applicationGuid == null)
+                   // throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
-                Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
+                Application application = ctx.Applications.First();
 
                 if (application == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
@@ -436,7 +435,6 @@ namespace SocialPayments.DomainServices
                     {
                         Amount = amount,
                         Application = application,
-                        ApiKey = application.ApiKey,
                         Comments = comments,
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
@@ -727,6 +725,8 @@ namespace SocialPayments.DomainServices
                 message.Status = PaystreamMessageStatus.AcceptedRequest;
                 message.LastUpdatedDate = System.DateTime.Now;
 
+                ctx.SaveChanges();
+
                 var paymentMessage = AddMessage(message.ApiKey.ToString(), userId, message.SenderId.ToString(), message.SenderUri, paymentAccount.Id.ToString(),
                                          message.Amount, message.Comments, "Payment", 0, 0, message.senderFirstName, message.senderLastName, message.senderImageUri, securityPin,
                                          message.Id.ToString(), "Standard");
@@ -734,8 +734,8 @@ namespace SocialPayments.DomainServices
                 //kick off background taskes to lookup recipient, send emails, and bath transactions
                 Task.Factory.StartNew(() =>
                 {
-                    AcceptedRequestMessageTask task = new AcceptedRequestMessageTask();
-                    task.Execute(message.Id);
+                    SubmittedPaymentMessageTask task = new SubmittedPaymentMessageTask();
+                    task.Execute(paymentMessage.Id);
 
                 });
             }
@@ -1160,6 +1160,8 @@ namespace SocialPayments.DomainServices
                     .Include("Recipient.Merchant")
                     .Include("Sender")
                     .Include("Sender.Merchant")
+                    .Include("Sender.FacebookUser")
+                    .Include("Sender.UserSocialNetworks")
                     .Include("Payment")
                     .Include("PaymentRequest")
                     .FirstOrDefault(m => m.Id == messageId);

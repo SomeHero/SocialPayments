@@ -5,73 +5,179 @@
     ViewBag.Classes = "page settings";
 }
 <div id="@ViewBag.PageID" class="@ViewBag.Classes" >
-    
-    <div  class="header-pdthx" >
-        <h1><img src="@Url.Content("~/Content/images/logo.png")" /></h1>
-       <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
+
+    <div class="header-pdthx">
+        <h1>
+            <img src="@Url.Content("~/Content/images/logo.png")" /></h1>
+        <a href="@Url.Content("~/Preferences")"  class="hd-btn-right btn-settings"></a>
     </div>
     <div class="pd-content">
-    <div class="pad">
-                    <!-- Profile -->
-                    <a href="@Url.Content("~/Profile")" class="profile-area">
-                    @{
-                        if (Model.UserPic != "" && Model.UserPic != null && Model.UserPic != "null")
-                        {
-                            <img width="50" height="50" class="ps-image" src="@Model.UserPic" alt="@Model.UserName" />
-                        }
-                        else
-                        {
-                            <img width="50" height="50" class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
-                        }
-                        
+        <div class="pad">
+            <!-- Profile -->
+            <a href="@Url.Content("~/Profile")" class="profile-area">
+                @{
+                    if (Model.UserPic != "" && Model.UserPic != null && Model.UserPic != "null")
+                    {
+                    <img width="50" height="50" class="ps-image" src="@Model.UserPic" alt="@Model.UserName" />
                     }
-                    <div class="profile-section">
+                    else
+                    {
+                    <img width="50" height="50" class="ps-image" src="@Url.Content("~/Content/images/avatar.png")" alt="@Model.UserName" />
+                    }
+                        
+                }
+                <div class="profile-section">
                     <div class="txt-flt">
-                    <h2 class="heading"> @Model.UserName </h2>
-                    <h4 class="subheading">Profile: <span class="percent"><b>@Model.UserProfileComplete%</b> Complete</span></h4> 
-                    <div class="progress-bar">
-    <div class="profile-complete" style="width:@Model.UserProfileComplete%">
-        &nbsp;
-    </div>
-</div>
-</div>
-<div class="clear"></div>
-</div>
-</a>
+                        <h2 class="heading">@Model.UserName </h2>
+                        <h4 class="subheading">Profile: <span class="percent"><b>@Model.UserProfileComplete%</b> Complete</span></h4>
+                        <div class="progress-bar">
+                            <div class="profile-complete" style="width:@Model.UserProfileComplete%">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </a>
 
-<div class="profile-line"></div>
-                    
-     
-     <div class="nav-panel">
-     
-     <a href="@Url.Content("~/Paystream")" id="nav-panel-paystream" class="nav-item top-left">
-      <img class="hm-icon" src="@Url.Content("~/Content/images/icn-stream-bg.png")" alt="Paystream" /><br />
-     ACTIVITY
+            <div class="profile-line"></div>
+
+
+            <div class="nav-panel">
+
+                <a href="@Url.Content("~/Paystream")" id="nav-panel-paystream" class="nav-item top-left">
+                    <img class="hm-icon" src="@Url.Content("~/Content/images/icn-stream-bg.png")" alt="Paystream" /><br />
+                    ACTIVITY
      @{
-         if(Model.UserNewActivity > 0){
-          <div id="new-items">@Model.UserNewActivity</div>   
+         if (Model.UserNewActivity > 0)
+         {
+         <div id="new-items">@Model.UserNewActivity</div>   
          }
              
      }
-     
-     </a>
-     <a href="@Url.Content("~/DoGood")" id="nav-panel-dogood" class="nav-item top-right">
-     <img class="hm-icon" src="@Url.Content("~/Content/images/icn-dogood-bg.png")" alt="Do Good" /><br />
-     DO GOOD
-     </a>
-     <a href="@Url.Content("~/Send")" id="nav-panel-send" class="nav-item bottom-left">
-     <img class="hm-icon" src="@Url.Content("~/Content/images/icn-send-bg.png")" alt="Send" /><br />
-     SEND
-     </a>
-      <a href="@Url.Content("~/Request")" id="nav-panel-request" class="nav-item bottom-right">
-      <img class="hm-icon" src="@Url.Content("~/Content/images/icn-request-bg.png")" alt="Request" /><br />
-      REQUEST
-     </a>
-     </div>               
-  <br /><br /><br /><br /><br /><br /><br />
+
+                </a>
+                <a href="@Url.Content("~/DoGood")" id="nav-panel-dogood" class="nav-item top-right">
+                    <img class="hm-icon" src="@Url.Content("~/Content/images/icn-dogood-bg.png")" alt="Do Good" /><br />
+                    DO GOOD
+                </a>
+                <a href="@Url.Content("~/Send")" id="nav-panel-send" class="nav-item bottom-left">
+                    <img class="hm-icon" src="@Url.Content("~/Content/images/icn-send-bg.png")" alt="Send" /><br />
+                    SEND
+                </a>
+                <a href="@Url.Content("~/Request")" id="nav-panel-request" class="nav-item bottom-right">
+                    <img class="hm-icon" src="@Url.Content("~/Content/images/icn-request-bg.png")" alt="Request" /><br />
+                    REQUEST
+                </a>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
         </div>
-        
+
     </div>
-       </div>
-     
+</div>
+@if(Model.PendingMessage != null)
+{
+<div id="help" class="lightbox" style="display: none; padding: 10px;">
+
+        <h4 class="lb-title">CLAIM YOUR PAYMENT</h4>
+        <p>
+            We noticed that your were sent here to claim your @String.Format("{0:C}", Model.PendingMessage.Amount) payment sent to @Model.PendingMessage.RecipientUri but you opted to signup with another email address.  To finishing
+            claim your payment, you will need to add @Model.PendingMessage.RecipientUri as a pay point and prove ownership of this email address.
+        </p>
+        <br />
+        <div class="icon-holder">
+            <img alt="Example Settings Button" class="grow" src="@Url.Content("~/Content/images/samplecheck.png")" />
+        </div>
+        <p>
+            <br />
+            To add a pay point simply edit your profile and click on "Emails" under the "Linked PayPoints" section.  Follow a few steps and you're good to go.
+            <br />
+        </p>
+        <p>
+            <button type="button" id="btn-gotit" class="pd-btn blue">
+                OK, Take Me There!
+            </button>
+        </p>
+        <p>
+            <button type="button" id="btn-gotit" class="pd-btn blue">
+                I'll Do This Later</button>
+        </p>
+    </div>
+}
+
+@section PageStyles{
+
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-buttons.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-thumbs.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox.css")">
+}
+@section PageScripts
+{
+
+    <!-- FancyBox -->
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-buttons.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-thumbs.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.easing-1.3.pack.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.mousewheel-3.0.6.pack.js")"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            @if(Model.PendingMessage != null) 
+            {
+                <text>
+            $.fancybox.open({
+                maxWidth: 700,
+                width: '98%',
+                autoWidth: true,
+                autoHeight: true,
+                scrolling: 'no',
+                openEffect: 'none',
+                openSpeed: 0,
+                closeEffect: 'elastic',
+                minHeight: '360px',
+                helpers: {
+                    overlay: {
+                        css: {
+                            'background': 'rgba(255, 255, 255, 0.99)'
+                        }
+                    }
+                },
+                type: 'html',
+                content: $('#help').html()
+            });
+
+            if ($('.validation-summary-errors').is(':visible')) {
+                //do nothing for now
+            } else {
+                $('#btn-help').trigger('click');
+            }
+
+
+
+            $('#btn-gotit').click(function (event) {
+                $.fancybox.close(false);
+            });
+
+
+            $('.cs-radio').addClass('input_hidden');
+            $('.cs-radio-label').click(function (event) {
+                $(this).addClass('selected').siblings().removeClass('selected');
+            });
+            </text>
+            }
+
+
+        });
+    </script>
+}
 

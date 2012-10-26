@@ -46,14 +46,12 @@ namespace SocialPayments.DomainServices
             {
                 Guid apiKeyGuid;
 
-                Guid.TryParse(apiKey, out apiKeyGuid);
-
-                if (apiKeyGuid == null)
-                    throw new CustomExceptions.NotFoundException(String.Format("Invalid Application Specified {0}.", apiKey));
 
                 return ctx.Applications
                     .Include("ConfigurationValues")
-                    .FirstOrDefault(a => a.ApiKey.Equals(apiKeyGuid));
+                    .First();
+                        
+
             }
         }
         public void AddApplication(string name, string url, string isActive)

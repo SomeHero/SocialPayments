@@ -4,14 +4,21 @@ using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
 using System.Data.Entity;
+using System.Threading.Tasks;
+using NLog;
+using System.Configuration;
 
 namespace SocialPayments.DomainServices
 {
     public class UserPaymentAccountServices
     {
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+        
         public Domain.PaymentAccount AddPaymentAccount(string userId, string nickName, string bankIconUrl, string nameOnAccount, string routingNumber,
             string accountNumber, string accountTypeName, string securityPin, int securityQuestionId, string securityQuestionAnswer)
         {
+            _logger.Log(LogLevel.Info, String.Format("Start Add Payment Account for User {0}", userId));
+
             using (var ctx = new Context())
             {
                 var securityServices = new DomainServices.SecurityService();
@@ -68,6 +75,18 @@ namespace SocialPayments.DomainServices
                 user.SetupSecurityPin = true;
 
                 ctx.SaveChanges();
+
+                Task.Factory.StartNew(() =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Started Summitted Payment Account Task. {0} to {1}", user.UserName, paymentAccount.Id));
+
+                    DomainServices.PaymentAccountProcessing.SubmittedPaymentAccountTask task = new DomainServices.PaymentAccountProcessing.SubmittedPaymentAccountTask();
+                    task.Excecute(paymentAccount.Id);
+
+                }).ContinueWith(task =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Completed Summitted Payment AccountTask. {0} to {1}", user.UserName, paymentAccount.Id));
+                });
 
                 return paymentAccount;
             }
@@ -157,6 +176,18 @@ namespace SocialPayments.DomainServices
                     user.PreferredSendAccount = paymentAccount;
 
                 ctx.SaveChanges();
+
+                Task.Factory.StartNew(() =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Started Summitted Payment Account Task. {0} to {1}", user.UserName, paymentAccount.Id));
+
+                    DomainServices.PaymentAccountProcessing.SubmittedPaymentAccountTask task = new DomainServices.PaymentAccountProcessing.SubmittedPaymentAccountTask();
+                    task.Excecute(paymentAccount.Id);
+
+                }).ContinueWith(task =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Completed Summitted Payment AccountTask. {0} to {1}", user.UserName, paymentAccount.Id));
+                });
 
                 return paymentAccount;
             }

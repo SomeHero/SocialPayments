@@ -38,20 +38,7 @@ namespace SocialPayments.Domain
         RejectedRequest = 13,
         [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
         CancelledRequest = 14,
-        [MessageStatusAttribute(RecipientDescription = "Submitted", SenderDescription = "Submitted", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
-        SubmittedPledge = 15,
-        [MessageStatusAttribute(RecipientDescription = "", SenderDescription = "Notified", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
-        NotifiedPledge = 16,
-        [MessageStatusAttribute(RecipientDescription = "Respond", SenderDescription = "Waiting", IsAcceptable = true, IsRejectable = true, IsCancellable = false, IsRemindable = true)]
-        PendingPledge = 17,
-        [MessageStatusAttribute(RecipientDescription = "Accepted", SenderDescription = "Accepted", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
-        AcceptedPledge = 18,
-        [MessageStatusAttribute(RecipientDescription = "Rejected", SenderDescription = "Rejected", IsAcceptable = false, IsRejectable = false, IsCancellable = false, IsRemindable = false)]
-        RejectedPledge = 19,
-        [MessageStatusAttribute(RecipientDescription = "Cancelled", SenderDescription = "Cancelled", IsAcceptable=false, IsRejectable=false, IsCancellable = false, IsRemindable = false)]
-        CancelledPledge = 20,
-        [MessageStatusAttribute(RecipientDescription = "Processing", SenderDescription = "Processing", IsAcceptable = false, IsRejectable = false, IsCancellable = true, IsRemindable = false)]
-        SubmittedDonation = 21,
-        
+        [MessageStatusAttribute(RecipientDescription = "Processing", SenderDescription = "Processing", IsAcceptable = false, IsRejectable = false, IsCancellable = true, IsRemindable = true)]
+        PendingPayment = 21
     }
 }

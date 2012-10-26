@@ -39,7 +39,7 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.DisplayName = "Socail Payment Nacha File Processor";
+            this.serviceInstaller1.DisplayName = "Social Payment Nacha File Processor";
             this.serviceInstaller1.ServiceName = "Socail Payment Nacha File Processor";
             // 
             // ProjectInstaller

@@ -21,5 +21,9 @@ namespace SocialPayments.RestServices.Internal.Models
 
             public virtual IEnumerable<TransactionModels.TransactionResponse> Transactions { get; set; } 
         }
+        public class UpdateBatchStatusRequest
+        {
+            public Guid BatchId { get; set; }
+        }
     }
 }

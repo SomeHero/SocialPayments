@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SocialPayments.Domain;
 using SocialPayments.DataLayer;
+using System.Data.Entity;
 using NLog;
 using System.Configuration;
 
@@ -28,7 +29,10 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                 var userService = new DomainServices.UserService(ctx);
                 var transactionBatchServices = new DomainServices.TransactionBatchService(ctx, _logger);
 
-                var paymentAccount = paymentAccountService.GetPaymentAccount(paymentAccountId);
+                var paymentAccount =  ctx.PaymentAccounts
+                    .Include("User")
+                    .Include("User.Messages")
+                    .FirstOrDefault(p => p.Id.Equals(paymentAccountId));
 
                 //get random numbers between 10 and 49 that are not equal
                 var random = new Random();
@@ -47,6 +51,7 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                 var estimatedSettlementDate = System.DateTime.Now.AddDays(5);
 
                 var transactionBatch = transactionBatchServices.GetOpenBatch();
+                ctx.TransactionBatches.Attach(transactionBatch);
 
                 //validate that user is owned by paymentAccount
                 var paymentAccountVerification = ctx.PaymentAccountVerifications.Add(new PaymentAccountVerification()
@@ -147,21 +152,27 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                     _logger.Log(LogLevel.Error, String.Format("Exception Sending Bank Account Verification Link to {0}. {1}", paymentAccount.User.EmailAddress, ex.Message));
                 }
 
-                var messages = messageService.GetMessages(paymentAccount.User.UserId);
+                var messages = ctx.Messages
+                    .Where(m => m.RecipientId == paymentAccount.User.UserId)
+                    .ToList<Domain.Message>();
 
-                _logger.Log(LogLevel.Info, String.Format("Processing {0} notified payment(s) from user {1}.",messages.Count, paymentAccount.User.UserName));
+                _logger.Log(LogLevel.Info, String.Format("Processing {0} notified payment(s) from user {1}.", messages.Count, paymentAccount.User.UserName));
 
                 foreach (var message in messages)
                 {
-                    if (message.Status == PaystreamMessageStatus.NotifiedPayment)
+ 
+                    if (message.Status == PaystreamMessageStatus.SubmittedPayment || message.Status == PaystreamMessageStatus.NotifiedPayment
+                        || message.Status == PaystreamMessageStatus.PendingPayment)
                     {
                         _logger.Log(LogLevel.Info, String.Format("Batch Deposit Transaction for Message {0} into PaymentAccount {1}.", message.Id, paymentAccount.Id));
 
                         try
                         {
                             message.Status = PaystreamMessageStatus.ProcessingPayment;
-                            //Add the withdrawal transaction
-                            message.Payment.Transactions.Add(new Domain.Transaction()
+                            message.Payment.RecipientAccount = paymentAccount;
+
+                            //Add the deposit transaction
+                            ctx.Transactions.Add(new Domain.Transaction()
                             {
                                 AccountNumber = paymentAccount.AccountNumber,
                                 Amount = message.Payment.Amount,
@@ -175,20 +186,20 @@ namespace SocialPayments.DomainServices.PaymentAccountProcessing
                                 RoutingNumber = paymentAccount.RoutingNumber,
                                 StandardEntryClass = StandardEntryClass.Web,
                                 Status = TransactionStatus.Pending,
-                                Type = TransactionType.Withdrawal,
+                                Type = TransactionType.Deposit,
                                 TransactionBatch = transactionBatch,
                                 Payment = message.Payment
                             });
 
+                            ctx.SaveChanges();
                         }
                         catch (Exception ex)
                         {
                             _logger.Log(LogLevel.Error, String.Format("Exception Batching Deposit Transaction for Message {0} into PaymentAccount {1}. Exception: {2}", message.Id, paymentAccount.Id, ex.Message));
                         }
                     }
+                    
                 }
-
-                ctx.SaveChanges();
 
             }
         }

@@ -5,157 +5,162 @@
     ViewBag.Classes = "page";
 }
 <div id="@ViewBag.PageID" class="@ViewBag.Classes"  >
-     <div class="header-pdthx" >
-        <h1>
-            Link Bank</h1>
-            <a href="#help" id="btn-help" class="hd-btn-right fancybox">Help?</a>
+    <div class="header-pdthx">
+        <h1>Link Bank</h1>
+        <a href="#help" id="btn-help" class="hd-btn-right fancybox">Help?</a>
     </div>
     <div class="pd-content">
-    <div class="top-panel">
+        <div class="top-panel">
             @if (Model.Payment != null)
             {
-                <text> <p>You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> waiting for you. To receive this and future payments, please add
-                your preferred bank below.</p>
+                <text>
+                <p>
+                    You have <b>@String.Format("{0:C}", Model.Payment.Amount)</b> waiting for you. To receive this and future payments, please add
+                your preferred bank below.
+                </p>
                 </text>
             }
             else
             {
-                <text> <p>Link a new bank account by entering a routing number and account number below.</p>
+                <text>
+                <p>Link a new bank account by entering a routing number and account number below.</p>
                 </text>
             }
         </div>
 
         @Html.ValidationSummary()
 
-    <div class="pad">
-        
-        <div id="setup-ach-account-form">
-            @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
-            {
+        <div class="pad">
+
+            <div id="setup-ach-account-form">
+                @using (Html.BeginForm("SetupACHAccount", "Register", FormMethod.Post, new Dictionary<string, object> { { "id", "frmSubmit" }, { "class", "validateMe" }, { "data-transition", "slideup" } }))
+                {
                 
 
-                <fieldset>
-                    <div class="editor-field">
-                        <span class="form-holder"> @Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })</span>
-                    </div>
-                    <div class="editor-field">
-                       <span class="form-holder">  @Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" }, { "pattern", "[0-9]*" } })</span>
-                    </div>
-                    <div class="editor-field">
-                       <span class="form-holder">  @Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required accountformat" }, { "pattern", "[0-9]*" } })</span>
-                    </div>
-                    <div class="editor-field">
-                       <span class="form-holder">  @Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" }, { "pattern", "[0-9]*" } })</span>
-                    </div>
-                    <div data-role="fieldcontain" class="cs-radio-holder">
-                        <div data-role="controlgroup" data-type="horizontal">
-                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
-                            <label class="cs-radio-label selected" for="radio-choice-1">
-                                Checking</label>
-                            <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
-                            <label class="cs-radio-label" for="radio-choice-2">
-                                Savings</label>
+                    <fieldset>
+                        <div class="editor-field">
+                            <span class="form-holder">@Html.TextBoxFor(m => m.NameOnAccount, new Dictionary<string, object>() { { "placeholder", "Name on Account" }, { "class", "required" } })</span>
                         </div>
-                    </div>
-                
+                        <div class="editor-field">
+                            <span class="form-holder">@Html.TextBoxFor(m => m.RoutingNumber, new Dictionary<string, object>() { { "placeholder", "Bank Routing Number (9 Digits)" }, { "class", "required validaterouting" }, { "pattern", "[0-9]*" } })</span>
+                        </div>
+                        <div class="editor-field">
+                            <span class="form-holder">@Html.TextBoxFor(m => m.AccountNumber, new Dictionary<string, object>() { { "placeholder", "Your Account Number" }, { "class", "required accountformat" }, { "pattern", "[0-9]*" } })</span>
+                        </div>
+                        <div class="editor-field">
+                            <span class="form-holder">@Html.TextBoxFor(m => m.ConfirmAccountNumber, new Dictionary<string, object>() { { "placeholder", "Confirm Your Account Number" }, { "class", "required accountmatch" }, { "pattern", "[0-9]*" } })</span>
+                        </div>
+                        <div data-role="fieldcontain" class="cs-radio-holder">
+                            <div data-role="controlgroup" data-type="horizontal">
+                                <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-1" value="Checking" checked="checked" />
+                                <label class="cs-radio-label selected" for="radio-choice-1">
+                                    Checking</label>
+                                <input class="cs-radio input_hidden" type="radio" name="AccountType" id="radio-choice-2" value="Savings" />
+                                <label class="cs-radio-label" for="radio-choice-2">
+                                    Savings</label>
+                            </div>
+                        </div>
+
                         <button type="submit" id="button-submit-ach" class="pd-btn green">
                             Add Bank Account</button>
-               
-                    
-                </fieldset>
-                <p class="remindme">
-                <br />
+
+
+                    </fieldset>
+                    <p class="remindme">
+                        <br />
                         <a href="@Url.Content("~/Register/SkipACHSetup")">Remind Me Later</a>
-                </p>
-            }
+                    </p>
+                }
+            </div>
         </div>
     </div>
+
+    <div id="help" class="lightbox" style="display: none; padding: 10px;">
+
+        <h4 class="lb-title">LINK YOUR BANK</h4>
+        <p>
+            PaidThx works directly with your bank account.  To link an account, you'll need the <b>Routing</b> and <b>Account Number</b>.
+        </p>
+        <br />
+        <div class="icon-holder">
+            <img alt="Example Check" class="grow" src="@Url.Content("~/Content/images/samplecheck.png")" />
+        </div>
+        <p>
+            <br />
+            You can find this info on the <b>bottom of a check</b>, within your <b>online banking</b>, or you can <b>call your bank</b>.
+            <br />
+        </p>
+        <p>
+            <button type="button" id="btn-gotit" class="pd-btn blue">
+                OK, Got It!</button>
+        </p>
     </div>
-    
-<div id="help" class="lightbox" style="display:none;padding:10px;">
-
-<h4 class="lb-title">LINK YOUR BANK</h4>
-<p>
-PaidThx works directly with your bank account.  To link an account, you'll need the <b>Routing</b> and <b>Account Number</b>.
-</p>
-<br />
-<div class="icon-holder">
- <img alt="Example Check" class="grow" src="@Url.Content("~/Content/images/samplecheck.png")" />
-</div>
-<p>
-<br />
-You can find this info on the <b>bottom of a check</b>, within your <b>online banking</b>, or you can <b>call your bank</b>.
-<br />
-</p>
- <p>
-                <button type="button" id="btn-gotit" class="pd-btn blue">
-                   OK, Got It!</button></p>
-</div>​
+    ​
 </div>
 
-    @section PageStyles{
+@section PageStyles{
 
-        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-buttons.css")">
-        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-thumbs.css")">
-        <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox.css")">
-    }
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-buttons.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox-thumbs.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Libs/fancybox/css/jquery.fancybox.css")">
+}
 
 @section PageScripts
 {
 
-<!-- FancyBox -->
-		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox.js")"></script>
-		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-buttons.js")"></script>
-		<script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-thumbs.js")"></script>
-        <script src="@Url.Content("~/Libs/fancybox/js/jquery.easing-1.3.pack.js")"></script>
-		<script src="@Url.Content("~/Libs/fancybox/js/jquery.mousewheel-3.0.6.pack.js")"></script>
+    <!-- FancyBox -->
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-buttons.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.fancybox-thumbs.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.easing-1.3.pack.js")"></script>
+    <script src="@Url.Content("~/Libs/fancybox/js/jquery.mousewheel-3.0.6.pack.js")"></script>
 
 
-        <script type="text/javascript">
-            var getBaseURL = function () {
-                return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
-            }
+    <script type="text/javascript">
+        var getBaseURL = function () {
+            return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
+        }
 
-            $(document).ready(function () {
+        $(document).ready(function () {
 
-                $(".fancybox").fancybox({
-                    maxWidth: 700,
-                    width: '98%',
-                    autoWidth: true,
-                    autoHeight: true,
-                    scrolling: 'no',
-                    openEffect: 'none',
-                    openSpeed: 0,
-                    closeEffect: 'elastic',
-                    minHeight: '360px',
-                    helpers: {
-                        overlay: {
-                            css: {
-                                'background': 'rgba(255, 255, 255, 0.99)'
-                            }
+            $(".fancybox").fancybox({
+                maxWidth: 700,
+                width: '98%',
+                autoWidth: true,
+                autoHeight: true,
+                scrolling: 'no',
+                openEffect: 'none',
+                openSpeed: 0,
+                closeEffect: 'elastic',
+                minHeight: '360px',
+                helpers: {
+                    overlay: {
+                        css: {
+                            'background': 'rgba(255, 255, 255, 0.99)'
                         }
                     }
-                });
-
-                if ($('.validation-summary-errors').is(':visible')) {
-                   //do nothing for now
-                } else {
-                    $('#btn-help').trigger('click');
                 }
-
-                
-
-                $('#btn-gotit').click(function (event) {
-                    $.fancybox.close(false);
-                });
-
-
-                $('.cs-radio').addClass('input_hidden');
-                $('.cs-radio-label').click(function (event) {
-                    $(this).addClass('selected').siblings().removeClass('selected');
-                });
-
-
             });
+
+            if ($('.validation-summary-errors').is(':visible')) {
+                //do nothing for now
+            } else {
+                $('#btn-help').trigger('click');
+            }
+
+
+
+            $('#btn-gotit').click(function (event) {
+                $.fancybox.close(false);
+            });
+
+
+            $('.cs-radio').addClass('input_hidden');
+            $('.cs-radio-label').click(function (event) {
+                $(this).addClass('selected').siblings().removeClass('selected');
+            });
+
+
+        });
     </script>
 }

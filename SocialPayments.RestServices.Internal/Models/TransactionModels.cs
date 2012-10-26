@@ -7,6 +7,11 @@ namespace SocialPayments.RestServices.Internal.Models
 {
     public class TransactionModels
     {
+        public class PagedResults
+        {
+            public int TotalRecords { get; set; }
+            public IEnumerable<TransactionResponse> Results { get; set; }
+        }
         public class TransactionResponse
         {
             public Guid Id { get; set; }
