@@ -222,5 +222,33 @@ namespace SocialPayments.DomainServices
                 ctx.SaveChanges();
             }
         }
+        public void UpdateBatchTransactionsToSentToBank(Guid batchId)
+        {
+            using (var ctx = new Context())
+            {
+                var transactionBatch = ctx.TransactionBatches.FirstOrDefault(t => t.Id == batchId);
+
+                foreach (var transaction in transactionBatch.Transactions)
+                {
+                    transaction.Status = TransactionStatus.Processed;
+                    transaction.SentDate = System.DateTime.Now;
+
+                    if (transaction.Payment != null)
+                    {
+                        if (transaction.Payment.RecipientAccount != null)
+                        {
+                            transaction.Payment.PaymentStatus = PaymentStatus.Processed;
+                            if (transaction.Payment.Message != null)
+                                transaction.Payment.Message.Status = PaystreamMessageStatus.ProcessedPayment;
+                        }
+                        else
+                            transaction.Payment.PaymentStatus = PaymentStatus.Open;
+                    }
+                }
+
+                ctx.SaveChanges();
+            }
+
+        }
     }
 }

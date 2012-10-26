@@ -1060,7 +1060,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in With Facebook. Account {0}", request.accountId));
+                _logger.Log(LogLevel.Error, String.Format("Exception Signing in With Facebook Account {0}. Exception: {1} Stack Trace: {2}", request.accountId,
+                    ex.Message, ex.StackTrace));
 
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }

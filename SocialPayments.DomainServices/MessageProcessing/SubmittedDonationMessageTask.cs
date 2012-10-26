@@ -23,6 +23,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
             {
                 try
                 {
+                    var userService = new UserService(ctx);
                     var transactionBatchServices = new DomainServices.TransactionBatchService();
                     var messageService = new DomainServices.MessageServices();
 
@@ -53,7 +54,13 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         HoldDays = holdDays,
                         ScheduledProcessingDate = scheduledProcessingDate,
                         PaymentVerificationLevel = verificationLevel,
-                        Transactions = new List<Transaction>()
+                        EstimatedDeliveryDate = System.DateTime.Now,
+                        ExpressDeliveryFee = 0,
+                        ExpressDeliveryDate = System.DateTime.Now,
+                        IsExpressed = (message.deliveryMethod == DeliveryMethod.Express ? true : false),
+                        Transactions = new List<Transaction>(),
+                        RecipientAccount = message.Recipient.PreferredReceiveAccount,
+                        Fees = new List<Fee>()
                     };
 
                     //Add the withdrawal transaction
@@ -65,7 +72,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         ACHTransactionId = "",
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
-                        IndividualIdentifier = message.RecipientUri,
+                        IndividualIdentifier = userService.GetSenderName(message.Recipient),
                         NameOnAccount = message.SenderAccount.NameOnAccount,
                         PaymentChannelType = PaymentChannelType.Single,
                         RoutingNumber = message.SenderAccount.RoutingNumber,
@@ -73,12 +80,36 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         Status = TransactionStatus.Pending,
                         Type = TransactionType.Withdrawal,
                         TransactionBatch = transactionBatch,
-                        Payment = message.Payment
+                        Payment = message.Payment,
                     });
 
                     transactionBatch.TotalNumberOfWithdrawals += 1;
                     transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
 
+                    //Add the deposit Transaction
+                    message.Payment.Transactions.Add(new Domain.Transaction()
+                    {
+                        AccountNumber = message.Payment.RecipientAccount.AccountNumber,
+                        Amount = message.Payment.Amount,
+                        AccountType = Domain.AccountType.Checking,
+                        ACHTransactionId = "",
+                        CreateDate = System.DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        IndividualIdentifier = userService.GetSenderName(message.Sender),
+                        NameOnAccount = message.Payment.RecipientAccount.NameOnAccount,
+                        PaymentChannelType = PaymentChannelType.Single,
+                        RoutingNumber = message.Payment.RecipientAccount.RoutingNumber,
+                        StandardEntryClass = StandardEntryClass.Web,
+                        Status = TransactionStatus.Pending,
+                        Type = TransactionType.Deposit,
+                        TransactionBatch = transactionBatch,
+                        Payment = message.Payment,
+                    });
+
+                    transactionBatch.TotalNumberOfDeposits += 1;
+                    transactionBatch.TotalDepositAmount += message.Payment.Amount;
+                    
+                    message.Status = PaystreamMessageStatus.ProcessingPayment;
                     message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
                     message.LastUpdatedDate = System.DateTime.Now;
 
@@ -97,16 +128,6 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
 
             }
-        }
-        private static DateTime ConvertToLocalTime(DateTime utcDate, string timeZoneId)
-        {
-            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            DateTime createDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZoneInfo);
-
-            if (timeZoneInfo.IsDaylightSavingTime(createDate))
-                createDate = createDate.AddHours(-1);
-
-            return createDate;
         }
     }
 }

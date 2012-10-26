@@ -645,6 +645,5 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
-
     }
 }

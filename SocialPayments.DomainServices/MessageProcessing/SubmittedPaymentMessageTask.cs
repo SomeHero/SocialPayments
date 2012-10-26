@@ -29,6 +29,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private DomainServices.IOSNotificationServices _iosNotificationServices;
 
         private SocialNetwork _facebookSocialNetwork;
+        private String _shortCode;
 
         private string _senderName;
 
@@ -50,12 +51,12 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     var urlShortnerService = new DomainServices.GoogleURLShortener();
                     var transactionBatchServices = new DomainServices.TransactionBatchService(ctx, _logger);
 
-                    _facebookSocialNetwork = ctx.SocialNetworks
-                    .FirstOrDefault(u => u.Name == "Facebook");
-
                     var message = _messageServices.GetMessage(messageId);
                     ctx.Messages.Attach(message);
 
+                    _facebookSocialNetwork = ctx.SocialNetworks
+                        .FirstOrDefault(u => u.Name == "Facebook");
+                    _shortCode = urlShortnerService.GetShortCode(_mobileWebSiteUrl, message.Id.ToString());
                     //Batch Transacations
                     //Calculate the # of hold days
                     var holdDays = 0;
@@ -95,6 +96,19 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         Transactions = new List<Transaction>()
                     };
 
+                    var recipientName = "";
+
+                    if (!String.IsNullOrEmpty(message.recipientFirstName))
+                        recipientName = message.recipientFirstName;
+
+                    if(recipientName.Length > 0 && !String.IsNullOrEmpty(message.recipientLastName))
+                        recipientName += " " + message.recipientLastName;
+                    else if (!String.IsNullOrEmpty(message.recipientLastName))
+                            recipientName = message.recipientLastName;
+                    
+                    if(recipientName.Length == 0)
+                        recipientName = message.RecipientUri;
+
                     //Add the withdrawal transaction
                     message.Payment.Transactions.Add(new Domain.Transaction()
                     {
@@ -104,7 +118,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         ACHTransactionId = "",
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),
-                        IndividualIdentifier = message.RecipientUri,
+                        IndividualIdentifier = recipientName,
                         NameOnAccount = message.SenderAccount.NameOnAccount,
                         PaymentChannelType = PaymentChannelType.Single,
                         RoutingNumber = message.SenderAccount.RoutingNumber,
@@ -121,15 +135,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     message.WorkflowStatus = PaystreamMessageWorkflowStatus.Complete;
                     message.LastUpdatedDate = System.DateTime.Now;
 
-                    message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+                    message.shortUrl =String.Format("{0}i/{1}", _mobileWebSiteUrl, _shortCode);
+
                     var recipient = _userServices.GetUser(message.RecipientUri);
 
                     if (recipient != null)
                     {
                         ctx.Users.Attach(recipient);
-                       message.Recipient = recipient;
+                        message.Recipient = recipient;
 
-                        string recipientName = _userServices.GetSenderName(message.Recipient);
                         bool isRecipientEngaged = true;
 
                         var preferredReceiveAccount = message.Recipient.PreferredReceiveAccount;
@@ -142,6 +156,8 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         if (isRecipientEngaged && message.Payment.ScheduledProcessingDate <= System.DateTime.Now)
                         {
                             message.Status = PaystreamMessageStatus.ProcessingPayment;
+                            message.Payment.RecipientAccount = recipient.PreferredReceiveAccount;
+                            message.Payment.PaymentStatus = PaymentStatus.Pending;
 
                             transactionBatch.TotalNumberOfDeposits += 1;
                             transactionBatch.TotalWithdrawalAmount += message.Payment.Amount;
@@ -162,14 +178,14 @@ namespace SocialPayments.DomainServices.MessageProcessing
                                 TransactionBatch = transactionBatch,
                                 Type = TransactionType.Deposit,
                                 Payment = message.Payment,
-                                IndividualIdentifier = _senderName
+                                IndividualIdentifier = _userServices.GetSenderName(message.Sender)
                             });
                         }
 
                         //Send SMS Message to recipient - not engaged
                         if (!isRecipientEngaged)
                         {
-                            message.Status = PaystreamMessageStatus.ProcessingPayment;
+                            message.Status = PaystreamMessageStatus.PendingPayment;
 
                             //Send Recipient Not Engaged Communication
                             try
@@ -248,7 +264,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
                     DateTime createDate = ConvertToLocalTime(message.CreateDate, "Eastern Standard Time");
                         
-                    _emailServices.SendEmail(message.Recipient.EmailAddress, String.Format("{0} sent you {1} using PaidThx", _senderName, message.Amount),
+                    _emailServices.SendEmail(message.Recipient.EmailAddress, String.Format("{0} sent you {1:C} using PaidThx", _senderName, message.Amount),
                                         communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                                 {
                                     new KeyValuePair<string, string>("REC_SENDER", _senderName),
@@ -276,13 +292,16 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
-                    var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+                    var senderSocialNetwork = message.Sender.UserSocialNetworks.FirstOrDefault(s => s.SocialNetworkId == _facebookSocialNetwork.Id);
 
-                    _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, recipientSocialNetworkAccount.UserNetworkId));
+                    if (senderSocialNetwork == null)
+                        throw new Exception(String.Format("Unable to find Facebook OAuth Credentials for Sender {0}", message.Sender.UserId));
 
-                    _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, recipientSocialNetworkAccount.UserNetworkId,
-                        String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
-                        message.shortUrl);
+                    var facebookLink = String.Format("http://apps.google.com/paidthx/i/{0}", _shortCode);
+
+                    _facebookServices.MakeWallPost(senderSocialNetwork.UserAccessToken, message.RecipientUri.Substring(3),
+                        String.Format(communicationTemplate.Template, message.Amount, message.Comments, facebookLink),
+                        facebookLink);
                 }
                 catch (Exception ex)
                 {
@@ -329,16 +348,16 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         _emailServices.SendEmail(message.Recipient.EmailAddress, String.Format("{0} sent you {1:C} using PaidThx", _senderName, message.Amount),
                             communicationTemplate.Template, new List<KeyValuePair<string, string>>()
                                     {
-                                        new KeyValuePair<string, string>("first_name", message.Recipient.FirstName),
-                                        new KeyValuePair<string, string>("last_name", message.Recipient.LastName),
-                                        new KeyValuePair<string, string>("rec_amount",  String.Format("{0:C}", message.Amount)),
-                                        new KeyValuePair<string, string>("rec_sender", _senderName),
-                                        new KeyValuePair<string, string>("rec_sender_photo_url", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
-                                        new KeyValuePair<string, string>("rec_datetime", String.Format("{0} at {1}", createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
-                                        new KeyValuePair<string, string>("rec_comments", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
+                                        new KeyValuePair<string, string>("FIRST_NAME", message.Recipient.FirstName),
+                                        new KeyValuePair<string, string>("LAST_NAME", message.Recipient.LastName),
+                                        new KeyValuePair<string, string>("REC_AMOUNT",  String.Format("{0:C}", message.Amount)),
+                                        new KeyValuePair<string, string>("REC_SENDER", _senderName),
+                                        new KeyValuePair<string, string>("REC_SENDER_PHOTO_URL", (message.Sender.ImageUrl != null ? message.Sender.ImageUrl : _defaultAvatarImage)),
+                                        new KeyValuePair<string, string>("REC_DATETIME", String.Format("{0} at {1}", createDate.ToString("dddd, MMMM dd"), createDate.ToString("hh:mm tt"))),
+                                        new KeyValuePair<string, string>("REC_COMMENTS", (!String.IsNullOrEmpty(message.Comments) ? message.Comments : "")),
                                         new KeyValuePair<string, string>("REC_COMMENTS_DISPLAY", (String.IsNullOrEmpty(message.Comments) ? "display: none" : "")),
-                                        new KeyValuePair<string, string>("link_registration", message.shortUrl),
-                                        new KeyValuePair<string, string>("app_user", "false")
+                                        new KeyValuePair<string, string>("LINK_ITEM", message.shortUrl),
+                                        new KeyValuePair<string, string>("APP_USER", "false")
                                     });
                     }
                     catch (Exception ex)
@@ -405,44 +424,22 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 //Send Facebook Message
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Payment_Receipt_Facebook");
 
-                var client = new Facebook.FacebookClient(message.Sender.FacebookUser.OAuthToken);
-                var args = new Dictionary<string, object>();
+                var senderSocialNetwork = message.Sender.UserSocialNetworks.FirstOrDefault(s => s.SocialNetworkId == _facebookSocialNetwork.Id);
 
-                var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
+                if (senderSocialNetwork == null)
+                    throw new Exception(String.Format("Unable to find Facebook OAuth Credentials for Sender {0}", message.Sender.UserId));
 
-                var senderSocialNetworkAccount = message.Sender.UserSocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Facebook");
+                var facebookLink = String.Format("http://apps.facebook.com/paidthx/i/{0}", _shortCode);
 
-                _logger.Log(LogLevel.Debug, String.Format("Before posting Facebook wall: SenderToken[{0}] - SenderId[{1}] - RecipientId[{2}]", senderSocialNetworkAccount.UserAccessToken, senderSocialNetworkAccount.UserNetworkId, message.RecipientUri.Substring(3)));
-
-                _facebookServices.MakeWallPost(senderSocialNetworkAccount.UserAccessToken, message.RecipientUri.Substring(3),
-                    String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
-                    message.shortUrl);
-
-                client.Post(String.Format("/{0}/feed", message.RecipientUri.Substring(3)), args);
+                _facebookServices.MakeWallPost(senderSocialNetwork.UserAccessToken, message.RecipientUri.Substring(3),
+                    String.Format(communicationTemplate.Template, message.Amount, message.Comments, facebookLink),
+                    facebookLink);
 
             }
         }
         private void SendRecipientNotRegisteredCommunication(Domain.Message message)
         {
-            // var link = String.Format("{0}{1}", _mobileWebSiteUrl, message.Id.ToString());
             URIType recipientType = _messageServices.GetURIType(message.RecipientUri);
-
-            //Send out CoSMS message to sender
-            //if (!String.IsNullOrEmpty(message.Sender.MobileNumber))
-            //{
-            //    _logger.Log(LogLevel.Info, String.Format("Send SMS to Sender (Recipient is not an registered user)."));
-
-            //    smsService.SendSMS(message.ApiKey, message.Sender.MobileNumber, String.Format(_senderSMSMessageRecipientNotRegistered, message.Amount, message.RecipientUri, message.shortUrl));
-            //}
-            //if (!String.IsNullOrEmpty(message.Sender.EmailAddress))
-            //{
-            //    //Send confirmation email to sender
-            //    _logger.Log(LogLevel.Info, String.Format("Send Email to Sender (Recipient is not an registered user)."));
-
-            //    emailService.SendEmail(message.ApiKey, _fromEmailAddress, message.Sender.EmailAddress,
-            //        String.Format(_senderConfirmationEmailSubjectRecipientNotRegistered, message.RecipientUri),
-            //        String.Format(_senderConfirmationEmailBodyRecipientNotRegistered, message.Amount, message.RecipientUri));
-            //}
 
             //Look at the recipient uri and determine what type of communication to send
             if (recipientType == URIType.MobileNumber)
@@ -494,10 +491,12 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     if(senderSocialNetwork == null)
                         throw new Exception(String.Format("Unable to find Facebook OAuth Credentials for Sender {0}", message.Sender.UserId));
-                
+
+                    var facebookLink = String.Format("http://apps.facebook.com/paidthx/i/{0}", _shortCode);
+
                     _facebookServices.MakeWallPost(senderSocialNetwork.UserAccessToken, message.RecipientUri.Substring(3),
-                        String.Format(communicationTemplate.Template, message.Amount, message.Comments, message.shortUrl),
-                        message.shortUrl);
+                        String.Format(communicationTemplate.Template, message.Amount, message.Comments, facebookLink),
+                        facebookLink);
 
                 }
                 catch (Exception ex)

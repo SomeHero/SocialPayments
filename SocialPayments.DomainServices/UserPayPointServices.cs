@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
 using System.Data.Entity;
+using System.Threading.Tasks;
+using NLog;
+using SocialPayments.DomainServices.UserPayPointProcessing;
 
 namespace SocialPayments.DomainServices
 {
     public class UserPayPointServices
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public Domain.UserPayPoint AddUserPayPoint(string userId, string payPointTypeName, string uri)
         {
             using (var _ctx = new Context())
@@ -86,7 +91,7 @@ namespace SocialPayments.DomainServices
                     switch (message.MessageType)
                     {
                         case Domain.MessageType.Payment:
-                            message.Status = Domain.PaystreamMessageStatus.ProcessingPayment;
+                            message.Status = Domain.PaystreamMessageStatus.PendingPayment;
                             break;
                         case Domain.MessageType.PaymentRequest:
                             message.Status = Domain.PaystreamMessageStatus.PendingRequest;
@@ -101,6 +106,17 @@ namespace SocialPayments.DomainServices
                 else if (payPointType.Name == "Phone")
                     userService.SendMobileVerificationCode(userId, userPayPoint.Id.ToString());
 
+                Task.Factory.StartNew(() =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Started Added PayPoint Task. {0} to {1}", user.UserName, userPayPoint.Id));
+
+                    AddUserPayPointTask task = new AddUserPayPointTask();
+                    task.Excecute(userPayPoint.Id);
+
+                }).ContinueWith(task =>
+                {
+                    _logger.Log(LogLevel.Info, String.Format("Completed Added PayPoint Task. {0} to {1}", user.UserName, userPayPoint.Id));
+                });
 
                 return userPayPoint;
             }

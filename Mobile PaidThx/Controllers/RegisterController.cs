@@ -164,7 +164,7 @@ namespace Mobile_PaidThx.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Paystream");
+                return RedirectToAction("Index", "Dashboard");
             }
         }
         [HttpPost]
@@ -310,7 +310,7 @@ namespace Mobile_PaidThx.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Paystream");
+                return RedirectToAction("Index", "Dashboard");
             }
         }
 

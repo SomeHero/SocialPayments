@@ -17,21 +17,36 @@
             xfbml: true  // parse XFBML tags on this page?
         });
 
-        // Additional initialization code such as adding Event Listeners goes here
-        FB.getLoginStatus(function (response) {
-            if (response.status === 'connected') {
-                var uid = response.authResponse.userID;
+        @if(Model.Message != null)
+        {
+            <text>
+            // Additional initialization code such as adding Event Listeners goes here
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    var uid = response.authResponse.userID;
 
-                if (uid === '@Model.Message.RecipientUri') {
-                    $("#claimPayment").show();
-                } else {
-                    $("#notAuthorized").show();
+                    if (uid === '@Model.Message.RecipientUri') {
+                        $("#claimPayment").show();
+                    } else {
+                        $("#notAuthorized").show();
+                    }
                 }
-            }
-            else {
-                $("#notLoggedIn").show();
-            }
-        });
+                else {
+                    FB.login(function (response) {
+                        FB.api('/me', function (response) {
+                            var uid = response.authResponse.userID;
+
+                            if (uid === '@Model.Message.RecipientUri') {
+                                $("#claimPayment").show();
+                            } else {
+                                $("#notAuthorized").show();
+                            }
+                        });
+                    });
+                }
+            });
+            </text>
+        }
     };
 
     // Load the SDK's source Asynchronously
@@ -81,19 +96,20 @@
 
                 </div>
                 -->
-            <div id="notLoggedIn" style="display: none;">
-                You're not logged in
-            </div>
-            <div id="notAuthorized" style="display: none;">
-                You're not authorized
-            </div>
+
             <div id="claimPayment" style="display: none;">
             @if (Model.Message != null)
             {
                 if (Model.Message.MessageType == "Payment")
                 {
                 <text>
-
+                            <div id="notAuthorized" style="display: none;">
+                 <div class="paystream-aui">
+                    <img class="sender ps-image left-image" src="@Model.Message.SenderImageUrl" width="50" height="50" />
+                    <span class="aui-message">You're facebook friends are using PaidThx to easily send and receive money.  Join the PaidThx network below to see just how easy it is.</span>
+                    <div class="clear"></div>
+                </div>
+            </div>
                  <div id="pay-in" class="aui">
                 <div class="paystream-aui">
                     <img class="sender ps-image left-image" src="@Model.Message.SenderImageUrl" width="50" height="50" />
@@ -145,7 +161,7 @@ requested <span class="lbl-amount request in">$@string.Format("{0:n2}", Model.Me
                 }
             }
             </div>
-                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
+                <button onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=332189543469634&redirect_uri=@Html.FormatCallbackUrl(Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + Url.Content("~/"), "Join/RegisterWithFacebook/&scope=email,read_friendlists,publish_stream&state=", Model.FBState)'" type="submit" id="signin-facebook-submit" class="pd-btn fb">
                 Join with Facebook</button>
            <!-- <h5 style="margin-top:25px" id="form-marker">
                 Or join with your Email Address</h5>-->

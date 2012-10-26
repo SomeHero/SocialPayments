@@ -103,27 +103,14 @@ namespace SocialPayments.BatchFileServices.NachaBatchFile
                 }
 
                 //Move all payments where we made the deposit to Sent To Bank
-                //foreach (var transaction in transactionBatch.Transactions)
-                //{
-                //    transaction.Status = TransactionStatus.Complete;
-                //    transaction.SentDate = System.DateTime.Now;
-
-                //    if (transaction.Payment == null)
-                //        continue;
-
-                //    if (transaction.Type == TransactionType.Deposit)
-                //    {
-                //        transaction.Payment.PaymentStatus = PaymentStatus.Complete;
-                //        transaction.Payment.Message.Status = PaystreamMessageStatus.ProcessedPayment;
-                //    }
-                //}
+                batchServices.UpdateTransactionStatusesSentToBank(transactionBatch.Id);
 
                 //Update Batch File
                 //Start BatchFile Workflow
             }
             catch (Exception ex)
             {
-                logger.ErrorException("Unhandled Exception Processing Nacha File", ex);
+                logger.Log(LogLevel.Error, String.Format("Unhandled Exception Processing Nacha File. Exception: {0} Stack Trace {1}", ex.Message, ex.StackTrace));
 
                 throw ex;
             }

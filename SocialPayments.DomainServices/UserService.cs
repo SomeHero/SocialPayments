@@ -79,13 +79,38 @@ namespace SocialPayments.DomainServices
 
             Domain.PayPointType payPointType;
 
-            payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"EmailAddress");
+            var uriType = GetURIType(userName);
 
-            if (payPointType == null)
-                throw new Exception("Pay Point Type Email Address Not Found");
+            if (uriType == URIType.FacebookAccount)
+            {
+                payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"Facebook");
 
+                if (payPointType == null)
+                    throw new Exception("Pay Point Type Facebook Account Not Found");
+
+                var userPayPoint = _ctx.UserPayPoints
+                    .FirstOrDefault(p => p.URI == userName);
+
+                if (userPayPoint == null)
+                {
+                    user.PayPoints.Add(new UserPayPoint()
+                    {
+                        Id = Guid.NewGuid(),
+                        CreateDate = System.DateTime.Now,
+                        IsActive = true,
+                        URI = userName,
+                        Type = payPointType,
+                        Verified = true
+                    });
+                }
+            }
             if (!String.IsNullOrEmpty(emailAddress))
             {
+                payPointType = _ctx.PayPointTypes.FirstOrDefault(p => p.Name == @"EmailAddress");
+
+                if (payPointType == null)
+                    throw new Exception("Pay Point Type Email Address Not Found");
+
                 var userPayPoint = _ctx.UserPayPoints
                     .FirstOrDefault(p => p.URI == emailAddress);
 
@@ -157,9 +182,8 @@ namespace SocialPayments.DomainServices
                 }
             }
             var messages = _ctx.Messages
-                .Where(m => (m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
-                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)
-                    || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPledge)))
+                .Where(m => (m.RecipientUri == user.UserName || m.RecipientUri == user.EmailAddress || m.RecipientUri == user.MobileNumber)
+                    && (m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedPayment) || m.StatusValue.Equals((int)PaystreamMessageStatus.NotifiedRequest)))
                     .ToList();
 
             foreach (var message in messages)
@@ -168,7 +192,7 @@ namespace SocialPayments.DomainServices
                 {
                     case MessageType.Payment:
                         message.Recipient = user;
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
+                        message.Status = PaystreamMessageStatus.PendingPayment;
 
                         break;
                     case MessageType.PaymentRequest:
@@ -178,7 +202,7 @@ namespace SocialPayments.DomainServices
                         break;
                     case MessageType.AcceptPledge:
                         message.Recipient = user;
-                        message.Status = PaystreamMessageStatus.PendingPledge;
+                        message.Status = PaystreamMessageStatus.PendingRequest;
 
                         break;
 
@@ -190,72 +214,6 @@ namespace SocialPayments.DomainServices
             }
 
             _ctx.SaveChanges();
-
-            if (!String.IsNullOrEmpty(messageId))
-            {
-                Guid messageGuid;
-
-                Guid.TryParse(messageId, out messageGuid);
-
-                var message = _ctx.Messages
-                    .FirstOrDefault(m => m.Id == messageGuid);
-
-                if (message.Recipient == null)
-                {
-                    message.Recipient = user;
-                }
-                switch (message.MessageType)
-                {
-                    case MessageType.Payment:
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
-                        break;
-                    case MessageType.PaymentRequest:
-                        message.Status = PaystreamMessageStatus.NotifiedRequest;
-                        break;
-                    case MessageType.Donation:
-                        message.Status = PaystreamMessageStatus.ProcessingPayment;
-                        break;
-                }
-
-                UserPayPoint messagePayPoint;
-
-                switch (GetURIType(message.RecipientUri))
-                {
-                    case URIType.EmailAddress:
-                        if (message.RecipientUri != user.EmailAddress)
-                        {
-                            messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                            {
-                                CreateDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 1,
-                                URI = message.RecipientUri,
-                                User = user
-                            });
-
-                        }
-
-                        break;
-                    case URIType.MobileNumber:
-
-                        if (message.RecipientUri != user.MobileNumber)
-                        {
-                            messagePayPoint = _ctx.UserPayPoints.Add(new UserPayPoint()
-                            {
-                                CreateDate = System.DateTime.Now,
-                                Id = Guid.NewGuid(),
-                                PayPointTypeId = 2,
-                                URI = message.RecipientUri,
-                                User = user
-                            });
-
-                        }
-                        break;
-                }
-
-                _ctx.SaveChanges();
-
-            }
 
             return user;
         }
@@ -827,8 +785,7 @@ namespace SocialPayments.DomainServices
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
-            try
-            {
+
                 user = _ctx.Users
                     .FirstOrDefault(u => u.FacebookUser.FBUserID.Equals(accountId));
 
@@ -928,26 +885,7 @@ namespace SocialPayments.DomainServices
                     _ctx.SaveChanges();
                 }
 
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        _logger.Log(LogLevel.Error, String.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage));
-                    }
-                }
-
-                throw dbEx;
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Fatal, String.Format("Exception Signing in with Facebook. {0}", ex.Message));
-
-                throw ex;
-            }
-
+           
             return user;
         }
 
@@ -959,8 +897,6 @@ namespace SocialPayments.DomainServices
 
             var memberRole = _ctx.Roles.FirstOrDefault(r => r.RoleName == "Member");
 
-            try
-            {
                 user = GetUserById(userId);
 
                 if (user != null)
@@ -979,14 +915,7 @@ namespace SocialPayments.DomainServices
 
                     return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, "Error linking facebook account:");
-                _logger.Log(LogLevel.Error, ex.Message);
 
-                return false;
-            }
 
             _ctx.SaveChanges();
 

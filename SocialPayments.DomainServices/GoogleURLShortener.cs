@@ -11,19 +11,19 @@ namespace SocialPayments.DomainServices
 {
     public class GoogleURLShortener
     {
-        private class GoogleShortenedURLResponse
+        public class GoogleShortenedURLResponse
         {
             public string id { get; set; }
             public string kind { get; set; }
             public string longUrl { get; set; }
         }
 
-        private class GoogleShortenedURLRequest
+        public class GoogleShortenedURLRequest
         {
             public string longUrl { get; set; }
         }
 
-        public string ShortenURL(string baseUrl, string messageid)
+        public string GetShortCode(string baseUrl, string messageid)
         {
             string googReturnedJson = string.Empty;
             JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
@@ -59,11 +59,7 @@ namespace SocialPayments.DomainServices
 
             GoogleShortenedURLResponse googUrl = javascriptSerializer.Deserialize<GoogleShortenedURLResponse>(googReturnedJson);
 
-            var shortCode = googUrl.id.Substring(googUrl.id.LastIndexOf("/") + 1, googUrl.id.Length - googUrl.id.LastIndexOf("/") - 1);
-
-            var shortUrl = String.Format("{0}i/{1}", baseUrl, shortCode);
-
-            return shortUrl;
+            return googUrl.id.Substring(googUrl.id.LastIndexOf("/") + 1, googUrl.id.Length - googUrl.id.LastIndexOf("/") - 1);
         }
     }
 }

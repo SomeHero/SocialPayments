@@ -30,7 +30,7 @@ namespace SocialPayments.DomainServices
         public void MakeWallPost(string oAuthToken, string recipientFacebookId, string message, string link)
         {
             _logger.Log(LogLevel.Info, String.Format("Posting to facebook wall for {0}", recipientFacebookId));
-
+            
             var client = new Facebook.FacebookClient(oAuthToken);
             var args = new Dictionary<string, object>();
 

@@ -27,6 +27,9 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private DomainServices.FacebookServices _facebookServices;
         private DomainServices.IOSNotificationServices _iosNotificationServices;
 
+        private SocialNetwork _facebookSocialNetwork;
+        private String _shortCode;
+
         public void Execute(Guid messageId)
         {
             using (var ctx = new Context())
@@ -47,12 +50,16 @@ namespace SocialPayments.DomainServices.MessageProcessing
 
                     var message = ctx.Messages
                         .FirstOrDefault(m => m.Id == messageId);
+                   
+                    _facebookSocialNetwork = ctx.SocialNetworks
+                        .FirstOrDefault(u => u.Name == "Facebook");
+                    _shortCode = urlShortnerService.GetShortCode("", message.Id.ToString());
 
                     //Validate Payment Request
                     bool isRecipientEngaged = true;
 
                     message.Recipient = _userServices.GetUser(message.RecipientUri);
-                    message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+                    message.shortUrl = String.Format("{0}i/{1}", _mobileWebSiteUrl, _shortCode);
 
                     if (message.Recipient != null)
                     {
@@ -63,7 +70,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         {
                             _logger.Log(LogLevel.Info, String.Format("Sending Communication to Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                            message.Status = PaystreamMessageStatus.PendingPledge;
+                            message.Status = PaystreamMessageStatus.PendingRequest;
 
                             SendRecipientEngagedCommunication(message);
                         }
@@ -71,7 +78,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         {
                             _logger.Log(LogLevel.Info, String.Format("Sending Communication to Non Engaged Recipient {0} for Message {1}", message.Recipient.UserId, message.Id));
 
-                            message.Status = PaystreamMessageStatus.PendingPledge;
+                            message.Status = PaystreamMessageStatus.PendingRequest;
 
                             SendRecipientNotEngagedCommunication(message);
                         }
@@ -80,7 +87,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     {
                         _logger.Log(LogLevel.Info, String.Format("Sending Communication to Not Registered Recipient {0} for Message {1}", message.RecipientUri, message.Id));
 
-                        message.Status = PaystreamMessageStatus.NotifiedPledge;
+                        message.Status = PaystreamMessageStatus.NotifiedRequest;
 
                         SendRecipientNotRegisteredCommunication(message);
                     }
