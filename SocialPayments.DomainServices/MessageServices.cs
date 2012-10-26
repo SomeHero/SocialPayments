@@ -180,10 +180,10 @@ namespace SocialPayments.DomainServices
             using (var ctx = new Context())
             {
 
-                if (applicationGuid == null)
-                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+                //if (applicationGuid == null)
+                 //   throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
-                Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
+                Application application = ctx.Applications.First();
 
                 if (application == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
@@ -227,7 +227,6 @@ namespace SocialPayments.DomainServices
                 {
                     Amount = amount,
                     Application = application,
-                    ApiKey = application.ApiKey,
                     Comments = comments,
                     CreateDate = System.DateTime.Now,
                     Id = Guid.NewGuid(),
@@ -323,12 +322,12 @@ namespace SocialPayments.DomainServices
 
 
                 //Validate the specified APIKEY is Valid
-                Guid.TryParse(apiKey, out applicationGuid);
+               // Guid.TryParse(apiKey, out applicationGuid);
 
-                if (applicationGuid == null)
-                    throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
+               // if (applicationGuid == null)
+                   // throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
 
-                Application application = ctx.Applications.FirstOrDefault(a => a.ApiKey == applicationGuid);
+                Application application = ctx.Applications.First();
 
                 if (application == null)
                     throw new CustomExceptions.BadRequestException(String.Format("Application {0} Not Valid", apiKey));
@@ -436,7 +435,6 @@ namespace SocialPayments.DomainServices
                     {
                         Amount = amount,
                         Application = application,
-                        ApiKey = application.ApiKey,
                         Comments = comments,
                         CreateDate = System.DateTime.Now,
                         Id = Guid.NewGuid(),

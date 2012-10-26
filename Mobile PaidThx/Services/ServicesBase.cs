@@ -13,10 +13,11 @@ namespace Mobile_PaidThx.Services
     public class ServicesBase
     {
         protected string _webServicesBaseUrl = ConfigurationManager.AppSettings["WebServicesBaseUrl"];
+        private string _apiKey = ConfigurationManager.AppSettings["APIKEY"];
 
         protected ServiceResponse Get(string serviceUrl)
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
             req.Method = "GET";
 
             HttpStatusCode statusCode = HttpStatusCode.OK;
@@ -64,7 +65,7 @@ namespace Mobile_PaidThx.Services
         protected ServiceResponse Delete(string serviceUrl, string json)
         {
             // Create new HTTP request.
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
             req.Method = "DELETE";
             req.ContentType = "application/json";
             byte[] postData = Encoding.ASCII.GetBytes(json);
@@ -117,7 +118,7 @@ namespace Mobile_PaidThx.Services
         protected ServiceResponse Post(string serviceUrl, string json)
         {
             // Create new HTTP request.
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
             req.Method = "POST";
             req.ContentType = "application/json";
             byte[] postData = Encoding.ASCII.GetBytes(json);
@@ -169,7 +170,7 @@ namespace Mobile_PaidThx.Services
         protected ServiceResponse Put(string serviceUrl, string json)
         {
             // Create new HTTP request.
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(serviceUrl);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
             req.Method = "PUT";
             req.ContentType = "application/json";
             byte[] postData = Encoding.ASCII.GetBytes(json);
