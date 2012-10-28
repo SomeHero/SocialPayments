@@ -130,7 +130,8 @@ namespace Mobile_PaidThx.Controllers
             }
 
         }
-        public ActionResult SignInWithFacebook(string state, string code)
+        public ActionResult 
+            SignInWithFacebook(string state, string code)
         {
             var faceBookServices = new FacebookServices();
             var userServices = new UserServices();

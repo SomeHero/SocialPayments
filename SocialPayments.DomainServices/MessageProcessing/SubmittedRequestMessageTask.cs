@@ -30,6 +30,10 @@ namespace SocialPayments.DomainServices.MessageProcessing
         private DomainServices.FacebookServices _facebookServices;
         private DomainServices.IOSNotificationServices _iosNotificationServices;
 
+        private SocialNetwork _facebookSocialNetwork;
+        private String _shortCode;
+
+
         public void Execute(Guid messageId)
         {
             using (var ctx = new Context())
@@ -52,11 +56,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                         .FirstOrDefault(m => m.Id == messageId);
                     ctx.Messages.Attach(message);
 
+                    _facebookSocialNetwork = ctx.SocialNetworks
+                        .FirstOrDefault(u => u.Name == "Facebook");
+                    _shortCode = urlShortnerService.GetShortCode("", message.Id.ToString());
+
                     //Validate Payment Request
                     bool isRecipientEngaged = true;
 
                     message.Recipient = _userServices.GetUser(message.RecipientUri);
-                    message.shortUrl = urlShortnerService.ShortenURL(_mobileWebSiteUrl, message.Id.ToString());
+                    message.shortUrl = String.Format("{0}i/{1}", _mobileWebSiteUrl, _shortCode);
 
                     if (message.Recipient != null)
                     {
@@ -195,14 +203,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 _logger.Log(LogLevel.Info, String.Format("Send Facebook Message to Recipient"));
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Request_Receipt_Facebook");
-                                
+                var facebookLink = String.Format("http://apps.facebook.com/paidthx/i/{0}", _shortCode);
+          
                 try
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
                     _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
-                        String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
-                        message.shortUrl);
+                        String.Format(communicationTemplate.Template, message.Amount, comment, facebookLink),
+                        facebookLink);
                 }
                 catch (Exception ex)
                 {
@@ -271,14 +280,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                     _logger.Log(LogLevel.Info, String.Format("Make Facebook Wall Post to Recipient - Not Engaged {0}", message.Recipient.FacebookUser.FBUserID));
 
                     var communicationTemplate = _communicationServices.GetCommunicationTemplate("Request_NotEngaged_Facebook");
+                    var facebookLink = String.Format("http://apps.facebook.com/paidthx/i/{0}", _shortCode);
 
                     try
                     {
                         var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
 
                         _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.Recipient.FacebookUser.FBUserID,
-                           String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
-                            message.shortUrl);
+                           String.Format(communicationTemplate.Template, message.Amount, comment, facebookLink),
+                            facebookLink);
                     }
                     catch (Exception ex)
                     {
@@ -292,7 +302,7 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 }
             }
         }
-        private void SendRecipientNotRegisteredCommunication(Domain.Message message)
+        private void    SendRecipientNotRegisteredCommunication(Domain.Message message)
         {
             string smsMessage;
             string emailSubject;
@@ -360,14 +370,15 @@ namespace SocialPayments.DomainServices.MessageProcessing
                 _logger.Log(LogLevel.Info, String.Format("Make Facebook Wall Post to Recipient - Not Registered"));
 
                 var communicationTemplate = _communicationServices.GetCommunicationTemplate("Request_NotRegistered_Facebook");
+                var facebookLink = String.Format("http://apps.facebook.com/paidthx/i/{0}", _shortCode);
 
                 try
                 {
                     var comment = (!String.IsNullOrEmpty(message.Comments) ? String.Format(": \"{0}\"", message.Comments) : "");
- 
-                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.RecipientUri.Substring(3), 
-                        String.Format(communicationTemplate.Template, message.Amount, comment, message.shortUrl),
-                        message.shortUrl);
+
+                    _facebookServices.MakeWallPost(message.Sender.FacebookUser.OAuthToken, message.RecipientUri.Substring(3),
+                        String.Format(communicationTemplate.Template, message.Amount, comment, facebookLink),
+                        facebookLink);
                 }
                 catch (Exception ex)
                 {

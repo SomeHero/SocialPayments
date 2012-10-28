@@ -93,7 +93,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/app.js")"></script>
     
     <script>
-        webServicesController.init('@System.Configuration.ConfigurationSettings.AppSettings["WebServicesBaseUrl"]');
+        webServicesController.init('@System.Configuration.ConfigurationManager.AppSettings["WebServicesBaseUrl"]', '@System.Configuration.ConfigurationManager.AppSettings["ApiKey"]');
     </script>
     <!-- Google Analytics - Hard Coded Dev -->
         <script>

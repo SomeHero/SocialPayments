@@ -233,6 +233,7 @@
     <Compile Include="MessageServices.cs" />
     <Compile Include="IOSNotificationServices.cs" />
     <Compile Include="Mother.cs" />
+    <Compile Include="UserPayPointProcessing\AddUserPayPointTask.cs" />
     <Compile Include="PaymentAccountProcessing\SubmittedPaymentAccountTask.cs" />
     <Compile Include="PaymentAccountService.cs" />
     <Compile Include="ProfileServices.cs" />

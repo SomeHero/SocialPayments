@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SocialPayments.DataLayer;
+using System.Data.Entity;
 
 namespace SocialPayments.DomainServices
 {
@@ -63,6 +64,52 @@ namespace SocialPayments.DomainServices
 
                 return transaction;
 
+            }
+        }
+        public List<Domain.Transaction> GetTransactions(string withStatus)
+        {
+            Domain.TransactionStatus statusCode = Domain.TransactionStatus.Pending;
+
+            if (withStatus == "SentToBank")
+                statusCode = Domain.TransactionStatus.Processed;
+            if (withStatus == "Complete")
+                statusCode = Domain.TransactionStatus.Complete;
+            if (withStatus == "Pending")
+                statusCode = Domain.TransactionStatus.Pending;
+            if (withStatus == "Cancelled")
+                statusCode = Domain.TransactionStatus.Cancelled;
+
+            using (var ctx = new Context())
+            {
+                var transactions = ctx.Transactions
+                    .Include("Payment")
+                    .Where(t => t.TransactionStatusId.Equals((int)statusCode))
+                    .ToList<Domain.Transaction>();
+
+                return transactions;
+            }
+        }
+        public void UpdateTransactionStatus(Guid id, string newStatus)
+        {
+            using (var ctx = new Context())
+            {
+                var transaction = ctx.Transactions
+                    .FirstOrDefault(t => t.Id == id);
+
+                transaction.Status = Domain.TransactionStatus.Complete;
+
+                if (transaction.Type == Domain.TransactionType.Deposit)
+                {
+                    if (transaction.Payment != null)
+                    {
+                        transaction.Payment.PaymentStatus = Domain.PaymentStatus.Complete;
+
+                        if (transaction.Payment.Message != null)
+                            transaction.Payment.Message.Status = Domain.PaystreamMessageStatus.CompletePayment;
+                    }
+                }
+
+                ctx.SaveChanges();
             }
         }
     }

@@ -11,6 +11,7 @@ using Mobile_PaidThx.Services.ResponseModels;
 using System.Web.Routing;
 using System.Configuration;
 using System.Text;
+using System.Web.Security;
 
 namespace Mobile_PaidThx.Controllers
 {
@@ -49,12 +50,18 @@ namespace Mobile_PaidThx.Controllers
 
             Session["MessageId"] = payment.Id;
 
+            var recipientUri = "";
+            if (payment.recipientUriType == "FacebookAccount")
+                recipientUri = payment.recipientUri.Substring(3);
+
             return View("Index", new JoinModels.JoinModel()
             {
                 UserName = (payment.recipientUriType == "EmailAddress" ? payment.recipientUri : ""),
                 FBState = Session["JoinFBState"].ToString(),
                 Message = new MessageModel()
                 {
+                    Id = payment.Id.ToString(),
+                    RecipientUri = recipientUri,
                     MessageType = payment.messageType,
                     Amount = payment.amount,
                     Comments = payment.comments,
@@ -92,6 +99,7 @@ namespace Mobile_PaidThx.Controllers
                 });
             }
 
+            FormsAuthentication.SetAuthCookie(user.userId.ToString(), false);
 
             Session["UserId"] = user.userId;
             Session["User"] = user;
@@ -102,6 +110,7 @@ namespace Mobile_PaidThx.Controllers
         public ActionResult RegisterWithFacebook(string state, string code)
         {
             var faceBookServices = new FacebookServices();
+            var applicationServices = new ApplicationServices();
             var userServices = new UserServices();
 
             var redirect = String.Format(fbTokenRedirectURL, "Join/RegisterWithFacebook/");
@@ -158,7 +167,7 @@ namespace Mobile_PaidThx.Controllers
 
             try
             {
-                _logger.Log(LogLevel.Error, String.Format("Getting Facebook Friends. Access Token {0}", fbAccount.accessToken));
+                _logger.Log(LogLevel.Info, String.Format("Getting Facebook Friends. Access Token {0}", fbAccount.accessToken));
             
                 friends = faceBookServices.GetFriendsList(fbAccount.accessToken);
             }
@@ -189,15 +198,45 @@ namespace Mobile_PaidThx.Controllers
                     Message = null
                 });
             }
+            ApplicationResponse application;
 
+            try
+            {
+                application = applicationServices.GetApplication(_apiKey);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                _logger.Log(LogLevel.Error, String.Format("Exception Getting Application {0}. Exception: {1}. StackTrace: {2}", _apiKey, ex.Message, ex.StackTrace));
+
+                return View(new SignInModels.SignInModel()
+                {
+                    FBState = Session["SignInFBState"].ToString()
+                });
+            }
+
+
+            FormsAuthentication.SetAuthCookie(userResponse.userId.ToString(), false);
+
+            Session["Application"] = application;
             Session["UserId"] = facebookSignInResponse.userId;
             Session["User"] = userResponse;
             Session["Friends"] = friends;
 
-            if(isNewUser)
+            if (isNewUser)
                 return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
             else
-                return RedirectToAction("Index", "Dashboard", new RouteValueDictionary() { });
+            {
+                if (!userResponse.setupSecurityPin)
+                {
+                    return RedirectToAction("Personalize", "Register", new RouteValueDictionary() { });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Dashboard", new RouteValueDictionary() { });
+                }
+            }
             
         }
         /// <summary>

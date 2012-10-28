@@ -29,6 +29,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
         public HttpResponseMessage GetPaged(int take, int skip, int page, int pageSize)
         {
             var messageServices = new DomainServices.MessageServices();
+            var formattingServices = new DomainServices.FormattingServices();
+            
             List<Domain.Message> messages = null;
             int totalRecords = 0;
 
@@ -66,9 +68,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     {
                         amount = m.Amount,
                         comments = m.Comments,
-                        createDate = m.CreateDate.ToString("MM/dd/yyyy"),
+                        createDate = formattingServices.FormatDateTimeForJSON(m.CreateDate),
                         Id = m.Id,
-                        lastUpdatedDate = (m.LastUpdatedDate != null ? m.LastUpdatedDate.Value.ToString("MM/dd/yyyy") : ""),
+                        lastUpdatedDate = (m.LastUpdatedDate != null ? formattingServices.FormatDateTimeForJSON(m.LastUpdatedDate) : ""),
                         latitude = m.Latitude,
                         longitutde = m.Longitude,
                         messageStatus = m.Status.ToString(),
@@ -85,6 +87,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             _logger.Log(LogLevel.Info, String.Format("Getting Message {0} Started", id));
 
             var messageServices = new DomainServices.MessageServices();
+            var formattingServices = new DomainServices.FormattingServices();
+            
             Domain.Message message = null;
 
             try
@@ -117,9 +121,9 @@ namespace SocialPayments.RestServices.Internal.Controllers
             {
                 amount = message.Amount,
                 comments = message.Comments,
-                createDate = message.CreateDate.ToString("MM/dd/yyyy"),
+                createDate = formattingServices.FormatDateTimeForJSON(message.CreateDate),
                 Id = message.Id,
-                lastUpdatedDate = (message.LastUpdatedDate != null ? message.LastUpdatedDate.Value.ToString("MM/dd/yyyy") : ""),
+                lastUpdatedDate = (message.LastUpdatedDate != null ? formattingServices.FormatDateTimeForJSON(message.LastUpdatedDate) : ""),
                 latitude = message.Latitude,
                 longitutde = message.Longitude,
                 messageStatus = message.Status.ToString(),
@@ -208,6 +212,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             return Request.CreateResponse(HttpStatusCode.Created);
         }
         [HttpPost]
+        // POST /api/users/{userId}/paystreammessages/{id/express_payment
         public HttpResponseMessage ExpressPayment(string userId, string id, MessageModels.ExpressPaymentRequest request)
         {
             _logger.Log(LogLevel.Info, String.Format("Express Payment Started Sender: {0} Message: {1} Sender Account: {2}", userId, id, request.sendAccountId));
@@ -640,6 +645,5 @@ namespace SocialPayments.RestServices.Internal.Controllers
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
-
     }
 }

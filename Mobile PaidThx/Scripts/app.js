@@ -21,10 +21,12 @@ $.fn.center = function () {
 var webServicesController = (function ($, undefined) {
     var pub = {},
     webServicesBaseUrl = "",
+    apiKey = "",
     $this = $(this);
 
-    pub.init = function(theWebServicesBaseUrl){
+    pub.init = function(theWebServicesBaseUrl, theApiKey){
         webServicesBaseUrl = theWebServicesBaseUrl;
+        apiKey = theApiKey;
     };
     pub.getBaseURL = function () {
         return getBaseURL();
@@ -32,11 +34,17 @@ var webServicesController = (function ($, undefined) {
     pub.getWebServicesBaseUrl = function () {
         return getWebServicesBaseUrl();
     };
+    pub.getApiKey = function () {
+        return getApiKey();
+    };
     function getBaseURL() {
         return location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/mobile/";
     }
     function getWebServicesBaseUrl() {
         return webServicesBaseUrl;
+    }
+    function getApiKey() {
+        return apiKey;
     }
 
     return pub;
@@ -214,7 +222,7 @@ var paystreamController = (function ($, undefined) {
     function searchPayStream(callback) {
         //Get news via ajax and return jqXhr
         $.ajax({
-            url: webServicesController.getWebServicesBaseUrl() + "Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize,
+            url: webServicesController.getWebServicesBaseUrl() + "Users/" + userId + "/PaystreamMessages?type=" + type + "&take=" + take + "&skip=" + skip + "&page=" + page + "&pageSize=" + pageSize + "&apikey=" + webServicesController.getApiKey(),
             dataType: "json",
             error: function (data, textStatus, xhr) {
                //hiding for now alert(textStatus);
@@ -320,7 +328,7 @@ var paystreamController = (function ($, undefined) {
 
     }
     function openOffersDialog(transactionId, callback) {
-        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId;
+        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "/Users/" + userId + "/PaystreamMessages/" + transactionId + "?apikey=" + webServicesController.getApiKey();
 
         $.ajax({
             url: serviceUrl,
@@ -454,7 +462,7 @@ var contactsSearchController = (function ($, undefined) {
     };
 
     function searchByMeCode(searchValue, type, callback) {
-        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue;
+        var serviceUrl = webServicesController.getWebServicesBaseUrl() + "Users/searchbymecode/" + searchValue + "?apikey=" + webServicesController.getApiKey();
 
         if (type) {
             serviceUrl = serviceUrl + "?type=" + type;
