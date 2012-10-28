@@ -100,6 +100,8 @@ namespace Mobile_PaidThx.Controllers
 
             user.userPayPoints = service.GetPayPoints(user.userId.ToString());
 
+            TempData["Success"] = "removed";
+
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -161,7 +163,7 @@ namespace Mobile_PaidThx.Controllers
             }
             if (verified)
             {
-                TempData["Message"] = String.Format("You've successfully verified {0} and can begin to send and receive money at this mobile #", phoneNumber.Uri);
+                TempData["Success"] = String.Format("verified");
 
                 user.userPayPoints = userPayPointServices.GetPayPoints(user.userId.ToString());
                 phoneNumber = user.userPayPoints.FirstOrDefault(p => p.Id == model.PayPointId);

@@ -20,13 +20,6 @@
      
 
        </div>
-                  @{
-                    if (TempData["Message"] != null && !String.IsNullOrEmpty(TempData["Message"].ToString()))
-                    {
-                    @TempData["Message"]
-                    }
-                }
-
         <div class="pad">
             
             <ul class="panel-container">
@@ -50,3 +43,33 @@
         </div>
     </div>
 </div>
+
+@section PageScripts{
+
+  @{
+      if (TempData["Success"] != null)
+      {
+          if (TempData["Success"] == "sp-changed")
+      {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Success - Security PIN Changed");
+            });
+       </script>
+       </text>
+      }else if (TempData["Success"] == "pw-changed")
+      {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Success - Password Changed");
+            });
+       </script>
+       </text>
+      }
+        }
+      }
+
+
+}

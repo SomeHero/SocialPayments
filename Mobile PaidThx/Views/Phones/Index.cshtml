@@ -58,8 +58,9 @@
 
 
     @{
-        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+        if (TempData["Success"] != null) {
 
+             if (TempData["Success"] == "added") {
         <text>
         <script type="text/javascript">
         $(document).ready(function () {
@@ -67,7 +68,19 @@
           });
        </script>
        </text>
+        }else if (TempData["Success"] == "removed")
+             {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Success - Phone Deleted");
+            });
+       </script>
+       </text> 
+            
+             }
         }
-    }
+
+}
 
 }

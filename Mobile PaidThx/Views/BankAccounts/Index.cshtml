@@ -9,7 +9,7 @@
 <div  id="@ViewBag.PageID" class="@ViewBag.Classes"  >
     <div  class="header-pdthx" >
         <h1>
-            Bank Accounts</h1>
+            Accounts</h1>
         <a href="@Url.Content("~/Preferences")"  class="hd-btn-left btn-back">Back</a>
     </div>
     <div class="pd-content">
@@ -18,7 +18,7 @@
     @if (Model.PaymentAccounts.Count < 1)
     {
         
-    <text>No bank account yet?  Well how do you expect to use PaidThx?  Add a bank below - it is a snap.</text>
+    <text>No bank account linked yet?  Well how do you expect to use PaidThx?  Add a bank below - it is a snap.</text>
         
         }else{                                                                                                                                                                                                                                        
     
@@ -95,4 +95,21 @@ $(document).ready(function() {
     });
 });
 </script>
+
+    @{
+        if (TempData["Success"] != null) {
+
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("New Bank Account Added");
+            });
+       </script>
+       </text>
+        }
+    }
+
 }
+
+
+
