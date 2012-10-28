@@ -153,6 +153,7 @@ namespace Mobile_PaidThx.Controllers
             }
 
             user.bankAccounts = bankAccountServices.GetAccounts(_apiKey, user.userId.ToString());
+            TempData["Success"] = String.Format("added");
 
             return RedirectToAction("Index");
         }

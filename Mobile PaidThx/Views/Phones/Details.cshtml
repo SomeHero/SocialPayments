@@ -87,6 +87,25 @@
 </div>
 
 @section PageScripts{
+
+
+  @{
+      if (TempData["Success"] != null)
+      {
+          if (TempData["Success"] == "verified")
+      {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Success - Phone Number Verified");
+            });
+       </script>
+       </text>
+      }
+        }
+      }
+
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -103,3 +122,6 @@
     </script>
 
     }
+
+
+

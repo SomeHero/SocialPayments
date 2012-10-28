@@ -16,30 +16,42 @@
         <div class="pad">
 
         
-<div class="paystreamDetail @{ if (Model.messageType == "Payment"){<text>payment </text>} if( Model.messageType == "PaymentRequest"){<text>request </text>} if( Model.messageType == "Donation"){<text>donation </text>} if (Model.direction == "Out"){<text>out </text>} if(Model.direction == "In"){<text>in </text>} }">
+<div class="paystreamDetail @{ if (Model.messageType == "Payment"){<text>payment </text>} if( Model.messageType == "PaymentRequest"){<text>request </text>} if( Model.messageType == "Donation"){<text>donation </text>} if (Model.direction == "Out"){<text>out </text>} if(Model.direction == "In"){<text>in </text>} if(Model.messageStatus == "Complete"){<text>done </text>} if (Model.messageStatus == "Accepted" || Model.messageStatus == "Rejected" || Model.messageStatus == "Cancelled"){<text>dead </text>}}">
 <div class="whathappened">
 <h2 class="psd-type">
     @{
         
-    if (Model.messageType == "Payment" && Model.direction == "In"){
+        if (Model.messageType == "Payment" && Model.direction == "In")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Payment Received &nbsp;&nbsp;&nbsp; &#8594;</text>
-        }else if(Model.messageType == "Payment" && Model.direction == "Out"){
+        }
+        else if (Model.messageType == "Payment" && Model.direction == "Out")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Payment Sent &nbsp;&nbsp;&nbsp; &#8594;</text>
-       }else if(Model.messageType == "PaymentRequest" && Model.direction == "In"){
+        }
+        else if (Model.messageType == "PaymentRequest" && Model.direction == "In")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Request Received &nbsp;&nbsp;&nbsp; &#8594;</text>
-       }else if(Model.messageType == "PaymentRequest" && Model.direction == "Out"){
+        }
+        else if (Model.messageType == "PaymentRequest" && Model.direction == "Out")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Request Sent &nbsp;&nbsp;&nbsp; &#8594;</text>
-    }else if(Model.messageType == "Donation" && Model.direction == "Out"){
+        }
+        else if (Model.messageType == "Donation" && Model.direction == "Out")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Donation &nbsp;&nbsp;&nbsp; &#8594;</text>
-    }else if(Model.messageType == "AcceptPledge" && Model.direction == "In"){
+        }
+        else if (Model.messageType == "AcceptPledge" && Model.direction == "In")
+        {
     <text>&#8594; &nbsp;&nbsp;&nbsp; Pledge &nbsp;&nbsp;&nbsp; &#8594;</text>
-    }
+        }
     }
     </h2>
 <div class="whathappened-details">
 
 @{
-    if ( Model.messageType == "Payment" && Model.direction == "In"){
+    if (Model.messageType == "Payment" && Model.direction == "In")
+    {
         <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" /> 
 <div class="ps-detail-textpad">
@@ -52,7 +64,9 @@ sent you <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span>
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
 </text>
-    }else if( Model.messageType == "Payment" && Model.direction == "Out"){
+    }
+    else if (Model.messageType == "Payment" && Model.direction == "Out")
+    {
     <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" /> 
     <div class="ps-detail-textpad">
@@ -65,7 +79,9 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
     <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
     </text>
-    }else if( Model.messageType == "PaymentRequest" && Model.direction == "In"){
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.direction == "In")
+    {
     <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" />
     <div class="ps-detail-textpad"> 
@@ -78,7 +94,9 @@ requested <span class="lbl-amount">$@string.Format("{0:n2}", Model.amount)</span
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
 </text>
-    }else if( Model.messageType == "PaymentRequest" && Model.direction == "Out"){
+    }
+    else if (Model.messageType == "PaymentRequest" && Model.direction == "Out")
+    {
     <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" /> 
     <div class="ps-detail-textpad">
@@ -91,7 +109,9 @@ from <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
 </text>
-    }else if( Model.messageType == "Donation" && Model.direction == "Out"){
+    }
+    else if (Model.messageType == "Donation" && Model.direction == "Out")
+    {
         <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.senderImageUri" alt="Sender" />
     <div class="ps-detail-textpad">
@@ -104,7 +124,9 @@ to <span class="lbl-recipient">@Model.recipientName</span>
 </div>
 <img width="40" height="40" class="psd-image recipient" src="@Model.recipientImageUri" alt="Recipient" />
     </text>
-    }else if( Model.messageType == "AcceptPledge" && Model.direction == "In"){
+    }
+    else if (Model.messageType == "AcceptPledge" && Model.direction == "In")
+    {
         <text>
     <img width="40" height="40" class="psd-image sender" src="@Model.recipientImageUri" alt="Sender" />
     <div class="ps-detail-textpad">
@@ -143,7 +165,7 @@ to <span class="lbl-recipient">@Model.senderName</span>
         if (Model.messageType == "Payment" && Model.isExpressable)
         {
             <text>
- <div class="t-panel">
+ <div class="t-panel delivery">
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
 <span class="lbl-status">Standard</span> - Payment should arrive in 1-2 business days.
@@ -158,10 +180,11 @@ to <span class="lbl-recipient">@Model.senderName</span>
             </div>
         </text>
         
-        }else if (Model.messageType == "Payment" && !Model.isExpressable)
+        }
+        else if (Model.messageType == "Payment" && !Model.isExpressable)
         {
             <text>
- <div class="t-panel">
+ <div class="t-panel delivery">
 <h2 class="t-panel-heading">Delivery</h2>
 <div class="t-panel-details">
 <span class="lbl-status">Standard</span> - Payment should arrive in 1-2 business days.
@@ -177,7 +200,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     if (Model.messageType == "Payment" && Model.isRemindable)
     {
      <text>
-     @using(Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "SendPaymentReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment" messageId="@Model.Id">
@@ -189,7 +213,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     else if (Model.messageType == "PaymentRequest" && Model.isRemindable)
     {
      <text>
-      @using(Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get)) {
+      @using (Html.BeginForm("SendReminder", "Paystream", null, FormMethod.Get))
+      {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "SendPaymentRequestReminder") 
      <button type="submit" class="pd-btn blue send-reminder send-reminder-payment-request" messageId="@Model.Id">
@@ -203,7 +228,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     if (Model.messageType == "PaymentRequest" && Model.isAcceptable)
     {
      <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "AcceptRequest") 
      <button type="submit" class="pd-btn green accept accept-payment-request" messageId="@Model.Id" >
@@ -216,7 +242,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     {
 
      <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "RejectPledge") 
      <button type="submit" class="pd-btn red reject reject-payment-request" messageId="@Model.Id">
@@ -229,7 +256,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     if (Model.messageType == "Payment" && Model.isCancellable)
     {
     <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "CancelPayment") 
      <button type="submit" class="pd-btn red cancel cancel-payment" messageId="@Model.Id">
@@ -242,7 +270,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     {
 
     <text> 
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "CancelRequest") 
     <button type="submit" class="pd-btn red cancel cancel-payment-request" messageId="@Model.Id">
@@ -252,10 +281,11 @@ to <span class="lbl-recipient">@Model.senderName</span>
      </text>
     
     }
-        if (Model.messageType == "AcceptPledge" && Model.isAcceptable)
+    if (Model.messageType == "AcceptPledge" && Model.isAcceptable)
     {
      <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "AcceptPledge") 
      <button type="submit" class="pd-btn green accept accept-payment-request">
@@ -268,7 +298,8 @@ to <span class="lbl-recipient">@Model.senderName</span>
     {
 
      <text>
-     @using(Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get)) {
+     @using (Html.BeginForm("PopupPinSwipe", "Paystream", null, FormMethod.Get))
+     {
      @Html.Hidden("messageId", @Model.Id) 
      @Html.Hidden("paystreamAction", "RejectPledge") 
      <button type="submit" class="pd-btn red reject reject-payment-request">

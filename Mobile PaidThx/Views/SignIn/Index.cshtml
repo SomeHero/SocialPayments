@@ -40,7 +40,7 @@
 
                     <span class="form-holder"><input type="password" id="password" class="required" placeholder="Password" name="Password" /></span>
                     <button type="submit" id="signin-submit" class="pd-btn green">
-                      Sign In</button>
+                      Sign In with Email</button>
 
                 }
             </div>
@@ -55,3 +55,24 @@
         </div>
     </div>
      </div>
+
+
+     @section PageScripts{
+
+  @{
+      if (TempData["Success"] != null)
+      {
+      if (TempData["Success"] == "reset")
+      {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Password Reset - Please Login");
+            });
+       </script>
+       </text>
+      }
+        }
+      }
+
+     }

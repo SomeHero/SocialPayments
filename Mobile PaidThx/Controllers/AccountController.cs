@@ -249,7 +249,7 @@ namespace Mobile_PaidThx.Controllers
 
                     userServices.ResetPassword(userId, model.SecurityQuestionAnswer, model.NewPassword);
 
-                    TempData["Message"] = "Your Password was successfully reset";
+                    TempData["Success"] = "reset";
 
                     return RedirectToAction("Index", "SignIn");
                 }

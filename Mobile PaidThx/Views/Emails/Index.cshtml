@@ -24,7 +24,6 @@
         }     
     </div>
     @Html.ValidationSummary()
-    @TempData["Message"]
         <div class="pad">
             <ul class="panel-container">
                 @foreach (var payPoint in Model.PayPoints)
@@ -60,7 +59,7 @@
 
 
     @{
-        if (TempData["Success"] != null && !String.IsNullOrEmpty(TempData["Success"].ToString())) {
+        if (TempData["Success"] != null) {
 
         <text>
         <script type="text/javascript">
