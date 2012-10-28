@@ -8,18 +8,22 @@
     <div class="header-pdthx">
         <h1>
            Verified</h1>
-       <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back history">Home</a>
+       <a href="@Url.Content("~/Dashboard")"  class="hd-btn-left btn-back">Home</a>
     </div>
     <div class="pd-content">
-    <div class="pad">
-        @if (ViewBag.Confirmed)
+    <div class="top-panel">
+            @if (ViewBag.Confirmed)
         {
-            <text>Thanks. You have successfully verified this paypoint and can now begin to receive funds.</text>
+            <text>Success - You have successfully verified this paypoint and can now begin to receive funds sent to this email address.</text>
         }
         else
         {
             @ViewBag.Message
         }
+    </div>
+    <div class="pad">
+    <a href="@Url.Content("~/Emails")" id="btn-back-to-emails" class="pd-btn blue">
+                   Return to Emails</a>
         </div>
     </div>
 </div>
