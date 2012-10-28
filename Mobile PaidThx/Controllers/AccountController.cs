@@ -167,7 +167,9 @@ namespace Mobile_PaidThx.Controllers
 
             ViewBag.Confirmed = true;
 
-            return View();
+            TempData["Success"] = "verified";
+            return RedirectToAction("Index", "Emails");
+            //return View();
         }
 
         
