@@ -298,7 +298,7 @@ var paystreamController = (function ($, undefined) {
             } else if (createDateMonth == lastMonth && createDateYear == lastMonthYear) {
                 headerText = "Last Month";
             } else {
-                headerText = createDate.format('ddd, MMM Do, h:mm a');
+                headerText = moment.utc($(items).get(i).createDate).local().format('ddd, MMM Do, YY');
             }
 
 
