@@ -55,3 +55,24 @@
         </div>
     </div>
      </div>
+
+
+     @section PageScripts{
+
+  @{
+      if (TempData["Success"] != null)
+      {
+      if (TempData["Success"] == "reset")
+      {
+        <text>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                confirmAlert("Password Reset - Please Login");
+            });
+       </script>
+       </text>
+      }
+        }
+      }
+
+     }

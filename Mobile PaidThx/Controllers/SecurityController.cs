@@ -80,6 +80,7 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
 
+            TempData["Success"] = "pw-changed";
             return RedirectToAction("Index");
         }
         public ActionResult ChangeSecurityPin()
@@ -172,7 +173,7 @@ namespace Mobile_PaidThx.Controllers
                 return View();
             }
 
-            TempData["Message"] = "Your securiry pin was successfully changed.";
+            TempData["Success"] = "sp-changed";
 
             return RedirectToAction("Index");
         }
