@@ -250,7 +250,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage Post(UserModels.SubmitUserRequest request)
         {
-            _logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.userName));
+            _logger.Log(LogLevel.Info, string.Format("Registering User  {0}", request.userName));
 
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
@@ -767,7 +767,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                         }
                         else if (msg.Recipient.Merchant != null)
                         {
-                            _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
+                            _logger.Log(LogLevel.Info, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
 
                             recipName = msg.RecipientUri;
 
@@ -945,7 +945,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             User user;
             string securityQuestion = "";
             var isValid = false;
-            _logger.Log(LogLevel.Error, String.Format("Validating User {0}.", request.userName));
+            _logger.Log(LogLevel.Debug, String.Format("Validating User {0}.", request.userName));
 
             try
             {
