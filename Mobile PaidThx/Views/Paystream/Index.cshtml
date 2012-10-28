@@ -126,6 +126,14 @@
             $form.submit();
 
         });
+        $listview.on("click", "div.dead", function (event) {
+            var messageId = $(this).parents().find('.paystreamItem').attr("messageId");
+            var $form = $(this).parents("form:first");
+
+            $('input[name=messageId]').val(messageId);
+            $form.submit();
+
+        });
         $('.closePaystreamItem').die('click').live('click', function () {
             paystreamController.closeDetailDialog(function () { });
         });

@@ -1,6 +1,10 @@
 
+$(document).ready(function () {
+    showAJAXLoader();
+});
 
 function generatePincode() {
+    
     patternlock.generate(document.getElementById("patternlock"));
     document.getElementById("pinswipesubmit").style.display = 'none';
 }
@@ -21,7 +25,7 @@ var patternlock = {
     startbutton: 0,
 
     init: function () {
-
+        
         if (this.autoInit) {
             var pw = document.getElementsByTagName("input");
             for (var i = 0; i < pw.length; i++) {
