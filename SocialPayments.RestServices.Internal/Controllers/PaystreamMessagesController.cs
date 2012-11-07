@@ -22,6 +22,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
     public class PaystreamMessagesController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private string _apiKey = "BDA11D91-7ADE-4DA1-855D-24ADFE39D174";
         private string _defaultAvatarImage = ConfigurationManager.AppSettings["DefaultAvatarImage"];
 
         // GET /api/paystreammessage
@@ -36,7 +37,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
             try
             {
-                messages = messageServices.GetPagedMessages("", "1", take, skip, page, pageSize, out totalRecords);
+                messages = messageServices.GetPagedMessages("", "ALL", take, skip, page, pageSize, out totalRecords);
             }
             catch (NotFoundException ex)
             {
@@ -178,14 +179,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage Donate(MessageModels.SubmitDonateRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.senderId, request.organizationId, request.recipientFirstName, request.recipientLastName));
-
             var messagesServices = new DomainServices.MessageServices();
             Domain.Message message = null;
 
             try
             {
-                message = messagesServices.Donate(request.apiKey, request.senderId, request.organizationId, request.organizationId, request.senderAccountId, request.amount, request.comments, request.securityPin);
+                message = messagesServices.Donate(_apiKey, request.senderId, request.organizationId, request.organizationId, request.senderAccountId, request.amount, request.comments, request.securityPin);
             }
             catch (NotFoundException ex)
             {
@@ -252,14 +251,12 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage Pledge(MessageModels.SubmitPledgeRequest request)
         {
-            _logger.Log(LogLevel.Info, String.Format("{0} - Pledge Posted {1} {2} {3} {4}", request.apiKey, request.onBehalfOfId, request.recipientUri, request.recipientFirstName, request.recipientLastName));
-
             DomainServices.MessageServices _messageServices = new DomainServices.MessageServices();
             Domain.Message message = null;
 
             try
             {
-                message = _messageServices.Pledge(request.apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
+                message = _messageServices.Pledge(_apiKey, request.senderId, request.onBehalfOfId, request.recipientUri, request.amount,
                     request.comments, request.latitude, request.longitude, request.recipientFirstName, request.recipientLastName, request.recipientLastName,
                     request.securityPin);
             }
