@@ -700,8 +700,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var userService = new DomainServices.UserService();
             var messageService = new DomainServices.MessageServices();
             List<UserModels.QuickSendUserReponse> quickSends = new List<UserModels.QuickSendUserReponse>();
-            int numberOfIncomingNotifications = 0;
-            int numberOfOutgoingNotifications = 0;
+            int numberOfNewNotifications = 0;
+            int numberOfPendingNotifications = 0;
 
             User user = null;
 
@@ -812,7 +812,8 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     }
                 }
  
-                numberOfOutgoingNotifications = messageService.GetNumberOfPendingMessages(id);
+                numberOfPendingNotifications = messageService.GetNumberOfPendingMessages(id);
+                numberOfNewNotifications = messageService.GetNumberOfNewMessages(id);
             }
             catch (NotFoundException ex)
             {
@@ -839,16 +840,16 @@ namespace SocialPayments.RestServices.Internal.Controllers
             var results = new UserModels.HomepageRefreshReponse()
             {
                 userId = id,
-                numberOfIncomingNotifications = numberOfIncomingNotifications,
-                numberOfOutgoingNotifications = numberOfOutgoingNotifications,
+                numberOfIncomingNotifications = numberOfNewNotifications,
+                numberOfOutgoingNotifications = numberOfPendingNotifications,
                 quickSendContacts = quickSends
             };
 
             return Request.CreateResponse<UserModels.HomepageRefreshReponse>(HttpStatusCode.OK, new UserModels.HomepageRefreshReponse()
             {
                 userId = id,
-                numberOfIncomingNotifications = numberOfIncomingNotifications,
-                numberOfOutgoingNotifications = numberOfOutgoingNotifications,
+                numberOfIncomingNotifications = numberOfNewNotifications,
+                numberOfOutgoingNotifications = numberOfPendingNotifications,
                 quickSendContacts = quickSends
             });
         }
