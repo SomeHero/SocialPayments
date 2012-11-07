@@ -23,7 +23,6 @@ namespace SocialPayments.RestServices.External.Models
             public String messageStatus { get; set; }
         }
         public class SubmitMessageRequest {
-            public string apiKey { get; set; }
             public String senderUri { get; set; }
             public String senderAccountId { get; set; }
             public String recipientUri { get; set; }
