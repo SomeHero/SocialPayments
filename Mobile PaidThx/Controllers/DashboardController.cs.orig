@@ -37,15 +37,9 @@ namespace Mobile_PaidThx.Controllers
                     if (profileItem.ItemType == "ShortText")
                     {
                         numItems++;
-<<<<<<< HEAD
+
                     if (attribute != null && !String.IsNullOrEmpty(attribute.AttributeValue))
                         numItemsComplete++;
-=======
-
-                        if (attribute != null && attribute.AttributeValue != null && attribute.AttributeValue != "")
-                            numItemsComplete++;
-                    }
->>>>>>> upstream/development
                 }
             }
             
@@ -53,13 +47,8 @@ namespace Mobile_PaidThx.Controllers
             {
                 UserName = user.senderName,
                 UserPic = user.imageUrl,
-<<<<<<< HEAD
-                UserNewActivity = user.numberOfPaystreamUpdates,
-                UserProfileComplete = Math.Round((double)(numItemsComplete/numItems)*100)
-=======
                 UserNewActivity = user.newMessageCount + user.pendingMessageCount,
                 UserProfileComplete = Math.Round(((double)(numItemsComplete/numItems)*100.0))
->>>>>>> upstream/development
             });
 
             //if (String.IsNullOrEmpty(messageId) || messageId.Length <= 32)
