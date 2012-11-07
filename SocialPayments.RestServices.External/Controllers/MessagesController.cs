@@ -118,7 +118,7 @@ namespace SocialPayments.RestServices.External.Controllers
             }
 
             //TODO: validate application in request
-            var application = GetApplication(request.apiKey);
+            //var application = GetApplication(request.apiKey);
 
             if(application == null)
             {

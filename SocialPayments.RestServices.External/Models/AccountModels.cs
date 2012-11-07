@@ -18,7 +18,6 @@ namespace SocialPayments.RestServices.External.Models
         }
         public class SubmitAccountRequest
         {
-            public string ApiKey { get; set; }
             public string NameOnAccount { get; set; }
             public string RoutingNumber { get; set; }
             public string AccountNumber { get; set; }
@@ -26,7 +25,6 @@ namespace SocialPayments.RestServices.External.Models
         }
         public class UpdateAccountRequest
         {
-            public string ApiKey { get; set; }
             public string NameOnAccount { get; set; }
             public string RoutingNumber { get; set; }
             public string AccountNumber { get; set; }

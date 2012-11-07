@@ -119,8 +119,6 @@ namespace SocialPayments.DomainServices
                
                 sc.Send(fromAddress, toAddress, subject, body);
 
-                _logger.Log(LogLevel.Info, String.Format("I am Here"));
-
                 emailLog.EmailStatus = EmailStatus.Sent;
                 emailLog.SentDate = System.DateTime.Now;
 
