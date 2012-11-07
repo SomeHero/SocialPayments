@@ -1401,6 +1401,7 @@ namespace SocialPayments.DomainServices
                 return messages;
             }
         }
+
         public int GetNumberOfPendingMessages(string userId)
         {
             using (var ctx = new Context())
