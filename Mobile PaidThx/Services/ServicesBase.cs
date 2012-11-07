@@ -17,7 +17,13 @@ namespace Mobile_PaidThx.Services
 
         protected ServiceResponse Get(string serviceUrl)
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
+            HttpWebRequest req = null;
+            
+            if(serviceUrl.Contains('?'))
+                req = (HttpWebRequest)WebRequest.Create(String.Format("{0}&apikey={1}", serviceUrl, _apiKey));
+            else
+                req = (HttpWebRequest)WebRequest.Create(String.Format("{0}?apikey={1}", serviceUrl, _apiKey));
+
             req.Method = "GET";
 
             HttpStatusCode statusCode = HttpStatusCode.OK;

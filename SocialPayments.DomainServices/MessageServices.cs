@@ -1225,6 +1225,7 @@ namespace SocialPayments.DomainServices
         {
             using (var ctx = new Context())
             {
+                var userService = new DomainServices.UserService();
                 var formattingService = new DomainServices.FormattingServices();
 
                 Guid userGuid;
@@ -1242,15 +1243,24 @@ namespace SocialPayments.DomainServices
                 List<Domain.Message> messages = null;
 
                 //TODO: refactor query method
-                messages = ctx.Messages
+                var allMessages = ctx.Messages
                     .Include("Recipient")
                     .Include("Recipient.Merchant")
                     .Where
                     (m => m.SenderId == user.UserId && m.MessageTypeValue.Equals((int)MessageType.Payment))
                     .OrderByDescending(m => m.CreateDate).ToList();
+                    
+                messages = allMessages
+                    .Distinct(new SameRecipientComparer())
+                    .Take(6).ToList();
 
-                // Not sure what distinct does, but maybe it's unique entries?
-                return messages.Distinct(new SameRecipientComparer()).Take(6).ToList();
+                foreach (var message in messages)
+                {
+                    if (message.Recipient != null)
+                        message.Recipient.SenderName = userService.GetSenderName(message.Recipient);
+                }
+
+                return messages;
             }
         }
 
@@ -1411,8 +1421,6 @@ namespace SocialPayments.DomainServices
 
                 if (user == null)
                     throw new CustomExceptions.NotFoundException(String.Format("User {0} Not Valid", userId));
-
-                var mobileNumber = formattingService.RemoveFormattingFromMobileNumber(user.MobileNumber);
 
                 count = ctx.Messages.Count(m => (
                         (m.SenderId == user.UserId && m.StatusValue.Equals((int)PaystreamMessageStatus.PendingRequest))

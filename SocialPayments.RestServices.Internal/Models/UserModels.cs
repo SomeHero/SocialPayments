@@ -111,7 +111,6 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class SubmitUserRequest
         {
-            public string apiKey { get; set; }
             public string userName { get; set; }
             public string password { get; set; }
             public string emailAddress { get; set; }
@@ -171,7 +170,6 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class FacebookSignInRequest
         {
-            public string apiKey { get; set; }
             public string accountId { get; set; }
             public string firstName { get; set; }
             public string lastName { get; set; }
@@ -187,14 +185,12 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class LinkFacebookRequest
         {
-            public string apiKey { get; set; }
             public string AccountId { get; set; }
             public string oAuthToken { get; set; }
         }
 
         public class UnlinkFacebookRequest
         {
-            public string apiKey { get; set; }
         }
 
         public class FacebookSignInResponse

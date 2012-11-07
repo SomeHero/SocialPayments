@@ -51,7 +51,6 @@ namespace SocialPayments.RestServices.Internal.Models
         public class MessageSeenUpdateRequest
         {
             public string userId { get; set; }
-            public string apiKey { get; set; }
             public List<string> messageIds { get; set; }
         }
         public class MultipleURIRequest
@@ -86,7 +85,6 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class SubmitDonateRequest
         {
-            public string apiKey { get; set; }
             public string senderId { get; set; }
             public string organizationId { get; set; }
             public string senderAccountId { get; set; }
@@ -101,7 +99,6 @@ namespace SocialPayments.RestServices.Internal.Models
         }
         public class SubmitPledgeRequest
         {
-            public string apiKey { get; set; }
             public string senderId { get; set; }
             public string onBehalfOfId { get; set; }
             public string recipientUri { get; set; }

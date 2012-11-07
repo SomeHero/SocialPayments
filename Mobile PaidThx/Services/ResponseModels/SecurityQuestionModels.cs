@@ -15,7 +15,6 @@ namespace Mobile_PaidThx.Services.ResponseModels
         }
         public class SetupQuestionRequest
         {
-            public string ApiKey { get; set; }
             public int questionId { get; set; }
             public string questionAnswer { get; set; }
         }
@@ -25,7 +24,6 @@ namespace Mobile_PaidThx.Services.ResponseModels
         }
         public class UpdateQuestionRequest
         {
-            public string ApiKey { get; set; }
             public Guid userId { get; set; }
             public int oldQuestionId { get; set; }
             public string oldQuestionAnswer { get; set; }

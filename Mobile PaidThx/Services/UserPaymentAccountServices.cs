@@ -10,15 +10,6 @@ using Mobile_PaidThx.Services.CustomExceptions;
 
 namespace Mobile_PaidThx.Services
 {
-    //    public string ApiKey { get; set; }
-    //public string Nickname { get; set; }
-    //public string NameOnAccount { get; set; }
-    //public string RoutingNumber { get; set; }
-    //public string AccountNumber { get; set; }
-    //public string AccountType { get; set; }
-    //public string SecurityPin { get; set; }
-    //public int SecurityQuestionID { get; set; }
-    //public string SecurityQuestionAnswer { get; set; }
     public class UserPaymentAccountServices : ServicesBase
     {
         private string _setupACHAccountServiceUrl = "{0}Users/{1}/PaymentAccounts";

@@ -250,46 +250,14 @@ namespace SocialPayments.RestServices.Internal.Controllers
         [HttpPost]
         public HttpResponseMessage Post(UserModels.SubmitUserRequest request)
         {
-            _logger.Log(LogLevel.Error, string.Format("Registering User  {0}", request.userName));
+            _logger.Log(LogLevel.Info, string.Format("Registering User  {0}", request.userName));
 
             DomainServices.SecurityService securityService = new DomainServices.SecurityService();
             DomainServices.FormattingServices formattingService = new DomainServices.FormattingServices();
             DomainServices.UserService _userService = new DomainServices.UserService();
 
-            //_logger.Log(LogLevel.Error, string.Format("Formatting Mobile Number"));
 
-            //try
-            //{
-            //    if (!String.IsNullOrEmpty(request.mobileNumber))
-            //    {
-
-            //        formattingService.RemoveFormattingFromMobileNumber(request.mobileNumber);
-
-            //        _logger.Log(LogLevel.Error, string.Format("Registering User Mobile Number {0}", mobileNumber));
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.Log(LogLevel.Error, string.Format("Exception formatting mobile number. {0}", ex.Message));
-
-            //}
             User user;
-
-            //validate that email address is not already user
-           
-            //if(!String.IsNullOrEmpty(mobileNumber))
-            //{
-            //    user = _userService.FindUserByMobileNumber(mobileNumber);
-
-            //    if (user != null)
-            //    {
-            //        var errorMessage = new HttpResponseMessage<UserModels.SubmitUserResponse>(HttpStatusCode.BadRequest);
-            //        errorMessage.ReasonPhrase = String.Format("The mobile number {0} is already registered.", request.mobileNumber);
-
-            //        return errorMessage;
-            //    }
-            //}
 
             try
             {
@@ -302,7 +270,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Sorry, {0} belongs to an existing account.", request.userName));
                 }
 
-                user = _userService.RegisterUser(Guid.Parse(request.apiKey), request.userName, request.password, request.emailAddress,
+                user = _userService.RegisterUser(ApiKey, request.userName, request.password, request.emailAddress,
                     request.deviceToken, "", request.messageId);
             }
             catch (Exception ex)
@@ -761,13 +729,13 @@ namespace SocialPayments.RestServices.Internal.Controllers
                                 userName = recipName,
                                 userFirstName = msg.recipientFirstName,
                                 userLastName = msg.recipientLastName,
-                                userImage = msg.recipientImageUri,
+                                userImage = (!String.IsNullOrEmpty(msg.recipientImageUri) ? msg.recipientImageUri : null),
                                 userType = 0 // Normal User
                             });
                         }
                         else if (msg.Recipient.Merchant != null)
                         {
-                            _logger.Log(LogLevel.Error, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
+                            _logger.Log(LogLevel.Info, "Found a merchant for {0}", msg.Recipient.Merchant.Id.ToString());
 
                             recipName = msg.RecipientUri;
 
@@ -836,14 +804,6 @@ namespace SocialPayments.RestServices.Internal.Controllers
 
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
-
-            var results = new UserModels.HomepageRefreshReponse()
-            {
-                userId = id,
-                numberOfIncomingNotifications = numberOfNewNotifications,
-                numberOfOutgoingNotifications = numberOfPendingNotifications,
-                quickSendContacts = quickSends
-            };
 
             return Request.CreateResponse<UserModels.HomepageRefreshReponse>(HttpStatusCode.OK, new UserModels.HomepageRefreshReponse()
             {
@@ -946,7 +906,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             User user;
             string securityQuestion = "";
             var isValid = false;
-            _logger.Log(LogLevel.Error, String.Format("Validating User {0}.", request.userName));
+            _logger.Log(LogLevel.Debug, String.Format("Validating User {0}.", request.userName));
 
             try
             {
@@ -1056,7 +1016,7 @@ namespace SocialPayments.RestServices.Internal.Controllers
             //TODO: Add exception
             try
             {
-                user = _userService.SignInWithFacebook(Guid.Parse(request.apiKey), request.accountId, request.emailAddress, request.firstName, request.lastName,
+                user = _userService.SignInWithFacebook(ApiKey, request.accountId, request.emailAddress, request.firstName, request.lastName,
                     request.deviceToken, request.oAuthToken, System.DateTime.Now.AddDays(30), request.messageId, out isNewUser);
             }
             catch (Exception ex)
